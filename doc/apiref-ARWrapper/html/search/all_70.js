@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['page',['page',['../struct_tracking_init_handle.html#aa9bf008a99192b5d35de18000ad6d93b',1,'TrackingInitHandle']]],
+  ['pageno',['pageNo',['../class_a_r_marker_n_f_t.html#af909e44374b95693a08906cd78b6b417',1,'ARMarkerNFT']]],
+  ['patt_5fid',['patt_id',['../class_a_r_marker_square.html#a0fd1a607bce14008528b7ecbbeae3a9c',1,'ARMarkerSquare']]],
+  ['patt_5ftype',['patt_type',['../class_a_r_marker_square.html#acc5601d5992f43d8a68b0d0fe54b2d68',1,'ARMarkerSquare']]],
+  ['pattern_5ftype',['PATTERN_TYPE',['../class_a_r_pattern.html#a490d2397b82a58c44eaa88a9c33172ba',1,'ARPattern']]],
+  ['pattern_5ftype_5fiset',['PATTERN_TYPE_ISET',['../class_a_r_pattern.html#a490d2397b82a58c44eaa88a9c33172baaa3d7bd17c224ab413b259c36e2443e71',1,'ARPattern']]],
+  ['pattern_5ftype_5fmatrix',['PATTERN_TYPE_MATRIX',['../class_a_r_pattern.html#a490d2397b82a58c44eaa88a9c33172baa8a7029259f8c27c1d84ec3c74eae9034',1,'ARPattern']]],
+  ['pattern_5ftype_5fnone',['PATTERN_TYPE_NONE',['../class_a_r_pattern.html#a490d2397b82a58c44eaa88a9c33172baaef06318897487cc600d1737885584d71',1,'ARPattern']]],
+  ['pattern_5ftype_5ftemplate',['PATTERN_TYPE_TEMPLATE',['../class_a_r_pattern.html#a490d2397b82a58c44eaa88a9c33172baa44648dfa666ba8e0f4d9097089ec2bca',1,'ARPattern']]],
+  ['patterncount',['patternCount',['../class_a_r_marker.html#ac2e25ec0decca5e09caed74a2e0c86d3',1,'ARMarker']]],
+  ['patterns',['patterns',['../class_a_r_marker.html#a206ed57cdd5ad38e277a742ac3071b06',1,'ARMarker']]],
+  ['pfn_5flogcallback',['PFN_LOGCALLBACK',['../_platform_8h.html#a4d175bf9baf646649f851fc1508bb4ef',1,'Platform.h']]],
+  ['pixelformat',['pixelFormat',['../class_video_source.html#a827806681429582927ac13c6f373e1ca',1,'VideoSource']]],
+  ['platform_2eh',['Platform.h',['../_platform_8h.html',1,'']]],
+  ['positionscalefactor',['positionScalefactor',['../class_a_r_marker.html#a57e2fccc34abc6ea0e3227ebfaaa3c92',1,'ARMarker']]],
+  ['projectionfarplane',['projectionFarPlane',['../class_a_r_controller.html#a290ba1cd38c6a7e38104af03cfe33c88',1,'ARController']]],
+  ['projectionnearplane',['projectionNearPlane',['../class_a_r_controller.html#a6107f783d52887d655bd571ac906421c',1,'ARController']]]
+];

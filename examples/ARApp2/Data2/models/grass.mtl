@@ -1,0 +1,8 @@
+newmtl material_1
+Ns 80
+d 1.000000
+illum 2
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+map_Kd smoothgrass2.jpg

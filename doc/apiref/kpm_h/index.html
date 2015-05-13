@@ -1,0 +1,880 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>kpm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<meta name="xcode-display" content="render">
+<style type="text/css"><!--.char {background: #ffffff; color:#0000ff;}.comment {background:#ffffff; color:#236e25}.function {background:#ffffff; color:#000000;}.keyword {background:#ffffff; color:#761550;}.number {background: #ffffff; color:#0000ff;}.param {background:#ffffff; color:#000000;}.preprocessor {background:#ffffff; color:#236e25}.string {background: #ffffff; color:#891315;}.template {background:#ffffff; color:#761550;}.type {background:#ffffff; color:#761550;}.var {background:#ffffff; color:#000000;}body {border: 0px; margin: 0px;}div {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}td {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}span.hd_tocAccessSpace { display: block; font-size: 1px; height: 3px; min-height: 3px; }span.hd_tocGroupSpace { display: block; font-size: 1px; height: 3px; min-height: 3px; }span.hd_tocGroup { display: block; font-weight: bold; font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000; margin-left: 0px; padding-left: 40px; }span.hd_tocGroup + span.hd_tocAccess { padding-top: 5px; }td.toc_contents_text {font-size: 11pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000; }li.tocSubEntry {font-size: 11pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}p {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}h2.h2tight { margin-top: 0px; padding-top: 0px; }h1 { margin-top: 13px; padding-top: 0px; }h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}h5 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10.1pt; font-weight: bold;}pre {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666; font-size: 10pt;}pre a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}pre a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}code a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}code a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}tt a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}tt a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}body  {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt; padding-left: 0px; padding-top: 0px; margin-left: 0px; margin-top: 0px; border: none; }#hd_outermost_table { margin-left: 0px; border-spacing: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; }#hd_outermost_table > tbody > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tbody > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-top: 3px; }.afterName { display: none; }.list_indent { margin-left: 40px; }.declaration_indent { margin-left: 40px; margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; min-height: 12px; vertical-align: middle; }.declaration_indent pre { margin-top: 20px; padding-top: 0px; margin-bottom: 20px; padding-bottom: 0px; }.gapBeforeFooter { display: none; }hr { height: 0px; min-height: 0px; border-top: none; border-left: none; border-right: none; border-bottom: 1px solid #909090;}hr.afterHeader { display: none }.param_group_indent { margin-left: 25px; }.param_indent { margin-left: 40px; margin-top: 0px; padding-top: 0px; }.param_indent dl { margin-top: 4px; padding-top: 0px; }dl dd > p:first-child { margin-top: 2px; padding-top: 0px; }.param_indent dl dd > p:first-child { margin-top: 2px; padding-top: 0px; }.group_indent { margin-left: 40px; }.group_desc_indent { margin-left: 20px; }.warning_indent { margin-left: 40px; }.important_indent { margin-left: 40px; }.note_indent { margin-left: 40px; }h3 {       color: #3C4C6C;}.tight {       margin-top: 2px; margin-bottom: 0px;       padding-top: 0px; padding-bottom: 0px;}h3 a {       color: #3C4C6C;	font-size: 16px;	font-style: normal;	font-variant: normal;	font-weight: bold;	height: 0px;	line-height: normal;}.hd_tocAccess { display: block; margin-left: 40px; font-style: italic; font-size: 10px; font-weight: normal; color: #303030; }.tocSubheading { margin-bottom: 4px; }--></style>
+<style><!--
+body {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+.toc_contents_text {
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+ul.tocSubEntryList li.tocSubEntry {
+    list-style: none;
+}
+
+#colorbox {
+		display: none;
+}
+.spec_sheet_line {
+		margin-bottom: 1px;
+}
+.collapsible {
+		display: none;
+}
+.toc_leadspace {
+		width: 10; min-width: 10;
+}
+.disclosure_triangle_td {
+		width: 14; min-width: 14;
+		font-size: 10px;
+		vertical-align: middle;
+}
+.specbox td {
+		font-size: 13px;
+}
+.specbox td a {
+		font-size: 13px;
+}
+.specbox td code {
+		font-size: 13px;
+}
+.specbox td tt {
+		font-size: 13px;
+}
+.specbox td pre {
+		font-size: 13px;
+}
+.specbox a {
+		font-size: 12px;
+}
+.disclosure_triangle_td a {
+		text-decoration: none;
+}
+.disclosure_triangle_td a:link {
+		text-decoration: none;
+}
+.disclosure_triangle_td a:active {
+		text-decoration: none;
+}
+.disclosure_triangle_td a:visited:hover {
+		text-decoration: none;
+}
+.disclosure_triangle_td a:hover {
+		text-decoration: none;
+}
+.hd_toc_box {
+		padding-top: 10px;
+		padding-right: 15px;
+}.tocSeparator {
+		margin-top: 15px;
+		padding-bottom: 0px;
+		margin-bottom: 0px;
+}
+.tocSubEntryList {
+		margin-left: 0px;
+		padding-left: 40px;
+		padding-top: 0px;
+		margin-top: 2px;
+		padding-bottom: 0px;
+		margin-bottom: 8px;
+}
+.hd_toc_heading_table {
+		margin-top: 2px;
+		margin-bottom: 2px;
+}
+.hd_toc_entry_table {
+		margin-top: 2px;
+		margin-bottom: 2px;
+}
+.tocSubEntry {
+		margin-left: 0px;
+		padding-left: 0px;
+		margin-top: 0px;
+		margin-bottom: 1px;
+}
+.tocSubEntry a {
+		font-size: 10pt;
+}
+.tocSubheading {
+		padding-left: 14px;
+		margin-left: 0px;
+		margin-top: 5px;
+		padding-top: 0px;
+		font-size: 16px;
+		color: #808080;
+}
+
+#hd_outermost_table { margin-left: 0px; border-spacing: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }
+#hd_outermost_table > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }
+#hd_outermost_table > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; }
+#hd_outermost_table > tbody > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }
+#hd_outermost_table > tbody > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-top: 3px; }
+
+#tocMenu {
+		border-right: 1px solid #c0c0c0;
+		background-color: #f4f4ff;
+		top:0px;
+		left:0px;
+		width:230px;
+		height:100%;
+}
+#bodyContents {
+		width: auto;
+		padding-left: 15px;
+}
+--></style>
+<style id="disable_before_iOS_5"><!--
+#tocMenu {
+		position: fixed;
+		height: 100%;
+		overflow: auto;
+}
+#bodyContents {
+		width: auto;
+		left: 235px;
+		right: 0;
+		padding-left: 15px;
+		position: fixed;
+		height: 100%;
+		overflow-y: scroll;
+}
+--></style>
+<script language="JavaScript" type="text/javascript"><!--
+    if (navigator.platform && (navigator.platform.match(/iPad/) || navigator.platform.match(/iPhone/) || navigator.platform.match(/iPod/))) {
+        if (navigator.userAgent.match(/OS 1(_\d)+/) ||
+            navigator.userAgent.match(/OS 2(_\d)+/) ||
+            navigator.userAgent.match(/OS 3(_\d)+/) ||
+            navigator.userAgent.match(/OS 4(_\d)+/)) {
+                /* Earlier iOS versions require different scrolling gestures with position: fixed. */
+                var del_style_elt = document.getElementById("disable_before_iOS_5");
+                if (del_style_elt) del_style_elt.parentNode.removeChild(del_style_elt);
+        }
+    }
+// --></script><script language="JavaScript" type="text/javascript"><!--
+function getNewHTTPObject()
+{
+        var xmlhttp;
+
+        /** Special IE only code ... */
+        /*@cc_on
+          @if (@_jscript_version >= 5)
+              try
+              {
+                  xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+              }
+              catch (e)
+              {
+                  try
+                  {
+                      xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+                  }
+                  catch (E)
+                  {
+                      xmlhttp = false;
+                  }
+             }
+          @else
+             xmlhttp = false;
+        @end @*/
+
+        /** Every other browser on the planet */
+        if (!xmlhttp && typeof XMLHttpRequest != 'undefined')
+        {
+            try
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            catch (e)
+            {
+                xmlhttp = false;
+            }
+        }
+
+        return xmlhttp;
+}
+
+function hidetoc() {
+	var toc = document.getElementById('tocMenu');
+	var src = toc.getAttribute('src');
+	var xhr = getNewHTTPObject();
+	xhr.open('GET', src, true);
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4) {
+			var toc = document.getElementById('tocMenu');
+			toc.innerHTML = xhr.responseText;
+		}
+	}
+	xhr.send(null);
+	var origURL = parent.document.URL;
+	var contentURL = origURL.substring(origURL.indexOf('?')+1, origURL.length);
+	if (contentURL.length == origURL.length) {
+		jumpPos = origURL.substring(origURL.indexOf('#')+1, origURL.length);
+	}
+	if (contentURL == "hidetoc") {
+		var body = document.getElementById('bodyContents');
+		if (toc && body) {
+			toc.style.display = 'none';
+			body.style.marginLeft = '0px';
+		}
+	}
+}
+
+function disclosure_triangle(elt) {
+   var linkelt = elt;
+   while (elt && elt.tagName != 'TABLE') { elt = elt.parentNode;}
+   if (!elt) { return; }
+   while (elt && elt.tagName != 'DIV') { elt = elt.nextSibling;}
+   if (!elt) { return; }
+   if (parseInt(linkelt.getAttribute('state'))) {
+      // It's open.  Close it
+      linkelt.innerHTML = '&#x25B7;';
+      linkelt.setAttribute('state', 0);
+      linkelt.setAttribute('class', 'closed_disclosure_triangle');
+      elt.style.display = 'none';
+   } else {
+      // It's closed.  Open it
+      linkelt.innerHTML = '&#x25BC;';
+      linkelt.setAttribute('state', 1);
+      linkelt.setAttribute('class', 'open_disclosure_triangle');
+      elt.style.display = 'block';
+   }
+}
+--></script><style type="text/css"><!--.char {background: #ffffff; color:#0000ff;}.comment {background:#ffffff; color:#236e25}.function {background:#ffffff; color:#000000;}.keyword {background:#ffffff; color:#761550;}.number {background: #ffffff; color:#0000ff;}.param {background:#ffffff; color:#000000;}.preprocessor {background:#ffffff; color:#236e25}.string {background: #ffffff; color:#891315;}.template {background:#ffffff; color:#761550;}.type {background:#ffffff; color:#761550;}.var {background:#ffffff; color:#000000;}body {border: 0px; margin: 0px;}div {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}td {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}span.hd_tocAccessSpace { display: block; font-size: 1px; height: 3px; min-height: 3px; }span.hd_tocGroupSpace { display: block; font-size: 1px; height: 3px; min-height: 3px; }span.hd_tocGroup { display: block; font-weight: bold; font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000; margin-left: 0px; padding-left: 40px; }span.hd_tocGroup + span.hd_tocAccess { padding-top: 5px; }td.toc_contents_text {font-size: 11pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000; }li.tocSubEntry {font-size: 11pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}p {font-size: 10pt; text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #000000;}a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; color: #36c;}h2.h2tight { margin-top: 0px; padding-top: 0px; }h1 { margin-top: 13px; padding-top: 0px; }h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}h5 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10.1pt; font-weight: bold;}pre {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666; font-size: 10pt;}pre a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}pre a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}pre a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}code a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}code a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}code a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}tt a { font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt;}tt a:link { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:visited { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:visited:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:active { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}tt a:hover { font-family: Courier, Consolas, monospace; color: #36c;font-size: 10pt;}body  {text-decoration: none; font-family: Courier, Consolas, monospace; color: #666;font-size: 10pt; padding-left: 0px; padding-top: 0px; margin-left: 0px; margin-top: 0px; border: none; }#hd_outermost_table { margin-left: 0px; border-spacing: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; }#hd_outermost_table > tbody > tr { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-left: 0px; padding-top: 0px; border: none; }#hd_outermost_table > tbody > tr > td { border-spacing: 0px; margin-left: 0px; margin-top: 0px; padding-top: 3px; }.afterName { display: none; }.list_indent { margin-left: 40px; }.declaration_indent { margin-left: 40px; margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; min-height: 12px; vertical-align: middle; }.declaration_indent pre { margin-top: 20px; padding-top: 0px; margin-bottom: 20px; padding-bottom: 0px; }.gapBeforeFooter { display: none; }hr { height: 0px; min-height: 0px; border-top: none; border-left: none; border-right: none; border-bottom: 1px solid #909090;}hr.afterHeader { display: none }.param_group_indent { margin-left: 25px; }.param_indent { margin-left: 40px; margin-top: 0px; padding-top: 0px; }.param_indent dl { margin-top: 4px; padding-top: 0px; }dl dd > p:first-child { margin-top: 2px; padding-top: 0px; }.param_indent dl dd > p:first-child { margin-top: 2px; padding-top: 0px; }.group_indent { margin-left: 40px; }.group_desc_indent { margin-left: 20px; }.warning_indent { margin-left: 40px; }.important_indent { margin-left: 40px; }.note_indent { margin-left: 40px; }h3 {       color: #3C4C6C;}.tight {       margin-top: 2px; margin-bottom: 0px;       padding-top: 0px; padding-bottom: 0px;}h3 a {       color: #3C4C6C;	font-size: 16px;	font-style: normal;	font-variant: normal;	font-weight: bold;	height: 0px;	line-height: normal;}.hd_tocAccess { display: block; margin-left: 40px; font-style: italic; font-size: 10px; font-weight: normal; color: #303030; }.tocSubheading { margin-bottom: 4px; }--></style>
+</head>
+<body bgcolor="#ffffff" onload="hidetoc();">
+<!-- headerDoc=Header;  uid=//apple_ref/doc/header/kpm.h;   name=kpm -->
+<a name="//apple_ref/doc/header/kpm.h"></a>
+<table id="hd_outermost_table" height="100%" width="100%"><tr>
+<td valign="top" id="tocMenu" src="toc.html"></td>
+<td id="bodyContents" valign="top">
+<a name="top"></a>
+<h1><a name="kpm">kpm</a></h1>
+<div class="spec_sheet_info_box"><table cellspacing="0" class="specbox"><tr>
+<td scope="row"><b>Includes:</b></td>
+<td><div style="margin-bottom:1px"><div class="content_text">
+<a machinegenerated="true" href="../ar_h/index.html#//apple_ref/doc/header/ar.h" logicalPath="//apple_ref/doc/header/ar.h" target="_top">&lt;AR/ar.h&gt;</a><br><!-- a logicalPath="//apple_ref/doc/header/surfSub.h" machineGenerated="true" -->&lt;KPM/surfSub.h&gt;<!-- /a --><br><!-- a logicalPath="//apple_ref/doc/header/kpmType.h" machineGenerated="true" -->&lt;KPM/kpmType.h&gt;<!-- /a -->
+</div></div></td>
+</tr></table></div>
+<h2>Introduction</h2>
+<p><!-- headerDoc=abstract;uid=//apple_ref/doc/header/kpm.h;name=start --><!-- begin abstract --></p>
+<p>libKPM NFT image recognition and tracking initialisation routines.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/doc/header/kpm.h;name=end --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/doc/header/kpm.h;name=start --><p>This header declares types and API for an NFT tracker,
+in particular those routines involved in recognising a texture page and
+initialising the tracking for use by the texture tracker.
+<!-- headerDoc=discussion;uid=//apple_ref/doc/header/kpm.h;name=end --><!-- end discussion -->
+</p>
+<hr class="afterClassOrHeaderInfo">
+<br><a name="HeaderDoc_functions"></a>
+<h2 class="h2tight">Functions</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmChangePageNoOfRefDataSet" target="_top">kpmChangePageNoOfRefDataSet</a></tt></dt>
+<dd></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmCreateHandle" target="_top">kpmCreateHandle</a></tt></dt>
+<dd><p>Allocate and initialise essential structures for KPM tracking, using full six degree-of-freedom tracking.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" target="_top">kpmCreateHandleHomography</a></tt></dt>
+<dd><p>Allocate and initialise essential structures for KPM tracking, using homography-only tracking.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmDeleteHandle" target="_top">kpmDeleteHandle</a></tt></dt>
+<dd><p>Finalise and dispose of structures for KPM tracking.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" target="_top">kpmDeleteRefDataSet</a></tt></dt>
+<dd><p>Dispose of a reference data set and its allocated memory.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmLoadRefDataSet" target="_top">kpmLoadRefDataSet</a></tt></dt>
+<dd><p>Load a reference data set from the filesystem into memory.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmMatching" target="_top">kpmMatching</a></tt></dt>
+<dd><p>Perform key-point matching on an image.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmMergeRefDataSet" target="_top">kpmMergeRefDataSet</a></tt></dt>
+<dd><p>Merge a second KPM dataset into the first, and dispose of second.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmSaveRefDataSet" target="_top">kpmSaveRefDataSet</a></tt></dt>
+<dd></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmSetRefDataSet" target="_top">kpmSetRefDataSet</a></tt></dt>
+<dd><p>Load a reference data set into the key point matcher for tracking.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmSetRefDataSetFile" target="_top">kpmSetRefDataSetFile</a></tt></dt>
+<dd><p>Loads a reference data set from a file into the KPM tracker.
+</p></dd>
+</dl>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmChangePageNoOfRefDataSet;   name=kpmChangePageNoOfRefDataSet --><a name="//apple_ref/c/func/kpmChangePageNoOfRefDataSet"></a>
+<h3><a name="kpmChangePageNoOfRefDataSet">kpmChangePageNoOfRefDataSet</a></h3>
+<hr class="afterName">
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmChangePageNoOfRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmChangePageNoOfRefDataSet" logicalPath="//apple_ref/c/instm/kpmChangePageNoOfRefDataSet //apple_ref/c/clm/kpmChangePageNoOfRefDataSet //apple_ref/c/intfcm/kpmChangePageNoOfRefDataSet //apple_ref/c/intfm/kpmChangePageNoOfRefDataSet //apple_ref/c/func/kpmChangePageNoOfRefDataSet" target="_top"><span class="function">kpmChangePageNoOfRefDataSet</span></a> (
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="param">refDataSet</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">oldPageNo</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">newPageNo</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmChangePageNoOfRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/refDataSet;   name=refDataSet -->
+<a name="//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/refDataSet"></a>
+<code>refDataSet</code>
+</dt>
+<dd> </dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/oldPageNo;   name=oldPageNo -->
+<a name="//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/oldPageNo"></a>
+<code>oldPageNo</code>
+</dt>
+<dd> </dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/newPageNo;   name=newPageNo -->
+<a name="//apple_ref/doc/functionparam/kpmChangePageNoOfRefDataSet/newPageNo"></a>
+<code>newPageNo</code>
+</dt>
+<dd> </dd>
+</dl>
+</div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmCreateHandle;   name=kpmCreateHandle --><a name="//apple_ref/c/func/kpmCreateHandle"></a>
+<h3><a name="kpmCreateHandle">kpmCreateHandle</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmCreateHandle;name=start --><!-- begin abstract --></p>
+<p>Allocate and initialise essential structures for KPM tracking, using full six degree-of-freedom tracking.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmCreateHandle;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmCreateHandle;name=start --><!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmCreateHandle" logicalPath="//apple_ref/c/instm/kpmCreateHandle //apple_ref/c/clm/kpmCreateHandle //apple_ref/c/intfcm/kpmCreateHandle //apple_ref/c/intfm/kpmCreateHandle //apple_ref/c/func/kpmCreateHandle" target="_top"><span class="function">kpmCreateHandle</span></a> (
+    <a machinegenerated="true" href="../param_h/index.html#//apple_ref/c/tdef/ARParamLT" logicalPath="//apple_ref/c/cl/ARParamLT //apple_ref/c/tdef/ARParamLT" target="_top"><span class="type">ARParamLT</span></a> <span class="type">*</span><span class="param">cparamLT</span>,
+    <a machinegenerated="true" href="../config_h/index.html#//apple_ref/c/tdef/AR_PIXEL_FORMAT" logicalPath="//apple_ref/c/cl/AR_PIXEL_FORMAT //apple_ref/c/tdef/AR_PIXEL_FORMAT" target="_top"><span class="type">AR_PIXEL_FORMAT</span></a> <span class="param">pixFormat</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmCreateHandle;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmCreateHandle/cparamLT;   name=cparamLT -->
+<a name="//apple_ref/doc/functionparam/kpmCreateHandle/cparamLT"></a>
+<code>cparamLT</code>
+</dt>
+<dd><p>Pointer to an ARParamLT structure holding camera parameters in lookup-table form.
+The pointer only is copied, and the ARParamLT structure itself is NOT copied, and must remain
+valid for the lifetime of the KpmHandle.
+This structure also specifies the size of video frames which will be later supplied to the
+kpmMatching() function as cparamLT-&gt;param.xsize and cparamLT-&gt;param.ysize.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmCreateHandle/pixFormat;   name=pixFormat -->
+<a name="//apple_ref/doc/functionparam/kpmCreateHandle/pixFormat"></a>
+<code>pixFormat</code>
+</dt>
+<dd><p>Pixel format of video frames which will be later supplied to the kpmMatching() function.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>Pointer to a newly-allocated KpmHandle structure. This structure must be deallocated
+via a call to kpmDeleteHandle() when no longer needed.
+
+<!-- end return value --></p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" logicalPath="//apple_ref/c/func/kpmCreateHandleHomography" target="_top">kpmCreateHandleHomography</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteHandle" logicalPath="//apple_ref/c/func/kpmDeleteHandle" target="_top">kpmDeleteHandle</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmCreateHandleHomography;   name=kpmCreateHandleHomography --><a name="//apple_ref/c/func/kpmCreateHandleHomography"></a>
+<h3><a name="kpmCreateHandleHomography">kpmCreateHandleHomography</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=start --><!-- begin abstract --></p>
+<p>Allocate and initialise essential structures for KPM tracking, using homography-only tracking.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=start --><!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" logicalPath="//apple_ref/c/instm/kpmCreateHandleHomography //apple_ref/c/clm/kpmCreateHandleHomography //apple_ref/c/intfcm/kpmCreateHandleHomography //apple_ref/c/intfm/kpmCreateHandleHomography //apple_ref/c/func/kpmCreateHandleHomography" target="_top"><span class="function">kpmCreateHandleHomography</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">xsize</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">ysize</span>,
+    <a machinegenerated="true" href="../config_h/index.html#//apple_ref/c/tdef/AR_PIXEL_FORMAT" logicalPath="//apple_ref/c/cl/AR_PIXEL_FORMAT //apple_ref/c/tdef/AR_PIXEL_FORMAT" target="_top"><span class="type">AR_PIXEL_FORMAT</span></a> <span class="param">pixFormat</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmCreateHandleHomography/xsize;   name=xsize -->
+<a name="//apple_ref/doc/functionparam/kpmCreateHandleHomography/xsize"></a>
+<code>xsize</code>
+</dt>
+<dd><p>Width of video frames which will be later supplied to the kpmMatching() function.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmCreateHandleHomography/ysize;   name=ysize -->
+<a name="//apple_ref/doc/functionparam/kpmCreateHandleHomography/ysize"></a>
+<code>ysize</code>
+</dt>
+<dd><p>Height of video frames which will be later supplied to the kpmMatching() function.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmCreateHandleHomography/pixFormat;   name=pixFormat -->
+<a name="//apple_ref/doc/functionparam/kpmCreateHandleHomography/pixFormat"></a>
+<code>pixFormat</code>
+</dt>
+<dd><p>Pixel format of video frames which will be later supplied to the kpmMatching() function.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>Pointer to a newly-allocated KpmHandle structure. This structure must be deallocated
+via a call to kpmDeleteHandle() when no longer needed.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=start --><p>Homography tracking assumes that the camera has zero lens-distortion, and this does not depend on
+camera parameters. It is therefore unable to provide correctly calibrated position measurements,
+but the resulting pose is suitable for visual overlay purposes.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmCreateHandleHomography;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandle" logicalPath="//apple_ref/c/func/kpmCreateHandle" target="_top">kpmCreateHandle</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteHandle" logicalPath="//apple_ref/c/func/kpmDeleteHandle" target="_top">kpmDeleteHandle</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmDeleteHandle;   name=kpmDeleteHandle --><a name="//apple_ref/c/func/kpmDeleteHandle"></a>
+<h3><a name="kpmDeleteHandle">kpmDeleteHandle</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmDeleteHandle;name=start --><!-- begin abstract --></p>
+<p>Finalise and dispose of structures for KPM tracking.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmDeleteHandle;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmDeleteHandle;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmDeleteHandle" logicalPath="//apple_ref/c/instm/kpmDeleteHandle //apple_ref/c/clm/kpmDeleteHandle //apple_ref/c/intfcm/kpmDeleteHandle //apple_ref/c/intfm/kpmDeleteHandle //apple_ref/c/func/kpmDeleteHandle" target="_top"><span class="function">kpmDeleteHandle</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><span class="type">*</span><span class="param">kpmHandle</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmDeleteHandle;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmDeleteHandle/kpmHandle;   name=kpmHandle -->
+<a name="//apple_ref/doc/functionparam/kpmDeleteHandle/kpmHandle"></a>
+<code>kpmHandle</code>
+</dt>
+<dd><p>Pointer to a location which holds a pointer to a KpmHandle structure.
+On return, the location pointed to will be set to NULL.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if successful, or value &lt;0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmDeleteHandle;name=start --><p>Once KPM processing has completed, this routine should be called to
+dispose of memory allocated.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmDeleteHandle;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandle" logicalPath="//apple_ref/c/func/kpmCreateHandle" target="_top">kpmCreateHandle</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" logicalPath="//apple_ref/c/func/kpmCreateHandleHomography" target="_top">kpmCreateHandleHomography</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmDeleteRefDataSet;   name=kpmDeleteRefDataSet --><a name="//apple_ref/c/func/kpmDeleteRefDataSet"></a>
+<h3><a name="kpmDeleteRefDataSet">kpmDeleteRefDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=start --><!-- begin abstract --></p>
+<p>Dispose of a reference data set and its allocated memory.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" logicalPath="//apple_ref/c/instm/kpmDeleteRefDataSet //apple_ref/c/clm/kpmDeleteRefDataSet //apple_ref/c/intfcm/kpmDeleteRefDataSet //apple_ref/c/intfm/kpmDeleteRefDataSet //apple_ref/c/func/kpmDeleteRefDataSet" target="_top"><span class="function">kpmDeleteRefDataSet</span></a> (
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="type">*</span><span class="param">refDataSetPtr</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmDeleteRefDataSet/refDataSetPtr;   name=refDataSetPtr -->
+<a name="//apple_ref/doc/functionparam/kpmDeleteRefDataSet/refDataSetPtr"></a>
+<code>refDataSetPtr</code>
+</dt>
+<dd><p>Pointer to memory location which points to the dataset. On success,
+this location will be set to NULL.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if the delete succeeded, or a value &lt; 0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=start --><p>Once a data set has been loaded into a KPM handle, or is otherwise no longer required
+to be held in memory, it should be deleted (i.e. disposed) from memory by calling
+this function.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmDeleteRefDataSet;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmLoadRefDataSet" logicalPath="//apple_ref/c/func/kpmLoadRefDataSet" target="_top">kpmLoadRefDataSet</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmLoadRefDataSet;   name=kpmLoadRefDataSet --><a name="//apple_ref/c/func/kpmLoadRefDataSet"></a>
+<h3><a name="kpmLoadRefDataSet">kpmLoadRefDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=start --><!-- begin abstract --></p>
+<p>Load a reference data set from the filesystem into memory.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmLoadRefDataSet" logicalPath="//apple_ref/c/instm/kpmLoadRefDataSet //apple_ref/c/clm/kpmLoadRefDataSet //apple_ref/c/intfcm/kpmLoadRefDataSet //apple_ref/c/intfm/kpmLoadRefDataSet //apple_ref/c/func/kpmLoadRefDataSet" target="_top"><span class="function">kpmLoadRefDataSet</span></a> (
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">filename</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">ext</span>,
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="type">*</span><span class="param">refDataSetPtr</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmLoadRefDataSet/filename;   name=filename -->
+<a name="//apple_ref/doc/functionparam/kpmLoadRefDataSet/filename"></a>
+<code>filename</code>
+</dt>
+<dd><p>Path to the dataset. Either full path, or a relative path if supported by
+the operating system.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmLoadRefDataSet/ext;   name=ext -->
+<a name="//apple_ref/doc/functionparam/kpmLoadRefDataSet/ext"></a>
+<code>ext</code>
+</dt>
+<dd><p>If non-NULL, a '.' charater and this string will be appended to 'filename'.
+Often, this parameter is a pointer to the string "fset2".</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmLoadRefDataSet/refDataSetPtr;   name=refDataSetPtr -->
+<a name="//apple_ref/doc/functionparam/kpmLoadRefDataSet/refDataSetPtr"></a>
+<code>refDataSetPtr</code>
+</dt>
+<dd><p>Pointer to a location which after loading will point to the loaded
+reference data set.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if the load succeeded, or a value &lt; 0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=start --><p>This does not set the reference data as the current tracking set. To do that, call
+kpmSetRefDataSet after this load completes. Alternately, the loaded set can be
+merged with another loaded set by calling kpmMergeRefDataSet. To dispose of the
+loaded dataset, call kpmDeleteRefDataSet.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmLoadRefDataSet;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmSetRefDataSet" logicalPath="//apple_ref/c/func/kpmSetRefDataSet" target="_top">kpmSetRefDataSet</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmMergeRefDataSet" logicalPath="//apple_ref/c/func/kpmMergeRefDataSet" target="_top">kpmMergeRefDataSet</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" logicalPath="//apple_ref/c/func/kpmDeleteRefDataSet" target="_top">kpmDeleteRefDataSet</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmMatching;   name=kpmMatching --><a name="//apple_ref/c/func/kpmMatching"></a>
+<h3><a name="kpmMatching">kpmMatching</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmMatching;name=start --><!-- begin abstract --></p>
+<p>Perform key-point matching on an image.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmMatching;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmMatching;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmMatching" logicalPath="//apple_ref/c/instm/kpmMatching //apple_ref/c/clm/kpmMatching //apple_ref/c/intfcm/kpmMatching //apple_ref/c/intfm/kpmMatching //apple_ref/c/func/kpmMatching" target="_top"><span class="function">kpmMatching</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><span class="param">kpmHandle</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><span class="param">inImage</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmMatching;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmMatching/kpmHandle;   name=kpmHandle -->
+<a name="//apple_ref/doc/functionparam/kpmMatching/kpmHandle"></a>
+<code>kpmHandle</code>
+</dt>
+<dd> </dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmMatching/inImage;   name=inImage -->
+<a name="//apple_ref/doc/functionparam/kpmMatching/inImage"></a>
+<code>inImage</code>
+</dt>
+<dd><p>Source image containing the pixels which will be searched for features.
+Typically, this is one frame from a video stream. The dimensions and pixel format
+of this image must match the values specified at the time of creation of the KPM handle.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if successful, or value &lt;0 in case of error.
+
+<!-- end return value --></p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandle" logicalPath="//apple_ref/c/func/kpmCreateHandle" target="_top">kpmCreateHandle</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" logicalPath="//apple_ref/c/func/kpmCreateHandleHomography" target="_top">kpmCreateHandleHomography</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmMergeRefDataSet;   name=kpmMergeRefDataSet --><a name="//apple_ref/c/func/kpmMergeRefDataSet"></a>
+<h3><a name="kpmMergeRefDataSet">kpmMergeRefDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=start --><!-- begin abstract --></p>
+<p>Merge a second KPM dataset into the first, and dispose of second.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmMergeRefDataSet" logicalPath="//apple_ref/c/instm/kpmMergeRefDataSet //apple_ref/c/clm/kpmMergeRefDataSet //apple_ref/c/intfcm/kpmMergeRefDataSet //apple_ref/c/intfm/kpmMergeRefDataSet //apple_ref/c/func/kpmMergeRefDataSet" target="_top"><span class="function">kpmMergeRefDataSet</span></a> (
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="type">*</span><span class="param">refDataSetPtr1</span>,
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="type">*</span><span class="param">refDataSetPtr2</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmMergeRefDataSet/refDataSetPtr1;   name=refDataSetPtr1 -->
+<a name="//apple_ref/doc/functionparam/kpmMergeRefDataSet/refDataSetPtr1"></a>
+<code>refDataSetPtr1</code>
+</dt>
+<dd><p>Pointer to a location which points to the first data set, or pointer
+to NULL if a new dataset is to be created. This will hold the results of the merge.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmMergeRefDataSet/refDataSetPtr2;   name=refDataSetPtr2 -->
+<a name="//apple_ref/doc/functionparam/kpmMergeRefDataSet/refDataSetPtr2"></a>
+<code>refDataSetPtr2</code>
+</dt>
+<dd><p>Pointer to a location which points to the second data set. After the
+merge, the dataset pointed to will be deleted and the location pointed to set to NULL.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if the merge succeeded, or a value &lt; 0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=start --><p>This function merges two KPM datasets by adding the reference points in
+the second into the first (allocating a new set if the location pointed to
+by refDataSetPtr1 is NULL) and then deleting the second set.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmMergeRefDataSet;name=end --><!-- end discussion -->
+</p>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmSaveRefDataSet;   name=kpmSaveRefDataSet --><a name="//apple_ref/c/func/kpmSaveRefDataSet"></a>
+<h3><a name="kpmSaveRefDataSet">kpmSaveRefDataSet</a></h3>
+<hr class="afterName">
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSaveRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmSaveRefDataSet" logicalPath="//apple_ref/c/instm/kpmSaveRefDataSet //apple_ref/c/clm/kpmSaveRefDataSet //apple_ref/c/intfcm/kpmSaveRefDataSet //apple_ref/c/intfm/kpmSaveRefDataSet //apple_ref/c/func/kpmSaveRefDataSet" target="_top"><span class="function">kpmSaveRefDataSet</span></a> (
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">filename</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">ext</span>,
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="param">refDataSet</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSaveRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSaveRefDataSet/filename;   name=filename -->
+<a name="//apple_ref/doc/functionparam/kpmSaveRefDataSet/filename"></a>
+<code>filename</code>
+</dt>
+<dd> </dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSaveRefDataSet/ext;   name=ext -->
+<a name="//apple_ref/doc/functionparam/kpmSaveRefDataSet/ext"></a>
+<code>ext</code>
+</dt>
+<dd> </dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSaveRefDataSet/refDataSet;   name=refDataSet -->
+<a name="//apple_ref/doc/functionparam/kpmSaveRefDataSet/refDataSet"></a>
+<code>refDataSet</code>
+</dt>
+<dd> </dd>
+</dl>
+</div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmSetRefDataSet;   name=kpmSetRefDataSet --><a name="//apple_ref/c/func/kpmSetRefDataSet"></a>
+<h3><a name="kpmSetRefDataSet">kpmSetRefDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmSetRefDataSet;name=start --><!-- begin abstract --></p>
+<p>Load a reference data set into the key point matcher for tracking.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmSetRefDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSetRefDataSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmSetRefDataSet" logicalPath="//apple_ref/c/instm/kpmSetRefDataSet //apple_ref/c/clm/kpmSetRefDataSet //apple_ref/c/intfcm/kpmSetRefDataSet //apple_ref/c/intfm/kpmSetRefDataSet //apple_ref/c/func/kpmSetRefDataSet" target="_top"><span class="function">kpmSetRefDataSet</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><span class="param">kpmHandle</span>,
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/KpmRefDataSet" logicalPath="//apple_ref/c/cl/KpmRefDataSet //apple_ref/c/tdef/KpmRefDataSet" target="_top"><span class="type">KpmRefDataSet</span></a> <span class="type">*</span><span class="param">refDataSet</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSetRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSetRefDataSet/kpmHandle;   name=kpmHandle -->
+<a name="//apple_ref/doc/functionparam/kpmSetRefDataSet/kpmHandle"></a>
+<code>kpmHandle</code>
+</dt>
+<dd><p>Handle to the current KPM tracker instance, as generated by kpmCreateHandle or kpmCreateHandleHomography.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSetRefDataSet/refDataSet;   name=refDataSet -->
+<a name="//apple_ref/doc/functionparam/kpmSetRefDataSet/refDataSet"></a>
+<code>refDataSet</code>
+</dt>
+<dd><p>The reference data set to load into the KPM handle. The operation takes
+a copy of the data required from this dataset, thus unless the need for a further load
+at a later time is required, the dataset can be disposed of by calling kpmDeleteRefDataSet
+after this operation succeeds.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>0 if successful, or value &lt;0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmSetRefDataSet;name=start --><p>This function takes a reference data set already in memory and makes it the current
+dataset for key point matching.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmSetRefDataSet;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandle" logicalPath="//apple_ref/c/func/kpmCreateHandle" target="_top">kpmCreateHandle</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmCreateHandleHomography" logicalPath="//apple_ref/c/func/kpmCreateHandleHomography" target="_top">kpmCreateHandleHomography</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" logicalPath="//apple_ref/c/func/kpmDeleteRefDataSet" target="_top">kpmDeleteRefDataSet</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmSetRefDataSetFile;   name=kpmSetRefDataSetFile --><a name="//apple_ref/c/func/kpmSetRefDataSetFile"></a>
+<h3><a name="kpmSetRefDataSetFile">kpmSetRefDataSetFile</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=start --><!-- begin abstract --></p>
+<p>Loads a reference data set from a file into the KPM tracker.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmSetRefDataSetFile" logicalPath="//apple_ref/c/instm/kpmSetRefDataSetFile //apple_ref/c/clm/kpmSetRefDataSetFile //apple_ref/c/intfcm/kpmSetRefDataSetFile //apple_ref/c/intfm/kpmSetRefDataSetFile //apple_ref/c/func/kpmSetRefDataSetFile" target="_top"><span class="function">kpmSetRefDataSetFile</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/KpmHandle //apple_ref/c/tdef/KpmHandle //apple_ref/c/tag/KpmHandle //apple_ref/c/struct/KpmHandle //apple_ref/c/intf/KpmHandle //apple_ref/doc/anysymbol/KpmHandle" machineGenerated="true" --><span class="type">KpmHandle</span><!-- /a --> <span class="type">*</span><span class="param">kpmHandle</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">filename</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">ext</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSetRefDataSetFile/kpmHandle;   name=kpmHandle -->
+<a name="//apple_ref/doc/functionparam/kpmSetRefDataSetFile/kpmHandle"></a>
+<code>kpmHandle</code>
+</dt>
+<dd><p>Handle to the current KPM tracker instance, as generated by kpmCreateHandle or kpmCreateHandleHomography.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSetRefDataSetFile/filename;   name=filename -->
+<a name="//apple_ref/doc/functionparam/kpmSetRefDataSetFile/filename"></a>
+<code>filename</code>
+</dt>
+<dd><p>Path to the dataset. Either full path, or a relative path if supported by
+the operating system.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmSetRefDataSetFile/ext;   name=ext -->
+<a name="//apple_ref/doc/functionparam/kpmSetRefDataSetFile/ext"></a>
+<code>ext</code>
+</dt>
+<dd><p>If non-NULL, a '.' charater and this string will be appended to 'filename'.
+Often, this parameter is a pointer to the string "fset2".</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>Returns 0 if successful, or value &lt;0 in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=start --><p>This is a convenience method which performs a sequence of kpmLoadRefDataSet, followed
+by kpmSetRefDataSet and finally kpmDeleteRefDataSet. When tracking from a single
+reference dataset file, this is the simplest means to start.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/kpmSetRefDataSetFile;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmLoadRefDataSet" logicalPath="//apple_ref/c/func/kpmLoadRefDataSet" target="_top">kpmLoadRefDataSet</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmSetRefDataSet" logicalPath="//apple_ref/c/func/kpmSetRefDataSet" target="_top">kpmSetRefDataSet</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" logicalPath="//apple_ref/c/func/kpmDeleteRefDataSet" target="_top">kpmDeleteRefDataSet</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenSections">
+<a name="HeaderDoc_datatypes"></a>
+<h2 class="h2tight">Typedefs</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/c/tdef/KpmRefDataSet" target="_top">KpmRefDataSet</a></tt></dt>
+<dd><p>A loaded dataset for KPM tracking.
+</p></dd>
+</dl>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=tdef;  uid=//apple_ref/c/tdef/KpmRefDataSet;   name=KpmRefDataSet --><a name="//apple_ref/c/tdef/KpmRefDataSet"></a>
+<h3><a name="KpmRefDataSet">KpmRefDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/tdef/KpmRefDataSet;name=start --><!-- begin abstract --></p>
+<p>A loaded dataset for KPM tracking.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/tdef/KpmRefDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/tdef/KpmRefDataSet;name=start --><span class="keyword">typedef</span> <span class="keyword">struct</span> { 
+    <!-- a logicalPath="//apple_ref/c/cl/KpmRefData //apple_ref/c/tdef/KpmRefData //apple_ref/c/tag/KpmRefData //apple_ref/c/struct/KpmRefData //apple_ref/c/intf/KpmRefData //apple_ref/doc/anysymbol/KpmRefData" machineGenerated="true" --><span class="type">KpmRefData</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/c/econst/refPoint //apple_ref/c/data/refPoint //apple_ref/c/clconst/refPoint " machineGenerated="true" --><span class="var">refPoint</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/num //apple_ref/c/data/num //apple_ref/c/clconst/num " machineGenerated="true" --><span class="var">num</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/KpmPageInfo //apple_ref/c/tdef/KpmPageInfo //apple_ref/c/tag/KpmPageInfo //apple_ref/c/struct/KpmPageInfo //apple_ref/c/intf/KpmPageInfo //apple_ref/doc/anysymbol/KpmPageInfo" machineGenerated="true" --><span class="type">KpmPageInfo</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/c/econst/pageInfo //apple_ref/c/data/pageInfo //apple_ref/c/clconst/pageInfo " machineGenerated="true" --><span class="var">pageInfo</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/pageNum //apple_ref/c/data/pageNum //apple_ref/c/clconst/pageNum " machineGenerated="true" --><span class="var">pageNum</span><!-- /a -->; 
+} <!-- a logicalPath="//apple_ref/c/econst/KpmRefDataSet //apple_ref/c/data/KpmRefDataSet //apple_ref/c/clconst/KpmRefDataSet " machineGenerated="true" --><span class="var">KpmRefDataSet</span><!-- /a -->;  <!-- headerDoc=declaration;uid=//apple_ref/c/tdef/KpmRefDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Fields</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmRefDataSet/refPoint;   name=refPoint -->
+<a name="//apple_ref/doc/typedeffield/KpmRefDataSet/refPoint"></a>
+<code>refPoint</code>
+</dt>
+<dd><p>Tracking reference points.</p></dd>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmRefDataSet/num;   name=num -->
+<a name="//apple_ref/doc/typedeffield/KpmRefDataSet/num"></a>
+<code>num</code>
+</dt>
+<dd><p>Number of refPoints in the dataset.</p></dd>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmRefDataSet/pageInfo;   name=pageInfo -->
+<a name="//apple_ref/doc/typedeffield/KpmRefDataSet/pageInfo"></a>
+<code>pageInfo</code>
+</dt>
+<dd><p>Array of info about each page in the dataset. One entry per page.</p></dd>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmRefDataSet/pageNum;   name=pageNum -->
+<a name="//apple_ref/doc/typedeffield/KpmRefDataSet/pageNum"></a>
+<code>pageNum</code>
+</dt>
+<dd><p>Number of pages in the dataset (i.e. a count, not an index).</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmRefDataSet;name=start --><p>Key point matching takes as input a reference data set of points. This strucutre holds a set of points in memory prior to loading into the tracker.
+<!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmRefDataSet;name=end --><!-- end discussion -->
+</p>
+<p class="gapBeforeFooter">&nbsp;</p>
+<hr class="afterFooter">
+<div class="hd_copyright_and_timestamp">
+<p class="hd_copyright">&copy; 2006-2015 ARToolworks, Inc.
+ </p>
+<p class="hd_timestamp">Last Updated: Monday, May 11, 2015
+</p>
+</div>
+</td>
+</tr></table>
+</body>
+</html>

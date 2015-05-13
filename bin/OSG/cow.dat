@@ -1,0 +1,6 @@
+# Example model configuration file.
+# First line is OSG model filename, relative to this .dat file.
+cow.osg
+0.0 0.0 40.0        # Translation
+0.0 1.0 0.0 0.0     # Rotation
+15.0 15.0 15.0      # Scale

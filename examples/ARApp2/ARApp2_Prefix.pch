@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'ARApp2' target in the 'ARApp2' project
+//
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#endif

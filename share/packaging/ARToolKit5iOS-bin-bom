@@ -1,0 +1,192 @@
+README (ARToolKit for iOS).txt
+LICENSE.txt
+ChangeLog.txt
+
+include/AR/
+include/AR2/
+include/KPM/
+include/ARWrapper/
+include/Eden/
+include/profile.h
+include/thread_sub.h
+include/glStateCache.h
+include/glStateCache2.h
+include/ios511/opencv/
+include/ios511/opencv2/
+include/ios511/OpenThreads/
+include/ios511/freetype2/
+include/ios511/ft2build.h
+include/ios511/jconfig.h
+include/ios511/jmorecfg.h
+include/ios511/jpeglib.h
+include/ios511/jversion.h
+include/ios511/osg/
+include/ios511/osgAnimation/
+include/ios511/osgDB/
+include/ios511/osgFX/
+include/ios511/osgGA/
+include/ios511/osgManipulator/
+include/ios511/osgParticle/
+include/ios511/osgPresentation/
+include/ios511/osgShadow/
+include/ios511/osgSim/
+include/ios511/osgTerrain/
+include/ios511/osgText/
+include/ios511/osgUtil/
+include/ios511/osgViewer/
+include/ios511/osgVolume/
+include/ios511/osgWidget/
+
+lib/libAR.a
+lib/libAR2.a
+lib/libARgsub_es.a
+lib/libARgsub_es2.a
+lib/libARICP.a
+lib/libARMulti.a
+lib/libARosg.a
+lib/libARUtil.a
+lib/libARvideo.a
+lib/libKPM.a
+lib/libEden.a
+lib/libARWrapper.a
+lib/ios511/libopencv_core.a
+lib/ios511/libopencv_flann.a
+lib/ios511/libfreetype.a
+lib/ios511/libOpenThreads.a
+lib/ios511/libjpeg.a
+lib/ios511/libosg.a
+lib/ios511/libosgAnimation.a
+lib/ios511/libosgDB.a
+lib/ios511/libosgFX.a
+lib/ios511/libosgGA.a
+lib/ios511/libosgManipulator.a
+lib/ios511/libosgParticle.a
+lib/ios511/libosgPresentation.a
+lib/ios511/libosgShadow.a
+lib/ios511/libosgSim.a
+lib/ios511/libosgTerrain.a
+lib/ios511/libosgText.a
+lib/ios511/libosgUtil.a
+lib/ios511/libosgViewer.a
+lib/ios511/libosgVolume.a
+lib/ios511/libosgWidget.a
+lib/ios511/libosgdb_freetype.a
+lib/ios511/libosgdb_imageio.a
+lib/ios511/libosgdb_ive.a
+lib/ios511/libosgdb_obj.a
+lib/ios511/libosgdb_osg.a
+
+bin/mk_patt
+bin/genTexData
+bin/dispFeatureSet
+bin/dispImageSet
+bin/checkResolution
+bin/check_id
+bin/genMarkerSet
+
+bin/libopencv_calib3d.2.4.6.dylib
+bin/libopencv_core.2.4.6.dylib
+bin/libopencv_flann.2.4.6.dylib
+bin/libopencv_highgui.2.4.6.dylib
+bin/libopencv_imgproc.2.4.6.dylib
+bin/libopencv_features2d.2.4.6.dylib
+lib/macosx-universal/libopencv_calib3d.2.4.6.dylib
+lib/macosx-universal/libopencv_core.2.4.6.dylib
+lib/macosx-universal/libopencv_flann.2.4.6.dylib
+lib/macosx-universal/libopencv_highgui.2.4.6.dylib
+lib/macosx-universal/libopencv_imgproc.2.4.6.dylib
+lib/macosx-universal/libopencv_features2d.2.4.6.dylib
+
+bin/Data/camera_para.dat
+bin/Data/cubeMarkerConfig.dat
+bin/Data/multi/
+bin/Data/multi-barcode-4x3.dat
+bin/Data/multi-barcode-8x6.dat
+bin/Data/patt.hiro
+bin/Data/patt.kanji
+bin/Data/patt.sample1
+bin/Data/patt.sample2
+bin/Data/camera_para-iPad 2 front.dat
+bin/Data/camera_para-iPad 2 rear 1280x720.dat
+bin/Data/camera_para-iPad 2 rear 640x480.dat
+bin/Data/camera_para-iPhone 4 front.dat
+bin/Data/camera_para-iPhone 4 rear 1280x720 0.3m.dat
+bin/Data/camera_para-iPhone 4 rear 1280x720 1.0m.dat
+bin/Data/camera_para-iPhone 4 rear 1280x720 macro.dat
+bin/Data/camera_para-iPhone 4 rear 640x480 0.3m.dat
+bin/Data/camera_para-iPhone 4 rear 640x480 1.0m.dat
+bin/Data/camera_para-iPhone 4 rear 640x480 inf.dat
+bin/Data/camera_para-iPhone 4 rear 640x480 macro.dat
+bin/Data/camera_para-iPhone 4S front.dat
+bin/Data/camera_para-iPhone 4S rear 1280x720 0.3m.dat
+bin/Data/camera_para-iPhone 4S rear 1280x720 1.0m.dat.dat
+bin/Data/camera_para-iPhone 4S rear 1280x720 inf.dat
+bin/Data/camera_para-iPhone 4S rear 1280x720 macro.dat
+bin/Data/camera_para-iPhone 4S rear 640x480 0.3m.dat
+bin/Data/camera_para-iPhone 4S rear 640x480 1.0m.dat
+bin/Data/camera_para-iPhone 4S rear 640x480 inf.dat
+bin/Data/camera_para-iPhone 4S rear 640x480 macro.dat
+bin/Data/camera_para-iPhone 5 front 1280x720.dat
+bin/Data/camera_para-iPhone 5 front 640x480.dat
+bin/Data/camera_para-iPhone 5 rear 1280x720 0.3m.dat
+bin/Data/camera_para-iPhone 5 rear 1280x720 1.0m.dat
+bin/Data/camera_para-iPhone 5 rear 1280x720 inf.dat
+bin/Data/camera_para-iPhone 5 rear 1280x720 macro.dat
+bin/Data/camera_para-iPhone 5 rear 640x480 0.3m.dat
+bin/Data/camera_para-iPhone 5 rear 640x480 1.0m.dat
+bin/Data/camera_para-iPhone 5 rear 640x480 inf.dat
+bin/Data/camera_para-iPhone 5 rear 640x480 macro.dat
+bin/Data/camera_para-iPhone 5s front 1280x720.dat
+bin/Data/camera_para-iPhone 5s front 640x480.dat
+bin/Data/camera_para-iPhone 5s rear 1280x720 0.3m.dat
+bin/Data/camera_para-iPhone 5s rear 1280x720 1.0m.dat
+bin/Data/camera_para-iPhone 5s rear 1280x720 inf.dat
+bin/Data/camera_para-iPhone 5s rear 1280x720 macro.dat
+bin/Data/camera_para-iPhone 5s rear 640x480 0.3m.dat
+bin/Data/camera_para-iPhone 5s rear 640x480 1.0m.dat
+bin/Data/camera_para-iPhone 5s rear 640x480 inf.dat
+bin/Data/camera_para-iPhone 5s rear 640x480 macro.dat
+bin/Data/camera_para-iPhone.dat
+bin/Data/camera_para-iPod touch 4G front.dat
+bin/Data/camera_para-iPod touch 4G rear 1280x720.dat
+bin/Data/camera_para-iPod touch 4G rear 640x480.dat
+
+lib/SRC/AR/
+lib/SRC/ARICP/
+lib/SRC/ARMulti/
+lib/SRC/ARWrapper/
+lib/SRC/ARosg/
+lib/SRC/Gl/glStateCache.c
+lib/SRC/Gl/glStateCache2.c
+lib/SRC/Gl/gsub_es.c
+lib/SRC/Gl/gsub_es2.c
+lib/SRC/Gl/gsub_mtx.c
+lib/SRC/Video/
+lib/SRC/VideoDummy/
+lib/SRC/VideoImage/
+lib/SRC/VideoiPhone/
+lib/SRC/AR2/
+lib/SRC/KPM/
+lib/SRC/Util/
+lib/SRC/Eden/
+
+examples/ARAppCore/
+examples/ARAppES1/
+examples/ARApp/
+examples/ARApp2/
+examples/ARAppOSG/
+examples/ARAppMovie/
+examples/ARAppNFT/
+examples/ARAppNFTOSG/
+
+doc/
+
+share/doc/
+share/packaging/ARToolKit5iOS-bin.sh
+share/packaging/ARToolKit5iOS-bin-bom
+share/packaging/headerDoc2HTML.config
+
+ARToolKit5iOS.xcodeproj/project.pbxproj
+ARToolKit5iOS.xcodeproj/xcshareddata/
+Xcode/version.xcconfig
+Xcode/ARToolKit default images/

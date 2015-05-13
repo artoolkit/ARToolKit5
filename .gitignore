@@ -1,0 +1,42 @@
+#### OS-generated caches and stres
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+#### Intermediate build products
+*.o
+
+#### Intermediate Language products
+*.dex
+*.class
+
+#### Caches
+# Visual C++
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+
+#### IDE user-config.
+# Eclipse
+local.properties
+# MonoDevelop/Xamarin Studio
+*.userprefs
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# Xcode
+xcuserdata/
+*.mode1*
+*.pbxuser
+
+#### Other VCS
+.svn/

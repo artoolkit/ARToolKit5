@@ -1,0 +1,11 @@
+#! /bin/sh
+sed -i.bak '/ARTOOLKIT5_ROOT=/d' ~/.profile
+sed -i.bak '/setenv ARTOOLKIT5_ROOT/d' ~/.cshrc
+if [ "`uname`" = "Darwin" ]
+then
+	defaults delete ~/.MacOSX/environment ARTOOLKIT5_ROOT
+	if [ -f ~/.MacOSX/environment.plist ]
+	then
+		plutil -convert xml1 ~/.MacOSX/environment.plist
+	fi
+fi

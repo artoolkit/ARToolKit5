@@ -1,0 +1,128 @@
+#
+# For instalation. Change this to your settings.
+#
+INC_DIR = ../../../../include
+LIB_DIR = ../../..
+#
+#  compiler
+#
+CC=@CC@
+CFLAG= @CFLAG@ -I$(INC_DIR)
+#
+# For making the library
+#
+AR=@AR@
+ARFLAGS=@ARFLAGS@
+RANLIB= @RANLIB@
+#
+#   products
+#
+LIB= ${LIB_DIR}/libAR.a
+INCLUDE0= ${INC_DIR}/AR/config.h
+INCLUDE1= ${INC_DIR}/AR/matrix.h
+INCLUDE2= ${INC_DIR}/AR/param.h
+INCLUDE3= ${INC_DIR}/AR/arConfig.h ${INC_DIR}/AR/ar.h
+
+#
+#   compilation control
+#
+LIBOBJS=  ${LIB}(arLabelingSubDBR3C.o)       \
+          ${LIB}(arLabelingSubDBI3C.o)       \
+          ${LIB}(arLabelingSubDWR3C.o)       \
+          ${LIB}(arLabelingSubDWI3C.o)       \
+          ${LIB}(arLabelingSubEBR3C.o)       \
+          ${LIB}(arLabelingSubEBI3C.o)       \
+          ${LIB}(arLabelingSubEWR3C.o)       \
+          ${LIB}(arLabelingSubEWI3C.o)       \
+          ${LIB}(arLabelingSubDBR3CA.o)      \
+          ${LIB}(arLabelingSubDBI3CA.o)      \
+          ${LIB}(arLabelingSubDWR3CA.o)      \
+          ${LIB}(arLabelingSubDWI3CA.o)      \
+          ${LIB}(arLabelingSubEBR3CA.o)      \
+          ${LIB}(arLabelingSubEBI3CA.o)      \
+          ${LIB}(arLabelingSubEWR3CA.o)      \
+          ${LIB}(arLabelingSubEWI3CA.o)      \
+          ${LIB}(arLabelingSubDBRA3C.o)      \
+          ${LIB}(arLabelingSubDBIA3C.o)      \
+          ${LIB}(arLabelingSubDWRA3C.o)      \
+          ${LIB}(arLabelingSubDWIA3C.o)      \
+          ${LIB}(arLabelingSubEBRA3C.o)      \
+          ${LIB}(arLabelingSubEBIA3C.o)      \
+          ${LIB}(arLabelingSubEWRA3C.o)      \
+          ${LIB}(arLabelingSubEWIA3C.o)      \
+          ${LIB}(arLabelingSubDBRC.o)        \
+          ${LIB}(arLabelingSubDBIC.o)        \
+          ${LIB}(arLabelingSubDWRC.o)        \
+          ${LIB}(arLabelingSubDWIC.o)        \
+          ${LIB}(arLabelingSubEBRC.o)        \
+          ${LIB}(arLabelingSubEBIC.o)        \
+          ${LIB}(arLabelingSubEWRC.o)        \
+          ${LIB}(arLabelingSubEWIC.o)        \
+          ${LIB}(arLabelingSubDBRYC.o)       \
+          ${LIB}(arLabelingSubDBIYC.o)       \
+          ${LIB}(arLabelingSubDWRYC.o)       \
+          ${LIB}(arLabelingSubDWIYC.o)       \
+          ${LIB}(arLabelingSubEBRYC.o)       \
+          ${LIB}(arLabelingSubEBIYC.o)       \
+          ${LIB}(arLabelingSubEWRYC.o)       \
+          ${LIB}(arLabelingSubEWIYC.o)       \
+          ${LIB}(arLabelingSubDBRCY.o)       \
+          ${LIB}(arLabelingSubDBICY.o)       \
+          ${LIB}(arLabelingSubDWRCY.o)       \
+          ${LIB}(arLabelingSubDWICY.o)       \
+          ${LIB}(arLabelingSubEBRCY.o)       \
+          ${LIB}(arLabelingSubEBICY.o)       \
+          ${LIB}(arLabelingSubEWRCY.o)       \
+          ${LIB}(arLabelingSubEWICY.o)       \
+          ${LIB}(arLabelingSubDBR3C565.o)    \
+          ${LIB}(arLabelingSubDBI3C565.o)    \
+          ${LIB}(arLabelingSubDWR3C565.o)    \
+          ${LIB}(arLabelingSubDWI3C565.o)    \
+          ${LIB}(arLabelingSubEBR3C565.o)    \
+          ${LIB}(arLabelingSubEBI3C565.o)    \
+          ${LIB}(arLabelingSubEWR3C565.o)    \
+          ${LIB}(arLabelingSubEWI3C565.o)    \
+          ${LIB}(arLabelingSubDBR3CA4444.o)  \
+          ${LIB}(arLabelingSubDBI3CA4444.o)  \
+          ${LIB}(arLabelingSubDWR3CA4444.o)  \
+          ${LIB}(arLabelingSubDWI3CA4444.o)  \
+          ${LIB}(arLabelingSubEBR3CA4444.o)  \
+          ${LIB}(arLabelingSubEBI3CA4444.o)  \
+          ${LIB}(arLabelingSubEWR3CA4444.o)  \
+          ${LIB}(arLabelingSubEWI3CA4444.o)  \
+          ${LIB}(arLabelingSubDBR3CA5551.o)  \
+          ${LIB}(arLabelingSubDBI3CA5551.o)  \
+          ${LIB}(arLabelingSubDWR3CA5551.o)  \
+          ${LIB}(arLabelingSubDWI3CA5551.o)  \
+          ${LIB}(arLabelingSubEBR3CA5551.o)  \
+          ${LIB}(arLabelingSubEBI3CA5551.o)  \
+          ${LIB}(arLabelingSubEWR3CA5551.o)  \
+          ${LIB}(arLabelingSubEWI3CA5551.o)  \
+          ${LIB}(arLabelingSubDBZ.o)  \
+          ${LIB}(arLabelingSubDWZ.o)  \
+          ${LIB}(arLabelingSubEBZ.o)  \
+          ${LIB}(arLabelingSubEWZ.o)  \
+
+all:		${LIBOBJS}
+
+${LIBOBJS}:	arLabelingSub.h ${INCLUDE0} ${INCLUDE1} ${INCLUDE2} ${INCLUDE3}
+
+
+.c.a:
+	${CC} -c ${CFLAG} $<
+	${AR} ${ARFLAGS} $@ $*.o
+	${RANLIB}
+	rm -f $*.o
+
+clean:
+	rm -f *.o
+	rm -f ${LIB}
+
+allclean:
+	rm -f *.o
+	rm -f ${LIB}
+	rm -f Makefile
+
+distclean:
+	rm -f *.o
+	rm -f Makefile

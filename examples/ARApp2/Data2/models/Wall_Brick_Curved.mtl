@@ -1,0 +1,15 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2006 Google, Inc.
+
+newmtl _Brick_rough2_
+Ka 0.000000 0.000000 0.000000
+Kd 0.639216 0.474510 0.470588
+Ks 0.330000 0.330000 0.330000
+map_Kd Wall_Brick_Curved/_Brick_rough2_.jpg
+
+newmtl Material2
+Ka 0.000000 0.000000 0.000000
+Kd 0.694118 0.694118 0.694118
+Ks 0.330000 0.330000 0.330000
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menuItem_settings">Settings</string>
+    
+    <string name="prefCategory_title_camera">Camera settings</string>
+    <string name="pref_title_cameraResolution">Camera resolution</string>
+    <string-array name="pref_entries_cameraResolution">
+        <item>320x240   (4:3)</item>
+    </string-array>
+    <string-array name="pref_entryValues_cameraResolution">
+        <item>320x240</item>
+    </string-array>
+    <string name="pref_defaultValue_cameraResolution">320x240</string>
+    
+    <string name="pref_title_cameraIndex">Change camera</string>
+    <string-array name="pref_entries_cameraIndex">
+        <item>Rear camera</item>
+    </string-array>
+    <string-array name="pref_entryValues_cameraIndex">
+        <item>0</item>
+    </string-array>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="org.artoolkit.utils.AssetUnpacker"
+      android:versionCode="50000"
+      android:versionName="5.0">
+
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="18"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:allowBackup="true">
+        <activity android:name="org.artoolkit.utils.AssetUnpacker.AssetUnpackerActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+    
+        
+</manifest>

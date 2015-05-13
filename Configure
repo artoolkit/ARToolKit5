@@ -1,0 +1,794 @@
+#!/bin/sh
+
+#
+#  Configure
+#  ARToolKit5
+#
+#  This file is part of ARToolKit.
+#
+#  ARToolKit is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  ARToolKit is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
+#
+#  As a special exception, the copyright holders of this library give you
+#  permission to link this library with independent modules to produce an
+#  executable, regardless of the license terms of these independent modules, and to
+#  copy and distribute the resulting executable under terms of your choice,
+#  provided that you also meet, for each linked independent module, the terms and
+#  conditions of the license of that module. An independent module is a module
+#  which is neither derived from nor based on this library. If you modify this
+#  library, you may extend this exception to your version of the library, but you
+#  are not obligated to do so. If you do not wish to do so, delete this exception
+#  statement from your version.
+#
+#  Copyright 2015 Daqri, LLC.
+#  Copyright 2002-2015 ARToolworks, Inc.
+#
+#  Author(s): Hirokazu Kato, Philip Lamb
+#
+
+#####################################################
+#
+# ARToolKit Configure for Linux/Unix Video Devices
+#
+#####################################################
+
+MDIR=".                              \
+      lib/SRC                        \
+      lib/SRC/AR                     \
+      lib/SRC/AR/arLabelingSub       \
+      lib/SRC/ARICP                  \
+      lib/SRC/AR2                    \
+      lib/SRC/KPM                    \
+      lib/SRC/Util                   \
+      lib/SRC/ARMulti                \
+      lib/SRC/Gl                     \
+      lib/SRC/Video                  \
+      lib/SRC/VideoDummy             \
+      lib/SRC/VideoImage             \
+      lib/SRC/VideoLinuxV4L          \
+      lib/SRC/VideoLinux1394Cam      \
+      lib/SRC/VideoLinux1394Cam/ver1 \
+      lib/SRC/VideoLinux1394Cam/ver2 \
+      lib/SRC/VideoQuickTime         \
+      lib/SRC/VideoQuickTime7        \
+      lib/SRC/VideoGStreamer         \
+      lib/SRC/ARosg                  \
+      lib/SRC/ARvrml                 \
+      lib/SRC/Eden                   \
+      util                           \
+      util/calib_camera              \
+      util/calib_stereo              \
+      util/mk_patt                   \
+      util/1394                      \
+      util/1394/whiteBalance         \
+      util/1394/listCamera           \
+      util/1394/checkImage           \
+      util/calib_optical             \
+      util/calib_camera_old-v3       \
+      util/calib_stereo_old-v3       \
+      util/check_id                  \
+      util/genTexData                \
+      util/genMarkerSet              \
+      util/dispImageSet              \
+      util/dispFeatureSet            \
+      util/checkResolution           \
+      examples                       \
+      examples/simple                \
+      examples/simpleLite            \
+      examples/simpleMovie           \
+      examples/multi                 \
+      examples/simpleOSG             \
+      examples/simpleVRML            \
+      examples/stereo                \
+      examples/multiCube             \
+      examples/multiWin              \
+      examples/optical               \
+      examples/opticalStereo         \
+      examples/nftSimple             \
+      examples/nftBook               "
+      #lib/SRC/VideoLinuxDV  \
+      #lib/SRC/VideoSGI      \
+      #util/calib_distortion \
+
+SED=/tmp/SED.$$
+trap "rm -f $SED; exit 0" 0 1 2 3 15
+VERSION=`grep -E 'AR_HEADER_VERSION_STRING[[:space:]]+"[0-9]+\.[0-9]+(\.[0-9]+)*"' include/AR/config.h.in | grep -Eo "[0-9]+\.[0-9]+(\.[0-9]+)*"`
+
+
+E=`uname`
+MACHINE=`uname -m`
+if [ "$E" = "Linux" ]
+then
+    SYSTEM="linux-$MACHINE"
+    echo "Do you want to use Intel Compiler? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INTELCC="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INTELCC="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+
+    DEFAULT_CAP_DEVICE=""
+    echo "Do you want to enable the Video4Linux capture module? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_V4L="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_V4L="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_V4L" = "y" ]
+    then
+        echo "Do you want to use it as the default input device? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DEFAULT_CAP_DEVICE="V4L"
+        elif [ "$ANS" = "n" ]
+        then
+            DEFAULT_CAP_DEVICE=""
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+    fi
+
+    echo "Do you want to enable the IEEE 1394 Digital Video Camera capture module? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_CAM1394="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_CAM1394="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_CAM1394" = "y" ]
+    then
+        echo "Do you want to use libdc1394_Ver.2? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DC1394_V2="y"
+        elif [ "$ANS" = "n" ]
+        then
+            DC1394_V2="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+
+        if [ "$DEFAULT_CAP_DEVICE" = "" ]
+        then
+            echo "Do you want to use it as the default input device? (y or n)"
+            echo -n "Enter : "
+            read ANS
+            if [ "$ANS" = "y" ]
+            then
+                DEFAULT_CAP_DEVICE="CAM1394"
+            elif [ "$ANS" = "n" ]
+            then
+                DEFAULT_CAP_DEVICE=""
+            else
+                echo "Please enter y or n."
+                exit 0
+            fi
+        fi
+        echo "Does your IEEE1394 camera support color image? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            COLOR_1394="y"
+        elif [ "$ANS" = "n" ]
+        then
+            COLOR_1394="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+
+        echo "Do you use a DragonFly as a IEEE 1394 camera? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DRAGON="y"
+        elif [ "$ANS" = "n" ]
+        then
+            DRAGON="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+    fi
+
+#    echo "Do you want to use DV Video Camera? (y or n)"
+#    echo -n "Enter : "
+#    read ANS
+#    if [ "$ANS" = "y" ]
+#    then
+#        INPUT_DV="y"
+#    elif [ "$ANS" = "n" ]
+#    then
+#        INPUT_DV="n"
+#    else
+#        echo "Please enter y or n."
+#        exit 0
+#    fi
+#    if [ "$INPUT_DV" = "y" ]
+#    then
+#        if [ "$DEFAULT_CAP_DEVICE" = "" ]
+#        then
+#            echo "Do you want to use it as the default input device? (y or n)"
+#            echo -n "Enter : "
+#            read ANS
+#            if [ "$ANS" = "y" ]
+#            then
+#                DEFAULT_CAP_DEVICE="DV"
+#            elif [ "$ANS" = "n" ]
+#            then
+#                DEFAULT_CAP_DEVICE=""
+#            else
+#                echo "Please enter y or n."
+#                exit 0
+#            fi
+#        fi
+#    fi
+
+    echo "Do you want to enable the GStreamer capture module? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_GSTREAMER="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_GSTREAMER="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_GSTREAMER" = "y" ]
+    then
+        if [ "$DEFAULT_CAP_DEVICE" = "" ]
+        then
+            echo "Do you want to use it as the default input device? (y or n)"
+            echo -n "Enter : "
+            read ANS
+            if [ "$ANS" = "y" ]
+            then
+                DEFAULT_CAP_DEVICE="GSTREAMER"
+            elif [ "$ANS" = "n" ]
+            then
+                DEFAULT_CAP_DEVICE=""
+            else
+                echo "Please enter y or n."
+                exit 0
+            fi
+        fi
+    fi
+
+
+    if [ "$INTELCC" = "y" ]
+    then
+        CC="icc"
+        CXX="icc"
+        CFLAG="-O2 -axW -tpp7 -I/usr/local/include"
+        #CFLAG="-O2 -xW -tpp7 -I/usr/local/include"
+        #CFLAG="-O2 -march=pentium4 -tpp7 -I/usr/local/include"
+        #CFLAG="-O2 -mcpu=pentium4 -tpp7 -I/usr/local/include"
+    else
+        CC="cc"
+        CXX="g++"
+        #CFLAG="-O"
+        #CFLAG="-O3 -march=pentium4"
+        CFLAG="-O3 -fPIC -march=core2"
+    fi
+
+    if [ "$MACHINE" = "x86_64" ]
+    then
+        CFLAG="$CFLAG -I/usr/include/x86_64-linux-gnu"
+        LDFLAG="-L/usr/lib/x86_64-linux-gnu"
+    else
+        CFLAG="$CFLAG -I/usr/include/i386-linux-gnu"
+        LDFLAG="-L/usr/lib/i386-linux-gnu"
+    fi
+
+    AR="ar"
+    ARFLAGS="rs"
+    RANLIB="true"
+    LIBS="-lglut -lGLU -lGL -lX11 -lm -lpthread -ljpeg"
+
+    if [ "$INPUT_GSTREAMER" = "y" ]
+    then
+        GST_CFLAGS=`pkg-config --cflags gstreamer-0.10`
+		GST_LIBS=`pkg-config --libs gstreamer-0.10`
+        CFLAG="$CFLAG $GST_CFLAGS"
+        LIBS="$LIBS $GST_LIBS"
+    fi
+    if [ "$INPUT_CAM1394" = "y" ]
+    then
+        if [ "$DC1394_V2" = "y" ]
+        then
+            LIBS="$LIBS `pkg-config libdc1394-2 --libs` `pkg-config libraw1394 --libs`"
+            CFLAG="$CFLAG `pkg-config libdc1394-2 --cflags` `pkg-config libraw1394 --cflags`"
+        else
+            LIBS="$LIBS -lraw1394 -ldc1394_control"
+        fi
+    fi
+    #CV_CFLAG=`pkg-config opencv --cflags`
+    #CV_LIBS=`pkg-config opencv --libs`
+    CV_CFLAG=""
+    CV_LIBS="-lopencv_calib3d -lopencv_features2d -lopencv_imgproc -lopencv_flann -lopencv_core -lz"
+elif [ "$E" = "IRIX" ]
+then
+    SYSTEM="irix"
+    CC="cc"
+    CXX="c++"
+    #INPUT_SGI="y"
+    CFLAG="-O -n32"
+    LDFLAG="-n32"
+    AR="ar"
+    ARFLAGS="rs"
+    RANLIB="true"
+    LIBS="-lglut -lGLU -lGL -lXmu -lX11 -lvl -lm -ljpeg"
+    CV_CFLAG=`pkg-config opencv --cflags`
+    CV_LIBS=`pkg-config opencv --libs`
+elif [ "$E" = "IRIX64" ]
+then
+    SYSTEM="irix64"
+    CC="cc"
+    CXX="c++"
+    #INPUT_SGI="y"
+    CFLAG="-O -n32"
+    LDFLAG="-n32"
+    AR="ar"
+    ARFLAGS="rs"
+    RANLIB="true"
+    LIBS="-lglut -lGLU -lGL -lXmu -lX11 -lvl -lm -ljpeg"
+    CV_CFLAG=`pkg-config opencv --cflags`
+    CV_LIBS=`pkg-config opencv --libs`
+elif [ "$E" = "Darwin" ]
+then
+    SYSTEM="macosx-universal"
+    DEFAULT_CAP_DEVICE=""
+    echo "Do you want to use QuickTime Video? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_QUICKTIME="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_QUICKTIME="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_QUICKTIME" = "y" ]
+    then
+        echo "Do you want to use it as the default input device? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DEFAULT_CAP_DEVICE="QUICKTIME"
+        elif [ "$ANS" = "n" ]
+        then
+            DEFAULT_CAP_DEVICE=""
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+    fi
+
+    echo "Do you want to use IEEE 1394 Digital Video Camera? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_CAM1394_MAC="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_CAM1394_MAC="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_CAM1394_MAC" = "y" ]
+    then
+#       echo "Do you want to use libdc1394_Ver.2? (y or n)"
+#        echo -n "Enter : "
+#        read ANS
+#        if [ "$ANS" = "y" ]
+#        then
+#            DC1394_V2="y"
+#        elif [ "$ANS" = "n" ]
+#        then
+#            DC1394_V2="n"
+#        else
+#            echo "Please enter y or n."
+#            exit 0
+#        fi
+        DC1394_V2="y"
+
+        if [ "$DEFAULT_CAP_DEVICE" = "" ]
+        then
+            echo "Do you want to use it as the default input device? (y or n)"
+            echo -n "Enter : "
+            read ANS
+            if [ "$ANS" = "y" ]
+            then
+                DEFAULT_CAP_DEVICE="CAM1394"
+            elif [ "$ANS" = "n" ]
+            then
+                DEFAULT_CAP_DEVICE=""
+            else
+                echo "Please enter y or n."
+                exit 0
+            fi
+        fi
+    fi
+
+    #CC="cc -arch i386 -arch x86_64"
+    CC="cc"
+    CXX="c++"
+    CFLAG="-O"
+    LDFLAG=""
+    #AR="libtool"
+    #ARFLAGS="-static -o"
+    #RANLIB="true"
+    AR="ar"
+    ARFLAGS="-r -u"
+    RANLIB="true"
+    LIBS="-framework Accelerate -framework QTKit -framework CoreVideo -framework Carbon -framework GLUT -framework OpenGL -framework Cocoa -ljpeg"
+    if [ "$INPUT_QUICKTIME" = "y" ]
+    then
+        LIBS="$LIBS -framework QuickTime"
+    fi
+    if [ "$INPUT_CAM1394_MAC" = "y" ]
+    then
+        LIBS="$LIBS -ldc1394"
+    fi
+    if [ "$INPUT_CAM1394_MAC" = "y" ]
+    then
+        echo "Does your IEEE1394 camera support color image? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            COLOR_1394="y"
+        elif [ "$ANS" = "n" ]
+        then
+            COLOR_1394="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+
+        echo "Do you use a DragonFly as a IEEE 1394 camera? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DRAGON="y"
+        elif [ "$ANS" = "n" ]
+        then
+            DRAGON="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+    fi
+
+    #CV_CFLAG="-framework OpenCV"
+    #CV_LIBS="-framework OpenCV"
+    CV_CFLAG=""
+    CV_LIBS="-lopencv_flann -lopencv_core -lopencv_calib3d -lopencv_imgproc -lopencv_highgui"
+else
+    echo "This configure command supports Linux, IRIX and MacOSX."
+    exit 0
+fi
+
+echo "Enable the VRML renderer and example? (y or n)"
+echo -n "Enter : "
+read ANS
+if [ "$ANS" = "y" ]
+then
+    ENABLE_VRML="y"
+elif [ "$ANS" = "n" ]
+then
+    ENABLE_VRML="n"
+else
+    echo "Please enter y or n."
+    exit 0
+fi
+
+echo "Enable the OpenSceneGraph renderer and examples? (y or n)"
+echo -n "Enter : "
+read ANS
+if [ "$ANS" = "y" ]
+then
+    ENABLE_OSG="y"
+elif [ "$ANS" = "n" ]
+then
+    ENABLE_OSG="n"
+else
+    echo "Please enter y or n."
+    exit 0
+fi
+
+
+#
+# Output step 1.
+# Create Makefiles, setting symbols, and selecting directories for compilation.
+#
+
+# Prefix any slashes with '\' for sed.
+echo $CC | sed -e 's/\//\\\//g' >$SED
+CC=`cat $SED`
+echo $CXX | sed -e 's/\//\\\//g' >$SED
+CXX=`cat $SED`
+echo $CFLAG | sed -e 's/\//\\\//g' >$SED
+CFLAG=`cat $SED`
+echo $LDFLAG | sed -e 's/\//\\\//g' >$SED
+LDFLAG=`cat $SED`
+echo $AR | sed -e 's/\//\\\//g' >$SED
+AR=`cat $SED`
+echo $ARFLAGS | sed -e 's/\//\\\//g' >$SED
+ARFLAGS=`cat $SED`
+echo $RANLIB | sed -e 's/\//\\\//g' >$SED
+RANLIB=`cat $SED`
+echo $LIBS | sed -e 's/\//\\\//g' >$SED
+LIBS=`cat $SED`
+echo $CV_CFLAG | sed -e 's/\//\\\//g' >$SED
+CV_CFLAG=`cat $SED`
+echo $CV_LIBS | sed -e 's/\//\\\//g' >$SED
+CV_LIBS=`cat $SED`
+echo $VERSION | sed -e 's/\//\\\//g' >$SED
+VERSION=`cat $SED`
+echo $SYSTEM | sed -e 's/\//\\\//g' >$SED
+SYSTEM=`cat $SED`
+
+cat > $SED <<EOF
+s/@CC@/$CC/
+s/@CXX@/$CXX/
+s/@CFLAG@/$CFLAG/
+s/@LDFLAG@/$LDFLAG/
+s/@AR@/$AR/
+s/@ARFLAGS@/$ARFLAGS/
+s/@RANLIB@/$RANLIB/
+s/@LIBS@/$LIBS/
+s/@CV_CFLAG@/$CV_CFLAG/
+s/@CV_LIBS@/$CV_LIBS/
+s/@VERSION@/$VERSION/
+s/@SYSTEM@/$SYSTEM/
+EOF
+
+if [ "$INPUT_V4L" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoLinuxV4L;     make -f Makefile)/(cd VideoLinuxV4L;     make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_CAM1394" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoLinux1394Cam; make -f Makefile)/(cd VideoLinux1394Cam; make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_DV" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoLinuxDV;      make -f Makefile)/(cd VideoLinuxDV;      make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_GSTREAMER" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoGStreamer;    make -f Makefile)/(cd VideoGStreamer;    make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_SGI" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoSGI;          make -f Makefile)/(cd VideoSGI;          make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_QUICKTIME" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoQuickTime;    make -f Makefile)/(cd VideoQuickTime;    make -f Makefile)/
+s/#(cd VideoQuickTime7;   make -f Makefile)/(cd VideoQuickTime7;   make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_CAM1394_MAC" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoLinux1394Cam; make -f Makefile)/(cd VideoLinux1394Cam; make -f Makefile)/
+EOF
+fi
+
+if [ "$INPUT_IMAGE" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoImage;        make -f Makefile)/(cd VideoImage;        make -f Makefile)/
+EOF
+fi
+
+if [ "$ENABLE_VRML" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd ARvrml;            make -f Makefile)/(cd ARvrml           ; make -f Makefile)/
+s/#(cd simpleVRML; make -f Makefile)/(cd simpleVRML; make -f Makefile)/
+EOF
+fi
+
+if [ "$ENABLE_OSG" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd ARosg;             make -f Makefile)/(cd ARosg;             make -f Makefile)/
+s/#(cd simpleOSG;  make -f Makefile)/(cd simpleOSG;  make -f Makefile)/
+s/#(cd nftBook;    make -f Makefile)/(cd nftBook;    make -f Makefile)/
+s/#(cd stereo;     make -f Makefile)/(cd stereo;     make -f Makefile)/
+s/#(cd optical;    make -f Makefile)/(cd optical;    make -f Makefile)/
+s/#(cd opticalStereo;    make -f Makefile)/(cd opticalStereo;    make -f Makefile)/
+EOF
+fi
+
+
+for i in $MDIR
+do
+    echo "  create $i/Makefile"
+    sed -f $SED <$i/Makefile.in > $i/Makefile
+done
+echo "  create share/artoolkit5-config"
+sed -f $SED <share/artoolkit5-config.in > share/artoolkit5-config
+chmod ugo+rx share/artoolkit5-config
+
+#
+# Output step 2.
+# Record configuration in config.h.
+#
+
+if [ "$DRAGON" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef   AR_INPUT_1394CAM_USE_DRAGONFLY/#define AR_INPUT_1394CAM_USE_DRAGONFLY/
+EOF
+fi
+
+if [ "$COLOR_1394" = "y" ]
+then
+cat >> $SED <<EOF
+s/#define   AR_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_MONO/#define   AR_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_RGB/
+EOF
+fi
+
+if [ "$INPUT_V4L" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_V4L/#define AR_INPUT_V4L/
+EOF
+fi
+
+if [ "$INPUT_CAM1394" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_1394CAM/#define AR_INPUT_1394CAM/
+EOF
+fi
+
+if [ "$DC1394_V2" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef AR_INPUT_1394CAM_USE_LIBDC1394_V2/#define AR_INPUT_1394CAM_USE_LIBDC1394_V2/
+EOF
+fi
+
+if [ "$INPUT_DV" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_DV/#define AR_INPUT_DV/
+EOF
+fi
+
+# Commented out since QuickTime config is now handled by predefined macros.
+#if [ "$INPUT_QUICKTIME" = "y" ]
+#then
+#cat >> $SED <<EOF
+#s/#undef  AR_INPUT_QUICKTIME/#define AR_INPUT_QUICKTIME/
+#EOF
+#fi
+
+if [ "$INPUT_CAM1394_MAC" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_1394CAM/#define AR_INPUT_1394CAM/
+EOF
+fi
+
+if [ "$INPUT_GSTREAMER" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_GSTREAMER/#define AR_INPUT_GSTREAMER/
+EOF
+fi
+
+if [ "$INPUT_IMAGE" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_IMAGE/#define AR_INPUT_IMAGE/
+EOF
+fi
+
+if [ "$DEFAULT_CAP_DEVICE" = "V4L" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_DEFAULT_INPUT_V4L/#define AR_DEFAULT_INPUT_V4L/
+EOF
+elif [ "$DEFAULT_CAP_DEVICE" = "CAM1394" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_DEFAULT_INPUT_1394CAM/#define AR_DEFAULT_INPUT_1394CAM/
+EOF
+elif [ "$DEFAULT_CAP_DEVICE" = "DV" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_DEFAULT_INPUT_DV/#define AR_DEFAULT_INPUT_DV/
+EOF
+elif [ "$DEFAULT_CAP_DEVICE" = "QUICKTIME" ]
+then
+# Commented out since QuickTime config is now handled by predefined macros.
+echo
+#cat >> $SED <<EOF
+#s/#undef  AR_DEFAULT_INPUT_QUICKTIME/#define AR_DEFAULT_INPUT_QUICKTIME/
+#EOF
+elif [ "$DEFAULT_CAP_DEVICE" = "GSTREAMER" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_DEFAULT_INPUT_GSTREAMER/#define AR_DEFAULT_INPUT_GSTREAMER/
+EOF
+elif [ "$E" = "Linux" ]
+then
+echo "You have to choose default input device!!"
+exit 0
+fi
+
+echo "  create include/AR/config.h"
+sed -f $SED <include/AR/config.h.in > include/AR/config.h
+
+echo "Done."

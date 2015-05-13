@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/Applications/Unity/Unity.app/Contents/PlaybackEngines/AndroidPlayer/release/bin/classes.jar" sourcepath="/Applications/Unity/Unity.app/Contents/PlaybackEngines/AndroidPlayer/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ARBaseLib"/>
+	<classpathentry kind="lib" path="/Users/phil/Documents/Development/Android/android-sdk-mac_86/platforms/android-15/android.jar" sourcepath="/Users/phil/Documents/Development/Android/android-sdk-mac_86/sources/android-15">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/phil/Documents/Development/Android/android-sdk-mac_86/docs/reference/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/BT200Ctrl.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

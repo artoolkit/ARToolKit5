@@ -1,0 +1,730 @@
+ARToolKit ChangeLog.
+====================
+
+
+Changes in version 5.2 (this release) (2015-05-13).
+---------------------------------------------------
+New features:
+- Full source is now supplied.
+- The Android optical calibration tool is now included in ARToolKit.
+
+Other changes:
+- Package names are now based on "org.artoolkit" rather than "com.artoolworks".
+- Obsolete video modules "QuickTimeOld" and "WinHDCam" have been removed.
+
+
+Changes in version 5.1.7 (2015-04-15).
+--------------------------------------
+New features:
+- Support for larger square template (pictorial) marker patterns. The default is 16x16 pattern. The size can be specified as a parameter to a new function arPattCreateHandle2(). The tools mk_patt, genMarkerSet and check_id all support a new command-line parameter --pattSize n (where n=16 is the default)
+- Support for tracking of multiple NFT surfaces simultaneously. Currently implemented in ARWrapper, but will be added to other examples in a later release.
+
+Enhancements:
+- The operation of the ARLOG* macros has been altered to use a new arLog function, and a new function arLogSetLogger() allows the output of arLog to be redirected via a callback.
+- On Windows, <windows.h> is now included in <AR/ar.h>, allowing for greater control over targetted versions of Windows.
+- check_id can now take accept a larger number of multi-marker configurations.
+- In genMarkerSet, threshold and other settings can be adjusted prior to marker extraction.
+- In genMarkerSet, now accepts JPEG images as input.
+- For square-tracking on very large input images where the marker extraction exceeds 65536 labels (connected regions), a compile-time option can be set to use 32-bit labels.
+- Internal support has been added for requesting a list of video inputs from a video module prior to opening a video connection. See function ar2VideoCreateSourceInfoList(). Currently supported for modules WinDS and WinMF only.
+- In genTexData, the minimum input images size has been reduced.
+- In ARWrapper, video frames can now be returned with 32-bit RGBA pixels, as well as 4 float pixels.
+- In ARWrapper, markers can now be added or removed during tracking.
+- The maximum number of template (pictorial) markers that may be loaded into a single ARPattHandle may now be set at the time the ARPattHandle is created. This should allow the memory occupied by the ARPattHandle to better match the caller's expected usage.
+
+Bug fixes:
+- THREAD_HANDLE_T is now an opaque type in thread_sub.h. Please replace direct access to THREAD_HANDLE_T.arg with new accessor function threadGetArg().
+- In ARWrapper, adding or removing NFT markers now correctly loads and unloads the marker data when tracking is already running.
+- Moved gsub_* inclusion out of ARController.h and into ARController.cpp and ARMarker.cpp.
+- Corrected definition of AR_DLL_API for cases where static linking is used.
+- In ARWrapper, corrected a bug which resulted in NFT marker data not being unloaded.
+- In ARWrapper, fixed a race condition between stopping video stream and stopping NFT tracking which sometimes resulted in a crash.
+- Misc minor fixes.
+- pthread-w32 (i.e. pthreadVC2.dll) now links against the correct Visual Studio runtime version.
+- genMarkerSet now correctly writes marker files with relative paths to the referenced pattern files.
+- In genTexData, generation of key-point data is no longer limited to images with DPIs of 100.0 and under.
+
+
+Changes in version 5.1.6 (2014-10-10).
+--------------------------------------
+Bug fixes
+- Corrects an issue on Windows which prevented use of the new Media Foundation video plugin inside a process using managed COM objects.
+
+
+Changes in version 5.1.5 (2014-10-03).
+--------------------------------------
+Enhancements:
+- A new video module is available on Windows. It uses the Microsoft Media Foundation framework, and is supported on Windows 7 or later. This module provides better support for built-in cameras on tablet devices running Windows 8. to use this new module, use a video configuration string of "-device=WinMF -format=BGRA". See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION for more information on format and frame size options.
+- Support for stereo tracking has been added to ARWrapper. (Previously available only in the C API, and used in the 'stereo' example.) As part of this change, some external API has changed in ARWrapper.
+
+
+Changes in version 5.1.4 (2014-08-05).
+--------------------------------------
+Enhancements:
+- Greatly improved control over internal ARToolKit log output. Messages are now assigned a priority level, and the user can control which messages are seen by setting the global variable arLogLevel (in libAR) to one of: AR_LOG_LEVEL_ERROR, AR_LOG_LEVEL_WARN, AR_LOG_LEVEL_INFO. The default is AR_LOG_LEVEL_INFO. Note that debug messages are not compiled into non-debug builds.
+
+Bug fixes:
+- Android: Fixed a bug introduced with 5.1.0 affecting nftSimple and nftBook examples where async NFT data loading was not being checked for completion.
+- Android: Fixed a bug in Java and ARWrapper-based examples where shutdown could occur while a video frame was being processed, resulting in a crash during app shutdown. A lock now mediates access.
+- Android: Fixed a bug which caused a crash in situations where native code stopped AR processing without stopping the video stream from Java. As part of this, the functionality of arwAcceptVideoInit() has been merged back into arwAcceptVideoImage(). The performance difference is negligable.
+
+
+Changes in version 5.1.2 (2014-07-04).
+--------------------------------------
+Enhancements:
+- In ARWrapper, renamed things. C++ class ARToolKit to ARController, arwGetMarkerImageCount() to arwGetMarkerPatternCount(), arwGetSubMarkerInfo() to arwGetMarkerPatternConfig() (with changed API), arwGetMarkerImage() to arwGetMarkerPatternImage(). Internal performance improvements in ARWrapper.
+- In ARWrapper, expose optical parameter loading functionality.
+- libEden is now included int the OS X, Windows and Linux SDKs.
+
+Bug fixes:
+- In genTexData, consider with AND height when working out minimum allowable DPI.
+
+
+Changes in version 5.1.1 (2014-06-10).
+--------------------------------------
+Bug fixes:
+- In ARWrapper, some internal changes in AndroidVideoSource class to reflect underlying changes in Android libarvideo.
+- Add support in videoAndroid for '-cachedir=' video config option to explicitly directory in which to cache downloaded camera parameters. (Default is working directory).
+
+
+Changes in version 5.1.0 (2014-05-30).
+--------------------------------------
+New features:
+- ARToolKit 5.1 introduces a significant new feature on Android, fetching of camera calibration data from an ARToolworks-provided server. On request, ARToolworks provides developers access to an on-device verson of calib_camera which submits calibration data to ARToolworks' server, making it available to all users of that device. The underlying changes to support this include a native version of libARvideo for Android which provides the functions to fetch camera calibration data (note that libARvideo on Android does not handle frame retrieval from the camera; that still happens on the Java side). Existing native apps which wish to use the functionality should follow the example usage from the ARNative example, and also link against libarvideo, and its additional dependencies libcurl, libssl and libcrypto.
+
+Enhancements:
+- Improved font handling in libEden.
+- iOS: On devices with retina displays, retina mode is now used by default in EAGLView and ARView. To revert to the old behaviour, edit EAGLView's -initWithFrame method.
+- The OSG renderer now allows for manual specification of the frame time (useful for pausing simulation/animation or performing at non-standard rates).
+- In the QuickTime video module, reading from a video file now supports option to get every frame, even if frame reading takes longer than the inter-frame interval.
+- arVideoSaveImageJPEG now allows for saving of arbitrary buffers, and includes an efficient vertical flip (useful for writing OpenGL framebuffers as JPEG files).
+
+Bug fixes:
+- Android: Corrected some inconsistencies in the example AndroidManifest.xml (screen size, uses-feature). Added requirement for android.hardware.camera.any and made android.hardware.camera.autofocus and android.hardware.camera optional. This should fix reported issues with Android market not making apps available to devices with only a front camera or to devices without an autofocus camera.
+- checkResolution's --help command line option now working again.
+- Linux: the libraries are now built with -fPIC by default.
+- Fixed an issue in libargsub_es's arglPixelBufferDataUploadBiPlanar where the optimised NEON code path was not preserving some required registers. This was manifesting as odd errors in functions which called arglPixelBufferDataUploadBiPlanar.
+- Android: Fixed an issue in the MoviePlayer Java class (in the ARMovie sample) which was causing the movie video to freeze after a random amount of time while the audio continued. Movie playback is much more reliable now.
+- iOS: An error whereby the correct camera parameters were not being selected for most recent iOS devices when using a video configuration of "-preset=high" has been corrected.
+
+
+Changes in version 5.0.8 (2014-03-10).
+--------------------------------------
+Enhancements:
+- iOS: Optimised support for iPhone 5s and later devices with 64-bit CPUs. The minimum supported OS version is now iOS 5.1.1, although the list of supported devices does not change. Xcode 5.0.1 is now the minimum supported build environment. iOS platform-specific library dependencies are now in lib/ios511 with headers in include/ios511 (was: lib/ios4 and include/ios4). C++ code is still linked against GNU's libstdc++. At some point in the future when OpenSceneGraph switches to libc++, ARToolKit will switch too.
+- iOS: The location of classes used in the iOS application examples has changed. Files shared by the applications are now in a subdirectory examples/ARAppCore. This makes it easier to see which parts of each application are different.
+- Added new functions arVideoOpenAsync()/ar2VideoOpenAsync() to allow opening of the video stream to proceed asynchronously. Once the stream parameters (size, pixelformat) are known, a callback is called. See notes (below) about use of this function on iOS to correct a bug.
+- iOS: Removed dependencies of ARMarker* classes on ARHandle etc. during init. Made -update specialised for each ARMarker subclass and handle the differences in the ARViewController.
+- iOS: Added ARMarkerMulti class.
+- iOS: Modified ARMarker -newMarkersFromConfigDataFile: and VirtualEnvironment -addObjectsFromObjectListFile: to accept absolute paths not referenced to the bundle folder.
+- iOS: Modify VirtualEnvironment to separate init from adding of objects from file.
+- iOS: In ARMarker, add "name" property and method findMarkerWithName:inMarkers:, and add positionScalefactor property to allow variation at runtime (used to be VIEW_SCALEFACTOR).
+- iOS: Add ARMarkerCreatedNotification/ARMarkerDestroyedNotification to allow other objects to be dynamically created/destroyed alongside ARMarker objects.
+- iOS: Add method to get ARMarker inverse pose.
+- iOS: Allow registration of VEObject subclasses which don't service any file extension.
+- iOS: Added VEObjectRegistryEntryIsInterestedInVirtualEnvironmentLifespan protocol to allow VEObject subclasses to do setup and cleanup. In VirtualEnvironment init/dealloc, call VEObject subclasses which conform to the protocol.
+- iOS: Separated initialisation of VEObject from act of adding the object to a VirtualEnvironment. New delegate methods -wasAddedToEnvironment: and -willBeRemovedFromEnvironment: are called on VEObject now to allow it to access things like VirtualEnvironment.arViewController.glView etc for drawing notifications.
+- iOS: In VEObject, gave VEObjects a 'name' property.
+- iOS: In VEObject, changed "From" and "To" suffix to "AsChildOf" in method names willBeAdded/wasAdded/willBeRemoved/wasRemoved to clarify meaning.
+- iOS: Moved setup of observation of ARMarker notifications into VEObject from VirtualEnvironment class. New method new method startObservingARMarker: replaces markerUpdatedPose:, markerAppeared: and markerDisappeared: methods.
+- iOS: In VEObject, provided full-featured parent/child system for pose. For objects with a parent, 'poseInEyeCoordinates' now has same meaning as old 'pose' for objects without a parent.
+- iOS: Updated VEObjectOBJ and VEObjectOSG for parent/child system. VEObjectOSG's OSG internal state now justs mirror the VEObject state.
+- iOS: Added an option to VirtualEnvironment so that in an objects.dat file, objects can refer to markers by name using MARKER_NAME token.
+- Added a new function arUtilGetResourcesDirectoryPath(), separate from arUtilChangeToResourcesDirectory(). Improved support for some of the search modes (e.g. user home directory). As a consequence OS X apps must now link to Foundation.framework.
+- Some improved API in ARWrapper.
+
+Bug fixes:
+- iOS: On VEObject dealloc, we now remove children before releasing the array.
+- iOS: Several important bug fixes in iOS video library. ar2VideoOpenAsync() is now used by default in the iOS examples, and this corrects an issue with video not opening correctly when returning to the ARViewController from a child UIViewController.
+- On mobile platforms, updated libosg.a for an issue where osg::LightModel was trying to apply non-OpenGL ES enums.
+- iOS: Fixed an issue in VEObjectMovie when using MovieVideo asynchronous loading.
+
+
+Changes in version 5.0.7 (2014-02-10).
+--------------------------------------
+Bug fixes:
+- The default video module on Windows (WinDS), fixed cleanup in arVideoClose().
+- Corrects an issue encountered when using multitextured OSG models by ensuring gsub_es resets multitexture state.
+
+
+Changes in version 5.0.6 (2014-02-05).
+--------------------------------------
+Enhancements:
+- In ARWrapper, internal optimisation has resulted in some API changes. arwCaptureAndUpdateAR() has been separated into arwCapture() and arwUpdateAR(), and the Android-speciific arwAcceptVideoImage() now returns bool true if no error occurred. Note also that arwGetProjectionMatrix() will not return true until arwIsRunning() also returns true.
+- Added options to checkResolution to scale the provided camera parameter.
+
+Bug fixes:
+- Fixes to catch case where candidate square markers with almost parallel edges result in miscalculated vertex values which resulted in unnecessary internal processing.
+- NFT examples: Improved error handling in trackingSub.c.
+- iOS: Improved cleanup in ARViewController.m.
+- iOS: In MovieVideo class, improved frame timing for movies without audio.
+- OS X: Improved cleanup in QTKitVideo, including case in -stop where buffer wasn't being released.
+- ARWrapper: fix shutdown leak of ARParamLT struct, and fix crash when shutting down after failed start.
+
+
+Changes in version 5.0.5 (2014-01-06).
+--------------------------------------
+Enhancements:
+- arImageProcMode is now exposed through libARWrapper.
+- Numerous small API documentation improvements.
+- EdenSound interface is now provided, connecting to OpenAL.
+- Android: the CameraPreferences API now allows querying of whether the camera is front-facing.
+- Added arUtilGetFileExtensionFromPath().
+- In threading library, added extra function threadGetBusyStatus to test if a thread is between start and end states.
+- gluttext is now in libEden.
+- calib_camera will use arImageProcLuma to do grayscale conversion, improving performance.
+- Added a parameter to arImageProcInit to force copying of incoming image, even if mono, to handle case where we might need to keep the image around for longer.
+- ARWrapper internal improvements.
+- Windows: The DSVideoLib library (used with video config '-device=DSVL') has been recompiled with VS 2010 SP1. There should no longer be any need to include msvsr71.dll or msvcp71.dll with ARToolKit-based applications, and these files have been removed from the installed version of ARToolKit.
+
+Bug fixes:
+- The tool for generating NFT datasets, genTexData, now enforces a lower limit of 196 pixels square on the smallest image in the image set. This corrects an error which occured during KPM data creation when small images were used.
+- A bug in eliminating marker matches with low confidence values when using mixed pattern/barcode detection mode has been corrected.
+- iOS examples: Removed an extraneous -drawView call from EAGLView's -layoutSubviews method.
+- genTexData now allows generation of a dataset with a single resolution (provide the same value for min and max DPI).
+- Include API reference for ARWrapper in release package.
+- Ensure all glStateCache(En/Dis)AbleTex2D calls are proceeded by glStateCacheActiveTexture() and all glStateCache(Dis/En)ableClientStateTexCoordArray calls are proceeded by glStateCacheClientActiveTexture().
+- Don't require ARParam to be kept around for lifetime of ARGL_CONTEXT_SETTINGS_REF.
+
+
+Changes in version 5.0.4 (2013-10-17).
+--------------------------------------
+New features:
+- This release includes libARWrapper (previously known as libARToolKitWrapper) which was previously supplied only with ARToolKit for Android. As ARWrapper has utility as a generic simplified C API to ARToolKit (for example when binding to Java or C#) it will now be provided for all platforms.
+- Full source code for the NFT utilities is now provided. This will allow customisation of the NFT dataset generation.
+
+Bug fixes:
+- mtxRotatef()/mtxRotated() (included in <AR/gsub_mtx.h>) now correctly normalise a non-normal axis of rotation. Previously, rotations were incorrect if the axis was not normalised.
+
+
+Changes in version 5.0.3 (2013-10-07).
+--------------------------------------
+Enhancements:
+- This release adds support for the iPhone 5s and 5c.
+
+
+Changes in version 5.0.2 (2013-10-04).
+--------------------------------------
+Bug fixes:
+- The glm model loader for Wavefront .obj files now better handles non-standard .obj files. Additionally, an option has been provided to flip textures on .obj files in the vertical dimension, as many .obj models are written with textures flipped. To enable texture flipping for a single .obj model, add this line to the model definition in the models.dat file: "CONFIG TEXTURE_FLIPV" (without the quotes).
+- iOS: Fixed a problem building EAGLView on the pre-iOS 7 SDK (added inclusion of QuartzCore headers). 
+- iOS: Fixed a problem in ARViewController which lead to the ARView not being released when the view controller was disposed of.
+
+Enhancements:
+- This release updates the included OpenCV libraries to version 2.4.6.1 (on Windows, OS X, and Linux).
+
+
+Changes in version 5.0.1 (2013-09-18).
+--------------------------------------
+Bug fixes:
+- A bug in handling of frame-sequential stereo has been corrected. Note that frame-sequential stereo generally requires a fixed frame rate, which is not guaranteed by GLUT. Platform-specific window-handling code will be added in a future release.
+- NFT input images are required to have an even number of pixels in both width and height. A check has been added to genTexData to enforce this.
+- Handling of file extensions in readtex() (used on iOS and Android) is now case-independent.
+- A bug in ARHandle initialisation which affected Windows debug builds has been corrected.
+
+
+Changes in version 5.0 (2013-09-06).
+------------------------------------
+New features:
+- New format for the NFT datasets (.iset, .fset and .fset2). API is substantially similar, with a few necessary changes documented at http://www.artoolworks.com/support/library/ARToolKit_upgrade_guide#Upgrading_to_ARToolKit_v5.0 . You will need to regenerate your datasets using genTexData.
+- OpenGL ES 2.0 support. A new library libARgsub_es2 provides the essential connection between ARToolKit and OpenGL ES 2.0, and includes code to manage shader programs, and also matrix math analogues of the OpenGL fixed-function matrix utilities. The matrix library is useful elsewhere and so has also been added to libARgsub_es and libARgsub_lite. On iOS, the EAGLView class has been enhanced to allow runtime selection of either an ES2 or ES1 context.
+- The native video formats on Android (NV21) and iOS (420f) are now handled natively in ARToolKit, resulting in substantial performance improvements both in video handling and tracking on these platforms.
+- ar2VideoGetImage() and arglDispImage() now support retrieving and rendering bi-planar format images from the camera. Performance is best with libARgsub_es2, but even libARgsub_es's performance with these formats is better than that of rendering BGRA format images due to some hand-optimised ARM NEON code.
+
+Enhancements:
+- The iOS video module (videoiPhone) now allows requesting of different pixel formats at runtime via a video configuration string option. See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#iOS_video_input_from_camera .
+- The ARMarkerSquare class used on iOS and native Android now automatically supports specification of square barcode markers in the markers.dat file.
+- Android (Java): Matching confidence and confidence cutoff may be queried.
+- Greatly improved support for different stereo display types in the stereo examples (stereo and stereoOptical) and calib_optical. Use the --help command-line option to see the control parameters.
+- Many more of the examples now use the ARMarker* classes, which offer a simple standard way to specify markers via a file (markers.dat by default), including (on desktop): simpleOSG, nftSimple, nftBook, stereo, optical, and stereoOptical, all apps on iOS except ARAppES1 and ARApp, and on Android all the fully-native apps.
+- Several more apps now support model loading and rendering via OpenSceneGraph, through the VirtualEnvironment class or C-pseudoclass.
+- Command-line options have been improved amongst the utilities. Use '-h' or '--help' after any utility name to see a full listing of its command-line options.
+- Optical see-through calibration has been improved, with better on-screen help, and with support for calibrating stereo optical displays against a single camera.
+- On Android, the Eclipse project files have been improved with the addition of C project files for the mixed-native and native examples. The CDT Eclipse plugin is required. See http://tools.android.com/recent/usingthendkplugin.
+- When using template matching (square picture-based markers) with mono or biplanar video formats, mono matching will be selected by default. Conversely colour matching will be used for colour formats.
+- iOS: When using the front camera, the image will be mirrored by default. This is achieved by new flipping support in ARView and argl. Previously, this flipping was achieved by mirroring the incoming video, but this caused other problems (e.g. NFT wouldn't track correctly). Now, tracking occurs correctly, and the effects on lighting of OSG models are also offset by support in libARosg (via VEObjectOSG class) for reversing the polygon winding when mirroring the video rendered scene. See example usage in ARViewController and ARView.
+
+Bug fixes:
+- Saving of optical parameters from calib_optical had been broken in a release in the 4.6 series, and this has been fixed. Optical calibrations will need to be recalibrated. Additionally, the optical parameter matrix stored on disk is now the position of the camera relative to the observer's eye, rather than the reverse. This makes use of optical parameters in rendering a single matrix multiplication. See optical/stereoOptical for new example usage.
+- Linux: The configure script now offers an option to avoid trying to build ARToolworks-internal-only code (i.e. libARICP and the NFT code).
+- Hundreds of other minor bug fixes.
+- iOS: Camera parameters for 16:9 video formats will now be more reliably drawn from 16:9 calibrations.
+- Android native apps will 'fill parent'. For the other apps using the camera preview, it's more complicatedÉ a solution will be provided in a later release.
+- An issue on OS X when 2 USB cameras can't both be served simultaneously should now result in a graceful failure with a timeout error message rather than a hang inside libARvideo.
+
+Other changes:
+- For performance, an optimised form of the calibrated camera parameters (ARCparamLT) is now used internally by ARToolKit. See the examples for usage, and the upgrade guide for API changes. Camera parameters format on disk is identical, although it is also possible to save and load the optimised form on disk.
+- iOS/Android: The OpenGL ES state cache (glStateCache) implemented by ARToolKit has been updated. If you are using OpenGL commands in your app, it is advisable to examine the list of functions whose state is handled in the cache, so that you are able to switch your usage to the cache and achieve correct and optimal rendering. Multitexturing support has been added to the ES1 cache.
+- The optical see-through example is now named "optical" rather than simpleLiteOptical. The new stereo optical example is named stereoOptical.
+- Android: ARNativeExample is now named just ARNative.
+- Android: native apps using ARToolKitWrapper don't need to link against libjpeg, since it's now linked into the wrapper itself.
+- iOS: Objective C private instance variables in classes such as ARViewController, ARView and VirtualEnvironment are now listed in the @implementation block, consistent with modern Objective C runtime style.
+- Marker pose filtering is now available to all examples using the ARMarker* classes. The simpleOSGFilter desktop example has been removed.
+- Continuous pose estimation, which was previously used by default has now been made a user-enabled option (i.e. it is off by default). This will result in increased "jitter" of marker poses, but should alleviate the problem where badly calibrated cameras would produce bizzare "inverted" poses. It is still recommended to use good camera calibration data, and re-enabled continuous pose estimation in your code.
+
+
+Changes in version 4.6.9 (2013-04-09).
+--------------------------------------
+New features:
+- ARToolKit for Android: Added a user-visible camera preferences screen to the examples. The preferences screen is automatically added to any applications based on ARBaseLib's ARActivity class. See http://www.artoolworks.com/support/library/ARToolKit_for_Android_Camera_Preferences for more information.
+
+Bug fixes:
+- Fixed an initialisation error introduced in 4.6.6 which affected auto-thresholding modes (not enabled by default).
+- Android ARMovie example: fixed issue with playback not resuming when activity is paused and resumed.
+
+
+Changes in version 4.6.8 (2013-03-27).
+--------------------------------------
+New features:
+- ARToolKit for Android now includes an example of playback of a video file on a marker surface. The example is NDK (native)-based and is named ARMovie. Movie playback is only supported by Android OS v4.0 ("Ice Cream Sandwich") and later (Android API level 14), and support varies in quality and reliability from device to device. It is highly recommended that you provide alternate playback mechanisms for devices where playback in the AR environment cannot proceed, e.g. full screen playback.
+
+Enhancements:
+- On iOS and Android examples which load markers from a configuration file (iOS: ARApp2, ARAppMovie, ARAppOSG; Android: ARNativeOSG), the tracking will now automatically be set to match the types of square markers (template (pictorial) vs. matrix (barcode)) used in the configuration file. It is not recommended that template and matrix markers are mixed in the same application, as this lowers the tracking reliability of both types.
+
+Bug fixes:
+- Android: A reliable fix has been found for the long-standing issue on some devices where after an app is exited and relaunched, the camera preview surface appears above the augmented surface. The fix adds a call to GLSurfaceView.setZOrderMediaOverlay(true), and then adds the camera preview to the window before the GLSurfaceView. Java-based apps will automatically inherit the fix (via ARBaseLib). Code based on the native examples should be updated with the updated method in the example's Activity.onStart() method.
+- Android: Improvements to the startup and shutdown of the example Activity classes mean that the previous requirement for the ARActivity to have noHistory:true set in its manifest has been removed.
+- Android: The DEBUG preprocessor macro is now defined in the native code modules when building in debug mode. (Previously, only NDEBUG was available, for release mode builds).
+
+
+Changes in version 4.6.7 (2013-03-05).
+--------------------------------------
+Enhancements:
+- Extra functionality for handling OSG objects with animations has been added to arOSG.
+
+Bug fixes:
+- Android: fixed a bug introduced in 4.6.6 which affected optimised code running on devices with an ARMv7 CPU without NEON (including Nvidia Tegra 2-based devices).
+- Fixed a rendering bug in EdenSurfacesDraw (added in 4.6.6).
+
+
+Changes in version 4.6.6 (2013-02-11).
+--------------------------------------
+New features:
+- A new Android native example demonstrated loading of square markers and rendereing with OSG.
+
+Enhancements:
+- Portions of the utility library libEden's "Surfaces" interface for texture handling has been reworked. A new function EdenSurfacesDraw provides a convenient method for drawing a texture in an OpenGL scene.
+- For the iOS NFT examples, loading/unloading of the .fset data has been moved into the ARMarkerNFT class. For the purposes of page numbering, a weak reference to the data is still held in the ARViewController class. With this change, it is now possible to get the width and height of an NFT surface by querying marker_width and marker_height. Previously this was possible only for square markers.
+- iOS/Android (ARM) improved performance of image processing for auto-thresholding and NFT. For native Android applications, the Android "cpufeatures" static library must be linked along with ARToolKit's native libraries.
+- iOS: Improvements to -capturePhoto method and enabled options for optimised flipping/rotating of incoming video. Also enabled "photo", cif (352x288) and 1080p (1920x1080) video resolutions.
+
+
+Changes in version 4.6.5 (2013-01-14).
+--------------------------------------
+New features:
+- In the OSG-based examples on the desktop platforms (simpleOSG and simpleOSGFilter) support is now included for loading common image formats as models. Additionally, a transparency hint can be supplied. This allows for (for example) transparent .png files to be displayed on markers. An example file has been included in these examples, displaying the ARToolworks logo on the "sample2" pattern.
+
+
+Changes in version 4.6.4 (2012-12-21).
+--------------------------------------
+
+
+New features:
+- Android: Asset handling on Android has been overhauled. Previously, assets required by the native code were unpacked in the Activity's onCreate() method to a folder named "AR" in the external storage, resulting in wasted launch time, unreclaimed storage space if the app was uninstalled, and potentially, asset conflicts. Now, assets are unpacked in an Application subclass to the application's cache on the internal storage. On subsequent launches, the assets are used from cache, saving time. Also, if space on the device is short, Android can clear this cache automatically, or the user manually. Finally, if the app is uninstalled, this space is reclaimed. One rule needs to be observed: if the application's assets are changed, the "VersionCode" field (an integer) in the application's AndroidManifest.xml MUST be changed (usually incremented).
+
+Enhancements:
+- iOS: In iOS video module, added tokens for iPad (4th generation) and iPad mini. Also, renamed iPad (March 2012) to iPad (3rd generation). Both new iPads use the same camera calibration as the iPad 3.
+- iOS: In CameraVideo, added "flipH" property, and "-capturePhoto" method.
+- Android: Transfer of video frames from Java to native now always uses JNI_ABORT in the operation. Previously, this behaviour was seen by default on some devices, while others were engaging in expensive reverse copies (causing a lot of garbage collector activity). This is a performance enhancement.
+
+Bug fixes:
+- iOS: Corrected an issue under iOS 6 where the ARViewController was getting unwanted autorotations as the device was rotated. See http://www.artoolworks.com/support/library/Updating_an_AR_application_with_the_latest_ARToolKit_for_iOS_example_code for more info.
+- Added an ARLOGperror() macro and used it where required. This should improve debug output on Android.
+- iOS: The obsolete "screenshot" method has been removed from ARViewController. The recommended means of taking a snapshot of the ARView is -snapshot and related methods in ARApp's ARViewController.m.
+
+Other changes:
+- Android: Changed ARToolKit.java's initialiseNative method to expect path to resources directory, and changed ARActivity.java to supply the cache directory as working directory. Updated Java-based examples to match. However, the native (NDK-based) examples will infer the path to the cache directory based on the package name. This will be improved in a later release.
+- iOS: In the NFT examples, trackingSub has been made identical to the version on the desktop-OS examples.
+
+
+Changes in version 4.6.3 (2012-12-06).
+--------------------------------------
+New features:
+- The OpenSceneGraph (OSG) model loader and renderer is now supported in ARToolKit for Android. At present, support is limited to NDK-based applications. A new Android example nftBook provides a full demonstration of OSG rendering. The Android.mk file shows how to link correctly. Note that prior to linking, the OSG libraries are extremely large, but will shrink considerably after symbol and dead code stripping during linking. OSG version 3.1.4 is supplied.
+
+Enhancements:
+- Android: Updated to build with Android NDK r8c, and added support for x86 and mips architectures. Updated to OpenCV 2.4.3. These changes require dropping support for Android 2.1 (API level 7). Android 2.2 (API level 8) is now the minimum supported version.
+- Video encoded with an alpha channel is now supported by the QuickTime video input module. (Available on 32-bit Windows and Mac OS X only, can be selected by using "-device=QUICKTIME" for video config.) The calling application must enabled blending on the OpenGL texture for video with an alpha channel to render correctly. (Typically: glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND);)
+
+Bug fixes:
+- A bug in mk_patt which prevented pattern-based square markers with non-standard border sizes being correctly saved has been fixed. Markers generated with non-standard border sizes should be regenerated.
+- A correction to a macro in video2.c now allows the new VideoImage module to open correctly on non-Mac OS X platforms.
+
+Other changes:
+- The Android ARNativeNFT example has been renamed to nftSimple, for consistency with other supported ARToolKit platforms.
+
+
+Changes in version 4.6.2 (2012-10-29).
+--------------------------------------
+Enhancements:
+- A new video input module "VideoImage" allows input from one or more JPEG images. This module is enabled by default on Windows, Linux and Mac OS X, and can also be enabled on iOS with a single change to include/AR/config.h.
+- iOS: Add a notification and properties to ARView for touch events.
+- iOS: In ARAppOSG's VEObjectOSG, listen for touches and correctly work out when they intersect the models.
+
+Bug fixes:
+- Fixed a serious issue with filtering. On all platforms using the ARMarker structure or class, filters were not being automatically reset after loss of tracking, resulting in some circumstances in the filtered position placing the object well outside the field of view. This bug fix should solve one source of the "disappearing object" bug in ARToolKit for Unity.
+- Created a user-editable constant "PAGES_MAX" for the NFT examples (nftSimple & nftBook on Mac OS X, Windows and Linux; ARAppNFT & ARAppNFTOSG on iOS, ARNativeNFT on Android) which sets the maximum number of NFT pages that may be specified in the markers.dat file.
+- iOS: Corrected a bug in ARView in touch-coord projection when the OpenGL content was drawn rotated with the device.
+- iOS: Fixed bug where some of the iPhone .nib files were missing the "fullscreen" property on their UIWindow instances, resulting in loss of touch events along the bottom of the screen.
+- iOS: Added clearing of stencil buffer (when present, which by default was never), in ARView.
+
+
+Changes in version 4.6.1 (2012-10-03).
+--------------------------------------
+Enhancements:
+- Support for iPhone 5 and iPod touch 5th Generation screen size and cameras.
+- Support for Apple's iOS 6 has been added. Support for iOS 6.0 requires use of Xcode 4.5, and this has a number of consequences; binaries are now built as armv7 + armv7s. armv6 is no longer supported, meaning that the minimum deployment target is now iOS 4.3, and the iPhone 3G can no longer be supported (the oldest supported model is now the iPhone 3GS). The project files have been updated to reflect this change. Users who still wish to support iPhone 3G can continue to use ARToolKit for iOS 4.6.0 (release 11) with Xcode 4.4.x.'
+- The bundled OpenSceneGraph libraries have been updated to v3.1.3 on iOS.
+
+Bug fixes:
+- A problem with texture loading when using Wavefront .obj models in the Android examples has been fixed. Now, a new function glmReadOBJ2 delays loading and submission of the textures until the model is ready to be drawn. Previously, texture loading was performed when the model was loaded, and typically no OpenGL context would be valid at that point.
+- On Android, debug output now goes to the Android logging facility, meaning that debug output from native ARToolKit should now be visible in Logcat (with the log tag "libar").
+- calib_camera now accepts file names with spaces when saving the calibrated parameters.
+- Extraneous header inclusions removed from simpleMovie.c.
+
+
+Changes in version 4.6.0 (2012-08-31).
+--------------------------------------
+New features:
+- NFT tracking is now included in all ARToolKit releases on all platforms.
+- Two new examples NFT-based for the desktop platforms: nftSimple, and nftBook. These display simple and advanced rendering on NFT surfaces. The formats used in the markers.dat and objects.dat file match those found in the ARToolKit for iOS and Android NFT examples.
+- NFT dataset creation utilities with the same improved ease of use and functionality as found on the mobile platforms are now provided for the desktop platforms. This means NFT datasets can be shared seamlessly between applications on mobile and desktop. The genTexData utility replaces the genImageSet, genFeatureMap, genFeatureSet and makeKpmTemplate utilities. The dispFeatureSet replaces the dispFeatureMap and checkKpmTemplate utilities.
+
+Enhancements:
+- The checkid utility has had some minor improvements in command-line handling and the types of information displayed. Please see its help page.
+- If opening movie files as video streams (via the QuickTime video module on Mac OS X or Windows), note that only URLs are now accepted. To construct a "file://" URI for a local file, a new convenience function arUtilGetFileURI has been added to libAR. The simpleMovie example shows the new simplified usage.
+- Pixel format information is now handled more consistently throughout the SDK, with AR_PIXEL_FORMAT used everywhere and AR_PIXEL_FORMAT_INVALID used to signal an invalid or unhandled format.
+- The calib_camera, calib_stereo and check_id applications have been improved and enhanced with better handling of command-line options. Run these utilities with the -h or --help option to see a summary of available options.
+- The winDF video module for interfacing with the Point Grey FlyCapture SDK (Windows-only) has been enhanced with some runtime configurable options. See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY for details.
+- The OSG-based projects now build for 32- and 64-bit on Mac OS X, provided OSG v3.1.3 or later is used. See http://www.artoolworks.com/dist/openscenegraph for an installer for OSG for Mac OS X.
+- A full OSG release is now bundled with ARToolKit for Windows.
+
+Bug fixes:
+- When using calib_camera or calib_stereo, camera frame sizes bigger than the screen were being cropped. This has been corrected by retaining the full frame tracking but scaling the drawn frame onscreen.
+- A buffer overrun error in arUtilGetFileURI has been fixed.
+
+Other changes:
+- For examples using gsub_lite, initialisation via arglSetup has changed. Now, an ARParam structure (holding the camera parameters) and pixel format are passed in instead of an ARHandle. If debug display mode functionality is required (for non-NFT tracking), this is now initialised separately in a new call.
+  For example, in your non-NFT applications, change:
+      gArglSettings = arglSetupForCurrentContext(gARHandle);
+  to:
+      gArglSettings = arglSetupForCurrentContext(&(gCparamLT->param), arVideoGetPixelFormat());
+      arglSetupDebugMode(gArglSettings, gARHandle);
+  See main() in simpleLite.c for example usage.
+- Support for Microsoft Visual Studio 2008 SP1 has been dropped.
+
+
+Changes in version 4.5.11 (2012-07-18).
+---------------------------------------
+Enhancements:
+- Handling of pre-supplied iOS camera calibration data has been improved. More information can be found in the iOS release notes.
+- The artoolkit-setenv script (which sets the ARTOOLKIT_4_ROOT environment variable on Mac OS X and Linux) should now function correctly on Mac OS X again.
+- Add Android-compatibility to arUtilChangeToResourcesDirectory(). The current "best" Android behaviour is to change to the root of the external storage (typically /mnt/sdcard or /sdcard (pre-Android OS 3.0)).
+
+Bug fixes:
+- The default filter cutoff (5 Hz) was a bit too low. The default is now 15Hz. This can of course be changed by the user.
+- Fixed a packaging error on Windows installers that left out some files required by the simpleOSG and simpleOSGFilter examples.
+
+
+Changes in version 4.5.10 (2012-07-04).
+---------------------------------------
+Enhancements
+- Improved the Windows configure script.
+
+
+Changes in version 4.5.9 (2012-04-17).
+--------------------------------------
+Bug fixes:
+- iOS: Fixed bug introduced in version 4.5.8 whereby incorrect tear-down of the camera connection could under some circumstances lead to a crash. 
+- iOS: Corrected Objective C object disposal in case of initialisation failure in VirtualEnvironment and VEObject* classes.
+
+Other changes:
+- iOS/Android: Changed marker handling to search for maximum of 30 markers per frame, and maximum of 25 picture (template) markers. (Limits on other platforms are 60 and 50 respectively.)
+- Android: the ARSimpleBarcode example has been renamed ARNativeBarcode, to better reflect its structure.
+- iOS: Users of the MovieVideo class can now listen for the NSNotification MovieVideoPlayBackEndedNotification to be notified of the end of playback of a movie file.
+- iOS: Improved handling of errors during movie loading in MovieVideo and VEObjectMovie classes.
+- iOS: Added correct compile-time flag for disabling Thumb code-generation when using LLVM compiler.
+
+
+Changes in version 4.5.8 (2012-03-28).
+--------------------------------------
+Enhancements:
+- Added support for the iPad (March 2012) to the iOS release. Also improved support for future iOS-based devices.
+
+Bug fixes:
+- Fixed bug in an OSG header encountered when using Xcode 4.3.x.
+
+Other changes:
+- Modification in behaviour of arPattLoadFromBuffer to allow use of const string parameter.
+
+
+Changes in version 4.5.7 (2012-02-14).
+--------------------------------------
+Enhancements:
+- Added arUtilChangeToResourcesDirectory function to allow one-line control of application resource path search behaviour.
+
+Bug fixes:
+- Mac OS X: Fixes for calling into the QuickTime7 video module from non-Objective C applications.
+
+Other changes:
+- Support for Microsoft Visual Studio 2005 SP1 (vs80sp1) has been dropped.
+- SGI Irix has not been supported for some time, and has now been dropped.
+
+
+Changes in version 4.5.6 (2011-10-18).
+--------------------------------------
+Enhancements:
+- iOS: The iPhone 4S is now supported; a full set of camera calibration files is included.
+
+Bug fixes:
+- iOS: Some memory leaks in marker and object file loading have been fixed.
+
+
+Changes in version 4.5.5 (2011-08-09).
+--------------------------------------
+Enhancements:
+- Extended controls and modes for ARvideo 1394dc.
+- Provides support for ARToolKit NFT v3.50.0.
+- Added matrix scaling functions to EdenMath.
+- arOSG now supports the concept of a "local transform". This is applied after the object's normal pose transform. Typically the pose transform is used to set the modelview matrix for the object, so the local transform allows translation, rotation, scaling or any combination
+
+Bug fixes:
+- Changed default threshold mode back to MANUAL. Auto modes have proven unreliable and will be improved in a future release.
+
+
+Changes in version 4.5.4 (2011-05-30).
+--------------------------------------
+Enhancements:
+- Extended controls and modes for ARvideo 1394dc.
+- Provides support for ARToolKit NFT v3.50.0.
+
+
+Changes in version 4.5.3 (2011-05-05).
+--------------------------------------
+New features:
+- An online 2D barcode marker generator is available now at http://www.artoolworks.com/support/app/marker.php.
+
+Enhancements:
+- The 4x4 barcode marker set, and two new error-checking and correction codes can now be selected at runtime.
+- check_id now has command-line switches to control parameters of the markers being used.
+
+Bug fixes:
+- A bug that prevented use of variable-border size markers has been fixed.
+
+
+Changes in version 4.5.2 (2011-04-20).
+--------------------------------------
+Enhancements:
+- arOSG now allows lighting to be turned on or off per model in the model .dat files. Also, it now allows for setting of viewpoints with the origin left or below (0,0).
+- A programmatic interface to the QuickTime movie interface is now exposed as <AR/sys/videoQuickTimeMovie.h>. The QuickTime "movie" object can be retrieved via a new function call ar2VideoGetMovieQuickTime().
+- A number of iOS-specific code improvements are documented in the iOS release notes.
+
+Bug fixes:
+- ar2VideoGetParams now correctly accepts a pointer to a string for the returned string parameter.
+- arOSG now turns off all ambient lighting.
+- The examples now create a window the same size as the incoming camera frame. Previously, a hard-coded window size was used.
+- A number of iOS-specific bug fixes are documented in the iOS release notes. 
+
+
+Changes in version 4.5.1 (2011-03-18).
+--------------------------------------
+Enhancements:
+- The arOSG library has added support for intersection queries, plus enabling/disabling lighting. Also, much more state information can now be queried.
+
+Bug fixes:
+- Mac OS X: An error which occured when closing the video stream has been corrected.
+- Mac OS X: The QuickTime7 video module will now default to supplying 32-bit BGRA pixels on Intel architectures and 32-bit ARGB pixels on ppc architectures. This can be overridden (e.g. to supply 2vuy or yuvs-format pixels) using the video config string.
+
+
+Changes in version 4.5.0 (2011-01-24).
+--------------------------------------
+New features:
+- arFilterTransMat functions to provide pose-estimate filtering.
+- Support for Microsoft Visual Studio 2010.
+- mk_patt can now train markers with non-standard border widths. The command line switch "-border=n" (n between 0 and 0.5 (not inclusive)) specifies the desired border width as a proportion of the marker width. The portion of the marker which will be used as the pattern is now indicated by mk_patt by outlining in blue. Note that in order to use markers with non-standard border widths, the border width must be specified in the application by using the arSetBorderSize() function (see reference documentation for more information.)
+
+
+Changes in version 4.5.0d3 (2011-01-06).
+----------------------------------------
+New features:
+- New QuickTime7 video input module for Mac, using the new QTKit Capture APIs. It is now the default video input module on the Mac. This new module offers a dramatic improvement in capture speed from high-definition video sources. If desired, ARToolKit can now be built with Mac OS X 10.6 the minimum version supported.
+- New example simpleMovie, demonstrating use of the QuickTime video input module to show a video file on a marker.
+- New utility, check_id, which allows low-level debugging of multi-marker tracking, particularly barcode marker tracking. See http://www.artoolworks.com/support/library/Debugging_marker_recognition_problems for a tutorial.
+
+Other changes:
+- Support for Microsoft Visual Studio .NET 2003, and OpenVRML 0.14.3 have been dropped.
+
+
+Changes in version 4.5.0d2 (2010-11-22).
+----------------------------------------
+New features:
+- Variable marker border width. See documentation for arSetBorderSize()/arGetBorderSize().
+- Error detection and correction codes with 3x3 matrix markers. Two modes are available, one using parity, and allowing for detection of single-bit errors with up to 32 markers, and one using a Hamming (6,3) code, allowing for detection of up to 3 bit errors and correction of up to 2 bit errors with up to 8 markers. Marker patterns for these modes can be found in the doc/patterns directory.
+- For identified square regions, which ultimately are not judged by ARToolKit to be known patterns, support is now included for discovering which stage of marker matching cutoff occured. See the documentation for the cutoffPhase member of the ARMarkerInfo structure.
+
+Enhancements:
+- On Mac OS X, adaptive thresholding makes use of the Accelerate framework for improved performance.
+
+Changes in version 4.5.0d1 (2010-10-05).
+----------------------------------------
+New features:
+- Adaptive thresholding. This algorithm adjusts the threshold intra-frame, and thus should help ARToolKit find markers when lighting condtions are non-uniform across a frame. Adaptive thresholding requires a fast computer, and is not enabled by default. The processing time taken is proportional to the number of pixels in the image; using an 800x600 image size or smaller is recommended. It can be enabled by calling arSetLabelingThreshMode(arHandle, AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE); Manually changing the threshold will disable adaptive thresholding. The kernel size (AR_LABELING_THRESH_ADAPTIVE_KERNEL_SIZE_DEFAULT) must be an odd number, and can be changed at compile-time. Larger values will provide better thresholding but require a faster CPU.
+
+
+Changes in version 4.4.3 (2010-08-20).
+--------------------------------------
+New features:
+- Added arVideoSaveImageJPEG() funtion, which saves video frame to a jpeg file.
+- Added a new auto threshold algorithm, based on Otsu's method, and changed this to the default method. Otsu's method typically selects a better threshold than the median, particularly when one or more markers are close to the camera.
+
+Enhancements:
+- Add new config token AR_ENABLE_MINIMIZE_MEMORY_FOOTPRINT. Enabled by default on iPhone, it removes support for the debug image, and saves several hundred KB of memory.
+
+Bug fixes:
+- Extraneous debug output from the pose estimator (ICP) now only present in debug builds, and goes to stderr.
+- Fix for small memory leak in arVideo.
+
+
+Changes in version 4.4.2 (this release) (2010-03-16).
+-----------------------------------------------------
+New features:
+- Auto-thresholding. ARToolKit will now by default automatically adjust the binarization threshold to the median image brightness. The brightness is measured using a full-image histogram, which runs by default every 8 frames. Note that if your ARToolKit application manually sets the threshold at any time (including during initialization) the auto-thresholding will be disabled.
+- New OpenSceneGraph-based rendering library, arOSG. arOSG is intended to provide access to the modern plugin-based scene graph OpenSceneGraph, and its attendant model formats and graphical capabilities. An example and full API documentation is included.
+
+Enhancements:
+- Windows binaries of ARToolKit are now supplied with win64-x64 versions of ARICP. win32-i386 versions now also build to subfolder of lib.
+- Update Windows DragonFly video module for latest FlyCapture SDK release (changes submitted by Henry Chu).
+- Reduced contrast required to identify barcode patterns (changed AR_PATT_CONTRAST_THRESH2 in arConfig.h to 15.0). This should enhance detection of barcode patterns.
+
+Bug fixes:
+- Fixup of handling of path separators on Win32 in utility functions to support osgART Professional Editon v1.1.3 ARToolKit4 and ARToolKit4NFT tracker plugins.
+
+s
+Changes in version 4.4.1 (2009-09-15).
+--------------------------------------
+Bug fixes:
+- Moved some symbols from libARvideo to libAR to avoid requirement to co-link.
+
+
+Changes in version 4.4.0 (2009-07-16).
+--------------------------------------
+New features:
+- Add line matching to pose estimator.
+- ARG: added "flipmode" for horizontal and vertical flipping.
+
+Enhancements:
+- Mac can also now use video1394dc.
+- New version of video1394dc, with headers and source, and configuration items.
+- Add draw square to ARG.
+- Add video pixel format name utility function.
+
+Bug fixes:
+- AR_AREA_MAX changed from 1e5 to 1e6. Tracking will now function better with HD images when marker is close to the camera.
+- Bug fixes in video1394dc.
+- Robust ppose estimator now makes better probability estimates.
+- Removal of 'static' qualifiers in multi lib.
+- Remove erroneous default video config in mk_patt for Windows DirectShow video.
+- Syntax error fixed in arViewerCapi.cpp.
+- Fix bug in videoQuickTime when UVC driver incorrectly reports frame timing.
+- Correct potential error in marker detection loop in examples.
+- Fix bug whereby request for a non-default pixel format was ignored by gsub_lite.
+- Change internal lib linkage in Xcode.
+- Removed some debug output from ARICP library.
+
+
+Changes in version 4.3.4 (2008-11-11).
+--------------------------------------
+Enhancements:
+- Add support for 3 packed pixel formats (RGB565, RGBA5551 and RGBA4444).
+- Addition of asynchronous fetching of video frames. New function ar2VideoGetImageAsync. At present, implemented only in dummy video.
+- Support for requesting power-of-2 sized buffers (via config string "-bufferpow2") from dummy video lib.
+- Replaced all double-precision floating point declarations with a macro which can be redefined to single-precision floating point as an optimisation.
+- Add 4x3 and 8x6 multi patterns and PDFs and Letter-size multi PDF.
+- Change multi-marker loading to allow backwards compatibility with config files from ARToolKit v2.x.
+
+Bug fixes:
+- Some gstreamer fixes incorporated, including correct pre-rolling with some additional source types, correction of default video config, and compatibility with new gstreamer releases.
+- Fixes to dual-mode marker detection (two pass detection of both matrix and template markers). arSetPatternDetectionMode no longer incorrectly rejects two-pass modes as invalid.
+- Debug image alpha channel (where appropriate) is now set to opaque.
+- More headerDoc documentation added.
+
+
+Changes in version 4.3.3 (2008-02-18).
+--------------------------------------
+New features:
+- Scripts to set and unset the ARTOOLKIT_4_ROOT environment variable have been added for the Linux and Mac OS X platforms. See the "share" directory.
+- A script "share/artoolkit5-config" allows 3rd-party applications to query ARToolKit build settings on the Linux and Mac OS X platforms.
+
+Bug fixes:
+- ARToolKit now assumes a little-endian architecture on Linux if the __BIG_ENDIAN__ macro is not defined by the preprocessor.
+- Change in multi-marker pattern file format (arMultiReadConfigFile); pattern filenames in a multimarker config file are now relative to the config file, rather than the working directory.
+
+
+Changes in version 4.3.2 (2008-01-20).
+--------------------------------------
+New features:
+- A new example, multiCube, demonstrates the use of non-planar multimarker sets, in this case a cube. Sample PDFs for cube markers are in doc/patterns/Cubes.
+- Add VideoGStreamer (LGPL license) which uses the GStreamer library for video input. Copyright Hartmut Seichter and ARToolworks, Inc.
+
+Enhancements:
+- The environment variable ARTOOLKIT_4_CONFIG can now be used to globally set the video configuration to be used when none is specified in the call to ar(2)VideoOpen().
+
+Bug fixes:
+- Configuration of Makefile builds (Linux, and optionally Mac OS X) has been cleaned up.
+- "-device=" option can now safely be passed to video input modules which don't use "-option" syntax.
+- gsub_lite is now correctly built in Makefile builds.
+
+
+Changes in version 4.3.1 (2008-01-08).
+--------------------------------------
+Other changes:
+- Update Xcode project for Xcode 3.0 compatibility.
+- Add arVideoUtilGetPixelFormat to libARvideo (duplicate of libAR's arUtilGetPixelFormat) to allow independent linkage.
+
+
+Changes in version 4.3 (2007-10-31).
+------------------------------------
+New features:
+- Hirokazu Kato has rewritten his original fast pose estimator a modern algorithm. The new pose estimator offers comparable accuraccy, with much improved speed.
+- A robust pose estimator has been added. See the documentation for functions arGetTransMatRobust() and arGetTransMatStereoRobust(). These functions are also available under multi-marker tracking.
+- Examples for multi-marker tracking and stereo tracking added.
+- Video input via QuickTime from file and streaming video sources has been added on Mac OS X and Windows. Full documentation is available in the ARToolworks support library.
+- A set of utilities for Linux 1394dc video have been added: whitebalance, checkimage, listcamera.
+
+Enhancements:
+- Camera calibration is now performed using the OpenCV library and is greatly simplified. A new version 4 of the camera calibration parameters is now saved. Camera calibration files generated with the earlier (versions 1 through 3) of the camera calibration utility may still be used. The old camera calibration utility is available as calib_camera_old-v3.
+- Multi-marker tracking is now available in two modes, template (pictorial markers) and matrix (2D-barcode markers). These modes can be used exclusively or together in a two-pass arrangement.
+- Some convenience functions added to gsub library: argGetScreenSize(), argSetWindowSize().
+- Video parameters under the Linux 1394dc video library can now be saved and restored.
+- ARvrml, the VRML renderer, now supports openvrml-0.16.6 on all platforms, and builds as a DLL on Windows to ease Building of programs that use ARvrml.
+
+Bug fixes:
+- arUtilSleep() now correctly operates in milliseconds on Unix-based systems.
+
+Other changes:
+- Minor changes in the parameters to some functions: please check the documentation for more information: arGetDebugMode(), arGetLabelingMode(), arGetLabelingThresh(), arGetImageProcMode(), arGetPattDetectionMode(), arGetMarkerExtractionMode(), arGetTransMat(), arGetTransMatStereo(), argGenImageTexture().
+- The following functions have been removed: arGetTransMatSub(), arGetTransMatSubStereo(), arModifyMatrix(), arModifyMatrixStereo(), arGetAngle(), arGetRot(), arGetNewMatrix(), arGetInitRot().
+
+Known issues in this release:
+- The Mac video library does not yet use the new QuickTime 7 video pipeline.
+- SGI video input is missing.
+
+
+Changes in version 4.1.3 (2007-05-12).
+--------------------------------------
+- Addition of routines to load and save optical calibration sets, updated calib_optical, and simpleLiteOptical example.
+
+
+Changes in version 4.1.2 (2007-04-24).
+--------------------------------------
+- Addition of calib_optical tool for calibration of optical see-through camera-display combinations.
+
+
+Changes in version 4.1.1 (2007-04-03).
+-----------------------------------------------------
+- Major modification to accommodate changing distortion function version at runtime. Several function prototypes have changed.
+- Lots of new headerDoc documentation in code.
+- Began maintaining ChangeLog inside release archives.
+
+--
+EOF

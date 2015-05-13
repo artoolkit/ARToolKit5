@@ -1,0 +1,10 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2006 Google, Inc.
+
+newmtl Concrete_rough_reddish
+Ka 0.000000 0.000000 0.000000
+Kd 0.517647 0.498039 0.474510
+Ks 0.330000 0.330000 0.330000
+map_Kd Boulder_Small_Gray/Concrete_rough_reddish.jpg
+

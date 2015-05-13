@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/settings"
+          android:icon="@drawable/settings"
+          android:title="@string/menuItem_settings"
+          android:titleCondensed="@string/menuItem_settings">
+    </item>
+    <item android:id="@+id/help"
+          android:icon="@drawable/help"
+          android:title="@string/menuItem_help"
+          android:titleCondensed="@string/menuItem_help">
+    </item>
+    <item android:id="@+id/toggleVideoSeeThrough"
+          android:icon="@drawable/ic_action_viewer_video"
+          android:title="@string/menuItem_toggleVideoSeeThrough"
+          android:titleCondensed="@string/menuItem_toggleVideoSeeThrough_short">
+    </item>
+    <!-- <item android:id="@+id/info"
+          android:icon="@drawable/about"
+          android:title="@string/menuItem_info"
+          android:titleCondensed="@string/menuItem_info"
+          android:showAsAction="ifRoom">
+    </item>  -->
+</menu>

@@ -1,0 +1,100 @@
+#! /bin/sh
+
+prefix="${ARTOOLKIT5_ROOT}"
+exec_prefix="${prefix}"
+includedir="${prefix}/include"
+libdir="${exec_prefix}/lib"
+version=@VERSION@
+cflags="@CFLAG@"
+ldflags="@LDFLAG@"
+libs="@LIBS@"
+
+usage()
+{
+    cat <<EOF
+Usage: artoolkit5-config [OPTION]
+
+Known values for OPTION are:
+
+  --prefix=DIR       change artoolkit5 prefix [default $prefix]
+  --exec-prefix=DIR  change artoolkit5 exec prefix [default $exec_prefix]
+  --libs             print all library linking information
+  --libs-only-l      print only -l library linking information 
+  --cflags           print pre-processor and compiler flags
+  --help             display this help and exit
+  --version          output version information
+EOF
+
+    exit $1
+}
+
+if test $# -eq 0; then
+    usage 1
+fi
+
+while test $# -gt 0; do
+    case "$1" in
+      -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+      *) optarg= ;;
+    esac
+
+    case "$1" in
+    --prefix=*)
+      prefix=$optarg
+      includedir=$prefix/include
+      libdir=$prefix/lib
+      ;;
+
+    --prefix)
+      echo $prefix
+      ;;
+
+    --exec-prefix=*)
+      exec_prefix=$optarg
+      libdir=$exec_prefix/lib
+      ;;
+
+    --exec-prefix)
+      echo $exec_prefix
+      ;;
+
+    --version)
+      echo $version
+      exit 0
+      ;;
+
+    --help)
+      usage 0
+      ;;
+
+    --cflags)
+      echo $cflags
+      ;;
+
+    --libs-only-l)
+      echo $libs
+      ;;
+
+    --libs)
+        if [ "`uname`" = "Linux" ]
+        then
+            if [ "-L${libdir}" = "-L/usr/lib64" ]
+            then
+                echo "$ldflags $libs"
+            else
+                echo "-L${libdir} $ldflags $libs"
+            fi
+        else
+            echo "-L${libdir} $ldflags $libs"
+        fi
+        ;;
+
+    *)
+    usage
+    exit 1
+    ;;
+    esac
+    shift
+done
+
+exit 0
