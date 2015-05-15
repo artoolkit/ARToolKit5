@@ -190,3 +190,4 @@ ARToolKit5iOS.xcodeproj/project.pbxproj
 ARToolKit5iOS.xcodeproj/xcshareddata/
 Xcode/version.xcconfig
 Xcode/ARToolKit default images/
+Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt

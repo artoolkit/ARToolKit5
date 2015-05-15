@@ -1392,6 +1392,7 @@
 		4A5BAA8D13D82BC000C8D5E7 /* ARAppMovie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAppMovie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5BAA8F13D82DFD00C8D5E7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4A5BAA9A13D82FC500C8D5E7 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
+		4A65437E1B0599DF00A6F660 /* libjpeg_symbols_to_mark_private.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjpeg_symbols_to_mark_private.txt; sourceTree = "<group>"; };
 		4A65BBD21843F943007380B3 /* ALFramework.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALFramework.cpp; sourceTree = "<group>"; };
 		4A65BBD31843F943007380B3 /* ALFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALFramework.h; sourceTree = "<group>"; };
 		4A65BBD41843F943007380B3 /* CWaves.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CWaves.cpp; sourceTree = "<group>"; };
@@ -3094,10 +3095,19 @@
 			name = "Other source";
 			sourceTree = "<group>";
 		};
+		4A65437A1B0599DF00A6F660 /* ARWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				4A65437E1B0599DF00A6F660 /* libjpeg_symbols_to_mark_private.txt */,
+			);
+			path = ARWrapper;
+			sourceTree = "<group>";
+		};
 		4A77EBA21162425300E4C0D2 /* Xcode */ = {
 			isa = PBXGroup;
 			children = (
 				4AA8B554161AD5A200B48D70 /* ARToolKit default images */,
+				4A65437A1B0599DF00A6F660 /* ARWrapper */,
 				4A77EBA31162425300E4C0D2 /* version.xcconfig */,
 			);
 			path = Xcode;
