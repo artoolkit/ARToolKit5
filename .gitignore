@@ -37,6 +37,7 @@ local.properties
 xcuserdata/
 *.mode1*
 *.pbxuser
+*.xccheckout
 
 #### Other VCS
 .svn/
