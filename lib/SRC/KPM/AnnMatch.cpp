@@ -50,7 +50,7 @@
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
  *  Author(s): Hirokazu Kato, Philip Lamb
  *
- * /
+ */
 
 #include <stdio.h>
 #include <string.h>
