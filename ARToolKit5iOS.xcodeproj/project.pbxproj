@@ -6810,7 +6810,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = (
+					armv7,
+					armv7s,
+					arm64,
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = "";
@@ -7188,7 +7192,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = (
+					armv7,
+					armv7s,
+					arm64,
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -7227,7 +7235,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = (
+					armv7,
+					armv7s,
+					arm64,
+				);
 				CLANG_CXX_LIBRARY = "libstdc++";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_VERSION = "";
