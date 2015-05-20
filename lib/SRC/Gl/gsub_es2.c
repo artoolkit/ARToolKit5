@@ -88,7 +88,7 @@ enum {
 };
 
 struct _ARGL_CONTEXT_SETTINGS {
-    ARParam *arParam;
+    ARParam arParam;
     GLuint  texture0; // For interleaved images all planes. For bi-planar images, plane 0.
     GLuint  texture1; // For interleaved images, not used.  For bi-planar images, plane 1.
     GLuint  program;
@@ -158,8 +158,8 @@ static char arglSetupTextureGeometry(ARGL_CONTEXT_SETTINGS_REF contextSettings)
     }
     
     // Set up the geometry for the surface which we will texture upon.
-    imageSizeX = (float)contextSettings->arParam->xsize;
-    imageSizeY = (float)contextSettings->arParam->ysize;
+    imageSizeX = (float)contextSettings->arParam.xsize;
+    imageSizeY = (float)contextSettings->arParam.ysize;
     zoom = contextSettings->zoom;
     if (contextSettings->disableDistortionCompensation) vertexCount = 4;
     else vertexCount = 840; // 20 rows of 2 x 21 vertices.
@@ -197,8 +197,8 @@ static char arglSetupTextureGeometry(ARGL_CONTEXT_SETTINGS_REF contextSettings)
                 x = imageSizeX * (float)i / 20.0f;
                 tx = x / (float)contextSettings->textureSizeX;
                 
-                arParamObserv2Ideal(contextSettings->arParam->dist_factor, (ARdouble)x, (ARdouble)y_prev, &x1, &y1, contextSettings->arParam->dist_function_version);
-                arParamObserv2Ideal(contextSettings->arParam->dist_factor, (ARdouble)x, (ARdouble)y,      &x2, &y2, contextSettings->arParam->dist_function_version);
+                arParamObserv2Ideal(contextSettings->arParam.dist_factor, (ARdouble)x, (ARdouble)y_prev, &x1, &y1, contextSettings->arParam.dist_function_version);
+                arParamObserv2Ideal(contextSettings->arParam.dist_factor, (ARdouble)x, (ARdouble)y,      &x2, &y2, contextSettings->arParam.dist_function_version);
                 
                 xx1 = (float)x1 * zoom;
                 yy1 = (imageSizeY - (float)y1) * zoom;
@@ -594,7 +594,7 @@ ARGL_CONTEXT_SETTINGS_REF arglSetupForCurrentContext(ARParam *cparam, AR_PIXEL_F
     ARGL_CONTEXT_SETTINGS_REF contextSettings;
     
     contextSettings = (ARGL_CONTEXT_SETTINGS_REF)calloc(1, sizeof(ARGL_CONTEXT_SETTINGS));
-    contextSettings->arParam = cparam;
+    contextSettings->arParam = *cparam; // Copy it.
     contextSettings->zoom = 1.0f;
     contextSettings->requestUpdateProjection = TRUE;
     // Because of calloc used above, these are redundant.
@@ -666,18 +666,18 @@ void arglDispImage(ARGL_CONTEXT_SETTINGS_REF contextSettings)
         if (contextSettings->rotate90) mtxLoadMatrixf(projection, ir90);
         else mtxLoadIdentityf(projection);
         if (contextSettings->flipV) {
-            bottom = (float)contextSettings->arParam->ysize;
+            bottom = (float)contextSettings->arParam.ysize;
             top = 0.0f;
         } else {
             bottom = 0.0f;
-            top = (float)contextSettings->arParam->ysize;
+            top = (float)contextSettings->arParam.ysize;
         }
         if (contextSettings->flipH) {
-            left = (float)contextSettings->arParam->xsize;
+            left = (float)contextSettings->arParam.xsize;
             right = 0.0f;
         } else {
             left = 0.0f;
-            right = (float)contextSettings->arParam->xsize;
+            right = (float)contextSettings->arParam.xsize;
         }
         mtxOrthof(projection, left, right, bottom, top, -1.0f, 1.0f);
         glUniformMatrix4fv(contextSettings->uniforms[ARGL_UNIFORM_MODELVIEW_PROJECTION_MATRIX], 1, GL_FALSE, projection);
