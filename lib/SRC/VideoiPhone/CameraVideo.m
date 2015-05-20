@@ -618,7 +618,7 @@ bail0:
         if (willSaveNextFrame) {
             CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, planes[0].bufDataPtr, planes[0].bytesPerRow * planes[0].height, NULL);
             CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-            CGImageRef newImgRef = CGImageCreate(planes[0].width, planes[0].height, 8, 32, planes[0].bytesPerRow, cs, kCGImageAlphaNoneSkipLast, dataProvider, NULL, false, kCGRenderingIntentDefault);
+            CGImageRef newImgRef = CGImageCreate(planes[0].width, planes[0].height, 8, 32, planes[0].bytesPerRow, cs, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little, dataProvider, NULL, false, kCGRenderingIntentDefault);
             CGDataProviderRelease(dataProvider);
             CGColorSpaceRelease(cs);
             UIImage *frameImage = [UIImage imageWithCGImage:newImgRef]; // Appears to do a CGImageRetain().
