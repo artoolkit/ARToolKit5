@@ -616,16 +616,27 @@ bail0:
         }
         
         if (willSaveNextFrame) {
-            CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, planes[0].bufDataPtr, planes[0].bytesPerRow * planes[0].height, NULL);
-            CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-            CGImageRef newImgRef = CGImageCreate(planes[0].width, planes[0].height, 8, 32, planes[0].bytesPerRow, cs, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little, dataProvider, NULL, false, kCGRenderingIntentDefault);
-            CGDataProviderRelease(dataProvider);
-            CGColorSpaceRelease(cs);
-            UIImage *frameImage = [UIImage imageWithCGImage:newImgRef]; // Appears to do a CGImageRetain().
-            CGImageRelease(newImgRef);
-            if (frameImage) {
-                UIImageWriteToSavedPhotosAlbum(frameImage, nil, nil, NULL);
-                willSaveNextFrame = NO;
+            CGBitmapInfo bi;
+            if      (pixelFormat == kCVPixelFormatType_32BGRA) bi = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little;
+            else if (pixelFormat == kCVPixelFormatType_32ARGB) bi = kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big;
+            //else if (pixelFormat == kCVPixelFormatType_24BGR) bi = kCGImageAlphaNone | kCGBitmapByteOrder32Little;
+            //else if (pixelFormat == kCVPixelFormatType_24RGB) bi = kCGImageAlphaNone | kCGBitmapByteOrder32Big;
+            else {
+                ARLOGe("Error: Request to save frame to camera roll, but not using RGB pixel format.\n");
+                bi = 0;
+            }
+            if (bi != 0) {
+                CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, planes[0].bufDataPtr, planes[0].bytesPerRow * planes[0].height, NULL);
+                CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
+                CGImageRef newImgRef = CGImageCreate(planes[0].width, planes[0].height, 8, 32, planes[0].bytesPerRow, cs, bi, dataProvider, NULL, false, kCGRenderingIntentDefault);
+                CGDataProviderRelease(dataProvider);
+                CGColorSpaceRelease(cs);
+                UIImage *frameImage = [UIImage imageWithCGImage:newImgRef]; // Appears to do a CGImageRetain().
+                CGImageRelease(newImgRef);
+                if (frameImage) {
+                    UIImageWriteToSavedPhotosAlbum(frameImage, nil, nil, NULL);
+                    willSaveNextFrame = NO;
+                }
             }
         }
         
