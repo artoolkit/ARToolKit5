@@ -117,8 +117,18 @@ extern "C" {
 #define  AR_VIDEO_1394_GAMMA_MIN_VAL                  101
 
 #define  AR_VIDEO_WINDS_SHOW_PROPERTIES			      129
-    
+
+#define  AR_VIDEO_FOCUS_MODE                          301 // i
+#define  AR_VIDEO_FOCUS_MANUAL_DISTANCE               302 // d
+#define  AR_VIDEO_FOCUS_POINT_OF_INTEREST_X           303 // d
+#define  AR_VIDEO_FOCUS_POINT_OF_INTEREST_Y           304 // d
+
 #define  AR_VIDEO_GET_VERSION                     INT_MAX
+
+#define  AR_VIDEO_FOCUS_MODE_FIXED                    0
+#define  AR_VIDEO_FOCUS_MODE_AUTO                     1
+#define  AR_VIDEO_FOCUS_MODE_POINT_OF_INTEREST        2
+#define  AR_VIDEO_FOCUS_MODE_MANUAL                   3
 
 /*!
     @typedef

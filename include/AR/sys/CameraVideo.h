@@ -183,6 +183,11 @@ extern NSString *const CameraVideoiOSDeviceAppleTVX; // "Apple TV (Unknown model
 @property(nonatomic, readonly) BOOL running;
 @property(nonatomic) BOOL pause;
 
+// The delegate which gets call each time a new frame is available, and its userdata.
+// See discussion of CameraVideoTookPictureDelegate above.
+@property(nonatomic, assign) id <CameraVideoTookPictureDelegate> tookPictureDelegate;
+@property(nonatomic, assign) void *tookPictureDelegateUserData;
+
 // These values are valid only once the first frame has been received.
 // When invalid, they return 0.
 // When a multi-planar format is in use, these are the same as calling
@@ -206,9 +211,17 @@ extern NSString *const CameraVideoiOSDeviceAppleTVX; // "Apple TV (Unknown model
 - (void) takePhoto;
 // You can also do the same thing, just from a notification with this method.
 - (void) takePhotoViaNotification:(NSNotification *)notification;
-@property BOOL willSaveNextFrame; // If set, when the next frame arrives it will be saved to the user's camera roll. Only supported when pixelFormat == kCVPixelFormatType_32BGRA.
-@property(nonatomic, assign) id <CameraVideoTookPictureDelegate> tookPictureDelegate;
-@property(nonatomic, assign) void *tookPictureDelegateUserData;
+
+// If set, when the next frame arrives it will be saved to the user's camera roll.
+// Only supported when using 32-bit RGB pixel formats, e.g. pixelFormat = kCVPixelFormatType_32BGRA.
+@property BOOL willSaveNextFrame;
+
+// Sets focus mode. When mode == AVCaptureFocusModeAutoFocus, then coords must be a
+// valid 2D coordinate in pixels, with 0,0 at the top-left of the frame where the frame
+// is considered upright when the device is held in landscape mode with the home button on the right.
+// Note that this DOES NOT give a visual indication of the focus point; that is up to the
+// caller to display, should he or she wish to.
+- (BOOL) setFocus:(AVCaptureFocusMode)mode atPixelCoords:(CGPoint)coords;
 
 // Get a pointer to the most recent frame.
 // If timestampOut is non-NULL, it will be filled with a timestamp using the same

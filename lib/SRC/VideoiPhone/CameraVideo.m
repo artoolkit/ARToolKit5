@@ -618,11 +618,11 @@ bail0:
         if (willSaveNextFrame) {
             CGBitmapInfo bi;
             if      (pixelFormat == kCVPixelFormatType_32BGRA) bi = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little;
-            else if (pixelFormat == kCVPixelFormatType_32ARGB) bi = kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big;
-            //else if (pixelFormat == kCVPixelFormatType_24BGR) bi = kCGImageAlphaNone | kCGBitmapByteOrder32Little;
-            //else if (pixelFormat == kCVPixelFormatType_24RGB) bi = kCGImageAlphaNone | kCGBitmapByteOrder32Big;
+            else if (pixelFormat == kCVPixelFormatType_32ARGB) bi = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
+            else if (pixelFormat == kCVPixelFormatType_32RGBA) bi = kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big;
+            else if (pixelFormat == kCVPixelFormatType_32ABGR) bi = kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Little;
             else {
-                ARLOGe("Error: Request to save frame to camera roll, but not using RGB pixel format.\n");
+                ARLOGe("Error: Request to save frame to camera roll, but not using 32-bit RGB pixel format.\n");
                 bi = 0;
             }
             if (bi != 0) {
@@ -770,6 +770,27 @@ bail0:
 - (void) takePhotoViaNotification:(NSNotification *)notification
 {
     [self takePhoto];
+}
+
+- (BOOL) setFocus:(AVCaptureFocusMode)mode atPixelCoords:(CGPoint)coords
+{
+    if (!captureDevice) return FALSE;
+    if (![captureDevice isFocusModeSupported:mode]) return FALSE;
+    
+    NSError *error = nil;
+    [captureDevice lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"Error: unable to set focus mode. %@.", error.localizedDescription);
+        return FALSE;
+    } else {
+        [captureDevice setFocusMode:mode];
+        if (mode == AVCaptureFocusModeAutoFocus && [captureDevice isFocusPointOfInterestSupported]) {
+            CGPoint coordsNorm = CGPointMake(coords.x/(float)self.width, coords.y/(float)self.height);
+            [captureDevice setFocusPointOfInterest:coordsNorm];
+        }
+        [captureDevice unlockForConfiguration];
+        return TRUE;
+    }
 }
 
 - (void) stop

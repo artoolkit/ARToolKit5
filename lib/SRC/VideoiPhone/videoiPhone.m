@@ -58,6 +58,8 @@ struct _AR2VideoParamiPhoneT  {
     void (*gotImageFunc)(AR2VideoBufferT *, void *);
     void *gotImageFuncUserData;
     AR_VIDEO_IOS_FOCUS focus;
+    float              focusPointOfInterestX;
+    float              focusPointOfInterestY;
     BOOL               itsAMovie;
     UInt64             currentFrameTimestamp;
     UInt64             hostClockFrequency;
@@ -265,6 +267,7 @@ AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callbac
     }
 
     arMallocClear(vid, AR2VideoParamiPhoneT, 1);
+    vid->focusPointOfInterestX = vid->focusPointOfInterestY = -1.0f;
      
     // Init the CameraVideo object.
     vid->cameraVideo = [[CameraVideo alloc] init];
@@ -608,6 +611,25 @@ int ar2VideoSetParamiiPhone( AR2VideoParamiPhoneT *vid, int paramName, int  valu
             if (value < 0) return (-1);
             vid->focus = value;
             break;
+        case AR_VIDEO_FOCUS_MODE:
+            if (value == AR_VIDEO_FOCUS_MODE_FIXED) {
+                [vid->cameraVideo setFocus:AVCaptureFocusModeLocked atPixelCoords:CGPointMake(0.0f, 0.0f)];
+            } else if (value == AR_VIDEO_FOCUS_MODE_AUTO) {
+                [vid->cameraVideo setFocus:AVCaptureFocusModeContinuousAutoFocus atPixelCoords:CGPointMake(0.0f, 0.0f)];
+            } else if (value == AR_VIDEO_FOCUS_MODE_POINT_OF_INTEREST) {
+                if (vid->focusPointOfInterestX < 0.0f || vid->focusPointOfInterestY < 0.0f) {
+                    ARLOGw("Warning: request for focus on point-of-interest, but point of interest not yet set.\n");
+                } else {
+                    [vid->cameraVideo setFocus:AVCaptureFocusModeAutoFocus atPixelCoords:CGPointMake(vid->focusPointOfInterestX, vid->focusPointOfInterestY)];
+                }
+            } else if (value == AR_VIDEO_FOCUS_MODE_MANUAL) {
+                ARLOGe("Error: request for manual focus but this mode not currently supported on iOS.\n");
+                return (-1);
+            } else {
+                ARLOGe("Error: request for focus mode %d but this mode not currently supported on iOS.\n", value);
+                return (-1);
+            }
+            break;
         default:
             return (-1);
     }
@@ -630,6 +652,16 @@ int ar2VideoSetParamdiPhone( AR2VideoParamiPhoneT *vid, int paramName, double  v
     if (!vid) return (-1);
     
     switch (paramName) {
+        case AR_VIDEO_FOCUS_MANUAL_DISTANCE:
+            ARLOGe("Error: request for manual focus but this mode not currently supported on iOS.\n");
+            return (-1);
+            break;
+        case AR_VIDEO_FOCUS_POINT_OF_INTEREST_X:
+            vid->focusPointOfInterestX = (float)value;
+            break;
+        case AR_VIDEO_FOCUS_POINT_OF_INTEREST_Y:
+            vid->focusPointOfInterestY = (float)value;
+            break;
         default:
             return (-1);
     }
