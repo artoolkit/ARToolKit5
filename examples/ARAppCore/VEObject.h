@@ -67,7 +67,7 @@
 // Designated initialiser.
 // 'file' is ignored by default, but may be used by VEObject suclasses.
 // 'config' is ignored by default, but may be used by VEObject suclasses.
-- (id) initFromFile:(NSString *)file translation:(const ARdouble [3])translation rotation:(const ARdouble [4])rotation scale:(const ARdouble [3])scale config:(char *)config;
+- (id) initFromFile:(NSString *)file translation:(const ARdouble [3])translation rotation:(const ARdouble [4])rotation scale:(const ARdouble [3])scale config:(char *)config NS_DESIGNATED_INITIALIZER;
 
 // Convenience initialisers.
 - (id) initFromFile:(NSString *)file translation:(const ARdouble [3])translation rotation:(const ARdouble [4])rotation scale:(const ARdouble [3])scale;

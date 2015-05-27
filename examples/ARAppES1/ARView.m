@@ -73,6 +73,9 @@ NSString *const ARViewUpdatedViewportNotification = @"ARViewUpdatedViewportNotif
     BOOL contentRotate90;
     BOOL contentFlipH;
     BOOL contentFlipV;
+    ARViewContentScaleMode contentScaleMode;
+    ARViewContentAlignMode contentAlignMode;
+
     float projection[16];
     GLint viewPort[4];
     
@@ -84,7 +87,7 @@ NSString *const ARViewUpdatedViewportNotification = @"ARViewUpdatedViewportNotif
     id <ARViewTouchDelegate> touchDelegate;
 }
 
-@synthesize contentWidth, contentHeight, touchDelegate, arViewController;
+@synthesize contentWidth, contentHeight, contentAlignMode, contentScaleMode, touchDelegate, arViewController;
 @synthesize gDrawRotate;
 
 - (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained
@@ -100,6 +103,9 @@ NSString *const ARViewUpdatedViewportNotification = @"ARViewUpdatedViewportNotif
         
         contentWidth = (int)frame.size.width;
         contentHeight = (int)frame.size.height;
+        contentScaleMode = ARViewContentScaleModeFill;
+        contentAlignMode = ARViewContentAlignModeCenter;
+
         cameraPoseValid = NO;
         
         // Init gestures.
@@ -127,17 +133,17 @@ NSString *const ARViewUpdatedViewportNotification = @"ARViewUpdatedViewportNotif
     NSLog(@"[ARView layoutSubviews] backingWidth=%d, backingHeight=%d\n", self.backingWidth, self.backingHeight);
 #endif        
 
-    if (self.contentMode == UIViewContentModeScaleToFill) {
+    if (self.contentScaleMode == ARViewContentScaleModeStretch) {
         w = self.backingWidth;
         h = self.backingHeight;
     } else {
         int contentWidthFinalOrientation = (contentRotate90 ? contentHeight : contentWidth);
         int contentHeightFinalOrientation = (contentRotate90 ? contentWidth : contentHeight);
-        if (self.contentMode == UIViewContentModeScaleAspectFit || self.contentMode == UIViewContentModeScaleAspectFill) {
+        if (self.contentScaleMode == ARViewContentScaleModeFit || self.contentScaleMode == ARViewContentScaleModeFill) {
             float scaleRatioWidth, scaleRatioHeight, scaleRatio;
             scaleRatioWidth = (float)self.backingWidth / (float)contentWidthFinalOrientation;
             scaleRatioHeight = (float)self.backingHeight / (float)contentHeightFinalOrientation;
-            if (self.contentMode == UIViewContentModeScaleAspectFill) scaleRatio = MAX(scaleRatioHeight, scaleRatioWidth);
+            if (self.contentScaleMode == ARViewContentScaleModeFill) scaleRatio = MAX(scaleRatioHeight, scaleRatioWidth);
             else scaleRatio = MIN(scaleRatioHeight, scaleRatioWidth);
             w = (int)((float)contentWidthFinalOrientation * scaleRatio);
             h = (int)((float)contentHeightFinalOrientation * scaleRatio);
@@ -147,20 +153,20 @@ NSString *const ARViewUpdatedViewportNotification = @"ARViewUpdatedViewportNotif
         }
     }
     
-    if (self.contentMode == UIViewContentModeTopLeft
-        || self.contentMode == UIViewContentModeLeft
-        || self.contentMode == UIViewContentModeBottomLeft) left = 0;
-    else if (self.contentMode == UIViewContentModeTopRight
-             || self.contentMode == UIViewContentModeRight
-             || self.contentMode == UIViewContentModeBottomRight) left = self.backingWidth - w;
+    if (self.contentAlignMode == ARViewContentAlignModeTopLeft
+        || self.contentAlignMode == ARViewContentAlignModeLeft
+        || self.contentAlignMode == ARViewContentAlignModeBottomLeft) left = 0;
+    else if (self.contentAlignMode == ARViewContentAlignModeTopRight
+             || self.contentAlignMode == ARViewContentAlignModeRight
+             || self.contentAlignMode == ARViewContentAlignModeBottomRight) left = self.backingWidth - w;
     else left = (self.backingWidth - w) / 2;
         
-    if (self.contentMode == UIViewContentModeBottomLeft
-        || self.contentMode == UIViewContentModeBottom
-        || self.contentMode == UIViewContentModeBottomRight) bottom = 0;
-    else if (self.contentMode == UIViewContentModeTopLeft
-             || self.contentMode == UIViewContentModeTop
-             || self.contentMode == UIViewContentModeTopRight) bottom = self.backingHeight - h;
+    if (self.contentAlignMode == ARViewContentAlignModeBottomLeft
+        || self.contentAlignMode == ARViewContentAlignModeBottom
+        || self.contentAlignMode == ARViewContentAlignModeBottomRight) bottom = 0;
+    else if (self.contentAlignMode == ARViewContentAlignModeTopLeft
+             || self.contentAlignMode == ARViewContentAlignModeTop
+             || self.contentAlignMode == ARViewContentAlignModeTopRight) bottom = self.backingHeight - h;
     else bottom = (self.backingHeight - h) / 2;
 
     glViewport(left, bottom, w, h);

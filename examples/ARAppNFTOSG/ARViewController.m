@@ -120,19 +120,21 @@
 {
     self.wantsFullScreenLayout = YES;
     
-    // This will be replaced with the actual AR view.
+    // This will be overlaid with the actual AR view.
     NSString *irisImage = nil;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         irisImage = @"Iris-iPad.png";
     }  else { // UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
         CGSize result = [[UIScreen mainScreen] bounds].size;
         if (result.height == 568) {
-             irisImage = @"Iris-568h.png"; // iPhone 5, iPod touch 5th Gen, etc.
+            irisImage = @"Iris-568h.png"; // iPhone 5, iPod touch 5th Gen, etc.
         } else { // result.height == 480
             irisImage = @"Iris.png";
         }
     }
-    self.view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:irisImage]] autorelease]; // autorelease because self.view retains it.
+    UIView *irisView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:irisImage]] autorelease];
+    irisView.userInteractionEnabled = YES;
+    self.view = irisView;
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -378,9 +380,9 @@ static void startCallback(void *userData)
     }
         
     // Allocate the OpenGL view.
-    glView = [[ARView alloc] initWithFrame:[[UIScreen mainScreen] bounds] pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:NO preserveBackbuffer:NO]; // Don't retain it, as it will be retained when by self.view.
+    glView = [[[ARView alloc] initWithFrame:[[UIScreen mainScreen] bounds] pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:NO preserveBackbuffer:NO] autorelease]; // Don't retain it, as it will be retained when added to self.view.
     glView.arViewController = self;
-    self.view = glView;
+    [self.view addSubview:glView];
     
     // Create the OpenGL projection from the calibrated camera parameters.
     // If flipV is set, flip.
@@ -390,7 +392,8 @@ static void startCallback(void *userData)
     glView.contentFlipV = flipV;
     
     // Set up content positioning.
-    glView.contentMode = UIViewContentModeScaleAspectFill;
+    glView.contentScaleMode = ARViewContentScaleModeFill;
+    glView.contentAlignMode = ARViewContentAlignModeCenter;
     glView.contentWidth = gCparamLT->param.xsize;
     glView.contentHeight = gCparamLT->param.ysize;
     BOOL isBackingTallerThanWide = (glView.surfaceSize.height > glView.surfaceSize.width);
@@ -601,8 +604,9 @@ static void startCallback(void *userData)
         arglCleanup(arglContextSettings);
         arglContextSettings = NULL;
     }
-    self.view = nil; // Will result in glView being released.
-        
+    [glView removeFromSuperview]; // Will result in glView being released.
+    glView = nil;
+    
     // NFT cleanup.
     trackingInitQuit(&threadHandle);
     detectedPage = -2;

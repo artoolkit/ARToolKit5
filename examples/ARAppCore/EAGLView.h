@@ -73,7 +73,7 @@ typedef enum {
 
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api; // These also set the current context.
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format;
-- (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained;
+- (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained NS_DESIGNATED_INITIALIZER;
 
 @property(readonly, nonatomic) NSString* pixelFormat; // Either kEAGLColorFormatRGBA8 or kEAGLColorFormatRGB565.
 @property(readonly, nonatomic) EAGLDepthFormat depthFormatEAGL;

@@ -88,6 +88,25 @@ enum viewPortIndices {
     viewPortIndexHeight
 };
 
+typedef enum {
+    ARViewContentScaleModeStretch = 0,
+    ARViewContentScaleModeFit,
+    ARViewContentScaleModeFill,
+    ARViewContentScaleModeFit1to1
+} ARViewContentScaleMode;
+
+typedef enum {
+    ARViewContentAlignModeTopLeft = 0,
+    ARViewContentAlignModeTop,
+    ARViewContentAlignModeTopRight,
+    ARViewContentAlignModeLeft,
+    ARViewContentAlignModeCenter,
+    ARViewContentAlignModeRight,
+    ARViewContentAlignModeBottomLeft,
+    ARViewContentAlignModeBottom,
+    ARViewContentAlignModeBottomRight,
+} ARViewContentAlignMode;
+
 @interface ARView : EAGLView <ARViewTouchDelegate> {
 }
 
@@ -106,6 +125,8 @@ enum viewPortIndices {
 @property BOOL contentRotate90;
 @property BOOL contentFlipH;
 @property BOOL contentFlipV;
+@property ARViewContentScaleMode contentScaleMode; // Defaults to ARViewContentScaleModeFill.
+@property ARViewContentAlignMode contentAlignMode; // Defaults to ARViewContentAlignModeCenter.
 
 // Interaction.
 @property(nonatomic, assign) id <ARViewTouchDelegate> touchDelegate;

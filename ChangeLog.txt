@@ -2,8 +2,21 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.2 (this release) (2015-05-13).
----------------------------------------------------
+Changes in version 5.2.1 (this release) (2015-xx-xx).
+-----------------------------------------------------
+Enhancements:
+- iOS: Added support for locking focus, auto-focus based on point-of-interest, or contintous autofocus (default).
+- iOS: Positioning and scaling of the video background is now separate from that of the ARView itself.
+
+Bug fixes:
+- gsub_es2 now caches the ARParam just like gsub_es does.
+- iOS: ARView for OpenGL ES 2.x now correctly releases the glProgram on dealloc.
+- iOS: Added the armv7s arch back in on iOS.
+- iOS: Avoid layout issues when stopping and restarting the ARViewController, by adding the glView as a child view of the ARViewController's view, rather than a replacement for it.
+
+
+Changes in version 5.2 (2015-05-13).
+------------------------------------
 New features:
 - Full source is now supplied.
 - The Android optical calibration tool is now included in ARToolKit.
