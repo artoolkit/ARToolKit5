@@ -636,6 +636,13 @@ bail0:
                 if (frameImage) {
                     UIImageWriteToSavedPhotosAlbum(frameImage, nil, nil, NULL);
                     willSaveNextFrame = NO;
+                    NSURL *shutterSoundURL = [[NSBundle mainBundle] URLForResource: @"slr_camera_shutter" withExtension: @"wav"];
+                    if (shutterSoundURL) {
+                        SystemSoundID shutterSound;
+                        if (AudioServicesCreateSystemSoundID((CFURLRef)shutterSoundURL, &shutterSound) == noErr) {
+                            AudioServicesPlaySystemSound(shutterSound);
+                        }
+                    }
                 }
             }
         }
