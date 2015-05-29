@@ -1,7 +1,7 @@
 [Setup]
 AppName="ARToolKit"
-AppVerName="ARToolKit v5.2"
-AppVersion=5.2
+AppVerName="ARToolKit v5.2.1"
+AppVersion=5.2.1
 AppPublisher="Daqri LLC"
 AppPublisherURL=http://www.artoolkit.org/
 AppSupportURL=http://www.artoolkit.org/documentation
@@ -12,7 +12,7 @@ InfoBeforeFile=README.txt
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit v5.2 Setup (bin-win32-vs100)"
+OutputBaseFilename="ARToolKit v5.2.1 Setup (bin-win32-vs100)"
 OutputDir=..
 ChangesEnvironment=yes
 
