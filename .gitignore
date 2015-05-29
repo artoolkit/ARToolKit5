@@ -46,11 +46,78 @@ xcuserdata/
 
 # config
 include/AR/config.h
+share/artoolkit5-config
 
 # iOS build products
 lib/libAR*.a
 lib/libEden.a
 lib/libKPM.a
+
+# Linux/OS X/Windows build products
+bin/calib_*
+bin/check_id
+bin/mk_patt
+bin/genTexData
+bin/dispImageSet
+bin/dispFeatureSet
+bin/checkResolution
+bin/genMarkerSet
+bin/checkImage
+bin/listCamera
+bin/whiteBalance
+lib/SRC/Gl/gsubTest
+bin/calib_*.exe
+bin/check_id.exe
+bin/mk_patt.exe
+bin/genTexData.exe
+bin/dispImageSet.exe
+bin/dispFeatureSet.exe
+bin/checkResolution.exe
+bin/genMarkerSet.exe
+
+bin/multiCube
+bin/multiTest
+bin/multiWin
+bin/simpleLite
+bin/optical
+bin/opticalStereo
+bin/simpleOSG
+bin/simpleTest
+bin/simpleVRML
+bin/stereo
+bin/nftSimple
+bin/nftBook
+bin/ARWrapper.so
+
+bin/multiCube.app/
+bin/multiTest.app/
+bin/multiWin.app/
+bin/simpleLite.app/
+bin/optical.app/
+bin/opticalStereo.app/
+bin/simpleMovie.app/
+bin/simpleOSG.app/
+bin/simpleTest.app/
+bin/simpleVRML.app/
+bin/stereo.app/
+bin/nftSimple.app/
+bin/nftBook.app/
+bin/ARWrapper.bundle
+
+bin/multi.exe
+bin/multiCube.exe
+bin/simpleLite.exe
+bin/optical.exe
+bin/opticalStereo.exe
+bin/simpleMovie.exe
+bin/simpleOSG.exe
+bin/simple.exe
+bin/simpleVRML.exe
+bin/stereo.exe
+bin/nftSimple.exe
+bin/nftBook.exe
+bin/ARWrapper.dll
+
 
 # Build directories of Android projects.
 android/obj/local/armeabi-v7a/objs
@@ -153,4 +220,5 @@ VisualStudio/vs120/Release-StaticCRuntime
 VisualStudio/vs120/x64
 
 # Symlinks in OS X builds.
-bin/*.dylib
+bin/libopencv_*.dylib
+bin/libpng15*.dylib
