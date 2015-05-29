@@ -2,11 +2,12 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.2.1 (this release) (2015-xx-xx).
+Changes in version 5.2.1 (this release) (2015-05-29).
 -----------------------------------------------------
 Enhancements:
 - iOS: Added support for locking focus, auto-focus based on point-of-interest, or contintous autofocus (default).
 - iOS: Positioning and scaling of the video background is now separate from that of the ARView itself.
+- iOS: Added presupplied calibration for iPad mini 3.
 
 Bug fixes:
 - gsub_es2 now caches the ARParam just like gsub_es does.

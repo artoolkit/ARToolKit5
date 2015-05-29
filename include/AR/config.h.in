@@ -37,7 +37,7 @@
 /*!
 	@header config.h
 	@abstract ARToolKit core configuration.
-	@version 5.2
+	@version 5.2.1
 	@discussion
 	@copyright 2015 Daqri, LLC.
  */
@@ -64,7 +64,7 @@
 
 // The TINY version number defines bug-fixes to existing
 // functionality. Range: [0-99].
-#define AR_HEADER_VERSION_TINY		0
+#define AR_HEADER_VERSION_TINY		1
 
 // The BUILD version number will always be zero in releases,
 // but may be non-zero in internal builds or in version-control
@@ -73,7 +73,7 @@
 
 // The string representation below must match the major, minor
 // and tiny release numbers.
-#define AR_HEADER_VERSION_STRING	"5.2.0"
+#define AR_HEADER_VERSION_STRING	"5.2.1"
 
 // The macros below are convenience macros to enable use
 // of certain ARToolKit header functionality by the release

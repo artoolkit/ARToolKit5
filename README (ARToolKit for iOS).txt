@@ -18,9 +18,9 @@ Next steps.
 About this archive.
 ------------------- 
 
-This archive contains the ARToolKit libraries, utilities and examples for iOS, version 5.2.
+This archive contains the ARToolKit libraries, utilities and examples for iOS, version 5.2.1.
 
-ARToolKit version 5.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.2.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Apple's iOS App Store, you must use your own package name, and not the org.artoolkit package name.
 
@@ -29,7 +29,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-05-13
+    2015-05-29
 
 
 Requirements.
@@ -89,7 +89,7 @@ Usage:
 
 Release notes.
 --------------
-This release contains ARToolKit v5.2 for iOS.
+This release contains ARToolKit v5.2.1 for iOS.
 
 Please see the ChangeLog.txt for details of changes in this and earlier releases.
 
@@ -116,7 +116,7 @@ Next steps.
 
 We have made a forum for discussion of ARToolKit for iOS development available on our community website.
 
-http://www.artoolkit.org/community/forum/
+http://www.artoolkit.org/community/forums/viewforum.php?f=22
 
 
 You are invited to join the forum and contribute your questions, answers and success stories.
