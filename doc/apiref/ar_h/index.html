@@ -279,6 +279,48 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 <hr class="afterClassOrHeaderInfo">
 <br><a name="HeaderDoc_groups"><h2 class="h2tight">Groups</h2></a>
 
+<h3>"3D calculation".</h3>
+<div class="group_desc_indent">
+</div>
+<h4>Group members:</h4>
+<div class="group_indent">
+<dl>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeCpara" logicalPath="//apple_ref/c/func/ar3DChangeCpara" target="_top">ar3DChangeCpara</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThresh" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThresh" target="_top">ar3DChangeLoopBreakThresh</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" target="_top">ar3DChangeLoopBreakThreshRatio</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeMaxLoopCount" logicalPath="//apple_ref/c/func/ar3DChangeMaxLoopCount" target="_top">ar3DChangeMaxLoopCount</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle" logicalPath="//apple_ref/c/func/ar3DCreateHandle" target="_top">ar3DCreateHandle</a></tt></dt>
+<dd><p>Create handle used for 3D calculation from calibrated camera parameters.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle2" logicalPath="//apple_ref/c/func/ar3DCreateHandle2" target="_top">ar3DCreateHandle2</a></tt></dt>
+<dd><p>Create handle used for 3D calculation from an intrinsic parameters matrix.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DDeleteHandle" logicalPath="//apple_ref/c/func/ar3DDeleteHandle" target="_top">ar3DDeleteHandle</a></tt></dt>
+<dd><p>Delete handle used for 3D calculation.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMat" logicalPath="//apple_ref/c/func/arGetTransMat" target="_top">arGetTransMat</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatRobust" logicalPath="//apple_ref/c/func/arGetTransMatRobust" target="_top">arGetTransMatRobust</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquare" logicalPath="//apple_ref/c/func/arGetTransMatSquare" target="_top">arGetTransMatSquare</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquareCont" logicalPath="//apple_ref/c/func/arGetTransMatSquareCont" target="_top">arGetTransMatSquareCont</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+</dl>
+</div>
+<p>&nbsp;</p>
 <h3>"Utility".</h3>
 <div class="group_desc_indent">
 </div>
@@ -292,6 +334,58 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 <dd><p>Prints a transformation matrix via ARLOG(...).
 </p></dd>
 </dl>
+</div>
+<p>&nbsp;</p>
+<h3>"Pattern identification".</h3>
+<div class="group_desc_indent">
+</div>
+<h4>Group members:</h4>
+<div class="group_indent">
+<dl>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattActivate" logicalPath="//apple_ref/c/func/arPattActivate" target="_top">arPattActivate</a></tt></dt>
+<dd><p>Activate a previously deactivated pattern.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattAttach" logicalPath="//apple_ref/c/func/arPattAttach" target="_top">arPattAttach</a></tt></dt>
+<dd><p>Associate a set of patterns with an ARHandle.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattCreateHandle" logicalPath="//apple_ref/c/func/arPattCreateHandle" target="_top">arPattCreateHandle</a></tt></dt>
+<dd><p>Allocate a pattern handle.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDeactivate" logicalPath="//apple_ref/c/func/arPattDeactivate" target="_top">arPattDeactivate</a></tt></dt>
+<dd><p>Deactivate a previously activated pattern.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDeleteHandle" logicalPath="//apple_ref/c/func/arPattDeleteHandle" target="_top">arPattDeleteHandle</a></tt></dt>
+<dd><p>Free all loaded patterns and pattern handle.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDetach" logicalPath="//apple_ref/c/func/arPattDetach" target="_top">arPattDetach</a></tt></dt>
+<dd><p>Reset an ARHandle to no pattern association.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattFree" logicalPath="//apple_ref/c/func/arPattFree" target="_top">arPattFree</a></tt></dt>
+<dd><p>Frees (unloads) a pattern file from memory.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetID2" logicalPath="//apple_ref/c/func/arPattGetID2" target="_top">arPattGetID2</a></tt></dt>
+<dd><p>Match the interior of a detected square against known patterns.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetIDGlobal" logicalPath="//apple_ref/c/func/arPattGetIDGlobal" target="_top">arPattGetIDGlobal</a></tt></dt>
+<dd><p>Match the interior of a detected square against known patterns with variable border width.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetImage2" logicalPath="//apple_ref/c/func/arPattGetImage2" target="_top">arPattGetImage2</a></tt></dt>
+<dd><p>Extract the image (i.e. locate and unwarp) of the pattern-space portion of a detected square.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetImage3" logicalPath="//apple_ref/c/func/arPattGetImage3" target="_top">arPattGetImage3</a></tt></dt>
+<dd><p>Extract the image (i.e. locate and unwarp) of an arbitrary portion of a detected square.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattLoad" logicalPath="//apple_ref/c/func/arPattLoad" target="_top">arPattLoad</a></tt></dt>
+<dd><p>Load a pattern file into a pattern handle.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattSave" logicalPath="//apple_ref/c/func/arPattSave" target="_top">arPattSave</a></tt></dt>
+<dd><p>Save a pattern to a pattern file.
+</p></dd>
+</dl>
+</div>
+<p>&nbsp;</p>
+<h3>"3D calculation by Stereo".</h3>
+<div class="group_desc_indent">
 </div>
 <p>&nbsp;</p>
 <h3>"Square detection".</h3>
@@ -389,100 +483,6 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arSetPixelFormat" logicalPath="//apple_ref/c/func/arSetPixelFormat" target="_top">arSetPixelFormat</a></tt></dt>
 <dd><p>Set the expected pixel format for video frames being passed to arDetectMarker
-</p></dd>
-</dl>
-</div>
-<p>&nbsp;</p>
-<h3>"3D calculation by Stereo".</h3>
-<div class="group_desc_indent">
-</div>
-<p>&nbsp;</p>
-<h3>"Pattern identification".</h3>
-<div class="group_desc_indent">
-</div>
-<h4>Group members:</h4>
-<div class="group_indent">
-<dl>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattActivate" logicalPath="//apple_ref/c/func/arPattActivate" target="_top">arPattActivate</a></tt></dt>
-<dd><p>Activate a previously deactivated pattern.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattAttach" logicalPath="//apple_ref/c/func/arPattAttach" target="_top">arPattAttach</a></tt></dt>
-<dd><p>Associate a set of patterns with an ARHandle.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattCreateHandle" logicalPath="//apple_ref/c/func/arPattCreateHandle" target="_top">arPattCreateHandle</a></tt></dt>
-<dd><p>Allocate a pattern handle.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDeactivate" logicalPath="//apple_ref/c/func/arPattDeactivate" target="_top">arPattDeactivate</a></tt></dt>
-<dd><p>Deactivate a previously activated pattern.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDeleteHandle" logicalPath="//apple_ref/c/func/arPattDeleteHandle" target="_top">arPattDeleteHandle</a></tt></dt>
-<dd><p>Free all loaded patterns and pattern handle.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDetach" logicalPath="//apple_ref/c/func/arPattDetach" target="_top">arPattDetach</a></tt></dt>
-<dd><p>Reset an ARHandle to no pattern association.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattFree" logicalPath="//apple_ref/c/func/arPattFree" target="_top">arPattFree</a></tt></dt>
-<dd><p>Frees (unloads) a pattern file from memory.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetID2" logicalPath="//apple_ref/c/func/arPattGetID2" target="_top">arPattGetID2</a></tt></dt>
-<dd><p>Match the interior of a detected square against known patterns.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetIDGlobal" logicalPath="//apple_ref/c/func/arPattGetIDGlobal" target="_top">arPattGetIDGlobal</a></tt></dt>
-<dd><p>Match the interior of a detected square against known patterns with variable border width.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetImage2" logicalPath="//apple_ref/c/func/arPattGetImage2" target="_top">arPattGetImage2</a></tt></dt>
-<dd><p>Extract the image (i.e. locate and unwarp) of the pattern-space portion of a detected square.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattGetImage3" logicalPath="//apple_ref/c/func/arPattGetImage3" target="_top">arPattGetImage3</a></tt></dt>
-<dd><p>Extract the image (i.e. locate and unwarp) of an arbitrary portion of a detected square.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattLoad" logicalPath="//apple_ref/c/func/arPattLoad" target="_top">arPattLoad</a></tt></dt>
-<dd><p>Load a pattern file into a pattern handle.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattSave" logicalPath="//apple_ref/c/func/arPattSave" target="_top">arPattSave</a></tt></dt>
-<dd><p>Save a pattern to a pattern file.
-</p></dd>
-</dl>
-</div>
-<p>&nbsp;</p>
-<h3>"3D calculation".</h3>
-<div class="group_desc_indent">
-</div>
-<h4>Group members:</h4>
-<div class="group_indent">
-<dl>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeCpara" logicalPath="//apple_ref/c/func/ar3DChangeCpara" target="_top">ar3DChangeCpara</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThresh" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThresh" target="_top">ar3DChangeLoopBreakThresh</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" target="_top">ar3DChangeLoopBreakThreshRatio</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeMaxLoopCount" logicalPath="//apple_ref/c/func/ar3DChangeMaxLoopCount" target="_top">ar3DChangeMaxLoopCount</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle" logicalPath="//apple_ref/c/func/ar3DCreateHandle" target="_top">ar3DCreateHandle</a></tt></dt>
-<dd><p>Create handle used for 3D calculation from calibrated camera parameters.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle2" logicalPath="//apple_ref/c/func/ar3DCreateHandle2" target="_top">ar3DCreateHandle2</a></tt></dt>
-<dd><p>Create handle used for 3D calculation from an intrinsic parameters matrix.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DDeleteHandle" logicalPath="//apple_ref/c/func/ar3DDeleteHandle" target="_top">ar3DDeleteHandle</a></tt></dt>
-<dd><p>Delete handle used for 3D calculation.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMat" logicalPath="//apple_ref/c/func/arGetTransMat" target="_top">arGetTransMat</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatRobust" logicalPath="//apple_ref/c/func/arGetTransMatRobust" target="_top">arGetTransMatRobust</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquare" logicalPath="//apple_ref/c/func/arGetTransMatSquare" target="_top">arGetTransMatSquare</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquareCont" logicalPath="//apple_ref/c/func/arGetTransMatSquareCont" target="_top">arGetTransMatSquareCont</a></tt></dt>
-<dd><p>(description)
 </p></dd>
 </dl>
 </div>
@@ -4848,7 +4848,7 @@ A standard ARToolKit marker with a pattern ratio of 0.5 has coordinates
 <div class="hd_copyright_and_timestamp">
 <p class="hd_copyright">&copy; 2015 Daqri, LLC.
  </p>
-<p class="hd_timestamp">Last Updated: Monday, May 11, 2015
+<p class="hd_timestamp">Last Updated: Friday, May 29, 2015
 </p>
 </div>
 </td>
