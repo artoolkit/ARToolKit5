@@ -45,16 +45,15 @@ bin/checkResolution.exe
 bin/check_id.exe
 bin/genMarkerSet.exe
 
-bin/opencv_calib3d246.dll
-bin/opencv_core246.dll
-bin/opencv_flann246.dll
-bin/opencv_imgproc246.dll
-bin/opencv_features2d246.dll
+bin/opencv_calib3d2410.dll
+bin/opencv_core2410.dll
+bin/opencv_flann2410.dll
+bin/opencv_imgproc2410.dll
+bin/opencv_features2d2410.dll
 bin/ARvideo.dll
-bin/msvcp71.dll
-bin/msvcr71.dll
 bin/pthreadVC2.dll
 bin/glut32.dll
+bin/DSVL.dll
 
 bin/Data/camera_para.dat
 bin/Data/cubeMarkerConfig.dat
