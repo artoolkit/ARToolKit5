@@ -940,7 +940,7 @@
 		4AC7305D180CF5C50012E1AA /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4AC73069180CF5C90012E1AA /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AEB273B1804BC2E002290C5 /* CoreFoundation.framework */; };
 		4AC7306A180CF5C90012E1AA /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
-		4AC73070180CF64B0012E1AA /* genTexData.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC73017180CF3E60012E1AA /* genTexData.c */; };
+		4AC73070180CF64B0012E1AA /* genTexData.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC73017180CF3E60012E1AA /* genTexData.c */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		4AC73071180CF6500012E1AA /* genMarkerSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC73014180CF3E60012E1AA /* genMarkerSet.c */; };
 		4AC73072180CF6550012E1AA /* dispImageSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC73011180CF3E60012E1AA /* dispImageSet.c */; };
 		4AC73073180CF65B0012E1AA /* dispFeatureSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC7300E180CF3E60012E1AA /* dispFeatureSet.c */; };
@@ -950,7 +950,7 @@
 		4ACA14EA0F71CB4900D9695E /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACA14E90F71CB4900D9695E /* libstdc++.6.dylib */; };
 		4AD15BEE17D184030096F22F /* ARMarkerSquare.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AD15BEA17D184030096F22F /* ARMarkerSquare.c */; };
 		4AD15BEF17D184030096F22F /* VirtualEnvironment.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AD15BEC17D184030096F22F /* VirtualEnvironment.c */; };
-		4AD1814E0C66701F000F46A0 /* ARVideoSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72D68A0C62E7DB002D429E /* ARVideoSettingsController.m */; };
+		4AD1814E0C66701F000F46A0 /* ARVideoSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72D68A0C62E7DB002D429E /* ARVideoSettingsController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		4AD2300B0D42DF3900CFF64B /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 78BB3F5208E483CB00D7CA2D /* Data */; };
 		4AD230240D42DFE400CFF64B /* multiCube.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AD230000D42BB2700CFF64B /* multiCube.c */; };
 		4AD5C3220A3900ED003F13D4 /* mk_patt.c in Sources */ = {isa = PBXBuildFile; fileRef = 7868FEAD08E880230089F090 /* mk_patt.c */; };
