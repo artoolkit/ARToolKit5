@@ -43,6 +43,11 @@
 #endif
 #include <ARWrapper/ARToolKitVideoSource.h>
 #include <ARWrapper/ARController.h>
+#include <ARWrapper/ColorConversion.h>
+
+#define MAX(x,y) (x > y ? x : y)
+#define MIN(x,y) (x < y ? x : y)
+#define CLAMP(x,r1,r2) (MIN(MAX(x,r1),r2))
 
 VideoSource* VideoSource::newVideoSource()
 {    
@@ -70,7 +75,7 @@ VideoSource::VideoSource() :
     glPixType(0),
 #endif
     frameBuffer(NULL),
-    frameBufferSize(0),
+    frameBuffer2(NULL),
     frameStamp(0),
     m_error(ARW_ERROR_NONE)
 {
@@ -164,10 +169,6 @@ AR_PIXEL_FORMAT VideoSource::getPixelFormat() {
 
 ARUint8* VideoSource::getFrame() {
 	return frameBuffer;
-}
-
-size_t VideoSource::getFrameSize() {
-	return frameBufferSize;
 }
 
 int VideoSource::getFrameStamp() {
@@ -344,7 +345,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
             break;
         case AR_PIXEL_FORMAT_MONO:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &frameBuffer[videoWidth*y];
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -352,10 +353,48 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
 #else
                     *outp = (*inp << 24) | (*inp << 16) | (*inp << 8) | 0xff;
 #endif
-                    inp += pixelSize;
+                    inp++;
                     outp++;
                 }
             }
+            break;
+        case AR_PIXEL_FORMAT_420f:
+            {
+                uint32_t *outp = buffer;
+                float Cb, Cr;
+                int Y0, Y1, R, G, B;
+                ARUint8 *pY = frameBuffer;
+                int wd2 = videoWidth >> 1;
+                for (int y = 0; y < videoHeight; y++) {
+                    ARUint8 *pCbCr = frameBuffer2 + videoWidth*(y >> 1);
+                    for (int x = 0; x < wd2; x++) { // Groups of two pixels.
+                        uint8_t R0, R1, G0, G1, B0, B1;
+                        Y0 = *(pY++);
+                        Y1 = *(pY++);
+                        Cb = (float)(*(pCbCr++) - 128);
+                        Cr = (float)(*(pCbCr++) - 128);
+                        R = (int)((             1.402f*Cr));
+                        G = (int)((-0.344f*Cb - 0.714f*Cr));
+                        B = (int)(( 1.772f*Cb));
+                        R0 = (uint8_t)CLAMP(Y0 + R, 0, 255);
+                        R1 = (uint8_t)CLAMP(Y1 + R, 0, 255);
+                        G0 = (uint8_t)CLAMP(Y0 + G, 0, 255);
+                        G1 = (uint8_t)CLAMP(Y1 + G, 0, 255);
+                        B0 = (uint8_t)CLAMP(Y0 + B, 0, 255);
+                        B1 = (uint8_t)CLAMP(Y1 + B, 0, 255);
+#ifdef AR_LITTLE_ENDIAN
+                        *(outp++) = 0xff000000 | (B0 << 16) | (G0 << 8) | R0;
+                        *(outp++) = 0xff000000 | (B1 << 16) | (G1 << 8) | R1;
+#else
+                        *(outp++) = (R0 << 24) | (G0 << 16) | (B0 << 8) | 0xff;
+                        *(outp++) = (R1 << 24) | (G1 << 16) | (B1 << 8) | 0xff;
+#endif
+                    }
+                }
+            }
+            break;
+        case AR_PIXEL_FORMAT_NV21:
+            color_convert_common((unsigned char *)frameBuffer, (unsigned char *)frameBuffer2, videoWidth, videoHeight, (unsigned char *)buffer);
             break;
         default:
             return false;

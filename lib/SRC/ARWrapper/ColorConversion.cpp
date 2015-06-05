@@ -41,14 +41,8 @@
 // Color conversion
 // ----------------------------------------------------------------------------------------------------
 
-
-
-// Unsafe because no checks on X and Y, so potential for unexpected behaviour
-// e.g. max_unsafe(x++, y) will execute x++ twice!
-// Because these are ONLY used in the color conversion loop where there is ONLY
-// straightforward usage, they are kept as simple as possible.
-#define max_unsafe(X,Y) ((X) > (Y) ? (X) : (Y))
-#define min_unsafe(X,Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 
 
 /*
@@ -62,12 +56,9 @@
    V (Cr) Sample Period 2 2
  */
 
-static const int bytes_per_pixel = 2;
-
 void color_convert_common(unsigned char *pY, unsigned char *pUV, int width, int height, unsigned char *buffer)  {
 	
 	int nR, nG, nB, nY, nU, nV, i, j, id2, jd2, offset;	
-	unsigned char *out = buffer;
 
 	offset = 0;
 	
@@ -80,12 +71,12 @@ void color_convert_common(unsigned char *pY, unsigned char *pUV, int width, int 
 		
 			jd2 = j >> 1; // Divide by two
 		
-			nY = *(pY + i * width + j);
-			nV = *(pUV + id2 * width + bytes_per_pixel * jd2);
-			nU = *(pUV + id2 * width + bytes_per_pixel * jd2 + 1);
+			nY = *(pY + i*width + j);
+			nV = *(pUV + id2*width + 2*jd2);
+			nU = *(pUV + id2*width + 2*jd2 + 1);
 	    
 			// Yuv Convert
-			nY = max_unsafe(nY - 16, 0);
+			nY = MAX(nY - 16, 0);
 			nU -= 128;
 			nV -= 128;		
 			
@@ -93,19 +84,19 @@ void color_convert_common(unsigned char *pY, unsigned char *pUV, int width, int 
 			nG = 1192 * nY - 833 * nV - 400 * nU;
 			nR = 1192 * nY + 1634 * nV;
 			
-			nR = min_unsafe(262143, max_unsafe(0, nR));
-			nG = min_unsafe(262143, max_unsafe(0, nG));
-			nB = min_unsafe(262143, max_unsafe(0, nB));
+			nR = MIN(262143, MAX(0, nR));
+			nG = MIN(262143, MAX(0, nG));
+			nB = MIN(262143, MAX(0, nB));
 			
 			nR >>= 10; nR &= 0xff;
 			nG >>= 10; nG &= 0xff;
 			nB >>= 10; nB &= 0xff;
 			
-			out[offset++] = (unsigned char)nR;
-			out[offset++] = (unsigned char)nG;
-			out[offset++] = (unsigned char)nB;
-			out[offset++] = (unsigned char)255;
+			buffer[offset++] = (unsigned char)nR;
+			buffer[offset++] = (unsigned char)nG;
+			buffer[offset++] = (unsigned char)nB;
+			buffer[offset++] = (unsigned char)255;
 	    }
 	    
 	}
-}  
+}

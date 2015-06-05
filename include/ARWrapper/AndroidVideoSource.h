@@ -55,6 +55,7 @@ private:
 
 	bool newFrameArrived;
     ARUint8 *localFrameBuffer;
+    size_t frameBufferSize;
 
     static void getVideoReadyAndroidCparamCallback(const ARParam *cparam_p, void *userdata);
     bool getVideoReadyAndroid2(const ARParam *cparam_p);
@@ -73,6 +74,12 @@ public:
 
 	virtual bool open();
 
+    /**
+     * Returns the size of current frame.
+     * @return		Size of the buffer containing the current video frame
+     */
+    size_t getFrameSize();
+    
 	void acceptImage(ARUint8* ptr);
 
 	virtual bool captureFrame();

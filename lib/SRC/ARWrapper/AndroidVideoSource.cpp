@@ -48,6 +48,7 @@
 AndroidVideoSource::AndroidVideoSource() : VideoSource(),
     newFrameArrived(false),
     localFrameBuffer(NULL),
+    frameBufferSize(0),
     gCameraIndex(0),
     gCameraIsFrontFacing(false) {
 }
@@ -193,6 +194,12 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
         goto bail;
 	}
     frameBuffer = localFrameBuffer;
+    if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
+        frameBuffer2 = localFrameBuffer + videoWidth*videoHeight;
+    } else {
+        frameBuffer2 = NULL;
+    }
+    
 
 	ARController::logv("Android Video Source running %dx%d.", videoWidth, videoHeight);
 
@@ -202,6 +209,10 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
 bail:
     deviceState = DEVICE_OPEN;
     return false;
+}
+
+size_t AndroidVideoSource::getFrameSize() {
+    return frameBufferSize;
 }
 
 bool AndroidVideoSource::captureFrame() {
@@ -245,6 +256,7 @@ bool AndroidVideoSource::close() {
 		free(localFrameBuffer);
 		localFrameBuffer = NULL;
         frameBuffer = NULL;
+        frameBuffer2 = NULL;
         frameBufferSize = 0;
 	}
     newFrameArrived = false;

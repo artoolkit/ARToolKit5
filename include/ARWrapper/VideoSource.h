@@ -91,7 +91,7 @@ protected:
 #endif
 
     ARUint8 *frameBuffer;               ///< Pointer to latest frame. Set by concrete subclass to point to frame data.
-    size_t frameBufferSize;
+    ARUint8 *frameBuffer2;              ///< For bi-planar formats, pointer to plane 2 of latest frame. Set by concrete subclass to point to frame data.
 	int frameStamp;						///< Latest framestamp. Incremented in the concrete subclass when a new frame arrives.
     
     int m_error;
@@ -189,12 +189,6 @@ public:
 	 */
 	ARUint8* getFrame();
 
-	/**
-	 * Returns the size of current frame.
-	 * @return		Size of the buffer containing the current video frame
-	 */
-    size_t getFrameSize();
-    
 	/**
 	 * Returns the current frame stamp. If the returned value has changed since the last 
 	 * time this function was called, then the caller can assume a new frame is available.

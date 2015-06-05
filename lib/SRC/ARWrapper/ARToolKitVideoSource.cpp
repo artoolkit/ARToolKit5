@@ -110,7 +110,6 @@ bool ARToolKitVideoSource::open() {
         this->close();
 		return false;
 	}
-    frameBufferSize = videoWidth * videoHeight * arUtilGetPixelSize(pixelFormat);
     
 	ARController::logv("Video %dx%d@%dBpp (%s)", videoWidth, videoHeight, arUtilGetPixelSize(pixelFormat), arUtilGetPixelFormatName(pixelFormat));
 
@@ -258,6 +257,7 @@ bool ARToolKitVideoSource::captureFrame() {
         if (vbuff && vbuff->buff) {
 			frameStamp++;
             frameBuffer = vbuff->buff;
+            frameBuffer2 = (vbuff->bufPlaneCount == 2 ? vbuff->bufPlanes[1] : NULL);
             return true;
 		}
 	}
@@ -281,7 +281,7 @@ bool ARToolKitVideoSource::close() {
     }
     
     frameBuffer = NULL;
-    frameBufferSize = 0;
+    frameBuffer2 = NULL;
 
     ARController::logv("Closing video.");
     if (ar2VideoClose(gVid) != 0) ARController::logv("Error closing video.");
