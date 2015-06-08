@@ -139,6 +139,7 @@ int main( int argc, char *argv[] )
     char                *sep = NULL;
 	time_t				 clock;
     int                  maxFeatureNum;
+    int                  err;
 
     for( i = 1; i < argc; i++ ) {
         if( strncmp(argv[i], "-dpi=", 5) == 0 ) {
@@ -341,7 +342,10 @@ int main( int argc, char *argv[] )
         ARLOGi("SURF_FEATURE = %d\n", featureDensity);
     }
 
-    readImageFromFile(filename, &image, &xsize, &ysize, &nc, &dpi);
+    if ((err = readImageFromFile(filename, &image, &xsize, &ysize, &nc, &dpi)) != 0) {
+        ARLOGe("Error reading image from file '%s'.\n", filename);
+        EXIT(err);
+    }
 
     setDPI();
 
@@ -592,7 +596,7 @@ static int readImageFromFile(const char *filename, ARUint8 **image_p, int *xsize
     char buf[256];
     char buf1[512], buf2[512];
     
-    if (!filename || !image_p || !*image_p || !xsize_p || !ysize_p || !nc_p || !dpi_p) return (E_BAD_PARAMETER);
+    if (!filename || !image_p || !xsize_p || !ysize_p || !nc_p || !dpi_p) return (E_BAD_PARAMETER);
 
     ext = arUtilGetFileExtensionFromPath(filename, 1);
     if (!ext) {
