@@ -133,6 +133,12 @@ EclipseProjects/ARMovie/libs/armeabi-v7a
 EclipseProjects/ARMovie/libs/mips
 EclipseProjects/ARMovie/libs/x86
 EclipseProjects/ARMovie/obj
+EclipseProjects/ARMulti/bin
+EclipseProjects/ARMulti/gen
+EclipseProjects/ARMulti/libs/armeabi
+EclipseProjects/ARMulti/libs/armeabi-v7a
+EclipseProjects/ARMulti/libs/mips
+EclipseProjects/ARMulti/libs/x86
 EclipseProjects/ARNative/bin
 EclipseProjects/ARNative/gen
 EclipseProjects/ARNative/libs/armeabi

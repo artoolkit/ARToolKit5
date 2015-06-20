@@ -83,6 +83,7 @@ $NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk
 JDK_PROJS=" \
     ARSimple \
     ARSimpleInteraction \
+    ARMulti \
 "
 for i in $JDK_PROJS
 do
