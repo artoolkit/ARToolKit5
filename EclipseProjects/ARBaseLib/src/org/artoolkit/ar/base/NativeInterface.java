@@ -328,4 +328,53 @@ public class NativeInterface {
     
     public static native boolean arwUpdateDebugTexture(byte[] image, boolean flipY);
   
+  
+	public static final int AR_LABELING_WHITE_REGION = 0,
+    						AR_LABELING_BLACK_REGION = 1;
+
+	public static native void arwSetLabelingMode(int mode);
+  	
+	public static native int arwGetLabelingMode();
+	
+	
+	public static final int AR_TEMPLATE_MATCHING_COLOR               = 0,
+    						AR_TEMPLATE_MATCHING_MONO                = 1,
+    						AR_MATRIX_CODE_DETECTION                 = 2,
+    						AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX    = 3,
+    						AR_TEMPLATE_MATCHING_MONO_AND_MATRIX     = 4;
+
+	public static native void arwSetPatternDetectionMode(int mode);
+	
+	public static native int arwGetPatternDetectionMode();
+	
+	
+	public static native void arwSetBorderSize(float size);
+	
+	public static native float arwGetBorderSize();
+	
+	
+	public static final int AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
+    						AR_MATRIX_CODE_3x3_PARITY65 = 0x103,                                        // Matrix code in range 0-31.
+    						AR_MATRIX_CODE_3x3_HAMMING63 = 0x203,                                       // Matrix code in range 0-7.
+    						AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
+    						AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x304,                                      // Matrix code in range 0-511.
+    						AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x404,                                      // Matrix code in range 0-31.
+    						AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x405,                                     // Matrix code in range 0-4095.
+    						AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x505,                                      // Matrix code in range 0-127.
+    						AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
+    						AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
+    						AR_MATRIX_CODE_GLOBAL_ID = 0xb0e;
+
+	public static native void arwSetMatrixCodeType(int type);
+	
+	public static native int arwGetMatrixCodeType();
+	
+	
+	public static final int AR_IMAGE_PROC_FRAME_IMAGE = 0,
+    						AR_IMAGE_PROC_FIELD_IMAGE = 1;
+
+	public static native void arwSetImageProcMode(int mode);
+	
+    public static native int arwGetImageProcMode();
+
 }
