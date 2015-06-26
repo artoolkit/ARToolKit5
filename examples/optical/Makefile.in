@@ -75,7 +75,7 @@ TARGET = $(AR_HOME)/bin/optical
 
 HEADERS = \
     ARMarkerSquare.h \
-    VirtualEnvironment2.h
+    VirtualEnvironment.h
 
 OBJS = \
     ARMarkerSquare.o \
