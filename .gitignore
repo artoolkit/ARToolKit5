@@ -120,10 +120,60 @@ bin/ARWrapper.dll
 
 
 # Build directories of Android projects.
-android/obj/local/armeabi-v7a/objs
 android/obj/local/armeabi/objs
+android/obj/local/armeabi-v7a/objs
 android/obj/local/mips/objs
 android/obj/local/x86/objs
+
+# Android build products.
+android/obj/local/armeabi/libar.a
+android/obj/local/armeabi/libargsub_es.a
+android/obj/local/armeabi/libargsub_es2.a
+android/obj/local/armeabi/libaricp.a
+android/obj/local/armeabi/libarmulti.a
+android/obj/local/armeabi/libarosg.a
+android/obj/local/armeabi/libarvideo.a
+android/obj/local/armeabi/libar2.a
+android/obj/local/armeabi/libARWrapper.so
+android/obj/local/armeabi/libeden.a
+android/obj/local/armeabi/libkpm.a
+android/obj/local/armeabi/libutil.a
+android/obj/local/armeabi-v7a/libar.a
+android/obj/local/armeabi-v7a/libargsub_es.a
+android/obj/local/armeabi-v7a/libargsub_es2.a
+android/obj/local/armeabi-v7a/libaricp.a
+android/obj/local/armeabi-v7a/libarmulti.a
+android/obj/local/armeabi-v7a/libarosg.a
+android/obj/local/armeabi-v7a/libarvideo.a
+android/obj/local/armeabi-v7a/libar2.a
+android/obj/local/armeabi-v7a/libARWrapper.so
+android/obj/local/armeabi-v7a/libeden.a
+android/obj/local/armeabi-v7a/libkpm.a
+android/obj/local/armeabi-v7a/libutil.a
+android/obj/local/mips/libar.a
+android/obj/local/mips/libargsub_es.a
+android/obj/local/mips/libargsub_es2.a
+android/obj/local/mips/libaricp.a
+android/obj/local/mips/libarmulti.a
+android/obj/local/mips/libarosg.a
+android/obj/local/mips/libarvideo.a
+android/obj/local/mips/libar2.a
+android/obj/local/mips/libARWrapper.so
+android/obj/local/mips/libeden.a
+android/obj/local/mips/libkpm.a
+android/obj/local/mips/libutil.a
+android/obj/local/x86/libar.a
+android/obj/local/x86/libargsub_es.a
+android/obj/local/x86/libargsub_es2.a
+android/obj/local/x86/libaricp.a
+android/obj/local/x86/libarmulti.a
+android/obj/local/x86/libarosg.a
+android/obj/local/x86/libarvideo.a
+android/obj/local/x86/libar2.a
+android/obj/local/x86/libARWrapper.so
+android/obj/local/x86/libeden.a
+android/obj/local/x86/libkpm.a
+android/obj/local/x86/libutil.a
 EclipseProjects/ARBaseLib/bin
 EclipseProjects/ARBaseLib/gen
 EclipseProjects/ARMovie/bin
@@ -228,3 +278,4 @@ VisualStudio/vs120/x64
 # Symlinks in OS X builds.
 bin/libopencv_*.dylib
 bin/libpng15*.dylib
+
