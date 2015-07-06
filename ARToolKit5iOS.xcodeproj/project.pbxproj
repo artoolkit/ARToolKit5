@@ -300,6 +300,10 @@
 		4A47F9D3116E63FB00FC577E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
 		4A47F9DC116E641C00FC577E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E70DC97C3800B73A53 /* CoreGraphics.framework */; };
 		4A50D7161164E55700ED169B /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A50D7141164E55700ED169B /* ARViewController.m */; };
+		4A5433EE1B4A1B840091CA91 /* EdenError.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433EA1B4A1B840091CA91 /* EdenError.c */; };
+		4A5433EF1B4A1B840091CA91 /* EdenGLFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433EB1B4A1B840091CA91 /* EdenGLFont.c */; };
+		4A5433F01B4A1B840091CA91 /* EdenMessage.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433EC1B4A1B840091CA91 /* EdenMessage.c */; };
+		4A5433F11B4A1B840091CA91 /* EdenTime.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433ED1B4A1B840091CA91 /* EdenTime.c */; };
 		4A559AD7155A59240092223A /* slr_camera_shutter.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A559AD6155A59240092223A /* slr_camera_shutter.wav */; };
 		4A5BAA7913D82BC000C8D5E7 /* libARgsub_es.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD26CBB13B37EEB00F5E037 /* libARgsub_es.a */; };
 		4A5BAA7A13D82BC000C8D5E7 /* libARMulti.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD26CBC13B37EEB00F5E037 /* libARMulti.a */; };
@@ -1388,6 +1392,10 @@
 		4A47F752116E092C00FC577E /* ARView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARView.m; sourceTree = "<group>"; };
 		4A50D7131164E55700ED169B /* ARViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARViewController.h; sourceTree = "<group>"; };
 		4A50D7141164E55700ED169B /* ARViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ARViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		4A5433EA1B4A1B840091CA91 /* EdenError.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenError.c; sourceTree = "<group>"; };
+		4A5433EB1B4A1B840091CA91 /* EdenGLFont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenGLFont.c; sourceTree = "<group>"; };
+		4A5433EC1B4A1B840091CA91 /* EdenMessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenMessage.c; sourceTree = "<group>"; };
+		4A5433ED1B4A1B840091CA91 /* EdenTime.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenTime.c; sourceTree = "<group>"; };
 		4A559AD6155A59240092223A /* slr_camera_shutter.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = slr_camera_shutter.wav; sourceTree = "<group>"; };
 		4A5BAA8D13D82BC000C8D5E7 /* ARAppMovie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAppMovie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A5BAA8F13D82DFD00C8D5E7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -3258,13 +3266,17 @@
 		4AC36B5D113E653700C86F19 /* Eden */ = {
 			isa = PBXGroup;
 			children = (
+				4A5433EA1B4A1B840091CA91 /* EdenError.c */,
+				4A5433EB1B4A1B840091CA91 /* EdenGLFont.c */,
+				4AC3715E113EBF3800C86F19 /* EdenMath.c */,
+				4A5433EC1B4A1B840091CA91 /* EdenMessage.c */,
+				4A65BBD61843F943007380B3 /* EdenSound.c */,
 				4AC36B5E113E653700C86F19 /* EdenSurfaces.c */,
+				4A5433ED1B4A1B840091CA91 /* EdenTime.c */,
 				4AC36B5F113E653700C86F19 /* EdenUtil.c */,
 				4AC36B60113E653700C86F19 /* glm.c */,
-				4A335C0518109C070015C735 /* gluttext */,
 				4AC36B61113E653700C86F19 /* readtex.c */,
-				4AC3715E113EBF3800C86F19 /* EdenMath.c */,
-				4A65BBD61843F943007380B3 /* EdenSound.c */,
+				4A335C0518109C070015C735 /* gluttext */,
 				4A65BBD21843F943007380B3 /* ALFramework.cpp */,
 				4A65BBD31843F943007380B3 /* ALFramework.h */,
 				4A65BBD41843F943007380B3 /* CWaves.cpp */,
@@ -5636,13 +5648,17 @@
 				4A335C1E18109C360015C735 /* glut_hel12.c in Sources */,
 				4A335C1B18109C360015C735 /* glut_8x13.c in Sources */,
 				4AC36B9B113E66E400C86F19 /* EdenUtil.c in Sources */,
+				4A5433F01B4A1B840091CA91 /* EdenMessage.c in Sources */,
+				4A5433F11B4A1B840091CA91 /* EdenTime.c in Sources */,
 				4A65BBD71843F943007380B3 /* ALFramework.cpp in Sources */,
 				4A335C1C18109C360015C735 /* glut_9x15.c in Sources */,
 				4A335C1D18109C360015C735 /* glut_hel10.c in Sources */,
 				4AC36B9C113E66E400C86F19 /* glm.c in Sources */,
+				4A5433EF1B4A1B840091CA91 /* EdenGLFont.c in Sources */,
 				4AC36B9D113E66E400C86F19 /* readtex.c in Sources */,
 				4A335C1F18109C360015C735 /* glut_hel18.c in Sources */,
 				4A65BBD91843F943007380B3 /* EdenSound.c in Sources */,
+				4A5433EE1B4A1B840091CA91 /* EdenError.c in Sources */,
 				4A335C1818109C360015C735 /* glut_mroman.c in Sources */,
 				4A335C1A18109C360015C735 /* glut_bwidth.c in Sources */,
 				4A335C1718109C360015C735 /* glut_roman.c in Sources */,
