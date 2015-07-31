@@ -1041,6 +1041,29 @@ int            arGetLine( int x_coord[], int y_coord[], int coord_num, int verte
 */
 ARPattHandle  *arPattCreateHandle(void);
 
+/*!
+    @function 
+    @abstract   Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
+    @discussion Allocates an empty pattern handle, into which patterns can
+		be loaded by calling arPattLoad().
+		When the pattern handle is no longer needed, it should be
+		freed by calling arPattDeleteHandle().
+ 
+        Note that a pattern handle is NOT required when using only matrix-
+        code (2D barcode) markers.
+    @param pattSize For any square template (pattern) markers, the number of rows and
+        columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+        
+        Pass AR_PATT_SIZE1 for the same behaviour as arPattCreateHandle().
+    @param pattCountMax For any square template (pattern) markers, the maximum number of
+        markers that may be loaded for a single matching pass. Must be > 0.
+ 
+        Pass AR_PATT_NUM_MAX for the same behaviour as arPattCreateHandle().
+    @seealso    arPattLoad arPattLoad
+    @seealso    arPattDeleteHandle arPattDeleteHandle
+    @result     The created pattern handle, or NULL in case of error.
+*/
+
 ARPattHandle *arPattCreateHandle2(const int pattSize, const int patternCountMax);
     
 /*!

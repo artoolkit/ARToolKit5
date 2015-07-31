@@ -69,8 +69,8 @@ extern "C" {
 
     /**
      * Initialises the ARToolKit with non-default options for size and number of square markers.
-     * @param pattSize For any square template (pattern) markers, the number of rows and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
-     * @param pattCountMax For any square template (pattern) markers, the maximum number of markers that may be loaded for a single matching pass. Must be > 0.
+     * @param pattSize For any square template (pattern) markers, the number of rows and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX. Pass AR_PATT_SIZE1 for the same behaviour as arwInitialiseAR().
+     * @param pattCountMax For any square template (pattern) markers, the maximum number of markers that may be loaded for a single matching pass. Must be > 0. Pass AR_PATT_NUM_MAX for the same behaviour as arwInitialiseAR().
      * @return			true if successful, false if an error occurred
      * @see				arwShutdownAR()
      */
