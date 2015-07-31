@@ -95,6 +95,24 @@ public class NativeInterface {
      */
     public static native boolean arwInitialiseAR();
     
+    /**
+     * Initialises the the basic ARToolKit functions with non-default options
+     * for size and number of square markers. After this function has 
+     * been successfully called, markers can be added and removed, but marker 
+     * detection is not yet running.
+     * @param pattSize For any square template (pattern) markers, the number of rows
+     *     and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+     *     
+     *      Pass AR_PATT_SIZE1 for the same behaviour as arwInitialiseAR().
+     * @param pattCountMax For any square template (pattern) markers, the maximum number
+     *     of markers that may be loaded for a single matching pass. Must be > 0.
+     *     
+     *      Pass AR_PATT_NUM_MAX for the same behaviour as arwInitialiseAR().
+     * @return			true if successful, false if an error occurred
+     * @see				arwShutdownAR()
+     */
+    public static native boolean arwInitialiseARWithOptions(int pattSize, int pattCountMax);
+
 	/**
 	 * Changes the working directory to the resources directory used by ARToolKit.
      * Normally, this would be called immediately after arwInitialiseAR()
