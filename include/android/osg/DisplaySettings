@@ -15,6 +15,7 @@
 #define OSG_DisplaySettings 1
 
 #include <osg/Referenced>
+#include <osg/Matrixd>
 #include <osg/ref_ptr>
 
 #include <string>
@@ -184,6 +185,11 @@ class OSG_EXPORT DisplaySettings : public osg::Referenced
         void setSerializeDrawDispatch(bool serializeDrawDispatch) { _serializeDrawDispatch = serializeDrawDispatch; }
         bool getSerializeDrawDispatch() const { return _serializeDrawDispatch; }
 
+
+        void setUseSceneViewForStereoHint(bool hint) { _useSceneViewForStereoHint = hint; }
+        bool getUseSceneViewForStereoHint() const { return _useSceneViewForStereoHint; }
+
+
         /** Set the hint for the total number of threads in the DatbasePager set up, inclusive of the number of http dedicated threads.*/
         void setNumOfDatabaseThreadsHint(unsigned int numThreads) { _numDatabaseThreadsHint = numThreads; }
 
@@ -277,6 +283,33 @@ class OSG_EXPORT DisplaySettings : public osg::Referenced
 
         /** Get the hint of the profile mask to use in when creating graphic contexts.*/
         unsigned int getGLContextProfileMask() const { return _glContextProfileMask; }
+        
+        
+        void setKeystoneHint(bool enabled) { _keystoneHint = enabled; }
+        bool getKeystoneHint() const { return _keystoneHint; }
+        
+        typedef std::vector<std::string> FileNames;
+        void setKeystoneFileNames(const FileNames& filenames) { _keystoneFileNames = filenames; }
+        FileNames& getKeystoneFileNames() { return _keystoneFileNames; }
+        const FileNames& getKeystoneFileNames() const { return _keystoneFileNames; }
+        
+        typedef std::vector< osg::ref_ptr<osg::Object> > Objects;
+        void setKeystones(const Objects& objects) { _keystones = objects; }
+        Objects& getKeystones() { return _keystones; }
+        const Objects& getKeystones() const { return _keystones; }
+
+
+        /** helper function for computing the left eye projection matrix.*/
+        virtual osg::Matrixd computeLeftEyeProjectionImplementation(const osg::Matrixd& projection) const;
+
+        /** helper function for computing the left eye view matrix.*/
+        virtual osg::Matrixd computeLeftEyeViewImplementation(const osg::Matrixd& view, double eyeSeperationScale=1.0) const;
+
+        /** helper function for computing the right eye view matrix.*/
+        virtual osg::Matrixd computeRightEyeProjectionImplementation(const osg::Matrixd& projection) const;
+
+        /** helper function for computing the right eye view matrix.*/
+        virtual osg::Matrixd computeRightEyeViewImplementation(const osg::Matrixd& view, double eyeSeperationScale=1.0) const;
 
     protected:
 
@@ -313,6 +346,7 @@ class OSG_EXPORT DisplaySettings : public osg::Referenced
 
         bool                            _compileContextsHint;
         bool                            _serializeDrawDispatch;
+        bool                            _useSceneViewForStereoHint;
 
         unsigned int                    _numDatabaseThreadsHint;
         unsigned int                    _numHttpDatabaseThreadsHint;
@@ -330,6 +364,12 @@ class OSG_EXPORT DisplaySettings : public osg::Referenced
         unsigned int                    _glContextProfileMask;
 
         SwapMethod                      _swapMethod;
+
+    
+        bool                            _keystoneHint;
+        FileNames                       _keystoneFileNames;
+        Objects                         _keystones; 
+        
 };
 
 }

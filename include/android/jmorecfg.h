@@ -10,6 +10,33 @@
  * optimizations.  Most users will not need to touch this file.
  */
 
+#ifndef JMORECFG_H
+#define JMORECFG_H
+
+#include <stdint.h>
+
+/*
+ * Define ANDROID_RGB to enable specific optimizations for Android
+ *   JCS_RGBA_8888 support
+ *   JCS_RGB_565 support
+ * 
+ */
+
+#define ANDROID_RGB
+
+#ifdef ANDROID_RGB
+#define PACK_SHORT_565(r,g,b)  ((((r)<<8)&0xf800)|(((g)<<3)&0x7E0)|((b)>>3))
+#define PACK_TWO_PIXELS(l,r)   ((r<<16) | l)
+#define PACK_NEED_ALIGNMENT(ptr) (((uintptr_t)(ptr))&3)
+#define WRITE_TWO_PIXELS(addr, pixels) do {     \
+         ((INT16*)(addr))[0] = (pixels);        \
+         ((INT16*)(addr))[1] = (pixels)>>16;    \
+    } while(0)
+#define WRITE_TWO_ALIGNED_PIXELS(addr, pixels)  ((*(INT32*)(addr)) = pixels)
+#define DITHER_565_R(r, dither) ((r) + ((dither)&0xFF))
+#define DITHER_565_G(g, dither) ((g) + (((dither)&0xFF)>>1))
+#define DITHER_565_B(b, dither) ((b) + ((dither)&0xFF))
+#endif
 
 /*
  * Define BITS_IN_JSAMPLE as either
@@ -56,7 +83,7 @@
 
 #ifdef HAVE_UNSIGNED_CHAR
 
-typedef unsigned char JSAMPLE;
+typedef uint8_t JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value))
 
 #else /* not HAVE_UNSIGNED_CHAR */
@@ -81,7 +108,7 @@ typedef char JSAMPLE;
  * On nearly all machines "short" will do nicely.
  */
 
-typedef short JSAMPLE;
+typedef int16_t JSAMPLE;
 #define GETJSAMPLE(value)  ((int) (value))
 
 #define MAXJSAMPLE	4095
@@ -96,7 +123,7 @@ typedef short JSAMPLE;
  * if you have memory to burn and "short" is really slow.
  */
 
-typedef short JCOEF;
+typedef int16_t JCOEF;
 
 
 /* Compressed datastreams are represented as arrays of JOCTET.
@@ -107,7 +134,7 @@ typedef short JCOEF;
 
 #ifdef HAVE_UNSIGNED_CHAR
 
-typedef unsigned char JOCTET;
+typedef uint8_t JOCTET;
 #define GETJOCTET(value)  (value)
 
 #else /* not HAVE_UNSIGNED_CHAR */
@@ -132,7 +159,7 @@ typedef char JOCTET;
 /* UINT8 must hold at least the values 0..255. */
 
 #ifdef HAVE_UNSIGNED_CHAR
-typedef unsigned char UINT8;
+typedef uint8_t UINT8;
 #else /* not HAVE_UNSIGNED_CHAR */
 #ifdef CHAR_IS_UNSIGNED
 typedef char UINT8;
@@ -144,7 +171,7 @@ typedef short UINT8;
 /* UINT16 must hold at least the values 0..65535. */
 
 #ifdef HAVE_UNSIGNED_SHORT
-typedef unsigned short UINT16;
+typedef uint16_t UINT16;
 #else /* not HAVE_UNSIGNED_SHORT */
 typedef unsigned int UINT16;
 #endif /* HAVE_UNSIGNED_SHORT */
@@ -152,13 +179,13 @@ typedef unsigned int UINT16;
 /* INT16 must hold at least the values -32768..32767. */
 
 #ifndef XMD_H			/* X11/xmd.h correctly defines INT16 */
-typedef short INT16;
+typedef int16_t INT16;
 #endif
 
 /* INT32 must hold at least signed 32-bit values. */
 
 #ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
-typedef long INT32;
+typedef int32_t INT32;
 #endif
 
 /* Datatype used for image dimensions.  The JPEG standard only supports
@@ -314,8 +341,10 @@ typedef int boolean;
 #define RGB_RED		0	/* Offset of Red in an RGB scanline element */
 #define RGB_GREEN	1	/* Offset of Green */
 #define RGB_BLUE	2	/* Offset of Blue */
-#define RGB_PIXELSIZE	3	/* JSAMPLEs per RGB scanline element */
-
+#ifdef ANDROID_RGB
+#define RGB_ALPHA   3   /* Offset of Alpha */
+#endif
+#define RGB_PIXELSIZE   3   /* JSAMPLEs per RGB scanline element */
 
 /* Definitions for speed-related optimizations. */
 
@@ -340,7 +369,15 @@ typedef int boolean;
  */
 
 #ifndef MULTIPLIER
-#define MULTIPLIER  int		/* type for fastest integer multiply */
+#ifdef ANDROID_INTELSSE2_IDCT
+  #define MULTIPLIER short
+#elif ANDROID_MIPS_IDCT
+  #define MULTIPLIER  short
+#elif NV_ARM_NEON
+  #define MULTIPLIER short
+#else
+  #define MULTIPLIER  int		/* type for fastest integer multiply */
+#endif
 #endif
 
 
@@ -361,3 +398,5 @@ typedef int boolean;
 #endif
 
 #endif /* JPEG_INTERNAL_OPTIONS */
+
+#endif /* JMORECFG_H */

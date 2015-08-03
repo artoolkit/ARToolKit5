@@ -2,10 +2,38 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.2.1 (this release) (2015-05-29).
------------------------------------------------------
+Changes in version 5.3 (this release) (2015-07-31).
+---------------------------------------------------
+New features:
+- libKPM now features the FREAK detector framework, contributed by DAQRI. The dependency on OpenCV's FLANN has also been removed. This should simplify app building and distribution.
+- "fset2" NFT dataset files have been replaced with "fset3" files throughout the toolkit.
+- All C++ code has been switched to building to c++11 (i.e. c++0x) standard and linking against libc++ (cf. c++98 and libstdc++). 
+- Support for Windows Phone 8.1 and Windows Store 8.1 has been added, with support for third-party applications-only at this time. No support for rendering of video backgrounds via DirectX is provided, and no sample applications are provided. Sample XAML apps will be provided in a future release.
+- iOS: A new sample app, ARAppCameraTest, provides examples of advanced camera stream handling on iOS, including switching cameras, camera resolutions, and tap-to-focus.
+- Android: An example of Android native camera functionality is supplied, in disabled form. It is based on OpenCV's (somewhat flawed) native camera handling, however it might be useful to device manufacturers including ARToolKit in their Android OS as an example of how to connect to  native camera drivers. grep the source for AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA.
+
 Enhancements:
-- iOS: Added support for locking focus, auto-focus based on point-of-interest, or contintous autofocus (default).
+- Added support for biplanar YCbCr texture formats to ARWrapper::updateTexture32.
+- Android: Added ARMulti Java-based example.
+- Android: Added control of square-tracking options to Java interface (look in NativeInterface.java).
+- More detailed logging in ARWrapper.
+- iOS/Android: Update bundled OpenSceneGraph to 3.2.2RC3, linked against libc++.
+- OS X: Update linked OpenSceneGraph to 3.2.2RC3. Separate installer for OpenSceneGraph is required for OS X, and is available from http://artoolkit.org/dist/3rdparty/openscenegraph/3.2.x/ .
+
+Bug fixes:
+- Fixed parameter usage in genTexData's readImageFromFile.
+- Add missed files to iOS build of libEden.
+- A variety of code correctness fixes from a Coverity "high impact" scan (tagged in source with "COVHI").
+
+Other changes:
+- Adaptive thresholding, which had been disabled on the mobile platforms, is now enabled again. arSetLabelingThreshMode(arHandle, AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE).
+- iOS OSG apps must now link against MobileCoreServices.framework.
+
+
+Changes in version 5.2.1 (2015-05-29).
+--------------------------------------
+Enhancements:
+- iOS: Added support for locking focus, auto-focus based on point-of-interest, or continuous autofocus (default).
 - iOS: Positioning and scaling of the video background is now separate from that of the ARView itself.
 - iOS: Added presupplied calibration for iPad mini 3.
 

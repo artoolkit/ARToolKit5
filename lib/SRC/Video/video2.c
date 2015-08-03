@@ -51,9 +51,9 @@ static const char *ar2VideoGetConfig(const char *config_in)
     
     /* If no config string is supplied, we should use the environment variable, otherwise set a sane default */
     if (!config_in || !(config_in[0])) {
-        /* None suppplied, lets see if the user supplied one from the shell */
+        /* None supplied, lets see if the user supplied one from the shell */
 #ifndef _WINRT
-        char *envconf = getenv ("ARTOOLKIT5_VCONF");
+        char *envconf = getenv("ARTOOLKIT5_VCONF");
         if (envconf && envconf[0]) {
             config = envconf;
             ARLOGi("Using video config from environment \"%s\".\n", envconf);
@@ -911,7 +911,11 @@ AR2VideoBufferT *ar2VideoGetImage( AR2VideoParamT *vid )
 #endif
 #ifdef AR_INPUT_ANDROID
     if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
+#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+        return ar2VideoGetImageAndroid( vid->device.android );
+#  else
         return (NULL); // NOT IMPLEMENTED.
+#  endif
     }
 #endif
 #ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
@@ -997,7 +1001,11 @@ int ar2VideoCapStart( AR2VideoParamT *vid )
 #endif
 #ifdef AR_INPUT_ANDROID
     if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
+#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+        return ar2VideoCapStartAndroid( vid->device.android );
+#  else
         return (-1); // NOT IMPLEMENTED.
+#  endif
     }
 #endif
 #ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
@@ -1008,6 +1016,21 @@ int ar2VideoCapStart( AR2VideoParamT *vid )
 #ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
     if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
         return ar2VideoCapStartWinMC( vid->device.winMC );
+    }
+#endif
+    return (-1);
+}
+
+int ar2VideoCapStartAsync (AR2VideoParamT *vid, AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata)
+{
+    if (!vid) return -1;
+#ifdef AR_INPUT_ANDROID
+    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
+#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+        return ar2VideoCapStartAsyncAndroid( vid->device.android, callback, userdata );
+#  else
+        return (-1); // NOT IMPLEMENTED.
+#  endif
     }
 #endif
     return (-1);
@@ -1083,7 +1106,11 @@ int ar2VideoCapStop( AR2VideoParamT *vid )
 #endif
 #ifdef AR_INPUT_ANDROID
     if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
+#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+		return ar2VideoCapStopAndroid( vid->device.android );
+#  else
         return (-1); // NOT IMPLEMENTED.
+#  endif
     }
 #endif
 #ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION

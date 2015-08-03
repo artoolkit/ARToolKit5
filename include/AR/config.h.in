@@ -37,7 +37,7 @@
 /*!
 	@header config.h
 	@abstract ARToolKit core configuration.
-	@version 5.2.1
+	@version 5.3
 	@discussion
 	@copyright 2015 Daqri, LLC.
  */
@@ -60,20 +60,20 @@
 // The MINOR version number defines additions to the ARToolKit
 // API, or (occsasionally) other significant backwards-compatible
 // changes in runtime functionality. Range: [0-99].
-#define AR_HEADER_VERSION_MINOR		2
+#define AR_HEADER_VERSION_MINOR		3
 
 // The TINY version number defines bug-fixes to existing
 // functionality. Range: [0-99].
-#define AR_HEADER_VERSION_TINY		1
+#define AR_HEADER_VERSION_TINY		0
 
 // The BUILD version number will always be zero in releases,
 // but may be non-zero in internal builds or in version-control
 // repository-sourced code. Range: [0-99].
-#define AR_HEADER_VERSION_BUILD		2
+#define AR_HEADER_VERSION_BUILD		0
 
 // The string representation below must match the major, minor
 // and tiny release numbers.
-#define AR_HEADER_VERSION_STRING	"5.2.1.2"
+#define AR_HEADER_VERSION_STRING	"5.3"
 
 // The macros below are convenience macros to enable use
 // of certain ARToolKit header functionality by the release
@@ -88,6 +88,7 @@
 #define AR_HAVE_HEADER_VERSION_5
 #define AR_HAVE_HEADER_VERSION_5_1
 #define AR_HAVE_HEADER_VERSION_5_2
+#define AR_HAVE_HEADER_VERSION_5_3
 
 //
 // End version definitions.
@@ -215,6 +216,7 @@ enum {
     AR_LOG_LEVEL_INFO,
     AR_LOG_LEVEL_WARN,
     AR_LOG_LEVEL_ERROR,
+    AR_LOG_LEVEL_REL_INFO
 };
 #define AR_LOG_LEVEL_DEFAULT AR_LOG_LEVEL_INFO
 

@@ -87,15 +87,14 @@ class OSGVIEWER_EXPORT Viewer : public ViewerBase, public osgViewer::View
         /** check to see if the new frame is required, called by run(..) when FrameScheme is set to ON_DEMAND.*/
         virtual bool checkNeedToDoFrame();
 
+        /** check to see if events have been received, return true if events are now available.*/
+        virtual bool checkEvents();
+
         virtual void advance(double simulationTime=USE_REFERENCE_TIME);
 
         virtual void eventTraversal();
 
         virtual void updateTraversal();
-
-        void setCameraWithFocus(osg::Camera* camera) { _cameraWithFocus = camera; }
-        osg::Camera* getCameraWithFocus() { return _cameraWithFocus.get(); }
-        const osg::Camera* getCameraWithFocus() const { return _cameraWithFocus.get(); }
 
         virtual void getCameras(Cameras& cameras, bool onlyActive=true);
 
@@ -119,8 +118,9 @@ class OSGVIEWER_EXPORT Viewer : public ViewerBase, public osgViewer::View
 
         virtual void viewerInit() { init(); }
 
-        osg::observer_ptr<osg::Camera>              _cameraWithFocus;
-
+        void generateSlavePointerData(osg::Camera* camera, osgGA::GUIEventAdapter& event);
+        void generatePointerData(osgGA::GUIEventAdapter& event);
+        void reprojectPointerData(osgGA::GUIEventAdapter& source_event, osgGA::GUIEventAdapter& dest_event);
 
 };
 

@@ -65,21 +65,30 @@ else
     CPUS=1
 fi
 
+if [ "$1" == "clean" ] ; then
+    CPUS=1
+fi
+
 #
 # Update <AR/config.h> if required.
 #
+if [ "$1" == "clean" ] ; then
+rm -f ../include/AR/config.h
+else
 if [[ ../include/AR/config.h.in -nt ../include/AR/config.h ]]; then cp -v ../include/AR/config.h.in ../include/AR/config.h; fi
+fi
 
 #
 # Build core ARToolKit libraries.
 #
-$NDK/ndk-build -j $CPUS
+$NDK/ndk-build -j $CPUS $1
 
 #
 # Build ARWrapper and copy output libs to JDK-based targets.
 #
-$NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk
+$NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
 
+if [ "$1" != "clean" ] ; then
 JDK_PROJS=" \
     ARSimple \
     ARSimpleInteraction \
@@ -89,4 +98,4 @@ for i in $JDK_PROJS
 do
     cp -Rpv -f libs/* ../EclipseProjects/${i}/libs/
 done
-
+fi

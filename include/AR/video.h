@@ -198,6 +198,8 @@ typedef struct {
     ARVideoSourceInfoT *info;
 } ARVideoSourceInfoListT;
 
+typedef void (*AR_VIDEO_FRAME_READY_CALLBACK)(void *);
+    
 #ifdef _WIN32
 #  ifndef LIBARVIDEO_STATIC
 #    ifdef LIBARVIDEO_EXPORTS
@@ -330,6 +332,7 @@ AR_DLL_API int               arVideoGetPixelSize    (void);
 AR_DLL_API AR_PIXEL_FORMAT   arVideoGetPixelFormat  (void);
 AR_DLL_API ARUint8          *arVideoGetImage        (void);
 AR_DLL_API int               arVideoCapStart        (void);
+AR_DLL_API int               arVideoCapStartAsync   (AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata);
 AR_DLL_API int               arVideoCapStop         (void);
 AR_DLL_API int               arVideoGetParami       (int paramName, int *value);
 AR_DLL_API int               arVideoSetParami       (int paramName, int  value);
@@ -441,6 +444,7 @@ AR_DLL_API int               ar2VideoGetPixelSize    (AR2VideoParamT *vid);
 AR_DLL_API AR_PIXEL_FORMAT   ar2VideoGetPixelFormat  (AR2VideoParamT *vid);
 AR_DLL_API AR2VideoBufferT  *ar2VideoGetImage        (AR2VideoParamT *vid);
 AR_DLL_API int               ar2VideoCapStart        (AR2VideoParamT *vid);
+AR_DLL_API int               ar2VideoCapStartAsync   (AR2VideoParamT *vid, AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata);
 AR_DLL_API int               ar2VideoCapStop         (AR2VideoParamT *vid);
 AR_DLL_API int               ar2VideoGetParami       (AR2VideoParamT *vid, int paramName, int *value);
 AR_DLL_API int               ar2VideoSetParami       (AR2VideoParamT *vid, int paramName, int  value);

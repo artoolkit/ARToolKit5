@@ -51,8 +51,10 @@
 APP_MODULES		:= ARMovieNative
 APP_OPTIM		:= release
 #APP_OPTIM		:= debug
-APP_ABI			:= all
-#APP_ABI			:= armeabi armeabi-v7a x86
+#APP_ABI			:= all
+APP_ABI			:= armeabi armeabi-v7a x86 mips
+#APP_ABI			:= armeabi armeabi-v7a x86 arm64-v8a x86_64 mips64
 APP_PLATFORM    := android-11
-APP_STL 		:= gnustl_static
+APP_STL 		:= c++_shared
 APP_CPPFLAGS 	:= -frtti -fexceptions
+NDK_TOOLCHAIN_VERSION := clang

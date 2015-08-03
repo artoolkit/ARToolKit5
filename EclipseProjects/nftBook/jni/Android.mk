@@ -81,14 +81,7 @@ LOCAL_PATH := $(CURL_LIBDIR)
 $(foreach module,$(CURL_LIBS),$(eval $(call add_curl_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
-# Pull OpenCV into the build.
-# Set LOCAL_C_INCLUDES, LOCAL_CFLAGS, LOCAL_STATIC_LIBRARIES/LOCAL_SHARED_LIBRARIES, LOCAL_LDLIBS
-# appropriately for linking against OpenCV. 
-OPENCV_PACKAGE_DIR:=$(ARTOOLKIT_DIR)/jni/OpenCV-2.4.3-android-sdk
-OPENCV_LIB_TYPE:=STATIC
-OPENCV_CAMERA_MODULES:=off
-OPENCV_INSTALL_MODULES:=on
-include $(OPENCV_PACKAGE_DIR)/sdk/native/jni/OpenCV.mk
+include $(CLEAR_VARS)
 
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
@@ -97,24 +90,19 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 LOCAL_MODULE := nftBookNative
 LOCAL_SRC_FILES := nftBook.cpp ARMarkerNFT.c trackingSub.c VirtualEnvironment.c
 
-#LOCAL_CPPFLAGS += -fvisibility=hidden
-#LOCAL_LDFLAGS += -fvisibility=hidden
+# Silence the warning caused by empty struct lconv { } in /usr/include/locale.h.
+LOCAL_CPPFLAGS += -Wno-extern-c-compat
+
 # Make sure DEBUG is defined for debug builds. (NDK already defines NDEBUG for release builds.)
 ifeq ($(APP_OPTIM),debug)
     LOCAL_CPPFLAGS += -DDEBUG
 endif
 
 LOCAL_C_INCLUDES += $(ARTOOLKIT_DIR)/../include/android $(ARTOOLKIT_DIR)/../include
-LOCAL_LDLIBS += -llog -lGLESv1_CM
+LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 LOCAL_SHARED_LIBRARIES += curl ssl crypto
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += ar2 kpm opencv_flann opencv_core util eden argsub_es armulti arosg aricp cpufeatures jpeg arvideo
+LOCAL_STATIC_LIBRARIES += ar2 kpm util eden argsub_es armulti arosg aricp cpufeatures jpeg arvideo
 LOCAL_STATIC_LIBRARIES += osgdb_osg osgdb_ive osgdb_jpeg osgdb_gif gif osgdb_tiff tiff osgdb_bmp osgdb_png png osgdb_tga osgdb_freetype ft2 osgAnimation osgFX osgParticle osgPresentation osgShadow osgSim osgTerrain osgText osgVolume osgWidget osgViewer osgGA osgDB osgUtil osgdb_deprecated_osg osgdb_deprecated_osganimation osgdb_deprecated_osgfx  osgdb_deprecated_osgparticle osgdb_deprecated_osgshadow osgdb_deprecated_osgsim osgdb_deprecated_osgterrain osgdb_deprecated_osgtext osgdb_deprecated_osgviewer osgdb_deprecated_osgvolume osgdb_deprecated_osgwidget osg OpenThreads
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-	LOCAL_STATIC_LIBRARIES += tbb
-endif
-ifeq ($(TARGET_ARCH_ABI),x86)
-	LOCAL_STATIC_LIBRARIES += tbb
-endif
 
 include $(BUILD_SHARED_LIBRARY)

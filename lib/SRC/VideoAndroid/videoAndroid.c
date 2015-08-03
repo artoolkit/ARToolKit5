@@ -37,9 +37,16 @@
 
 #include <AR/video.h>
 #include <stdbool.h>
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+#  include <sys/time.h> // gettimeofday()
+#endif
 
 #include "android_os_build_codes.h"
 #include "cparamSearch.h"
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+#  include "videoAndroidNativeCapture.h"
+#  include "color_convert_common.h"
+#endif
 
 struct _AR2VideoParamAndroidT {
     char               device_id[PROP_VALUE_MAX*3+2]; // From <sys/system_properties.h>. 3 properties plus separators.
@@ -52,11 +59,20 @@ struct _AR2VideoParamAndroidT {
     int                cparamSearchInited;
     void             (*cparamSearchCallback)(const ARParam *, void *);
     void              *cparamSearchUserdata;
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    VIDEO_ANDROID_NATIVE_CAPTURE *nativeCapture;
+    AR2VideoBufferT    buffer;
+    bool               capturing;
+#endif
 };
 
 int ar2VideoDispOptionAndroid( void )
 {
     ARLOG(" -device=Android\n");
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    ARLOG(" -source=N\n");
+    ARLOG("    Acquire video from connected source device with index N (default = 0).\n");
+#endif
     ARLOG(" -width=N\n");
     ARLOG("    specifies desired width of image.\n");
     ARLOG(" -height=N\n");
@@ -139,6 +155,10 @@ AR2VideoParamAndroidT *ar2VideoOpenAndroid( const char *config )
                     free(cacheDir);
                     cacheDir = strdup(line);
                 }
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+            } else if( strncmp( line, "-source=", 8 ) == 0 ) {
+                if( sscanf( &line[8], "%d", &vid->camera_index ) == 0 ) err_i = 1;
+#endif
             } else {
                 err_i = 1;
             }
@@ -157,6 +177,9 @@ AR2VideoParamAndroidT *ar2VideoOpenAndroid( const char *config )
     // Initial state.
     if (!vid->format) vid->format = AR_INPUT_ANDROID_PIXEL_FORMAT;
     if (!vid->focal_length) vid->focal_length = AR_VIDEO_ANDROID_FOCAL_LENGTH_DEFAULT;
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    vid->capturing = false;
+#endif
     
     // In lieu of identifying the actual camera, we use manufacturer/model/board to identify a device,
     // and assume that identical devices have identical cameras.
@@ -170,19 +193,75 @@ AR2VideoParamAndroidT *ar2VideoOpenAndroid( const char *config )
     len++;
     len += __system_property_get(ANDROID_OS_BUILD_BOARD, vid->device_id + len);
     
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    // Open the camera connection. Until this is done, we can't set any properties of the stream.
+    if (!(vid->nativeCapture = videoAndroidNativeCaptureOpen(vid->camera_index))) {
+        ARLOGe("Unable to initialise native Android video capture.\n");
+        goto bail;
+    }
+#endif
+
     // Set width and height if specified.
+#if !AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
     if (width && height) {
         vid->width = width;
         vid->height = height;
     }
+#else
+    if (width && height) {
+        if (!videoAndroidNativeCaptureSetSize(vid->nativeCapture, width, height)) {
+            ARLOGe("Error: Unable to set native Android video frame size.\n");
+        }
+    }
+    // Read back the actual width and height.
+    if (!videoAndroidNativeCaptureGetSize(vid->nativeCapture, &vid->width, &vid->height)) {
+        ARLOGe("Error: Unable to get native Android video frame size.\n");
+        goto bail1;
+    }
+#endif
     
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    // Add any required changes to other properties here.
+    //videoAndroidNativeCaptureSetProperty(ANDROID_CAMERA_PROPERTY_FOCUS_MODE, ANDROID_CAMERA_FOCUS_MODE_AUTO);
+    //if (!videoAndroidNativeCaptureApplyProperties(vid->nativeCapture)) {
+    //    ARLOGe("Unable to apply changes to native Android video.\n");
+    //}
+    
+    // Check format and prepare the vid->buffer structure for later use.
+    if (vid->format == AR_PIXEL_FORMAT_NV21 || vid->format == AR_PIXEL_FORMAT_420f) {
+        // For non-planar formats, incoming buffers will be served directly,
+        // so no allocation for buff, but do need to allocate an array for thr bufPlanes pointers.
+        vid->buffer.buff = NULL;
+        vid->buffer.bufPlanes = (ARUint8 **)calloc(2, sizeof(ARUint8 *));
+        vid->buffer.bufPlaneCount = 2;
+    } else if (vid->format == AR_PIXEL_FORMAT_RGBA) {
+        vid->buffer.buff = malloc(vid->width * vid->height * 4);
+        vid->buffer.bufPlanes = NULL;
+        vid->buffer.bufPlaneCount = 0; // This will be checked for in ar2VideoCloseAndroid when deciding whether to free(buff).
+    } else {
+        ARLOGe("Error opening Android video: Unsupported video format %s (%d).\n", arVideoUtilGetPixelFormatName(vid->format), vid->format);
+        goto bail1;
+    }
+    
+    ARLOGi("Opened native video %dx%d, %s.\n", vid->width, vid->height, arVideoUtilGetPixelFormatName(vid->format));
+#endif
+
+	// Initialisation required before cparamSearch can be used.
     if (cparamSearchInit(cacheDir, false) < 0) {
         ARLOGe("Unable to initialise cparamSearch.\n");
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+        goto bail1;
+#else
         goto bail;
+#endif
     };
 
     goto done;
 
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+bail1:
+    videoAndroidNativeCaptureClose(&vid->nativeCapture);
+#endif
 bail:
     free(vid);
     vid = NULL;
@@ -194,6 +273,18 @@ done:
 int ar2VideoCloseAndroid( AR2VideoParamAndroidT *vid )
 {
     if (!vid) return (-1); // Sanity check.
+    
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+    // Free image stuff.
+    if (vid->capturing) ar2VideoCapStopAndroid(vid);
+    if (vid->buffer.bufPlaneCount == 0) free(vid->buffer.buff);
+    else free(vid->buffer.bufPlanes);
+    
+    // Clean up native capture;
+    if (!videoAndroidNativeCaptureClose(&vid->nativeCapture)) {
+        ARLOGe("Error shutting down native Android video.\n");
+    }
+#endif
     
     if (cparamSearchFinal() < 0) {
         ARLOGe("Unable to finalise cparamSearch.\n");
@@ -219,6 +310,72 @@ int ar2VideoGetSizeAndroid(AR2VideoParamAndroidT *vid, int *x,int *y)
     return 0;
 }
 
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+
+AR2VideoBufferT *ar2VideoGetImageAndroid( AR2VideoParamAndroidT *vid )
+{
+    if (!vid) return NULL;
+    
+    unsigned char *frame = videoAndroidNativeCaptureGetFrame(vid->nativeCapture);
+    if (!frame) return NULL;
+    
+    if (vid->format == AR_PIXEL_FORMAT_NV21 || vid->format == AR_PIXEL_FORMAT_420f) {
+        vid->buffer.bufPlanes[0] = vid->buffer.buff = (ARUint8 *)frame; // Luma plane.
+        vid->buffer.bufPlanes[1] = (ARUint8 *)(frame + vid->width*vid->height); // Chroma plane.
+    } else if (vid->format == AR_PIXEL_FORMAT_RGBA) {
+        color_convert_common(frame, frame + vid->width*vid->height, vid->width, vid->height, vid->buffer.buff);
+    } else {
+        return NULL;
+    }
+    
+    vid->buffer.fillFlag = 1;
+    
+    // Get time of capture.
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    vid->buffer.time_sec = time.tv_sec;
+    vid->buffer.time_usec = time.tv_usec;
+    
+    return (&vid->buffer);
+}
+
+int ar2VideoCapStartAndroid(AR2VideoParamAndroidT *vid)
+{
+    return (ar2VideoCapStartAsyncAndroid(vid, NULL, NULL));
+}
+
+int ar2VideoCapStartAsyncAndroid(AR2VideoParamAndroidT *vid, AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata)
+{
+    if (!vid) return -1;
+    if (vid->capturing) return -1; // Already capturing.
+    
+    if (!videoAndroidNativeCaptureStart(vid->nativeCapture, callback, userdata)) {
+        ARLOGe("Error starting native frame capture.\n");
+        return -1;
+    }
+    vid->capturing = true;
+    
+    return 0;
+}
+
+int ar2VideoCapStopAndroid(AR2VideoParamAndroidT *vid)
+{
+    int ret = 0;
+    
+    if (!vid) return -1;
+    if (!vid->capturing) return -1; // Not capturing.
+    
+    if (!videoAndroidNativeCaptureStop(vid->nativeCapture)) {
+        ARLOGe("Error stopping native frame capture.\n");
+        ret = -1;
+    }
+    vid->capturing = false;
+    
+    return ret;
+}
+
+#endif // AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+
 AR_PIXEL_FORMAT ar2VideoGetPixelFormatAndroid( AR2VideoParamAndroidT *vid )
 {
     if (!vid) return AR_PIXEL_FORMAT_INVALID;
@@ -231,9 +388,11 @@ int ar2VideoGetParamiAndroid( AR2VideoParamAndroidT *vid, int paramName, int *va
     if (!vid || !value) return (-1);
     
     switch (paramName) {
+#if !AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
         case AR_VIDEO_PARAM_ANDROID_WIDTH:          *value = vid->width; break;
         case AR_VIDEO_PARAM_ANDROID_HEIGHT:         *value = vid->height; break;
         case AR_VIDEO_PARAM_ANDROID_PIXELFORMAT:    *value = (int)vid->format; break;
+#endif
         case AR_VIDEO_PARAM_ANDROID_CAMERA_INDEX:   *value = vid->camera_index; break;
         case AR_VIDEO_PARAM_ANDROID_CAMERA_FACE:    *value = vid->camera_face; break;
         default:
@@ -247,9 +406,11 @@ int ar2VideoSetParamiAndroid( AR2VideoParamAndroidT *vid, int paramName, int  va
     if (!vid) return (-1);
     
     switch (paramName) {
+#if !AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
         case AR_VIDEO_PARAM_ANDROID_WIDTH:          vid->width = value; break;
         case AR_VIDEO_PARAM_ANDROID_HEIGHT:         vid->height = value; break;
         case AR_VIDEO_PARAM_ANDROID_PIXELFORMAT:    vid->format = (AR_PIXEL_FORMAT)value; break;
+#endif
         case AR_VIDEO_PARAM_ANDROID_CAMERA_INDEX:   vid->camera_index = value; break;
         case AR_VIDEO_PARAM_ANDROID_CAMERA_FACE:    vid->camera_face = value; break;
         case AR_VIDEO_PARAM_ANDROID_INTERNET_STATE: return (cparamSearchSetInternetState(value)); break;

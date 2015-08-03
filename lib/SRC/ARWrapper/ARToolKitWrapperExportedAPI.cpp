@@ -195,6 +195,7 @@ EXPORT_API bool arwStartRunning(const char *vconf, const char *cparaName, const 
 EXPORT_API bool arwStartRunningB(const char *vconf, const char *cparaBuff, const int cparaBuffLen, const float nearPlane, const float farPlane)
 {
     if (!gARTK) return false;
+    //gARTK->logv("ARWrap::arwStartRunningB(): called, (ThdID-%d)", GetCurrentThreadId());
     gARTK->setProjectionNearPlane(nearPlane);
     gARTK->setProjectionFarPlane(farPlane);
 	return gARTK->startRunning(vconf, NULL, cparaBuff, cparaBuffLen);
@@ -203,6 +204,7 @@ EXPORT_API bool arwStartRunningB(const char *vconf, const char *cparaBuff, const
 EXPORT_API bool arwStartRunningStereo(const char *vconfL, const char *cparaNameL, const char *vconfR, const char *cparaNameR, const char *transL2RName, const float nearPlane, const float farPlane)
 {
     if (!gARTK) return false;
+    //gARTK->logv("ARWrap::arwStartRunningStereo(): called, (ThdID-%d)", GetCurrentThreadId());
     gARTK->setProjectionNearPlane(nearPlane);
     gARTK->setProjectionFarPlane(farPlane);
 	return gARTK->startRunningStereo(vconfL, cparaNameL, NULL, 0L, vconfR, cparaNameR, NULL, 0L, transL2RName, NULL, 0L);
@@ -211,6 +213,7 @@ EXPORT_API bool arwStartRunningStereo(const char *vconfL, const char *cparaNameL
 EXPORT_API bool arwStartRunningStereoB(const char *vconfL, const char *cparaBuffL, const int cparaBuffLenL, const char *vconfR, const char *cparaBuffR, const int cparaBuffLenR, const char *transL2RBuff, const int transL2RBuffLen, const float nearPlane, const float farPlane)
 {
     if (!gARTK) return false;
+    //gARTK->logv("ARWrap::arwStartRunningStereoB(): called, (ThdID-%d)", GetCurrentThreadId());
     gARTK->setProjectionNearPlane(nearPlane);
     gARTK->setProjectionFarPlane(farPlane);
 	return gARTK->startRunningStereo(vconfL, NULL, cparaBuffL, cparaBuffLenL, vconfR, NULL, cparaBuffR, cparaBuffLenR, NULL, transL2RBuff, transL2RBuffLen);
@@ -225,6 +228,7 @@ EXPORT_API bool arwIsRunning()
 EXPORT_API bool arwStopRunning()
 {
     if (!gARTK) return false;
+    //gARTK->logv("ARWrap::arwStopRunning: called, (ThdID-%d)", GetCurrentThreadId());
 	return gARTK->stopRunning();
 }
 
@@ -839,7 +843,7 @@ EXPORT_API bool arwLoadOpticalParams(const char *optical_param_name, const char 
 // Utility function to create a Java float array from a C float array
 jfloatArray glArrayToJava(JNIEnv *env, ARdouble *arr, int len) {
 	jfloatArray result = NULL;
-	if (result = env->NewFloatArray(len)) env->SetFloatArrayRegion(result, 0, len, arr);
+	if ((result = env->NewFloatArray(len))) env->SetFloatArrayRegion(result, 0, len, arr);
 	return result;
 }
 

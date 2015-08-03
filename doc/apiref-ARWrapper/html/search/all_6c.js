@@ -7,5 +7,5 @@ var searchData=
   ['loadtemplate',['loadTemplate',['../class_a_r_pattern.html#a6b3fa362244a54588d361af8c09690f6',1,'ARPattern']]],
   ['log',['log',['../_a_r_tool_kit_wrapper_exported_a_p_i_8cpp.html#a658dcf98f0b22f514b51fa76d0817bf7',1,'ARToolKitWrapperExportedAPI.cpp']]],
   ['logcallback',['logCallback',['../class_a_r_controller.html#a54f0849f06076cd96311c48f25c2b58b',1,'ARController']]],
-  ['logv',['logv',['../class_a_r_controller.html#ae455f8a676ce0492c396d955ee7a108f',1,'ARController']]]
+  ['logv',['logv',['../class_a_r_controller.html#a33e443e6b1d71770bcc2ed22f907bf54',1,'ARController::logv(const int logLevel, const char *format,...)'],['../class_a_r_controller.html#ae455f8a676ce0492c396d955ee7a108f',1,'ARController::logv(const char *msg,...)']]]
 ];

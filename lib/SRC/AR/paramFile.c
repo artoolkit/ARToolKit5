@@ -258,24 +258,30 @@ int    arParamSave( const char *filename, const int num, const ARParam *param, .
     return 0;
 }
 
-int    arParamLoad( const char *filename, int num, ARParam *param, ...)
+int arParamLoad( const char *filename, int num, ARParam *param, ...)
 {
-    FILE        *fp;
-    va_list     ap;
-    ARParam     *param1;
-    int         i;
-    int         dist_function_version;
-	long		flen;
-	ARParamd	param_wasRead;
-	double		temp;
+    //COVHI10334
+    int      ret = 0;
+    FILE     *fp = NULL;
+    int      i = 0;
+    va_list  ap;
+    ARParam  *param1;
+    int      dist_function_version;
+    long     flen;
+    ARParamd param_wasRead;
+    double   temp;
 
-    if( num < 1 || !filename || !param) return -1;
+    if (num < 1 || !filename || !param) {
+        ret = -1;
+        goto done;
+    }
 
-    fp = fopen( filename, "rb" );
-    if( fp == NULL ) {
+    fp = fopen(filename, "rb");
+    if (fp == NULL) {
 		ARLOGe("Error (%d): unable to open camera parameters file \"%s\" for reading.\n", errno, filename);
 		ARLOGperror(NULL);
-		return -1;
+        ret = -1;
+        goto done;
 	}
 	
 	// Determine file length.
@@ -283,8 +289,9 @@ int    arParamLoad( const char *filename, int num, ARParam *param, ...)
 	if (ferror(fp)) {
 		ARLOGe("Error (%d): unable to determine file length.", errno);
 		ARLOGperror(NULL);
-		return -1;
-	}
+        ret = -1;
+        goto done;
+    }
 	flen = ftell(fp);
 	//ARLOGd("Loading a parameter file of length %ld.\n", flen);
 	rewind(fp);
@@ -300,16 +307,16 @@ int    arParamLoad( const char *filename, int num, ARParam *param, ...)
 	}
 	if (i == AR_DIST_FUNCTION_VERSION_MAX) {
 		ARLOGe("Error: supplied file does not appear to be an ARToolKit camera parameter file.\n");
-		fclose(fp);
-		return -1;
+        ret = -1;
+        goto done;
 	}
 	ARLOGd("Reading camera parameters from %s (distortion function version %d).\n", filename, dist_function_version);
     
     if (fread((void *)&param_wasRead, arParamVersionInfo[dist_function_version - 1].ARParam_size, 1, fp) != 1) {
 		ARLOGe("Error (%d): unable to read from file.", errno);
 		ARLOGperror(NULL);
-        fclose(fp);
-        return -1;
+        ret = -1;
+        goto done;
     }
     param_wasRead.dist_function_version = dist_function_version;
 #ifdef AR_LITTLE_ENDIAN
@@ -331,8 +338,8 @@ int    arParamLoad( const char *filename, int num, ARParam *param, ...)
         param1 = va_arg(ap, ARParam *);
 		param1->dist_function_version = param->dist_function_version;
         if (fread((void *)&param_wasRead, arParamVersionInfo[param->dist_function_version - 1].ARParam_size, 1, fp) != 1) {
-            fclose(fp);
-            return -1;
+            ret = -1;
+            goto done;
         }
         param_wasRead.dist_function_version = dist_function_version;
 #ifdef AR_LITTLE_ENDIAN
@@ -350,9 +357,12 @@ int    arParamLoad( const char *filename, int num, ARParam *param, ...)
 #endif
     }
 
-    fclose(fp);
-
-    return 0;
+done:
+    if (fp) {
+        fclose(fp);
+    }
+    
+    return ret;
 }
 
 int    arParamLoadFromBuffer( const void *buffer, size_t bufsize, ARParam *param)

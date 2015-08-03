@@ -42,9 +42,9 @@
 
 AR2FeatureSetT *ar2ReadFeatureSet( char *filename, char *ext )
 {
-    AR2FeatureSetT  *featureSet;
-    FILE            *fp;
-    int             i, j, l3;
+    AR2FeatureSetT *featureSet = NULL;
+    FILE           *fp = NULL;
+    int            i, j, l3;
 
     char buf[512];
     sprintf(buf, "%s.%s", filename, ext);
@@ -55,108 +55,69 @@ AR2FeatureSetT *ar2ReadFeatureSet( char *filename, char *ext )
 
     arMalloc( featureSet, AR2FeatureSetT, 1 );
 
+    //COVHI10403
     if( fread(&(featureSet->num), sizeof(featureSet->num), 1, fp) != 1 ) {
         ARLOGe("Read error!!\n");
-        free( featureSet );
-        return NULL;
+        goto bail0;
     }
 
     arMalloc( featureSet->list, AR2FeaturePointsT, featureSet->num );
     for( i = 0; i < featureSet->num; i++ ) {
         if( fread(&(featureSet->list[i].scale), sizeof(featureSet->list[i].scale), 1, fp) != 1 ) {
             ARLOGe("Read error!!\n");
-            for(l3=0;l3<i;l3++) {
-                free( featureSet->list[l3].coord );
-            }
-            free( featureSet->list );
-            free( featureSet );
-            return NULL;
+            goto bail1;
         }
         if( fread(&(featureSet->list[i].maxdpi), sizeof(featureSet->list[i].maxdpi), 1, fp) != 1 ) {
             ARLOGe("Read error!!\n");
-            for(l3=0;l3<i;l3++) {
-                free( featureSet->list[l3].coord );
-            }
-            free( featureSet->list );
-            free( featureSet );
-            return NULL;
+            goto bail1;
         }
         if( fread(&(featureSet->list[i].mindpi), sizeof(featureSet->list[i].mindpi), 1, fp) != 1 ) {
             ARLOGe("Read error!!\n");
-            for(l3=0;l3<i;l3++) {
-                free( featureSet->list[l3].coord );
-            }
-            free( featureSet->list );
-            free( featureSet );
-            return NULL;
+            goto bail1;
         }
         if( fread(&(featureSet->list[i].num), sizeof(featureSet->list[i].num), 1, fp) != 1 ) {
             ARLOGe("Read error!!\n");
-            for(l3=0;l3<i;l3++) {
-                free( featureSet->list[l3].coord );
-            }
-            free( featureSet->list );
-            free( featureSet );
-            return NULL;
+            goto bail1;
         }
 
         arMalloc( featureSet->list[i].coord, AR2FeatureCoordT, featureSet->list[i].num );
         for( j = 0; j < featureSet->list[i].num; j++ ) {
             if( fread(&(featureSet->list[i].coord[j].x), sizeof(featureSet->list[i].coord[j].x), 1, fp) != 1 ) {
                 ARLOGe("Read error!!\n");
-                for(l3=0;l3<i;l3++) {
-                    free( featureSet->list[l3].coord );
-                }
-                free( featureSet->list[i].coord );
-                free( featureSet->list );
-                free( featureSet );
-                return NULL;
+                goto bail1;
             }
             if( fread(&(featureSet->list[i].coord[j].y), sizeof(featureSet->list[i].coord[j].y), 1, fp) != 1 ) {
                 ARLOGe("Read error!!\n");
-                for(l3=0;l3<i;l3++) {
-                    free( featureSet->list[l3].coord );
-                }
-                free( featureSet->list[i].coord );
-                free( featureSet->list );
-                free( featureSet );
-                return NULL;
+                goto bail1;
             }
             if( fread(&(featureSet->list[i].coord[j].mx), sizeof(featureSet->list[i].coord[j].mx), 1, fp) != 1 ) {
                 ARLOGe("Read error!!\n");
-                for(l3=0;l3<i;l3++) {
-                    free( featureSet->list[l3].coord );
-                }
-                free( featureSet->list[i].coord );
-                free( featureSet->list );
-                free( featureSet );
-                return NULL;
+                goto bail1;
             }
             if( fread(&(featureSet->list[i].coord[j].my), sizeof(featureSet->list[i].coord[j].my), 1, fp) != 1 ) {
                 ARLOGe("Read error!!\n");
-                for(l3=0;l3<i;l3++) {
-                    free( featureSet->list[l3].coord );
-                }
-                free( featureSet->list[i].coord );
-                free( featureSet->list );
-                free( featureSet );
-                return NULL;
+                goto bail1;
             }
             if( fread(&(featureSet->list[i].coord[j].maxSim), sizeof(featureSet->list[i].coord[j].maxSim), 1, fp) != 1 ) {
                 ARLOGe("Read error!!\n");
-                for(l3=0;l3<i;l3++) {
-                    free( featureSet->list[l3].coord );
-                }
-                free( featureSet->list[i].coord );
-                free( featureSet->list );
-                free( featureSet );
-                return NULL;
+                goto bail1;
             }
         }
     }
 
-    fclose(fp);
+    goto done;
+    
+bail1:
+    for(l3=0;l3<i;l3++) {
+        free( featureSet->list[l3].coord );
+    }
+    free( featureSet->list );
+bail0:
+    free( featureSet );
+    featureSet = NULL;
 
+done:
+    fclose(fp);
     return featureSet;
 }
 

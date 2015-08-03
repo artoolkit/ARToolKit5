@@ -110,6 +110,7 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
             ARLOGe("Error opening file '%s.iset'.\n", name);
             free(surfaceSet->surface);
             free(surfaceSet);
+			if (fp) fclose(fp); //COVHI10426
             return (NULL);
         }
         ARLOGi("    end.\n");
@@ -121,11 +122,12 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
             ar2FreeImageSet(&surfaceSet->surface[i].imageSet);
             free(surfaceSet->surface);
             free(surfaceSet);
+			if (fp) fclose(fp); //COVHI10426
             return (NULL);
         }
         ARLOGi("    end.\n");
 
-        if( pattHandle != NULL ) {
+        if (pattHandle) {
             ARLOGi("  Read MarkerSet.\n");
             ar2UtilRemoveExt( name );
             surfaceSet->surface[i].markerSet = ar2ReadMarkerSet( name, "mrk", pattHandle );
@@ -135,15 +137,15 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
                 ar2FreeImageSet(&surfaceSet->surface[i].imageSet);
                 free(surfaceSet->surface);
                 free(surfaceSet);
+                if (fp) fclose(fp); //COVHI10426
                 return (NULL);
             }
             ARLOGi("    end.\n");
-        }
-        else {
+        } else {
             surfaceSet->surface[i].markerSet = NULL;
         }
 
-        if( readMode ) {
+        if (readMode) {
             if( get_buff(buf, 256, fp) == NULL ) break;
             if( sscanf(buf, "%f %f %f %f",
                        &(surfaceSet->surface[i].trans[0][0]),
@@ -174,9 +176,7 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
                 fclose(fp);
                 exit(0);
             }
-            fclose(fp);
-        }
-        else {
+        } else {
             for( j = 0; j < 3; j++ ) {
                 for( k = 0; k < 4; k++ ) {
                     surfaceSet->surface[i].trans[j][k] = (j == k)? 1.0f: 0.0f;
@@ -189,7 +189,10 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
         arMalloc( surfaceSet->surface[i].jpegName, char, 256);
         strncpy( surfaceSet->surface[i].jpegName, name, 256 );
     }
-    if( i < surfaceSet->num ) exit(0);
+
+    if (fp) fclose(fp); //COVHI10459
+
+    if (i < surfaceSet->num) exit(0);
 
     return surfaceSet;
 }

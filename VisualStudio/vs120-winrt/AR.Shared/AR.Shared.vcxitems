@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a62195e7-15ba-4db4-bf8e-8f1792d2970d</SharedGUID>
+    <ItemsProjectGuid>{c641c727-2445-4306-b142-103deac4803d}</ItemsProjectGuid>
+    <ItemsRootNamespace>AR</ItemsRootNamespace>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\ar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arFilterTransMat.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arImageProc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\icp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\icpCore.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\matrix.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\param.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingPrivate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSub.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\ar3DCreateHandle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\ar3DUtil.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arCreateHandle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arDetectMarker.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arDetectMarker2.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arFilterTransMat.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arGetLine.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arGetMarkerInfo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arGetTransMat.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arGetTransMatStereo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arImageProc.c">
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabeling.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBI3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBI3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBI3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBI3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBI3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBIA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBIC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBICY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBIYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBR3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBR3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBR3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBR3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBR3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBRA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBRC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBRCY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBRYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDBZ.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWI3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWI3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWI3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWI3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWI3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWIA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWIC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWICY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWIYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWR3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWR3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWR3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWR3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWR3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWRA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWRC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWRCY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWRYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubDWZ.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBI3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBI3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBI3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBI3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBI3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBIA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBIC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBICY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBIYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBR3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBR3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBR3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBR3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBR3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBRA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBRC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBRCY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBRYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEBZ.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWI3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWI3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWI3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWI3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWI3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWIA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWIC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWICY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWIYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWR3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWR3C565.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWR3CA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWR3CA4444.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWR3CA5551.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWRA3C.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWRC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWRCY.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWRYC.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arLabelingSub\arLabelingSubEWZ.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arPattAttach.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arPattCreateHandle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arPattGetID.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arPattLoad.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arPattSave.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\arUtil.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAlloc.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAllocDup.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAllocInv.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAllocMul.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAllocTrans.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mAllocUnit.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mDet.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mDisp.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mDup.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mFree.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mInv.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mMul.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mPCA.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mSelfInv.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mTrans.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\mUnit.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramChangeSize.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramClear.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramDecomp.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramDisp.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramDistortion.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramFile.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramGetPerspective.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\paramLT.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vAlloc.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vDisp.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vFree.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vHouse.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vInnerP.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR\vTridiag.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\include\Ar\config.h.in" />
+  </ItemGroup>
+</Project>

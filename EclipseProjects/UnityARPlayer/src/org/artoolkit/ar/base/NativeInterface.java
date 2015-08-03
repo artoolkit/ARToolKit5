@@ -66,6 +66,8 @@ public class NativeInterface {
     		
     		Log.i(TAG, "Attempting to load library: " + LIBRARY_NAME);
     		
+    		System.loadLibrary("c++_shared");
+		
     		// ARToolKit v5.1.0 and later depend on libcurl.
     		System.loadLibrary("crypto");
     		System.loadLibrary("ssl");

@@ -46,6 +46,7 @@
 #include <sys/param.h> // MAXPATHLEN
 #include <sys/stat.h> // struct stat, stat(), mkdir()
 #include <math.h> // log2f(), fabsf()
+#include <unistd.h> // unlink()
 
 #ifdef ANDROID
 #  include "android_os_build_codes.h"
@@ -455,6 +456,7 @@ int cparamSearchFinal()
 int cparamSearchSetInternetState(int state)
 {
     internetState = state;
+    return (0);
 }
 
 // Receive size*nmemb bytes of non-NULL terminated data.
@@ -614,7 +616,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                     // Decode the ARParam.
                                     ARParam decodedCparam;
                                     size_t decodedLen;
-                                    unsigned char *decoded = base64_decode(camera_para_base64, strlen(camera_para_base64), &decodedLen);
+                                    unsigned char *decoded = base64_decode((char *)camera_para_base64, strlen((char *)camera_para_base64), &decodedLen);
                                     if (!decoded) {
                                         ARLOGe("Error in database: bad base64.\n");
                                     } else if (arParamLoadFromBuffer(decoded, decodedLen, &decodedCparam) < 0) {
@@ -791,13 +793,13 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                 // Decode the ARParam.
                                                 ARParam decodedCparam;
                                                 size_t decodedLen;
-                                                unsigned char *decoded = base64_decode(camera_para_base64, strlen(camera_para_base64), &decodedLen);
+                                                unsigned char *decoded = base64_decode((char *)camera_para_base64, strlen((char *)camera_para_base64), &decodedLen);
                                                 if (!decoded) {
                                                     ARLOGe("Error in database: bad base64.\n");
                                                 } else if (arParamLoadFromBuffer(decoded, decodedLen, &decodedCparam) < 0) {
                                                     ARLOGe("Error in database: bad ARParam.\n");
                                                 } else {
-                                                    if (strcmp(aspect_ratio, searchData->aspect_ratio) == 0) {
+                                                    if (strcmp((char *)aspect_ratio, searchData->aspect_ratio) == 0) {
                                                         // If this result is better than a previous result, save it.
                                                         // If it's the first result, it will always be better.
                                                         float sizeRatio = fabsf(LOG2F(((float)camera_width)/((float)searchData->camera_width)));
@@ -821,8 +823,8 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                         } else {
                                                             ;
                                                             if (((sqliteErr = sqlite3_bind_text(stmt, 1, searchData->device_id, -1, SQLITE_STATIC)) != SQLITE_OK) ||
-                                                                ((sqliteErr = sqlite3_bind_text(stmt, 2, aspect_ratio, -1, SQLITE_STATIC)) != SQLITE_OK) ||
-                                                                ((sqliteErr = sqlite3_bind_text(stmt, 3, camera_para_base64, -1, SQLITE_STATIC)) != SQLITE_OK)) {
+                                                                ((sqliteErr = sqlite3_bind_text(stmt, 2, (char *)aspect_ratio, -1, SQLITE_STATIC)) != SQLITE_OK) ||
+                                                                ((sqliteErr = sqlite3_bind_text(stmt, 3, (char *)camera_para_base64, -1, SQLITE_STATIC)) != SQLITE_OK)) {
                                                                 reportSQLite3Err(cacheDB);
                                                             } else {
                                                                 sqliteErr = sqlite3_step(stmt);

@@ -19,6 +19,8 @@
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>org.artoolkit.${PRODUCT_NAME:identifier}</string>
+	<key>CFBundleDisplayName</key>
+	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

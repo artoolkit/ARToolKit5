@@ -276,6 +276,7 @@ static void init( void )
     arParamClear(&cparam, xsize, ysize, AR_DIST_FUNCTION_VERSION_DEFAULT);
     ARLOG("*** Camera Parameter ***\n");
     arParamDisp( &cparam );
+    //COVHI10445 ignored as false positive, i.e. cparam->m[3][4] uninitialized.
     cparamLT = arParamLTCreate(&cparam, AR_PARAM_LT_DEFAULT_OFFSET);
     
     arHandle = arCreateHandle(cparamLT);

@@ -40,25 +40,6 @@ extern "C"
 
 namespace osgDB {
 
-/** basic structure for custom runtime inheritance checking */
-struct basic_type_wrapper {
-    virtual ~basic_type_wrapper() {}
-    virtual bool matches(const osg::Object *proto) const = 0;
-};
-
-/** a class template that checks inheritance between a given
-    Object's class and a class defined at compile time through
-        the template parameter T.
-        This is used in conjunction with readObjectOfType() to
-        specify an abstract class as reference type.
-**/
-template<class T>
-struct type_wrapper: basic_type_wrapper {
-    bool matches(const osg::Object *proto) const
-    {
-        return dynamic_cast<const T*>(proto) != 0;
-    }
-};
 
 /**
     Registry is a singleton factory which stores
@@ -147,6 +128,11 @@ class OSGDB_EXPORT Registry : public osg::Referenced
 
         /** get const list of all registered ReaderWriters.*/
         const ReaderWriterList& getReaderWriterList() const { return _rwList; }
+        
+        /** get a list of registered ReaderWriters which can handle given protocol */
+        void getReaderWriterListForProtocol(const std::string& protocol, ReaderWriterList& results) const;
+        
+        ReaderWriter* getReaderWriterForProtocolAndExtension(const std::string& protocol, const std::string& extension);
 
 
         typedef std::vector< osg::ref_ptr<ImageProcessor> > ImageProcessorList;
@@ -718,7 +704,7 @@ struct PluginFunctionProxy
     static osgDB::PluginFunctionProxy proxy_serializer_library_##libname(wrapper_serializer_library_##libname);
 
 #define USE_COMPRESSOR_WRAPPER(classname) \
-    extern "C" void wrapper_serializer_##classname(void); \
+    extern "C" void wrapper_compressor_##classname(void); \
     static osgDB::PluginFunctionProxy proxy_compressor_##classname(wrapper_compressor_##classname);
 
 #define REGISTER_OSGPLUGIN(ext, classname) \

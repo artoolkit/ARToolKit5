@@ -87,6 +87,9 @@ class OSGVIEWER_EXPORT CompositeViewer : public ViewerBase
         /** Check to see if the new frame is required, called by run() when FrameScheme is set to ON_DEMAND.*/
         virtual bool checkNeedToDoFrame();
 
+        /** check to see if events have been received, return true if events are now available.*/
+        virtual bool checkEvents();
+
         virtual void advance(double simulationTime=USE_REFERENCE_TIME);
 
         virtual void eventTraversal();
@@ -123,6 +126,10 @@ class OSGVIEWER_EXPORT CompositeViewer : public ViewerBase
 
         virtual void viewerInit();
 
+        void generateSlavePointerData(osg::Camera* camera, osgGA::GUIEventAdapter& event);
+        void generatePointerData(osgGA::GUIEventAdapter& event);
+        void reprojectPointerData(osgGA::GUIEventAdapter& source_event, osgGA::GUIEventAdapter& dest_event);
+
         typedef std::vector< osg::ref_ptr<osgViewer::View> > RefViews;
         RefViews _views;
 
@@ -135,6 +142,8 @@ class OSGVIEWER_EXPORT CompositeViewer : public ViewerBase
 
         osg::observer_ptr<osg::Camera>      _cameraWithFocus;
         osg::observer_ptr<osgViewer::View>  _viewWithFocus;
+        
+        osg::ref_ptr<osgGA::GUIEventAdapter> _previousEvent;
 
 };
 

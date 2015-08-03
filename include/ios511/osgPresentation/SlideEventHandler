@@ -15,23 +15,84 @@
 
 #include <osg/Switch>
 #include <osg/Timer>
+#include <osg/ValueObject>
+#include <osg/ImageSequence>
 
 #include <osgGA/GUIEventHandler>
 #include <osgViewer/Viewer>
 
 #include <osgPresentation/CompileSlideCallback>
+#include <osgPresentation/PropertyManager>
 
 namespace osgPresentation
 {
 
+// forward declare
+class SlideEventHandler;
+    
 /// Operations related to click to run/load/key events.
 enum Operation
 {
     RUN,
     LOAD,
     EVENT,
-    JUMP
+    JUMP,
+    FORWARD_EVENT
 };
+
+struct JumpData
+{
+    JumpData():
+        relativeJump(true),
+        slideNum(0),
+        layerNum(0) {}
+        
+    JumpData(bool in_relativeJump, int in_slideNum, int in_layerNum):
+        relativeJump(in_relativeJump),
+        slideNum(in_slideNum),
+        layerNum(in_layerNum) {}
+
+    JumpData(const std::string& in_slideName, const std::string& in_layerName):
+        relativeJump(true),
+        slideNum(0),
+        layerNum(0),
+        slideName(in_slideName),
+        layerName(in_layerName) {}
+
+    JumpData(const JumpData& rhs):
+        relativeJump(rhs.relativeJump),
+        slideNum(rhs.slideNum),
+        layerNum(rhs.layerNum),
+        slideName(rhs.slideName),
+        layerName(rhs.layerName) {}
+
+    JumpData& operator = (const JumpData& rhs)
+    {
+        if (&rhs==this) return *this;
+        relativeJump = rhs.relativeJump;
+        slideNum = rhs.slideNum;
+        layerNum = rhs.layerNum;
+        slideName = rhs.slideName;
+        layerName = rhs.layerName;
+        return *this;
+    }
+
+    bool requiresJump() const
+    {
+        if (!slideName.empty() || !layerName.empty()) return true;
+        return relativeJump ? (slideNum!=0 || layerNum!=0) : true;
+    }
+
+    bool jump(SlideEventHandler* seh) const;
+
+    bool relativeJump;
+    int slideNum;
+    int layerNum;
+
+    std::string slideName;
+    std::string layerName;
+};
+
 
 struct HomePosition : public virtual osg::Referenced
 {
@@ -74,8 +135,8 @@ struct LayerCallback : public virtual osg::Referenced
 
 struct OSGPRESENTATION_EXPORT LayerAttributes : public virtual osg::Referenced
 {
-    LayerAttributes():_duration(0),_relativeJump(true),_slideNum(0),_layerNum(0) {}
-    LayerAttributes(double in_duration):_duration(in_duration),_relativeJump(true),_slideNum(0),_layerNum(0) {}
+    LayerAttributes():_duration(0) {}
+    LayerAttributes(double in_duration):_duration(in_duration) {}
 
     void setDuration(double duration) { _duration = duration; }
     double getDuration() const { return _duration; }
@@ -93,26 +154,13 @@ struct OSGPRESENTATION_EXPORT LayerAttributes : public virtual osg::Referenced
 
     void addRunString(const std::string& runString) { _runStrings.push_back(runString); }
 
-    void setJump(bool relativeJump, int slideNum, int layerNum)
-    {
-        _relativeJump = relativeJump;
-        _slideNum = slideNum;
-        _layerNum = layerNum;
-    }
+    void setJump(const JumpData& jumpData) { _jumpData = jumpData; }
+    const JumpData& getJumpData() const { return _jumpData; }
 
-    bool getRelativeJump() const { return _relativeJump; }
-    int getSlideNum() const { return _slideNum; }
-    int getLayerNum() const { return _layerNum; }
-
-    bool requiresJump() const { return _relativeJump ? (_slideNum!=0 || _layerNum!=0) : true; }
-
-    double  _duration;
-    Keys    _keys;
-    RunStrings _runStrings;
-
-    bool                                _relativeJump;
-    int                                 _slideNum;
-    int                                 _layerNum;
+    double      _duration;
+    Keys        _keys;
+    RunStrings  _runStrings;
+    JumpData    _jumpData;
 
     void addEnterCallback(LayerCallback* lc) { _enterLayerCallbacks.push_back(lc); }
     void addLeaveCallback(LayerCallback* lc) { _leaveLayerCallbacks.push_back(lc); }
@@ -148,11 +196,12 @@ struct ObjectOperator : public osg::Referenced
 
     virtual void* ptr() const = 0;
 
-    virtual void enter() = 0;
-    virtual void maintain() = 0;
-    virtual void leave() = 0;
-    virtual void setPause(bool pause) = 0;
-    virtual void reset() = 0;
+    virtual void enter(SlideEventHandler*) = 0;
+    virtual void frame(SlideEventHandler*) {} ;
+    virtual void maintain(SlideEventHandler*) = 0;
+    virtual void leave(SlideEventHandler*) = 0;
+    virtual void setPause(SlideEventHandler*, bool pause) = 0;
+    virtual void reset(SlideEventHandler*) = 0;
 
     virtual ~ObjectOperator() {}
 };
@@ -165,21 +214,23 @@ public:
 
     void collect(osg::Node* incommingNode, osg::NodeVisitor::TraversalMode tm = osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
 
-    void process();
+    void process(SlideEventHandler* seh);
 
-    void setPause(bool pause);
+    void frame(SlideEventHandler*);
+
+    void setPause(SlideEventHandler* seh, bool pause);
     bool getPause() const { return _pause; }
 
-    void reset();
+    void reset(SlideEventHandler* seh);
 
     typedef std::set< osg::ref_ptr<ObjectOperator>, dereference_less >  OperatorList;
 
 protected:
 
-    void processOutgoing();
-    void processIncomming();
-    void processMaintained();
-
+    void processOutgoing(SlideEventHandler* seh);
+    void processIncomming(SlideEventHandler* seh);
+    void processMaintained(SlideEventHandler* seh);
+    
     bool            _pause;
 
     OperatorList    _previous;
@@ -214,6 +265,8 @@ public:
 
     osgViewer::Viewer* getViewer() { return _viewer.get(); }
 
+    osg::Switch* getPresentationSwitch() { return _presentationSwitch.get(); }
+
     enum WhichPosition
     {
         FIRST_POSITION = 0,
@@ -227,6 +280,9 @@ public:
 
     int getActiveSlide() const { return _activeSlide; }
     int getActiveLayer() const { return _activeLayer; }
+
+    osg::Switch* getSlide(int slideNum);
+    osg::Node* getLayer(int slideNum, int layerNum);
 
     bool selectSlide(int slideNum,int layerNum=FIRST_POSITION);
     bool selectLayer(int layerNum);
@@ -266,6 +322,7 @@ public:
     void setRequestReload(bool flag);
     bool getRequestReload() const { return _requestReload; }
 
+    double getReferenceTime() const { return _referenceTime; }
 
 protected:
 
@@ -276,6 +333,8 @@ protected:
 
     void updateAlpha(bool, bool, float x, float y);
     void updateLight(float x, float y);
+
+    void updateOperators();
 
 
     osg::observer_ptr<osgViewer::Viewer>    _viewer;
@@ -290,6 +349,7 @@ protected:
     int                                     _activeLayer;
 
     bool                                    _firstTraversal;
+    double                                  _referenceTime;
     double                                  _previousTime;
     double                                  _timePerSlide;
     bool                                    _autoSteppingActive;
@@ -319,9 +379,6 @@ protected:
     osg::ref_ptr<CompileSlideCallback>      _compileSlideCallback;
 
     bool                                    _requestReload;
-
-    void updateOperators();
-
 };
 
 }

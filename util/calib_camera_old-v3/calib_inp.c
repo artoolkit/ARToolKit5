@@ -690,17 +690,37 @@ static void get_cpara( CALIB_COORD_T *world, CALIB_COORD_T *screen, int num, ARd
 
 static int get_fl( ARdouble *p , ARdouble *q, int num, ARdouble f[2] )
 {
-    ARMat   *a, *b, *c;
-    ARMat   *at, *aa, *res;
-    int     i;
+    //COVHI10404, COVHI10368, COVHI10351, COVHI10315, COVHI10310, COVHI10309
+    ARMat *a = NULL, *b = NULL, *c = NULL;
+    ARMat *at = NULL, *aa = NULL, *res = NULL;
+    int   i, ret = 0;
 
 #if 1
-    a = arMatrixAlloc( num, 2 );
-    b = arMatrixAlloc( num, 1 );
-    c = arMatrixAlloc( 2, num );
-    at = arMatrixAlloc( 2, num );
-    aa = arMatrixAlloc( 2, 2 );
-    res = arMatrixAlloc( 2, 1 );
+    if (NULL == (a = arMatrixAlloc(num, 2))) {
+        ret = -1;
+        goto done;
+    }
+    if (NULL == (b = arMatrixAlloc(num, 1))) {
+        ret = -1;
+        goto done;
+    }
+    if (NULL == (c = arMatrixAlloc(2, num))) {
+        ret = -1;
+        goto done;
+    }
+    if (NULL == (at = arMatrixAlloc(2, num))) {
+        ret = -1;
+        goto done;
+    }
+    if (NULL == (aa = arMatrixAlloc(2, 2))) {
+        ret = -1;
+        goto done;
+    }
+    if (NULL == (res = arMatrixAlloc(2, 1))) {
+        ret = -1;
+        goto done;
+    }
+
     for( i = 0; i < num; i++ ) {
         a->m[i*2+0] = *(p++);
         a->m[i*2+1] = *(q++);
@@ -726,11 +746,15 @@ static int get_fl( ARdouble *p , ARdouble *q, int num, ARdouble f[2] )
     arMatrixMul( c, aa, at );
     arMatrixMul( res, c, b );
 
-    if( res->m[0] < 0 || res->m[1] < 0 ) return -1;
+    if (res->m[0] < 0 || res->m[1] < 0) {
+        ret = -1;
+        goto done;
+    }
 
     f[0] = sqrt( 1.0 / res->m[0] );
     f[1] = sqrt( 1.0 / res->m[1] );
 
+done:
     arMatrixFree( a );
     arMatrixFree( b );
     arMatrixFree( c );
@@ -738,7 +762,7 @@ static int get_fl( ARdouble *p , ARdouble *q, int num, ARdouble f[2] )
     arMatrixFree( aa );
     arMatrixFree( res );
 
-    return 0;
+    return (ret);
 }
 
 static int check_rotation( ARdouble rot[2][3] )

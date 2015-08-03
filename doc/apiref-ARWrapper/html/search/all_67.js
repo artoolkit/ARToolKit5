@@ -10,7 +10,7 @@ var searchData=
   ['getdebugmode',['getDebugMode',['../class_a_r_controller.html#ac385b8f5be31e172a34e9aef3f3ac82a',1,'ARController']]],
   ['geterror',['getError',['../class_a_r_controller.html#ae3eef04a6533f0eb8b44e906cc2acb7b',1,'ARController::getError()'],['../class_video_source.html#afdcbad266f06a6ee07ecb8ce2873e871',1,'VideoSource::getError()']]],
   ['getframe',['getFrame',['../class_video_source.html#a4aa1c837e84952450cf330d8dba86bfa',1,'VideoSource']]],
-  ['getframesize',['getFrameSize',['../class_video_source.html#a13aabd6897f9c1e2810df4e792583e44',1,'VideoSource']]],
+  ['getframesize',['getFrameSize',['../class_android_video_source.html#a5823842eb4a5519e389deba792ddcf3e',1,'AndroidVideoSource']]],
   ['getframestamp',['getFrameStamp',['../class_video_source.html#aa99b09f155bf7db297be0262950e131d',1,'VideoSource']]],
   ['getimageprocmode',['getImageProcMode',['../class_a_r_controller.html#aa51e7898c99e5fac6658a5d6e594bce6',1,'ARController']]],
   ['getlabelingmode',['getLabelingMode',['../class_a_r_controller.html#a9fa24578408ae5a2d1b4cb215b5c5c32',1,'ARController']]],

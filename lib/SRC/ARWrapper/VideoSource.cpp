@@ -118,28 +118,28 @@ int VideoSource::getError()
 }
 
 void VideoSource::configure(const char* vconf, const char* cparaName, const char* cparaBuff, size_t cparaBuffLen) {
-
+    ARController::logv(AR_LOG_LEVEL_DEBUG, "VideoSource::configure(): called");
 	if (vconf) {
 		size_t len = strlen(vconf);
 		videoConfiguration = (char*)malloc(sizeof(char) * len + 1);
 		strcpy(videoConfiguration, vconf);
-		ARController::logv("Video Source video configuration: %s", videoConfiguration);
+        ARController::logv(AR_LOG_LEVEL_INFO, "VideoSource::configure(): video Source video configuration: \"%s\"", videoConfiguration);
 	}
 
 	if (cparaName) {
 		size_t len = strlen(cparaName);
 		cameraParam = (char*)malloc(sizeof(char) * len + 1);
 		strcpy(cameraParam, cparaName);
-		ARController::logv("Video Source camera parameters: %s", cameraParam);
+        ARController::logv(AR_LOG_LEVEL_INFO, "VideoSource::configure(): video Source camera parameters: \"%s\"", cameraParam);
 	}
 
 	if (cparaBuff) {
 		cameraParamBufferLen = cparaBuffLen;
 		cameraParamBuffer = (char*)malloc(sizeof(char) * cameraParamBufferLen);
 		memcpy(cameraParamBuffer, cparaBuff, cameraParamBufferLen);
-		ARController::logv("Video Source camera parameters buffer: %ld bytes", cameraParamBufferLen);
+        ARController::logv(AR_LOG_LEVEL_INFO, "VideoSource::configure(): video Source camera parameters buffer: %ld bytes", cameraParamBufferLen);
 	}
-    
+    ARController::logv(AR_LOG_LEVEL_DEBUG, "VideoSource::configure(): exiting");
 }
 
 bool VideoSource::isOpen() {

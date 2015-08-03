@@ -386,7 +386,7 @@ static void calib(void)
     for( i = 0; i < 4; i++ ) {
         dist[i] = ((float*)(distortionCoeff->data.ptr))[i];
     }
-    convParam(intr, dist, xsize, ysize, &param);
+    convParam(intr, dist, xsize, ysize, &param); //COVHI10434 ignored.
     arParamDisp(&param);
 
     l = 0;

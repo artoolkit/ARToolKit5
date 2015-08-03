@@ -57,8 +57,10 @@
 
 int arMatrixFree(ARMat *m)
 {
-	free(m->m);
-	free(m);
+    if (m) {
+        free(m->m);
+	    free(m);
+    }
 
 	return 0;
 }
@@ -66,8 +68,10 @@ int arMatrixFree(ARMat *m)
 #ifndef ARDOUBLE_IS_FLOAT
 int arMatrixFreef(ARMatf *m)
 {
-	free(m->m);
-	free(m);
+    if (m) {
+        free(m->m);
+	    free(m);
+    }
 
 	return 0;
 }

@@ -157,7 +157,7 @@ MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
 LOCAL_SRC_FILES := $(MY_FILES)
-LOCAL_CFLAGS += $(MY_CFLAGS)
+LOCAL_CFLAGS += $(MY_CFLAGS) -Wno-extern-c-compat
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_MODULE := arosg
 include $(BUILD_STATIC_LIBRARY)
@@ -186,16 +186,26 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
-OPENCV_PACKAGE_DIR:=$(LOCAL_PATH)/OpenCV-2.4.3-android-sdk
-
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/KPM/*.cpp $(ARTOOLKIT_ROOT)/lib/SRC/KPM/*.c)
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/DoG_scale_invariant_detector.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/gaussian_scale_space_pyramid.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/gradients.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/harris.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/orientation_assignment.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/detectors/pyramid.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/facade/visual_database_facade.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/framework/date_time.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/framework/image.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/framework/logger.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/framework/timers.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/matchers/freak.cpp
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher/matchers/hough_similarity_voting.cpp
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
 LOCAL_SRC_FILES := $(MY_FILES)
-LOCAL_CFLAGS += $(MY_CFLAGS)
-LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
-LOCAL_C_INCLUDES += $(OPENCV_PACKAGE_DIR)/sdk/native/jni/include
+LOCAL_CFLAGS += $(MY_CFLAGS) -Wno-extern-c-compat -Wno-null-conversion
+LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include $(ARTOOLKIT_ROOT)/lib/SRC/KPM/FreakMatcher
 LOCAL_MODULE := kpm
 include $(BUILD_STATIC_LIBRARY)
 
@@ -237,7 +247,7 @@ include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 CURL_DIR := $(MY_LOCAL_PATH)/curl
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/video/*.c)
-MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/videoAndroid/*.c)
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/videoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/videoAndroid/cparamSearch.c $(ARTOOLKIT_ROOT)/lib/SRC/videoAndroid/nxjson.c $(ARTOOLKIT_ROOT)/lib/SRC/videoAndroid/sqlite3.c
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/videoDummy/*.c)
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/videoImage/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)

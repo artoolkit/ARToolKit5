@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dummy">
+      <UniqueIdentifier>{6333f0a1-06a0-49db-906a-a425a0c252d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{2f996424-cc84-4bdb-88b2-5f33793a64ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMC">
+      <UniqueIdentifier>{63dbab0d-df8b-4a39-bd84-9fc680a7cb43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMC\CaptureFrameGrabber">
+      <UniqueIdentifier>{a1e9e177-9c63-452c-94ec-c8a97073fea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinMF">
+      <UniqueIdentifier>{e231d3a0-91ac-48be-a43f-b7a106ce284a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoDummy\videoDummy.c">
+      <Filter>Dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoImage\videoImage.c">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\videoWinMC.cpp">
+      <Filter>WinMC</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\WindowsMediaCapture.cpp">
+      <Filter>WinMC</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\CaptureFrameGrabber.cpp">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaStreamSink.cpp">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\LogMediaType.cpp">
+      <Filter>WinMF</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWinMF.cpp">
+      <Filter>WinMF</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video2.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoSaveImage.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoDummy.h">
+      <Filter>Dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoImage.h">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoWindowsMediaCapture.h">
+      <Filter>WinMC</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\WindowsMediaCapture.h">
+      <Filter>WinMC</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\CaptureFrameGrabber.h">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaSink.h">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaStreamSink.h">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MFIncludes.h">
+      <Filter>WinMC\CaptureFrameGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoWindowsMediaFoundation.h">
+      <Filter>WinMF</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\BufferLock.h">
+      <Filter>WinMF</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\ar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\matrix.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\param.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\video.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\videoConfig.h" />
+  </ItemGroup>
+</Project>

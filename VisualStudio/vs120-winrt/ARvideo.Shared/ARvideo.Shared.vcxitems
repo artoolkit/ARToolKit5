@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>07acbae3-a879-4064-8f20-5b34d99aad3e</SharedGUID>
+    <ItemsProjectGuid>{680be40f-9494-4241-8366-a935710c35c8}</ItemsProjectGuid>
+    <ItemsRootNamespace>ARvideo</ItemsRootNamespace>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoDummy\videoDummy.c">
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoImage\videoImage.c">
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\CaptureFrameGrabber.cpp">
+      <CompileAsWinRT>true</CompileAsWinRT>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaStreamSink.cpp">
+      <CompileAsWinRT>true</CompileAsWinRT>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\videoWinMC.cpp">
+      <CompileAsWinRT>true</CompileAsWinRT>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\WindowsMediaCapture.cpp">
+      <CompileAsWinRT>true</CompileAsWinRT>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\LogMediaType.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWinMF.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video2.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoSaveImage.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\ar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\matrix.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\param.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoDummy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoImage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoWindowsMediaCapture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\videoWindowsMediaFoundation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\WindowsMediaCapture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\video.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\videoConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\CaptureFrameGrabber.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaSink.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaStreamSink.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MFIncludes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\BufferLock.h" />
+  </ItemGroup>
+</Project>

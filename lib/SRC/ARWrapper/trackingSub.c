@@ -89,7 +89,7 @@ THREAD_HANDLE_T *trackingInitInit( KpmHandle *kpmHandle )
     trackingInitHandle = (TrackingInitHandle *)malloc(sizeof(TrackingInitHandle));
     if( trackingInitHandle == NULL ) return NULL;
     trackingInitHandle->kpmHandle = kpmHandle;
-    trackingInitHandle->imageSize = kpmHandle->xsize * kpmHandle->ysize * arUtilGetPixelSize(kpmHandle->pixFormat);
+    trackingInitHandle->imageSize = kpmHandleGetXSize(kpmHandle) * kpmHandleGetYSize(kpmHandle) * arUtilGetPixelSize(kpmHandleGetPixelFormat(kpmHandle));
     trackingInitHandle->imagePtr  = (ARUint8 *)malloc(trackingInitHandle->imageSize);
     trackingInitHandle->flag      = 0;
 

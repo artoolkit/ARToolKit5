@@ -494,9 +494,9 @@ static int loadNFTData(void)
     for (i = 0; i < markersNFTCount; i++) {
         // Load KPM data.
         KpmRefDataSet  *refDataSet2;
-        ARLOGi("Reading %s.fset2\n", markersNFT[i].datasetPathname);
-        if (kpmLoadRefDataSet(markersNFT[i].datasetPathname, "fset2", &refDataSet2) < 0 ) {
-            ARLOGe("Error reading KPM data from %s.fset2\n", markersNFT[i].datasetPathname);
+        ARLOGi("Reading %s.fset3\n", markersNFT[i].datasetPathname);
+        if (kpmLoadRefDataSet(markersNFT[i].datasetPathname, "fset3", &refDataSet2) < 0 ) {
+            ARLOGe("Error reading KPM data from %s.fset3\n", markersNFT[i].datasetPathname);
             markersNFT[i].pageNo = -1;
             continue;
         }

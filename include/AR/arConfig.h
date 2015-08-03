@@ -101,7 +101,7 @@
 #  define AR_LABELING_WORK_SIZE      1024*32*16
 #  define AR_LABELING_LABEL_TYPE        ARInt32
 #else
-#  define AR_LABELING_WORK_SIZE         1024*32
+#  define AR_LABELING_WORK_SIZE         1024*32     // This number may not exceed 65535 when using 16-bits labels.
 #  define AR_LABELING_LABEL_TYPE        ARInt16
 #endif
 

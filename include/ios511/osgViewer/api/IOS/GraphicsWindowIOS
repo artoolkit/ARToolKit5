@@ -72,7 +72,7 @@ class GraphicsWindowIOS : public osgViewer::GraphicsWindow
                 setState( new osg::State );
                 getState()->setGraphicsContext(this);
 
-                if (_traits.valid() && _traits->sharedContext)
+                if (_traits.valid() && _traits->sharedContext.valid())
                 {
                     getState()->setContextID( _traits->sharedContext->getState()->getContextID() );
                     incrementContextIDUsageCount( getState()->getContextID() );   
@@ -109,7 +109,7 @@ class GraphicsWindowIOS : public osgViewer::GraphicsWindow
         virtual void swapBuffersImplementation();
         
         /** Check to see if any events have been generated.*/
-        virtual void checkEvents();
+        virtual bool checkEvents();
 
         /** Set Window decoration.*/
         virtual bool setWindowDecorationImplementation(bool flag);
@@ -149,7 +149,8 @@ class GraphicsWindowIOS : public osgViewer::GraphicsWindow
                 :   _windowOrView(window_or_view),
                     _deviceOrientationFlags(orientationFlags),
                     _viewContentScaleFactor(scaleFactor),
-                    _createTransparentView(false)
+                    _createTransparentView(false),
+                    _useRetainedBacking(false)
                 {
                 }
                 
@@ -161,12 +162,17 @@ class GraphicsWindowIOS : public osgViewer::GraphicsWindow
                 
                 bool getCreateTransparentView() { return _createTransparentView; }
                 void setCreateTransparentView(bool b) { _createTransparentView = b; }
+
+                bool getUseRetainedBacking() { return _useRetainedBacking; }
+                void setUseRetainedBacking(bool b) { _useRetainedBacking = b; }
+
             private:
 
                 UIView*                _windowOrView;
                 DeviceOrientationFlags _deviceOrientationFlags;
                 float                  _viewContentScaleFactor; 
                 bool                   _createTransparentView;
+                bool                   _useRetainedBacking; 
         
             friend class GraphicsWindowIOS;
 

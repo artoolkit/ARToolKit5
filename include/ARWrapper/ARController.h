@@ -203,7 +203,14 @@ public:
 	~ARController();
 	
 	static PFN_LOGCALLBACK logCallback;		///< Callback where log messages are passed to
-    
+
+private:
+    static void logvBuf(va_list args, const char* format, char **bufPtr, int* lenPtr);
+    static void logvWriteBuf(char* buf, int len, const int logLevel);
+
+public:
+    static void logv(const int logLevel, const char* format, ...);
+
 	/**
 	 * If a log callback has been set, then this passes the formatted message to it.
      * If no log callback has been set, then the message is discarded.

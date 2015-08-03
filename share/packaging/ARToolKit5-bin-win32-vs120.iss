@@ -1,7 +1,7 @@
 [Setup]
 AppName="ARToolKit"
-AppVerName="ARToolKit v5.2.1"
-AppVersion=5.2.1
+AppVerName="ARToolKit v5.3"
+AppVersion=5.3
 AppPublisher="Daqri LLC"
 AppPublisherURL=http://www.artoolkit.org/
 AppSupportURL=http://www.artoolkit.org/documentation
@@ -12,7 +12,7 @@ InfoBeforeFile=README.txt
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit v5.2.1 Setup (bin-win32-vs120)"
+OutputBaseFilename="ARToolKit v5.3 Setup (bin-win32-vs120)"
 OutputDir=..
 ChangesEnvironment=yes
 
@@ -33,6 +33,18 @@ Name: docs; Description: "Documentation for ARToolKit"; Types: full custom
 
 [InstallDelete]
 ; Here we remove obsolete files from earlier versions.
+; Removed from 5.3
+Type: files; Name: "{app}\include\KPM\surfSub.h"
+Type: files; Name: "{app}\lib\SRC\KPM\AnnMatch.cpp"
+Type: files; Name: "{app}\lib\SRC\KPM\AnnMatch.h"
+Type: files; Name: "{app}\lib\SRC\KPM\AnnMatch2.cpp"
+Type: files; Name: "{app}\lib\SRC\KPM\AnnMatch2.h"
+Type: files; Name: "{app}\lib\SRC\KPM\HomographyEst.cpp"
+Type: files; Name: "{app}\lib\SRC\KPM\surfSub1.cpp"
+Type: files; Name: "{app}\lib\SRC\KPM\surfSub2.cpp"
+Type: files; Name: "{app}\lib\SRC\KPM\surfSubPrivate.h"
+Type: filesandordirs; Name: "{app}\lib\SRC\KPM\surfOld"
+Type: files; Name: "{app}\bin\DataNFT\pinball.fset2"
 ; Removed from 5.1.2
 Type: files; Name: "{app}\include\ARWrapper\ARToolKit.h"
 ; Removed from 5.1.0
@@ -81,10 +93,6 @@ Source: "lib\win32-i386\KPM*"; Components: dev; DestDir: "{app}\lib\win32-i386";
 Source: "lib\win64-x64\KPM*"; Components: dev; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win32-i386\Eden.lib"; Components: dev; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win64-x64\Eden.lib"; Components: dev; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
-Source: "bin\opencv_core2410.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "bin64\opencv_core2410.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
-Source: "bin\opencv_flann2410.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "bin64\opencv_flann2410.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "bin\ARvideo*.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin64\ARvideo*.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "bin\ARWrapper*.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -196,15 +204,6 @@ Source: "include\win64-x64\jmorecfg.h"; Components: dev and src; DestDir: "{app}
 Source: "include\win64-x64\jversion.h"; Components: dev and src; DestDir: "{app}\include\win64-x64"; Flags: ignoreversion
 Source: "lib\win32-i386\libjpeg.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win64-x64\libjpeg.lib"; Components: dev and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
-; OpenCV
-Source: "include\win32-i386\opencv\*"; Components: dev and src; DestDir: "{app}\include\win32-i386\opencv"; Flags: recursesubdirs ignoreversion
-Source: "include\win32-i386\opencv2\*"; Components: dev and src; DestDir: "{app}\include\win32-i386\opencv2"; Flags: recursesubdirs ignoreversion
-Source: "include\win64-x64\opencv\*"; Components: dev and src; DestDir: "{app}\include\win64-x64\opencv"; Flags: recursesubdirs ignoreversion
-Source: "include\win64-x64\opencv2\*"; Components: dev and src; DestDir: "{app}\include\win64-x64\opencv2"; Flags: recursesubdirs ignoreversion
-Source: "lib\win32-i386\opencv_core2410.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
-Source: "lib\win32-i386\opencv_flann2410.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
-Source: "lib\win64-x64\opencv_core2410.lib"; Components: dev and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
-Source: "lib\win64-x64\opencv_flann2410.lib"; Components: dev and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 ; OpenSceneGraph-3.2.1
 Source: "include\win32-i386\OpenThreads\*"; Components: dev and src; DestDir: "{app}\include\win32-i386\OpenThreads"; Flags: recursesubdirs ignoreversion
 Source: "include\win64-x64\OpenThreads\*"; Components: dev and src; DestDir: "{app}\include\win64-x64\OpenThreads"; Flags: recursesubdirs ignoreversion
@@ -260,6 +259,10 @@ Source: "bin\dispImageSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: 
 Source: "bin\dispFeatureSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\checkResolution.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\genMarkerSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_core2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin64\opencv_core2410.dll"; Components: utils; DestDir: "{app}\bin64"; Flags: ignoreversion
+Source: "bin\opencv_flann2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin64\opencv_flann2410.dll"; Components: utils; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "bin\opencv_calib3d2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\opencv_imgproc2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\opencv_features2d2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -286,9 +289,18 @@ Source: "util\dispImageSet\*"; Excludes: "Makefile.in"; Components: utils and sr
 Source: "util\genMarkerSet\*"; Excludes: "Makefile.in"; Components: utils and src; DestDir: "{app}\util\genMarkerSet"; Flags: recursesubdirs ignoreversion
 Source: "util\genTexData\*"; Excludes: "Makefile.in"; Components: utils and src; DestDir: "{app}\util\genTexData"; Flags: recursesubdirs ignoreversion
 Source: "util\mk_patt\*"; Excludes: "Makefile.in"; Components: utils and src; DestDir: "{app}\util\mk_patt"; Flags: recursesubdirs ignoreversion
+; OpenCV
+Source: "include\win32-i386\opencv\*"; Components: utils and src; DestDir: "{app}\include\win32-i386\opencv"; Flags: recursesubdirs ignoreversion
+Source: "include\win32-i386\opencv2\*"; Components: utils and src; DestDir: "{app}\include\win32-i386\opencv2"; Flags: recursesubdirs ignoreversion
+Source: "include\win64-x64\opencv\*"; Components: utils and src; DestDir: "{app}\include\win64-x64\opencv"; Flags: recursesubdirs ignoreversion
+Source: "include\win64-x64\opencv2\*"; Components: utils and src; DestDir: "{app}\include\win64-x64\opencv2"; Flags: recursesubdirs ignoreversion
+Source: "lib\win32-i386\opencv_core2410.lib"; Components: utils and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
+Source: "lib\win32-i386\opencv_flann2410.lib"; Components: utils and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win32-i386\opencv_calib3d2410.lib"; Components: utils and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win32-i386\opencv_imgproc2410.lib"; Components: utils and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win32-i386\opencv_features2d2410.lib"; Components: utils and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
+Source: "lib\win64-x64\opencv_core2410.lib"; Components: utils and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
+Source: "lib\win64-x64\opencv_flann2410.lib"; Components: utils and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win64-x64\opencv_calib3d2410.lib"; Components: utils and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win64-x64\opencv_imgproc2410.lib"; Components: utils and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win64-x64\opencv_features2d2410.lib"; Components: utils and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion

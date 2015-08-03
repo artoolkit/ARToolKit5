@@ -20,6 +20,20 @@ echo "Please enter y or n."
 exit 0
 fi
 
+echo "Do you want to copy the utilities from WINDOWS ARToolKit5 folder? (y or n)"
+echo -n "Enter : "
+read ANS
+if [ "$ANS" = "y" ]
+then
+COPYUTILSWIN="y"
+elif [ "$ANS" = "n" ]
+then
+COPYUTILSWIN="n"
+else
+echo "Please enter y or n."
+exit 0
+fi
+
 if [ "$COPYUTILS" = "y" ]
 then
 cp -v \
@@ -31,6 +45,10 @@ cp -v \
     ../ARToolKit5/bin/genTexData \
     ../ARToolKit5/bin/mk_patt \
     bin/
+fi
+
+if [ "$COPYUTILSWIN" = "y" ]
+then
 cp -v \
     /Volumes/C/Projects/ARToolKit5/bin/ARvideo.dll \
     /Volumes/C/Projects/ARToolKit5/bin/check_id.exe \

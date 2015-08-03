@@ -321,21 +321,6 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </dl>
 </div>
 <p>&nbsp;</p>
-<h3>"Utility".</h3>
-<div class="group_desc_indent">
-</div>
-<h4>Group members:</h4>
-<div class="group_indent">
-<dl>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintMtx16" logicalPath="//apple_ref/c/func/arUtilPrintMtx16" target="_top">arUtilPrintMtx16</a></tt></dt>
-<dd><p>Prints a 4x4 row-major matrix via ARLOG(...).
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintTransMat" logicalPath="//apple_ref/c/func/arUtilPrintTransMat" target="_top">arUtilPrintTransMat</a></tt></dt>
-<dd><p>Prints a transformation matrix via ARLOG(...).
-</p></dd>
-</dl>
-</div>
-<p>&nbsp;</p>
 <h3>"Pattern identification".</h3>
 <div class="group_desc_indent">
 </div>
@@ -380,6 +365,21 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattSave" logicalPath="//apple_ref/c/func/arPattSave" target="_top">arPattSave</a></tt></dt>
 <dd><p>Save a pattern to a pattern file.
+</p></dd>
+</dl>
+</div>
+<p>&nbsp;</p>
+<h3>"Utility".</h3>
+<div class="group_desc_indent">
+</div>
+<h4>Group members:</h4>
+<div class="group_indent">
+<dl>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintMtx16" logicalPath="//apple_ref/c/func/arUtilPrintMtx16" target="_top">arUtilPrintMtx16</a></tt></dt>
+<dd><p>Prints a 4x4 row-major matrix via ARLOG(...).
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintTransMat" logicalPath="//apple_ref/c/func/arUtilPrintTransMat" target="_top">arUtilPrintTransMat</a></tt></dt>
+<dd><p>Prints a transformation matrix via ARLOG(...).
 </p></dd>
 </dl>
 </div>
@@ -579,6 +579,12 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arGetVersion" target="_top">arGetVersion</a></tt></dt>
 <dd><p>Get the ARToolKit version information in numberic and string format.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arLog" target="_top">arLog</a></tt></dt>
+<dd><p>Write a string to the current logging facility.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arLogSetLogger" target="_top">arLogSetLogger</a></tt></dt>
+<dd><p>Divert logging to a callback, or revert to default logging.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arPattActivate" target="_top">arPattActivate</a></tt></dt>
 <dd><p>Activate a previously deactivated pattern.
@@ -2148,6 +2154,102 @@ the comments in the config.h header for more discussion of the definition of
 major, minor, tiny and build version numbers.
 </p>
 <!-- headerDoc=discussion;uid=//apple_ref/c/func/arGetVersion;name=end --><!-- end discussion -->
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arLog;   name=arLog --><a name="//apple_ref/c/func/arLog"></a>
+<h3><a name="arLog">arLog</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arLog;name=start --><!-- begin abstract --></p>
+<p>Write a string to the current logging facility.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arLog;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arLog;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arLog" logicalPath="//apple_ref/c/instm/arLog //apple_ref/c/clm/arLog //apple_ref/c/intfcm/arLog //apple_ref/c/intfm/arLog //apple_ref/c/func/arLog" target="_top"><span class="function">arLog</span></a>(
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">logLevel</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <span class="type">*</span><span class="param">format</span>,
+    ...);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arLog;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arLog/logLevel;   name=logLevel -->
+<a name="//apple_ref/doc/functionparam/arLog/logLevel"></a>
+<code>logLevel</code>
+</dt>
+<dd><p>The severity of the log message. Defined in %lt;ar/config.h&gt;.
+Log output is written to the logging facility provided the logLevel meets or
+exceeds the minimum level specified in global arLogLevel.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arLog/format;   name=format -->
+<a name="//apple_ref/doc/functionparam/arLog/format"></a>
+<code>format</code>
+</dt>
+<dd><p>Log format string, in the form of printf().</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arLog;name=start --><p>The default logging facility varies by platform, but on Unix-like platforms is typically
+the standard error file descriptor. However, logging may be redirected to some other
+facility by arLogSetLogger.
+</p>
+<p>Newlines are not automatically appended to log output.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arLog;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/data/arLogLevel" logicalPath="//apple_ref/c/data/arLogLevel" target="_top">arLogLevel</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/arLogSetLogger" logicalPath="//apple_ref/c/func/arLogSetLogger" target="_top">arLogSetLogger</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arLogSetLogger;   name=arLogSetLogger --><a name="//apple_ref/c/func/arLogSetLogger"></a>
+<h3><a name="arLogSetLogger">arLogSetLogger</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arLogSetLogger;name=start --><!-- begin abstract --></p>
+<p>Divert logging to a callback, or revert to default logging.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arLogSetLogger;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arLogSetLogger;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arLogSetLogger" logicalPath="//apple_ref/c/instm/arLogSetLogger //apple_ref/c/clm/arLogSetLogger //apple_ref/c/intfcm/arLogSetLogger //apple_ref/c/intfm/arLogSetLogger //apple_ref/c/func/arLogSetLogger" target="_top"><span class="function">arLogSetLogger</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/AR_LOG_LOGGER_CALLBACK //apple_ref/c/tdef/AR_LOG_LOGGER_CALLBACK //apple_ref/c/tag/AR_LOG_LOGGER_CALLBACK //apple_ref/c/struct/AR_LOG_LOGGER_CALLBACK //apple_ref/c/intf/AR_LOG_LOGGER_CALLBACK //apple_ref/doc/anysymbol/AR_LOG_LOGGER_CALLBACK" machineGenerated="true" --><span class="type">AR_LOG_LOGGER_CALLBACK</span><!-- /a --> <span class="param">callback</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">callBackOnlyIfOnSameThread</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arLogSetLogger;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arLogSetLogger/callback;   name=callback -->
+<a name="//apple_ref/doc/functionparam/arLogSetLogger/callback"></a>
+<code>callback</code>
+</dt>
+<dd><p>The function which will be called with the log output, or NULL to
+cancel redirection.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arLogSetLogger/callBackOnlyIfOnSameThread;   name=callBackOnlyIfOnSameThread -->
+<a name="//apple_ref/doc/functionparam/arLogSetLogger/callBackOnlyIfOnSameThread"></a>
+<code>callBackOnlyIfOnSameThread</code>
+</dt>
+<dd>
+<p>If non-zero, then the callback will only be called
+if the call to arLog is made on the same thread as the thread which called this function,
+and if the arLog call is made on a different thread, log output will be buffered until
+the next call to arLog on the original thread.
+</p>
+<p>The purpose of this is to prevent logging from secondary threads in cases where the
+callback model of the target platform precludes this.</p>
+</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arLogSetLogger;name=start --><p>The default logging facility varies by platform, but on Unix-like platforms is typically
+the standard error file descriptor. However, logging may be redirected to some other
+facility by this function.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arLogSetLogger;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/arLog" logicalPath="//apple_ref/c/func/arLog" target="_top">arLog</a></p></dt>
+<dd></dd>
+</dl></div>
 <hr class="betweenAPIEntries">
 <!-- headerDoc=func;  uid=//apple_ref/c/func/arPattActivate;   name=arPattActivate --><a name="//apple_ref/c/func/arPattActivate"></a>
 <h3><a name="arPattActivate">arPattActivate</a></h3>
@@ -4843,12 +4945,42 @@ A standard ARToolKit marker with a pattern ratio of 0.5 has coordinates
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/tdef/ARTrackingHistory;name=start --><p>(description)
 <!-- headerDoc=discussion;uid=//apple_ref/c/tdef/ARTrackingHistory;name=end --><!-- end discussion -->
 </p>
+<hr class="betweenSections">
+<a name="HeaderDoc_vars"></a>
+<h2 class="h2tight">Globals</h2>
+<dl>
+<dt><tt><a href="index.html#//apple_ref/c/data/arLogLevel" target="_top">arLogLevel</a></tt></dt>
+<dd><p>Sets the severity level. Log messages below the set severity level are not logged.
+</p></dd>
+</dl>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=data;  uid=//apple_ref/c/data/arLogLevel;   name=arLogLevel --><a name="//apple_ref/c/data/arLogLevel"></a>
+<h3><a name="arLogLevel">arLogLevel</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/data/arLogLevel;name=start --><!-- begin abstract --></p>
+<p>Sets the severity level. Log messages below the set severity level are not logged.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/data/arLogLevel;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/data/arLogLevel;name=start --><span class="keyword">extern</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/data/arLogLevel" logicalPath="//apple_ref/c/econst/arLogLevel //apple_ref/c/data/arLogLevel" target="_top"><span class="var">arLogLevel</span></a>;  <!-- headerDoc=declaration;uid=//apple_ref/c/data/arLogLevel;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/data/arLogLevel;name=start --><p>All calls to ARToolKit's logging facility include a "log level" parameter, which specifies
+the severity of the log message. (The severities are defined in %lt;ar/config.h&gt;.)
+Setting this global allows for filtering of log messages. All log messages lower than
+the set level will not be logged by arLog().
+<!-- headerDoc=discussion;uid=//apple_ref/c/data/arLogLevel;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/arLog" logicalPath="//apple_ref/c/func/arLog" target="_top">arLog</a></p></dt>
+<dd></dd>
+</dl></div>
 <p class="gapBeforeFooter">&nbsp;</p>
 <hr class="afterFooter">
 <div class="hd_copyright_and_timestamp">
 <p class="hd_copyright">&copy; 2015 Daqri, LLC.
  </p>
-<p class="hd_timestamp">Last Updated: Friday, May 29, 2015
+<p class="hd_timestamp">Last Updated: Friday, July 31, 2015
 </p>
 </div>
 </td>

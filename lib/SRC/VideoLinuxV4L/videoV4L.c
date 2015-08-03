@@ -512,11 +512,11 @@ static void ar2VideoGetTimeStampV4L(ARUint32 *t_sec, ARUint32 *t_usec)
     double             tt;
     int                s1, s2;
 
-#if defined(__linux) || defined(__APPLE__)
+#  if defined(__linux) || defined(__APPLE__)
     gettimeofday( &time, NULL );
-#else
+#  else
     gettimeofday( &time );
-#endif
+#  endif
     *t_sec  = time.tv_sec;
     *t_usec = time.tv_usec;
 #endif

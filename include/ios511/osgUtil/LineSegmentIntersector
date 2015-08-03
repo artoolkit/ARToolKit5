@@ -37,7 +37,7 @@ class OSGUTIL_EXPORT LineSegmentIntersector : public Intersector
           * In VIEW and MODEL coordinates creates a start value of (x,y,0) and end value of (x,y,1).*/
         LineSegmentIntersector(CoordinateFrame cf, double x, double y);
 
-        struct Intersection
+        struct OSGUTIL_EXPORT Intersection
         {
             Intersection():
                 ratio(-1.0),
@@ -63,6 +63,11 @@ class OSGUTIL_EXPORT LineSegmentIntersector : public Intersector
 
             const osg::Vec3& getLocalIntersectNormal() const { return localIntersectionNormal; }
             osg::Vec3 getWorldIntersectNormal() const { return matrix.valid() ? osg::Matrix::transform3x3(osg::Matrix::inverse(*matrix),localIntersectionNormal) : localIntersectionNormal; }
+
+            /** convinience function for mapping the intersection point to any textures assigned to the objects intersected.
+             *  Returns the Texture pointer and texture coords of object hit when a texture is available on the object, returns NULL otherwise.*/
+            osg::Texture* getTextureLookUp(osg::Vec3& tc) const;
+            
         };
 
         typedef std::multiset<Intersection> Intersections;

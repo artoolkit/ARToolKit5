@@ -152,9 +152,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4aa1c837e84952450cf330d8dba86bfa"><td class="memItemLeft" align="right" valign="top">ARUint8 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#a4aa1c837e84952450cf330d8dba86bfa">getFrame</a> ()</td></tr>
 <tr class="memdesc:a4aa1c837e84952450cf330d8dba86bfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current frame.  <a href="#a4aa1c837e84952450cf330d8dba86bfa">More...</a><br/></td></tr>
 <tr class="separator:a4aa1c837e84952450cf330d8dba86bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13aabd6897f9c1e2810df4e792583e44"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#a13aabd6897f9c1e2810df4e792583e44">getFrameSize</a> ()</td></tr>
-<tr class="memdesc:a13aabd6897f9c1e2810df4e792583e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of current frame.  <a href="#a13aabd6897f9c1e2810df4e792583e44">More...</a><br/></td></tr>
-<tr class="separator:a13aabd6897f9c1e2810df4e792583e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa99b09f155bf7db297be0262950e131d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#aa99b09f155bf7db297be0262950e131d">getFrameStamp</a> ()</td></tr>
 <tr class="memdesc:aa99b09f155bf7db297be0262950e131d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current frame stamp.  <a href="#aa99b09f155bf7db297be0262950e131d">More...</a><br/></td></tr>
 <tr class="separator:aa99b09f155bf7db297be0262950e131d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,8 +223,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:aba22b2ecb8dac722d61133e05b91de67"><td class="memItemLeft" align="right" valign="top">ARUint8 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#aba22b2ecb8dac722d61133e05b91de67">frameBuffer</a></td></tr>
 <tr class="memdesc:aba22b2ecb8dac722d61133e05b91de67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to latest frame. Set by concrete subclass to point to frame data.  <a href="#aba22b2ecb8dac722d61133e05b91de67">More...</a><br/></td></tr>
 <tr class="separator:aba22b2ecb8dac722d61133e05b91de67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a456accd372c6449f3983c268a18eab95"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#a456accd372c6449f3983c268a18eab95">frameBufferSize</a></td></tr>
-<tr class="separator:a456accd372c6449f3983c268a18eab95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f660cd0cb8a2a881e89a24ea7d41b6e"><td class="memItemLeft" align="right" valign="top">ARUint8 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#a9f660cd0cb8a2a881e89a24ea7d41b6e">frameBuffer2</a></td></tr>
+<tr class="memdesc:a9f660cd0cb8a2a881e89a24ea7d41b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">For bi-planar formats, pointer to plane 2 of latest frame. Set by concrete subclass to point to frame data.  <a href="#a9f660cd0cb8a2a881e89a24ea7d41b6e">More...</a><br/></td></tr>
+<tr class="separator:a9f660cd0cb8a2a881e89a24ea7d41b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4cd6f08ee44690a778a2b3aaefef380"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_video_source.html#ad4cd6f08ee44690a778a2b3aaefef380">frameStamp</a></td></tr>
 <tr class="memdesc:ad4cd6f08ee44690a778a2b3aaefef380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Latest framestamp. Incremented in the concrete subclass when a new frame arrives.  <a href="#ad4cd6f08ee44690a778a2b3aaefef380">More...</a><br/></td></tr>
 <tr class="separator:ad4cd6f08ee44690a778a2b3aaefef380"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -470,24 +468,6 @@ Protected Attributes</h2></td></tr>
 
 <p>Returns the current frame. </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the buffer containing the current video frame </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a13aabd6897f9c1e2810df4e792583e44"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t VideoSource::getFrameSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the size of current frame. </p>
-<dl class="section return"><dt>Returns</dt><dd>Size of the buffer containing the current video frame </dd></dl>
 
 </div>
 </div>
@@ -902,7 +882,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a456accd372c6449f3983c268a18eab95"></a>
+<a class="anchor" id="a9f660cd0cb8a2a881e89a24ea7d41b6e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -910,7 +890,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t VideoSource::frameBufferSize</td>
+          <td class="memname">ARUint8* VideoSource::frameBuffer2</td>
         </tr>
       </table>
   </td>
@@ -919,6 +899,8 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>For bi-planar formats, pointer to plane 2 of latest frame. Set by concrete subclass to point to frame data. </p>
 
 </div>
 </div>
@@ -1119,7 +1101,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 29 2015 14:59:18 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 31 2015 02:11:17 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

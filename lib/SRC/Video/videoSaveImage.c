@@ -38,7 +38,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <jpeglib.h>
+#include "jpeglib.h"
 
 #ifndef MAX
 #  define MAX(x,y) (x > y ? x : y)

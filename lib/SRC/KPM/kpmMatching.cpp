@@ -1,86 +1,182 @@
 /*
  *  kpmMatching.cpp
- *  libKPM
+ *  ARToolKit5
  *
- *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
- *  LLC ("Daqri") in consideration of your agreement to the following
- *  terms, and your use, installation, modification or redistribution of
- *  this Daqri software constitutes acceptance of these terms.  If you do
- *  not agree with these terms, please do not compile, install, use, or
- *  redistribute this Daqri software.
+ *  This file is part of ARToolKit.
  *
- *  In consideration of your agreement to abide by the following terms, and
- *  subject to these terms, Daqri grants you a personal, non-exclusive,
- *  non-transferable license, under Daqri's copyrights in this original Daqri
- *  software (the "Daqri Software"), to compile, install and execute Daqri Software
- *  exclusively in conjunction with the ARToolKit software development kit version 5.2
- *  ("ARToolKit"). The allowed usage is restricted exclusively to the purposes of
- *  two-dimensional surface identification and camera pose extraction and initialisation,
- *  provided that applications involving automotive manufacture or operation, military,
- *  and mobile mapping are excluded.
+ *  ARToolKit is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  You may reproduce and redistribute the Daqri Software in source and binary
- *  forms, provided that you redistribute the Daqri Software in its entirety and
- *  without modifications, and that you must retain this notice and the following
- *  text and disclaimers in all such redistributions of the Daqri Software.
- *  Neither the name, trademarks, service marks or logos of Daqri LLC may
- *  be used to endorse or promote products derived from the Daqri Software
- *  without specific prior written permission from Daqri.  Except as
- *  expressly stated in this notice, no other rights or licenses, express or
- *  implied, are granted by Daqri herein, including but not limited to any
- *  patent rights that may be infringed by your derivative works or by other
- *  works in which the Daqri Software may be incorporated.
+ *  ARToolKit is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
- *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
- *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
- *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *  As a special exception, the copyright holders of this library give you
+ *  permission to link this library with independent modules to produce an
+ *  executable, regardless of the license terms of these independent modules, and to
+ *  copy and distribute the resulting executable under terms of your choice,
+ *  provided that you also meet, for each linked independent module, the terms and
+ *  conditions of the license of that module. An independent module is a module
+ *  which is neither derived from nor based on this library. If you modify this
+ *  library, you may extend this exception to your version of the library, but you
+ *  are not obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
  *
  *  Copyright 2015 Daqri, LLC. All rights reserved.
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
- *  Author(s): Hirokazu Kato, Philip Lamb
+ *  Author(s): Hirokazu Kato, Philip Lamb, Nalin Senthamil
  *
  */
 
 #include <stdio.h>
 #include <AR/ar.h>
+#include <string>
+#include <sstream>
+#include <algorithm>
+
 #include <KPM/kpm.h>
-#include "AnnMatch.h"
-#include "AnnMatch2.h"
-#include "HomographyEst.h"
-
-
-#if !ANN2
-typedef struct {
-    int   pageID;
-    int   imageID;
-    int   xsize, ysize;
-    int   xnum, ynum;
-    int   xsize2, ysize2;
-    int   xoff, yoff;
-} KpmSmallImageInfo;
+#include "kpmPrivate.h"
+#if BINARY_FEATURE
+extern "C" {
+#  include <jpeglib.h>
+}
+#else
+#  include "HomographyEst.h"
+#  include "AnnMatch.h"
+#  include "AnnMatch2.h"
 #endif
 
+int kpmUtilGetPose_binary( ARParamLT *cparamLT, const vision::matches_t &matchData, const std::vector<vision::Point3d<float> > &refDataSet, const std::vector<vision::FeaturePoint> &inputDataSet, float  camPose[3][4], float  *error );
+
+template<typename T>
+std::string arrayToString(T *v, size_t size){
+    std::stringstream ss;
+    for(size_t i = 0; i < size; ++i){
+        if(i != 0)
+            ss << ",";
+        ss << v[i];
+    }
+    std::string s = ss.str();
+    return s;
+}
+
+std::string arrayToString2(float pose[3][4]){
+    std::stringstream ss;
+    for(int i = 0; i < 3; ++i){
+        for(int j = 0; j < 4; ++j){
+            if(j != 0 )
+                ss << ",";
+            ss << pose[i][j];
+        }
+        ss << "\n";
+    }
+    std::string s = ss.str();
+    return s;
+}
+
+#ifdef HAVE_LIBJPEG
+static unsigned char *kpmReadJPEGMono(FILE *fp, int *width, int *height)
+{
+    unsigned char                   *buf;
+    struct jpeg_decompress_struct    cinfo;
+    struct jpeg_error_mgr            jerr;
+    unsigned char                  **decompressBufRowPtrs = NULL;
+    int                              decompressBufRows, rowsToRead;
+    int                              row;
+    int                              i;
+    
+    if (!fp || !width || !height) return (NULL);
+    
+    memset(&cinfo, 0, sizeof(cinfo));
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_decompress(&cinfo);
+    jpeg_stdio_src(&cinfo, fp);
+    (void) jpeg_read_header(&cinfo, TRUE);
+    
+    // Adjust decompression parameters to match requested.
+    if (cinfo.num_components != 3 && cinfo.num_components != 4 && cinfo.num_components != 1) {
+        ARLOGe("JPEG file has unsupported %d-component pixels\n", cinfo.num_components);
+        jpeg_destroy_decompress(&cinfo);
+        return (NULL);
+    }
+    cinfo.out_color_space = JCS_GRAYSCALE;// Converting to mono, let libjpeg handle it.
+
+    // Start decompression. This gives us access to the JPEG size.
+    (void) jpeg_start_decompress(&cinfo);
+    *height = cinfo.output_height;
+    *width = cinfo.output_width;
+    buf = (unsigned char *)malloc(*width * *height);
+    if (!buf) {
+        ARLOGe("Out of memory!!\n");
+        jpeg_destroy_decompress(&cinfo);
+        return (NULL);
+    }
+    
+    // Decompression requires a bunch of pointers to where to output the decompressed pixels. Create an array to hold the pointers.
+    decompressBufRows = cinfo.rec_outbuf_height;
+    arMalloc(decompressBufRowPtrs, unsigned char *, decompressBufRows);
+    
+    // Decompress straight into user-supplied buffer (i.e. buf).
+    row = 0;
+    while (cinfo.output_scanline < *height) {
+        rowsToRead = std::min<int>(*height - cinfo.output_scanline, decompressBufRows);
+        // Update the set of pointers to decompress into.
+        for (i = 0; i < rowsToRead; i++) decompressBufRowPtrs[i] = &(buf[*width * (row + i)]);
+        // Decompress.
+        row += jpeg_read_scanlines(&cinfo, decompressBufRowPtrs, rowsToRead);
+    }
+    
+    (void) jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
+    free(decompressBufRowPtrs);
+    
+    return (buf);
+}
+#endif // HAVE_LIBJPEG
+
+int kpmLoadImageDb(KpmHandle *kpmHandle, const char *filename)
+{
+    FILE                *fp;
+    unsigned char       *image = NULL;
+    int                  width, height;
+    
+    if (!kpmHandle || !filename) {
+        ARLOGe("kpmSetRefDataSet(): NULL kpmHandle/filename.\n");
+        return -1;
+    }
+    
+    if ((fp = fopen(filename, "rb")) == NULL) {
+        ARLOGe("Can't open JPEG file '%s'\n", filename);
+        ARLOGperror(NULL);
+        return (0);
+    } else {
+        image = kpmReadJPEGMono(fp, &width, &height);
+        fclose(fp);
+        if (!image) {
+            ARLOGe("Can't read JPEG file '%s'\n", filename);
+            return (0);
+        }
+    }
+
+    //kpmHandle->freakMatcherOpencv->addImage(image, width, height, 1);
+    kpmHandle->freakMatcher->addImage(image, width, height, 1);
+    free(image);
+    
+    return 1;
+}
+        
 int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
 {
-#if ANN2
+#if !BINARY_FEATURE
     CAnnMatch2         *ann2;
-#else
-    CAnnMatch          *ann;
-    KpmSmallImageInfo  *smallImageInfo;
-    int                 smallImageInfoNum;
-    int                 k;
 #endif
+    
     FeatureVector       featureVector;
     int                 i, j;
     
@@ -152,7 +248,7 @@ int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
     }
 
     // Create feature vectors.
-#if ANN2
+#if !BINARY_FEATURE
     if (kpmHandle->ann2) {
         delete (CAnnMatch2 *)(kpmHandle->ann2);
         kpmHandle->ann2 = NULL;
@@ -169,95 +265,36 @@ int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
         free(featureVector.sf);
     }
 #else
-    if( kpmHandle->annInfo != NULL ) {
-        for( i = 0; i < kpmHandle->annInfoNum; i++ ) {
-            if( kpmHandle->annInfo[i].ann != NULL ) {
-                CAnnMatch *ann = (CAnnMatch *)(kpmHandle->annInfo[i].ann);
-                delete ann;
-            }
-            if( kpmHandle->annInfo[i].annCoordIndex != NULL ) {
-                free( kpmHandle->annInfo[i].annCoordIndex );
-            }
-        }
-    }
-    free( kpmHandle->annInfo );
-    
-    //int  regXsize = kpmHandle->xsize*3/2;
-    //int  regYsize = kpmHandle->ysize*3/2;
-    int  regXsize = 10000;
-    int  regYsize = 10000;
-    int  overlapX = kpmHandle->xsize/3;
-    int  overlapY = kpmHandle->ysize/3;
-    for( i = k = 0; i < kpmHandle->refDataSet.pageNum; i++ ) k += kpmHandle->refDataSet.pageInfo[i].imageNum;
-    smallImageInfoNum = k;
-    arMalloc( smallImageInfo, KpmSmallImageInfo, smallImageInfoNum );
-    for( i = k = 0; i < kpmHandle->refDataSet.pageNum; i++ ) {
-        for( j = 0; j < kpmHandle->refDataSet.pageInfo[i].imageNum; j++ ) {
-            smallImageInfo[k].pageID  = i;
-            smallImageInfo[k].imageID = j;
-            smallImageInfo[k].xsize =   kpmHandle->refDataSet.pageInfo[i].imageInfo[j].width;
-            smallImageInfo[k].ysize =   kpmHandle->refDataSet.pageInfo[i].imageInfo[j].height;
-            smallImageInfo[k].xnum =   (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].width -overlapX) / regXsize + 1;
-            smallImageInfo[k].ynum =   (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].height-overlapY) / regYsize + 1;
-            smallImageInfo[k].xsize2 = (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].width -overlapX) / smallImageInfo[k].xnum + overlapX;
-            smallImageInfo[k].ysize2 = (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].height-overlapY) / smallImageInfo[k].ynum + overlapY;
-            smallImageInfo[k].xoff =   (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].width -overlapX) / smallImageInfo[i].xnum;
-            smallImageInfo[k].yoff =   (kpmHandle->refDataSet.pageInfo[i].imageInfo[j].height-overlapY) / smallImageInfo[i].ynum;
-            k++;
-        }
-    }
-
-    for( i = k = 0; i < smallImageInfoNum; i++ ) {
-        k += smallImageInfo[i].xnum * smallImageInfo[i].ynum;
-    }
-    kpmHandle->annInfoNum = k;
-    arMalloc(kpmHandle->annInfo, KpmAnnInfo, k);
-    for( i = k = 0; i < smallImageInfoNum; i++ ) {
-        for( int jj = 0; jj < smallImageInfo[i].ynum; jj++ ) {
-            int sy = smallImageInfo[i].yoff * jj;
-            int ey = (jj == smallImageInfo[i].ynum-1)? smallImageInfo[i].ysize-1: sy + smallImageInfo[i].ysize2 - 1;
-            for( int ii = 0; ii < smallImageInfo[i].xnum; ii++ ) {
-                int sx = smallImageInfo[i].xoff * ii;
-                int ex = (ii == smallImageInfo[i].xnum-1)? smallImageInfo[i].xsize-1: sx + smallImageInfo[i].xsize2 - 1;
-
-                ann = new CAnnMatch();
-                kpmHandle->annInfo[k].ann = (void *)ann;
-                
-                kpmHandle->annInfo[k].pageID  = smallImageInfo[i].pageID;
-                kpmHandle->annInfo[k].imageID = smallImageInfo[i].imageID;
+    if (kpmHandle->refDataSet.num != 0) {
+        featureVector.num = kpmHandle->refDataSet.num;
         
-                int dataNum = 0;
-                int pageNo  = kpmHandle->refDataSet.pageInfo[smallImageInfo[i].pageID].pageNo;
-                int imageNo = kpmHandle->refDataSet.pageInfo[smallImageInfo[i].pageID].imageInfo[smallImageInfo[i].imageID].imageNo;
-                for( int l = 0; l < kpmHandle->refDataSet.num; l++ ) {
-                    if( kpmHandle->refDataSet.refPoint[l].pageNo     != pageNo  ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].refImageNo != imageNo ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].coord2D.x < sx || kpmHandle->refDataSet.refPoint[l].coord2D.x > ex ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].coord2D.y < sy || kpmHandle->refDataSet.refPoint[l].coord2D.y > ey ) continue;
-                    dataNum++;
+        int db_id = 0;
+        for (int k = 0; k < kpmHandle->refDataSet.pageNum; k++) {
+            for (int m = 0; m < kpmHandle->refDataSet.pageInfo[k].imageNum; m++) {
+                std::vector<vision::FeaturePoint> points;
+                std::vector<vision::Point3d<float> > points_3d;
+                std::vector<unsigned char> descriptors;
+            
+                for (int i = 0; i < featureVector.num; i++) {
+                    if (kpmHandle->refDataSet.refPoint[i].refImageNo == kpmHandle->refDataSet.pageInfo[k].imageInfo[m].imageNo) {
+                        points.push_back(vision::FeaturePoint(kpmHandle->refDataSet.refPoint[i].coord2D.x,
+                                                          kpmHandle->refDataSet.refPoint[i].coord2D.y,
+                                                          kpmHandle->refDataSet.refPoint[i].featureVec.angle,
+                                                          kpmHandle->refDataSet.refPoint[i].featureVec.scale,
+                                                          kpmHandle->refDataSet.refPoint[i].featureVec.maxima));
+                        points_3d.push_back(vision::Point3d<float>(kpmHandle->refDataSet.refPoint[i].coord3D.x,
+                                                                   kpmHandle->refDataSet.refPoint[i].coord3D.y,                                                                  0));
+                        for (int j = 0; j < FREAK_SUB_DIMENSION; j++)
+                            descriptors.push_back(kpmHandle->refDataSet.refPoint[i].featureVec.v[j]);
+                    }
                 }
-                arMalloc( kpmHandle->annInfo[k].annCoordIndex, int, dataNum );
-                arMalloc( featureVector.sf, SurfFeature, dataNum );
-
-                for( int l = 0, l1 = 0; l < kpmHandle->refDataSet.num; l++ ) {
-                    if( kpmHandle->refDataSet.refPoint[l].pageNo     != pageNo  ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].refImageNo != imageNo ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].coord2D.x < sx || kpmHandle->refDataSet.refPoint[l].coord2D.x > ex ) continue;
-                    if( kpmHandle->refDataSet.refPoint[l].coord2D.y < sy || kpmHandle->refDataSet.refPoint[l].coord2D.y > ey ) continue;
-                    featureVector.sf[l1] = kpmHandle->refDataSet.refPoint[l].featureVec;
-                    kpmHandle->annInfo[k].annCoordIndex[l1] = l;
-                    l1++;
-                }
-                featureVector.num = dataNum;
-                ann->Construct(&featureVector);
-                free(featureVector.sf);
-                k++;
+                ARLOGi("points-%d\n", points.size());
+                kpmHandle->freakMatcher->addFreakFeaturesAndDescriptors(points,descriptors,points_3d,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].width,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].height,db_id++);
             }
         }
     }
-    free(smallImageInfo);
 #endif
-
+    
     return 0;
 }
 
@@ -318,6 +355,7 @@ int kpmSetMatchingSkipPage( KpmHandle *kpmHandle, int skipPages[], int num )
     return 0;
 }
 
+#if !BINARY_FEATURE
 int kpmSetMatchingSkipRegion( KpmHandle *kpmHandle, SurfSubRect *skipRegion, int regionNum)
 {
     if( kpmHandle->skipRegion.regionMax < regionNum ) {
@@ -337,6 +375,7 @@ int kpmSetMatchingSkipRegion( KpmHandle *kpmHandle, SurfSubRect *skipRegion, int
     }
     return 0;
 }
+#endif
 
 int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
 {
@@ -345,20 +384,17 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     int               procMode;
     ARUint8          *inImageBW;
     FeatureVector     featureVector;
+    int               i, j;
+#if !BINARY_FEATURE
     int              *inlierIndex;
     CorspMap          preRANSAC;
     int               inlierNum;
-    int               i, j;
-    float             h[3][3];
-    int               ret;
-#if ANN2
     CAnnMatch2       *ann2;
     int              *annMatch2;
     int               knn;
-#else
-    CAnnMatch        *ann;
-    int              *annMatch;
+    float             h[3][3];
 #endif
+    int               ret;
     
     if (!kpmHandle || !inImage) {
         ARLOGe("kpmMatching(): NULL kpmHandle/inImage.\n");
@@ -375,31 +411,52 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         inImageBW = kpmUtilGenBWImage( inImage, kpmHandle->pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 );
         if( inImageBW == NULL ) return -1;
     }
-   
+
+#if BINARY_FEATURE
+    //kpmHandle->freakMatcherOpencv->query(inImageBW, xsize ,ysize);
+    kpmHandle->freakMatcher->query(inImageBW, xsize ,ysize);
+    kpmHandle->inDataSet.num = featureVector.num = (int)kpmHandle->freakMatcher->getQueryFeaturePoints().size();
+#else
     surfSubExtractFeaturePoint( kpmHandle->surfHandle, inImageBW, kpmHandle->skipRegion.region, kpmHandle->skipRegion.regionNum );
     kpmHandle->skipRegion.regionNum = 0;
-    
     kpmHandle->inDataSet.num = featureVector.num = surfSubGetFeaturePointNum( kpmHandle->surfHandle );
+#endif
+    
     if( kpmHandle->inDataSet.num != 0 ) {
         if( kpmHandle->inDataSet.coord != NULL ) free(kpmHandle->inDataSet.coord);
+#if !BINARY_FEATURE
         if( kpmHandle->preRANSAC.match != NULL ) free(kpmHandle->preRANSAC.match);
         if( kpmHandle->aftRANSAC.match != NULL ) free(kpmHandle->aftRANSAC.match);
+#endif
         arMalloc( kpmHandle->inDataSet.coord, KpmCoord2D,     kpmHandle->inDataSet.num );
+#if !BINARY_FEATURE
         arMalloc( kpmHandle->preRANSAC.match, KpmMatchData,   kpmHandle->inDataSet.num );
         arMalloc( kpmHandle->aftRANSAC.match, KpmMatchData,   kpmHandle->inDataSet.num );
+#endif
+#if BINARY_FEATURE
+        arMalloc( featureVector.sf,           FreakFeature,   kpmHandle->inDataSet.num );
+#else
         arMalloc( featureVector.sf,           SurfFeature,    kpmHandle->inDataSet.num );
         arMalloc( preRANSAC.mp,               MatchPoint,     kpmHandle->inDataSet.num );
         arMalloc( inlierIndex,                int,            kpmHandle->inDataSet.num );
-#if ANN2
-        //knn = kpmHandle->refDataSet.pageNum;
+
         knn = 1;
         arMalloc( annMatch2,                  int,            kpmHandle->inDataSet.num*knn);
-#else
-        arMalloc( annMatch,                   int,            kpmHandle->inDataSet.num );
 #endif
-
+        
+#if BINARY_FEATURE
+        const std::vector<vision::FeaturePoint>& points = kpmHandle->freakMatcher->getQueryFeaturePoints();
+        const std::vector<unsigned char>& descriptors = kpmHandle->freakMatcher->getQueryDescriptors();
+#endif
         if( procMode == KpmProcFullSize ) {
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
+
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+#else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
                 desc = surfSubGetFeatureDescPtr( kpmHandle->surfHandle, i );
@@ -407,6 +464,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                     featureVector.sf[i].v[j] = desc[j];
                 }
                 featureVector.sf[i].l = surfSubGetFeatureSign( kpmHandle->surfHandle, i );
+#endif
                 if( kpmHandle->cparamLT != NULL ) {
                     arParamObserv2IdealLTf( &(kpmHandle->cparamLT->paramLTf), x, y, &(kpmHandle->inDataSet.coord[i].x), &(kpmHandle->inDataSet.coord[i].y) );
                 }
@@ -418,6 +476,12 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         }
         else if( procMode == KpmProcTwoThirdSize ) {
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+#else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
                 desc = surfSubGetFeatureDescPtr( kpmHandle->surfHandle, i );
@@ -425,6 +489,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                     featureVector.sf[i].v[j] = desc[j];
                 }
                 featureVector.sf[i].l = surfSubGetFeatureSign( kpmHandle->surfHandle, i );
+#endif
                 if( kpmHandle->cparamLT != NULL ) {
                     arParamObserv2IdealLTf( &(kpmHandle->cparamLT->paramLTf), x*1.5f, y*1.5f, &(kpmHandle->inDataSet.coord[i].x), &(kpmHandle->inDataSet.coord[i].y) );
                 }
@@ -436,6 +501,12 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         }
         else if( procMode == KpmProcHalfSize ) {
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+#else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
                 desc = surfSubGetFeatureDescPtr( kpmHandle->surfHandle, i );
@@ -443,6 +514,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                     featureVector.sf[i].v[j] = desc[j];
                 }
                 featureVector.sf[i].l = surfSubGetFeatureSign( kpmHandle->surfHandle, i );
+#endif
                 if( kpmHandle->cparamLT != NULL ) {
                     arParamObserv2IdealLTf( &(kpmHandle->cparamLT->paramLTf), x*2.0f, y*2.0f, &(kpmHandle->inDataSet.coord[i].x), &(kpmHandle->inDataSet.coord[i].y) );
                 }
@@ -454,6 +526,12 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         }
         else if( procMode == KpmProcOneThirdSize ) {
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+#else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
                 desc = surfSubGetFeatureDescPtr( kpmHandle->surfHandle, i );
@@ -461,6 +539,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                     featureVector.sf[i].v[j] = desc[j];
                 }
                 featureVector.sf[i].l = surfSubGetFeatureSign( kpmHandle->surfHandle, i );
+#endif
                 if( kpmHandle->cparamLT != NULL ) {
                     arParamObserv2IdealLTf( &(kpmHandle->cparamLT->paramLTf), x*3.0f, y*3.0f, &(kpmHandle->inDataSet.coord[i].x), &(kpmHandle->inDataSet.coord[i].y) );
                 }
@@ -472,6 +551,12 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         }
         else { // procMode == KpmProcQuatSize
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+#else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
                 desc = surfSubGetFeatureDescPtr( kpmHandle->surfHandle, i );
@@ -479,6 +564,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                     featureVector.sf[i].v[j] = desc[j];
                 }
                 featureVector.sf[i].l = surfSubGetFeatureSign( kpmHandle->surfHandle, i );
+#endif
                 if( kpmHandle->cparamLT != NULL ) {
                     arParamObserv2IdealLTf( &(kpmHandle->cparamLT->paramLTf), x*4.0f, y*4.0f, &(kpmHandle->inDataSet.coord[i].x), &(kpmHandle->inDataSet.coord[i].y) );
                 }
@@ -489,7 +575,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             }
         }
 
-#if ANN2
+#if !BINARY_FEATURE
         ann2 = (CAnnMatch2*)kpmHandle->ann2;
         ann2->Match(&featureVector, knn, annMatch2);
         for(int pageLoop = 0; pageLoop < kpmHandle->resultNum; pageLoop++ ) {
@@ -540,6 +626,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
                 //printf("----- Page %d ------\n", pageLoop);
                 ret = kpmUtilGetPose(kpmHandle->cparamLT, &(kpmHandle->aftRANSAC), &(kpmHandle->refDataSet), &(kpmHandle->inDataSet),
                                      kpmHandle->result[pageLoop].camPose,  &(kpmHandle->result[pageLoop].error) );
+                ARLOGi("Pose - %s",arrayToString2(kpmHandle->result[pageLoop].camPose).c_str());
                 //printf("----- End. ------\n");
             }
             else {
@@ -554,81 +641,42 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         }
         free(annMatch2);
 #else
-        for(int pageLoop = 0; pageLoop < kpmHandle->resultNum; pageLoop++ ) {
+        for (int pageLoop = 0; pageLoop < kpmHandle->resultNum; pageLoop++) {
+            
             kpmHandle->result[pageLoop].pageNo = kpmHandle->refDataSet.pageInfo[pageLoop].pageNo;
             kpmHandle->result[pageLoop].camPoseF = -1;
             if( kpmHandle->result[pageLoop].skipF ) continue;
             
-            kpmHandle->preRANSAC.num = 0;
-            kpmHandle->aftRANSAC.num = 0;
-            int annBestLoopFeatureNum = -1;
-            for( int annLoop = 0; annLoop < kpmHandle->annInfoNum; annLoop++ ) {
-                if( kpmHandle->annInfo[annLoop].pageID != pageLoop ) continue;
-                ann = (CAnnMatch *)kpmHandle->annInfo[annLoop].ann;
-                ann->Match(&featureVector, annMatch);
             
-                int featureNum = 0;
-                for( i = 0; i < kpmHandle->inDataSet.num; i++ ) {
-                    if( annMatch[i] < 0 ) continue;
-                    featureNum++;
-                }
-                if( featureNum < 6 ) continue;
+            const vision::matches_t& matches = kpmHandle->freakMatcher->inliers();
+            int matched_image_id = kpmHandle->freakMatcher->matchedId();
+            if (matched_image_id < 0) continue;
 
-                preRANSAC.num = 0;
-                for( i = j = 0; i < kpmHandle->inDataSet.num; i++ ) {
-                    if( annMatch[i] < 0 ) continue;
-                    kpmHandle->preRANSAC.match[j].inIndex = i;
-                    kpmHandle->preRANSAC.match[j].refIndex = kpmHandle->annInfo[annLoop].annCoordIndex[annMatch[i]];
-                    preRANSAC.mp[j].x1 = kpmHandle->inDataSet.coord[i].x;
-                    preRANSAC.mp[j].y1 = kpmHandle->inDataSet.coord[i].y;
-                    preRANSAC.mp[j].x2 = kpmHandle->refDataSet.refPoint[kpmHandle->annInfo[annLoop].annCoordIndex[annMatch[i]]].coord3D.x;
-                    preRANSAC.mp[j].y2 = kpmHandle->refDataSet.refPoint[kpmHandle->annInfo[annLoop].annCoordIndex[annMatch[i]]].coord3D.y;
-                    j++;
-                }
-                preRANSAC.num = j;
-                if( kpmRansacHomograhyEstimation(&preRANSAC, inlierIndex, &inlierNum, h) < 0 ) {
-                    inlierNum = 0;
-                }
-                //printf("ann[%d] %d  pre:%3d, aft:%3d\n", annLoop, kpmHandle->inDataSet.num, preRANSAC.num, inlierNum);
-                if( inlierNum < 6 ) continue;
-
-                kpmHandle->preRANSAC.num = preRANSAC.num;
-                kpmHandle->aftRANSAC.num = inlierNum;
-                for( i = 0; i < inlierNum; i++ ) {
-                    kpmHandle->aftRANSAC.match[i].inIndex = kpmHandle->preRANSAC.match[inlierIndex[i]].inIndex;
-                    kpmHandle->aftRANSAC.match[i].refIndex = kpmHandle->preRANSAC.match[inlierIndex[i]].refIndex;
-                }
-                //printf(" ---> %d %d %d\n", kpmHandle->inDataSet.num, kpmHandle->preRANSAC.num, kpmHandle->aftRANSAC.num);
-                float  camPose[3][4], error;
-                if( kpmHandle->poseMode == KpmPose6DOF ) {
-                    ret = kpmUtilGetPose(kpmHandle->cparamLT, &(kpmHandle->aftRANSAC), &(kpmHandle->refDataSet), &(kpmHandle->inDataSet),
-                                         camPose,  &error );
-                }
-                else {
-                    ret = kpmUtilGetPoseHomography(&(kpmHandle->aftRANSAC), &(kpmHandle->refDataSet), &(kpmHandle->inDataSet),
-                                             camPose,  &error );
-                }
-                if( ret == 0 ) {
-                    if( annBestLoopFeatureNum < 0 || kpmHandle->aftRANSAC.num > annBestLoopFeatureNum ) {
-                        annBestLoopFeatureNum = kpmHandle->aftRANSAC.num;
-                        for(j=0;j<3;j++) for(i=0;i<4;i++) kpmHandle->result[pageLoop].camPose[j][i] = camPose[j][i];
-                        ARLOGi("ann[%d] %d  pre:%3d, aft:%3d\n", annLoop, kpmHandle->inDataSet.num, preRANSAC.num, inlierNum);
-                        ARLOGi("page: %d, error = %f\n", kpmHandle->result[pageLoop].pageNo, error);
-                        kpmHandle->result[pageLoop].error = error;
-                        kpmHandle->result[pageLoop].camPoseF = 0;
-                    }
-                }
+            ret = kpmUtilGetPose_binary(kpmHandle->cparamLT,
+                                        matches ,
+                                        kpmHandle->freakMatcher->get3DFeaturePoints(matched_image_id),
+                                        kpmHandle->freakMatcher->getQueryFeaturePoints(),
+                                        kpmHandle->result[pageLoop].camPose,
+                                        &(kpmHandle->result[pageLoop].error) );
+            //ARLOGi("Pose (freak) - %s",arrayToString2(kpmHandle->result[pageLoop].camPose).c_str());
+            if( ret == 0 ) {
+                kpmHandle->result[pageLoop].camPoseF = 0;
+                kpmHandle->result[pageLoop].inlierNum = (int)matches.size();
+                ARLOGi("Page[%d]  pre:%3d, aft:%3d, error = %f\n", pageLoop, (int)matches.size(), (int)matches.size(), kpmHandle->result[pageLoop].error);
             }
         }
-        free(annMatch);
 #endif
         free(featureVector.sf);
+#if !BINARY_FEATURE
         free(preRANSAC.mp);
         free(inlierIndex);
+#endif
     }
     else {
+#if !BINARY_FEATURE
         kpmHandle->preRANSAC.num = 0;
         kpmHandle->aftRANSAC.num = 0;
+#endif
         for( i = 0; i < kpmHandle->resultNum; i++ ) {
             kpmHandle->result[i].camPoseF = -1;
         }
@@ -640,3 +688,118 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     
     return 0;
 }
+
+
+int kpmUtilGetPose_binary(ARParamLT *cparamLT, const vision::matches_t &matchData, const std::vector<vision::Point3d<float> > &refDataSet, const std::vector<vision::FeaturePoint> &inputDataSet, float camPose[3][4], float *error)
+{
+    ICPHandleT    *icpHandle;
+    ICPDataT       icpData;
+    ICP2DCoordT   *sCoord;
+    ICP3DCoordT   *wCoord;
+    ARdouble       initMatXw2Xc[3][4];
+    ARdouble       err;
+    int            i;
+    
+    
+    if( matchData.size() < 4 ) return -1;
+    
+    arMalloc( sCoord, ICP2DCoordT, matchData.size() );
+    arMalloc( wCoord, ICP3DCoordT, matchData.size() );
+    for( i = 0; i < matchData.size(); i++ ) {
+        sCoord[i].x = inputDataSet[matchData[i].ins].x;
+        sCoord[i].y = inputDataSet[matchData[i].ins].y;
+
+        wCoord[i].x = refDataSet[matchData[i].ref].x;
+        wCoord[i].y = refDataSet[matchData[i].ref].y;
+        wCoord[i].z = 0.0;
+    }
+    
+    icpData.num = i;
+    icpData.screenCoord = &sCoord[0];
+    icpData.worldCoord  = &wCoord[0];
+    
+    if( icpGetInitXw2Xc_from_PlanarData( cparamLT->param.mat, sCoord, wCoord, (int)matchData.size(), initMatXw2Xc ) < 0 ) {
+        //printf("Error!! at icpGetInitXw2Xc_from_PlanarData.\n");
+        free( sCoord );
+        free( wCoord );
+        return -1;
+    }
+    /*
+    printf("--- Init pose ---\n");
+    for( int j = 0; j < 3; j++ ) {
+        for( i = 0; i < 4; i++ )  printf(" %8.3f", initMatXw2Xc[j][i]);
+        printf("\n");
+    }
+    */
+    if( (icpHandle = icpCreateHandle( cparamLT->param.mat )) == NULL ) {
+        free( sCoord );
+        free( wCoord );
+        return -1;
+    }
+#if 0
+    if( icpData.num > 10 ) {
+        icpSetInlierProbability( icpHandle, 0.7 );
+        if( icpPointRobust( icpHandle, &icpData, initMatXw2Xc, camPose, &err ) < 0 ) {
+            ARLOGe("Error!! at icpPoint.\n");
+            free( sCoord );
+            free( wCoord );
+            icpDeleteHandle( &icpHandle );
+            return -1;
+        }
+    }
+    else {
+        if( icpPoint( icpHandle, &icpData, initMatXw2Xc, camPose, &err ) < 0 ) {
+            ARLOGe("Error!! at icpPoint.\n");
+            free( sCoord );
+            free( wCoord );
+            icpDeleteHandle( &icpHandle );
+            return -1;
+        }
+    }
+#else
+#  ifdef ARDOUBLE_IS_FLOAT
+    if( icpPoint( icpHandle, &icpData, initMatXw2Xc, camPose, &err ) < 0 ) {
+        //ARLOGe("Error!! at icpPoint.\n");
+        free( sCoord );
+        free( wCoord );
+        icpDeleteHandle( &icpHandle );
+        return -1;
+    }
+#  else
+    ARdouble camPosed[3][4];
+    if( icpPoint( icpHandle, &icpData, initMatXw2Xc, camPosed, &err ) < 0 ) {
+        //ARLOGe("Error!! at icpPoint.\n");
+        free( sCoord );
+        free( wCoord );
+        icpDeleteHandle( &icpHandle );
+        return -1;
+    }
+    for (int r = 0; r < 3; r++) for (int c = 0; c < 4; c++) camPose[r][c] = (float)camPosed[r][c];
+#  endif
+#endif
+    icpDeleteHandle( &icpHandle );
+    
+    /*
+    printf("error = %f\n", err);
+    for( int j = 0; j < 3; j++ ) {
+        for( i = 0; i < 4; i++ )  printf(" %8.3f", camPose[j][i]);
+        printf("\n");
+    }
+    if( err > 10.0f ) {
+        for( i = 0; i < matchData->num; i++ ) {
+            printf("%d\t%f\t%f\t%f\t%f\n", i+1, sCoord[i].x, sCoord[i].y, wCoord[i].x, wCoord[i].y);
+        }
+    }
+    */
+    
+    
+    free( sCoord );
+    free( wCoord );
+    
+    *error = (float)err;
+    if( *error > 10.0f ) return -1;
+    
+    return 0;
+}
+
+

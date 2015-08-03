@@ -15,6 +15,7 @@
 
 #include <osg/Vec3>
 #include <osg/Vec4>
+#include <osg/ImageUtils>
 #include <osg/Group>
 #include <osg/ClearNode>
 #include <osg/Switch>
@@ -27,30 +28,17 @@
 
 #include <osgDB/FileUtils>
 
+#include <osgVolume/VolumeTile>
+#include <osgVolume/Property>
+
 #include <osgPresentation/AnimationMaterial>
 #include <osgPresentation/SlideEventHandler>
+#include <osgPresentation/PropertyManager>
+#include <osgPresentation/Timeout>
 
 namespace osgPresentation
 {
 
-class OSGPRESENTATION_EXPORT HUDSettings : public osg::Referenced
-{
-    public:
-        HUDSettings(double slideDistance, float eyeOffset, unsigned int leftMask, unsigned int rightMask);
-
-        virtual bool getModelViewMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const;
-
-        virtual bool getInverseModelViewMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const;
-
-        double          _slideDistance;
-        double          _eyeOffset;
-        unsigned int    _leftMask;
-        unsigned int    _rightMask;
-
-protected:
-
-        virtual ~HUDSettings();
-};
 
 
 class OSGPRESENTATION_EXPORT HUDTransform : public osg::Transform
@@ -226,6 +214,7 @@ public:
     {
         ModelData() {}
 
+        std::string region;
         std::string effect;
         std::string options;
     };
@@ -245,7 +234,12 @@ public:
             duration(-1.0),
             imageSequence(false),
             imageSequencePagingMode(osg::ImageSequence::PAGE_AND_DISCARD_USED_IMAGES),
-            imageSequenceInteractionMode(PLAY_AUTOMATICALLY_LIKE_MOVIE)
+            imageSequenceInteractionMode(PLAY_AUTOMATICALLY_LIKE_MOVIE),
+            blendingHint(USE_IMAGE_ALPHA),
+            delayTime(0.0),
+            startTime(0.0),
+            stopTime(-1.0),
+            volume("")
         {}
 
         std::string                     options;
@@ -270,7 +264,21 @@ public:
             USE_MOUSE_Y_POSITION
         };
         ImageSequenceInteractionMode imageSequenceInteractionMode;
+
+        enum BlendingHint
+        {
+            USE_IMAGE_ALPHA,
+            OFF,
+            ON
+        };
         
+        BlendingHint    blendingHint;
+
+        double          delayTime;
+        double          startTime;
+        double          stopTime;
+        std::string     volume;
+
     };
 
     struct VolumeData
@@ -288,13 +296,12 @@ public:
             useTabbedDragger(false),
             useTrackballDragger(false),
             region_in_pixel_coords(false),
-            alphaValue(1.0),
-            cutoffValue(0.1),
-            sampleDensityValue(0.005),
-            sampleDensityWhenMovingValue(0.0)
+            alphaValue("1.0"),
+            cutoffValue("0.1"),
+            sampleDensityValue("0.005"),
+            colorSpaceOperation(osg::NO_COLOR_SPACE_OPERATION),
+            colorModulate(1.0f,1.0f,1.0f,1.0f)
         {
-            region[0] = region[1] = region[2] = 0.0f;
-            region[3] = region[4] = region[5] = 1.0f;
         }
 
         std::string                             options;
@@ -302,12 +309,15 @@ public:
         osg::ref_ptr<osg::TransferFunction1D>   transferFunction;
         bool                                    useTabbedDragger;
         bool                                    useTrackballDragger;
-        float                                   region[6];
+        std::string                             region;
         bool                                    region_in_pixel_coords;
-        float                                   alphaValue;
-        float                                   cutoffValue;
-        float                                   sampleDensityValue;
-        float                                   sampleDensityWhenMovingValue;
+        std::string                             alphaValue;
+        std::string                             cutoffValue;
+        std::string                             sampleDensityValue;
+        std::string                             sampleDensityWhenMovingValue;
+
+        osg::ColorSpaceOperation                colorSpaceOperation;
+        osg::Vec4                               colorModulate;
     };
 
 
@@ -371,6 +381,7 @@ public:
 
     void setSlideDuration(double duration);
 
+    Timeout* addTimeout();
 
     void addLayer(bool inheritPreviousLayers=true, bool defineAsBaseLayer=false);
 
@@ -420,6 +431,8 @@ public:
     void layerClickToDoOperation(const std::string& command, Operation operation,  const JumpData& jumpData=JumpData());
     void layerClickEventOperation(const KeyPosition& keyPos,  const JumpData& jumpData=JumpData());
 
+    void addPropertyAnimation(PresentationContext presentationContext, PropertyAnimation* propertyAnimation);
+
     void addToCurrentLayer(osg::Node* subgraph);
 
     void addBullet(const std::string& bullet, PositionData& positionData, FontData& fontData);
@@ -442,6 +455,8 @@ public:
 
     void addModel(const std::string& filename, const PositionData& positionData, const ModelData& modelData);
 
+    void setUpVolumeScalarProperty(osgVolume::VolumeTile* tile, osgVolume::ScalarProperty* property, const std::string& source);
+    
     void addVolume(const std::string& filename, const PositionData& positionData, const VolumeData& volumeData);
 
     osg::Group* takePresentation() { return _root.release(); }
@@ -452,6 +467,9 @@ public:
 
     osg::Switch* getCurrentSlide() { return _slide.get(); }
 
+    void pushCurrentLayer();
+    void popCurrentLayer();
+    
     osg::Group* getCurrentLayer() { return _currentLayer.get(); }
 
     void setLoopPresentation(bool loop) { _loopPresentation = loop; }
@@ -470,6 +488,7 @@ protected:
     void findImageStreamsAndAddCallbacks(osg::Node* node);
 
     osg::Geometry* createTexturedQuadGeometry(const osg::Vec3& pos, const osg::Vec4& rotation, float width,float height, osg::Image* image, bool& usedTextureRectangle);
+    void setUpMovieVolume(osg::Node* subgraph, osg::ImageStream* imageStream, const ImageData& imageData);
 
     osg::Vec3 computePositionInModelCoords(const PositionData& positionData) const;
     void updatePositionFromInModelCoords(const osg::Vec3& vertex, PositionData& positionData) const;
@@ -548,6 +567,8 @@ protected:
 
     osg::ref_ptr<osg::Group>        _previousLayer;
     osg::ref_ptr<osg::Group>        _currentLayer;
+    typedef std::vector< osg::ref_ptr<osg::Group> > LayerStack;
+    LayerStack                      _layerStack;
 
     osg::ref_ptr<FilePathData>      _filePathData;
 

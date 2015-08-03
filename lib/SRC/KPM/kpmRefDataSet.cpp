@@ -1,50 +1,32 @@
 /*
  *  kpmRefDataSet.cpp
- *  libKPM
+ *  ARToolKit5
  *
- *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
- *  LLC ("Daqri") in consideration of your agreement to the following
- *  terms, and your use, installation, modification or redistribution of
- *  this Daqri software constitutes acceptance of these terms.  If you do
- *  not agree with these terms, please do not compile, install, use, or
- *  redistribute this Daqri software.
+ *  This file is part of ARToolKit.
  *
- *  In consideration of your agreement to abide by the following terms, and
- *  subject to these terms, Daqri grants you a personal, non-exclusive,
- *  non-transferable license, under Daqri's copyrights in this original Daqri
- *  software (the "Daqri Software"), to compile, install and execute Daqri Software
- *  exclusively in conjunction with the ARToolKit software development kit version 5.2
- *  ("ARToolKit"). The allowed usage is restricted exclusively to the purposes of
- *  two-dimensional surface identification and camera pose extraction and initialisation,
- *  provided that applications involving automotive manufacture or operation, military,
- *  and mobile mapping are excluded.
+ *  ARToolKit is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  You may reproduce and redistribute the Daqri Software in source and binary
- *  forms, provided that you redistribute the Daqri Software in its entirety and
- *  without modifications, and that you must retain this notice and the following
- *  text and disclaimers in all such redistributions of the Daqri Software.
- *  Neither the name, trademarks, service marks or logos of Daqri LLC may
- *  be used to endorse or promote products derived from the Daqri Software
- *  without specific prior written permission from Daqri.  Except as
- *  expressly stated in this notice, no other rights or licenses, express or
- *  implied, are granted by Daqri herein, including but not limited to any
- *  patent rights that may be infringed by your derivative works or by other
- *  works in which the Daqri Software may be incorporated.
+ *  ARToolKit is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
- *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
- *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
- *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *  As a special exception, the copyright holders of this library give you
+ *  permission to link this library with independent modules to produce an
+ *  executable, regardless of the license terms of these independent modules, and to
+ *  copy and distribute the resulting executable under terms of your choice,
+ *  provided that you also meet, for each linked independent module, the terms and
+ *  conditions of the license of that module. An independent module is a module
+ *  which is neither derived from nor based on this library. If you modify this
+ *  library, you may extend this exception to your version of the library, but you
+ *  are not obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
  *
  *  Copyright 2015 Daqri, LLC. All rights reserved.
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
@@ -58,8 +40,15 @@
 #include <AR/ar.h>
 #include <KPM/kpm.h>
 #include <KPM/kpmType.h>
-#include <KPM/surfSub.h>
+#include "kpmPrivate.h"
 #include "kpmFopen.h"
+
+#if BINARY_FEATURE
+#include <facade/visual_database_facade.h>
+#else
+#include <KPM/surfSub.h>
+#endif
+
 
 
 int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, float dpi, int procMode, int compMode, int maxFeatureNum,
@@ -67,8 +56,6 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
 {
     ARUint8         *refImageBW;
     KpmRefDataSet   *refDataSet;
-    ARUint8         *refImageBW2;
-    ARUint8         *p1, *p2;
     int              xsize2, ysize2;
     int              i, j;
 
@@ -94,12 +81,12 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
     refDataSet->pageInfo[0].imageInfo[0].height  = ysize2;
 
     if( compMode == KpmCompY ) {
-        refImageBW2 = refImageBW;
+        ARUint8 *refImageBW2 = refImageBW;
         refImageBW = (ARUint8 *)malloc(sizeof(ARUint8)*xsize2*(ysize2/2));
         if( refImageBW == NULL ) exit(0);
 
-        p1 = refImageBW;
-        p2 = refImageBW2;
+        ARUint8 *p1 = refImageBW;
+        ARUint8 *p2 = refImageBW2;
         for( j = 0; j < ysize2/2; j++ ) {
             for( i = 0; i < xsize2; i++ ) {
                 *(p1++) = ( (int)*p2 + (int)*(p2+xsize2) ) / 2;
@@ -110,6 +97,17 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
         free( refImageBW2 );
     }
 
+#if BINARY_FEATURE
+    vision::VisualDatabaseFacade freakMatcher;
+    std::vector<vision::FeaturePoint> points;
+    std::vector<unsigned char> descriptors;
+    freakMatcher.computeFreakFeaturesAndDescriptors(refImageBW, xsize2, ysize2, points, descriptors);
+    ARLOGi("Freak features - %d",points.size());
+    //freakMatcher.addImage(refImageBW, xsize2, ysize2, imageNo);
+    //const std::vector<vision::FeaturePoint>& points = freakMatcher.getFeaturePoints(imageNo);
+    //const std::vector<unsigned char>& descriptors = freakMatcher.getDescriptors(imageNo);
+    refDataSet->num = (int)points.size();
+#else
     SurfSubHandleT   *surfHandle;
     surfHandle = surfSubCreateHandle(xsize2, (compMode == KpmCompY)? ysize2/2: ysize2, AR_PIXEL_FORMAT_MONO);
     if (!surfHandle) {
@@ -118,12 +116,23 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
     }
     surfSubSetMaxPointNum( surfHandle, maxFeatureNum );
     surfSubExtractFeaturePoint( surfHandle, refImageBW, NULL, 0 );
-
     refDataSet->num = surfSubGetFeaturePointNum( surfHandle );
+#endif
+    
     if( refDataSet->num != 0 ) {
         arMalloc( refDataSet->refPoint, KpmRefData, refDataSet->num );
         if( procMode == KpmProcFullSize ) {
-            for( i = 0 ; i < refDataSet->num ; i++ ) {       
+            for( i = 0 ; i < refDataSet->num ; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                if( compMode == KpmCompY ) y *= 2.0f;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    refDataSet->refPoint[i].featureVec.v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+                refDataSet->refPoint[i].featureVec.angle = points[i].angle;
+                refDataSet->refPoint[i].featureVec.scale = points[i].scale;
+                refDataSet->refPoint[i].featureVec.maxima = (int)points[i].maxima;
+#else
                 float  x, y, *desc;
                 desc = surfSubGetFeatureDescPtr( surfHandle, i );
                 surfSubGetFeaturePosition( surfHandle, i, &x, &y );
@@ -132,6 +141,8 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
                     refDataSet->refPoint[i].featureVec.v[j] = desc[j];
                 }
                 refDataSet->refPoint[i].featureVec.l = surfSubGetFeatureSign( surfHandle, i );
+#endif
+                
                 refDataSet->refPoint[i].coord2D.x = x;
                 refDataSet->refPoint[i].coord2D.y = y;
                 refDataSet->refPoint[i].coord3D.x = (x + 0.5f) / dpi * 25.4f;               // millimetres.
@@ -141,7 +152,17 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
             }
         }
         else if( procMode == KpmProcTwoThirdSize ) {
-            for( i = 0 ; i < refDataSet->num ; i++ ) {       
+            for( i = 0 ; i < refDataSet->num ; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                if( compMode == KpmCompY ) y *= 2.0f;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    refDataSet->refPoint[i].featureVec.v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+                refDataSet->refPoint[i].featureVec.angle = points[i].angle;
+                refDataSet->refPoint[i].featureVec.scale = points[i].scale;
+                refDataSet->refPoint[i].featureVec.maxima = (int)points[i].maxima;
+#else
                 float  x, y, *desc;
                 desc = surfSubGetFeatureDescPtr( surfHandle, i );
                 surfSubGetFeaturePosition( surfHandle, i, &x, &y );
@@ -150,6 +171,8 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
                     refDataSet->refPoint[i].featureVec.v[j] = desc[j];
                 }
                 refDataSet->refPoint[i].featureVec.l = surfSubGetFeatureSign( surfHandle, i );
+#endif
+                
                 refDataSet->refPoint[i].coord2D.x = x;
                 refDataSet->refPoint[i].coord2D.y = y;
                 refDataSet->refPoint[i].coord3D.x = (x*1.5f + 0.75f) / dpi * 25.4f;         // millimetres.
@@ -160,6 +183,16 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
         }
         else if( procMode == KpmProcHalfSize ) {
             for( i = 0 ; i < refDataSet->num ; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                if( compMode == KpmCompY ) y *= 2.0f;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    refDataSet->refPoint[i].featureVec.v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+                refDataSet->refPoint[i].featureVec.angle = points[i].angle;
+                refDataSet->refPoint[i].featureVec.scale = points[i].scale;
+                refDataSet->refPoint[i].featureVec.maxima = (int)points[i].maxima;
+#else
                 float  x, y, *desc;
                 desc = surfSubGetFeatureDescPtr( surfHandle, i );
                 surfSubGetFeaturePosition( surfHandle, i, &x, &y );
@@ -168,6 +201,8 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
                     refDataSet->refPoint[i].featureVec.v[j] = desc[j];
                 }
                 refDataSet->refPoint[i].featureVec.l = surfSubGetFeatureSign( surfHandle, i );
+#endif
+                
                 refDataSet->refPoint[i].coord2D.x = x;
                 refDataSet->refPoint[i].coord2D.y = y;
                 refDataSet->refPoint[i].coord3D.x = (x*2.0f + 1.0f) / dpi * 25.4f;          // millimetres.
@@ -177,7 +212,17 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
             }
         }
         else if( procMode == KpmProcOneThirdSize ) {
-            for( i = 0 ; i < refDataSet->num ; i++ ) {       
+            for( i = 0 ; i < refDataSet->num ; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                if( compMode == KpmCompY ) y *= 2.0f;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    refDataSet->refPoint[i].featureVec.v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+                refDataSet->refPoint[i].featureVec.angle = points[i].angle;
+                refDataSet->refPoint[i].featureVec.scale = points[i].scale;
+                refDataSet->refPoint[i].featureVec.maxima = (int)points[i].maxima;
+#else
                 float  x, y, *desc;
                 desc = surfSubGetFeatureDescPtr( surfHandle, i );
                 surfSubGetFeaturePosition( surfHandle, i, &x, &y );
@@ -186,6 +231,7 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
                     refDataSet->refPoint[i].featureVec.v[j] = desc[j];
                 }
                 refDataSet->refPoint[i].featureVec.l = surfSubGetFeatureSign( surfHandle, i );
+#endif
                 refDataSet->refPoint[i].coord2D.x = x;
                 refDataSet->refPoint[i].coord2D.y = y;
                 refDataSet->refPoint[i].coord3D.x = (x*3.0f + 1.5f) / dpi * 25.4f;          // millimetres.
@@ -196,6 +242,16 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
         }
         else {
             for( i = 0 ; i < refDataSet->num ; i++ ) {
+#if BINARY_FEATURE
+                float  x = points[i].x, y = points[i].y;
+                if( compMode == KpmCompY ) y *= 2.0f;
+                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
+                    refDataSet->refPoint[i].featureVec.v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
+                }
+                refDataSet->refPoint[i].featureVec.angle = points[i].angle;
+                refDataSet->refPoint[i].featureVec.scale = points[i].scale;
+                refDataSet->refPoint[i].featureVec.maxima = (int)points[i].maxima;
+#else
                 float  x, y, *desc;
                 desc = surfSubGetFeatureDescPtr( surfHandle, i );
                 surfSubGetFeaturePosition( surfHandle, i, &x, &y );
@@ -204,6 +260,8 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
                     refDataSet->refPoint[i].featureVec.v[j] = desc[j];
                 }
                 refDataSet->refPoint[i].featureVec.l = surfSubGetFeatureSign( surfHandle, i );
+#endif
+                
                 refDataSet->refPoint[i].coord2D.x = x;
                 refDataSet->refPoint[i].coord2D.y = y;
                 refDataSet->refPoint[i].coord3D.x = (x*4.0f + 2.0f) / dpi * 25.4f;          // millimetres.
@@ -217,7 +275,9 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
         refDataSet->refPoint = NULL;
     }
     free(refImageBW);
+#if !BINARY_FEATURE
     surfSubDeleteHandle( &surfHandle );
+#endif
     
     *refDataSetPtr = refDataSet;
 
@@ -403,7 +463,11 @@ int kpmSaveRefDataSet( const char *filename, const char *ext, KpmRefDataSet  *re
     for(i = 0; i < refDataSet->num; i++ ) {
         if( fwrite(  &(refDataSet->refPoint[i].coord2D), sizeof(KpmCoord2D), 1, fp) != 1 ) goto bailBadWrite;
         if( fwrite(  &(refDataSet->refPoint[i].coord3D), sizeof(KpmCoord2D), 1, fp) != 1 ) goto bailBadWrite;
+#if BINARY_FEATURE
+        if( fwrite(  &(refDataSet->refPoint[i].featureVec), sizeof(FreakFeature), 1, fp) != 1 ) goto bailBadWrite;
+#else
         if( fwrite(  &(refDataSet->refPoint[i].featureVec), sizeof(SurfFeature), 1, fp) != 1 ) goto bailBadWrite;
+#endif
         if( fwrite(  &(refDataSet->refPoint[i].pageNo),     sizeof(int), 1, fp) != 1 ) goto bailBadWrite;
         if( fwrite(  &(refDataSet->refPoint[i].refImageNo), sizeof(int), 1, fp) != 1 ) goto bailBadWrite;
     }
@@ -453,7 +517,12 @@ int kpmLoadRefDataSet( const char *filename, const char *ext, KpmRefDataSet **re
     for(i = 0; i < refDataSet->num; i++ ) {
         if( fread(  &(refDataSet->refPoint[i].coord2D), sizeof(KpmCoord2D), 1, fp) != 1 ) goto bailBadRead;
         if( fread(  &(refDataSet->refPoint[i].coord3D), sizeof(KpmCoord2D), 1, fp) != 1 ) goto bailBadRead;
+#if BINARY_FEATURE
+        if( fread(  &(refDataSet->refPoint[i].featureVec), sizeof(FreakFeature), 1, fp) != 1 ) goto bailBadRead;
+#else
         if( fread(  &(refDataSet->refPoint[i].featureVec), sizeof(SurfFeature), 1, fp) != 1 ) goto bailBadRead;
+#endif
+        
         if( fread(  &(refDataSet->refPoint[i].pageNo),     sizeof(int), 1, fp) != 1 ) goto bailBadRead;
         if( fread(  &(refDataSet->refPoint[i].refImageNo), sizeof(int), 1, fp) != 1 ) goto bailBadRead;
     }
@@ -490,6 +559,7 @@ bailBadRead:
 
 int kpmLoadRefDataSetOld( const char *filename, const char *ext, KpmRefDataSet **refDataSetPtr )
 {
+#if !BINARY_FEATURE
     KpmRefDataSet  *refDataSet;
     FILE           *fp;
     char            fmode[] = "rb";
@@ -560,6 +630,10 @@ bailBadRead:
     free(refDataSet);
     fclose(fp);
     return (-1);
+#else
+    return 0;
+#endif
+    
 }
 
 int kpmChangePageNoOfRefDataSet ( KpmRefDataSet *refDataSet, int oldPageNo, int newPageNo )

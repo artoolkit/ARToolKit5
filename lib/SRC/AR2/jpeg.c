@@ -39,7 +39,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <jpeglib.h>
+#include "jpeglib.h"
 #include <setjmp.h>
 #include <AR2/imageFormat.h>
 

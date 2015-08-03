@@ -66,7 +66,7 @@
 #include <Eden/EdenUtil.h> // EdenGetFileExtensionFromPath()
 
 #ifdef EDEN_HAVE_LIBJPEG
-#  include <jpeglib.h>
+#  include "jpeglib.h"
 #endif
 
 // Core in OpenGL 1.4.

@@ -42,7 +42,7 @@
 #ifdef AR_INPUT_IMAGE
 
 #include <string.h> // memset()
-#include <jpeglib.h>
+#include "jpeglib.h"
 
 #define AR_VIDEO_IMAGE_XSIZE_DEFAULT   640
 #define AR_VIDEO_IMAGE_YSIZE_DEFAULT   480

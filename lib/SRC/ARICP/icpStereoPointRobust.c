@@ -46,26 +46,26 @@
 static void   icpStereoGetXw2XcCleanup( char *message, ARdouble *J_U_S, ARdouble *dU, ARdouble *E, ARdouble *E2 );
 static int    compE( const void *a, const void *b );
 
-int icpStereoPointRobust( ICPStereoHandleT   *handle,
-                          ICPStereoDataT     *data,
-                          ARdouble              initMatXw2Xc[3][4],
-                          ARdouble              matXw2Xc[3][4],
-                          ARdouble             *err )
+int icpStereoPointRobust( ICPStereoHandleT *handle,
+                          ICPStereoDataT   *data,
+                          ARdouble         initMatXw2Xc[3][4],
+                          ARdouble         matXw2Xc[3][4],
+                          ARdouble         *err )
 {
-    ICP2DCoordT   U;
-    ARdouble       *J_U_S;
-    ARdouble       *dU, dx, dy;
-    ARdouble       *E, *E2, K2, W;
-    ARdouble        matXw2Ul[3][4];
-    ARdouble        matXw2Ur[3][4];
-    ARdouble        matXc2Ul[3][4];
-    ARdouble        matXc2Ur[3][4];
-    ARdouble        dS[6];
-    ARdouble        err0, err1;
-    int           inlierNum;
-    int           i, j, k;
+    ICP2DCoordT U;
+    ARdouble    *J_U_S;
+    ARdouble    *dU, dx, dy;
+    ARdouble    *E, *E2, K2, W;
+    ARdouble    matXw2Ul[3][4];
+    ARdouble    matXw2Ur[3][4];
+    ARdouble    matXc2Ul[3][4];
+    ARdouble    matXc2Ur[3][4];
+    ARdouble    dS[6];
+    ARdouble    err0, err1;
+    int         inlierNum;
+    int         i, j, k;
 #if ICP_DEBUG
-    int           l;
+    int         l;
 #endif
 
     if( data->numL + data->numR < 4 ) return -1;
@@ -224,7 +224,12 @@ int icpStereoPointRobust( ICPStereoHandleT   *handle,
         ARLOG("RIGHT  IN: %2d, OUT: %2d\n", l, data->numR-l);
 #endif
 
-        if( k < 6 ) return -1;
+        if( k < 6 )
+        {
+            //COVHI10425, COVHI10406, COVHI10393, COVHI10325
+            icpStereoGetXw2XcCleanup("icpStereoPointRobust(), if (k < 6)", J_U_S, dU, E, E2);
+            return -1;
+        }
 
         if( icpGetDeltaS( dS, dU, (ARdouble (*)[6])J_U_S, k ) < 0 ) {
             icpStereoGetXw2XcCleanup("icpGetS",J_U_S,dU,E,E2);
@@ -232,7 +237,7 @@ int icpStereoPointRobust( ICPStereoHandleT   *handle,
         }
 
         icpUpdateMat( matXw2Xc, dS );
-    }
+    }//end: for( i = 0;; i++ )
 
 #if ICP_DEBUG
     ARLOG("*********** %f\n", err1);
@@ -246,7 +251,11 @@ int icpStereoPointRobust( ICPStereoHandleT   *handle,
     free(E2);
 
     return 0;
-}
+} //end: int icpStereoPointRobust(ICPStereoHandleT *handle,
+  //                              ICPStereoDataT   *data,
+  //                              ARdouble         initMatXw2Xc[3][4],
+  //                              ARdouble         matXw2Xc[3][4],
+  //                              ARdouble         *err)
 
 static void icpStereoGetXw2XcCleanup( char *message, ARdouble *J_U_S, ARdouble *dU, ARdouble *E, ARdouble *E2 )
 {

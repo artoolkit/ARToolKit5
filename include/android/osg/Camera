@@ -25,6 +25,14 @@
 
 #include <OpenThreads/Mutex>
 
+
+#if defined(OSG_GLES1_AVAILABLE) || defined(OSG_GLES2_AVAILABLE) && !defined(OSG_GL3_AVAILABLE)
+    #define GL_FRONT_LEFT       0x0400
+    #define GL_FRONT_RIGHT      0x0401
+    #define GL_BACK_LEFT        0x0402
+    #define GL_BACK_RIGHT       0x0403
+#endif
+
 namespace osg {
 
 // forward declare View to allow Camera to point back to the View that its within
@@ -671,6 +679,19 @@ class OSG_EXPORT Camera : public Transform, public CullSettings
         ref_ptr<DrawCallback>               _postDrawCallback;
         ref_ptr<DrawCallback>               _finalDrawCallback;
 };
+
+
+/** Functor to assist with ordering camers in the order they should be rendered in.*/
+struct CameraRenderOrderSortOp
+{
+    inline bool operator() (const Camera* lhs,const Camera* rhs) const
+    {
+        if (lhs->getRenderOrder()<rhs->getRenderOrder()) return true;
+        if (rhs->getRenderOrder()<lhs->getRenderOrder()) return false;
+        return lhs->getRenderOrderNum()<rhs->getRenderOrderNum();
+    }
+};
+
 
 }
 

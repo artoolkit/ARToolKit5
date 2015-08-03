@@ -179,6 +179,13 @@ int arVideoCapStart( void )
     return ar2VideoCapStart( vid );
 }
 
+int arVideoCapStartAsync(AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata)
+{
+    if( vid == NULL ) return -1;
+    
+    return ar2VideoCapStartAsync(vid, callback, userdata);
+}
+
 int arVideoCapStop( void )
 {
     if( vid == NULL ) return -1;

@@ -1,50 +1,32 @@
 /*
  *  kpmUtil.cpp
- *  libKPM
+ *  ARToolKit5
  *
- *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
- *  LLC ("Daqri") in consideration of your agreement to the following
- *  terms, and your use, installation, modification or redistribution of
- *  this Daqri software constitutes acceptance of these terms.  If you do
- *  not agree with these terms, please do not compile, install, use, or
- *  redistribute this Daqri software.
+ *  This file is part of ARToolKit.
  *
- *  In consideration of your agreement to abide by the following terms, and
- *  subject to these terms, Daqri grants you a personal, non-exclusive,
- *  non-transferable license, under Daqri's copyrights in this original Daqri
- *  software (the "Daqri Software"), to compile, install and execute Daqri Software
- *  exclusively in conjunction with the ARToolKit software development kit version 5.2
- *  ("ARToolKit"). The allowed usage is restricted exclusively to the purposes of
- *  two-dimensional surface identification and camera pose extraction and initialisation,
- *  provided that applications involving automotive manufacture or operation, military,
- *  and mobile mapping are excluded.
+ *  ARToolKit is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  You may reproduce and redistribute the Daqri Software in source and binary
- *  forms, provided that you redistribute the Daqri Software in its entirety and
- *  without modifications, and that you must retain this notice and the following
- *  text and disclaimers in all such redistributions of the Daqri Software.
- *  Neither the name, trademarks, service marks or logos of Daqri LLC may
- *  be used to endorse or promote products derived from the Daqri Software
- *  without specific prior written permission from Daqri.  Except as
- *  expressly stated in this notice, no other rights or licenses, express or
- *  implied, are granted by Daqri herein, including but not limited to any
- *  patent rights that may be infringed by your derivative works or by other
- *  works in which the Daqri Software may be incorporated.
+ *  ARToolKit is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
- *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
- *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
- *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *  As a special exception, the copyright holders of this library give you
+ *  permission to link this library with independent modules to produce an
+ *  executable, regardless of the license terms of these independent modules, and to
+ *  copy and distribute the resulting executable under terms of your choice,
+ *  provided that you also meet, for each linked independent module, the terms and
+ *  conditions of the license of that module. An independent module is a module
+ *  which is neither derived from nor based on this library. If you modify this
+ *  library, you may extend this exception to your version of the library, but you
+ *  are not obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
  *
  *  Copyright 2015 Daqri, LLC. All rights reserved.
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
@@ -59,7 +41,12 @@
 #include <AR/icp.h>
 #include <KPM/kpm.h>
 #include <KPM/kpmType.h>
+
+#if BINARY_FEATURE
+#include <facade/visual_database_facade.h>
+#else
 #include <KPM/surfSub.h>
+#endif
 
 static ARUint8 *genBWImageFull      ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
 static ARUint8 *genBWImageHalf      ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
@@ -68,33 +55,48 @@ static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat,
 static ARUint8 *genBWImageQuart     ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
 
 
-static int    kpmUtilGetInitPoseHomography( float *sCoord, float *wCoord, int num, float initPose[3][4] );
+#if !BINARY_FEATURE
+static int kpmUtilGetInitPoseHomography( float *sCoord, float *wCoord, int num, float initPose[3][4] );
+#endif
 
-
-int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int maxPointNum, CornerPoints *cornerPoints )
+int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int maxPointNum,
+                      CornerPoints *cornerPoints )
 {
-    ARUint8          *inImageBW;
-    int               xsize2, ysize2;
-    int               cornerNum;
-    int               i;
+    ARUint8        *inImageBW;
+    int            xsize2, ysize2;
+    int            cornerNum;
+    int            i;
 
-    inImageBW = kpmUtilGenBWImage( inImage, pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 );
+    inImageBW = kpmUtilGenBWImage( inImage, pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 ); //Eventually returns a
+                                                                                                   //malloc()'ed buffer
     if( inImageBW == NULL ) return -1;
-
-    SurfSubHandleT   *surfHandle;
+    
+#if BINARY_FEATURE
+    vision::VisualDatabaseFacade *freakMatcher = new vision::VisualDatabaseFacade;
+    freakMatcher->addImage(inImageBW, xsize, ysize, 1);
+    const std::vector<vision::FeaturePoint>& points = freakMatcher->getQueryFeaturePoints();
+    cornerNum = (int)freakMatcher->getQueryFeaturePoints().size();
+#else
+    SurfSubHandleT *surfHandle;
     surfHandle = surfSubCreateHandle(xsize2, ysize2, AR_PIXEL_FORMAT_MONO);
     if (!surfHandle) {
         ARLOGe("Error: unable to initialise KPM feature matching.\n");
+        free( inImageBW ); //COVHI10283
         return -1;
     }
     surfSubSetMaxPointNum( surfHandle, maxPointNum );
     surfSubExtractFeaturePoint( surfHandle, inImageBW, NULL, 0 );
-
     cornerNum = surfSubGetFeaturePointNum( surfHandle );
+#endif
+    
     if( procMode == KpmProcFullSize ) {
         for( i = 0; i < cornerNum; i++ ) {
             float  x, y;
+#if BINARY_FEATURE
+            x = points[i].x, y = points[i].y;
+#else
             surfSubGetFeaturePosition( surfHandle, i, &x, &y );
+#endif
             cornerPoints->pt[i].x = (int)x;
             cornerPoints->pt[i].y = (int)y;
         }
@@ -102,7 +104,11 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     else if( procMode == KpmProcTwoThirdSize ) {
         for( i = 0; i < cornerNum; i++ ) {
             float  x, y;
+#if BINARY_FEATURE
+            x = points[i].x, y = points[i].y;
+#else
             surfSubGetFeaturePosition( surfHandle, i, &x, &y );
+#endif
             cornerPoints->pt[i].x = (int)(x * 1.5f);
             cornerPoints->pt[i].y = (int)(y * 1.5f);
         }
@@ -110,7 +116,11 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     else if( procMode == KpmProcHalfSize ) {
         for( i = 0; i < cornerNum; i++ ) {
             float  x, y;
+#if BINARY_FEATURE
+            x = points[i].x, y = points[i].y;
+#else
             surfSubGetFeaturePosition( surfHandle, i, &x, &y );
+#endif
             cornerPoints->pt[i].x = (int)(x * 2.0f);
             cornerPoints->pt[i].y = (int)(y * 2.0f);
         }
@@ -118,7 +128,11 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     else if( procMode == KpmProcOneThirdSize ) {
         for( i = 0; i < cornerNum; i++ ) {
             float  x, y;
+#if BINARY_FEATURE
+            x = points[i].x, y = points[i].y;
+#else
             surfSubGetFeaturePosition( surfHandle, i, &x, &y );
+#endif
             cornerPoints->pt[i].x = (int)(x * 3.0f);
             cornerPoints->pt[i].y = (int)(y * 3.0f);
         }
@@ -126,7 +140,11 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     else {      
         for( i = 0; i < cornerNum; i++ ) {
             float  x, y;
+#if BINARY_FEATURE
+            x = points[i].x, y = points[i].y;
+#else
             surfSubGetFeaturePosition( surfHandle, i, &x, &y );
+#endif
             cornerPoints->pt[i].x = (int)(x * 4.0f);
             cornerPoints->pt[i].y = (int)(y * 4.0f);
         }
@@ -134,11 +152,14 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     cornerPoints->num = cornerNum;
 
     free( inImageBW );
+#if BINARY_FEATURE
+    delete freakMatcher;
+#else
     surfSubDeleteHandle( &surfHandle );
+#endif
 
     return 0;
 }
-
 
 ARUint8 *kpmUtilGenBWImage( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int *newXsize, int *newYsize )
 {
@@ -159,6 +180,7 @@ ARUint8 *kpmUtilGenBWImage( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize
     }
 }
 
+#if !BINARY_FEATURE
 int kpmUtilGetPose( ARParamLT *cparamLT, KpmMatchResult *matchData, KpmRefDataSet *refDataSet, KpmInputDataSet *inputDataSet, float  camPose[3][4], float  *error )
 {
     ICPHandleT    *icpHandle;
@@ -439,6 +461,7 @@ int kpmUtilGetPoseHomography( KpmMatchResult *matchData, KpmRefDataSet *refDataS
 
     return 0;
 }
+#endif
 
 static ARUint8 *genBWImageFull( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
 {
@@ -1105,6 +1128,7 @@ static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat,
     return newImage;
 }
 
+#if !BINARY_FEATURE
 static int kpmUtilGetInitPoseHomography( float *sCoord, float *wCoord, int num, float initPose[3][4] )
 {
     float  *A, *B;
@@ -1197,3 +1221,4 @@ bail:
 
     return (ret);
 }
+#endif

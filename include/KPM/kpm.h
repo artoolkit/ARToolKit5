@@ -1,50 +1,32 @@
 /*
  *  kpm.h
- *  libKPM
+ *  ARToolKit5
  *
- *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
- *  LLC ("Daqri") in consideration of your agreement to the following
- *  terms, and your use, installation, modification or redistribution of
- *  this Daqri software constitutes acceptance of these terms.  If you do
- *  not agree with these terms, please do not compile, install, use, or
- *  redistribute this Daqri software.
+ *  This file is part of ARToolKit.
  *
- *  In consideration of your agreement to abide by the following terms, and
- *  subject to these terms, Daqri grants you a personal, non-exclusive,
- *  non-transferable license, under Daqri's copyrights in this original Daqri
- *  software (the "Daqri Software"), to compile, install and execute Daqri Software
- *  exclusively in conjunction with the ARToolKit software development kit version 5.2
- *  ("ARToolKit"). The allowed usage is restricted exclusively to the purposes of
- *  two-dimensional surface identification and camera pose extraction and initialisation,
- *  provided that applications involving automotive manufacture or operation, military,
- *  and mobile mapping are excluded.
+ *  ARToolKit is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  You may reproduce and redistribute the Daqri Software in source and binary
- *  forms, provided that you redistribute the Daqri Software in its entirety and
- *  without modifications, and that you must retain this notice and the following
- *  text and disclaimers in all such redistributions of the Daqri Software.
- *  Neither the name, trademarks, service marks or logos of Daqri LLC may
- *  be used to endorse or promote products derived from the Daqri Software
- *  without specific prior written permission from Daqri.  Except as
- *  expressly stated in this notice, no other rights or licenses, express or
- *  implied, are granted by Daqri herein, including but not limited to any
- *  patent rights that may be infringed by your derivative works or by other
- *  works in which the Daqri Software may be incorporated.
+ *  ARToolKit is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
- *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
- *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
- *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *  As a special exception, the copyright holders of this library give you
+ *  permission to link this library with independent modules to produce an
+ *  executable, regardless of the license terms of these independent modules, and to
+ *  copy and distribute the resulting executable under terms of your choice,
+ *  provided that you also meet, for each linked independent module, the terms and
+ *  conditions of the license of that module. An independent module is a module
+ *  which is neither derived from nor based on this library. If you modify this
+ *  library, you may extend this exception to your version of the library, but you
+ *  are not obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
  *
  *  Copyright 2015 Daqri, LLC. All rights reserved.
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
@@ -65,20 +47,25 @@
 #ifndef KPM_H
 #define KPM_H
 
-#define     ANN2    1
+#define     BINARY_FEATURE    1
 
 #include <AR/ar.h>
-#include <KPM/surfSub.h>
 #include <KPM/kpmType.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 #define   KpmPose6DOF            1
 #define   KpmPoseHomography      2
 
-#define   KpmProcFullSize        1
-#define   KpmProcHalfSize        2
-#define   KpmProcQuatSize        3
-#define   KpmProcOneThirdSize    4
-#define   KpmProcTwoThirdSize    5
+typedef enum {
+    KpmProcFullSize        = 1,
+    KpmProcHalfSize        = 2,
+    KpmProcQuatSize        = 3,
+    KpmProcOneThirdSize    = 4,
+    KpmProcTwoThirdSize    = 5
+} KPM_PROC_MODE;
 #define   KpmDefaultProcMode     KpmProcFullSize
 
 #define   KpmCompNull            0
@@ -94,12 +81,6 @@ typedef struct {
 } KpmCoord2D;
 
 typedef struct {
-    SurfSubSkipRegion    *region;
-    int                   regionNum;
-    int                   regionMax;
-} KpmSkipRegionSet;
-
-typedef struct {
     int               width;
     int               height;
     int               imageNo;
@@ -111,10 +92,14 @@ typedef struct {
     int               pageNo;
 } KpmPageInfo;
 
-typedef struct {
+typedef struct _KpmRefData {
     KpmCoord2D        coord2D;
     KpmCoord2D        coord3D;      // millimetres.
+#if BINARY_FEATURE
+    FreakFeature      featureVec;
+#else
     SurfFeature       featureVec;
+#endif
     int               pageNo;
     int               refImageNo;
 } KpmRefData;
@@ -123,7 +108,7 @@ typedef struct {
     @typedef    KpmRefDataSet
     @abstract   A loaded dataset for KPM tracking.
     @discussion
-        Key point matching takes as input a reference data set of points. This strucutre holds a set of points in memory prior to loading into the tracker.
+        Key point matching takes as input a reference data set of points. This structure holds a set of points in memory prior to loading into the tracker.
 	@field		refPoint Tracking reference points.
 	@field		num Number of refPoints in the dataset.
 	@field		pageInfo Array of info about each page in the dataset. One entry per page.
@@ -136,11 +121,22 @@ typedef struct {
     int               pageNum;
 } KpmRefDataSet;
 
+/*!
+    @typedef    KpmInputDataSet
+    @abstract   Data describing the number and location of keypoints in an input image to be matched against a loaded data set.
+    @discussion
+        Key point matching occurs between a loaded data set and a set of keypoints extracted from an input image. This structure
+        holds the number and pixel location of keypoints in the input image. The keypoints themselves are an array of 'num'
+        KpmRefData structures.
+	@field		coord Array of pixel locations of the keypoints in an input image.
+	@field		num Number of coords in the array.
+  */
 typedef struct {
     KpmCoord2D       *coord;
     int               num;
 } KpmInputDataSet;
 
+#if !BINARY_FEATURE
 typedef struct {
     int               refIndex;
     int               inIndex;
@@ -150,6 +146,7 @@ typedef struct {
     KpmMatchData     *match;
     int               num;
 } KpmMatchResult;
+#endif
 
 typedef struct {
     float                     camPose[3][4];
@@ -160,45 +157,8 @@ typedef struct {
     int                       skipF;
 } KpmResult;
 
-typedef struct {
-    void                     *ann;
-    int                      *annCoordIndex;
-    int                       pageID;
-    int                       imageID;
-} KpmAnnInfo;
+typedef struct _KpmHandle KpmHandle;
 
-typedef struct {
-    SurfSubHandleT           *surfHandle;
-#if ANN2
-    void                     *ann2;
-#else
-    KpmAnnInfo               *annInfo;
-    int                       annInfoNum;
-#endif
-
-    ARParamLT                *cparamLT;
-    int                       poseMode;
-    int                       xsize, ysize;
-    AR_PIXEL_FORMAT           pixFormat;
-    int                       procMode;
-    int                       detectedMaxFeature;
-    int                       surfThreadNum;
-
-    KpmRefDataSet             refDataSet;
-    KpmInputDataSet           inDataSet;
-    KpmMatchResult            preRANSAC;
-    KpmMatchResult            aftRANSAC;
-
-    KpmSkipRegionSet          skipRegion;
-    
-    KpmResult                *result;
-    int                       resultNum;
-} KpmHandle;
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*!
     @function
@@ -253,8 +213,12 @@ KpmHandle  *kpmCreateHandleHomography( int xsize, int ysize, AR_PIXEL_FORMAT pix
  */
 int         kpmDeleteHandle( KpmHandle **kpmHandle );
 
-int         kpmSetProcMode( KpmHandle *kpmHandle, int  procMode );
-int         kpmGetProcMode( KpmHandle *kpmHandle, int *procMode );
+int         kpmHandleGetXSize(const KpmHandle *kpmHandle);
+int         kpmHandleGetYSize(const KpmHandle *kpmHandle);
+AR_PIXEL_FORMAT kpmHandleGetPixelFormat(const KpmHandle *kpmHandle);
+    
+int         kpmSetProcMode( KpmHandle *kpmHandle, KPM_PROC_MODE  procMode );
+int         kpmGetProcMode( KpmHandle *kpmHandle, KPM_PROC_MODE *procMode );
 int         kpmSetDetectedFeatureMax( KpmHandle *kpmHandle, int  detectedMaxFeature );
 int         kpmGetDetectedFeatureMax( KpmHandle *kpmHandle, int *detectedMaxFeature );
 int         kpmSetSurfThreadNum( KpmHandle *kpmHandle, int surfThreadNum );
@@ -289,7 +253,7 @@ int         kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet );
     @param filename Path to the dataset. Either full path, or a relative path if supported by
         the operating system.
     @param ext If non-NULL, a '.' charater and this string will be appended to 'filename'.
-        Often, this parameter is a pointer to the string "fset2".
+        Often, this parameter is a pointer to the string "fset3".
     @result Returns 0 if successful, or value &lt;0 in case of error.
     @seealso kpmLoadRefDataSet kpmLoadRefDataSet
     @seealso kpmSetRefDataSet kpmSetRefDataSet
@@ -314,11 +278,15 @@ int         kpmSetRefDataSetFileOld( KpmHandle *kpmHandle, const char *filename,
 int         kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage );
 
 int         kpmSetMatchingSkipPage( KpmHandle *kpmHandle, int *skipPages, int num );
+#if !BINARY_FEATURE
 int         kpmSetMatchingSkipRegion( KpmHandle *kpmHandle, SurfSubRect *skipRegion, int regionNum);
-    
+#endif
+
 int         kpmGetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet **refDataSet );
 int         kpmGetInDataSet( KpmHandle *kpmHandle, KpmInputDataSet **inDataSet );
+#if !BINARY_FEATURE
 int         kpmGetMatchingResult( KpmHandle *kpmHandle, KpmMatchResult **preRANSAC, KpmMatchResult **aftRANSAC );
+#endif
 int         kpmGetPose( KpmHandle *kpmHandle, float  pose[3][4], int *pageNo, float  *error );
 int         kpmGetResult( KpmHandle *kpmHandle, KpmResult **result, int *resultNum );
 
@@ -380,7 +348,7 @@ int         kpmSaveRefDataSet   ( const char *filename, const char *ext, KpmRefD
     @param filename Path to the dataset. Either full path, or a relative path if supported by
         the operating system.
     @param ext If non-NULL, a '.' charater and this string will be appended to 'filename'.
-        Often, this parameter is a pointer to the string "fset2".
+        Often, this parameter is a pointer to the string "fset3".
     @result Returns 0 if successful, or value &lt;0 in case of error.
     @param refDataSetPtr Pointer to a location which after loading will point to the loaded
         reference data set.
@@ -405,13 +373,32 @@ int         kpmLoadRefDataSetOld( const char *filename, const char *ext, KpmRefD
 int         kpmChangePageNoOfRefDataSet ( KpmRefDataSet *refDataSet, int oldPageNo, int newPageNo );
 
 
+/*!
+    @function
+    @abstract 
+    @discussion 
+    @param image Source image, as an unpadded pixel buffer beginning with the leftmost pixel of the top row.
+    @param pixFormat Layout of pixel data in 'image'.
+    @param xsize Layout of pixel data in 'image'.
+    @param ysize Layout of pixel data in 'image'.
+    @param procMode
+    @result 
+ */
 ARUint8    *kpmUtilGenBWImage( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int *newXsize, int *newYsize );
+
+#if !BINARY_FEATURE
 int         kpmUtilGetPose ( ARParamLT *cparamLT, KpmMatchResult *matchData, KpmRefDataSet *refDataSet, KpmInputDataSet *inputDataSet, float  camPose[3][4], float  *err );
+    
 int         kpmUtilGetPose2( ARParamLT *cparamLT, KpmMatchResult *matchData, KpmRefDataSet *refDataSet, int *redDataIndex, KpmInputDataSet *inputDataSet, float  camPose[3][4], float  *error );
 int         kpmUtilGetPoseHomography( KpmMatchResult *matchData, KpmRefDataSet *refDataSet, KpmInputDataSet *inputDataSet, float  camPose[3][4], float  *err );
+#endif
 int         kpmUtilGetCorner( ARUint8 *inImagePtr, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int maxPointNum, CornerPoints *cornerPoints );
 
 
+double wallclock();
+    
+int kpmLoadImageDb(const char *filename);
+    
 #ifdef __cplusplus
 }
 #endif

@@ -90,8 +90,9 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 LOCAL_MODULE := ARNativeOSGNative
 LOCAL_SRC_FILES := ARNativeOSG.cpp ARMarkerSquare.c VirtualEnvironment.c
 
-#LOCAL_CPPFLAGS += -fvisibility=hidden
-#LOCAL_LDFLAGS += -fvisibility=hidden
+# Silence the warning caused by empty struct lconv { } in /usr/include/locale.h.
+LOCAL_CPPFLAGS += -Wno-extern-c-compat
+
 # Make sure DEBUG is defined for debug builds. (NDK already defines NDEBUG for release builds.)
 ifeq ($(APP_OPTIM),debug)
     LOCAL_CPPFLAGS += -DDEBUG

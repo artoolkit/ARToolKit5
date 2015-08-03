@@ -510,9 +510,9 @@ static void *loadNFTDataAsync(THREAD_HANDLE_T *threadHandle)
         for (i = 0; i < markersNFTCount; i++) {
             // Load KPM data.
             KpmRefDataSet  *refDataSet2;
-            LOGI("Reading %s.fset2\n", markersNFT[i].datasetPathname);
-            if (kpmLoadRefDataSet(markersNFT[i].datasetPathname, "fset2", &refDataSet2) < 0 ) {
-                LOGE("Error reading KPM data from %s.fset2\n", markersNFT[i].datasetPathname);
+            LOGI("Reading %s.fset3\n", markersNFT[i].datasetPathname);
+            if (kpmLoadRefDataSet(markersNFT[i].datasetPathname, "fset3", &refDataSet2) < 0 ) {
+                LOGE("Error reading KPM data from %s.fset3\n", markersNFT[i].datasetPathname);
                 markersNFT[i].pageNo = -1;
                 continue;
             }

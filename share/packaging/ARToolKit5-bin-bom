@@ -32,10 +32,8 @@ share/artoolkit5-setenv
 share/artoolkit5-unsetenv
 
 bin/calib_camera
-bin/calib_camera_old-v3
 bin/calib_optical
 bin/calib_stereo
-bin/calib_stereo_old-v3
 bin/check_id
 bin/mk_patt
 bin/genTexData

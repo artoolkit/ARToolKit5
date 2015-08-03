@@ -1,50 +1,32 @@
 /*
  *  kpmType.h
- *  libKPM
+ *  ARToolKit5
  *
- *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
- *  LLC ("Daqri") in consideration of your agreement to the following
- *  terms, and your use, installation, modification or redistribution of
- *  this Daqri software constitutes acceptance of these terms.  If you do
- *  not agree with these terms, please do not compile, install, use, or
- *  redistribute this Daqri software.
+ *  This file is part of ARToolKit.
  *
- *  In consideration of your agreement to abide by the following terms, and
- *  subject to these terms, Daqri grants you a personal, non-exclusive,
- *  non-transferable license, under Daqri's copyrights in this original Daqri
- *  software (the "Daqri Software"), to compile, install and execute Daqri Software
- *  exclusively in conjunction with the ARToolKit software development kit version 5.2
- *  ("ARToolKit"). The allowed usage is restricted exclusively to the purposes of
- *  two-dimensional surface identification and camera pose extraction and initialisation,
- *  provided that applications involving automotive manufacture or operation, military,
- *  and mobile mapping are excluded.
+ *  ARToolKit is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  You may reproduce and redistribute the Daqri Software in source and binary
- *  forms, provided that you redistribute the Daqri Software in its entirety and
- *  without modifications, and that you must retain this notice and the following
- *  text and disclaimers in all such redistributions of the Daqri Software.
- *  Neither the name, trademarks, service marks or logos of Daqri LLC may
- *  be used to endorse or promote products derived from the Daqri Software
- *  without specific prior written permission from Daqri.  Except as
- *  expressly stated in this notice, no other rights or licenses, express or
- *  implied, are granted by Daqri herein, including but not limited to any
- *  patent rights that may be infringed by your derivative works or by other
- *  works in which the Daqri Software may be incorporated.
+ *  ARToolKit is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
- *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
- *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
- *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with ARToolKit.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
- *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
- *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
- *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
- *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
+ *  As a special exception, the copyright holders of this library give you
+ *  permission to link this library with independent modules to produce an
+ *  executable, regardless of the license terms of these independent modules, and to
+ *  copy and distribute the resulting executable under terms of your choice,
+ *  provided that you also meet, for each linked independent module, the terms and
+ *  conditions of the license of that module. An independent module is a module
+ *  which is neither derived from nor based on this library. If you modify this
+ *  library, you may extend this exception to your version of the library, but you
+ *  are not obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
  *
  *  Copyright 2015 Daqri, LLC. All rights reserved.
  *  Copyright 2006-2015 ARToolworks, Inc. All rights reserved.
@@ -54,7 +36,9 @@
 
 #pragma once
 
+#if !BINARY_FEATURE
 #include <KPM/surfSub.h>
+#endif
 
 //-------------------------------------------------------------------------
 // Corner points
@@ -91,6 +75,18 @@ typedef struct _CorspMap {
 	MatchPoint  *mp;
 } CorspMap;
 
+#if BINARY_FEATURE
+
+#define    FREAK_SUB_DIMENSION             96
+
+//FREAK feature vector
+typedef struct _FreakFeature {
+    unsigned char    v[FREAK_SUB_DIMENSION];
+    float              angle;
+    float              scale;
+    int               maxima;
+} FreakFeature;
+#else
 //-------------------------------------------------------------------------
 // Surf feature vector
 //-------------------------------------------------------------------------
@@ -99,9 +95,15 @@ typedef struct _SurfFeature {
 	float            v[SURF_SUB_DIMENSION];
     int              l;
 } SurfFeature;
+#endif
 
 typedef struct _FeatureVector {
 	int              num;
-	SurfFeature     *sf;
+#if BINARY_FEATURE
+    FreakFeature *sf;
+#else
+    SurfFeature     *sf;
+#endif
+    
 } FeatureVector;
 

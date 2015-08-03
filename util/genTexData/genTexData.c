@@ -89,7 +89,7 @@ enum {
 };
 
 static int                  genfset = 1;
-static int                  genfset2 = 1;
+static int                  genfset3 = 1;
 
 static char                 filename[MAXPATHLEN] = "";
 static AR2JpegImageT       *jpegImage;
@@ -167,9 +167,15 @@ int main( int argc, char *argv[] )
         } else if( strcmp(argv[i], "-fset") == 0 ) {
             genfset = 1;
         } else if( strcmp(argv[i], "-nofset2") == 0 ) {
-            genfset2 = 0;
+            ARLOGe("Error: -nofset2 option no longer supported as of ARToolKit v5.3.\n");
+            exit(-1);
         } else if( strcmp(argv[i], "-fset2") == 0 ) {
-            genfset2 = 1;
+            ARLOGe("Error: -fset2 option no longer supported as of ARToolKit v5.3.\n");
+            exit(-1);
+        } else if( strcmp(argv[i], "-nofset3") == 0 ) {
+            genfset3 = 0;
+        } else if( strcmp(argv[i], "-fset3") == 0 ) {
+            genfset3 = 1;
         } else if( strncmp(argv[i], "-log=", 5) == 0 ) {
             strncpy(logfile, &(argv[i][5]), sizeof(logfile) - 1);
             logfile[sizeof(logfile) - 1] = '\0'; // Ensure NULL termination.
@@ -315,7 +321,7 @@ int main( int argc, char *argv[] )
         ARLOGi("MIN_THRESH  = %f\n", min_thresh);
         ARLOGi("SD_THRESH   = %f\n", sd_thresh);
     }
-    if (genfset2) {
+    if (genfset3) {
         if (initialization_extraction_level == -1 && featureDensity == -1) {
             do {
                 printf("Select extraction level for initializing features, 0(few) <--> 3(many), [default=%d]: ", INITIALIZATION_EXTRACTION_LEVEL_DEFAULT);
@@ -444,8 +450,8 @@ int main( int argc, char *argv[] )
         ar2FreeFeatureSet( &featureSet );
     }
     
-    if (genfset2) {
-        ARLOGi("Generating FeatureSet2...\n");
+    if (genfset3) {
+        ARLOGi("Generating FeatureSet3...\n");
         refDataSet  = NULL;
         procMode    = KpmProcFullSize;
         for( i = 0; i < imageSet->num; i++ ) {
@@ -469,8 +475,8 @@ int main( int argc, char *argv[] )
             }
         }
         ARLOGi("  Done.\n");
-        ARLOGi("Saving FeatureSet2...\n");
-        if( kpmSaveRefDataSet(filename, "fset2", refDataSet) != 0 ) {
+        ARLOGi("Saving FeatureSet3...\n");
+        if( kpmSaveRefDataSet(filename, "fset3", refDataSet) != 0 ) {
             ARLOGe("Save error: %s.fset2\n", filename );
             EXIT(E_DATA_PROCESSING_ERROR);
         }

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>75a5952b-6687-4207-8094-ea4eea7866c8</SharedGUID>
+    <ItemsProjectGuid>{c8e7f742-0e98-41db-8584-f064b634ab78}</ItemsProjectGuid>
+    <ItemsRootNamespace>AR2</ItemsRootNamespace>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\coord.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\featureSet.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\imageFormat.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\imageSet.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\marker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\searchPoint.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\template.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\tracking.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR2\util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\coord.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\featureMap.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\featureSet.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\handle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\imageSet.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\jpeg.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\marker.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\matching.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\matching2.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\searchPoint.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\selectTemplate.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\surface.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\template.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\tracking.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\tracking2d.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\AR2\util.c" />
+  </ItemGroup>
+</Project>

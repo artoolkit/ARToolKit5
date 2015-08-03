@@ -90,7 +90,7 @@
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;opencv_core246.lib;opencv_flann246.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win32-i386;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -116,7 +116,7 @@
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;opencv_core246.lib;opencv_flann246.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win64-x64;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +142,7 @@
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;opencv_core246.lib;opencv_flann246.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win32-i386;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -169,7 +169,7 @@
       <DisableSpecificWarnings>4068</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;opencv_core246.lib;opencv_flann246.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win64-x64;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

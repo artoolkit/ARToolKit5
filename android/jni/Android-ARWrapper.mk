@@ -86,14 +86,7 @@ LOCAL_PATH := $(CURL_LIBDIR)
 $(foreach module,$(CURL_LIBS),$(eval $(call add_curl_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
-# Pull OpenCV into the build.
-# Set LOCAL_C_INCLUDES, LOCAL_CFLAGS, LOCAL_STATIC_LIBRARIES/LOCAL_SHARED_LIBRARIES, LOCAL_LDLIBS
-# appropriately for linking against OpenCV. 
-OPENCV_PACKAGE_DIR:=$(MY_LOCAL_PATH)/OpenCV-2.4.3-android-sdk
-OPENCV_LIB_TYPE:=STATIC
-OPENCV_CAMERA_MODULES:=off
-OPENCV_INSTALL_MODULES:=on
-include $(OPENCV_PACKAGE_DIR)/sdk/native/jni/OpenCV.mk
+include $(CLEAR_VARS)
 
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
@@ -109,12 +102,6 @@ LOCAL_CFLAGS += -DHAVE_NFT=1 $(MY_CFLAGS)
 LOCAL_LDLIBS += -llog -lGLESv1_CM
 LOCAL_SHARED_LIBRARIES += curl ssl crypto
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += ar2 kpm opencv_flann opencv_core util argsub_es armulti aricp cpufeatures jpeg arvideo
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-	LOCAL_STATIC_LIBRARIES += tbb
-endif
-ifeq ($(TARGET_ARCH_ABI),x86)
-	LOCAL_STATIC_LIBRARIES += tbb
-endif
+LOCAL_STATIC_LIBRARIES += ar2 kpm util argsub_es armulti aricp cpufeatures jpeg arvideo
 
 include $(BUILD_SHARED_LIBRARY)

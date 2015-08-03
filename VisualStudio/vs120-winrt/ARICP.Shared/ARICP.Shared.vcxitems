@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c6a025d5-1c50-49e0-aa5b-aefff7916209</SharedGUID>
+    <ItemsProjectGuid>{44a5c8bb-62ec-4cb5-9dab-d51c068e54ce}</ItemsProjectGuid>
+    <ItemsRootNamespace>ARICP</ItemsRootNamespace>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\ar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\icp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\icpCalib.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\icpCore.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpCalibStereo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpCore.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpHandle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpPoint.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpPointRobust.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpStereoHandle.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpStereoPoint.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpStereoPointRobust.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARICP\icpUtil.c" />
+  </ItemGroup>
+</Project>

@@ -28,8 +28,28 @@
 
 #include <osgViewer/Scene>
 #include <osgViewer/ViewerBase>
+#include <osgViewer/Keystone>
 
 namespace osgViewer {
+
+
+/** Base class for View configurations for setting up Camera and Windowing.*/
+class OSGVIEWER_EXPORT ViewConfig : public osg::Object
+{
+    public:
+
+        ViewConfig() {}
+
+        ViewConfig(const ViewConfig& rhs, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY) : osg::Object(rhs,copyop) {}
+
+        META_Object(osgViewer,ViewConfig);
+        
+        /** configure method that is overridden by Config subclasses.*/
+        virtual void configure(osgViewer::View& /*view*/) const {}
+        
+        /** convinience method for getting the relavent display settings to use.*/
+        virtual osg::DisplaySettings* getActiveDisplaySetting(osgViewer::View& view) const;
+};
 
 
 struct OSGVIEWER_EXPORT DepthPartitionSettings : public osg::Referenced
@@ -196,26 +216,33 @@ class OSGVIEWER_EXPORT View : public osg::View, public osgGA::GUIActionAdapter
         /** Get the FusionDistanceValue. Note, only used for USE_FUSION_DISTANCE_VALUE & PROPORTIONAL_TO_SCREEN_DISTANCE modes.*/
         float getFusionDistanceValue() const { return _fusionDistanceValue; }
 
-
-        /** Convenience method for creating slave Cameras and associated GraphicsWindows across all screens.*/
+        
+        /** Apply a viewer configuration to set up Cameras and Windowing. */
+        void apply(ViewConfig* config);
+        
+        ViewConfig* getLastAppliedViewConfig() { return _lastAppliedViewConfig.get(); }
+        const ViewConfig* getLastAppliedViewConfig() const { return _lastAppliedViewConfig.get(); }
+        
+        
+        /** deprecated, use view.apply(new osgViewer::AcrossAllWindows()). */
         void setUpViewAcrossAllScreens();
 
-        /** Convenience method for a single camera on a single window.*/
+        /** depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum)). */
         void setUpViewInWindow(int x, int y, int width, int height, unsigned int screenNum=0);
 
-        /** Convenience method for a single camera associated with a single full screen GraphicsWindow.*/
+        /** deprecated, use view.apply(new osgViewer::SingleScreen(screenNum)). */
         void setUpViewOnSingleScreen(unsigned int screenNum=0);
 
-
-        /** Convenience method for spherical display using 6 slave cameras rendering the 6 sides of a cube map, and 7th camera doing distortion correction to present on a spherical display.*/
+        /** deprecated, use view.apply(new osgViewer::SphericalDisplay(radius, collar, screenNum, intensityMap, projectorMatrix)). */
         void setUpViewFor3DSphericalDisplay(double radius=1.0, double collar=0.45, unsigned int screenNum=0, osg::Image* intensityMap=0, const osg::Matrixd& projectorMatrix = osg::Matrixd());
 
-        /** Convenience method for spherical display by rendering main scene to a panoramic 2:1 texture and then doing distortion correction to present onto a spherical display.*/
+        /** depreacted, use view.apply(new osgViewer::PanoramicSphericalDisplay(radius, collar, screenNum, intensityMap, projectorMatrix)). */
         void setUpViewForPanoramicSphericalDisplay(double radius=1.0, double collar=0.45, unsigned int screenNum=0, osg::Image* intensityMap=0, const osg::Matrixd& projectorMatrix = osg::Matrixd());
 
-        /** Convenience method for autostereoscopic Philips WoWvx display.*/
+        /** deprecated. use view.apply(new osgViewer::WoWVxDisplay(type (20 to 42), screenNum). */
         void setUpViewForWoWVxDisplay(unsigned int screenNum, unsigned char wow_content, unsigned char wow_factor, unsigned char wow_offset, float wow_disparity_Zd, float wow_disparity_vz, float wow_disparity_M, float wow_disparity_C);
 
+        
 
         /** Convenience method for setting up depth partitioning on the specified camera.*/
         bool setUpDepthPartitionForCamera(osg::Camera* cameraToPartition, DepthPartitionSettings* dps=0);
@@ -227,24 +254,53 @@ class OSGVIEWER_EXPORT View : public osg::View, public osgGA::GUIActionAdapter
         /** Return true if this view contains a specified camera.*/
         bool containsCamera(const osg::Camera* camera) const;
 
-        /** Get the camera which contains the pointer position x,y specified in the master camera's window/eye coordinates.
-          * Also passes back the local window coordinatess for the graphics context associated with the camera. */
+        
+        /** deprecated. */
         const osg::Camera* getCameraContainingPosition(float x, float y, float& local_x, float& local_y) const;
 
-        /** Compute intersections between a ray through the specified master camera's window/eye coordinates and a specified node.
-          * Note, when a master camera has slaves and no viewport itself, its coordinate frame will be in clip space i.e. -1,-1 to 1,1,
-          * while if it has a viewport the coordintates will be relative to its viewport dimensions.
-          * Mouse events handled by the view will automatically be attached to the master camera window/clip coordinates so that they can be passed
-          * directly to the computeIntersections method. */
+        /** deprecated. */
         bool computeIntersections(float x,float y, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
 
-        /** Compute intersections between a ray through the specified master camera's window/eye coordinates and a specified nodePath's subgraph. */
+        /** deprecated. */
         bool computeIntersections(float x,float y, const osg::NodePath& nodePath, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
 
+        
+        /** Compute intersections of a ray, starting the current mouse position, through the specified camera. */
+        bool computeIntersections(const osgGA::GUIEventAdapter& ea, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
+
+        /** Compute intersections of a ray, starting the current mouse position, through the specified master camera's window/eye coordinates and a specified nodePath's subgraph. */
+        bool computeIntersections(const osgGA::GUIEventAdapter& ea, const osg::NodePath& nodePath, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
+
+        
+        /** Compute intersections of a ray through the specified camera. */
+        bool computeIntersections(const osg::Camera* camera, osgUtil::Intersector::CoordinateFrame cf, float x,float y, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
+
+        /** Compute intersections of a ray through the specified camera and a specified nodePath's subgraph. */
+        bool computeIntersections(const osg::Camera* camera, osgUtil::Intersector::CoordinateFrame cf, float x,float y, const osg::NodePath& nodePath, osgUtil::LineSegmentIntersector::Intersections& intersections,osg::Node::NodeMask traversalMask = 0xffffffff);
 
         virtual void requestRedraw();
         virtual void requestContinuousUpdate(bool needed=true);
         virtual void requestWarpPointer(float x,float y);
+
+
+    public:
+        
+        osg::Texture* createDistortionTexture(int width, int height);
+        osg::Camera* assignRenderToTextureCamera(osg::GraphicsContext* gc, int width, int height, osg::Texture* texture);
+        osg::Camera* assignKeystoneDistortionCamera(osg::DisplaySettings* ds, osg::GraphicsContext* gc, int x, int y, int width, int height, GLenum buffer, osg::Texture* texture, Keystone* keystone);
+        osg::Camera* assignStereoCamera(osg::DisplaySettings* ds, osg::GraphicsContext* gc, int x, int y, int width, int height, GLenum buffer, double eyeScale);
+        void assignStereoOrKeystoneToCamera(osg::Camera* camera, osg::DisplaySettings* ds);
+
+        struct StereoSlaveCallback : public osg::View::Slave::UpdateSlaveCallback
+        {
+            StereoSlaveCallback(osg::DisplaySettings* ds, double eyeScale):_ds(ds), _eyeScale(eyeScale) {}
+
+            virtual void updateSlave(osg::View& view, osg::View::Slave& slave);
+
+            osg::ref_ptr<osg::DisplaySettings> _ds;
+            double _eyeScale;
+        };
+        
 
     public:
 
@@ -264,7 +320,7 @@ class OSGVIEWER_EXPORT View : public osg::View, public osgGA::GUIActionAdapter
 
         osg::Timer_t                            _startTick;
 
-        Devices                            _eventSources;
+        Devices                                 _eventSources;
 
         osg::ref_ptr<osgViewer::Scene>          _scene;
         osg::ref_ptr<osgGA::EventQueue>         _eventQueue;
@@ -276,6 +332,9 @@ class OSGVIEWER_EXPORT View : public osg::View, public osgGA::GUIActionAdapter
         osg::ref_ptr<osg::DisplaySettings>      _displaySettings;
         osgUtil::SceneView::FusionDistanceMode  _fusionDistanceMode;
         float                                   _fusionDistanceValue;
+
+        osg::ref_ptr<ViewConfig>                _lastAppliedViewConfig;
+        
 };
 
 }

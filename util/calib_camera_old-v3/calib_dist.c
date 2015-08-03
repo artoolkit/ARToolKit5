@@ -57,7 +57,8 @@ static ARdouble   check_error( ARdouble *x, ARdouble *y, int num, ARdouble dist_
 static ARdouble   calc_distortion2( CALIB_PATT_T *patt, ARdouble dist_factor[], int dist_function_version );
 static ARdouble   get_size_factor( ARdouble dist_factor[], int xsize, int ysize, int dist_function_version );
 
-void calc_distortion( CALIB_PATT_T *patt, int xsize, int ysize, ARdouble aspect_ratio, ARdouble dist_factor[], int dist_function_version )
+void calc_distortion( CALIB_PATT_T *patt, int xsize, int ysize, ARdouble aspect_ratio, ARdouble dist_factor[],
+                      int dist_function_version )
 {
     int       i, j;
     ARdouble  bx, by;
@@ -65,70 +66,84 @@ void calc_distortion( CALIB_PATT_T *patt, int xsize, int ysize, ARdouble aspect_
     ARdouble  error, min;
     ARdouble  factor[AR_DIST_FACTOR_NUM_MAX];
 
-	// Sanity check.
-	if (dist_function_version < 1 || dist_function_version > AR_DIST_FUNCTION_VERSION_MAX) {
-		ARLOGe("calc_distortion: dist_function_version out of bounds.\n");
-		exit (-1);
-	}
-	
+    // Sanity check. COVHI10443
+    if ((dist_function_version < 1) || (dist_function_version > (AR_DIST_FUNCTION_VERSION_MAX - 1))) {
+        ARLOGe("calc_distortion: dist_function_version out of bounds.\n");
+        exit (-1);
+    }
+
     bx = xsize / 2;
     by = ysize / 2;
     factor[0] = bx;
     factor[1] = by;
     factor[2] = 1.0;
-	if (dist_function_version == 3) {
-		factor[3] = aspect_ratio;
-	}
+    if (dist_function_version == 3) {
+        factor[3] = aspect_ratio;
+    }
     min = calc_distortion2( patt, factor, dist_function_version );
-	if (dist_function_version == 3) {
-		bf[0] = factor[0];
-		bf[1] = factor[1];
-		bf[2] = factor[2];
-		bf[3] = factor[3];
-		bf[4] = factor[4];
-		bf[5] = factor[5];
-		ARLOG("[%5.1f, %5.1f, %5.1f %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
-	} else if (dist_function_version == 2) {
-		bf[0] = factor[0];
-		bf[1] = factor[1];
-		bf[2] = factor[2];
-		bf[3] = factor[3];
-		bf[4] = factor[4];		
-		ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
-	} else if (dist_function_version == 1) {
-		bf[0] = factor[0];
-		bf[1] = factor[1];
-		bf[2] = factor[2];
-		bf[3] = factor[3];
-		ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
-	}
+    if (dist_function_version == 3) {
+        bf[0] = factor[0];
+        bf[1] = factor[1];
+        bf[2] = factor[2];
+        bf[3] = factor[3];
+        bf[4] = factor[4];
+        bf[5] = factor[5];
+        ARLOG("[%5.1f, %5.1f, %5.1f %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
+    } else if (dist_function_version == 2) {
+        bf[0] = factor[0];
+        bf[1] = factor[1];
+        bf[2] = factor[2];
+        bf[3] = factor[3];
+        bf[4] = factor[4];
+        ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
+    } else if (dist_function_version == 1) {
+        bf[0] = factor[0];
+        bf[1] = factor[1];
+        bf[2] = factor[2];
+        bf[3] = factor[3];
+        ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
+    }
     for( j = -10; j <= 10; j++ ) {
         factor[1] = by + j*5;
         for( i = -10; i <= 10; i++ ) {
             factor[0] = bx + i*5;
             error = calc_distortion2( patt, factor, dist_function_version );
-			if (dist_function_version == 3) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				bf[4] = factor[4]; bf[5] = factor[5];
-				min = error; }
-			} else if (dist_function_version == 2) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				bf[4] = factor[4]; min = error; }
-			} else if (dist_function_version == 1) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				min = error; }
-			}
+            if (dist_function_version == 3) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    bf[4] = factor[4];
+                    bf[5] = factor[5];
+                    min = error;
+                }
+            } else if (dist_function_version == 2) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    bf[4] = factor[4];
+                    min = error;
+                }
+            } else if (dist_function_version == 1) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    min = error;
+                }
+            }
         }
-		if (dist_function_version == 3) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
-		} else if (dist_function_version == 2) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
-		} else if (dist_function_version == 1) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
-		}
+        if (dist_function_version == 3) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
+        } else if (dist_function_version == 2) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
+        } else if (dist_function_version == 1) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
+        }
     }
 
     bx = bf[0];
@@ -138,49 +153,63 @@ void calc_distortion( CALIB_PATT_T *patt, int xsize, int ysize, ARdouble aspect_
         for( i = -10; i <= 10; i++ ) {
             factor[0] = bx + 0.5 * i;
             error = calc_distortion2( patt, factor, dist_function_version );
-			if (dist_function_version == 3) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				bf[4] = factor[4]; bf[5] = factor[5];
-				min = error; }
-			} else if (dist_function_version == 2) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				bf[4] = factor[4]; min = error; }
-			} else if (dist_function_version == 1) {
-				if( error < min ) { bf[0] = factor[0]; bf[1] = factor[1];
-				bf[2] = factor[2]; bf[3] = factor[3];
-				min = error; }
-			}
+            if (dist_function_version == 3) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    bf[4] = factor[4];
+                    bf[5] = factor[5];
+                    min = error;
+                }
+            } else if (dist_function_version == 2) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    bf[4] = factor[4];
+                    min = error;
+                }
+            } else if (dist_function_version == 1) {
+                if( error < min ) {
+                    bf[0] = factor[0];
+                    bf[1] = factor[1];
+                    bf[2] = factor[2];
+                    bf[3] = factor[3];
+                    min = error;
+                }
+            }
         }
-		if (dist_function_version == 3) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
-		} else if (dist_function_version == 2) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
-		} else if (dist_function_version == 1) {
-			ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
-		}
+        if (dist_function_version == 3) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], bf[5], min);
+        } else if (dist_function_version == 2) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], bf[4], min);
+        } else if (dist_function_version == 1) {
+            ARLOG("[%5.1f, %5.1f, %5.1f, %5.1f] %f\n", bf[0], bf[1], bf[2], bf[3], min);
+        }
     }
 
-	if (dist_function_version == 3) {
-		dist_factor[0] = bf[0];
-		dist_factor[1] = bf[1];
-		dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
-		dist_factor[3] = bf[3];
-		dist_factor[4] = bf[4];
-		dist_factor[5] = bf[5];
-	} else if (dist_function_version == 2) {
-		dist_factor[0] = bf[0];
-		dist_factor[1] = bf[1];
-		dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
-		dist_factor[3] = bf[3];
-		dist_factor[4] = bf[4];
-	} else if (dist_function_version == 1) {
-		dist_factor[0] = bf[0];
-		dist_factor[1] = bf[1];
-		dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
-		dist_factor[3] = bf[3];
-	}
+    if (dist_function_version == 3) {
+        dist_factor[0] = bf[0];
+        dist_factor[1] = bf[1];
+        dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
+        dist_factor[3] = bf[3];
+        dist_factor[4] = bf[4];
+        dist_factor[5] = bf[5];
+    } else if (dist_function_version == 2) {
+        dist_factor[0] = bf[0];
+        dist_factor[1] = bf[1];
+        dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
+        dist_factor[3] = bf[3];
+        dist_factor[4] = bf[4];
+    } else if (dist_function_version == 1) {
+        dist_factor[0] = bf[0];
+        dist_factor[1] = bf[1];
+        dist_factor[2] = get_size_factor( bf, xsize, ysize, dist_function_version );
+        dist_factor[3] = bf[3];
+    }
 }
 
 static ARdouble get_size_factor( ARdouble dist_factor[], int xsize, int ysize, int dist_function_version )
@@ -245,130 +274,140 @@ static ARdouble calc_distortion2( CALIB_PATT_T *patt, ARdouble *dist_factor, int
 	double min;
 	
 	// ----------------------------------------
-	if (dist_function_version == 3) {
-		
-	double    err, f1, f2, fb1, fb2;
-    int       i, j;
+    if (dist_function_version == 3) {
 
-    dist_factor[4] = 0.0;
-    dist_factor[5] = 0.0;
-    min = get_fitting_error( patt, dist_factor, 3 );
+        double    err, f1, f2, fb1, fb2;
+        int       i, j;
 
-    f1 = dist_factor[4];
-    for( i = -100; i < 200; i+=10 ) {
-        dist_factor[4] = i;
-        err = get_fitting_error( patt, dist_factor, 3 );
-        if( err < min ) { min = err; f1 = dist_factor[4]; }
-    }
+        dist_factor[4] = 0.0;
+        dist_factor[5] = 0.0;
+        min = get_fitting_error( patt, dist_factor, 3 );
 
-    fb1 = f1;
-    for( j = -10; j <= 10; j++ ) {
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[4] = fb1 + i;
-        dist_factor[5] = j;
-        //if( dist_factor[4] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 3 );
-        if( err < min ) { min = err; f1 = dist_factor[4]; f2 = dist_factor[5]; }
-    }
-    }
+        f1 = dist_factor[4];
+        for( i = -100; i < 200; i+=10 ) {
+            dist_factor[4] = i;
+            err = get_fitting_error( patt, dist_factor, 3 );
+            if( err < min ) { min = err; f1 = dist_factor[4]; }
+        }
 
-    fb1  = f1;
-    fb2  = f2;
-    for( j = -10; j <= 10; j++ ) {
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[4] = fb1 + 0.1 * i;
-        dist_factor[5] = fb2 + 0.1 * j;
-        //if( dist_factor[4] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 3 );
-        if( err < min ) { min = err; f1 = dist_factor[4]; f2 = dist_factor[5]; }
-    }
-    }
+        fb1 = f1;
+        for( j = -10; j <= 10; j++ ) {
+            for( i = -10; i <= 10; i++ ) {
+                dist_factor[4] = fb1 + i;
+                dist_factor[5] = j;
+                //if( dist_factor[4] < 0 ) continue;
+                err = get_fitting_error( patt, dist_factor, 3 );
+                if( err < min ) { min = err; f1 = dist_factor[4]; f2 = dist_factor[5]; }
+            }
+        }
 
-    dist_factor[4] = f1;
-    dist_factor[5] = f2;
+        fb1  = f1;
+        fb2  = f2;
+        for( j = -10; j <= 10; j++ ) {
+            for( i = -10; i <= 10; i++ ) {
+                dist_factor[4] = fb1 + 0.1 * i;
+                dist_factor[5] = fb2 + 0.1 * j;
+                //if( dist_factor[4] < 0 ) continue;
+                err = get_fitting_error( patt, dist_factor, 3 );
+                if( err < min ) { min = err; f1 = dist_factor[4]; f2 = dist_factor[5]; }
+            }
+        }
+
+        dist_factor[4] = f1;
+        dist_factor[5] = f2;
 
 	// ----------------------------------------
 	} else if (dist_function_version == 2) {
 
-	double    err, f1, f2, fb1, fb2;
-    int       i, j;
+	    double    err, f1, f2 = 0.0 /*//COVHI10458*/, fb1, fb2;
+        int       i, j;
 
-    dist_factor[3] = 0.0;
-    dist_factor[4] = 0.0;
-    min = get_fitting_error( patt, dist_factor, 2 );
+        dist_factor[3] = 0.0;
+        dist_factor[4] = 0.0;
+        min = get_fitting_error( patt, dist_factor, 2 );
 
-    f1 = dist_factor[3];
-    for( i = -100; i < 200; i+=10 ) {
-        dist_factor[3] = i;
-        err = get_fitting_error( patt, dist_factor, 2 );
-        if( err < min ) { min = err; f1 = dist_factor[3]; }
-    }
+        f1 = dist_factor[3];
+        for( i = -100; i < 200; i+=10 ) {
+            dist_factor[3] = i;
+            err = get_fitting_error( patt, dist_factor, 2 );
+            if( err < min ) {
+                min = err;
+                f1 = dist_factor[3];
+            }
+        }
 
-    fb1 = f1;
-    for( j = -10; j <= 10; j++ ) {
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[3] = fb1 + i;
-        dist_factor[4] = j;
-        //if( dist_factor[3] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 2 );
-        if( err < min ) { min = err; f1 = dist_factor[3]; f2 = dist_factor[4]; }
-    }
-    }
+        fb1 = f1;
+        for( j = -10; j <= 10; j++ ) {
+            for( i = -10; i <= 10; i++ ) {
+                dist_factor[3] = fb1 + i;
+                dist_factor[4] = j;
+                //if( dist_factor[3] < 0 ) continue;
+                err = get_fitting_error( patt, dist_factor, 2 );
+                if( err < min ) {
+                    min = err;
+                    f1 = dist_factor[3];
+                    f2 = dist_factor[4];
+                }
+            }
+        }
 
-    fb1  = f1;
-    fb2  = f2;
-    for( j = -10; j <= 10; j++ ) {
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[3] = fb1 + 0.1 * i;
-        dist_factor[4] = fb2 + 0.1 * j;
-        //if( dist_factor[3] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 2 );
-        if( err < min ) { min = err; f1 = dist_factor[3]; f2 = dist_factor[4]; }
-    }
-    }
+        fb1  = f1;
+        fb2  = f2;
+        for( j = -10; j <= 10; j++ ) {
+            for( i = -10; i <= 10; i++ ) {
+                dist_factor[3] = fb1 + 0.1 * i;
+                dist_factor[4] = fb2 + 0.1 * j;
+                //if( dist_factor[3] < 0 ) continue;
+                err = get_fitting_error( patt, dist_factor, 2 );
+                if( err < min ) {
+                    min = err;
+                    f1 = dist_factor[3];
+                    f2 = dist_factor[4];
+                }
+            }
+        }
 
-    dist_factor[3] = f1;
-    dist_factor[4] = f2;
+        dist_factor[3] = f1;
+        dist_factor[4] = f2;
 	
 	// ----------------------------------------
 	} else if (dist_function_version == 1) {
 
-	double    err, f, fb;
-    int       i;
+	    double    err, f, fb;
+        int       i;
 
-    dist_factor[3] = 0.0;
-    min = get_fitting_error( patt, dist_factor, 1 );
+        dist_factor[3] = 0.0;
+        min = get_fitting_error( patt, dist_factor, 1 );
 
-    f = dist_factor[3];
-    for( i = -100; i < 200; i+=10 ) {
-        dist_factor[3] = i;
-        err = get_fitting_error( patt, dist_factor, 1 );
-        if( err < min ) { min = err; f = dist_factor[3]; }
-    }
+        f = dist_factor[3];
+        for( i = -100; i < 200; i+=10 ) {
+            dist_factor[3] = i;
+            err = get_fitting_error( patt, dist_factor, 1 );
+            if( err < min ) { min = err; f = dist_factor[3]; }
+        }
 
-    fb = f;
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[3] = fb + i;
-        //if( dist_factor[3] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 1 );
-        if( err < min ) { min = err; f = dist_factor[3]; }
-    }
+        fb = f;
+        for( i = -10; i <= 10; i++ ) {
+            dist_factor[3] = fb + i;
+            //if( dist_factor[3] < 0 ) continue;
+            err = get_fitting_error( patt, dist_factor, 1 );
+            if( err < min ) { min = err; f = dist_factor[3]; }
+        }
 
-    fb = f;
-    for( i = -10; i <= 10; i++ ) {
-        dist_factor[3] = fb + 0.1 * i;
-        //if( dist_factor[3] < 0 ) continue;
-        err = get_fitting_error( patt, dist_factor, 1 );
-        if( err < min ) { min = err; f = dist_factor[3]; }
-    }
+        fb = f;
+        for( i = -10; i <= 10; i++ ) {
+            dist_factor[3] = fb + 0.1 * i;
+            //if( dist_factor[3] < 0 ) continue;
+            err = get_fitting_error( patt, dist_factor, 1 );
+            if( err < min ) { min = err; f = dist_factor[3]; }
+        }
 
-    dist_factor[3] = f;
+        dist_factor[3] = f;
 
 	// ----------------------------------------
 	} else {
 		min = 0;
 	}
-
 
     return min;
 }

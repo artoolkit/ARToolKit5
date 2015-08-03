@@ -112,7 +112,7 @@ AR2ImageSetT *ar2ReadImageSet( char *filename )
     arMalloc( imageSet->scale, AR2ImageT*, imageSet->num );
 
     arMalloc( imageSet->scale[0], AR2ImageT, 1 );
-    jpgImage = ar2ReadJpegImage2(fp);
+    jpgImage = ar2ReadJpegImage2(fp); //uses arMalloc() macro that calls malloc()
     if( jpgImage == NULL || jpgImage->nc != 1 ) {
         ARLOGw("Falling back to reading '%s%s' in ARToolKit v4.x format.\n", filename, ext);
         free(imageSet->scale[0]);
@@ -123,6 +123,7 @@ AR2ImageSetT *ar2ReadImageSet( char *filename )
             rewind(fp);
             return ar2ReadImageSetOld(fp);
         }
+        free(jpgImage); //COVHI10396
         fclose(fp);
         return NULL;
     }

@@ -50,8 +50,13 @@ class OSGUTIL_EXPORT SceneView : public osg::Object, public osg::CullSettings
             HEADLIGHT = 0x1,
             SKY_LIGHT = 0x2,
             COMPILE_GLOBJECTS_AT_INIT = 0x4,
+            APPLY_GLOBAL_DEFAULTS = 0x8,
+            CLEAR_GLOBAL_STATESET = 0x10,
             STANDARD_SETTINGS = HEADLIGHT |
-                                COMPILE_GLOBJECTS_AT_INIT
+                                COMPILE_GLOBJECTS_AT_INIT |
+                                APPLY_GLOBAL_DEFAULTS |
+                                CLEAR_GLOBAL_STATESET
+
         };
 
         /* Set defaults. */
@@ -406,8 +411,6 @@ class OSGUTIL_EXPORT SceneView : public osg::Object, public osg::CullSettings
         inline const osg::FrameStamp* getFrameStamp() const { return _frameStamp.get(); }
 
 
-
-
         inline osg::Matrixd computeLeftEyeProjection(const osg::Matrixd& projection)  const
         {
             if (_computeStereoMatricesCallback.valid()) return _computeStereoMatricesCallback->computeLeftEyeProjection(projection);
@@ -432,11 +435,18 @@ class OSGUTIL_EXPORT SceneView : public osg::Object, public osg::CullSettings
             else return computeRightEyeViewImplementation(view);
         }
 
+        /** helper function for computing the left eye projection matrix.*/
         virtual osg::Matrixd computeLeftEyeProjectionImplementation(const osg::Matrixd& projection) const;
+
+        /** helper function for computing the left eye view matrix.*/
         virtual osg::Matrixd computeLeftEyeViewImplementation(const osg::Matrixd& view) const;
 
+        /** helper function for computing the right eye view matrix.*/
         virtual osg::Matrixd computeRightEyeProjectionImplementation(const osg::Matrixd& projection) const;
+
+        /** helper function for computing the right eye view matrix.*/
         virtual osg::Matrixd computeRightEyeViewImplementation(const osg::Matrixd& view) const;
+
 
         /** Inherit the local cull settings variable from a specified CullSettings object, according to the inheritance mask.*/
         virtual void inheritCullSettings(const osg::CullSettings& settings) { inheritCullSettings(settings, _inheritanceMask); }
@@ -483,6 +493,9 @@ class OSGUTIL_EXPORT SceneView : public osg::Object, public osg::CullSettings
         /** Set whether the SceneView should automatically call flushDeletedObjects() on each new frame.*/
         void setAutomaticFlush(bool automaticFlush) { _automaticFlush = automaticFlush; }
         bool getAutomaticFlush() const { return _automaticFlush; }
+
+        void setResetColorMaskToAllOn(bool enable) { _resetColorMaskToAllEnabled = enable; }
+        bool getResetColorMaskToAllOn() const { return _resetColorMaskToAllEnabled; }
 
     protected:
 
@@ -552,6 +565,8 @@ class OSGUTIL_EXPORT SceneView : public osg::Object, public osg::CullSettings
         int                                         _interlacedStereoStencilHeight;
 
         unsigned int                                _dynamicObjectCount;
+
+        bool                                        _resetColorMaskToAllEnabled;
 };
 
 }

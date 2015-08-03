@@ -128,9 +128,9 @@ typedef struct {
   /* The decompressor output side may not use these variables. */
   int dc_tbl_no;		/* DC entropy table selector (0..3) */
   int ac_tbl_no;		/* AC entropy table selector (0..3) */
-  
+
   /* Remaining fields should be treated as private by applications. */
-  
+
   /* These values are computed during compression or decompression startup: */
   /* Component's size in DCT blocks.
    * Any dummy blocks added to complete an MCU are not counted; therefore
@@ -209,7 +209,11 @@ typedef enum {
 	JCS_RGB,		/* red/green/blue */
 	JCS_YCbCr,		/* Y/Cb/Cr (also known as YUV) */
 	JCS_CMYK,		/* C/M/Y/K */
-	JCS_YCCK		/* Y/Cb/Cr/K */
+	JCS_YCCK,		/* Y/Cb/Cr/K */
+#ifdef ANDROID_RGB
+    JCS_RGBA_8888,  /* red/green/blue/alpha */
+    JCS_RGB_565     /* red/green/blue in 565 format */
+#endif
 } J_COLOR_SPACE;
 
 /* DCT/IDCT algorithm options. */
@@ -298,14 +302,14 @@ struct jpeg_compress_struct {
 
   jpeg_component_info * comp_info;
   /* comp_info[i] describes component that appears i'th in SOF */
-  
+
   JQUANT_TBL * quant_tbl_ptrs[NUM_QUANT_TBLS];
   /* ptrs to coefficient quantization tables, or NULL if not defined */
-  
+
   JHUFF_TBL * dc_huff_tbl_ptrs[NUM_HUFF_TBLS];
   JHUFF_TBL * ac_huff_tbl_ptrs[NUM_HUFF_TBLS];
   /* ptrs to Huffman coding tables, or NULL if not defined */
-  
+
   UINT8 arith_dc_L[NUM_ARITH_TBLS]; /* L values for DC arith-coding tables */
   UINT8 arith_dc_U[NUM_ARITH_TBLS]; /* U values for DC arith-coding tables */
   UINT8 arith_ac_K[NUM_ARITH_TBLS]; /* Kx values for AC arith-coding tables */
@@ -345,7 +349,7 @@ struct jpeg_compress_struct {
   UINT16 X_density;		/* Horizontal pixel density */
   UINT16 Y_density;		/* Vertical pixel density */
   boolean write_Adobe_marker;	/* should an Adobe marker be written? */
-  
+
   /* State variable: index of next scanline to be written to
    * jpeg_write_scanlines().  Application may use this to control its
    * processing loop, e.g., "while (next_scanline < image_height)".
@@ -370,7 +374,7 @@ struct jpeg_compress_struct {
    * There are v_samp_factor * DCTSIZE sample rows of each component in an
    * "iMCU" (interleaved MCU) row.
    */
-  
+
   /*
    * These fields are valid during any one scan.
    * They describe the components and MCUs actually appearing in the scan.
@@ -378,10 +382,10 @@ struct jpeg_compress_struct {
   int comps_in_scan;		/* # of JPEG components in this scan */
   jpeg_component_info * cur_comp_info[MAX_COMPS_IN_SCAN];
   /* *cur_comp_info[i] describes component that appears i'th in SOS */
-  
+
   JDIMENSION MCUs_per_row;	/* # of MCUs across the image */
   JDIMENSION MCU_rows_in_scan;	/* # of MCU rows in the image */
-  
+
   int blocks_in_MCU;		/* # of DCT blocks per MCU */
   int MCU_membership[C_MAX_BLOCKS_IN_MCU];
   /* MCU_membership[i] is index in cur_comp_info of component owning */
@@ -417,7 +421,10 @@ struct jpeg_decompress_struct {
   /* Basic description of image --- filled in by jpeg_read_header(). */
   /* Application may inspect these values to decide how to process image. */
 
-  JDIMENSION image_width;	/* nominal image width (from SOF marker) */
+  JDIMENSION original_image_width;	/* nominal image width (from SOF marker) */
+
+  JDIMENSION image_width;	/* nominal image width (from SOF marker)
+                               may be changed by tile decode */
   JDIMENSION image_height;	/* nominal image height */
   int num_components;		/* # of color components in JPEG image */
   J_COLOR_SPACE jpeg_color_space; /* colorspace of JPEG image */
@@ -535,6 +542,7 @@ struct jpeg_decompress_struct {
   jpeg_component_info * comp_info;
   /* comp_info[i] describes component that appears i'th in SOF */
 
+  boolean tile_decode;         /* TRUE if using tile based decoding */
   boolean progressive_mode;	/* TRUE if SOFn specifies progressive mode */
   boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
 
@@ -629,6 +637,59 @@ struct jpeg_decompress_struct {
   struct jpeg_color_quantizer * cquantize;
 };
 
+typedef struct {
+
+  // |--- byte_offset ---|- bit_left -|
+  //  \------ 27 -------/ \---- 5 ----/
+  unsigned int bitstream_offset;
+  short prev_dc[3];
+
+  // remaining EOBs in EOBRUN
+  unsigned short EOBRUN;
+
+  // save the decoder current bit buffer, entropy->bitstate.get_buffer.
+  INT32 get_buffer;
+
+  // save the restart info.
+  unsigned short restarts_to_go;
+  unsigned char next_restart_num;
+} huffman_offset_data;
+
+typedef struct {
+
+  // The header starting position of this scan
+  unsigned int bitstream_offset;
+
+  // Number of components in this scan
+  int comps_in_scan;
+
+  // Number of MCUs in each row
+  int MCUs_per_row;
+  int MCU_rows_per_iMCU_row;
+
+  // The last MCU position and its dc value in this scan
+  huffman_offset_data prev_MCU_offset;
+
+  huffman_offset_data **offset;
+} huffman_scan_header;
+
+#define DEFAULT_MCU_SAMPLE_SIZE 16
+
+typedef struct {
+
+  // The number of MCUs that we sample each time as an index point
+  int MCU_sample_size;
+
+  // Number of scan in this image
+  int scan_count;
+
+  // Number of iMCUs rows in this image
+  int total_iMCU_rows;
+
+  // Memory used by scan struct
+  size_t mem_used;
+  huffman_scan_header *scan;
+} huffman_index;
 
 /* "Object" declarations for JPEG modules that may be supplied or called
  * directly by the surrounding application.
@@ -652,7 +713,7 @@ struct jpeg_error_mgr {
 #define JMSG_LENGTH_MAX  200	/* recommended size of format_message buffer */
   /* Reset error state variables at start of a new image */
   JMETHOD(void, reset_error_mgr, (j_common_ptr cinfo));
-  
+
   /* The message ID code and any parameters are saved here.
    * A message can have one string parameter or up to 8 int parameters.
    */
@@ -662,11 +723,11 @@ struct jpeg_error_mgr {
     int i[8];
     char s[JMSG_STR_PARM_MAX];
   } msg_parm;
-  
+
   /* Standard state variables for error facility */
-  
+
   int trace_level;		/* max msg_level that will be displayed */
-  
+
   /* For recoverable corrupt-data errors, we emit a warning message,
    * but keep going unless emit_message chooses to abort.  emit_message
    * should count warnings in num_warnings.  The surrounding application
@@ -724,13 +785,16 @@ struct jpeg_destination_mgr {
 
 struct jpeg_source_mgr {
   const JOCTET * next_input_byte; /* => next byte to read from buffer */
+  const JOCTET * start_input_byte; /* => first byte to read from input */
   size_t bytes_in_buffer;	/* # of bytes remaining in buffer */
+  size_t current_offset; /* current readed input offset */
 
   JMETHOD(void, init_source, (j_decompress_ptr cinfo));
   JMETHOD(boolean, fill_input_buffer, (j_decompress_ptr cinfo));
   JMETHOD(void, skip_input_data, (j_decompress_ptr cinfo, long num_bytes));
   JMETHOD(boolean, resync_to_restart, (j_decompress_ptr cinfo, int desired));
   JMETHOD(void, term_source, (j_decompress_ptr cinfo));
+  JMETHOD(boolean, seek_input_data, (j_decompress_ptr cinfo, long byte_offset));
 };
 
 
@@ -824,7 +888,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 /* Short forms of external names for systems with brain-damaged linkers.
  * We shorten external names to be unique in the first six letters, which
  * is good enough for all known systems.
- * (If your compiler itself needs names to be unique in less than 15 
+ * (If your compiler itself needs names to be unique in less than 15
  * characters, you are out of luck.  Get a better compiler.)
  */
 
@@ -973,9 +1037,21 @@ EXTERN(int) jpeg_read_header JPP((j_decompress_ptr cinfo,
 
 /* Main entry points for decompression */
 EXTERN(boolean) jpeg_start_decompress JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_start_tile_decompress JPP((j_decompress_ptr cinfo));
 EXTERN(JDIMENSION) jpeg_read_scanlines JPP((j_decompress_ptr cinfo,
 					    JSAMPARRAY scanlines,
 					    JDIMENSION max_lines));
+EXTERN(JDIMENSION) jpeg_read_scanlines_from JPP((j_decompress_ptr cinfo,
+					    JSAMPARRAY scanlines,
+					    int line_offset,
+					    JDIMENSION max_lines));
+EXTERN(JDIMENSION) jpeg_read_tile_scanline JPP((j_decompress_ptr cinfo,
+                        huffman_index *index,
+                        JSAMPARRAY scanlines));
+EXTERN(void) jpeg_init_read_tile_scanline JPP((j_decompress_ptr cinfo,
+                        huffman_index *index,
+		                int *start_x, int *start_y,
+                        int *width, int *height));
 EXTERN(boolean) jpeg_finish_decompress JPP((j_decompress_ptr cinfo));
 
 /* Replaces jpeg_read_scanlines when reading raw downsampled data. */
@@ -1013,6 +1089,8 @@ EXTERN(void) jpeg_set_marker_processor
 
 /* Read or write raw DCT coefficients --- useful for lossless transcoding. */
 EXTERN(jvirt_barray_ptr *) jpeg_read_coefficients JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_build_huffman_index
+    JPP((j_decompress_ptr cinfo, huffman_index *index));
 EXTERN(void) jpeg_write_coefficients JPP((j_compress_ptr cinfo,
 					  jvirt_barray_ptr * coef_arrays));
 EXTERN(void) jpeg_copy_critical_parameters JPP((j_decompress_ptr srcinfo,
@@ -1036,6 +1114,16 @@ EXTERN(void) jpeg_destroy JPP((j_common_ptr cinfo));
 /* Default restart-marker-resync procedure for use by data source modules */
 EXTERN(boolean) jpeg_resync_to_restart JPP((j_decompress_ptr cinfo,
 					    int desired));
+
+EXTERN(void) jpeg_configure_huffman_decoder(j_decompress_ptr cinfo,
+                        huffman_offset_data offset);
+EXTERN(void) jpeg_get_huffman_decoder_configuration(j_decompress_ptr cinfo,
+                        huffman_offset_data *offset);
+EXTERN(void) jpeg_create_huffman_index(j_decompress_ptr cinfo,
+                        huffman_index *index);
+EXTERN(void) jpeg_configure_huffman_index_scan(j_decompress_ptr cinfo,
+                        huffman_index *index, int scan_no, int offset);
+EXTERN(void) jpeg_destroy_huffman_index(huffman_index *index);
 
 
 /* These marker codes are exported since applications and data source modules

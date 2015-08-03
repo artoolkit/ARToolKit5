@@ -49,8 +49,6 @@ lib/libARvideo.a
 lib/libKPM.a
 lib/libEden.a
 lib/libARWrapper.a
-lib/ios511/libopencv_core.a
-lib/ios511/libopencv_flann.a
 lib/ios511/libfreetype.a
 lib/ios511/libOpenThreads.a
 lib/ios511/libjpeg.a
@@ -109,6 +107,16 @@ bin/Data/patt.sample2
 bin/Data/camera_para-iPad 2 front.dat
 bin/Data/camera_para-iPad 2 rear 1280x720.dat
 bin/Data/camera_para-iPad 2 rear 640x480.dat
+bin/Data/camera_para-iPad mini 3 front 1280x720.dat
+bin/Data/camera_para-iPad mini 3 front 640x480.dat
+bin/Data/camera_para-iPad mini 3 rear 1280x720 0.3m.dat
+bin/Data/camera_para-iPad mini 3 rear 1280x720 1.0m.dat
+bin/Data/camera_para-iPad mini 3 rear 1280x720 inf.dat
+bin/Data/camera_para-iPad mini 3 rear 1280x720 macro.dat
+bin/Data/camera_para-iPad mini 3 rear 640x480 0.3m.dat
+bin/Data/camera_para-iPad mini 3 rear 640x480 1.0m.dat
+bin/Data/camera_para-iPad mini 3 rear 640x480 inf.dat
+bin/Data/camera_para-iPad mini 3 rear 640x480 macro.dat
 bin/Data/camera_para-iPhone 4 front.dat
 bin/Data/camera_para-iPhone 4 rear 1280x720 0.3m.dat
 bin/Data/camera_para-iPhone 4 rear 1280x720 1.0m.dat
@@ -178,6 +186,7 @@ examples/ARAppOSG/
 examples/ARAppMovie/
 examples/ARAppNFT/
 examples/ARAppNFTOSG/
+examples/ARAppCameraTest/
 
 doc/
 

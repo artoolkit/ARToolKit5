@@ -67,6 +67,10 @@ else
     CPUS=1
 fi
 
+if [ "$1" == "clean" ] ; then
+    CPUS=1
+fi
+
 #
 # Build native targets
 #
@@ -84,7 +88,7 @@ cd EclipseProjects
 for i in $NATIVE_PROJS
 do
     cd $i
-    $NDK/ndk-build -j $CPUS
+    $NDK/ndk-build -j $CPUS $1
     cd ..
 done
 cd ..

@@ -21,6 +21,7 @@
 #include <osg/ref_ptr>
 #include <osg/Vec4>
 #include <osg/Vec4d>
+#include <osg/Vec4i>
 #include <osg/buffered_value>
 #include <osg/GL2Extensions>
 
@@ -31,6 +32,12 @@
 // http://oss.sgi.com/projects/ogl-sample/registry/EXT/texture_filter_anisotropic.txt
 #ifndef GL_TEXTURE_MAX_ANISOTROPY_EXT
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+#endif
+
+// If not defined, use the definition found in:
+// http://www.opengl.org/registry/specs/ARB/texture_swizzle.txt
+#ifndef GL_TEXTURE_SWIZZLE_RGBA
+    #define GL_TEXTURE_SWIZZLE_RGBA 0x8E46
 #endif
 
 #ifndef GL_ARB_texture_compression
@@ -90,8 +97,8 @@
     #define GL_LUMINANCE_ALPHA16F_ARB                0x881F
 #endif
 
-#ifndef GL_ARB_PIXEL_DATA
-    #define GL_HALF_FLOAT_ARB                        0x140B
+#ifndef GL_HALF_FLOAT
+    #define GL_HALF_FLOAT                            0x140B
 #endif
 
 #ifndef GL_NV_texture_shader
@@ -134,10 +141,6 @@
     #define GL_FLOAT_RGB32_NV                       0x8889
     #define GL_FLOAT_RGBA16_NV                      0x888A
     #define GL_FLOAT_RGBA32_NV                      0x888B
-#endif
-
-#ifndef GL_NV_half_float
-    #define GL_HALF_FLOAT_NV                        0x140B
 #endif
 
 #ifndef GL_ATI_texture_float
@@ -302,6 +305,117 @@
     #define GL_RGBA_INTEGER_MODE_EXT                           0x8D9E
 #endif
 
+#ifndef GL_VERSION_1_1
+#define GL_R3_G3_B2                       0x2A10
+#define GL_RGB4                           0x804F
+#define GL_RGB5                           0x8050
+#define GL_RGB8                           0x8051
+#define GL_RGB10                          0x8052
+#define GL_RGB12                          0x8053
+#define GL_RGB16                          0x8054
+#define GL_RGBA2                          0x8055
+#define GL_RGBA4                          0x8056
+#define GL_RGB5_A1                        0x8057
+#define GL_RGBA8                          0x8058
+#define GL_RGB10_A2                       0x8059
+#define GL_RGBA12                         0x805A
+#define GL_RGBA16                         0x805B
+#define GL_BGR_EXT                        0x80E0
+#define GL_BGRA_EXT                       0x80E1
+#endif
+
+#ifndef GL_ARB_texture_rg
+    #define GL_RG                             0x8227
+    #define GL_RG_INTEGER                     0x8228
+    #define GL_R8                             0x8229
+    #define GL_R16                            0x822A
+    #define GL_RG8                            0x822B
+    #define GL_RG16                           0x822C
+    #define GL_R16F                           0x822D
+    #define GL_R32F                           0x822E
+    #define GL_RG16F                          0x822F
+    #define GL_RG32F                          0x8230
+    #define GL_R8I                            0x8231
+    #define GL_R8UI                           0x8232
+    #define GL_R16I                           0x8233
+    #define GL_R16UI                          0x8234
+    #define GL_R32I                           0x8235
+    #define GL_R32UI                          0x8236
+    #define GL_RG8I                           0x8237
+    #define GL_RG8UI                          0x8238
+    #define GL_RG16I                          0x8239
+    #define GL_RG16UI                         0x823A
+    #define GL_RG32I                          0x823B
+    #define GL_RG32UI                         0x823C
+#endif
+
+#ifndef GL_ARB_shader_image_load_store
+    #define GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT 0x00000001
+    #define GL_ELEMENT_ARRAY_BARRIER_BIT      0x00000002
+    #define GL_UNIFORM_BARRIER_BIT            0x00000004
+    #define GL_TEXTURE_FETCH_BARRIER_BIT      0x00000008
+    #define GL_SHADER_IMAGE_ACCESS_BARRIER_BIT 0x00000020
+    #define GL_COMMAND_BARRIER_BIT            0x00000040
+    #define GL_PIXEL_BUFFER_BARRIER_BIT       0x00000080
+    #define GL_TEXTURE_UPDATE_BARRIER_BIT     0x00000100
+    #define GL_BUFFER_UPDATE_BARRIER_BIT      0x00000200
+    #define GL_FRAMEBUFFER_BARRIER_BIT        0x00000400
+    #define GL_TRANSFORM_FEEDBACK_BARRIER_BIT 0x00000800
+    #define GL_ATOMIC_COUNTER_BARRIER_BIT     0x00001000
+    #define GL_ALL_BARRIER_BITS               0xFFFFFFFF
+    #define GL_MAX_IMAGE_UNITS                0x8F38
+    #define GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS 0x8F39
+    #define GL_IMAGE_BINDING_NAME             0x8F3A
+    #define GL_IMAGE_BINDING_LEVEL            0x8F3B
+    #define GL_IMAGE_BINDING_LAYERED          0x8F3C
+    #define GL_IMAGE_BINDING_LAYER            0x8F3D
+    #define GL_IMAGE_BINDING_ACCESS           0x8F3E
+    #define GL_IMAGE_1D                       0x904C
+    #define GL_IMAGE_2D                       0x904D
+    #define GL_IMAGE_3D                       0x904E
+    #define GL_IMAGE_2D_RECT                  0x904F
+    #define GL_IMAGE_CUBE                     0x9050
+    #define GL_IMAGE_BUFFER                   0x9051
+    #define GL_IMAGE_1D_ARRAY                 0x9052
+    #define GL_IMAGE_2D_ARRAY                 0x9053
+    #define GL_IMAGE_CUBE_MAP_ARRAY           0x9054
+    #define GL_IMAGE_2D_MULTISAMPLE           0x9055
+    #define GL_IMAGE_2D_MULTISAMPLE_ARRAY     0x9056
+    #define GL_INT_IMAGE_1D                   0x9057
+    #define GL_INT_IMAGE_2D                   0x9058
+    #define GL_INT_IMAGE_3D                   0x9059
+    #define GL_INT_IMAGE_2D_RECT              0x905A
+    #define GL_INT_IMAGE_CUBE                 0x905B
+    #define GL_INT_IMAGE_BUFFER               0x905C
+    #define GL_INT_IMAGE_1D_ARRAY             0x905D
+    #define GL_INT_IMAGE_2D_ARRAY             0x905E
+    #define GL_INT_IMAGE_CUBE_MAP_ARRAY       0x905F
+    #define GL_INT_IMAGE_2D_MULTISAMPLE       0x9060
+    #define GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY 0x9061
+    #define GL_UNSIGNED_INT_IMAGE_1D          0x9062
+    #define GL_UNSIGNED_INT_IMAGE_2D          0x9063
+    #define GL_UNSIGNED_INT_IMAGE_3D          0x9064
+    #define GL_UNSIGNED_INT_IMAGE_2D_RECT     0x9065
+    #define GL_UNSIGNED_INT_IMAGE_CUBE        0x9066
+    #define GL_UNSIGNED_INT_IMAGE_BUFFER      0x9067
+    #define GL_UNSIGNED_INT_IMAGE_1D_ARRAY    0x9068
+    #define GL_UNSIGNED_INT_IMAGE_2D_ARRAY    0x9069
+    #define GL_UNSIGNED_INT_IMAGE_CUBE_MAP_ARRAY 0x906A
+    #define GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE 0x906B
+    #define GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY 0x906C
+    #define GL_MAX_IMAGE_SAMPLES              0x906D
+    #define GL_IMAGE_BINDING_FORMAT           0x906E
+    #define GL_IMAGE_FORMAT_COMPATIBILITY_TYPE 0x90C7
+    #define GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE 0x90C8
+    #define GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS 0x90C9
+    #define GL_MAX_VERTEX_IMAGE_UNIFORMS      0x90CA
+    #define GL_MAX_TESS_CONTROL_IMAGE_UNIFORMS 0x90CB
+    #define GL_MAX_TESS_EVALUATION_IMAGE_UNIFORMS 0x90CC
+    #define GL_MAX_GEOMETRY_IMAGE_UNIFORMS    0x90CD
+    #define GL_MAX_FRAGMENT_IMAGE_UNIFORMS    0x90CE
+    #define GL_MAX_COMBINED_IMAGE_UNIFORMS    0x90CF
+#endif
+
 namespace osg {
 
 
@@ -393,7 +507,6 @@ class OSG_EXPORT Texture : public osg::StateAttribute
             NEAREST_MIPMAP_NEAREST    = GL_NEAREST_MIPMAP_NEAREST
         };
 
-
         /** Sets the texture filter mode. */
         void setFilter(FilterParameter which, FilterMode filter);
 
@@ -409,6 +522,12 @@ class OSG_EXPORT Texture : public osg::StateAttribute
 
         /** Gets the maximum anisotropy value. */
         inline float getMaxAnisotropy() const { return _maxAnisotropy; }
+
+        /** Configure the source of texture swizzling for all channels */
+        inline void setSwizzle(const Vec4i& swizzle) { _swizzle = swizzle; dirtyTextureParameters(); };
+
+        /** Gets the source of texture swizzling for all channels */
+        inline const Vec4i& getSwizzle() const { return _swizzle; }
 
         /** Sets the hardware mipmap generation hint. If enabled, it will
           * only be used if supported in the graphics system. */
@@ -558,6 +677,37 @@ class OSG_EXPORT Texture : public osg::StateAttribute
           * min filter is used. */
         void allocateMipmapLevels();
 
+        /** Encapsulates texture image load/store attributes */
+        struct ImageAttachment
+        {
+            GLuint unit;
+            GLint level;
+            GLboolean layered;
+            GLint layer;
+            GLenum access;
+            GLenum format;
+            
+            ImageAttachment()
+            : unit(0), level(0), layered(GL_FALSE), layer(0), access(0), format(0) {}
+        };
+
+        /** Type of access that will be performed on the texture image. */
+        enum ImageAccess
+        {
+             NOT_USED = 0,
+             READ_ONLY = GL_READ_ONLY_ARB,
+             WRITE_ONLY = GL_WRITE_ONLY_ARB,
+             READ_WRITE = GL_READ_WRITE_ARB
+        };
+
+        /** Bind texture to an image unit (available only if GL version is 4.2 or greater)
+          * The format parameter for the image unit need not exactly match the texture internal format,
+          * but if it is set to 0, the texture internal format will be used.
+          * See http://www.opengl.org/registry/specs/ARB/shader_image_load_store.txt */
+        void bindToImageUnit(unsigned int unit, GLenum access, GLenum format=0, int level=0, bool layered=false, int layer=0);
+
+        ImageAttachment& getImageAttachment() { return _imageAttachment; }
+        const ImageAttachment& getImageAttachment() const { return _imageAttachment; }
 
         /** Sets GL_TEXTURE_COMPARE_MODE_ARB to GL_COMPARE_R_TO_TEXTURE_ARB
           * See http://oss.sgi.com/projects/ogl-sample/registry/ARB/shadow.txt. */
@@ -645,6 +795,9 @@ class OSG_EXPORT Texture : public osg::StateAttribute
                 void setTextureFilterAnisotropicSupported(bool flag) { _isTextureFilterAnisotropicSupported=flag; }
                 bool isTextureFilterAnisotropicSupported() const { return _isTextureFilterAnisotropicSupported; }
 
+                void setTextureSwizzleSupported(bool flag) { _isTextureSwizzleSupported=flag; }
+                bool isTextureSwizzleSupported() const { return _isTextureSwizzleSupported; }
+
                 void setTextureCompressionARBSupported(bool flag) { _isTextureCompressionARBSupported=flag; }
                 bool isTextureCompressionARBSupported() const { return _isTextureCompressionARBSupported; }
 
@@ -714,6 +867,8 @@ class OSG_EXPORT Texture : public osg::StateAttribute
                 void setTextureIntegerSupported(bool flag) { _isTextureIntegerEXTSupported=flag; }
                 bool isTextureIntegerSupported() const { return _isTextureIntegerEXTSupported; }
 
+                bool isBindImageTextureSupported() const { return _glBindImageTexture!=0; }
+
                 void glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data) const
                 {
                     _glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
@@ -744,6 +899,12 @@ class OSG_EXPORT Texture : public osg::StateAttribute
                     _glTexParameterIuiv(target, pname, data);
                 }
 
+                // ARB_shader_image_load_store
+                void glBindImageTexture(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format) const
+                {
+                    _glBindImageTexture(unit, texture, level, layered, layer, access, format);
+                }
+
             protected:
 
                 ~Extensions() {}
@@ -754,6 +915,7 @@ class OSG_EXPORT Texture : public osg::StateAttribute
                 typedef void (GL_APIENTRY * TexImage2DMultisample)(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
                 typedef void (GL_APIENTRY * TexParameterIivProc)(GLenum target, GLenum pname, const GLint* data);
                 typedef void (GL_APIENTRY * TexParameterIuivProc)(GLenum target, GLenum pname, const GLuint* data);
+                typedef void (GL_APIENTRY * BindImageTextureProc)( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
 
                 CompressedTexImage2DArbProc     _glCompressedTexImage2D;
                 CompressedTexSubImage2DArbProc  _glCompressedTexSubImage2D;
@@ -762,9 +924,12 @@ class OSG_EXPORT Texture : public osg::StateAttribute
                 TexParameterIivProc             _glTexParameterIiv;
                 TexParameterIuivProc            _glTexParameterIuiv;
 
+                // ARB_shader_image_load_store
+                BindImageTextureProc            _glBindImageTexture;
 
                 bool    _isMultiTexturingSupported;
                 bool    _isTextureFilterAnisotropicSupported;
+                bool    _isTextureSwizzleSupported;
                 bool    _isTextureCompressionARBSupported;
                 bool    _isTextureCompressionS3TCSupported;
                 bool    _isTextureCompressionPVRTC2BPPSupported;
@@ -887,6 +1052,7 @@ class OSG_EXPORT Texture : public osg::StateAttribute
         FilterMode      _min_filter;
         FilterMode      _mag_filter;
         float           _maxAnisotropy;
+        Vec4i           _swizzle;
         bool            _useHardwareMipMapGeneration;
         bool            _unrefImageDataAfterApply;
         bool            _clientStorageHint;
@@ -905,6 +1071,8 @@ class OSG_EXPORT Texture : public osg::StateAttribute
         ShadowCompareFunc   _shadow_compare_func;
         ShadowTextureMode   _shadow_texture_mode;
         float               _shadow_ambient;
+
+        ImageAttachment _imageAttachment;
 
     public:
 
@@ -1144,8 +1312,8 @@ class OSG_EXPORT Texture : public osg::StateAttribute
 
             unsigned int computeNumTextureObjectsInList() const;
             unsigned int getNumOfTextureObjects() const { return _numOfTextureObjects; }
-            unsigned int getNumOrphans() const { return _orphanedTextureObjects.size(); }
-            unsigned int getNumPendingOrphans() const { return _pendingOrphanedTextureObjects.size(); }
+            unsigned int getNumOrphans() const { return static_cast<unsigned int>(_orphanedTextureObjects.size()); }
+            unsigned int getNumPendingOrphans() const { return static_cast<unsigned int>(_pendingOrphanedTextureObjects.size()); }
 
         protected:
 

@@ -16,11 +16,11 @@ Next steps.
 
 
 About this archive.
-------------------- 
+-------------------
 
-This archive contains the ARToolKit libraries, utilities and examples for iOS, version 5.2.1.
+This archive contains the ARToolKit libraries, utilities and examples for iOS, version 5.3.
 
-ARToolKit version 5.2.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Apple's iOS App Store, you must use your own package name, and not the org.artoolkit package name.
 
@@ -29,7 +29,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-05-29
+    2015-07-31
 
 
 Requirements.
@@ -37,7 +37,7 @@ Requirements.
 
 Requirements:
  * Xcode tools v5.0.1 or later and iOS SDK v7.0 or later, running on Mac OS X 10.8 or later.
- * These devices are supported: iPhone: 3GS, 4, 4s, 5, 5c, 5s. iPad: 2, 3, Mini, 4, Mini 2, Air. iPod touch: 4th Generation, 5th Generation. The device must be running iOS 5.1.1 or later. The iPhone 3GS is not supported for NFT use.
+ * These devices are supported: iPhone: 3GS, 4, 4s, 5, 5c, 5s, 6, 6 Plus. iPad: 2, 3, Mini, 4, Mini 2, Mini 3, Air, Air 2. iPod touch: 4th Generation, 5th Generation. The device must be running iOS 5.1.1 or later. The iPhone 3GS is not supported for NFT use.
  * Paid membership of Apple's iOS Developer Program.
  * A valid iOS Developer Certificate issued by Apple.
  * A printer to print the pattern PDF images "Hiro pattern", "Kanji pattern", "Sample1 pattern", "Sample2 pattern", and "pinball.jpg".
@@ -53,6 +53,8 @@ The SDK is supplied as an archive file (.tar.gz or .zip file) which need only be
 
 Getting started.
 ----------------
+
+For full instructions on using this SDK, please refer to the online user guide at http://www.artoolkit.org/documentation/#iOS.
 
 The ARToolKit5.xcodeproj file contains six examples of using ARToolKit in an iOS application.
  * ARAppES1 shows only the most basic usage, which is to track the Hiro marker and draw a colorcube on the marker.
@@ -89,24 +91,22 @@ Usage:
 
 Release notes.
 --------------
-This release contains ARToolKit v5.2.1 for iOS.
+
+This release contains ARToolKit v5.3 for iOS.
+
+The major change in this release is a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
 Please see the ChangeLog.txt for details of changes in this and earlier releases.
 
-ARToolKit v5.2 is the first major release under an open source license in several years, and represents several years of commercial development of ARToolKit by ARToolworks during this time. It will appear to be a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
+ARToolKit v5.2 was the first major release under an open source license in several years, and represented several years of commercial development of ARToolKit by ARToolworks during this time. It was a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
 
-For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 includes a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
-
---
-ARToolKit v5.0.8 and later include optimised support for iPhone 5s and later devices with 64-bit CPUs. To support this change, the SDK must be used with Xcode 5.0.1 or later. Devices running iOS 5.1.1 and later are supported, which allows for the same supported device set as earlier releases. (Xcode 5.0 restricted support to devices running iOS 6.0 and later, but this was relaxed in Xcode 5.0.1 to devices running iOS 5.1.1 and later.)
-
-For help with integrating changes in this version of ARToolKit with your own iOS app code, please see http://www.artoolkit.org/documentation/Updating_an_AR_application_with_the_latest_ARToolKit_for_iOS_example_code
+For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 and later include a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
 
 
 libKPM usage.
 -------------
 
-libKPM, which performs key-point matching for NFT page recognition and initialization depends on the patented SURF algorithm. Previously, this was used under a commercial license from the owners of the SURF patent. Since this license is no longer appropriate for a free and open-source release, we are actively working on replacing SURF in libKPM. We expect to complete this change by the end of June 2015. In the meantime, users are free to use libKPM including SURF under the terms set out in the KPM header and source files. We recommend against deploying products including libKPM until an updated free and open source version is made available. We apologize for the inconvenience.
+libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simply app builds and app distribution on all supported platforms.
 
 Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via http://www.artoolkit.org/contact if you are an existing user of ARToolKit Professional with questions.
 
@@ -117,7 +117,6 @@ Next steps.
 We have made a forum for discussion of ARToolKit for iOS development available on our community website.
 
 http://www.artoolkit.org/community/forums/viewforum.php?f=22
-
 
 You are invited to join the forum and contribute your questions, answers and success stories.
 

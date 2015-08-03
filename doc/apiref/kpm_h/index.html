@@ -261,7 +261,7 @@ function disclosure_triangle(elt) {
 <div class="spec_sheet_info_box"><table cellspacing="0" class="specbox"><tr>
 <td scope="row"><b>Includes:</b></td>
 <td><div style="margin-bottom:1px"><div class="content_text">
-<a machinegenerated="true" href="../ar_h/index.html#//apple_ref/doc/header/ar.h" logicalPath="//apple_ref/doc/header/ar.h" target="_top">&lt;AR/ar.h&gt;</a><br><!-- a logicalPath="//apple_ref/doc/header/surfSub.h" machineGenerated="true" -->&lt;KPM/surfSub.h&gt;<!-- /a --><br><!-- a logicalPath="//apple_ref/doc/header/kpmType.h" machineGenerated="true" -->&lt;KPM/kpmType.h&gt;<!-- /a -->
+<a machinegenerated="true" href="../ar_h/index.html#//apple_ref/doc/header/ar.h" logicalPath="//apple_ref/doc/header/ar.h" target="_top">&lt;AR/ar.h&gt;</a><br><!-- a logicalPath="//apple_ref/doc/header/kpmType.h" machineGenerated="true" -->&lt;KPM/kpmType.h&gt;<!-- /a -->
 </div></div></td>
 </tr></table></div>
 <h2>Introduction</h2>
@@ -309,6 +309,8 @@ initialising the tracking for use by the texture tracker.
 <dt><tt><a href="index.html#//apple_ref/c/func/kpmSetRefDataSetFile" target="_top">kpmSetRefDataSetFile</a></tt></dt>
 <dd><p>Loads a reference data set from a file into the KPM tracker.
 </p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/kpmUtilGenBWImage" target="_top">kpmUtilGenBWImage</a></tt></dt>
+<dd></dd>
 </dl>
 <hr class="betweenAPIEntries">
 <!-- headerDoc=func;  uid=//apple_ref/c/func/kpmChangePageNoOfRefDataSet;   name=kpmChangePageNoOfRefDataSet --><a name="//apple_ref/c/func/kpmChangePageNoOfRefDataSet"></a>
@@ -552,7 +554,7 @@ the operating system.</p></dd>
 <code>ext</code>
 </dt>
 <dd><p>If non-NULL, a '.' charater and this string will be appended to 'filename'.
-Often, this parameter is a pointer to the string "fset2".</p></dd>
+Often, this parameter is a pointer to the string "fset3".</p></dd>
 <dt>
 <!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmLoadRefDataSet/refDataSetPtr;   name=refDataSetPtr -->
 <a name="//apple_ref/doc/functionparam/kpmLoadRefDataSet/refDataSetPtr"></a>
@@ -787,7 +789,7 @@ the operating system.</p></dd>
 <code>ext</code>
 </dt>
 <dd><p>If non-NULL, a '.' charater and this string will be appended to 'filename'.
-Often, this parameter is a pointer to the string "fset2".</p></dd>
+Often, this parameter is a pointer to the string "fset3".</p></dd>
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
@@ -810,14 +812,102 @@ reference dataset file, this is the simplest means to start.
 <dt><p><a href="index.html#//apple_ref/c/func/kpmDeleteRefDataSet" logicalPath="//apple_ref/c/func/kpmDeleteRefDataSet" target="_top">kpmDeleteRefDataSet</a></p></dt>
 <dd></dd>
 </dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/kpmUtilGenBWImage;   name=kpmUtilGenBWImage --><a name="//apple_ref/c/func/kpmUtilGenBWImage"></a>
+<h3><a name="kpmUtilGenBWImage">kpmUtilGenBWImage</a></h3>
+<hr class="afterName">
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmUtilGenBWImage;name=start --><!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><a machinegenerated="true" href="index.html#//apple_ref/c/func/kpmUtilGenBWImage" logicalPath="//apple_ref/c/instm/kpmUtilGenBWImage //apple_ref/c/clm/kpmUtilGenBWImage //apple_ref/c/intfcm/kpmUtilGenBWImage //apple_ref/c/intfm/kpmUtilGenBWImage //apple_ref/c/func/kpmUtilGenBWImage" target="_top"><span class="function">kpmUtilGenBWImage</span></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><span class="param">image</span>,
+    <a machinegenerated="true" href="../config_h/index.html#//apple_ref/c/tdef/AR_PIXEL_FORMAT" logicalPath="//apple_ref/c/cl/AR_PIXEL_FORMAT //apple_ref/c/tdef/AR_PIXEL_FORMAT" target="_top"><span class="type">AR_PIXEL_FORMAT</span></a> <span class="param">pixFormat</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">xsize</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">ysize</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">procMode</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="type">*</span><span class="param">newXsize</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="type">*</span><span class="param">newYsize</span> );  <!-- headerDoc=declaration;uid=//apple_ref/c/func/kpmUtilGenBWImage;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmUtilGenBWImage/image;   name=image -->
+<a name="//apple_ref/doc/functionparam/kpmUtilGenBWImage/image"></a>
+<code>image</code>
+</dt>
+<dd><p>Source image, as an unpadded pixel buffer beginning with the leftmost pixel of the top row.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmUtilGenBWImage/pixFormat;   name=pixFormat -->
+<a name="//apple_ref/doc/functionparam/kpmUtilGenBWImage/pixFormat"></a>
+<code>pixFormat</code>
+</dt>
+<dd><p>Layout of pixel data in 'image'.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmUtilGenBWImage/xsize;   name=xsize -->
+<a name="//apple_ref/doc/functionparam/kpmUtilGenBWImage/xsize"></a>
+<code>xsize</code>
+</dt>
+<dd><p>Layout of pixel data in 'image'.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmUtilGenBWImage/ysize;   name=ysize -->
+<a name="//apple_ref/doc/functionparam/kpmUtilGenBWImage/ysize"></a>
+<code>ysize</code>
+</dt>
+<dd><p>Layout of pixel data in 'image'.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/kpmUtilGenBWImage/procMode;   name=procMode -->
+<a name="//apple_ref/doc/functionparam/kpmUtilGenBWImage/procMode"></a>
+<code>procMode</code>
+</dt>
+<dd> </dd>
+</dl>
+</div>
 <hr class="betweenSections">
 <a name="HeaderDoc_datatypes"></a>
 <h2 class="h2tight">Typedefs</h2>
 <dl>
+<dt><tt><a href="index.html#//apple_ref/c/tdef/KpmInputDataSet" target="_top">KpmInputDataSet</a></tt></dt>
+<dd><p>Data describing the number and location of keypoints in an input image to be matched against a loaded data set.
+</p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/tdef/KpmRefDataSet" target="_top">KpmRefDataSet</a></tt></dt>
 <dd><p>A loaded dataset for KPM tracking.
 </p></dd>
 </dl>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=tdef;  uid=//apple_ref/c/tdef/KpmInputDataSet;   name=KpmInputDataSet --><a name="//apple_ref/c/tdef/KpmInputDataSet"></a>
+<h3><a name="KpmInputDataSet">KpmInputDataSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/tdef/KpmInputDataSet;name=start --><!-- begin abstract --></p>
+<p>Data describing the number and location of keypoints in an input image to be matched against a loaded data set.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/tdef/KpmInputDataSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/tdef/KpmInputDataSet;name=start --><span class="keyword">typedef</span> <span class="keyword">struct</span> { 
+    <!-- a logicalPath="//apple_ref/c/cl/KpmCoord2D //apple_ref/c/tdef/KpmCoord2D //apple_ref/c/tag/KpmCoord2D //apple_ref/c/struct/KpmCoord2D //apple_ref/c/intf/KpmCoord2D //apple_ref/doc/anysymbol/KpmCoord2D" machineGenerated="true" --><span class="type">KpmCoord2D</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/c/econst/coord //apple_ref/c/data/coord //apple_ref/c/clconst/coord " machineGenerated="true" --><span class="var">coord</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/num //apple_ref/c/data/num //apple_ref/c/clconst/num " machineGenerated="true" --><span class="var">num</span><!-- /a -->; 
+} <!-- a logicalPath="//apple_ref/c/econst/KpmInputDataSet //apple_ref/c/data/KpmInputDataSet //apple_ref/c/clconst/KpmInputDataSet " machineGenerated="true" --><span class="var">KpmInputDataSet</span><!-- /a -->;  <!-- headerDoc=declaration;uid=//apple_ref/c/tdef/KpmInputDataSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Fields</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmInputDataSet/coord;   name=coord -->
+<a name="//apple_ref/doc/typedeffield/KpmInputDataSet/coord"></a>
+<code>coord</code>
+</dt>
+<dd><p>Array of pixel locations of the keypoints in an input image.</p></dd>
+<dt>
+<!-- headerDoc=typedeffield;  uid=//apple_ref/doc/typedeffield/KpmInputDataSet/num;   name=num -->
+<a name="//apple_ref/doc/typedeffield/KpmInputDataSet/num"></a>
+<code>num</code>
+</dt>
+<dd><p>Number of coords in the array.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmInputDataSet;name=start --><p>Key point matching occurs between a loaded data set and a set of keypoints extracted from an input image. This structure
+holds the number and pixel location of keypoints in the input image. The keypoints themselves are an array of 'num'
+KpmRefData structures.
+<!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmInputDataSet;name=end --><!-- end discussion -->
+</p>
 <hr class="betweenAPIEntries">
 <!-- headerDoc=tdef;  uid=//apple_ref/c/tdef/KpmRefDataSet;   name=KpmRefDataSet --><a name="//apple_ref/c/tdef/KpmRefDataSet"></a>
 <h3><a name="KpmRefDataSet">KpmRefDataSet</a></h3>
@@ -863,7 +953,7 @@ reference dataset file, this is the simplest means to start.
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmRefDataSet;name=start --><p>Key point matching takes as input a reference data set of points. This strucutre holds a set of points in memory prior to loading into the tracker.
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmRefDataSet;name=start --><p>Key point matching takes as input a reference data set of points. This structure holds a set of points in memory prior to loading into the tracker.
 <!-- headerDoc=discussion;uid=//apple_ref/c/tdef/KpmRefDataSet;name=end --><!-- end discussion -->
 </p>
 <p class="gapBeforeFooter">&nbsp;</p>
@@ -871,7 +961,7 @@ reference dataset file, this is the simplest means to start.
 <div class="hd_copyright_and_timestamp">
 <p class="hd_copyright">&copy; 2006-2015 ARToolworks, Inc.
  </p>
-<p class="hd_timestamp">Last Updated: Friday, May 29, 2015
+<p class="hd_timestamp">Last Updated: Friday, July 31, 2015
 </p>
 </div>
 </td>

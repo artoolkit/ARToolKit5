@@ -87,9 +87,58 @@ extern "C" {
 #  define ARLOG(...)  printf(__VA_ARGS__)
 #endif
     
+/*!
+    @var
+    @abstract   Sets the severity level. Log messages below the set severity level are not logged.
+	@discussion
+        All calls to ARToolKit's logging facility include a "log level" parameter, which specifies
+        the severity of the log message. (The severities are defined in %lt;ar/config.h&gt;.)
+        Setting this global allows for filtering of log messages. All log messages lower than
+        the set level will not be logged by arLog().
+    @seealso arLog arLog
+*/
 extern int arLogLevel;
+    
+/*!
+    @function 
+    @abstract   Write a string to the current logging facility.
+	@discussion
+        The default logging facility varies by platform, but on Unix-like platforms is typically
+        the standard error file descriptor. However, logging may be redirected to some other
+        facility by arLogSetLogger.
+ 
+        Newlines are not automatically appended to log output.
+    @param      logLevel The severity of the log message. Defined in %lt;ar/config.h&gt;.
+        Log output is written to the logging facility provided the logLevel meets or
+        exceeds the minimum level specified in global arLogLevel.
+    @param      format Log format string, in the form of printf().
+    @seealso arLogLevel arLogLevel
+    @seealso arLogSetLogger arLogSetLogger
+*/
+
 void arLog(const int logLevel, const char *format, ...);
+    
 typedef void (AR_CALLBACK *AR_LOG_LOGGER_CALLBACK)(const char *logMessage);
+
+    
+/*!
+    @function 
+    @abstract   Divert logging to a callback, or revert to default logging.
+	@discussion
+        The default logging facility varies by platform, but on Unix-like platforms is typically
+        the standard error file descriptor. However, logging may be redirected to some other
+        facility by this function.
+    @param      callback The function which will be called with the log output, or NULL to
+        cancel redirection.
+    @param      callBackOnlyIfOnSameThread If non-zero, then the callback will only be called
+        if the call to arLog is made on the same thread as the thread which called this function,
+        and if the arLog call is made on a different thread, log output will be buffered until
+        the next call to arLog on the original thread.
+ 
+        The purpose of this is to prevent logging from secondary threads in cases where the
+        callback model of the target platform precludes this.
+    @seealso arLog arLog
+*/
 void arLogSetLogger(AR_LOG_LOGGER_CALLBACK callback, int callBackOnlyIfOnSameThread);
     
 // FN(x) allows for a function-like macro x which expands to a single statement.

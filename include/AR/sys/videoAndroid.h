@@ -38,6 +38,7 @@
 #ifndef AR_VIDEO_ANDROID_H
 #define AR_VIDEO_ANDROID_H
 
+#define AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA 0
 
 #include <AR/ar.h>
 #include <AR/video.h>
@@ -48,9 +49,11 @@ extern "C" {
 
 enum {
     AR_VIDEO_PARAM_ANDROID_DEVICEID,        // s, readonly
+#if !AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
     AR_VIDEO_PARAM_ANDROID_WIDTH,           // i
     AR_VIDEO_PARAM_ANDROID_HEIGHT,          // i
     AR_VIDEO_PARAM_ANDROID_PIXELFORMAT,     // i (cast to AR_PIXEL_FORMAT)
+#endif
     AR_VIDEO_PARAM_ANDROID_CAMERA_INDEX,    // i
     AR_VIDEO_PARAM_ANDROID_CAMERA_FACE,     // i
     AR_VIDEO_PARAM_ANDROID_FOCAL_LENGTH,    // d
@@ -79,9 +82,13 @@ int                    ar2VideoCloseAndroid          ( AR2VideoParamAndroidT *vi
 int                    ar2VideoGetIdAndroid          ( AR2VideoParamAndroidT *vid, ARUint32 *id0, ARUint32 *id1 );
 int                    ar2VideoGetSizeAndroid        ( AR2VideoParamAndroidT *vid, int *x,int *y );
 AR_PIXEL_FORMAT        ar2VideoGetPixelFormatAndroid ( AR2VideoParamAndroidT *vid );
-//AR2VideoBufferT       *ar2VideoGetImageAndroid       ( AR2VideoParamAndroidT *vid );
-//int                    ar2VideoCapStartAndroid       ( AR2VideoParamAndroidT *vid );
-//int                    ar2VideoCapStopAndroid        ( AR2VideoParamAndroidT *vid );
+
+#if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
+AR2VideoBufferT       *ar2VideoGetImageAndroid       ( AR2VideoParamAndroidT *vid );
+int                    ar2VideoCapStartAndroid       ( AR2VideoParamAndroidT *vid );
+int                    ar2VideoCapStartAsyncAndroid  ( AR2VideoParamAndroidT *vid, AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata );
+int                    ar2VideoCapStopAndroid        ( AR2VideoParamAndroidT *vid );
+#endif
 
 int                    ar2VideoGetParamiAndroid      ( AR2VideoParamAndroidT *vid, int paramName, int *value );
 int                    ar2VideoSetParamiAndroid      ( AR2VideoParamAndroidT *vid, int paramName, int  value );

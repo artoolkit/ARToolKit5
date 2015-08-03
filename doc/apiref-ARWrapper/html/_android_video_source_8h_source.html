@@ -139,41 +139,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">bool</span> newFrameArrived;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    ARUint8 *localFrameBuffer;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> getVideoReadyAndroidCparamCallback(<span class="keyword">const</span> ARParam *cparam_p, <span class="keywordtype">void</span> *userdata);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">bool</span> getVideoReadyAndroid2(<span class="keyword">const</span> ARParam *cparam_p);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a1b473787169a61348eec3fdbaf450a18">   64</a></span>&#160;    AR2VideoParamT *<a class="code" href="class_android_video_source.html#a1b473787169a61348eec3fdbaf450a18">gVid</a>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a5391f673ec22499ceac9962f6a4e7ca6">   65</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_android_video_source.html#a5391f673ec22499ceac9962f6a4e7ca6">gCameraIndex</a>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a15501ddbf12be134b95ca064752462fb">   66</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a15501ddbf12be134b95ca064752462fb">gCameraIsFrontFacing</a>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <a class="code" href="class_android_video_source.html#a396520f4c3055e8f6bd22eed27211bbd">AndroidVideoSource</a>();</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a3f6a21a36e1e3ce6690300cb8b1539f6">getVideoReadyAndroid</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> width, <span class="keyword">const</span> <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">int</span> cameraIndex, <span class="keyword">const</span> <span class="keywordtype">bool</span> cameraIsFrontFacing);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a95fcb3da7e9fc14b36ea75eb5414634e" title="Opens the video source.">open</a>();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_android_video_source.html#adfad4403dcb02d043692900f3ecd6c9f">acceptImage</a>(ARUint8* ptr);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#aa5b9ec62f730dc92cb392e4c6b89ceca" title="Asks the video source to capture a frame.">captureFrame</a>();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#ad712c1b6f2999147bac25269940a9321" title="Closes the video source.">close</a>();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="class_android_video_source.html#a6838c1816fb65eb2482a5a9c88dc20d3" title="Returns the name of this video source variation.">getName</a>();</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif // !ANDROIDVIDEOSOURCE_H</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">size_t</span> frameBufferSize;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> getVideoReadyAndroidCparamCallback(<span class="keyword">const</span> ARParam *cparam_p, <span class="keywordtype">void</span> *userdata);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">bool</span> getVideoReadyAndroid2(<span class="keyword">const</span> ARParam *cparam_p);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a1b473787169a61348eec3fdbaf450a18">   65</a></span>&#160;    AR2VideoParamT *<a class="code" href="class_android_video_source.html#a1b473787169a61348eec3fdbaf450a18">gVid</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a5391f673ec22499ceac9962f6a4e7ca6">   66</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_android_video_source.html#a5391f673ec22499ceac9962f6a4e7ca6">gCameraIndex</a>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="code" href="class_android_video_source.html#a15501ddbf12be134b95ca064752462fb">   67</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a15501ddbf12be134b95ca064752462fb">gCameraIsFrontFacing</a>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="class_android_video_source.html#a396520f4c3055e8f6bd22eed27211bbd">AndroidVideoSource</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a3f6a21a36e1e3ce6690300cb8b1539f6">getVideoReadyAndroid</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> width, <span class="keyword">const</span> <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">int</span> cameraIndex, <span class="keyword">const</span> <span class="keywordtype">bool</span> cameraIsFrontFacing);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#a95fcb3da7e9fc14b36ea75eb5414634e" title="Opens the video source.">open</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_android_video_source.html#a5823842eb4a5519e389deba792ddcf3e" title="Returns the size of current frame.">getFrameSize</a>();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_android_video_source.html#adfad4403dcb02d043692900f3ecd6c9f">acceptImage</a>(ARUint8* ptr);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#aa5b9ec62f730dc92cb392e4c6b89ceca" title="Asks the video source to capture a frame.">captureFrame</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_android_video_source.html#ad712c1b6f2999147bac25269940a9321" title="Closes the video source.">close</a>();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="class_android_video_source.html#a6838c1816fb65eb2482a5a9c88dc20d3" title="Returns the name of this video source variation.">getName</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;};</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif // !ANDROIDVIDEOSOURCE_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 29 2015 14:59:18 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 31 2015 02:11:16 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

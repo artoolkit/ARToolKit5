@@ -15,11 +15,11 @@ Next steps.
 
 
 About this archive.
-------------------- 
+-------------------
 
-This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.2.1.
+This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.
 
-ARToolKit version 5.2.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Google's Play Store or any other commercial marketplace, you must use your own package name, and not the org.artoolkit package name.
 
@@ -28,15 +28,15 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-05-29
+    2015-07-31
 
 
 Requirements.
 -------------
 
 Requirements:
- * Android SDK Tools r12 (for Android 2.2/API 8) or later required, r22.6.2 (March 2014) or later recommended.
- * Development of native ARToolKit for Android applications or requires Android NDK Revision 8b or later, revision 9d (March 2014) recommended.
+ * Android SDK Tools r12 (for Android 2.2/API 8) or later required, r24.3.3 (June 2015) or later recommended.
+ * Development of native ARToolKit for Android applications or requires Android NDK Revision 10 (July 2014) or later, revision 10e (May 2015) recommended.
  * Use of the Eclipse IDE is recommended, and Eclipse project files are supplied with the ARToolKit for Android SDK.
  * An Android device, running Android 2.2 or later. Testing is not possible using the Android Virtual Device system.
  * A printer to print the pattern PDF images.
@@ -47,7 +47,7 @@ ARToolKit is supplied as pre-built binaries for each platform, plus full source 
 Getting started.
 ----------------
 
-For full instructions on using this SDK, please refer to the online user guide at http://www.artoolkit.org/documentation/ARToolKit_for_Android.
+For full instructions on using this SDK, please refer to the online user guide at http://www.artoolkit.org/documentation/#Android.
 
 
 Training new markers.
@@ -76,15 +76,17 @@ Usage (Windows):
 
 Release notes.
 --------------
-This release contains ARToolKit v5.2.1 for Android.
+This release contains ARToolKit v5.3 for Android.
+
+The major change in this release is a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
 Please see the ChangeLog.txt for details of changes in this and earlier releases.
 
-ARToolKit v5.2 is the first major release under an open source license in several years, and represents several years of commercial development of ARToolKit by ARToolworks during this time. It will appear to be a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
+ARToolKit v5.2 was the first major release under an open source license in several years, and represented several years of commercial development of ARToolKit by ARToolworks during this time. It was a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
 
-For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 includes a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
+For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 and later include a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
 
-ARToolKit 5.2 for Android supports fetching of camera calibration data from an ARToolworks-provided server. On request, ARToolworks provides developers access to an on-device verson of calib_camera which submits calibration data to ARToolworks' server, making it available to all users of that device. The underlying changes to support this include a native version of libARvideo for Android which provides the functions to fetch camera calibration data (note that libARvideo on Android does not handle frame retrieval from the camera; that still happens on the Java side). Existing native apps which wish to use the functionality should follow the example usage from the ARNative example, and also link against libarvideo, and its additional dependencies libcurl, libssl and libcrypto.
+ARToolKit 5.2 and later for Android supports fetching of camera calibration data from an ARToolworks-provided server. On request, ARToolworks provides developers access to an on-device verson of calib_camera which submits calibration data to ARToolworks' server, making it available to all users of that device. The underlying changes to support this include a native version of libARvideo for Android which provides the functions to fetch camera calibration data (note that libARvideo on Android does not handle frame retrieval from the camera; that still happens on the Java side). Existing native apps which wish to use the functionality should follow the example usage from the ARNative example, and also link against libarvideo, and its additional dependencies libcurl, libssl and libcrypto.
 
 Please see http://www.artoolkit.org/documentation/Using_automatic_online_camera_calibration_retrieval for details on this feature and the code changes required.
 
@@ -92,7 +94,7 @@ Please see http://www.artoolkit.org/documentation/Using_automatic_online_camera_
 libKPM usage.
 -------------
 
-libKPM, which performs key-point matching for NFT page recognition and initialization depends on the patented SURF algorithm. Previously, this was used under a commercial license from the owners of the SURF patent. Since this license is no longer appropriate for a free and open-source release, we are actively working on replacing SURF in libKPM. We expect to complete this change by the end of June 2015. In the meantime, users are free to use libKPM including SURF under the terms set out in the KPM header and source files. We recommend against deploying products including libKPM until an updated free and open source version is made available. We apologize for the inconvenience.
+libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simply app builds and app distribution on all supported platforms.
 
 Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via http://www.artoolkit.org/contact if you are an existing user of ARToolKit Professional with questions.
 
@@ -103,7 +105,6 @@ Next steps.
 We have made a forum for discussion of ARToolKit for Android development available on our community website.
 
 http://www.artoolkit.org/community/forums/viewforum.php?f=26
-
 
 You are invited to join the forum and contribute your questions, answers and success stories.
 

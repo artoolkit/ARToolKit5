@@ -461,9 +461,9 @@ static void startCallback(void *userData)
             
             // Load KPM data.
             KpmRefDataSet  *refDataSet2;
-            printf("Read %s.fset2\n", markerNFT.datasetPathname);
-            if (kpmLoadRefDataSet(markerNFT.datasetPathname, "fset2", &refDataSet2) < 0 ) {
-                NSLog(@"Error reading KPM data from %s.fset2", markerNFT.datasetPathname);
+            printf("Read %s.fset3\n", markerNFT.datasetPathname);
+            if (kpmLoadRefDataSet(markerNFT.datasetPathname, "fset3", &refDataSet2) < 0 ) {
+                NSLog(@"Error reading KPM data from %s.fset3", markerNFT.datasetPathname);
                 markerNFT.pageNo = -1;
                 continue;
             }

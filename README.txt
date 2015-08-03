@@ -17,16 +17,16 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries, utilities and examples, version 5.2.1
+This archive contains the ARToolKit libraries, utilities and examples, version 5.3.
 
-ARToolKit version 5.2.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Android platforms.
 
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-05-29
+    2015-07-31
 
 
 Installing
@@ -80,7 +80,7 @@ An explanation of the sourcecode of this example can be found on the page http:/
 
   Mac OS X:
 
-	* Bundled applications are generated for the examples. Open the "bin" directory in the Finder and double-click the "simpleLite" example app.
+	* Bundled applications are generated for the examples. Open the "bin" directory in the Finder and double-click the "simpleLite" example app. Application errors are logged in the Console application.
 
   Linux:
   
@@ -98,9 +98,9 @@ Required external software
 
   * A supported compiler or IDE is required to use ARToolKit:
   
-	Windows: Microsoft Visual Studio 2012 and Microsoft Visual Studio 2010 SP1 are supported. The free Microsoft Visual Studio Express Edition will also work.
+	Windows: Microsoft Visual Studio 2013 and Microsoft Visual Studio 2010 SP1 are supported. The free Microsoft Visual Studio Express Edition will also work.
 	Mac OS X: Xcode tools v5.1 under Mac OS X 10.9 or later is required. Xcode 6 under Mac OS X 10.10 is recommended. Xcode may be obtained free from Apple at http://developer.apple.com/xcode/.
-	Linux: GCC 4.4 is required. GCC 4.8 or later is recommended.
+	Linux: GCC 4.6 is required. Clang 3.6 or later is recommended.
 	
   Where ARToolKit libraries require external DLLs, these are generally supplied with ARToolKit. Exceptions are listed below.
 
@@ -132,25 +132,30 @@ Opening the project files
 
   Linux
 
-	The SDK build system uses a Configure script and makefiles.
+	The SDK build system uses a Configure script and makefiles. To run the script, use this command from a terminal window:
+
+		./Configure
+
 
 
 Release notes.
 --------------
 
-This release contains ARToolKit v5.2.1.
+This release contains ARToolKit v5.3.
+
+The major change in this release is a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
 Please see the ChangeLog.txt for details of changes in this and earlier releases.
 
-ARToolKit v5.2 is the first major release under an open source license in several years, and represents several years of commercial development of ARToolKit by ARToolworks during this time. It will appear to be a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
+ARToolKit v5.2 was the first major release under an open source license in several years, and represented several years of commercial development of ARToolKit by ARToolworks during this time. It was a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
 
-For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 includes a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
+For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 and later include a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
 
 
 libKPM usage.
 -------------
 
-libKPM, which performs key-point matching for NFT page recognition and initialization depends on the patented SURF algorithm. Previously, this was used under a commercial license from the owners of the SURF patent. Since this license is no longer appropriate for a free and open-source release, we are actively working on replacing SURF in libKPM. We expect to complete this change by the end of June 2015. In the meantime, users are free to use libKPM including SURF under the terms set out in the KPM header and source files. We recommend against deploying products including libKPM until an updated free and open source version is made available. We apologize for the inconvenience.
+libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simply app builds and distribution on all supported platforms.
 
 Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via http://www.artoolkit.org/contact if you are an existing user of ARToolKit Professional with questions.
 

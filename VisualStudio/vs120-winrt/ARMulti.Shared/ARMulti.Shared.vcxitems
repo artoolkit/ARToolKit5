@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d1bf65d8-d348-4a97-9421-598a4aff1786</SharedGUID>
+    <ItemsProjectGuid>{400d753b-3525-479c-81a5-a0c562035e60}</ItemsProjectGuid>
+    <ItemsRootNamespace>ARMulti</ItemsRootNamespace>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\ar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\arMulti.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\matrix.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\param.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARMulti\arMultiFreeConfig.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARMulti\arMultiGetTransMat.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARMulti\arMultiGetTransMatStereo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARMulti\arMultiReadConfigFile.c" />
+  </ItemGroup>
+</Project>

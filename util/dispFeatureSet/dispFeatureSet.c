@@ -67,7 +67,7 @@ static KpmRefDataSet           *refDataSet;
 static int                      page = 0;
 
 static int                      display_fset = 0;
-static int                      display_fset2 = 0;
+static int                      display_fset3 = 0;
 
 static int  init( int argc, char *argv[] );
 static void reportCurrentDPI(void);
@@ -101,14 +101,17 @@ static int init( int argc, char *argv[] )
             display_defaults = 0;
             display_fset = 1;
         } else if( strcmp(argv[i], "-fset2") == 0 ) {
+            ARLOGe("Error: -fset2 option no longer supported as of ARToolKit v5.3.\n");
+            exit(-1);
+        } else if( strcmp(argv[i], "-fset3") == 0 ) {
             display_defaults = 0;
-            display_fset2 = 1;
+            display_fset3 = 1;
         } else if( filename == NULL ) filename = argv[i];
         else usage(argv[0] );
     }
     if (!filename || !filename[0]) usage(argv[0]);
     
-    if (display_defaults) display_fset = display_fset2 = 1;
+    if (display_defaults) display_fset = display_fset3 = 1;
 
     ARLOG("Read ImageSet.\n");
     ar2UtilRemoveExt( filename );
@@ -129,11 +132,11 @@ static int init( int argc, char *argv[] )
         ARLOG("  end.\n");
     }
  
-    if (display_fset2) {
-        ARLOG("Read FeatureSet2.\n");
-        kpmLoadRefDataSet( filename, "fset2", &refDataSet );
+    if (display_fset3) {
+        ARLOG("Read FeatureSet3.\n");
+        kpmLoadRefDataSet( filename, "fset3", &refDataSet );
         if( refDataSet == NULL ) {
-            ARLOGe("file open error: %s.fset2\n", filename );
+            ARLOGe("file open error: %s.fset3\n", filename );
             exit(0);
         }
         ARLOG("  end.\n");
@@ -191,7 +194,7 @@ static void usage( char *com )
 {
     ARLOG("%s <filename>\n", com);
     ARLOG("    -fset     Show fset features.\n");
-    ARLOG("    -fset2    Show fset2 features.\n");
+    ARLOG("    -fset3    Show fset3 features.\n");
     ARLOG("%s <filename>\n", com);
     exit(0);
 }
@@ -225,7 +228,7 @@ static void dispFunc( void )
         ARLOG("fset:  Num of feature points: %d\n", featureSet->list[page].num);
     }
 
-    if (display_fset2) {
+    if (display_fset3) {
         for( i = j = 0; i < refDataSet->num; i++ ) {
             if( refDataSet->refPoint[i].refImageNo != page ) continue;
             x = refDataSet->refPoint[i].coord2D.x;
@@ -235,12 +238,12 @@ static void dispFunc( void )
             argDrawLineByObservedPos(x+5, y-5, x-5, y+5);
             j++;
         }
-        ARLOG("fset2: Num of feature points: %d\n", j);
+        ARLOG("fset3: Num of feature points: %d\n", j);
 #if 0
         for (i = 0; i < refDataSet->pageNum; i++) {
             for (j = 0; j < refDataSet->pageInfo[i].imageNum; j++) {
                 if (refDataSet->pageInfo[i].imageInfo[j].imageNo == page) {
-                    ARLOG("fset2: Image size: %dx%d\n", refDataSet->pageInfo[i].imageInfo[j].width, refDataSet->pageInfo[i].imageInfo[j].height);
+                    ARLOG("fset3: Image size: %dx%d\n", refDataSet->pageInfo[i].imageInfo[j].width, refDataSet->pageInfo[i].imageInfo[j].height);
                 }
             }
         }

@@ -1078,7 +1078,7 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
         ARLOGe("Using %s for device %s.\n", cparamname, [iOSDevice cStringUsingEncoding:NSUTF8StringEncoding]);
         return (arParamLoadFromBuffer(cparambytes, cparam_size, cparam));
     } else {
-        ARLOGe("Unable to find suitable camera parameters for device %s", [iOSDevice cStringUsingEncoding:NSUTF8StringEncoding]);
+        ARLOGe("Unable to find suitable camera parameters for device %s.\n", [iOSDevice cStringUsingEncoding:NSUTF8StringEncoding]);
         return (-1);
     }
 }
