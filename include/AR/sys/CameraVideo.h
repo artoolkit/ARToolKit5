@@ -238,6 +238,13 @@ extern NSString *const CameraVideoiOSDeviceAppleTVX; // "Apple TV (Unknown model
 - (BOOL) framePlanes:(unsigned char **)bufDataPtrs count:(size_t)count timestamp:(UInt64 *)timestampOut ifNewerThanTimestamp:(UInt64)timestamp;
 @property(nonatomic, readonly) UInt64 timestampsPerSecond;
 
+// If set, callbacks on the delegate method -cameraVideoTookPicture:userData: will
+// be made on a serial queue not necessarily attached to the main thread.
+// Defaults to FALSE, i.e. callbacks are on the main thread. This allows OpenGL
+// operations, which should normally be on the main thread, to be called during the callback.
+// Changing this variable after calling -start will not take effect until -start is next called.
+@property(nonatomic) BOOL multithreaded;
+
 - (void) stop;
 - (void) dealloc;
 

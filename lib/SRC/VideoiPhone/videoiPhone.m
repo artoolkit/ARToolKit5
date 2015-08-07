@@ -89,6 +89,8 @@ int ar2VideoDispOptioniPhone( void )
     ARLOG("    requests that images are returned in a buffer which has power-of-two dimensions. N.B. IGNORED IN THIS RELEASE.\n");
     ARLOG(" -[no]flipv\n");
     ARLOG("    Flip camera image vertically.\n");
+    ARLOG(" -[no]mt\n");
+    ARLOG("    \"Multithreaded\", i.e. allow new frame callbacks on non-main thread.\n");
     //ARLOG(" -[no]fliph\n");
     //ARLOG("    Flip camera image horizontally.\n");
     ARLOG("\n");
@@ -110,13 +112,14 @@ AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callbac
     int                 itsAMovie = 0;
     char				movieConf[256] = "-pause -loop";
 	int					i;
-    int width = 0;
-    int height = 0;
-    uint32_t format = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
-	int	flipH = -1, flipV = -1;
-    char bufferpow2 = 0;
+    int                 width = 0;
+    int                 height = 0;
+    uint32_t            format = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
+	int                 flipH = -1, flipV = -1;
+    char                bufferpow2 = 0;
     AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
-    NSString *preset = AVCaptureSessionPresetMedium;
+    NSString            *preset = AVCaptureSessionPresetMedium;
+    int                 mt = 0;
 
     if (config) {
         a = config;
@@ -236,21 +239,21 @@ AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callbac
                     } else {
                         NSLog(@"Error: unsupported video device position requested. Using default.\n");
                     }
-                    //} else if (strncmp(a, "-fliph", 6) == 0) {
-                    //    flipH = 1;
-                    //} else if (strncmp(a, "-nofliph", 8) == 0) {
-                    //    flipH = 0;
-                } else if (strncmp(a, "-flipv", 6) == 0) {
+                } else if (strcmp(b, "-flipv") == 0) {
                     flipV = 1;
-                } else if (strncmp(a, "-noflipv", 8) == 0) {
+                } else if (strcmp(b, "-noflipv") == 0) {
                     flipV = 0;
-                } else if (strncmp(a, "-fliph", 6) == 0) {
+                } else if (strcmp(b, "-fliph") == 0) {
                     flipH = 1;
-                } else if (strncmp(a, "-nofliph", 8) == 0) {
+                } else if (strcmp(b, "-nofliph") == 0) {
                     flipH = 0;
-                } else if( strcmp( b, "-device=iPhone" ) == 0 )    {
-                } else if( strcmp( b, "-bufferpow2" ) == 0 )    {
+                } else if (strcmp(b, "-mt") == 0) {
+                    mt = 1;
+                } else if (strcmp(b, "-nomt") == 0) {
+                    mt = 0;
+                } else if (strcmp(b, "-bufferpow2") == 0) {
                     bufferpow2 = 1;
+                } else if (strcmp(b, "-device=iPhone") == 0) { // Ignored.
                 } else {
                     err_i = 1;
                 }

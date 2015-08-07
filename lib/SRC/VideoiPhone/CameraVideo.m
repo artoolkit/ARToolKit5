@@ -42,6 +42,7 @@
 #import <CoreVideo/CVHostTime.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <pthread.h>
 #import <Availability.h>
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000)
 #import <Accelerate/Accelerate.h>
@@ -100,7 +101,6 @@ typedef struct {
     AVCaptureDevicePosition captureDevicePosition;
     AVCaptureVideoDataOutput *captureVideoDataOutput;
     AVCaptureStillImageOutput *captureStillImageOutput;
-    //dispatch_queue_t captureQueue;
     UInt64 latestFrameHostTime;
     
     BOOL running;
@@ -115,10 +115,10 @@ typedef struct {
     BOOL flipH;
     BOOL pause;
     
-#ifdef CAMERA_VIDEO_MULTITHREADED
+    BOOL multithreaded;
     pthread_mutex_t frameLock_pthread_mutex;
     dispatch_queue_t captureQueue;
-#endif
+    
 #if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000)
     vImage_Buffer      imageSrcBuf;
     vImage_Buffer      imageDestBuf;
@@ -126,6 +126,7 @@ typedef struct {
 }
 @synthesize tookPictureDelegate = tookPictureDelegate, tookPictureDelegateUserData = tookPictureDelegateUserData;
 @synthesize running = running, willSaveNextFrame = willSaveNextFrame, pause = pause, iOSDevice = iOSDevice, flipV = flipV, flipH = flipH, planeCount = planeCount;
+@synthesize multithreaded = multithreaded;
 
 - (id) init
 {
@@ -190,15 +191,14 @@ typedef struct {
         tookPictureDelegateUserData = NULL;
         flipV = flipH = FALSE;
         
-#ifdef CAMERA_VIDEO_MULTITHREADED
         // Create a mutex to protect access to the frame.
         int err;
         if ((err = pthread_mutex_init(&frameLock_pthread_mutex, NULL)) != 0) {
             NSLog(@"QTKitVideo(): Error creating mutex.\n");
             [self release];
             return (nil);
-        }        
-#endif
+        }
+        captureQueue = NULL;
     }
     return (self);
 }
@@ -311,12 +311,12 @@ typedef struct {
                                             [NSNumber numberWithInteger:pixelFormat], kCVPixelBufferPixelFormatTypeKey,
                                             nil];
     
-#ifdef CAMERA_VIDEO_MULTITHREADED
-    captureQueue = dispatch_queue_create("com.artoolworks.artoolkit5.videoiPhone", NULL);
-    [captureVideoDataOutput setSampleBufferDelegate:self queue:captureQueue];
-#else
-    [captureVideoDataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()]; // Need to use serial queue on main thread, because of OpenGL.
-#endif
+    if (multithreaded) {
+        captureQueue = dispatch_queue_create("org.artoolkit.artoolkit5.videoiPhone", NULL);
+        [captureVideoDataOutput setSampleBufferDelegate:self queue:captureQueue];
+    } else {
+        [captureVideoDataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+    }
 	[captureVideoDataOutput setAlwaysDiscardsLateVideoFrames:YES]; // Discard if the data output queue is blocked (including during processing of any still image).
 
     if ([captureSession canAddOutput:captureVideoDataOutput]) [captureSession addOutput:captureVideoDataOutput];
@@ -393,9 +393,10 @@ bail4:
     [captureStillImageOutput release];
     captureStillImageOutput = nil;
 bail3:
-#ifdef CAMERA_VIDEO_MULTITHREADED
-    dispatch_release(captureQueue);
-#endif
+    if (captureQueue) {
+        dispatch_release(captureQueue);
+        captureQueue = NULL;
+    }
 bail2:
     [captureVideoDataOutput release];
     captureVideoDataOutput = nil;
@@ -417,9 +418,10 @@ bail0:
 
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-#ifdef CAMERA_VIDEO_MULTITHREADED
-    pthread_mutex_lock(&frameLock_pthread_mutex);
-#endif
+    if (multithreaded) {
+        pthread_mutex_lock(&frameLock_pthread_mutex);
+    }
+
     if (!planes) {
         pixelFormat = CVPixelBufferGetPixelFormatType(imageBuffer);
         //CFDictionaryRef pfDesc = CVPixelFormatDescriptionCreateWithPixelFormatType(CFAllocatorGetDefault(), pixelFormat);
@@ -552,9 +554,9 @@ bail0:
     }
     
     if (pause || !planes) {
-#ifdef CAMERA_VIDEO_MULTITHREADED
-        pthread_mutex_unlock(&frameLock_pthread_mutex);
-#endif
+        if (multithreaded) {
+            pthread_mutex_unlock(&frameLock_pthread_mutex);
+        }
         return;
     }
 
@@ -658,9 +660,9 @@ bail0:
     CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
 
     latestFrameHostTime = hostTime;
-#ifdef CAMERA_VIDEO_MULTITHREADED
-    pthread_mutex_unlock(&frameLock_pthread_mutex);
-#endif
+    if (multithreaded) {
+        pthread_mutex_unlock(&frameLock_pthread_mutex);
+    }
     
     if (tookPictureDelegate) [tookPictureDelegate cameraVideoTookPicture:self userData:tookPictureDelegateUserData];
 }
@@ -811,9 +813,10 @@ bail0:
     }
     
     [captureSession stopRunning];
-#ifdef CAMERA_VIDEO_MULTITHREADED
-    dispatch_release(captureQueue);
-#endif
+    if (captureQueue) {
+        dispatch_release(captureQueue);
+        captureQueue = NULL;
+    }
     [captureVideoDataOutput release];
     captureVideoDataOutput = nil;
     [captureStillImageOutput release];
@@ -827,10 +830,8 @@ bail0:
 {
     if (running) [self stop];
     
-#ifdef CAMERA_VIDEO_MULTITHREADED
     if (captureQueue) dispatch_release(captureQueue);
     pthread_mutex_destroy(&frameLock_pthread_mutex);
-#endif
     
     if (planes) {
         if (!planeCount) free(planes[0].bufDataPtr);

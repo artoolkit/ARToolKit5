@@ -292,6 +292,51 @@
 		4A47F828116E638B00FC577E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822D30DC96E3B00B73A53 /* OpenGLES.framework */; };
 		4A47F9D3116E63FB00FC577E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
 		4A47F9DC116E641C00FC577E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E70DC97C3800B73A53 /* CoreGraphics.framework */; };
+		4A4BAA8E1B745B210012B77D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B555161AD5A200B48D70 /* Default-568h@2x.png */; };
+		4A4BAA8F1B745B210012B77D /* Default-LandscapeLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B556161AD5A200B48D70 /* Default-LandscapeLeft.png */; };
+		4A4BAA901B745B210012B77D /* Default-LandscapeLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B557161AD5A200B48D70 /* Default-LandscapeLeft@2x.png */; };
+		4A4BAA911B745B210012B77D /* Default-LandscapeRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B558161AD5A200B48D70 /* Default-LandscapeRight.png */; };
+		4A4BAA921B745B210012B77D /* Default-LandscapeRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B559161AD5A200B48D70 /* Default-LandscapeRight@2x.png */; };
+		4A4BAA931B745B210012B77D /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55A161AD5A200B48D70 /* Default-Portrait.png */; };
+		4A4BAA941B745B210012B77D /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55B161AD5A200B48D70 /* Default-Portrait@2x.png */; };
+		4A4BAA951B745B210012B77D /* Default-PortraitUpsideDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55C161AD5A200B48D70 /* Default-PortraitUpsideDown.png */; };
+		4A4BAA961B745B210012B77D /* Default-PortraitUpsideDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55D161AD5A200B48D70 /* Default-PortraitUpsideDown@2x.png */; };
+		4A4BAA971B745B210012B77D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55E161AD5A200B48D70 /* Default.png */; };
+		4A4BAA981B745B210012B77D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AA8B55F161AD5A200B48D70 /* Default@2x.png */; };
+		4A4BAAAD1B745B210012B77D /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
+		4A4BAAAE1B745B210012B77D /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941C5E1AE5D923000FA802 /* libARvideo.a */; };
+		4A4BAAAF1B745B210012B77D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
+		4A4BAAB01B745B210012B77D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E70DC97C3800B73A53 /* CoreGraphics.framework */; };
+		4A4BAAB21B745B210012B77D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822D30DC96E3B00B73A53 /* OpenGLES.framework */; };
+		4A4BAAB31B745B210012B77D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E10DC97C2700B73A53 /* Foundation.framework */; };
+		4A4BAAB41B745B210012B77D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E50DC97C2700B73A53 /* UIKit.framework */; };
+		4A4BAAB51B745B210012B77D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC2E636118ED63E00CC4F55 /* AVFoundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		4A4BAAB61B745B210012B77D /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC2E638118ED63E00CC4F55 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		4A4BAAB71B745B210012B77D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC2E674118ED68C00CC4F55 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		4A4BAAB81B745B210012B77D /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AEB26291804A42A002290C5 /* libAR.a */; };
+		4A4BAAB91B745B210012B77D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A5BAA8F13D82DFD00C8D5E7 /* AudioToolbox.framework */; };
+		4A4BAABA1B745B210012B77D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8393B5152163C000D8FE60 /* Accelerate.framework */; };
+		4A4BAAC21B745C1C0012B77D /* ARAppCameraTestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA5A1B7453450012B77D /* ARAppCameraTestDelegate.m */; };
+		4A4BAAC31B745C1C0012B77D /* ARView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA5C1B7453450012B77D /* ARView.m */; };
+		4A4BAAC41B745C1C0012B77D /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA5E1B7453450012B77D /* ARViewController.m */; };
+		4A4BAAC51B745C1C0012B77D /* ARViewOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA601B7453450012B77D /* ARViewOverlay.m */; };
+		4A4BAAC61B745C1C0012B77D /* CameraFocusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA641B7453450012B77D /* CameraFocusView.m */; };
+		4A4BAAC71B745C1C0012B77D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4BAA731B7453450012B77D /* main.m */; };
+		4A4BAAC81B745C2D0012B77D /* ARViewOverlays-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA611B7453450012B77D /* ARViewOverlays-iPad.xib */; };
+		4A4BAAC91B745C2D0012B77D /* ARViewOverlays.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA621B7453450012B77D /* ARViewOverlays.xib */; };
+		4A4BAACA1B745C2D0012B77D /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA741B7453450012B77D /* MainWindow-iPad.xib */; };
+		4A4BAACB1B745C2D0012B77D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA751B7453450012B77D /* MainWindow.xib */; };
+		4A4BAACC1B745C2D0012B77D /* Resize-25@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA761B7453450012B77D /* Resize-25@2x.png */; };
+		4A4BAACD1B745C2D0012B77D /* slr_camera_shutter.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA771B7453450012B77D /* slr_camera_shutter.wav */; };
+		4A4BAACE1B745C2D0012B77D /* Switch Camera-25@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA781B7453450012B77D /* Switch Camera-25@2x.png */; };
+		4A4BAACF1B745C2D0012B77D /* Iris-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA6D1B7453450012B77D /* Iris-568h@2x.png */; };
+		4A4BAAD01B745C2D0012B77D /* Iris-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA6E1B7453450012B77D /* Iris-iPad.png */; };
+		4A4BAAD11B745C2D0012B77D /* Iris-iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA6F1B7453450012B77D /* Iris-iPad@2x.png */; };
+		4A4BAAD21B745C2D0012B77D /* Iris.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA701B7453450012B77D /* Iris.png */; };
+		4A4BAAD31B745C2D0012B77D /* Iris@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA711B7453450012B77D /* Iris@2x.png */; };
+		4A4BAAD41B745CC30012B77D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A4BAA6C1B7453450012B77D /* Images.xcassets */; };
+		4A4BAAD51B745E580012B77D /* libARgsub_es2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A6C5E501794F4E700061A08 /* libARgsub_es2.a */; };
+		4A4BAB081B745EDE0012B77D /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A33B6B818ADB7C50028A979 /* EAGLView.m */; };
 		4A50D7161164E55700ED169B /* ARViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A50D7141164E55700ED169B /* ARViewController.m */; };
 		4A5433EE1B4A1B840091CA91 /* EdenError.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433EA1B4A1B840091CA91 /* EdenError.c */; };
 		4A5433EF1B4A1B840091CA91 /* EdenGLFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5433EB1B4A1B840091CA91 /* EdenGLFont.c */; };
@@ -994,6 +1039,188 @@
 			remoteGlobalIDString = 4ACE00A1130B3F16009D1DA0;
 			remoteInfo = ARosg;
 		};
+		4A4BAA7E1B745B210012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AEB26281804A42A002290C5;
+			remoteInfo = AR;
+		};
+		4A4BAA821B745B210012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AC36B62113E654400C86F19;
+			remoteInfo = Eden;
+		};
+		4A4BAAD61B745E660012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A6C5E451794F4E700061A08;
+			remoteInfo = ARgsub_es2;
+		};
+		4A4BAAD81B745E6B0012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAADA1B745E710012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAADC1B745E760012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAADE1B745E7D0012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAAE01B745E7D0012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAAE21B745E850012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAAE41B745E850012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAAE61B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AEB26281804A42A002290C5;
+			remoteInfo = AR;
+		};
+		4A4BAAE81B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAAEA1B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAAEE1B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689FE1AE5D83C00AFC5F7;
+			remoteInfo = AR2;
+		};
+		4A4BAAF01B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941AD01AE5D8D9000FA802;
+			remoteInfo = KPM;
+		};
+		4A4BAAF21B745E940012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941B551AE5D8DC000FA802;
+			remoteInfo = ARUtil;
+		};
+		4A4BAAF41B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AEB26281804A42A002290C5;
+			remoteInfo = AR;
+		};
+		4A4BAAF61B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAAF81B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAAFA1B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689FE1AE5D83C00AFC5F7;
+			remoteInfo = AR2;
+		};
+		4A4BAAFC1B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941AD01AE5D8D9000FA802;
+			remoteInfo = KPM;
+		};
+		4A4BAAFE1B745EA90012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941B551AE5D8DC000FA802;
+			remoteInfo = ARUtil;
+		};
+		4A4BAB001B745EB50012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAB021B745EB50012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
+		4A4BAB041B745EBD0012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A8689791AE5D83A00AFC5F7;
+			remoteInfo = ARICP;
+		};
+		4A4BAB061B745EBD0012B77D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A941BDA1AE5D923000FA802;
+			remoteInfo = ARvideo;
+		};
 		4A5BAA5D13D82BC000C8D5E7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
@@ -1542,6 +1769,35 @@
 		4A3543441683173C0083B43E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4A47F751116E092C00FC577E /* ARView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARView.h; sourceTree = "<group>"; };
 		4A47F752116E092C00FC577E /* ARView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARView.m; sourceTree = "<group>"; };
+		4A4BAA571B7453450012B77D /* ARAppCameraTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ARAppCameraTest-Info.plist"; sourceTree = "<group>"; };
+		4A4BAA581B7453450012B77D /* ARAppCameraTest_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARAppCameraTest_Prefix.pch; sourceTree = "<group>"; };
+		4A4BAA591B7453450012B77D /* ARAppCameraTestDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARAppCameraTestDelegate.h; sourceTree = "<group>"; };
+		4A4BAA5A1B7453450012B77D /* ARAppCameraTestDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARAppCameraTestDelegate.m; sourceTree = "<group>"; };
+		4A4BAA5B1B7453450012B77D /* ARView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARView.h; sourceTree = "<group>"; };
+		4A4BAA5C1B7453450012B77D /* ARView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARView.m; sourceTree = "<group>"; };
+		4A4BAA5D1B7453450012B77D /* ARViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARViewController.h; sourceTree = "<group>"; };
+		4A4BAA5E1B7453450012B77D /* ARViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARViewController.m; sourceTree = "<group>"; };
+		4A4BAA5F1B7453450012B77D /* ARViewOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARViewOverlay.h; sourceTree = "<group>"; };
+		4A4BAA601B7453450012B77D /* ARViewOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARViewOverlay.m; sourceTree = "<group>"; };
+		4A4BAA611B7453450012B77D /* ARViewOverlays-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "ARViewOverlays-iPad.xib"; sourceTree = "<group>"; };
+		4A4BAA621B7453450012B77D /* ARViewOverlays.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ARViewOverlays.xib; sourceTree = "<group>"; };
+		4A4BAA631B7453450012B77D /* CameraFocusView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraFocusView.h; sourceTree = "<group>"; };
+		4A4BAA641B7453450012B77D /* CameraFocusView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraFocusView.m; sourceTree = "<group>"; };
+		4A4BAA651B7453450012B77D /* dist.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = dist.plist; sourceTree = "<group>"; };
+		4A4BAA6C1B7453450012B77D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4A4BAA6D1B7453450012B77D /* Iris-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Iris-568h@2x.png"; sourceTree = "<group>"; };
+		4A4BAA6E1B7453450012B77D /* Iris-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Iris-iPad.png"; sourceTree = "<group>"; };
+		4A4BAA6F1B7453450012B77D /* Iris-iPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Iris-iPad@2x.png"; sourceTree = "<group>"; };
+		4A4BAA701B7453450012B77D /* Iris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Iris.png; sourceTree = "<group>"; };
+		4A4BAA711B7453450012B77D /* Iris@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Iris@2x.png"; sourceTree = "<group>"; };
+		4A4BAA721B7453450012B77D /* lens-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lens-512.png"; sourceTree = "<group>"; };
+		4A4BAA731B7453450012B77D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4A4BAA741B7453450012B77D /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		4A4BAA751B7453450012B77D /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		4A4BAA761B7453450012B77D /* Resize-25@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Resize-25@2x.png"; sourceTree = "<group>"; };
+		4A4BAA771B7453450012B77D /* slr_camera_shutter.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = slr_camera_shutter.wav; sourceTree = "<group>"; };
+		4A4BAA781B7453450012B77D /* Switch Camera-25@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Switch Camera-25@2x.png"; sourceTree = "<group>"; };
+		4A4BAAC01B745B210012B77D /* ARAppCameraTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARAppCameraTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A50D7131164E55700ED169B /* ARViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARViewController.h; sourceTree = "<group>"; };
 		4A50D7141164E55700ED169B /* ARViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ARViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4A5433EA1B4A1B840091CA91 /* EdenError.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenError.c; sourceTree = "<group>"; };
@@ -3368,6 +3624,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4A4BAAA91B745B210012B77D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A4BAAD51B745E580012B77D /* libARgsub_es2.a in Frameworks */,
+				4A4BAAAD1B745B210012B77D /* libjpeg.a in Frameworks */,
+				4A4BAAAE1B745B210012B77D /* libARvideo.a in Frameworks */,
+				4A4BAAAF1B745B210012B77D /* QuartzCore.framework in Frameworks */,
+				4A4BAAB01B745B210012B77D /* CoreGraphics.framework in Frameworks */,
+				4A4BAAB21B745B210012B77D /* OpenGLES.framework in Frameworks */,
+				4A4BAAB31B745B210012B77D /* Foundation.framework in Frameworks */,
+				4A4BAAB41B745B210012B77D /* UIKit.framework in Frameworks */,
+				4A4BAAB51B745B210012B77D /* AVFoundation.framework in Frameworks */,
+				4A4BAAB61B745B210012B77D /* CoreMedia.framework in Frameworks */,
+				4A4BAAB71B745B210012B77D /* CoreVideo.framework in Frameworks */,
+				4A4BAAB81B745B210012B77D /* libAR.a in Frameworks */,
+				4A4BAAB91B745B210012B77D /* AudioToolbox.framework in Frameworks */,
+				4A4BAABA1B745B210012B77D /* Accelerate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4A50D6FB1164E16D00ED169B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3847,6 +4124,66 @@
 				4AA8B5BD161ADD7800B48D70 /* Iris@2x.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		4A4BAA561B7453450012B77D /* ARAppCameraTest */ = {
+			isa = PBXGroup;
+			children = (
+				4A4BAA791B74535B0012B77D /* Classes */,
+				4A4BAA7A1B74535F0012B77D /* Resources */,
+				4A4BAA7B1B7453650012B77D /* Other source */,
+			);
+			name = ARAppCameraTest;
+			path = "../../ARToolKit5-dev/examples/ARAppCameraTest";
+			sourceTree = "<group>";
+		};
+		4A4BAA791B74535B0012B77D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4A4BAA591B7453450012B77D /* ARAppCameraTestDelegate.h */,
+				4A4BAA5A1B7453450012B77D /* ARAppCameraTestDelegate.m */,
+				4A4BAA5B1B7453450012B77D /* ARView.h */,
+				4A4BAA5C1B7453450012B77D /* ARView.m */,
+				4A4BAA5D1B7453450012B77D /* ARViewController.h */,
+				4A4BAA5E1B7453450012B77D /* ARViewController.m */,
+				4A4BAA5F1B7453450012B77D /* ARViewOverlay.h */,
+				4A4BAA601B7453450012B77D /* ARViewOverlay.m */,
+				4A4BAA631B7453450012B77D /* CameraFocusView.h */,
+				4A4BAA641B7453450012B77D /* CameraFocusView.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		4A4BAA7A1B74535F0012B77D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4A4BAA571B7453450012B77D /* ARAppCameraTest-Info.plist */,
+				4A4BAA611B7453450012B77D /* ARViewOverlays-iPad.xib */,
+				4A4BAA621B7453450012B77D /* ARViewOverlays.xib */,
+				4A4BAA741B7453450012B77D /* MainWindow-iPad.xib */,
+				4A4BAA751B7453450012B77D /* MainWindow.xib */,
+				4A4BAA761B7453450012B77D /* Resize-25@2x.png */,
+				4A4BAA771B7453450012B77D /* slr_camera_shutter.wav */,
+				4A4BAA781B7453450012B77D /* Switch Camera-25@2x.png */,
+				4A4BAA651B7453450012B77D /* dist.plist */,
+				4A4BAA6C1B7453450012B77D /* Images.xcassets */,
+				4A4BAA6D1B7453450012B77D /* Iris-568h@2x.png */,
+				4A4BAA6E1B7453450012B77D /* Iris-iPad.png */,
+				4A4BAA6F1B7453450012B77D /* Iris-iPad@2x.png */,
+				4A4BAA701B7453450012B77D /* Iris.png */,
+				4A4BAA711B7453450012B77D /* Iris@2x.png */,
+				4A4BAA721B7453450012B77D /* lens-512.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4A4BAA7B1B7453650012B77D /* Other source */ = {
+			isa = PBXGroup;
+			children = (
+				4A4BAA581B7453450012B77D /* ARAppCameraTest_Prefix.pch */,
+				4A4BAA731B7453450012B77D /* main.m */,
+			);
+			name = "Other source";
 			sourceTree = "<group>";
 		};
 		4A50D7101164E4FB00ED169B /* ARApp */ = {
@@ -6187,6 +6524,7 @@
 				4A0619B113D59DF00066826B /* ARAppMovie */,
 				4A13023515BDF8F2003A441C /* ARAppNFT */,
 				4A13023415BDF8F2003A441C /* ARAppNFTOSG */,
+				4A4BAA561B7453450012B77D /* ARAppCameraTest */,
 			);
 			path = examples;
 			sourceTree = "<group>";
@@ -6277,6 +6615,7 @@
 				4A941B541AE5D8D9000FA802 /* libKPM.a */,
 				4A941BD91AE5D8DC000FA802 /* libARUtil.a */,
 				4A941C5E1AE5D923000FA802 /* libARvideo.a */,
+				4A4BAAC01B745B210012B77D /* ARAppCameraTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6350,6 +6689,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAAF51B745EA90012B77D /* PBXTargetDependency */,
+				4A4BAAF71B745EA90012B77D /* PBXTargetDependency */,
+				4A4BAAF91B745EA90012B77D /* PBXTargetDependency */,
+				4A4BAAFB1B745EA90012B77D /* PBXTargetDependency */,
+				4A4BAAFD1B745EA90012B77D /* PBXTargetDependency */,
+				4A4BAAFF1B745EA90012B77D /* PBXTargetDependency */,
 				4A1302AC15BDFF14003A441C /* PBXTargetDependency */,
 				4A1302AE15BDFF14003A441C /* PBXTargetDependency */,
 				4A1302B015BDFF14003A441C /* PBXTargetDependency */,
@@ -6371,6 +6716,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAAE71B745E940012B77D /* PBXTargetDependency */,
+				4A4BAAE91B745E940012B77D /* PBXTargetDependency */,
+				4A4BAAEB1B745E940012B77D /* PBXTargetDependency */,
+				4A4BAAEF1B745E940012B77D /* PBXTargetDependency */,
+				4A4BAAF11B745E940012B77D /* PBXTargetDependency */,
+				4A4BAAF31B745E940012B77D /* PBXTargetDependency */,
 				4A13030015BDFF17003A441C /* PBXTargetDependency */,
 				4A13030215BDFF17003A441C /* PBXTargetDependency */,
 			);
@@ -6409,6 +6760,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAADD1B745E760012B77D /* PBXTargetDependency */,
+				4A4BAADB1B745E710012B77D /* PBXTargetDependency */,
 				4AEB26D41804A6D5002290C5 /* PBXTargetDependency */,
 				4A2F72DC117840A600F35FA7 /* PBXTargetDependency */,
 				4A150ACC1178692D00F34D25 /* PBXTargetDependency */,
@@ -6430,6 +6783,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAADF1B745E7D0012B77D /* PBXTargetDependency */,
+				4A4BAAE11B745E7D0012B77D /* PBXTargetDependency */,
 				4AEB26D61804A6DB002290C5 /* PBXTargetDependency */,
 				4A3D429C130D1F2500E64C33 /* PBXTargetDependency */,
 				4A3D42D6130D202C00E64C33 /* PBXTargetDependency */,
@@ -6438,6 +6793,27 @@
 			name = ARAppOSG;
 			productName = ARApp;
 			productReference = 4AF6B86513B3778000F983E7 /* ARAppOSG.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4A4BAA7C1B745B210012B77D /* ARAppCameraTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A4BAABC1B745B210012B77D /* Build configuration list for PBXNativeTarget "ARAppCameraTest" */;
+			buildPhases = (
+				4A4BAA831B745B210012B77D /* Resources */,
+				4A4BAA9D1B745B210012B77D /* Sources */,
+				4A4BAAA91B745B210012B77D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4A4BAAD91B745E6B0012B77D /* PBXTargetDependency */,
+				4A4BAAD71B745E660012B77D /* PBXTargetDependency */,
+				4A4BAA7D1B745B210012B77D /* PBXTargetDependency */,
+				4A4BAA811B745B210012B77D /* PBXTargetDependency */,
+			);
+			name = ARAppCameraTest;
+			productName = ARApp;
+			productReference = 4A4BAAC01B745B210012B77D /* ARAppCameraTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4A50D6FC1164E16D00ED169B /* ARApp */ = {
@@ -6452,6 +6828,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAB051B745EBD0012B77D /* PBXTargetDependency */,
+				4A4BAB071B745EBD0012B77D /* PBXTargetDependency */,
 				4AEB26D01804A6C0002290C5 /* PBXTargetDependency */,
 				4AF7B0F117A1234C0033FB21 /* PBXTargetDependency */,
 			);
@@ -6472,6 +6850,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAAE31B745E850012B77D /* PBXTargetDependency */,
+				4A4BAAE51B745E850012B77D /* PBXTargetDependency */,
 				4AEB26D81804A6E0002290C5 /* PBXTargetDependency */,
 				4A5BAA5C13D82BC000C8D5E7 /* PBXTargetDependency */,
 				4A5BAA5E13D82BC000C8D5E7 /* PBXTargetDependency */,
@@ -6637,6 +7017,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A4BAB011B745EB50012B77D /* PBXTargetDependency */,
+				4A4BAB031B745EB50012B77D /* PBXTargetDependency */,
 				4AEB26CE1804A6B7002290C5 /* PBXTargetDependency */,
 				4AEB26D21804A6C7002290C5 /* PBXTargetDependency */,
 			);
@@ -6757,6 +7139,7 @@
 				4A5BAA5B13D82BC000C8D5E7 /* ARAppMovie */,
 				4A1302FF15BDFF17003A441C /* ARAppNFT */,
 				4A1302AB15BDFF14003A441C /* ARAppNFTOSG */,
+				4A4BAA7C1B745B210012B77D /* ARAppCameraTest */,
 			);
 		};
 /* End PBXProject section */
@@ -6889,6 +7272,37 @@
 				4AA8B5BF161ADD7800B48D70 /* Iris-iPad.png in Resources */,
 				4AA8B5C0161ADD7800B48D70 /* Iris-iPad@2x.png in Resources */,
 				4AA8B5C1161ADD7800B48D70 /* Iris@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A4BAA831B745B210012B77D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A4BAA8E1B745B210012B77D /* Default-568h@2x.png in Resources */,
+				4A4BAA8F1B745B210012B77D /* Default-LandscapeLeft.png in Resources */,
+				4A4BAAD11B745C2D0012B77D /* Iris-iPad@2x.png in Resources */,
+				4A4BAACA1B745C2D0012B77D /* MainWindow-iPad.xib in Resources */,
+				4A4BAAD21B745C2D0012B77D /* Iris.png in Resources */,
+				4A4BAACC1B745C2D0012B77D /* Resize-25@2x.png in Resources */,
+				4A4BAAD31B745C2D0012B77D /* Iris@2x.png in Resources */,
+				4A4BAA901B745B210012B77D /* Default-LandscapeLeft@2x.png in Resources */,
+				4A4BAA911B745B210012B77D /* Default-LandscapeRight.png in Resources */,
+				4A4BAAD41B745CC30012B77D /* Images.xcassets in Resources */,
+				4A4BAACF1B745C2D0012B77D /* Iris-568h@2x.png in Resources */,
+				4A4BAA921B745B210012B77D /* Default-LandscapeRight@2x.png in Resources */,
+				4A4BAA931B745B210012B77D /* Default-Portrait.png in Resources */,
+				4A4BAA941B745B210012B77D /* Default-Portrait@2x.png in Resources */,
+				4A4BAAD01B745C2D0012B77D /* Iris-iPad.png in Resources */,
+				4A4BAA951B745B210012B77D /* Default-PortraitUpsideDown.png in Resources */,
+				4A4BAA961B745B210012B77D /* Default-PortraitUpsideDown@2x.png in Resources */,
+				4A4BAACE1B745C2D0012B77D /* Switch Camera-25@2x.png in Resources */,
+				4A4BAAC91B745C2D0012B77D /* ARViewOverlays.xib in Resources */,
+				4A4BAACB1B745C2D0012B77D /* MainWindow.xib in Resources */,
+				4A4BAACD1B745C2D0012B77D /* slr_camera_shutter.wav in Resources */,
+				4A4BAA971B745B210012B77D /* Default.png in Resources */,
+				4A4BAAC81B745C2D0012B77D /* ARViewOverlays-iPad.xib in Resources */,
+				4A4BAA981B745B210012B77D /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7191,6 +7605,20 @@
 				4A33B6E618ADBA2E0028A979 /* ARMarkerSquare.m in Sources */,
 				4A33B6EB18ADBA510028A979 /* ARMarker.m in Sources */,
 				4A33B6E018ADB9A30028A979 /* VirtualEnvironment.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A4BAA9D1B745B210012B77D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A4BAAC61B745C1C0012B77D /* CameraFocusView.m in Sources */,
+				4A4BAAC21B745C1C0012B77D /* ARAppCameraTestDelegate.m in Sources */,
+				4A4BAAC41B745C1C0012B77D /* ARViewController.m in Sources */,
+				4A4BAB081B745EDE0012B77D /* EAGLView.m in Sources */,
+				4A4BAAC51B745C1C0012B77D /* ARViewOverlay.m in Sources */,
+				4A4BAAC71B745C1C0012B77D /* main.m in Sources */,
+				4A4BAAC31B745C1C0012B77D /* ARView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7619,6 +8047,136 @@
 			isa = PBXTargetDependency;
 			target = 4ACE00A1130B3F16009D1DA0 /* ARosg */;
 			targetProxy = 4A469652130B414700F7DE7F /* PBXContainerItemProxy */;
+		};
+		4A4BAA7D1B745B210012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AEB26281804A42A002290C5 /* AR */;
+			targetProxy = 4A4BAA7E1B745B210012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAA811B745B210012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AC36B62113E654400C86F19 /* Eden */;
+			targetProxy = 4A4BAA821B745B210012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAD71B745E660012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A6C5E451794F4E700061A08 /* ARgsub_es2 */;
+			targetProxy = 4A4BAAD61B745E660012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAD91B745E6B0012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAAD81B745E6B0012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAADB1B745E710012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAADA1B745E710012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAADD1B745E760012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAADC1B745E760012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAADF1B745E7D0012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAADE1B745E7D0012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAE11B745E7D0012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAAE01B745E7D0012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAE31B745E850012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAAE21B745E850012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAE51B745E850012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAAE41B745E850012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAE71B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AEB26281804A42A002290C5 /* AR */;
+			targetProxy = 4A4BAAE61B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAE91B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAAE81B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAEB1B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAAEA1B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAEF1B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689FE1AE5D83C00AFC5F7 /* AR2 */;
+			targetProxy = 4A4BAAEE1B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAF11B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941AD01AE5D8D9000FA802 /* KPM */;
+			targetProxy = 4A4BAAF01B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAF31B745E940012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941B551AE5D8DC000FA802 /* ARUtil */;
+			targetProxy = 4A4BAAF21B745E940012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAF51B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AEB26281804A42A002290C5 /* AR */;
+			targetProxy = 4A4BAAF41B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAF71B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAAF61B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAF91B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAAF81B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAFB1B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689FE1AE5D83C00AFC5F7 /* AR2 */;
+			targetProxy = 4A4BAAFA1B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAFD1B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941AD01AE5D8D9000FA802 /* KPM */;
+			targetProxy = 4A4BAAFC1B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAAFF1B745EA90012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941B551AE5D8DC000FA802 /* ARUtil */;
+			targetProxy = 4A4BAAFE1B745EA90012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAB011B745EB50012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAB001B745EB50012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAB031B745EB50012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAB021B745EB50012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAB051B745EBD0012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A8689791AE5D83A00AFC5F7 /* ARICP */;
+			targetProxy = 4A4BAB041B745EBD0012B77D /* PBXContainerItemProxy */;
+		};
+		4A4BAB071B745EBD0012B77D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A941BDA1AE5D923000FA802 /* ARvideo */;
+			targetProxy = 4A4BAB061B745EBD0012B77D /* PBXContainerItemProxy */;
 		};
 		4A5BAA5C13D82BC000C8D5E7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8114,6 +8672,50 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppOSG/ARAppOSG-Info.plist";
 				PRODUCT_NAME = ARAppOSG;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		4A4BAABD1B745B210012B77D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
+				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				PRODUCT_NAME = ARAppCameraTest;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4A4BAABE1B745B210012B77D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
+				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				PRODUCT_NAME = ARAppCameraTest;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4A4BAABF1B745B210012B77D /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = examples/ARAppCameraTest/dist.plist;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
+				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				PRODUCT_NAME = ARAppCameraTest;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -8796,7 +9398,7 @@
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
 				PRELINK_FLAGS = "-Llib/ios511 -Llib";
-				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -lopencv_core -lopencv_flann -ljpeg";
+				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SEPARATE_STRIP = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -8823,7 +9425,7 @@
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
 				PRELINK_FLAGS = "-Llib/ios511 -Llib";
-				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -lopencv_core -lopencv_flann -ljpeg";
+				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SEPARATE_STRIP = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -8850,7 +9452,7 @@
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
 				PRELINK_FLAGS = "-Llib/ios511 -Llib";
-				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -lopencv_core -lopencv_flann -ljpeg";
+				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -9033,6 +9635,16 @@
 				4A3D42C1130D1F2500E64C33 /* Debug */,
 				4A3D42C2130D1F2500E64C33 /* Release */,
 				4A3D42C3130D1F2500E64C33 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A4BAABC1B745B210012B77D /* Build configuration list for PBXNativeTarget "ARAppCameraTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A4BAABD1B745B210012B77D /* Debug */,
+				4A4BAABE1B745B210012B77D /* Release */,
+				4A4BAABF1B745B210012B77D /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
