@@ -8,17 +8,10 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
 	<string>Icon</string>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon.png</string>
-		<string>Icon@2x.png</string>
-		<string>Icon-72.png</string>
-		<string>Icon-Small.png</string>
-		<string>Icon-Small@2x.png</string>
-		<string>Icon-Small-50.png</string>
-	</array>
 	<key>CFBundleIdentifier</key>
 	<string>org.artoolkit.${PRODUCT_NAME:identifier}</string>
+	<key>CFBundleDisplayName</key>
+	<string>${PRODUCT_NAME}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
