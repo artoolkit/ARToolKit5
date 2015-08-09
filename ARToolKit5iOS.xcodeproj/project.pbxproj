@@ -42,6 +42,7 @@
 				4A67A99A134B4E7300A39C22 /* PBXTargetDependency */,
 				4A13033815BE01AF003A441C /* PBXTargetDependency */,
 				4A13033A15BE01AF003A441C /* PBXTargetDependency */,
+				4AD0E16F1B748781007FDDD2 /* PBXTargetDependency */,
 			);
 			name = "ARToolKit5iOS examples";
 			productName = "ARToolKit5iOS examples";
@@ -1416,6 +1417,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4A941B551AE5D8DC000FA802;
 			remoteInfo = ARUtil;
+		};
+		4AD0E16E1B748781007FDDD2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A4BAA7C1B745B210012B77D;
+			remoteInfo = ARAppCameraTest;
 		};
 		4AD5C44A0A39035C003F13D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -8317,6 +8325,11 @@
 			isa = PBXTargetDependency;
 			target = 4A941B551AE5D8DC000FA802 /* ARUtil */;
 			targetProxy = 4A941CB11AE5DB73000FA802 /* PBXContainerItemProxy */;
+		};
+		4AD0E16F1B748781007FDDD2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A4BAA7C1B745B210012B77D /* ARAppCameraTest */;
+			targetProxy = 4AD0E16E1B748781007FDDD2 /* PBXContainerItemProxy */;
 		};
 		4AD5C44B0A39035C003F13D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
