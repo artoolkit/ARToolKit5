@@ -614,8 +614,6 @@
 		4AE9CC56178E759500D944B9 /* ARMarkerNFT.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AE9CC54178E759500D944B9 /* ARMarkerNFT.c */; };
 		4AE9CC59178E75C300D944B9 /* ARMarkerNFT.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AE9CC57178E75C300D944B9 /* ARMarkerNFT.c */; };
 		4AEB27421804BC2E002290C5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4AEB27401804BC2E002290C5 /* InfoPlist.strings */; };
-		4AEB274A1804C2A4002290C5 /* libopencv_core.2.4.6.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4AEB27481804C295002290C5 /* libopencv_core.2.4.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4AEB274B1804C2A4002290C5 /* libopencv_flann.2.4.6.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4AEB27491804C295002290C5 /* libopencv_flann.2.4.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4AEB274C1804C2DA002290C5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4AEB274D1804C2DA002290C5 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F015A3B67A00A2EC4F /* Carbon.framework */; };
 		4AEB274E1804C2DA002290C5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F115A3B67A00A2EC4F /* Cocoa.framework */; };
@@ -627,8 +625,6 @@
 		4AEB27551804C34D002290C5 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
 		4AEB27561804C34D002290C5 /* libARMulti.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF79D840A26A39500E900EC /* libARMulti.a */; };
 		4AEB27571804C34D002290C5 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
-		4AEB275C1804C373002290C5 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A88F3E215D367CA002E595A /* libopencv_flann.dylib */; };
-		4AEB275D1804C373002290C5 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3149BB13C4AE1100F96B52 /* libopencv_core.dylib */; };
 		4AEB275E1804C384002290C5 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1E9759117E46FD00A2F3C2 /* libjpeg.a */; };
 		4AEB275F1804C395002290C5 /* ARMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB272A1804BB8A002290C5 /* ARMarker.cpp */; };
 		4AEB27601804C395002290C5 /* ARMarkerMulti.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB272B1804BB8A002290C5 /* ARMarkerMulti.cpp */; };
@@ -1982,15 +1978,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4AEB27471804C254002290C5 /* CopyFiles */ = {
+		4AEB27471804C254002290C5 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				4AEB274A1804C2A4002290C5 /* libopencv_core.2.4.6.dylib in CopyFiles */,
-				4AEB274B1804C2A4002290C5 /* libopencv_flann.2.4.6.dylib in CopyFiles */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -3453,8 +3448,6 @@
 				4AEB27561804C34D002290C5 /* libARMulti.a in Frameworks */,
 				4AEB27571804C34D002290C5 /* libARvideo.a in Frameworks */,
 				4AEB275E1804C384002290C5 /* libjpeg.a in Frameworks */,
-				4AEB275C1804C373002290C5 /* libopencv_flann.dylib in Frameworks */,
-				4AEB275D1804C373002290C5 /* libopencv_core.dylib in Frameworks */,
 				4AEB27531804C2DA002290C5 /* Foundation.framework in Frameworks */,
 				4AEB274C1804C2DA002290C5 /* Accelerate.framework in Frameworks */,
 				4AEB274D1804C2DA002290C5 /* Carbon.framework in Frameworks */,
@@ -6248,7 +6241,7 @@
 				4AEB27351804BC2E002290C5 /* Sources */,
 				4AEB27361804BC2E002290C5 /* Frameworks */,
 				4AEB27371804BC2E002290C5 /* Resources */,
-				4AEB27471804C254002290C5 /* CopyFiles */,
+				4AEB27471804C254002290C5 /* Copy Files */,
 			);
 			buildRules = (
 			);
