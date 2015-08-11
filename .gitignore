@@ -49,6 +49,7 @@ xcuserdata/
 # config
 include/AR/config.h
 share/artoolkit5-config
+Makefile
 
 # iOS build products
 lib/libAR*.a
