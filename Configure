@@ -45,7 +45,6 @@
 MDIR=".                              \
       lib/SRC                        \
       lib/SRC/AR                     \
-      lib/SRC/AR/arLabelingSub       \
       lib/SRC/ARICP                  \
       lib/SRC/AR2                    \
       lib/SRC/KPM                    \
@@ -462,12 +461,12 @@ then
     CXX="c++"
     CFLAG="-O"
     LDFLAG=""
-    #AR="libtool"
-    #ARFLAGS="-static -o"
-    #RANLIB="true"
-    AR="ar"
-    ARFLAGS="-r -u"
+    AR="libtool"
+    ARFLAGS="-static -o"
     RANLIB="true"
+    #AR="ar"
+    #ARFLAGS="-r -u"
+    #RANLIB="true"
     LIBS="-framework Accelerate -framework QTKit -framework CoreVideo -framework Carbon -framework GLUT -framework OpenGL -framework Cocoa -ljpeg"
     if [ "$INPUT_QUICKTIME" = "y" ]
     then

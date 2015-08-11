@@ -2879,7 +2879,6 @@
 		78BB3E2E08E482F400D7CA2D /* arLabelingSubEWR3CA.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA.c; sourceTree = "<group>"; };
 		78BB3E2F08E482F400D7CA2D /* arLabelingSubEWRA3C.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRA3C.c; sourceTree = "<group>"; };
 		78BB3E3008E482F400D7CA2D /* arLabelingSubEWRC.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRC.c; sourceTree = "<group>"; };
-		78BB3E3508E482F400D7CA2D /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		78BB3E3608E482F400D7CA2D /* arPattAttach.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arPattAttach.c; sourceTree = "<group>"; };
 		78BB3E3708E482F400D7CA2D /* arPattCreateHandle.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arPattCreateHandle.c; sourceTree = "<group>"; };
 		78BB3E3808E482F400D7CA2D /* arPattGetID.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arPattGetID.c; sourceTree = "<group>"; };
@@ -5312,7 +5311,6 @@
 				4A19C62F122C3F37005C1A9D /* arLabelingSubDWZ.c */,
 				4A19C631122C3F37005C1A9D /* arLabelingSubEBZ.c */,
 				4A19C633122C3F37005C1A9D /* arLabelingSubEWZ.c */,
-				78BB3E3508E482F400D7CA2D /* Makefile.in */,
 			);
 			path = arLabelingSub;
 			sourceTree = "<group>";

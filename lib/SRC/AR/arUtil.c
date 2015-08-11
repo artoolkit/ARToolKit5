@@ -1056,9 +1056,9 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             if (isAttached) (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
             return (wpath1);
         }
-#elif defined(__APPLE__) // iOS/OS X.
+#elif defined(__APPLE__) && defined(__OBJC__) // iOS/OS X.
         {
-            NSString *nssHomeDir = NSHomeDirectory();
+            NSString *nssHomeDir = NSHomeDirectory(); // CoreFoundation equivalent is CFCopyHomeDirectoryURL(), iOS 6.0+ only.
             if (!nssHomeDir) {
                 return (NULL);
             }

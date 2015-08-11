@@ -34,109 +34,189 @@
 #  Author(s): Hirokazu Kato, Philip Lamb
 #
 
-#
-# For instalation. Change this to your settings.
-#
-INC_DIR = ../../../include
-LIB_DIR = ../..
-#
-#  compiler
-#
-CC=@CC@
-CFLAG= @CFLAG@ -I$(INC_DIR)
-#
-# For making the library
-#
+UNAME = $(shell uname)
+
+AR_HOME = ../../..
+AR_CPPFLAGS = -I$(AR_HOME)/include
+
+CPPFLAGS = $(AR_CPPFLAGS)
+CFLAGS = @CFLAG@
+CXXFLAGS = @CFLAG@
 AR=@AR@
 ARFLAGS=@ARFLAGS@
-RANLIB= @RANLIB@
-#
-#   products
-#
-LIB= ${LIB_DIR}/libAR.a
-INCLUDE= ${INC_DIR}/AR/ar.h \
-         ${INC_DIR}/AR/config.h \
-         ${INC_DIR}/AR/arConfig.h \
-         ${INC_DIR}/AR/matrix.h \
-         ${INC_DIR}/AR/icp.h \
-         ${INC_DIR}/AR/icpCore.h \
-         ${INC_DIR}/AR/matrix.h \
-         ${INC_DIR}/AR/param.h \
-         ${INC_DIR}/AR/arImageProc.h \
-         ${INC_DIR}/AR/arFilterTransMat.h
+RANLIB = @RANLIB@
 
-#
-#   compilation control
-#
-LIBOBJS1= ${LIB}(mAlloc.o)      ${LIB}(mFree.o)       \
-	  ${LIB}(mAllocDup.o)   ${LIB}(mDup.o)        \
-	  ${LIB}(mAllocTrans.o) ${LIB}(mTrans.o)      \
-          ${LIB}(mAllocMul.o)   ${LIB}(mMul.o)        \
-	  ${LIB}(mAllocInv.o)   ${LIB}(mInv.o)        \
-	  ${LIB}(mSelfInv.o)    ${LIB}(mAllocUnit.o)  \
-	  ${LIB}(mUnit.o)       ${LIB}(mDisp.o)       \
-	  ${LIB}(mDet.o)        ${LIB}(mPCA.o)        \
-	  ${LIB}(vAlloc.o)      ${LIB}(vDisp.o)       \
-	  ${LIB}(vFree.o)       ${LIB}(vHouse.o)      \
-	  ${LIB}(vInnerP.o)     ${LIB}(vTridiag.o)
+TARGET = $(AR_HOME)/lib/libAR.a
 
-LIBOBJS2= ${LIB}(paramGetPerspective.o)   \
-          ${LIB}(paramClear.o)            \
-          ${LIB}(paramDecomp.o)           \
-          ${LIB}(paramDistortion.o)       \
-          ${LIB}(paramChangeSize.o)       \
-          ${LIB}(paramFile.o)             \
-          ${LIB}(paramLT.o)               \
-          ${LIB}(paramDisp.o)
+HEADERS = \
+arLabelingSub/arLabelingPrivate.h \
+arLabelingSub/arLabelingSub.h \
+$(AR_HOME)/include/AR/ar.h \
+$(AR_HOME)/include/AR/config.h \
+$(AR_HOME)/include/AR/arConfig.h \
+$(AR_HOME)/include/AR/matrix.h \
+$(AR_HOME)/include/AR/icp.h \
+$(AR_HOME)/include/AR/icpCore.h \
+$(AR_HOME)/include/AR/matrix.h \
+$(AR_HOME)/include/AR/param.h \
+$(AR_HOME)/include/AR/arImageProc.h \
+$(AR_HOME)/include/AR/arFilterTransMat.h \
 
-LIBOBJS3= ${LIB}(arCreateHandle.o)          \
-	  ${LIB}(arPattCreateHandle.o)      \
-	  ${LIB}(arPattAttach.o)            \
-	  ${LIB}(arPattLoad.o)              \
-	  ${LIB}(arPattSave.o)              \
-	  ${LIB}(arPattGetID.o)             \
-	  ${LIB}(arDetectMarker.o)          \
-	  ${LIB}(arAttachDiffImage.o)       \
-          ${LIB}(arLabeling.o)              \
-          ${LIB}(arDetectMarker2.o)         \
-          ${LIB}(arGetMarkerInfo.o)         \
-          ${LIB}(arGetLine.o)               \
-          ${LIB}(ar3DCreateHandle.o)        \
-          ${LIB}(ar3DUtil.o)                \
-          ${LIB}(arGetTransMat.o)           \
-          ${LIB}(arGetTransMatStereo.o)     \
-          ${LIB}(arUtil.o)              \
-          ${LIB}(arImageProc.o)			\
-          ${LIB}(arFilterTransMat.o)
 
-all:
-	(cd arLabelingSub; make -f Makefile)
-	make -f Makefile libs
+OBJS = \
+mAlloc.o \
+mFree.o \
+mAllocDup.o \
+mDup.o \
+mAllocTrans.o \
+mTrans.o \
+mAllocMul.o \
+mMul.o \
+mAllocInv.o \
+mInv.o \
+mSelfInv.o \
+mAllocUnit.o \
+mUnit.o \
+mDisp.o \
+mDet.o \
+mPCA.o \
+vAlloc.o \
+vDisp.o \
+vFree.o \
+vHouse.o \
+vInnerP.o \
+vTridiag.o \
+paramGetPerspective.o \
+paramClear.o \
+paramDecomp.o \
+paramDistortion.o \
+paramChangeSize.o \
+paramFile.o \
+paramLT.o \
+paramDisp.o \
+ar3DCreateHandle.o \
+ar3DUtil.o \
+arCreateHandle.o \
+arDetectMarker.o \
+arDetectMarker2.o \
+arFilterTransMat.o \
+arGetLine.o \
+arGetMarkerInfo.o \
+arGetTransMat.o \
+arGetTransMatStereo.o \
+arImageProc.o \
+arLabeling.o \
+arLabelingSub/arLabelingSubDBI3C.o \
+arLabelingSub/arLabelingSubDBI3C565.o \
+arLabelingSub/arLabelingSubDBI3CA.o \
+arLabelingSub/arLabelingSubDBI3CA4444.o \
+arLabelingSub/arLabelingSubDBI3CA5551.o \
+arLabelingSub/arLabelingSubDBIA3C.o \
+arLabelingSub/arLabelingSubDBIC.o \
+arLabelingSub/arLabelingSubDBICY.o \
+arLabelingSub/arLabelingSubDBIYC.o \
+arLabelingSub/arLabelingSubDBR3C.o \
+arLabelingSub/arLabelingSubDBR3C565.o \
+arLabelingSub/arLabelingSubDBR3CA.o \
+arLabelingSub/arLabelingSubDBR3CA4444.o \
+arLabelingSub/arLabelingSubDBR3CA5551.o \
+arLabelingSub/arLabelingSubDBRA3C.o \
+arLabelingSub/arLabelingSubDBRC.o \
+arLabelingSub/arLabelingSubDBRCY.o \
+arLabelingSub/arLabelingSubDBRYC.o \
+arLabelingSub/arLabelingSubDBZ.o \
+arLabelingSub/arLabelingSubDWI3C.o \
+arLabelingSub/arLabelingSubDWI3C565.o \
+arLabelingSub/arLabelingSubDWI3CA.o \
+arLabelingSub/arLabelingSubDWI3CA4444.o \
+arLabelingSub/arLabelingSubDWI3CA5551.o \
+arLabelingSub/arLabelingSubDWIA3C.o \
+arLabelingSub/arLabelingSubDWIC.o \
+arLabelingSub/arLabelingSubDWICY.o \
+arLabelingSub/arLabelingSubDWIYC.o \
+arLabelingSub/arLabelingSubDWR3C.o \
+arLabelingSub/arLabelingSubDWR3C565.o \
+arLabelingSub/arLabelingSubDWR3CA.o \
+arLabelingSub/arLabelingSubDWR3CA4444.o \
+arLabelingSub/arLabelingSubDWR3CA5551.o \
+arLabelingSub/arLabelingSubDWRA3C.o \
+arLabelingSub/arLabelingSubDWRC.o \
+arLabelingSub/arLabelingSubDWRCY.o \
+arLabelingSub/arLabelingSubDWRYC.o \
+arLabelingSub/arLabelingSubDWZ.o \
+arLabelingSub/arLabelingSubEBI3C.o \
+arLabelingSub/arLabelingSubEBI3C565.o \
+arLabelingSub/arLabelingSubEBI3CA.o \
+arLabelingSub/arLabelingSubEBI3CA4444.o \
+arLabelingSub/arLabelingSubEBI3CA5551.o \
+arLabelingSub/arLabelingSubEBIA3C.o \
+arLabelingSub/arLabelingSubEBIC.o \
+arLabelingSub/arLabelingSubEBICY.o \
+arLabelingSub/arLabelingSubEBIYC.o \
+arLabelingSub/arLabelingSubEBR3C.o \
+arLabelingSub/arLabelingSubEBR3C565.o \
+arLabelingSub/arLabelingSubEBR3CA.o \
+arLabelingSub/arLabelingSubEBR3CA4444.o \
+arLabelingSub/arLabelingSubEBR3CA5551.o \
+arLabelingSub/arLabelingSubEBRA3C.o \
+arLabelingSub/arLabelingSubEBRC.o \
+arLabelingSub/arLabelingSubEBRCY.o \
+arLabelingSub/arLabelingSubEBRYC.o \
+arLabelingSub/arLabelingSubEBZ.o \
+arLabelingSub/arLabelingSubEWI3C.o \
+arLabelingSub/arLabelingSubEWI3C565.o \
+arLabelingSub/arLabelingSubEWI3CA.o \
+arLabelingSub/arLabelingSubEWI3CA4444.o \
+arLabelingSub/arLabelingSubEWI3CA5551.o \
+arLabelingSub/arLabelingSubEWIA3C.o \
+arLabelingSub/arLabelingSubEWIC.o \
+arLabelingSub/arLabelingSubEWICY.o \
+arLabelingSub/arLabelingSubEWIYC.o \
+arLabelingSub/arLabelingSubEWR3C.o \
+arLabelingSub/arLabelingSubEWR3C565.o \
+arLabelingSub/arLabelingSubEWR3CA.o \
+arLabelingSub/arLabelingSubEWR3CA4444.o \
+arLabelingSub/arLabelingSubEWR3CA5551.o \
+arLabelingSub/arLabelingSubEWRA3C.o \
+arLabelingSub/arLabelingSubEWRC.o \
+arLabelingSub/arLabelingSubEWRCY.o \
+arLabelingSub/arLabelingSubEWRYC.o \
+arLabelingSub/arLabelingSubEWZ.o \
+arPattAttach.o \
+arPattCreateHandle.o \
+arPattGetID.o \
+arPattLoad.o \
+arPattSave.o \
 
-libs:		${LIBOBJS1} ${LIBOBJS2} ${LIBOBJS3}
 
-${LIBOBJS1}:	${INCLUDE}
-${LIBOBJS2}:	${INCLUDE}
-${LIBOBJS3}:	${INCLUDE}
+OBJS_OBJC = \
+arUtil.o \
 
-.c.a:
-	${CC} -c ${CFLAG} $<
-	${AR} ${ARFLAGS} $@ $*.o
-	${RANLIB}
-	rm -f $*.o
+
+# Implicit rule, to compile C++ files with the .cpp suffix (rule already exists for .cc).
+%.o : %.cpp
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+
+default build all: $(TARGET)
+
+$(OBJS_OBJC): $(HEADERS)
+	$(CC) $(CFLAGS) $(CPPFLAGS)  -c -ObjC -o $@ $*.c
+
+$(OBJS): $(HEADERS)
+
+$(TARGET): $(OBJS) $(OBJS_OBJC)
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@
 
 clean:
-	(cd arLabelingSub; make -f Makefile clean)
-	rm -f *.o
-	rm -f ${LIB}
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET)
 
 allclean:
-	(cd arLabelingSub; make -f Makefile allclean)
-	rm -f *.o
-	rm -f ${LIB}
-	rm -f Makefile
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET)
+	-rm -f Makefile
 
 distclean:
-	(cd arLabelingSub; make -f Makefile distclean)
 	rm -f *.o
 	rm -f Makefile
