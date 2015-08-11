@@ -45,6 +45,8 @@ ifeq "$(UNAME)" "Darwin"
 endif
 VRML_CPPFLAGS = -I$(VRML_HOME)/include/openvrml -I/usr/X11R6/include
 
+CC=@CC@
+CXX=@CXX@
 CPPFLAGS = $(AR_CPPFLAGS) $(VRML_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@

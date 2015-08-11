@@ -38,6 +38,8 @@ UNAME = $(shell uname)
 AR_HOME = ../../..
 AR_CPPFLAGS = -I$(AR_HOME)/include/@SYSTEM@ -I$(AR_HOME)/include -I$(AR_HOME)/lib/SRC/KPM/FreakMatcher
 
+CC=@CC@
+CXX=@CXX@
 CPPFLAGS = $(AR_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@

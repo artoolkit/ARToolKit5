@@ -39,6 +39,8 @@ UNAME = $(shell uname)
 AR_HOME = ../../..
 AR_CPPFLAGS = -I$(AR_HOME)/include
 
+CC=@CC@
+CXX=@CXX@
 CPPFLAGS = $(AR_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
@@ -188,9 +190,13 @@ arPattGetID.o \
 arPattLoad.o \
 arPattSave.o \
 
+ifneq "$(UNAME)" "Darwin"
+OBJS += arUtil.o
+endif
 
-OBJS_OBJC = \
-arUtil.o \
+ifeq "$(UNAME)" "Darwin"
+OBJS_OBJC = arUtil.o
+endif
 
 
 # Implicit rule, to compile C++ files with the .cpp suffix (rule already exists for .cc).

@@ -37,6 +37,8 @@ UNAME = $(shell uname)
 
 AR_HOME = ../../..
 
+CC=@CC@
+CXX=@CXX@
 CPPFLAGS = -I$(AR_HOME)/include
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@

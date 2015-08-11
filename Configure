@@ -109,19 +109,6 @@ MACHINE=`uname -m`
 if [ "$E" = "Linux" ]
 then
     SYSTEM="linux-$MACHINE"
-    echo "Do you want to use Intel Compiler? (y or n)"
-    echo -n "Enter : "
-    read ANS
-    if [ "$ANS" = "y" ]
-    then
-        INTELCC="y"
-    elif [ "$ANS" = "n" ]
-    then
-        INTELCC="n"
-    else
-        echo "Please enter y or n."
-        exit 0
-    fi
 
     DEFAULT_CAP_DEVICE=""
     echo "Do you want to enable the Video4Linux capture module? (y or n)"
@@ -295,22 +282,12 @@ then
     fi
 
 
-    if [ "$INTELCC" = "y" ]
-    then
-        CC="icc"
-        CXX="icc"
-        CFLAG="-O2 -axW -tpp7 -I/usr/local/include"
-        #CFLAG="-O2 -xW -tpp7 -I/usr/local/include"
-        #CFLAG="-O2 -march=pentium4 -tpp7 -I/usr/local/include"
-        #CFLAG="-O2 -mcpu=pentium4 -tpp7 -I/usr/local/include"
-    else
-        CC="cc"
-        CXX="g++"
-        #CFLAG="-O"
-        #CFLAG="-O3 -march=pentium4"
-        CFLAG="-O3 -fPIC -march=core2"
-    fi
-
+    CC="clang"
+    CXX="clang++ -std=c++11 -stdlib=libc++"
+    #CFLAG="-O3 -fPIC -march=i686"
+    #CFLAG="-O3 -fPIC -march=pentium4"
+    CFLAG="-O3 -fPIC -march=core2"
+ 
     if [ "$MACHINE" = "x86_64" ]
     then
         CFLAG="$CFLAG -I/usr/include/x86_64-linux-gnu"
