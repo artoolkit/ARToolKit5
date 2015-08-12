@@ -100,7 +100,7 @@ Required external software
   
 	Windows: Microsoft Visual Studio 2013 and Microsoft Visual Studio 2010 SP1 are supported. The free Microsoft Visual Studio Express Edition will also work.
 	Mac OS X: Xcode tools v5.1 under Mac OS X 10.9 or later is required. Xcode 6 under Mac OS X 10.10 is recommended. Xcode may be obtained free from Apple at http://developer.apple.com/xcode/.
-	Linux: clang and libc++-dev are required. clang-3.6 or later is recommended.
+    Linux: Clang and LLVM's libc++ are required. Packages: 'clang', 'libc++-dev'.
 	
   Where ARToolKit libraries require external DLLs, these are generally supplied with ARToolKit. Exceptions are listed below.
 
@@ -110,10 +110,12 @@ Required external software
 	* Point Grey camera: The Flycapture SDK (distributed with Point Grey Cameras) must be installed.
 
   Mac OS X
+    * C++ runtime: libc++ is only available on OS X 10.7 and later.
 	* OpenSceneGraph (optional; The ARToolKit OSG renderer requires OpenSceneGraph). Use the installer provided at http://www.artoolkit.org/dist/openscenegraph/.
 
   Linux
 	ARToolKit follows the Linux model whereby required software is externally installed. The following packages are required to be installed in your package manager to run the ARToolKit examples. (Additional packages required to build ARToolKit from source are listed on that help page.)
+    * C++ runtime: package 'libc++1'.
 	* OpenGL: Package 'xorg'
 	* GLUT: Package 'freeglut3'. Alternatively, GLUT can be built from source and is also included in the MESA 3D libraries:
 	* Video4Linux, lib1394dc, or GStreamer. Packages: 'libv4l2-0", 'libdc1394-22' (for lib1394 version 2.x) or 'libdc1394-13' (for lib1394 version 1.x), and 'libgstreamer0.10'.
