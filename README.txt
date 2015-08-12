@@ -100,7 +100,7 @@ Required external software
   
 	Windows: Microsoft Visual Studio 2013 and Microsoft Visual Studio 2010 SP1 are supported. The free Microsoft Visual Studio Express Edition will also work.
 	Mac OS X: Xcode tools v5.1 under Mac OS X 10.9 or later is required. Xcode 6 under Mac OS X 10.10 is recommended. Xcode may be obtained free from Apple at http://developer.apple.com/xcode/.
-	Linux: GCC 4.6 is required. Clang 3.6 or later is recommended.
+	Linux: clang and libc++-dev are required. clang-3.6 or later is recommended.
 	
   Where ARToolKit libraries require external DLLs, these are generally supplied with ARToolKit. Exceptions are listed below.
 
