@@ -379,7 +379,7 @@ static void arglCbCrToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
 					 "    mov         r4,  #227        \n" // B Cb factor =  1.772. 227/128 =  1.774 (227 = 0x00e3).
                      "    mov         r5,  #0x80       \n" // XOR with this value converts unsigned 8-bit val to signed 8-bit val - 128.
 					 "    vdup.16     q3,  r4          \n" // Load q3 (d6-d7) with 8 copies of the 16 LSBs of B Cb.
-                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r8.
+                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r5.
                      "    vmov.i16    q7,  #0          \n" // Load q7 (d14-d15) with 0s.
                      "    vmov.i8     d31, #0xFF       \n" // Load d31 (A channel of destRGBA) with FF.
 					 "0:						       \n"
@@ -396,12 +396,12 @@ static void arglCbCrToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
                      "    vmax.s16    q8,  q8,  q7     \n" // Put positive components into q8 (overwriting).
                      // Green.
 					 "    vmul.s16    q10, q1,  q6     \n"
-					 "    vmla.s16    q10, q2,  q5     \n" // G is now signed 16 bit in q10 (d18-d19).
+					 "    vmla.s16    q10, q2,  q5     \n" // G is now signed 16 bit in q10 (d20-21).
                      "    vmin.s16    q11, q10, q7     \n" // Put negative components into q11.
                      "    vneg.s16    q11, q11         \n" // Make positive.
                      "    vmax.s16    q10, q10, q7     \n" // Put positive components into q10 (overwriting).
                      // Blue.
-					 "    vmul.s16    q12, q3,  q5     \n" // B is now signed 16 bit in q12 (d20-d21).
+					 "    vmul.s16    q12, q3,  q5     \n" // B is now signed 16 bit in q12 (d24-d25).
                      "    vmin.s16    q13, q12, q7     \n" // Put negative components into q13.
                      "    vneg.s16    q13, q13         \n" // Make positive.
                      "    vmax.s16    q12, q12, q7     \n" // Put positive components into q12 (overwriting).
@@ -439,7 +439,7 @@ static void arglCrCbToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
 					 "    mov         r4,  #227        \n" // B Cb factor =  1.772. 227/128 =  1.774 (227 = 0x00e3).
                      "    mov         r5,  #0x80       \n" // XOR with this value converts unsigned 8-bit val to signed 8-bit val - 128.
 					 "    vdup.16     q3,  r4          \n" // Load q3 (d6-d7) with 8 copies of the 16 LSBs of B Cb.
-                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r8.
+                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r5.
                      "    vmov.i16    q7,  #0          \n" // Load q7 (d14-d15) with 0s.
                      "    vmov.i8     d31, #0xFF       \n" // Load d31 (A channel of destRGBA) with FF.
 					 "0:						       \n"
@@ -456,12 +456,12 @@ static void arglCrCbToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
                      "    vmax.s16    q8,  q8,  q7     \n" // Put positive components into q8 (overwriting).
                      // Green.
 					 "    vmul.s16    q10, q1,  q5     \n"
-					 "    vmla.s16    q10, q2,  q6     \n" // G is now signed 16 bit in q10 (d18-d19).
+					 "    vmla.s16    q10, q2,  q6     \n" // G is now signed 16 bit in q10 (d20-21).
                      "    vmin.s16    q11, q10, q7     \n" // Put negative components into q11.
                      "    vneg.s16    q11, q11         \n" // Make positive.
                      "    vmax.s16    q10, q10, q7     \n" // Put positive components into q10 (overwriting).
                      // Blue.
-					 "    vmul.s16    q12, q3,  q6     \n" // B is now signed 16 bit in q12 (d20-d21).
+					 "    vmul.s16    q12, q3,  q6     \n" // B is now signed 16 bit in q12 (d24-d25).
                      "    vmin.s16    q13, q12, q7     \n" // Put negative components into q13.
                      "    vneg.s16    q13, q13         \n" // Make positive.
                      "    vmax.s16    q12, q12, q7     \n" // Put positive components into q12 (overwriting).
