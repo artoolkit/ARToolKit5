@@ -85,6 +85,8 @@ Source: "include\ARWrapper\*"; Components: dev; DestDir: "{app}\include\ARWrappe
 Source: "include\Eden\*"; Components: dev; DestDir: "{app}\include\Eden"; Flags: recursesubdirs ignoreversion
 Source: "include\profile.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\thread_sub.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
+Source: "include\glStateCache.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
+Source: "include\glStateCache2.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\win32-i386\stdint.h"; Components: dev; DestDir: "{app}\include\win32-i386"; Flags: ignoreversion
 Source: "include\win64-x64\stdint.h"; Components: dev; DestDir: "{app}\include\win64-x64"; Flags: ignoreversion
 Source: "lib\win32-i386\AR*"; Components: dev; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion

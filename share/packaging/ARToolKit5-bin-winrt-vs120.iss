@@ -118,6 +118,8 @@ Source: "include\ARWrapper\*"; Components: dev; DestDir: "{app}\include\ARWrappe
 Source: "include\Eden\*"; Components: dev; DestDir: "{app}\include\Eden"; Flags: recursesubdirs ignoreversion
 Source: "include\profile.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\thread_sub.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
+Source: "include\glStateCache.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
+Source: "include\glStateCache2.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 
 Source: "lib\winrt-wp8_1-arm\AR*"; Components: dev; DestDir: "{app}\lib\winrt-wp8_1-arm"; Flags: ignoreversion
 Source: "lib\winrt-wp8_1-x86\AR*"; Components: dev; DestDir: "{app}\lib\winrt-wp8_1-x86"; Flags: ignoreversion
