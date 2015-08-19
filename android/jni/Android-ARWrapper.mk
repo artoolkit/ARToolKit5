@@ -95,6 +95,11 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 LOCAL_MODULE := ARWrapper
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/ARWrapper/*.c*)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+  # Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
+  MY_FILES := $(subst VideoSource.cpp,VideoSource.cpp.neon,$(MY_FILES))
+  LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
+endif
 LOCAL_SRC_FILES := $(MY_FILES)
 
 LOCAL_C_INCLUDES += $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include

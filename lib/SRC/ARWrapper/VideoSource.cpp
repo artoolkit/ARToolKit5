@@ -45,6 +45,13 @@
 #include <ARWrapper/ARController.h>
 #include <ARWrapper/ColorConversion.h>
 
+#ifdef HAVE_ARM_NEON
+#  include <arm_neon.h>
+#  ifdef ANDROID
+#    include "cpu-features.h"
+#  endif
+#endif
+
 #define MAX(x,y) (x > y ? x : y)
 #define MIN(x,y) (x < y ? x : y)
 #define CLAMP(x,r1,r2) (MIN(MAX(x,r1),r2))
@@ -69,6 +76,9 @@ VideoSource::VideoSource() :
     videoWidth(0),
     videoHeight(0),
     pixelFormat((AR_PIXEL_FORMAT)(-1)),
+#ifdef HAVE_ARM_NEON
+    m_fastPath(-1),
+#endif
 #ifndef _WINRT
     glPixIntFormat(0),
     glPixFormat(0),
@@ -268,6 +278,229 @@ bool VideoSource::updateTexture(Color* buffer) {
 
 }
 
+#ifdef HAVE_ARM_NEON
+static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCbCr, int rowBytes, int rows)
+{
+    __asm__ volatile("    vstmdb      sp!, {d8-d15}    \n" // Save any VFP or NEON registers that should be preserved (S16-S31 / Q4-Q7).
+                     // Setup factors etc.
+                     "    mov         r4,  #179        \n" // R Cr factor =  1.402. 179/128 =  1.398 (179 = 0x00b3)
+                     "    mvn         r5,  #90         \n" // G Cr factor = -0.714. -91/128 = -0.711 (-91 = 0xffa5 = NOT 90).
+                     "    mvn         r6,  #43         \n" // G Cb factor = -0.344. -44/128 = -0.344 (-44 = 0xffd4 = NOT 43).
+                     "    vdup.16     q0,  r4          \n" // Load q0 (d0-d1) with 8 copies of the 16 LSBs of R Cr.
+                     "    vdup.16     q1,  r5          \n" // Load q1 (d2-d3) with 8 copies of the 16 LSBs of G Cr.
+                     "    vdup.16     q2,  r6          \n" // Load q2 (d4-d5) with 8 copies of the 16 LSBs of G Cb.
+                     "    mov         r4,  #227        \n" // B Cb factor =  1.772. 227/128 =  1.774 (227 = 0x00e3).
+                     "    mov         r5,  #0x80       \n" // XOR with this value converts unsigned 8-bit val to signed 8-bit val - 128.
+                     "    vdup.16     q3,  r4          \n" // Load q3 (d6-d7) with 8 copies of the 16 LSBs of B Cb.
+                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r5.
+                     "    vmov.i8     d31, #0xFF       \n" // Load d31 (A channel of destRGBA) with FF.
+                     // Setup loop-related stuff.
+                     "    mov         r4,  %3          \n" // Save arg 3 (rowBytes) in r4 for later use.
+                     "    lsr         r6,  %4,  #1     \n" // Save arg 4 (rows) divided by 2 in r6 for loop count.
+                     "0:						       \n"
+                     "    lsr         r5,  %3,  #4     \n" // Save arg 3 (rowBytes) divided by 16 in r5 for loop count.
+                     "1:						       \n"
+                     // Read 8 CbCr pixels, convert to 16-bit.
+                     "    vld2.8      {d10-d11}, [%2]! \n" // Load 8 CbCr pixels, de-interleaving Cb into d10 (q5[0]), Cr into d11 (q5[1]).
+                     "    veor.8      d10, d10, d8     \n" // Subtract 128 from Cb. Result is signed.
+                     "    veor.8      d11, d11, d8     \n" // Subtract 128 from Cr. Result is signed.
+                     "    vmovl.s8    q6,  d11         \n" // Sign-extend Cr to 16 bit in q6 (d12-d13).
+                     "    vmovl.s8    q5,  d10         \n" // Sign-extend Cb to 16 bit in q5 (d10-d11) (overwriting).
+                     // Calculate red, then scale width by 2.
+                     "    vmul.s16    q8,  q0,  q6     \n" // R is now signed 16 bit in q8 (d16-d17).
+                     "    vmov        q9,  q8          \n" // Copy into q9 (d18-d19).
+                     "    vzip.16     q8,  q9          \n" // Interleave the original and the copy.
+                     // Calculate green, then scale width by 2.
+                     "    vmul.s16    q10, q1,  q6     \n"
+                     "    vmla.s16    q10, q2,  q5     \n" // G is now signed 16 bit in q10 (d20-d21).
+                     "    vmov        q11, q10         \n" // Copy into q11 (d22-d23).
+                     "    vzip.16     q10, q11         \n" // Interleave the original and the copy.
+                     // Calculate blue, then scale width by 2.
+                     "    vmul.s16    q12, q3,  q5     \n" // B is now signed 16 bit in q12 (d24-d25).
+                     "    vmov        q13, q12         \n" // Copy into q13 (d26-d27).
+                     "    vzip.16     q12, q13         \n" // Interleave the original and the copy.
+                     // Read 16 Y from first row.
+                     "    vld1.8      {d10,d11}, [%1]  \n" // Load 16 Y pixels into d10 (q5[0]) and d11 (q5[1]). N.B. No post-increment.
+                     "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
+                     "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
+                     // Add luma and chroma values. First 8 pixels.
+                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // Add luma and chroma values. Second 8 pixels.
+                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // 16 pixels of first row done.
+                     "    add         %1,  %1,  r4     \n" // Advance srcY by rowBytes to move to next row.
+                     "    sub         %0,  %0,  #64    \n" // Back up dest by 16 pixels/64 bytes.
+                     "    add         %0,  %0,  r4, LSL #2 \n" // Advance dest by 4xrowBytes.
+                     // Read 16 Y from second row.
+                     "    vld1.8      {d10,d11}, [%1]! \n" // Load 16 Y pixels into d10 (q5[0]) and d11 (q5[1]).
+                     "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
+                     "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
+                     // Add luma and chroma values. First 8 pixels.
+                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // Add luma and chroma values. Second 8 pixels.
+                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // 16 pixels of second row done.
+                     "    sub         %1,  %1,  r4     \n" // Back up srcY by rowBytes to move to previous row.
+                     "    sub         %0,  %0,  r4, LSL #2 \n" // Back up dest by 4xrowBytes.
+                     "    subs        r5,  r5,  #1     \n" // Decrement iteration count.
+                     "    bne         1b               \n" // Repeat unil iteration count is not zero.
+                     // Two rows done.
+                     "    add         %1,  %1,  r4     \n" // Advance srcY by rowBytes to skip row we've already done.
+                     "    add         %0,  %0,  r4, LSL #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
+                     "    subs        r6,  r6,  #1     \n" // Decrement iteration count.
+                     "    bne         0b               \n" // Repeat unil iteration count is not zero.
+                     "    vldmia      sp!, {d8-d15}    \n" // Restore any VFP or NEON registers that were saved.
+                     :
+                     : "r"(dest), "r"(srcY), "r"(srcCbCr), "r"(rowBytes), "r"(rows)
+                     : "cc", "r4", "r5", "r6"
+                     );
+}
+
+static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCrCb, int rowBytes, int rows)
+{
+    __asm__ volatile("    vstmdb      sp!, {d8-d15}    \n" // Save any VFP or NEON registers that should be preserved (S16-S31 / Q4-Q7).
+                     // Setup factors etc.
+                     "    mov         r4,  #179        \n" // R Cr factor =  1.402. 179/128 =  1.398 (179 = 0x00b3)
+                     "    mvn         r5,  #90         \n" // G Cr factor = -0.714. -91/128 = -0.711 (-91 = 0xffa5 = NOT 90).
+                     "    mvn         r6,  #43         \n" // G Cb factor = -0.344. -44/128 = -0.344 (-44 = 0xffd4 = NOT 43).
+                     "    vdup.16     q0,  r4          \n" // Load q0 (d0-d1) with 8 copies of the 16 LSBs of R Cr.
+                     "    vdup.16     q1,  r5          \n" // Load q1 (d2-d3) with 8 copies of the 16 LSBs of G Cr.
+                     "    vdup.16     q2,  r6          \n" // Load q2 (d4-d5) with 8 copies of the 16 LSBs of G Cb.
+                     "    mov         r4,  #227        \n" // B Cb factor =  1.772. 227/128 =  1.774 (227 = 0x00e3).
+                     "    mov         r5,  #0x80       \n" // XOR with this value converts unsigned 8-bit val to signed 8-bit val - 128.
+                     "    vdup.16     q3,  r4          \n" // Load q3 (d6-d7) with 8 copies of the 16 LSBs of B Cb.
+                     "    vdup.8      d8,  r5          \n" // Load d8 (q4[0]) with 8 copies of the 8 LSBs of r5.
+                     "    vmov.i8     d31, #0xFF       \n" // Load d31 (A channel of destRGBA) with FF.
+                     // Setup loop-related stuff.
+                     "    mov         r4,  %3          \n" // Save arg 3 (rowBytes) in r4 for later use.
+                     "    lsr         r6,  %4,  #1     \n" // Save arg 4 (rows) divided by 2 in r6 for loop count.
+                     "0:						       \n"
+                     "    lsr         r5,  %3,  #4     \n" // Save arg 3 (rowBytes) divided by 16 in r5 for loop count.
+                     "1:						       \n"
+                     // Read 8 CbCr pixels, convert to 16-bit.
+                     "    vld2.8      {d10-d11}, [%2]! \n" // Load 8 CrCb pixels, de-interleaving Cr into d10 (q5[0]), Cb into d11 (q5[1]).
+                     "    veor.8      d10, d10, d8     \n" // Subtract 128 from Cr. Result is signed.
+                     "    veor.8      d11, d11, d8     \n" // Subtract 128 from Cb. Result is signed.
+                     "    vmovl.s8    q6,  d11         \n" // Sign-extend Cb to 16 bit in q6 (d12-d13).
+                     "    vmovl.s8    q5,  d10         \n" // Sign-extend Cr to 16 bit in q5 (d10-d11) (overwriting).
+                     // Calculate red, then scale width by 2.
+                     "    vmul.s16    q8,  q0,  q5     \n" // R is now signed 16 bit in q8 (d16-d17).
+                     "    vmov        q9,  q8          \n" // Copy into q9 (d18-d19).
+                     "    vzip.16     q8,  q9          \n" // Interleave the original and the copy.
+                     // Calculate green, then scale width by 2.
+                     "    vmul.s16    q10, q1,  q5     \n"
+                     "    vmla.s16    q10, q2,  q6     \n" // G is now signed 16 bit in q10 (d20-d21).
+                     "    vmov        q11, q10         \n" // Copy into q11 (d22-d23).
+                     "    vzip.16     q10, q11         \n" // Interleave the original and the copy.
+                     // Calculate blue, then scale width by 2.
+                     "    vmul.s16    q12, q3,  q6     \n" // B is now signed 16 bit in q12 (d24-d25).
+                     "    vmov        q13, q12         \n" // Copy into q13 (d26-d27).
+                     "    vzip.16     q12, q13         \n" // Interleave the original and the copy.
+                     // Read 16 Y from first row.
+                     "    vld1.8      {d10,d11}, [%1]  \n" // Load 16 Y pixels into d10 (q5[0]) and d11 (q5[1]). N.B. No post-increment.
+                     "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
+                     "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
+                     // Add luma and chroma values. First 8 pixels.
+                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // Add luma and chroma values. Second 8 pixels.
+                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // 16 pixels of first row done.
+                     "    add         %1,  %1,  r4     \n" // Advance srcY by rowBytes to move to next row.
+                     "    sub         %0,  %0,  #64    \n" // Back up dest by 16 pixels/64 bytes.
+                     "    add         %0,  %0,  r4, LSL #2 \n" // Advance dest by 4xrowBytes.
+                     // Read 16 Y from second row.
+                     "    vld1.8      {d10,d11}, [%1]! \n" // Load 16 Y pixels into d10 (q5[0]) and d11 (q5[1]).
+                     "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
+                     "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
+                     // Add luma and chroma values. First 8 pixels.
+                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // Add luma and chroma values. Second 8 pixels.
+                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
+                     "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
+                     // 16 pixels of second row done.
+                     "    sub         %1,  %1,  r4     \n" // Back up srcY by rowBytes to move to previous row.
+                     "    sub         %0,  %0,  r4, LSL #2 \n" // Back up dest by 4xrowBytes.
+                     "    subs        r5,  r5,  #1     \n" // Decrement iteration count.
+                     "    bne         1b               \n" // Repeat unil iteration count is not zero.
+                     // Two rows done.
+                     "    add         %1,  %1,  r4     \n" // Advance srcY by rowBytes to skip row we've already done.
+                     "    add         %0,  %0,  r4, LSL #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
+                     "    subs        r6,  r6,  #1     \n" // Decrement iteration count.
+                     "    bne         0b               \n" // Repeat unil iteration count is not zero.
+                     "    vldmia      sp!, {d8-d15}    \n" // Restore any VFP or NEON registers that were saved.
+                     :
+                     : "r"(dest), "r"(srcY), "r"(srcCrCb), "r"(rowBytes), "r"(rows)
+                     : "cc", "r4", "r5", "r6"
+                     );
+}
+
+bool VideoSource::fastPath()
+{
+    if (m_fastPath == -1) {
+        if (videoWidth % 16 != 0 || videoHeight % 2 != 0) {
+            m_fastPath = 0;
+        } else {
+#  ifdef ANDROID
+            // Not all Android devices with ARMv7 are guaranteed to have NEON, so check.
+            uint64_t features = android_getCpuFeatures();
+            m_fastPath = (features & ANDROID_CPU_ARM_FEATURE_ARMv7) && (features & ANDROID_CPU_ARM_FEATURE_NEON);
+#  else
+            m_fastPath = 1;
+#  endif
+            if (m_fastPath) ARLOGi("VideoSource::updateTexture32 will use ARM NEON acceleration.\n");
+        }
+    }
+    return (m_fastPath == 1);
+}
+#endif // HAVE_ARM_NEON
+
 bool VideoSource::updateTexture32(uint32_t *buffer) {
     
     static int lastFrameStamp = 0;
@@ -359,42 +592,137 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
             }
             break;
         case AR_PIXEL_FORMAT_420f:
-            {
-                uint32_t *outp = buffer;
-                float Cb, Cr;
-                int Y0, Y1, R, G, B;
-                ARUint8 *pY = frameBuffer;
+        {
+#if defined(HAVE_ARM_NEON)
+            if (fastPath()) {
+                YCbCr422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer, frameBuffer2, videoWidth, videoHeight);
+            } else {
+#endif
+                ARUint8 *pY0 = frameBuffer, *pY1 = frameBuffer + videoWidth;
+                ARUint8 *pCbCr = frameBuffer2;
+                uint8_t *outp0 = (uint8_t *)buffer;
+                uint8_t *outp1 = ((uint8_t *)buffer) + videoWidth*4;
                 int wd2 = videoWidth >> 1;
-                for (int y = 0; y < videoHeight; y++) {
-                    ARUint8 *pCbCr = frameBuffer2 + videoWidth*(y >> 1);
+                int hd2 = videoHeight >> 1;
+                for (int y = 0; y < hd2; y++) { // Groups of two pixels.
                     for (int x = 0; x < wd2; x++) { // Groups of two pixels.
+                        int16_t Cb, Cr;
+                        int16_t Y0, Y1, R, G, B;
                         uint8_t R0, R1, G0, G1, B0, B1;
-                        Y0 = *(pY++);
-                        Y1 = *(pY++);
-                        Cb = (float)(*(pCbCr++) - 128);
-                        Cr = (float)(*(pCbCr++) - 128);
-                        R = (int)((             1.402f*Cr));
-                        G = (int)((-0.344f*Cb - 0.714f*Cr));
-                        B = (int)(( 1.772f*Cb));
+                        Cb = ((int16_t)(*(pCbCr++))) - 128;
+                        Cr = ((int16_t)(*(pCbCr++))) - 128;
+                        R = (        179*Cr) >> 7;
+                        G = (-44*Cb - 91*Cr) >> 7;
+                        B = (227*Cb        ) >> 7;
+                        Y0 = *(pY0++);
+                        Y1 = *(pY0++);
                         R0 = (uint8_t)CLAMP(Y0 + R, 0, 255);
                         R1 = (uint8_t)CLAMP(Y1 + R, 0, 255);
                         G0 = (uint8_t)CLAMP(Y0 + G, 0, 255);
                         G1 = (uint8_t)CLAMP(Y1 + G, 0, 255);
                         B0 = (uint8_t)CLAMP(Y0 + B, 0, 255);
                         B1 = (uint8_t)CLAMP(Y1 + B, 0, 255);
-#ifdef AR_LITTLE_ENDIAN
-                        *(outp++) = 0xff000000 | (B0 << 16) | (G0 << 8) | R0;
-                        *(outp++) = 0xff000000 | (B1 << 16) | (G1 << 8) | R1;
-#else
-                        *(outp++) = (R0 << 24) | (G0 << 16) | (B0 << 8) | 0xff;
-                        *(outp++) = (R1 << 24) | (G1 << 16) | (B1 << 8) | 0xff;
-#endif
+                        *(outp0++) = R0;
+                        *(outp0++) = G0;
+                        *(outp0++) = B0;
+                        *(outp0++) = 255;
+                        *(outp1++) = R1;
+                        *(outp1++) = G1;
+                        *(outp1++) = B1;
+                        *(outp1++) = 255;
+                        Y0 = *(pY1++);
+                        Y1 = *(pY1++);
+                        R0 = (uint8_t)CLAMP(Y0 + R, 0, 255);
+                        R1 = (uint8_t)CLAMP(Y1 + R, 0, 255);
+                        G0 = (uint8_t)CLAMP(Y0 + G, 0, 255);
+                        G1 = (uint8_t)CLAMP(Y1 + G, 0, 255);
+                        B0 = (uint8_t)CLAMP(Y0 + B, 0, 255);
+                        B1 = (uint8_t)CLAMP(Y1 + B, 0, 255);
+                        *(outp0++) = R0;
+                        *(outp0++) = G0;
+                        *(outp0++) = B0;
+                        *(outp0++) = 255;
+                        *(outp1++) = R1;
+                        *(outp1++) = G1;
+                        *(outp1++) = B1;
+                        *(outp1++) = 255;
                     }
+                    pY0 += videoWidth;
+                    pY1 += videoWidth;
+                    outp0 += videoWidth*4;
+                    outp1 += videoWidth*4;
                 }
+#if defined(HAVE_ARM_NEON)
             }
+#endif
+        }
             break;
         case AR_PIXEL_FORMAT_NV21:
-            color_convert_common((unsigned char *)frameBuffer, (unsigned char *)frameBuffer2, videoWidth, videoHeight, (unsigned char *)buffer);
+        {
+#if defined(HAVE_ARM_NEON)
+            if (fastPath()) {
+                YCrCb422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer, frameBuffer2, videoWidth, videoHeight);
+            } else {
+#endif
+                //color_convert_common((unsigned char *)frameBuffer, (unsigned char *)frameBuffer2, videoWidth, videoHeight, (unsigned char *)buffer);
+                ARUint8 *pY0 = frameBuffer, *pY1 = frameBuffer + videoWidth;
+                ARUint8 *pCrCb = frameBuffer2;
+                uint8_t *outp0 = (uint8_t *)buffer;
+                uint8_t *outp1 = ((uint8_t *)buffer) + videoWidth*4;
+                int wd2 = videoWidth >> 1;
+                int hd2 = videoHeight >> 1;
+                for (int y = 0; y < hd2; y++) { // Groups of two pixels.
+                    for (int x = 0; x < wd2; x++) { // Groups of two pixels.
+                        int16_t Cb, Cr;
+                        int16_t Y0, Y1, R, G, B;
+                        uint8_t R0, R1, G0, G1, B0, B1;
+                        Cr = ((int16_t)(*(pCrCb++))) - 128;
+                        Cb = ((int16_t)(*(pCrCb++))) - 128;
+                        R = (        179*Cr) >> 7;
+                        G = (-44*Cb - 91*Cr) >> 7;
+                        B = (227*Cb        ) >> 7;
+                        Y0 = *(pY0++);
+                        Y1 = *(pY0++);
+                        R0 = (uint8_t)CLAMP(Y0 + R, 0, 255);
+                        R1 = (uint8_t)CLAMP(Y1 + R, 0, 255);
+                        G0 = (uint8_t)CLAMP(Y0 + G, 0, 255);
+                        G1 = (uint8_t)CLAMP(Y1 + G, 0, 255);
+                        B0 = (uint8_t)CLAMP(Y0 + B, 0, 255);
+                        B1 = (uint8_t)CLAMP(Y1 + B, 0, 255);
+                        *(outp0++) = R0;
+                        *(outp0++) = G0;
+                        *(outp0++) = B0;
+                        *(outp0++) = 255;
+                        *(outp1++) = R1;
+                        *(outp1++) = G1;
+                        *(outp1++) = B1;
+                        *(outp1++) = 255;
+                        Y0 = *(pY1++);
+                        Y1 = *(pY1++);
+                        R0 = (uint8_t)CLAMP(Y0 + R, 0, 255);
+                        R1 = (uint8_t)CLAMP(Y1 + R, 0, 255);
+                        G0 = (uint8_t)CLAMP(Y0 + G, 0, 255);
+                        G1 = (uint8_t)CLAMP(Y1 + G, 0, 255);
+                        B0 = (uint8_t)CLAMP(Y0 + B, 0, 255);
+                        B1 = (uint8_t)CLAMP(Y1 + B, 0, 255);
+                        *(outp0++) = R0;
+                        *(outp0++) = G0;
+                        *(outp0++) = B0;
+                        *(outp0++) = 255;
+                        *(outp1++) = R1;
+                        *(outp1++) = G1;
+                        *(outp1++) = B1;
+                        *(outp1++) = 255;
+                    }
+                    pY0 += videoWidth;
+                    pY1 += videoWidth;
+                    outp0 += videoWidth*4;
+                    outp1 += videoWidth*4;
+                }
+#if defined(HAVE_ARM_NEON)
+            }
+#endif
+        }
             break;
         default:
             return false;

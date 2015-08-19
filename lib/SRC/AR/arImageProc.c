@@ -459,7 +459,7 @@ static void arImageProcBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
 					 "bne         0b            \n" // Repeat unil iteration count is not zero.
 					 :
 					 : "r"(dest), "r"(src), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 
@@ -487,7 +487,7 @@ static void arImageProcRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
 					 "bne         0b            \n" // Repeat unil iteration count is not zero.
 					 :
 					 : "r"(dest), "r"(src), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 
@@ -515,7 +515,7 @@ static void arImageProcABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
 					 "bne         0b            \n" // Repeat unil iteration count is not zero.
 					 :
 					 : "r"(dest), "r"(src), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 
@@ -543,7 +543,7 @@ static void arImageProcARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
 					 "bne         0b            \n" // Repeat unil iteration count is not zero.
 					 :
 					 : "r"(dest), "r"(src), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 #endif // HAVE_ARM_NEON

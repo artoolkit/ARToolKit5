@@ -2805,7 +2805,7 @@
 		4AEB272E1804BB8A002290C5 /* ARPattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARPattern.cpp; sourceTree = "<group>"; };
 		4AEB272F1804BB8A002290C5 /* ARController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARController.cpp; sourceTree = "<group>"; };
 		4AEB27301804BB8A002290C5 /* ARToolKitVideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARToolKitVideoSource.cpp; sourceTree = "<group>"; };
-		4AEB27311804BB8A002290C5 /* ARToolKitWrapperExportedAPI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = ARToolKitWrapperExportedAPI.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		4AEB27311804BB8A002290C5 /* ARToolKitWrapperExportedAPI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = ARToolKitWrapperExportedAPI.cpp; sourceTree = "<group>"; };
 		4AEB27321804BB8A002290C5 /* ColorConversion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColorConversion.cpp; sourceTree = "<group>"; };
 		4AEB27331804BB8A002290C5 /* trackingSub.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = trackingSub.c; sourceTree = "<group>"; };
 		4AEB27341804BB8A002290C5 /* VideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoSource.cpp; sourceTree = "<group>"; };

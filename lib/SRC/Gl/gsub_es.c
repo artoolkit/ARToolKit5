@@ -421,7 +421,7 @@ static void arglCbCrToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
 					 "    vldmia      sp!, {d8-d15}    \n" // Restore any VFP or NEON registers that were saved.
 					 :
 					 : "r"(destRGBAAdd), "r"(destRGBASubtract), "r"(srcCbCr), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 
@@ -481,7 +481,7 @@ static void arglCrCbToRGBA_ARM_neon_asm(uint8_t * __restrict destRGBAAdd, uint8_
 					 "    vldmia      sp!, {d8-d15}    \n" // Restore any VFP or NEON registers that were saved..
 					 :
 					 : "r"(destRGBAAdd), "r"(destRGBASubtract), "r"(srcCrCb), "r"(numPixels)
-					 : "r4", "r5", "r6"
+					 : "cc", "r4", "r5", "r6"
 					 );
 }
 #endif // HAVE_ARM_NEON

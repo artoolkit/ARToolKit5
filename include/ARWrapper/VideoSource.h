@@ -84,6 +84,9 @@ protected:
 	int videoHeight;					///< Height of the video frame in pixels
 
 	AR_PIXEL_FORMAT pixelFormat;		///< Pixel format from ARToolKit enumeration.
+#ifdef HAVE_ARM_NEON
+    int m_fastPath;
+#endif
 #ifndef _WINRT
 	GLenum glPixIntFormat;
     GLenum glPixFormat;
@@ -203,6 +206,7 @@ public:
 	 */
 	bool updateTexture(Color* buffer);
 
+    bool fastPath();
     bool updateTexture32(uint32_t *buffer);
     
 #ifndef _WINRT
