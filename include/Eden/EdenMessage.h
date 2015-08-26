@@ -240,6 +240,8 @@ unsigned char *EdenMessageInputGetInput(void);
  */
 void EdenMessageSetViewSize(const float width, const float height);
 
+void EdenMessageSetBoxParams(const float width, const float padding);
+    
 /*!
     @function 
     @abstract   Draw previously-prepared text in a box onto the framebuffer.

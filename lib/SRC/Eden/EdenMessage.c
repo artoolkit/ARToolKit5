@@ -84,16 +84,10 @@ typedef struct _boxSettings {
 	float boxPaddingV;			// Pixels of padding between the top and bottom border and the text.
 	float boxCornerRadius;		// Radius in pixels of the rounded corners. Typically set to MIN(boxPaddingH, boxPaddinV).
 	float softwrapRatio;		// Percentage of the maximum text width at which to start soft-wrapping text.
+    unsigned char *text;
 	unsigned char *lines[BOX_LINES_MAX];
 	int lineCount;
 } boxSettings_t;
-
-
-
-#define MESSAGE_BOXWIDTH		0.6666667	// Width of box, including margins, as proportion of screenwidth.
-#define MESSAGE_MARGIN			4		// Margin width in number of character widths.
-#define MESSAGE_SOFTWRAP		8		// Number of characters from right-hand margin to begin softwrapping at.
-#define MESSAGE_LENGTH_MAX		255
 
 #define EDEN_MESSAGE_INPUT_MAX_LENGTH_DEFAULT 1023
 
@@ -111,8 +105,9 @@ static EDEN_BOOL gMessageInited = FALSE; // Set to TRUE once EdenMessageInit() h
 static boxSettings_t *gBoxSettings = NULL;
 
 // Screen size.
-static float gScreenwidth = 640.0f;
-static float gScreenheight = 480.0f;
+static float gScreenWidth = 640.0f;
+static float gScreenHeight = 480.0f;
+static float gScreenScale = 1.0f;
 
 // Use of gDrawLock allows EdenMessageDraw() to be called in a separate thread
 // by protecting the global static data (below) that it uses.
@@ -141,6 +136,9 @@ EDEN_BOOL gEdenMessageKeyboardRequired = FALSE;		// EdenMessageInputKeyboard sho
 // Private functions.
 //
 
+// Can pass NULL for parameter 'text' in which case previous text is reused.
+// Depends on settings 'text', 'boxWidth', 'boxPaddingH'.
+// Sets settings 'text', 'lines', 'lineCount', 'boxHeight'.
 static void boxSetText(boxSettings_t *settings, const unsigned char *text)
 {
 	int i;
@@ -156,13 +154,21 @@ static void boxSetText(boxSettings_t *settings, const unsigned char *text)
 	unsigned char lineBuf[BOX_LINE_LENGTH_MAX + 1] = ""; // +1 for null terminator.
 	float lineWidth = 0;
    
-	if (!settings || !text) return;
+	if (!settings) return;
     
     pthread_mutex_lock(&settings->lock);
     
+    if (text) {
+        free(settings->text);
+        settings->text = (unsigned char *)strdup((char *)text);
+    }
+    
 	// Free old lines.
 	if (settings->lineCount) {
-		for (i = 0; i < settings->lineCount; i++) free(settings->lines[i]);
+        for (i = 0; i < settings->lineCount; i++) {
+            free(settings->lines[i]);
+            settings->lines[i] = NULL;
+        }
 		settings->lineCount = 0;
 	}
     
@@ -171,67 +177,69 @@ static void boxSetText(boxSettings_t *settings, const unsigned char *text)
 	hyphenWidth = EdenGLFontGetCharacterWidth('-');
     interCharSpacingWidth = EdenGLFontGetLineWidth((const unsigned char *)"--") - 2.0f*hyphenWidth;
     
-	// Split text into lines, softwrapping on whitespace if possible.
-	textIndex = 0;
-	done = false;
-	do {
-        
-		bool newline = false;
-        
-        c0 = c;
-		c = text[textIndex];
-		if (!c) {
-			if (lineLength) newline = true;
-			done = true;
-        } else  if (c == '\n' || (c == ' ' && lineWidth >= boxTextWidthSoftwrap)) {
-            textIndex++;
-            newline = true;
-        } else if (c < ' ') {
-            textIndex++;
-        } else {
-            bool addChar = false;
-            // Is there still room for a hyphen after this character?
-            float predictedLineWidth = lineWidth + interCharSpacingWidth + EdenGLFontGetCharacterWidth(text[textIndex]);
-            if (predictedLineWidth < (boxTextWidth - hyphenWidth)) {
-                addChar = true;
+    if (settings->text) {
+        // Split text into lines, softwrapping on whitespace if possible.
+        textIndex = 0;
+        done = false;
+        do {
+            
+            bool newline = false;
+            
+            c0 = c;
+            c = settings->text[textIndex];
+            if (!c) {
+                if (lineLength) newline = true;
+                done = true;
+            } else  if (c == '\n' || (c == ' ' && lineWidth >= boxTextWidthSoftwrap)) {
+                textIndex++;
+                newline = true;
+            } else if (c < ' ') {
+                textIndex++;
             } else {
-                // No. But two exceptions:
-                // 1) this character is a space.
-                // 2) this character doesn't overflow and the next character is whitespace.
-                c1 = text[textIndex + 1];
-                if (c == ' ') {
-                    textIndex++;
-                    newline = true;
-                } else if (predictedLineWidth <= boxTextWidth && (!c1 || c1 == ' ' || c1 == '\n')) {
+                bool addChar = false;
+                // Is there still room for a hyphen after this character?
+                float predictedLineWidth = lineWidth + interCharSpacingWidth + EdenGLFontGetCharacterWidth(settings->text[textIndex]);
+                if (predictedLineWidth < (boxTextWidth - hyphenWidth)) {
                     addChar = true;
                 } else {
-                    // Exception didn't apply, so insert hyphen, then newline, then continue with same char on next line (unless previous char was space, in which case no hyphen).
-                    if (c0 != ' ') {
-                        lineBuf[lineLength++] = '-';
-                        lineBuf[lineLength] = '\0';
+                    // No. But two exceptions:
+                    // 1) this character is a space.
+                    // 2) this character doesn't overflow and the next character is whitespace.
+                    c1 = settings->text[textIndex + 1];
+                    if (c == ' ') {
+                        textIndex++;
+                        newline = true;
+                    } else if (predictedLineWidth <= boxTextWidth && (!c1 || c1 == ' ' || c1 == '\n')) {
+                        addChar = true;
+                    } else {
+                        // Exception didn't apply, so insert hyphen, then newline, then continue with same char on next line (unless previous char was space, in which case no hyphen).
+                        if (c0 != ' ') {
+                            lineBuf[lineLength++] = '-';
+                            lineBuf[lineLength] = '\0';
+                        }
+                        newline = true;
                     }
-                    newline = true;
+                }
+                if (addChar) {
+                    lineBuf[lineLength++] = c;
+                    lineBuf[lineLength] = '\0';
+                    lineWidth = EdenGLFontGetLineWidth(lineBuf);
+                    if (lineLength == BOX_LINE_LENGTH_MAX) newline = true; // Next char would overflow buffer, so break now.
+                    textIndex++;
                 }
             }
-            if (addChar) {
-                lineBuf[lineLength++] = c;
-                lineBuf[lineLength] = '\0';
-                lineWidth = EdenGLFontGetLineWidth(lineBuf);
-                if (lineLength == BOX_LINE_LENGTH_MAX) newline = true; // Next char would overflow buffer, so break now.
-                textIndex++;
+            
+            if (newline) {
+                // Start a new line.
+                settings->lines[settings->lineCount] = (unsigned char *)strdup((const char *)lineBuf);
+                settings->lineCount++;
+                if (settings->lineCount == BOX_LINES_MAX) done = true;
+                lineLength = 0;
+                lineBuf[0] = '\0';
+                lineWidth = 0.0f;
             }
-        }
-        
-		if (newline) {
-			// Start a new line.
-			settings->lines[settings->lineCount] = (unsigned char *)strdup((const char *)lineBuf);
-			settings->lineCount++;
-			if (settings->lineCount == BOX_LINES_MAX) done = true;
-			lineLength = 0;
-            lineBuf[0] = '\0';
-			lineWidth = 0.0f;
-		}
-	} while (!done);
+        } while (!done);
+    }
     
     settings->boxHeight = EdenGLFontGetBlockHeight((const unsigned char **)settings->lines, settings->lineCount) + 2.0f*settings->boxPaddingV;
 
@@ -244,10 +252,10 @@ static boxSettings_t *boxCreate(float width, float paddingH, float paddingV, flo
     if (!settings) return (NULL);
     
     pthread_mutex_init(&settings->lock, NULL);
-    settings->boxWidth = (width > 0.0f ? width : 400.0f);
-    settings->boxPaddingH = (paddingH >= 0.0f ? paddingH : 20.0f);
-    settings->boxPaddingV = (paddingV >= 0.0f ? paddingV : 20.0f);
-    settings->boxCornerRadius = (cornerRadius >= 0.0f ? cornerRadius : MIN(settings->boxPaddingH, settings->boxPaddingV));
+    settings->boxWidth = (width > 0.0f ? width : 400.0f)*gScreenScale;
+    settings->boxPaddingH = (paddingH >= 0.0f ? paddingH : 20.0f)*gScreenScale;
+    settings->boxPaddingV = (paddingV >= 0.0f ? paddingV : 20.0f)*gScreenScale;
+    settings->boxCornerRadius = (cornerRadius >= 0.0f ? cornerRadius*gScreenScale : MIN(settings->boxPaddingH, settings->boxPaddingV));
     settings->softwrapRatio = (softwrapRatio > 0.0f ? softwrapRatio : 0.9f);
     return (settings);
 }
@@ -265,6 +273,7 @@ static void boxDestroy(boxSettings_t **settings_p)
 		for (i = 0; i < (*settings_p)->lineCount; i++) free((*settings_p)->lines[i]);
 		(*settings_p)->lineCount = 0;
 	}
+    free((*settings_p)->text);
     free(*settings_p);
     (*settings_p) = NULL;
 }
@@ -474,8 +483,23 @@ done:
 
 void EdenMessageSetViewSize(const float width, const float height)
 {
-    gScreenwidth = width;
-    gScreenheight = height;
+    gScreenWidth = width;
+    gScreenHeight = height;
+}
+
+void EdenMessageSetBoxParams(const float width, const float padding)
+{
+    EDEN_BOOL changed = FALSE;
+    if (gBoxSettings->boxWidth != width) {
+        gBoxSettings->boxWidth = width;
+        changed = TRUE;
+    }
+    if (gBoxSettings->boxPaddingH != padding || gBoxSettings->boxPaddingV != padding) {
+        gBoxSettings->boxPaddingH = padding;
+        gBoxSettings->boxPaddingV = padding;
+        changed = TRUE;
+    }
+    if (changed) boxSetText(gBoxSettings, NULL);
 }
 
 void EdenMessageDraw(const int contextIndex)
@@ -522,9 +546,9 @@ void EdenMessageDraw(const int contextIndex)
     }
     pthread_mutex_unlock(&gInputLock);
     
-    boxcentrex = gScreenwidth / 2.0f;
+    boxcentrex = gScreenWidth / 2.0f;
     boxwd2 = gBoxSettings->boxWidth / 2;
-    boxcentrey = gScreenheight / 2.0f;
+    boxcentrey = gScreenHeight / 2.0f;
     boxhd2 = gBoxSettings->boxHeight / 2;
     boxVertices[0][0] = boxcentrex - boxwd2; boxVertices[0][1] = boxcentrey - boxhd2;
     boxVertices[1][0] = boxcentrex + boxwd2; boxVertices[1][1] = boxcentrey - boxhd2;

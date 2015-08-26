@@ -109,15 +109,20 @@
 
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api
 {
-	return [self initWithFrame:frame renderingAPI:api pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO];
+	return [self initWithFrame:frame renderingAPI:api pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];
 }
 
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format
 {
-	return [self initWithFrame:frame renderingAPI:api pixelFormat:format depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO];
+	return [self initWithFrame:frame renderingAPI:api pixelFormat:format depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];
 }
 
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained
+{
+    return [self initWithFrame:frame renderingAPI:api pixelFormat:format depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];
+}
+
+- (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained maxScale:(CGFloat)maxScale
 {
 	if ((self = [super initWithFrame:frame])) {
         
@@ -145,8 +150,9 @@
         surfaceSize = CGSizeZero;
         
         // Set scaling factor for retina displays.
-        if ([[UIScreen mainScreen] scale] == 2.0) {
-            self.contentScaleFactor = 2.0;
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        if (scale != 1.0f) {
+            self.contentScaleFactor = (maxScale ? MAX(scale, maxScale) : scale);
         }
         
 		// Get the layer
