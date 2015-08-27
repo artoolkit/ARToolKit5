@@ -1067,6 +1067,61 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                     }
                 }
             }
+        } else if (iOSDevice == CameraVideoiOSDeviceiPhone6Plus) {
+            if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetiFrame960x540) {
+                if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
+                    cparambytes = camera_para_iPhone_6_Plus_front_1280x720;
+                    cparamname = "camera_para_iPhone_6_Plus_front_1280x720.dat";
+                } else {
+                    switch (vid->focus) {
+                        case AR_VIDEO_IOS_FOCUS_INF:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_1280x720_inf;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_1280x720_inf.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_1_0M:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_1280x720_1_0m;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_1280x720_1_0m.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_MACRO:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_1280x720_macro;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_1280x720_macro.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_0_3M:
+                        default:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_1280x720_0_3m;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_1280x720_0_3m.dat";
+                            break;
+                    }
+                }
+            } else {
+                if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
+                    cparambytes = camera_para_iPhone_6_Plus_front_640x480;
+                    cparamname = "camera_para_iPhone_6_Plus_front_640x480.dat";
+                } else {
+                    switch (vid->focus) {
+                        case AR_VIDEO_IOS_FOCUS_INF:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_640x480_inf;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_640x480_inf.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_1_0M:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_640x480_1_0m;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_640x480_1_0m.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_MACRO:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_640x480_macro;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_640x480_macro.dat";
+                            break;
+                        case AR_VIDEO_IOS_FOCUS_0_3M:
+                        default:
+                            cparambytes = camera_para_iPhone_6_Plus_rear_640x480_0_3m;
+                            cparamname = "camera_para_iPhone_6_Plus_rear_640x480_0_3m.dat";
+                            break;
+                    }
+                }
+            }
         } else {
             cparambytes = NULL;
             cparamname = NULL;
