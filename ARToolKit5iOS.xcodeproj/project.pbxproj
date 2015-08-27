@@ -1946,6 +1946,7 @@
 		4A875CB01B608EBD002A00A1 /* Timeout */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = Timeout; sourceTree = "<group>"; };
 		4A875CB11B608EF0002A00A1 /* Keystone */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = Keystone; sourceTree = "<group>"; };
 		4A89E2B20B07E5AE005A9E7F /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
+		4A8CB4391B8EFB5100EEB539 /* iOS device camera parameters (for use with utilities) */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "iOS device camera parameters (for use with utilities)"; sourceTree = "<group>"; };
 		4A90B8FD13B9D61F0094D561 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		4A941B541AE5D8D9000FA802 /* libKPM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKPM.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A941BD91AE5D8DC000FA802 /* libARUtil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARUtil.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4258,6 +4259,7 @@
 		4A77EBA21162425300E4C0D2 /* Xcode */ = {
 			isa = PBXGroup;
 			children = (
+				4A8CB4391B8EFB5100EEB539 /* iOS device camera parameters (for use with utilities) */,
 				4AA8B554161AD5A200B48D70 /* ARToolKit default images */,
 				4A65437A1B0599DF00A6F660 /* ARWrapper */,
 				4A77EBA31162425300E4C0D2 /* version.xcconfig */,
