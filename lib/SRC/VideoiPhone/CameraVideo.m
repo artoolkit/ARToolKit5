@@ -76,7 +76,8 @@ typedef struct {
     size_t width;
     size_t height;
     OSType pixelFormat;
-    unsigned char *bufDataPtr;
+    unsigned char *bufDataPtr0;
+    unsigned char *bufDataPtr1;
     size_t bytesPerRow;
     size_t bytesPerRowSrc;
 } cameraVideoBuf_t;
@@ -108,6 +109,7 @@ typedef struct {
     OSType pixelFormat;
     size_t planeCount;
     cameraVideoBuf_t *planes;
+    int nextBuf;
     id <CameraVideoTookPictureDelegate> tookPictureDelegate;
     void *tookPictureDelegateUserData;
     BOOL willSaveNextFrame;
@@ -185,8 +187,9 @@ typedef struct {
         running = FALSE;
         captureStartAsyncCompletion = NULL;
         pixelFormat = kCVPixelFormatType_32BGRA;
-        planeCount = 0;
         planes = NULL;
+        planeCount = 0;
+        nextBuf = 0;
         tookPictureDelegate = nil;
         tookPictureDelegateUserData = NULL;
         flipV = flipH = FALSE;
@@ -352,11 +355,19 @@ typedef struct {
     
     // Deallocate any old bufDataPtr.
     if (planes) {
-        if (!planeCount) free(planes[0].bufDataPtr);
-        else for (int i = 0; i < planeCount; i++) free(planes[i].bufDataPtr);
+        if (!planeCount) {
+            free(planes[0].bufDataPtr0);
+            free(planes[0].bufDataPtr1);
+        } else {
+            for (int i = 0; i < planeCount; i++) {
+                free(planes[i].bufDataPtr0);
+                free(planes[i].bufDataPtr1);
+            }
+        }
         free(planes);
         planes = NULL;
         planeCount = 0;
+        nextBuf = 0;
     }
 
     if (!completion) {
@@ -418,9 +429,7 @@ bail0:
 
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-    if (multithreaded) {
-        pthread_mutex_lock(&frameLock_pthread_mutex);
-    }
+    pthread_mutex_lock(&frameLock_pthread_mutex);
 
     if (!planes) {
         pixelFormat = CVPixelBufferGetPixelFormatType(imageBuffer);
@@ -524,8 +533,9 @@ bail0:
                 planes[0].width = CVPixelBufferGetWidth(imageBuffer);
                 planes[0].height = CVPixelBufferGetHeight(imageBuffer);
                 planes[0].bytesPerRow = planes[0].width * pixelSize;
-                planes[0].bufDataPtr = (unsigned char *)valloc(planes[0].height*planes[0].bytesPerRow);
-                if (!planes[0].bufDataPtr) {
+                planes[0].bufDataPtr0 = (unsigned char *)valloc(planes[0].height*planes[0].bytesPerRow);
+                planes[0].bufDataPtr1 = (unsigned char *)valloc(planes[0].height*planes[0].bytesPerRow);
+                if (!planes[0].bufDataPtr0 || !planes[0].bufDataPtr1) {
                     NSLog(@"Error: Out of memory!\n");
                 }
             } else {
@@ -536,8 +546,9 @@ bail0:
                     planes[i].height = CVPixelBufferGetHeightOfPlane(imageBuffer, i);
                     if (i == 0) planes[i].bytesPerRow = planes[i].width * pixelSize;
                     else if (i == 1) planes[i].bytesPerRow = planes[i].width * 2;
-                    planes[i].bufDataPtr = (unsigned char *)valloc(planes[i].height*planes[i].bytesPerRow);
-                    if (!planes[i].bufDataPtr) {
+                    planes[i].bufDataPtr0 = (unsigned char *)valloc(planes[i].height*planes[i].bytesPerRow);
+                    planes[i].bufDataPtr1 = (unsigned char *)valloc(planes[i].height*planes[i].bytesPerRow);
+                    if (!planes[i].bufDataPtr0 || !!planes[i].bufDataPtr1) {
                         NSLog(@"Error: Out of memory!\n");
                     }
                 }
@@ -554,67 +565,39 @@ bail0:
     }
     
     if (pause || !planes) {
-        if (multithreaded) {
-            pthread_mutex_unlock(&frameLock_pthread_mutex);
-        }
+        pthread_mutex_unlock(&frameLock_pthread_mutex);
         return;
     }
 
-    uint8_t *baseAddress;
+    uint8_t *srcAddress, *destAddress;
     
     CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
     
     if (!planeCount) {
-        baseAddress = CVPixelBufferGetBaseAddress(imageBuffer);
+        srcAddress = CVPixelBufferGetBaseAddress(imageBuffer);
+        destAddress = (nextBuf ? planes[0].bufDataPtr1 : planes[0].bufDataPtr0);
         if (!self.flipV && !self.flipH) {
-            if (planes[0].bytesPerRow == planes[0].bytesPerRowSrc) memcpy(planes[0].bufDataPtr, baseAddress, planes[0].height*planes[0].bytesPerRow);
-            else for (int r = 0; r < planes[0].height; r++) memcpy(planes[0].bufDataPtr + r*planes[0].bytesPerRow, baseAddress + r*planes[0].bytesPerRowSrc, planes[0].bytesPerRow);
+            if (planes[0].bytesPerRow == planes[0].bytesPerRowSrc) memcpy(destAddress, srcAddress, planes[0].height*planes[0].bytesPerRow);
+            else for (int r = 0; r < planes[0].height; r++) memcpy(destAddress + r*planes[0].bytesPerRow, srcAddress + r*planes[0].bytesPerRowSrc, planes[0].bytesPerRow);
         } else {
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000 && __IPHONE_OS_VERSION_MIN_REQUIRED < 50000)
-            if (vImageVerticalReflect_ARGB8888 != NULL) { // If vImage is available, weak-linked function pointer will be non-NULL.
-#endif
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000)
-                // Setup structures for vImage now.
-                imageDestBuf.data = planes[0].bufDataPtr;
-                imageSrcBuf.width = imageDestBuf.width = planes[0].width;
-                imageSrcBuf.height = imageDestBuf.height = planes[0].height;
-                imageSrcBuf.rowBytes = planes[0].bytesPerRowSrc;
-                imageDestBuf.rowBytes = planes[0].bytesPerRow;
-                imageSrcBuf.data = baseAddress;
-                vImage_Error err;
-                if (self.flipV) {
-                    uint8_t black[4] = {0, 0, 0, 0};
-                    if (self.flipH) err = vImageRotate90_ARGB8888(&imageSrcBuf, &imageDestBuf, 2, black, 0);
-                    else err = vImageVerticalReflect_ARGB8888(&imageSrcBuf, &imageDestBuf, 0);
-                } else /* (self.flipH) */ err = vImageHorizontalReflect_ARGB8888(&imageSrcBuf, &imageDestBuf, 0);
-                if (err != kvImageNoError) {
-                    ARLOGe("Error manipulating image.\n");
-                }
-#endif
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000 && __IPHONE_OS_VERSION_MIN_REQUIRED < 50000)
-            } else {
-#endif
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED < 50000)
-                // Pre iOS 5.0, do it manually.
-                signed long bytesPerRowSigned = (self.flipV ? planes[0].bytesPerRow : -planes[0].bytesPerRow);
-                uint8_t *src = baseAddress, *dest = planes[0].bufDataPtr + (self.flipV ? (planes[0].height - 1)*planes[0].bytesPerRow : 0);
-                if (self.flipH) {
-                    for (int r = 0; r < planes[0].height; r++) {
-                        for (int c = 0; c < planes[0].width; c++) ((uint32_t *)dest)[c] = ((uint32_t *)src)[planes[0].width - 1 - c];
-                        src += planes[0].bytesPerRowSrc;
-                        dest += bytesPerRowSigned;
-                    }
-                } else {
-                    for (int r = 0; r < planes[0].height; r++) {
-                        memcpy(dest, src, planes[0].bytesPerRow);
-                        src += planes[0].bytesPerRowSrc;
-                        dest += bytesPerRowSigned;
-                    }
-                }
-#endif
-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 50000 && __IPHONE_OS_VERSION_MIN_REQUIRED < 50000)
+            // Do flipV/flipH using vImage (available iOS 5.0 and later).
+            imageDestBuf.data = destAddress;
+            imageSrcBuf.width = imageDestBuf.width = planes[0].width;
+            imageSrcBuf.height = imageDestBuf.height = planes[0].height;
+            imageSrcBuf.rowBytes = planes[0].bytesPerRowSrc;
+            imageDestBuf.rowBytes = planes[0].bytesPerRow;
+            imageSrcBuf.data = srcAddress;
+            vImage_Error err;
+            if (self.flipV) {
+                uint8_t black[4] = {0, 0, 0, 0};
+                if (self.flipH) err = vImageRotate90_ARGB8888(&imageSrcBuf, &imageDestBuf, 2, black, 0);
+                else err = vImageVerticalReflect_ARGB8888(&imageSrcBuf, &imageDestBuf, 0);
+            } else /* (self.flipH) */ {
+                err = vImageHorizontalReflect_ARGB8888(&imageSrcBuf, &imageDestBuf, 0);
             }
-#endif
+            if (err != kvImageNoError) {
+                ARLOGe("Error manipulating image.\n");
+            }
         }
         
         if (willSaveNextFrame) {
@@ -628,7 +611,7 @@ bail0:
                 bi = 0;
             }
             if (bi != 0) {
-                CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, planes[0].bufDataPtr, planes[0].bytesPerRow * planes[0].height, NULL);
+                CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, destAddress, planes[0].bytesPerRow * planes[0].height, NULL);
                 CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
                 CGImageRef newImgRef = CGImageCreate(planes[0].width, planes[0].height, 8, 32, planes[0].bytesPerRow, cs, bi, dataProvider, NULL, false, kCGRenderingIntentDefault);
                 CGDataProviderRelease(dataProvider);
@@ -651,18 +634,18 @@ bail0:
         
     } else {
         for (unsigned int i = 0; i < planeCount; i++) {
-            baseAddress = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i);
-            if (planes[i].bytesPerRow == planes[i].bytesPerRowSrc) memcpy(planes[i].bufDataPtr, baseAddress, planes[i].height*planes[i].bytesPerRow);
-            else for (int r = 0; r < planes[i].height; r++) memcpy(planes[i].bufDataPtr + r*planes[i].bytesPerRow, baseAddress + r*planes[i].bytesPerRowSrc, planes[i].bytesPerRow);
+            srcAddress = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, i);
+            destAddress = (nextBuf ? planes[i].bufDataPtr1 : planes[i].bufDataPtr0);
+            if (planes[i].bytesPerRow == planes[i].bytesPerRowSrc) memcpy(destAddress, srcAddress, planes[i].height*planes[i].bytesPerRow);
+            else for (int r = 0; r < planes[i].height; r++) memcpy(destAddress + r*planes[i].bytesPerRow, srcAddress + r*planes[i].bytesPerRowSrc, planes[i].bytesPerRow);
         }
     }
     
     CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
 
     latestFrameHostTime = hostTime;
-    if (multithreaded) {
-        pthread_mutex_unlock(&frameLock_pthread_mutex);
-    }
+
+    pthread_mutex_unlock(&frameLock_pthread_mutex);
     
     if (tookPictureDelegate) [tookPictureDelegate cameraVideoTookPicture:self userData:tookPictureDelegateUserData];
 }
@@ -712,14 +695,19 @@ bail0:
 - (unsigned char *) frameTimestamp:(UInt64 *)timestampOut
 {
     if (planes) {
+        unsigned char *ret;
+        pthread_mutex_lock(&frameLock_pthread_mutex);
         if (timestampOut) *timestampOut = latestFrameHostTime;
-        return (planes[0].bufDataPtr);
+        ret = (nextBuf ? planes[0].bufDataPtr1 : planes[0].bufDataPtr0);
+        nextBuf = !nextBuf;
+        pthread_mutex_unlock(&frameLock_pthread_mutex);
+        return ret;
     } else return (NULL);
 }
 
 - (unsigned char *) frameTimestamp:(UInt64 *)timestampOut ifNewerThanTimestamp:(UInt64)timestamp
 {
-    // In multithreaded mode, this should still be safe to perform without
+    // This check should still be safe to perform without
     // a lock since the producer thread will only ever increase latestFrameHostTime.
     if (latestFrameHostTime <= timestamp) return (NULL);
     return ([self frameTimestamp:timestampOut]);
@@ -728,15 +716,18 @@ bail0:
 - (BOOL) framePlanes:(unsigned char **)bufDataPtrs count:(size_t)count timestamp:(UInt64 *)timestampOut
 {
     if (planes && count > 0 && count <= planeCount) {
+        pthread_mutex_lock(&frameLock_pthread_mutex);
         if (timestampOut) *timestampOut = latestFrameHostTime;
-        for (int i = 0; i < count; i++) bufDataPtrs[i] = planes[i].bufDataPtr;
+        for (int i = 0; i < count; i++) bufDataPtrs[i] = (nextBuf ? planes[i].bufDataPtr1 : planes[i].bufDataPtr0);
+        nextBuf = !nextBuf;
+        pthread_mutex_unlock(&frameLock_pthread_mutex);
         return (TRUE);
     } else return (FALSE);
 }
 
 - (BOOL) framePlanes:(unsigned char **)bufDataPtrs count:(size_t)count timestamp:(UInt64 *)timestampOut ifNewerThanTimestamp:(UInt64)timestamp
 {
-    // In multithreaded mode, this should still be safe to perform without
+    // This check should still be safe to perform without
     // a lock since the producer thread will only ever increase latestFrameHostTime.
     if (latestFrameHostTime <= timestamp) return (FALSE);
     return ([self framePlanes:bufDataPtrs count:count timestamp:timestampOut]);
@@ -834,11 +825,19 @@ bail0:
     pthread_mutex_destroy(&frameLock_pthread_mutex);
     
     if (planes) {
-        if (!planeCount) free(planes[0].bufDataPtr);
-        else for (int i = 0; i < planeCount; i++) free(planes[i].bufDataPtr);
+        if (!planeCount) {
+            free(planes[0].bufDataPtr0);
+            free(planes[0].bufDataPtr1);
+        } else {
+            for (int i = 0; i < planeCount; i++) {
+                free(planes[i].bufDataPtr0);
+                free(planes[i].bufDataPtr1);
+            }
+        }
         free(planes);
         planes = NULL;
         planeCount = 0;
+        nextBuf = 0;
     }
     
     [super dealloc];
