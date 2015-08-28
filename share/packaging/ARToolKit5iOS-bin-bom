@@ -104,60 +104,6 @@ bin/Data/patt.hiro
 bin/Data/patt.kanji
 bin/Data/patt.sample1
 bin/Data/patt.sample2
-bin/Data/camera_para-iPad 2 front.dat
-bin/Data/camera_para-iPad 2 rear 1280x720.dat
-bin/Data/camera_para-iPad 2 rear 640x480.dat
-bin/Data/camera_para-iPad mini 3 front 1280x720.dat
-bin/Data/camera_para-iPad mini 3 front 640x480.dat
-bin/Data/camera_para-iPad mini 3 rear 1280x720 0.3m.dat
-bin/Data/camera_para-iPad mini 3 rear 1280x720 1.0m.dat
-bin/Data/camera_para-iPad mini 3 rear 1280x720 inf.dat
-bin/Data/camera_para-iPad mini 3 rear 1280x720 macro.dat
-bin/Data/camera_para-iPad mini 3 rear 640x480 0.3m.dat
-bin/Data/camera_para-iPad mini 3 rear 640x480 1.0m.dat
-bin/Data/camera_para-iPad mini 3 rear 640x480 inf.dat
-bin/Data/camera_para-iPad mini 3 rear 640x480 macro.dat
-bin/Data/camera_para-iPhone 4 front.dat
-bin/Data/camera_para-iPhone 4 rear 1280x720 0.3m.dat
-bin/Data/camera_para-iPhone 4 rear 1280x720 1.0m.dat
-bin/Data/camera_para-iPhone 4 rear 1280x720 macro.dat
-bin/Data/camera_para-iPhone 4 rear 640x480 0.3m.dat
-bin/Data/camera_para-iPhone 4 rear 640x480 1.0m.dat
-bin/Data/camera_para-iPhone 4 rear 640x480 inf.dat
-bin/Data/camera_para-iPhone 4 rear 640x480 macro.dat
-bin/Data/camera_para-iPhone 4S front.dat
-bin/Data/camera_para-iPhone 4S rear 1280x720 0.3m.dat
-bin/Data/camera_para-iPhone 4S rear 1280x720 1.0m.dat.dat
-bin/Data/camera_para-iPhone 4S rear 1280x720 inf.dat
-bin/Data/camera_para-iPhone 4S rear 1280x720 macro.dat
-bin/Data/camera_para-iPhone 4S rear 640x480 0.3m.dat
-bin/Data/camera_para-iPhone 4S rear 640x480 1.0m.dat
-bin/Data/camera_para-iPhone 4S rear 640x480 inf.dat
-bin/Data/camera_para-iPhone 4S rear 640x480 macro.dat
-bin/Data/camera_para-iPhone 5 front 1280x720.dat
-bin/Data/camera_para-iPhone 5 front 640x480.dat
-bin/Data/camera_para-iPhone 5 rear 1280x720 0.3m.dat
-bin/Data/camera_para-iPhone 5 rear 1280x720 1.0m.dat
-bin/Data/camera_para-iPhone 5 rear 1280x720 inf.dat
-bin/Data/camera_para-iPhone 5 rear 1280x720 macro.dat
-bin/Data/camera_para-iPhone 5 rear 640x480 0.3m.dat
-bin/Data/camera_para-iPhone 5 rear 640x480 1.0m.dat
-bin/Data/camera_para-iPhone 5 rear 640x480 inf.dat
-bin/Data/camera_para-iPhone 5 rear 640x480 macro.dat
-bin/Data/camera_para-iPhone 5s front 1280x720.dat
-bin/Data/camera_para-iPhone 5s front 640x480.dat
-bin/Data/camera_para-iPhone 5s rear 1280x720 0.3m.dat
-bin/Data/camera_para-iPhone 5s rear 1280x720 1.0m.dat
-bin/Data/camera_para-iPhone 5s rear 1280x720 inf.dat
-bin/Data/camera_para-iPhone 5s rear 1280x720 macro.dat
-bin/Data/camera_para-iPhone 5s rear 640x480 0.3m.dat
-bin/Data/camera_para-iPhone 5s rear 640x480 1.0m.dat
-bin/Data/camera_para-iPhone 5s rear 640x480 inf.dat
-bin/Data/camera_para-iPhone 5s rear 640x480 macro.dat
-bin/Data/camera_para-iPhone.dat
-bin/Data/camera_para-iPod touch 4G front.dat
-bin/Data/camera_para-iPod touch 4G rear 1280x720.dat
-bin/Data/camera_para-iPod touch 4G rear 640x480.dat
 
 lib/SRC/AR/
 lib/SRC/ARICP/
@@ -200,3 +146,4 @@ ARToolKit5iOS.xcodeproj/xcshareddata/
 Xcode/version.xcconfig
 Xcode/ARToolKit default images/
 Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt
+Xcode/iOS device camera parameters (for use with utilities)
