@@ -133,7 +133,7 @@ int arSetDebugMode( ARHandle *handle, int mode )
 
 int arGetDebugMode( ARHandle *handle, int *mode )
 {
-    if( handle == NULL ) return -1;
+    if (!handle || !mode) return -1;
     *mode = handle->arDebug;
 
     return 0;
@@ -158,7 +158,7 @@ int arSetLabelingMode( ARHandle *handle, int mode )
 
 int arGetLabelingMode( ARHandle *handle, int *mode )
 {
-    if( handle == NULL ) return -1;
+    if (!handle || !mode) return -1;
     *mode = handle->arLabelingMode;
 
     return 0;
@@ -177,7 +177,7 @@ int arSetLabelingThresh( ARHandle *handle, int thresh )
 
 int arGetLabelingThresh( ARHandle *handle, int *thresh )
 {
-    if( handle == NULL ) return -1;
+    if (!handle || !thresh) return -1;
     *thresh = handle->arLabelingThresh;
 
     return 0;
@@ -225,7 +225,7 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
 
 int arGetLabelingThreshMode(const ARHandle *handle, AR_LABELING_THRESH_MODE *mode_p)
 {
-    if (!handle) return (-1);
+    if (!handle || !mode_p) return (-1);
     *mode_p = handle->arLabelingThreshMode;
     return (0);
 }
@@ -240,7 +240,7 @@ int arSetLabelingThreshModeAutoInterval(ARHandle *handle, const int interval)
 
 int arGetLabelingThreshModeAutoInterval(const ARHandle *handle, int *interval_p)
 {
-    if (!handle) return (-1);
+    if (!handle || !interval_p) return (-1);
     *interval_p = handle->arLabelingThreshAutoInterval;
     return (0);
 }
