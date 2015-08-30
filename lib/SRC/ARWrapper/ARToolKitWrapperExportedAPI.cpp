@@ -874,7 +874,9 @@ extern "C" {
 	JNIEXPORT void JNICALL JNIFUNCTION(arwSetVideoDebugMode(JNIEnv *env, jobject obj, jboolean debug));
 	JNIEXPORT jboolean JNICALL JNIFUNCTION(arwGetVideoDebugMode(JNIEnv *env, jobject obj));
 	JNIEXPORT void JNICALL JNIFUNCTION(arwSetVideoThreshold(JNIEnv *env, jobject obj, jint threshold));
-	JNIEXPORT jint JNICALL JNIFUNCTION(arwGetVideoThreshold(JNIEnv *env, jobject obj));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwGetVideoThreshold(JNIEnv *env, jobject obj));
+    JNIEXPORT void JNICALL JNIFUNCTION(arwSetVideoThresholdMode(JNIEnv *env, jobject obj, jint mode));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwGetVideoThresholdMode(JNIEnv *env, jobject obj));
 	JNIEXPORT void JNICALL JNIFUNCTION(arwSetLabelingMode(JNIEnv *env, jobject obj, jint mode));
 	JNIEXPORT jint JNICALL JNIFUNCTION(arwGetLabelingMode(JNIEnv *env, jobject obj));
 	JNIEXPORT void JNICALL JNIFUNCTION(arwSetPatternDetectionMode(JNIEnv *env, jobject obj, jint mode));
@@ -1131,7 +1133,17 @@ JNIEXPORT jint JNICALL JNIFUNCTION(arwGetVideoThreshold(JNIEnv *env, jobject obj
 	return arwGetVideoThreshold();
 }
 
-JNIEXPORT void JNICALL JNIFUNCTION(arwSetLabelingMode(JNIEnv *env, jobject obj, jint mode)) 
+JNIEXPORT void JNICALL JNIFUNCTION(arwSetVideoThresholdMode(JNIEnv *env, jobject obj, jint mode))
+{
+    arwSetVideoThresholdMode(mode);
+}
+
+JNIEXPORT jint JNICALL JNIFUNCTION(arwGetVideoThresholdMode(JNIEnv *env, jobject obj))
+{
+    return (arwGetVideoThresholdMode());
+}
+
+JNIEXPORT void JNICALL JNIFUNCTION(arwSetLabelingMode(JNIEnv *env, jobject obj, jint mode))
 {
     arwSetLabelingMode(mode);
 }

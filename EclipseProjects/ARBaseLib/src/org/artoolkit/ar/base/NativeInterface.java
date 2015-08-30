@@ -318,6 +318,23 @@ public class NativeInterface {
 	 */
     public static native int arwGetVideoThreshold();    
     
+    public static final int AR_LABELING_THRESH_MODE_MANUAL = 0,
+    	    				AR_LABELING_THRESH_MODE_AUTO_MEDIAN = 1,
+    	    				AR_LABELING_THRESH_MODE_AUTO_OTSU = 2,
+    	    				AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE = 3;
+
+	/**
+	 * Sets the threshold mode used during video image binarization.
+	 * @param threshold		The new threshold mode.
+	 */
+    public static native void arwSetVideoThresholdMode(int mode);
+	
+	/**
+	 * Returns the current threshold mode used during video image binarization.
+	 * @return				The current threshold mode.
+	 */
+    public static native int arwGetVideoThresholdMode();    
+    
 	/**
 	 * Passes a video frame to the native library for processing.
 	 * @param image			Buffer containing the video frame

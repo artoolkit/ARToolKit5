@@ -113,7 +113,7 @@ public class ARToolKit {
 	 *            e.g. Activity.getContext().getCacheDir().getAbsolutePath()
 	 *            or Activity.getContext().getFilesDir().getAbsolutePath()
 	 */
-	public boolean initialiseNative(String resourcesDirectoryPath) {
+		public boolean initialiseNative(String resourcesDirectoryPath) {
 		if (!loadedNative) return false;
 		if (!NativeInterface.arwInitialiseAR()) {
 			Log.e(TAG, "Error initialising native library!");
@@ -127,6 +127,28 @@ public class ARToolKit {
 		return true;
 	}
 
+	/**
+	 * Initialises the native code library if it is available.
+	 * @return true if the library was found and successfully initialised.
+	 * @param resourcesDirectoryPath The full path (in the filesystem) to the directory to be used by the
+	 *            native routines as the base for relative references.
+	 *            e.g. Activity.getContext().getCacheDir().getAbsolutePath()
+	 *            or Activity.getContext().getFilesDir().getAbsolutePath()
+	 */
+	public boolean initialiseNativeWithOptions(String resourcesDirectoryPath, int pattSize, int pattCountMax) {
+		if (!loadedNative) return false;
+		if (!NativeInterface.arwInitialiseARWithOptions(pattSize, pattCountMax)) {
+			Log.e(TAG, "Error initialising native library!");
+			return false;
+		}
+		Log.i(TAG, "ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
+		if (!NativeInterface.arwChangeToResourcesDir(resourcesDirectoryPath)) {
+			Log.i(TAG, "Error while attempting to change working directory to resources directory.");
+		}
+		initedNative = true;
+		return true;
+	}
+			
 	/**
 	 * Returns whether the native library was found and successfully initialised. 
 	 * Native functions will not be called unless this is true.

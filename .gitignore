@@ -27,7 +27,7 @@ ipch/
 # Eclipse
 local.properties
 EclipseProjects/**/.settings/
-EclipseProjects/.metadata/
+.metadata/
 # MonoDevelop/Xamarin Studio
 *.userprefs
 # Visual Studio

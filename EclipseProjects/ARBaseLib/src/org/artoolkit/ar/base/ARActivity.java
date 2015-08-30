@@ -38,13 +38,12 @@
 package org.artoolkit.ar.base;
 
 import org.artoolkit.ar.base.NativeInterface;
-
 import org.artoolkit.ar.base.R;
 import org.artoolkit.ar.base.camera.CameraEventListener;
 import org.artoolkit.ar.base.camera.CameraPreferencesActivity;
 import org.artoolkit.ar.base.camera.CaptureCameraPreview;
 import org.artoolkit.ar.base.rendering.ARRenderer;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -53,6 +52,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Build;
 //import android.os.AsyncTask;
 //import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -61,6 +61,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
@@ -106,10 +107,22 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 	 * Layout that will be filled with the camera preview and GL views. This is provided by the subclass using {@link supplyFrameLayout()}.
 	 */
 	protected FrameLayout mainLayout; 
-
+	
+	/**
+     * For any square template (pattern) markers, the number of rows
+     * and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+     */
+	protected int pattSize = 16;
+	
+	/**
+     * For any square template (pattern) markers, the maximum number
+     * of markers that may be loaded for a single matching pass. Must be > 0.
+     */
+	protected int pattCountMax = 25;
+	
 	private boolean firstUpdate = false;
 	
-    @Override
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH) @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        
@@ -120,8 +133,20 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         // Correctly configures the activity window for running AR in a layer
         // on top of the camera preview. This includes entering 
         // fullscreen landscape mode and enabling transparency. 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		boolean needActionBar = false;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				if (!ViewConfiguration.get(this).hasPermanentMenuKey()) needActionBar = true;
+			} else {
+				needActionBar = true;
+			}
+        }
+		if (needActionBar) {
+			requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		} else {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);        	
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -149,7 +174,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
     	Log.i(TAG, "Activity starting.");
     	
-    	if (ARToolKit.getInstance().initialiseNative(this.getCacheDir().getAbsolutePath()) == false) { // Use cache directory for Data files.
+    	if (ARToolKit.getInstance().initialiseNativeWithOptions(this.getCacheDir().getAbsolutePath(), pattSize, pattCountMax) == false) { // Use cache directory for Data files.
         	
     		 new AlertDialog.Builder(this)
     	      .setMessage("The native library is not loaded. The application cannot continue.")
