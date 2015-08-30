@@ -256,14 +256,22 @@ extern "C" {
 	 */
 	EXPORT_API bool arwGetVideoDebugMode();
     
-	/**
-	 * Populates the provided color buffer with the contents of the debug image.
-	 * @param buffer	The color buffer to fill with the debug image
-	 * @param alpha		The alpha value to apply to each pixel
-	 * @return			true if successful, false if an error occurred
-	 */
-	EXPORT_API bool arwUpdateDebugTexture(Color *buffer, float alpha);
-
+    /**
+     * Populates the provided color buffer with the current contents of the debug image.
+     * @param buffer Pointer to a buffer of pixels (of type 'Color') to be filled. It is the caller's responsibility to ensure that the buffer is of sufficient size.
+     * @return				true if successful, false if an error occurred
+     */
+    EXPORT_API bool arwUpdateDebugTexture(Color *buffer);
+    
+    
+    /**
+     * Populates the provided buffer with the current contents of the debug image.
+     * @param buffer Pointer to a buffer of pixels (of type 'uint32_t') to be filled. It is the
+     *      caller's responsibility to ensure that the buffer is of sufficient size. The pixels are
+     *      RGBA in little-endian systems, or ABGR in big-endian systems.
+     */
+    EXPORT_API bool arwUpdateDebugTexture32(unsigned int *buffer);
+    
 #if !TARGET_PLATFORM_WINRT
 	/**
 	 * Uses OpenGL to directly updated the specified texture with the current video frame.

@@ -367,10 +367,16 @@ EXPORT_API bool arwGetVideoDebugMode()
 	return gARTK->getDebugMode();
 }
 
-EXPORT_API bool arwUpdateDebugTexture(Color *buffer, float alpha)
+EXPORT_API bool arwUpdateDebugTexture(Color *buffer)
 {
     if (!gARTK) return false;
-	return gARTK->updateDebugTexture(buffer, alpha);
+	return gARTK->updateDebugTexture(0, buffer);
+}
+
+EXPORT_API bool arwUpdateDebugTexture32(unsigned int *buffer)
+{
+    if (!gARTK) return false;
+    return gARTK->updateDebugTexture32(0, buffer);
 }
 
 #if !TARGET_PLATFORM_WINRT
@@ -901,7 +907,7 @@ extern "C" {
     JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImage(JNIEnv *env, jobject obj, jbyteArray pinArray, jint width, jint height, jint cameraIndex, jboolean cameraIsFrontFacing));
     JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImageStereo(JNIEnv *env, jobject obj, jbyteArray pinArrayL, jint widthL, jint heightL, jint cameraIndexL, jboolean cameraIsFrontFacingL, jbyteArray pinArrayR, jint widthR, jint heightR, jint cameraIndexR, jboolean cameraIsFrontFacingR));
 
-	JNIEXPORT bool  JNICALL JNIFUNCTION(arwUpdateDebugTexture(JNIEnv *env, jobject obj, jbyteArray pinArray, bool flipY));
+    JNIEXPORT bool JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray));
 
 	// ------------------------------------------------------------------------------------
 	// JNI Functions Not Yet Implemented
@@ -915,6 +921,8 @@ extern "C" {
     //EXPORT_API bool arwUpdateTexture32Stereo(unsigned int *bufferL, unsigned int *bufferR);
 	//EXPORT_API bool arwUpdateTextureGL(const int textureID);
 	//EXPORT_API bool arwUpdateTextureGLStereo(const int textureID_L, const int textureID_R);
+    //EXPORT_API bool arwUpdateDebugTexture(Color *buffer);
+
     //EXPORT_API bool arwLoadOpticalParams(const char *optical_param_name, const char *optical_param_buff, const int optical_param_buffLen, float *fovy_p, float *aspect_p, float m[16], float p[16]);
 	// ------------------------------------------------------------------------------------
 }
@@ -1247,14 +1255,14 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImageStereo(JNIEnv *env, jo
             );
 }
 
-JNIEXPORT bool  JNICALL JNIFUNCTION(arwUpdateDebugTexture(JNIEnv *env, jobject obj, jbyteArray pinArray, bool flipY)) 
+JNIEXPORT bool  JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray))
 {
     if (!gARTK) return false;
     
 	bool updated = false;
 
 	if (jbyte *inArray = env->GetByteArrayElements(pinArray, NULL)) {
-		updated = gARTK->updateDebugTextureB((ARUint8*)inArray, 255, flipY);
+		updated = arwUpdateDebugTexture32((unsigned int *)inArray);
 		env->ReleaseByteArrayElements(pinArray, inArray, 0); // 0 -> copy back the changes on the native side to the Java side.
 	}
 

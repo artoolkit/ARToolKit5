@@ -200,7 +200,7 @@ public class ARToolKit {
 
 		if (!initedNative) return null;
 
-		if (!NativeInterface.arwUpdateDebugTexture(debugImageData, false)) {
+		if (!NativeInterface.arwUpdateDebugTexture32(debugImageData)) {
 			return null;
 		}
 

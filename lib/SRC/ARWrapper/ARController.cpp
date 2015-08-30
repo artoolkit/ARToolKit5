@@ -404,21 +404,29 @@ bool ARController::capture()
 bool ARController::updateTexture(const int videoSourceIndex, Color* buffer)
 {
     if (videoSourceIndex < 0 || videoSourceIndex > (m_videoSourceIsStereo ? 1 : 0)) return false;
-   
-    VideoSource *vs = (videoSourceIndex == 0 ? m_videoSource0 : m_videoSource1);
-    if (!vs) return false;
     
-    return vs->updateTexture(buffer);
+    if (!debugMode) {
+        VideoSource *vs = (videoSourceIndex == 0 ? m_videoSource0 : m_videoSource1);
+        if (!vs) return false;
+        
+        return vs->updateTexture(buffer);
+    } else {
+        return updateDebugTexture(videoSourceIndex, buffer);
+    }
 }
 
 bool ARController::updateTexture32(const int videoSourceIndex, uint32_t *buffer)
 {
     if (videoSourceIndex < 0 || videoSourceIndex > (m_videoSourceIsStereo ? 1 : 0)) return false;
     
-    VideoSource *vs = (videoSourceIndex == 0 ? m_videoSource0 : m_videoSource1);
-    if (!vs) return false;
-    
-    return vs->updateTexture32(buffer);
+    if (!debugMode) {
+        VideoSource *vs = (videoSourceIndex == 0 ? m_videoSource0 : m_videoSource1);
+        if (!vs) return false;
+        
+        return vs->updateTexture32(buffer);
+    } else {
+        return updateDebugTexture32(videoSourceIndex, buffer);
+    }
 }
 
 #ifndef _WINRT
@@ -1210,7 +1218,7 @@ bool ARController::getNFTMultiMode() const
 // ----------------------------------------------------------------------------------------------------
 #pragma mark Debug texture
 // ----------------------------------------------------------------------------------------------------
-bool ARController::updateDebugTexture(Color* buffer, float alpha)
+bool ARController::updateDebugTexture(const int videoSourceIndex, Color* buffer)
 {
 #ifdef AR_DISABLE_LABELING_DEBUG_MODE
     logv("Debug texture not supported.");
@@ -1221,41 +1229,61 @@ bool ARController::updateDebugTexture(Color* buffer, float alpha)
 		return false;
 	}
 
-	// Check everything is valid
+	// Check everything is valid.
 	if (!buffer) return false;
-	if (!m_videoSource0) return false;
-    if (!m_arHandle0) return false;
+    ARHandle *arHandle = (videoSourceIndex == 1 ? m_arHandle1 : m_arHandle0);
+    if (!arHandle) return false;
 
-	// Get parameters from the video source
-	int w = m_videoSource0->getVideoWidth();
-	int h = m_videoSource0->getVideoHeight();
-    AR_PIXEL_FORMAT pf = m_videoSource0->getPixelFormat();
-	int pixelSize = arUtilGetPixelSize(pf);
-	int f = m_videoSource0->getFrameStamp();
+	// Get parameters from the tracker.
+	int w = arHandle->xsize;
+	int h = arHandle->ysize;
+    AR_PIXEL_FORMAT pf = arHandle->arPixelFormat;
+	int pixelSize = arHandle->arPixelSize;
 
-
-	static int lastFrameStamp = 0;				// Keep a record of the previous framestamp
-	if (lastFrameStamp == f) return false;		// Don't update the array if the current frame is the same is previous one
-	lastFrameStamp = f;							// Record the new framestamp
-
-	bool flipY = true;
-
-	if (ARUint8* debugImage = m_arHandle0->labelInfo.bwImage) {
-        if (pf == AR_PIXEL_FORMAT_RGBA) {
+	if (uint8_t *src = arHandle->labelInfo.bwImage) {
+        Color* dest = buffer;
+        if (pf == AR_PIXEL_FORMAT_RGBA || pf == AR_PIXEL_FORMAT_BGRA || pf == AR_PIXEL_FORMAT_RGB || pf == AR_PIXEL_FORMAT_BGR) {
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
-                    int idx = y*w + x;
-                    Color* c = &buffer[idx];
-                    
-                    int srcY = y;
-                    if (flipY) srcY = h - 1 - y;
-                    
-                    int idxSrc = (srcY*w + x) * pixelSize;
-                    
-                    c->b = (float)debugImage[idxSrc + 0] / 255.0f;
-                    c->g = (float)debugImage[idxSrc + 1] / 255.0f;
-                    c->r = (float)debugImage[idxSrc + 2] / 255.0f;
-                    c->a = alpha;
+                    dest->b = (float)(*(src + 0)) / 255.0f;
+                    dest->g = (float)(*(src + 1)) / 255.0f;
+                    dest->r = (float)(*(src + 2)) / 255.0f;
+                    dest->a = 1.0f;
+                    src += pixelSize;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_ARGB || pf == AR_PIXEL_FORMAT_ABGR) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    dest->b = (float)(*(src + 1)) / 255.0f;
+                    dest->g = (float)(*(src + 2)) / 255.0f;
+                    dest->r = (float)(*(src + 3)) / 255.0f;
+                    dest->a = 1.0f;
+                    src += pixelSize;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_MONO || pf == AR_PIXEL_FORMAT_420f ||  pf == AR_PIXEL_FORMAT_NV21 ||  pf == AR_PIXEL_FORMAT_yuvs || pf == AR_PIXEL_FORMAT_420v) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    dest->b = (float)(*src) / 255.0f;
+                    dest->g = (float)(*src) / 255.0f;
+                    dest->r = (float)(*src) / 255.0f;
+                    dest->a = 1.0f;
+                    src++;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_2vuy) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    dest->b = (float)(*(src + 1)) / 255.0f;
+                    dest->g = (float)(*(src + 1)) / 255.0f;
+                    dest->r = (float)(*(src + 1)) / 255.0f;
+                    dest->a = 1.0f;
+                    src++;
+                    dest++;
                 }
             }
         }
@@ -1265,61 +1293,68 @@ bool ARController::updateDebugTexture(Color* buffer, float alpha)
 #endif	
 }
 
-bool ARController::updateDebugTextureB(ARUint8* buffer, ARUint8 alpha, bool flipY)
+
+bool ARController::updateDebugTexture32(const int videoSourceIndex, uint32_t* buffer)
 {
 #ifdef AR_DISABLE_LABELING_DEBUG_MODE
     logv("Debug texture not supported.");
     return false;
-#else  
+#else
 	if (state != DETECTION_RUNNING) {
 		logv("Cannot update debug texture. Wrong state.");
 		return false;
 	}
 
-	// Check everything is valid
+	// Check everything is valid.
 	if (!buffer) return false;
-	if (!m_videoSource0) return false;
-    if (!m_arHandle0) return false;
+    ARHandle *arHandle = (videoSourceIndex == 1 ? m_arHandle1 : m_arHandle0);
+    if (!arHandle) return false;
 
-	// Get parameters from the video source
-	int w = m_videoSource0->getVideoWidth();
-	int h = m_videoSource0->getVideoHeight();
-    AR_PIXEL_FORMAT pf = m_videoSource0->getPixelFormat();
-	int pixelSize = arUtilGetPixelSize(pf);
-	int f = m_videoSource0->getFrameStamp();
+    // Get parameters from the tracker.
+    int w = arHandle->xsize;
+    int h = arHandle->ysize;
+    AR_PIXEL_FORMAT pf = arHandle->arPixelFormat;
+    int pixelSize = arHandle->arPixelSize;
 
-
-	static int lastFrameStamp = 0;				// Keep a record of the previous framestamp
-	if (lastFrameStamp == f) return false;		// Don't update the array if the current frame is the same is previous one
-	lastFrameStamp = f;							// Record the new framestamp
-
-    ARUint8* debugImage;
-	if ((debugImage = m_arHandle0->labelInfo.bwImage)) {
-        
-        if (pf == AR_PIXEL_FORMAT_RGBA) {
+    if (uint8_t *src = arHandle->labelInfo.bwImage) {
+        uint32_t* dest = buffer;
+        if (pf == AR_PIXEL_FORMAT_RGBA || pf == AR_PIXEL_FORMAT_BGRA || pf == AR_PIXEL_FORMAT_RGB || pf == AR_PIXEL_FORMAT_BGR) {
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
-                    
-                    int idx = (y*w + x) * 4;
-                    ARUint8* c = &buffer[idx];
-                    
-                    int srcY = y;
-                    if (flipY) srcY = h - 1 - y;
-                    
-                    int idxSrc = (srcY*w + x) * pixelSize;
-                    
-                    c[0] = debugImage[idxSrc + 0];
-                    c[1] = debugImage[idxSrc + 1];
-                    c[2] = debugImage[idxSrc + 2];
-                    c[3] = alpha;
-                    
+                    *dest = ((*(src + 0)) << 24) + ((*(src + 1)) << 16) + ((*(src + 2)) << 8) + 255;
+                    src += pixelSize;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_ARGB || pf == AR_PIXEL_FORMAT_ABGR) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    *dest = ((*(src + 1)) << 24) + ((*(src + 2)) << 16) + ((*(src + 3)) << 8) + 255;
+                    src += pixelSize;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_MONO || pf == AR_PIXEL_FORMAT_420f || pf == AR_PIXEL_FORMAT_NV21 ||  pf == AR_PIXEL_FORMAT_yuvs || pf == AR_PIXEL_FORMAT_420v) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    *dest = ((*src) << 24) + ((*src) << 16) + ((*src) << 8) + 255;
+                    src++;
+                    dest++;
+                }
+            }
+        } else if (pf == AR_PIXEL_FORMAT_2vuy) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    *dest = ((*(src + 1)) << 24) + ((*(src + 1)) << 16) + ((*(src + 1)) << 8) + 255;
+                    src++;
+                    dest++;
                 }
             }
         }
-	}
+    }
 
 	return true;
-#endif	
+#endif
 }
 
 // ----------------------------------------------------------------------------------------------------

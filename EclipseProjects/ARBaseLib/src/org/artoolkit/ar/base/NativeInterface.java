@@ -363,7 +363,7 @@ public class NativeInterface {
     public static native boolean arwAcceptVideoImageStereo(byte[] imageL, int widthL, int heightL, int cameraIndexL, boolean cameraIsFrontFacingL, byte[] imageR, int widthR, int heightR, int cameraIndexR, boolean cameraIsFrontFacingR);
     
     
-    public static native boolean arwUpdateDebugTexture(byte[] image, boolean flipY);
+    public static native boolean arwUpdateDebugTexture32(byte[] image);
   
   
 	public static final int AR_LABELING_WHITE_REGION = 0,

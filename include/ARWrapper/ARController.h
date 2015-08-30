@@ -368,6 +368,14 @@ public:
      */
     bool updateTexture(const int videoSourceIndex, Color* buffer);
     
+    /**
+     * Asks the video source to push the most recent frame into the passed-in buffer.
+     * @param videoSourceIndex Index into an array of video sources, specifying which source should
+     *      be queried.
+     * @param buffer Pointer to a buffer of pixels (of type 'uint32_t') to be filled. It is the
+     *      caller's responsibility to ensure that the buffer is of sufficient size. The pixels are
+     *      RGBA in little-endian systems, or ABGR in big-endian systems.
+     */
     bool updateTexture32(const int videoSourceIndex, uint32_t *buffer);
     
 #ifndef _WINRT
@@ -472,12 +480,21 @@ public:
 
 	/**
 	 * Populates the provided color buffer with the current contents of the debug image.
-	 * @param	buffer		The color buffer to populate
-	 * @param	alpha		The alpha value to use for each pixel set in the buffer
+     * @param videoSourceIndex Index into an array of video sources, specifying which source should be queried.
+     * @param buffer Pointer to a buffer of pixels (of type 'Color') to be filled. It is the caller's responsibility to ensure that the buffer is of sufficient size.
 	 * @return				true if successful, false if an error occurred
 	 */
-	bool updateDebugTexture(Color* buffer, float alpha);
-	bool updateDebugTextureB(ARUint8* buffer, ARUint8 alpha, bool flipY);
+	bool updateDebugTexture(const int videoSourceIndex, Color* buffer);
+
+    /**
+     * Populates the provided buffer with the current contents of the debug image.
+     * @param videoSourceIndex Index into an array of video sources, specifying which source should
+     *      be queried.
+     * @param buffer Pointer to a buffer of pixels (of type 'uint32_t') to be filled. It is the
+     *      caller's responsibility to ensure that the buffer is of sufficient size. The pixels are
+     *      RGBA in little-endian systems, or ABGR in big-endian systems.
+     */
+    bool updateDebugTexture32(const int videoSourceIndex, uint32_t* buffer);
 
 	/**
 	 * Populates the provided color buffer with the image for the specified pattern.
