@@ -2,8 +2,26 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.3 (this release) (2015-07-31).
----------------------------------------------------
+Changes in version 5.3.1 (this release) (2015-xx-xx).
+-----------------------------------------------------
+New features:
+- A new automatic thresholding algorithm has been added, AR_LABELING_THRESH_MODE_AUTO_BRACKETING. This algorithm repeats the marker detection pass with threshold values "bracketed" on either side of the current threshold, and picks the threshold value that maximises the number of markers detected.
+
+Enhancements:
+- ARWrapper: The number and size of template markers can now be set at initialisation time. New API arwInitialiseARWithOptions().
+- ARWrapper: Handling of the debug texture has been improved. If debug mode is on, the thresholded "debug" image will be returned in place of the normal colour image.
+- iOS: Calibrations added for iPad Air 2, iPhone 6 Plus.
+
+Bug fixes:
+- Android: The Java-based examples will now correctly show the action bar and the "Settings" menu if no hardware menu key is present.
+
+Other changes:
+- Changing the threshold value no longer also switches to AR_LABELING_THRESH_MODE_MANUAL.
+- iOS: The camera_para.dat files for various iOS devices which were previously in bin/Data have been moved to folder Xcode/iOS device camera parameters (for use with utilities), to reflect the fact that these are ONLY required when using the command-line utilities, and are never needed at runtime on an iOS device.
+
+
+Changes in version 5.3 (2015-07-31).
+------------------------------------
 New features:
 - libKPM now features the FREAK detector framework, contributed by DAQRI. The dependency on OpenCV's FLANN has also been removed. This should simplify app building and distribution.
 - "fset2" NFT dataset files have been replaced with "fset3" files throughout the toolkit.
@@ -11,10 +29,10 @@ New features:
 - Support for Windows Phone 8.1 and Windows Store 8.1 has been added, with support for third-party applications-only at this time. No support for rendering of video backgrounds via DirectX is provided, and no sample applications are provided. Sample XAML apps will be provided in a future release.
 - iOS: A new sample app, ARAppCameraTest, provides examples of advanced camera stream handling on iOS, including switching cameras, camera resolutions, and tap-to-focus.
 - Android: An example of Android native camera functionality is supplied, in disabled form. It is based on OpenCV's (somewhat flawed) native camera handling, however it might be useful to device manufacturers including ARToolKit in their Android OS as an example of how to connect to  native camera drivers. grep the source for AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA.
+- Android: A new Java-based multimarker example, ARMulti, has been added.
 
 Enhancements:
-- Added support for biplanar YCbCr texture formats to ARWrapper::updateTexture32.
-- Android: Added ARMulti Java-based example.
+- ARWrapper: arwUpdateTexture32 now uses highly-optimised ARM NEON implementation when converting from bi-planar video formats AR_PIXEL_FORMAT_420f and AR_PIXEL_FORMAT_NV21. Currently 32-bit ARM architecture only.
 - Android: Added control of square-tracking options to Java interface (look in NativeInterface.java).
 - More detailed logging in ARWrapper.
 - iOS/Android: Update bundled OpenSceneGraph to 3.2.2RC3, linked against libc++.
