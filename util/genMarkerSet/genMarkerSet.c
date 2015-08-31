@@ -389,7 +389,8 @@ static void   keyEvent( unsigned char key, int x, int y)
                 case AR_LABELING_THRESH_MODE_MANUAL:        modea = AR_LABELING_THRESH_MODE_AUTO_MEDIAN; break;
                 case AR_LABELING_THRESH_MODE_AUTO_MEDIAN:   modea = AR_LABELING_THRESH_MODE_AUTO_OTSU; break;
                 case AR_LABELING_THRESH_MODE_AUTO_OTSU:     modea = AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE; break;
-                case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE:
+                case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE: modea = AR_LABELING_THRESH_MODE_AUTO_BRACKETING; break;
+                case AR_LABELING_THRESH_MODE_AUTO_BRACKETING:
                 default: modea = AR_LABELING_THRESH_MODE_MANUAL; break;
             }
             arSetLabelingThreshMode(gARHandle, modea);

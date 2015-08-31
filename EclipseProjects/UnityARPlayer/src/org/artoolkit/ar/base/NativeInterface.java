@@ -321,7 +321,8 @@ public class NativeInterface {
     public static final int AR_LABELING_THRESH_MODE_MANUAL = 0,
     	    				AR_LABELING_THRESH_MODE_AUTO_MEDIAN = 1,
     	    				AR_LABELING_THRESH_MODE_AUTO_OTSU = 2,
-    	    				AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE = 3;
+    	    				AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE = 3,
+							AR_LABELING_THRESH_MODE_AUTO_BRACKETING = 4;
 
 	/**
 	 * Sets the threshold mode used during video image binarization.

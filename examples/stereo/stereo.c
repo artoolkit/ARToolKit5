@@ -408,8 +408,8 @@ int main(int argc, char** argv)
     arSetMarkerExtractionMode(gARHandleR, AR_USE_TRACKING_HISTORY_V2);
     //arSetMarkerExtractionMode(gARHandleL, AR_NOUSE_TRACKING_HISTORY);
     //arSetMarkerExtractionMode(gARHandleR, AR_NOUSE_TRACKING_HISTORY);
-    //arSetLabelingThreshMode(gARHandleL, AR_LABELING_THRESH_MODE_MANUAL); // Uncomment to use  manual thresholding.
-    //arSetLabelingThreshMode(gARHandleR, AR_LABELING_THRESH_MODE_MANUAL); // Uncomment to use  manual thresholding.
+    //arSetLabelingThreshMode(gARHandleL, AR_LABELING_THRESH_MODE_MANUAL); // Uncomment to force manual thresholding.
+    //arSetLabelingThreshMode(gARHandleR, AR_LABELING_THRESH_MODE_MANUAL); // Uncomment to force manual thresholding.
     
     // Set the pattern detection mode (template (pictorial) vs. matrix (barcode) based on
     // the marker types as defined in the marker config. file.
@@ -741,7 +741,8 @@ static void Keyboard(unsigned char key, int x, int y)
                 case AR_LABELING_THRESH_MODE_MANUAL:        modea = AR_LABELING_THRESH_MODE_AUTO_MEDIAN; break;
                 case AR_LABELING_THRESH_MODE_AUTO_MEDIAN:   modea = AR_LABELING_THRESH_MODE_AUTO_OTSU; break;
                 case AR_LABELING_THRESH_MODE_AUTO_OTSU:     modea = AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE; break;
-                case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE:
+                case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE: modea = AR_LABELING_THRESH_MODE_AUTO_BRACKETING; break;
+                case AR_LABELING_THRESH_MODE_AUTO_BRACKETING:
                 default: modea = AR_LABELING_THRESH_MODE_MANUAL; break;
             }
             arSetLabelingThreshMode(gARHandleL, modea);
@@ -1392,9 +1393,10 @@ static void printMode(const int contentWidth, const int contentHeight)
     arGetLabelingThreshMode(gARHandleL, &threshMode);
     switch (threshMode) {
         case AR_LABELING_THRESH_MODE_MANUAL: text_p = "MANUAL"; break;
-        case AR_LABELING_THRESH_MODE_AUTO_MEDIAN: text_p = "AUTO_MEDIAN, thresh="; break;
-        case AR_LABELING_THRESH_MODE_AUTO_OTSU: text_p = "AUTO_OTSU, thresh="; break;
+        case AR_LABELING_THRESH_MODE_AUTO_MEDIAN: text_p = "AUTO_MEDIAN"; break;
+        case AR_LABELING_THRESH_MODE_AUTO_OTSU: text_p = "AUTO_OTSU"; break;
         case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE: text_p = "AUTO_ADAPTIVE"; break;
+        case AR_LABELING_THRESH_MODE_AUTO_BRACKETING: text_p = "AUTO_BRACKETING"; break;
         default: text_p = "UNKNOWN"; break;
     }
     snprintf(text, sizeof(text), "Threshold mode: %s", text_p);

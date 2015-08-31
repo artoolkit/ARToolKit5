@@ -96,6 +96,9 @@ JDK_PROJS=" \
 "
 for i in $JDK_PROJS
 do
+	if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
+	    mkdir ../EclipseProjects/${i}/libs/
+	fi
     cp -Rpv -f libs/* ../EclipseProjects/${i}/libs/
 done
 fi

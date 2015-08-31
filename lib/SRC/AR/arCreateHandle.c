@@ -172,7 +172,7 @@ int arSetLabelingThresh( ARHandle *handle, int thresh )
 
     handle->arLabelingThresh = thresh;
     
-    return (arSetLabelingThreshMode(handle, AR_LABELING_THRESH_MODE_MANUAL)); // Force to manual mode.
+    return 0;
 }
 
 int arGetLabelingThresh( ARHandle *handle, int *thresh )
@@ -203,6 +203,9 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
 #endif
                 handle->arImageProcInfo = arImageProcInit(handle->xsize, handle->ysize, handle->arPixelFormat, 0);
                 break;
+            case AR_LABELING_THRESH_MODE_AUTO_BRACKETING:
+                handle->arLabelingThreshAutoBracketOver = handle->arLabelingThreshAutoBracketUnder = 1;
+                break;
             case AR_LABELING_THRESH_MODE_MANUAL:
                 break; // Do nothing.
             default:
@@ -216,6 +219,7 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
                 "AUTO_MEDIAN",
                 "AUTO_OTSU",
                 "AUTO_ADAPTIVE"
+                "AUTO_BRACKETING"
             };
             ARLOGe("Labeling threshold mode set to %s.\n", modeDescs[mode1]);
         }

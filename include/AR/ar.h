@@ -200,7 +200,8 @@ typedef enum {
     AR_LABELING_THRESH_MODE_MANUAL = 0,
     AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
     AR_LABELING_THRESH_MODE_AUTO_OTSU,
-    AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE
+    AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
+    AR_LABELING_THRESH_MODE_AUTO_BRACKETING
 } AR_LABELING_THRESH_MODE;
 
 /*!
@@ -476,6 +477,8 @@ typedef struct {
     AR_LABELING_THRESH_MODE arLabelingThreshMode;
     int                arLabelingThreshAutoInterval;
     int                arLabelingThreshAutoIntervalTTL;
+    int                arLabelingThreshAutoBracketOver;
+    int                arLabelingThreshAutoBracketUnder;
     ARImageProcInfo   *arImageProcInfo;
     ARdouble           pattRatio;
     AR_MATRIX_CODE_TYPE matrixCodeType;
@@ -627,10 +630,16 @@ int            arGetLabelingMode( ARHandle *handle, int *mode );
     @function 
     @abstract   Set the labeling threshhold.
     @discussion 
-        This function forces the labeling threshold mode to 
-        AR_LABELING_THRESH_MODE_MANUAL and sets the threshold value.
-        The default value is AR_DEFAULT_LABELING_THRESHm which is 100,
+        This function forces sets the threshold value.
+        The default value is AR_DEFAULT_LABELING_THRESH which is 100,
         unless edited in arConfig.h.
+        
+        The current threshold mode is not affected by this call.
+        Typically, this function is used when labeling threshold mode
+        is AR_LABELING_THRESH_MODE_MANUAL.
+ 
+        The threshold value is not relevant if threshold mode is
+        AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
  
         Background: The labeling threshold is the value which
 		the AR library uses to differentiate between black and white
@@ -652,9 +661,12 @@ int            arSetLabelingThresh( ARHandle *handle, int thresh );
     @abstract   Get the current labeling threshold.
     @discussion
         This function queries the current labeling threshold. For,
-        AR_LABELING_THRESH_MODE_AUTO_MEDIAN and AR_LABELING_THRESH_MODE_AUTO_OTSU,
+        AR_LABELING_THRESH_MODE_AUTO_MEDIAN, AR_LABELING_THRESH_MODE_AUTO_OTSU,
+        and AR_LABELING_THRESH_MODE_AUTO_BRACKETING
         the threshold value is only valid until the next auto-update.
+ 
         The current threshold mode is not affected by this call.
+ 
         The threshold value is not relevant if threshold mode is
         AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
     @param      handle An ARHandle referring to the current AR tracker
@@ -677,7 +689,8 @@ int            arGetLabelingThresh( ARHandle *handle, int *thresh );
         AR_LABELING_THRESH_MODE_MANUAL,
         AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
         AR_LABELING_THRESH_MODE_AUTO_OTSU,
-        AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE
+        AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
+        AR_LABELING_THRESH_MODE_AUTO_BRACKETING
     @result     0 if no error occured.
     @seealso arSetLabelingThresh arSetLabelingThresh
  */
@@ -694,7 +707,8 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
         AR_LABELING_THRESH_MODE_MANUAL,
         AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
         AR_LABELING_THRESH_MODE_AUTO_OTSU,
-        AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE
+        AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
+        AR_LABELING_THRESH_MODE_AUTO_BRACKETING
     @result     0 if no error occured.
     @seealso arSetLabelingThresh arSetLabelingThresh
  */
