@@ -83,6 +83,10 @@
 
 #  define TARGET_PLATFORM_ANDROID		1
 
+#elif __linux__
+
+# define TARGET_PLATFORM_LINUX			1
+
 #else
 
 #  error Unsupported platform.
@@ -113,7 +117,7 @@
 #  define LOGI(...) fprintf(stdout, __VA_ARGS__)
 #  define LOGE(...) fprintf(stderr, __VA_ARGS__)
 
-#elif TARGET_PLATFORM_OSX || TARGET_PLATFORM_IOS
+#elif TARGET_PLATFORM_OSX || TARGET_PLATFORM_IOS || TARGET_PLATFORM_LINUX
 
 #  define EXPORT_API
 #  define CALL_CONV
@@ -134,6 +138,5 @@
 
 typedef void (CALL_CONV *PFN_LOGCALLBACK)(const char* msg);
 
-//#define HAVE_NFT 1
 
 #endif // !PLATFORM_H

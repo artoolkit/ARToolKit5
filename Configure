@@ -47,6 +47,7 @@ MDIR=".                              \
       lib/SRC/AR                     \
       lib/SRC/ARICP                  \
       lib/SRC/AR2                    \
+      lib/SRC/ARWrapper              \
       lib/SRC/KPM                    \
       lib/SRC/Util                   \
       lib/SRC/ARMulti                \
@@ -286,7 +287,7 @@ then
     CXX="clang++ -std=c++11 -stdlib=libc++"
     #CFLAG="-O3 -fPIC -march=i686"
     #CFLAG="-O3 -fPIC -march=pentium4"
-    CFLAG="-O3 -fPIC -march=core2"
+    CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
  
     if [ "$MACHINE" = "x86_64" ]
     then

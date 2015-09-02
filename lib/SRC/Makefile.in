@@ -38,6 +38,7 @@ all:
 	(cd AR;                make -f Makefile)
 	(cd ARICP;             make -f Makefile)
 	(cd AR2;               make -f Makefile)
+	(cd ARWrapper;         make -f Makefile)
 	(cd KPM;               make -f Makefile)
 	(cd Util;              make -f Makefile)
 	(cd ARMulti;           make -f Makefile)
