@@ -94,9 +94,9 @@ ARController::ARController() :
     m_arHandle1(NULL),
     m_arPattHandle(NULL),
     m_ar3DHandle(NULL),
-    m_ar3DStereoHandle(NULL)
+    m_ar3DStereoHandle(NULL),
 #if HAVE_NFT
-    ,doNFTMarkerDetection(false),
+    doNFTMarkerDetection(false),
     m_nftMultiMode(false),
     m_kpmRequired(true),
     m_kpmBusy(false),
