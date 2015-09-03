@@ -224,8 +224,7 @@ int icpStereoPointRobust( ICPStereoHandleT *handle,
         ARLOG("RIGHT  IN: %2d, OUT: %2d\n", l, data->numR-l);
 #endif
 
-        if( k < 6 )
-        {
+        if( k < 6 ) {
             //COVHI10425, COVHI10406, COVHI10393, COVHI10325
             icpStereoGetXw2XcCleanup("icpStereoPointRobust(), if (k < 6)", J_U_S, dU, E, E2);
             return -1;
@@ -237,7 +236,7 @@ int icpStereoPointRobust( ICPStereoHandleT *handle,
         }
 
         icpUpdateMat( matXw2Xc, dS );
-    }//end: for( i = 0;; i++ )
+    }
 
 #if ICP_DEBUG
     ARLOG("*********** %f\n", err1);
@@ -251,11 +250,7 @@ int icpStereoPointRobust( ICPStereoHandleT *handle,
     free(E2);
 
     return 0;
-} //end: int icpStereoPointRobust(ICPStereoHandleT *handle,
-  //                              ICPStereoDataT   *data,
-  //                              ARdouble         initMatXw2Xc[3][4],
-  //                              ARdouble         matXw2Xc[3][4],
-  //                              ARdouble         *err)
+}
 
 static void icpStereoGetXw2XcCleanup( char *message, ARdouble *J_U_S, ARdouble *dU, ARdouble *E, ARdouble *E2 )
 {

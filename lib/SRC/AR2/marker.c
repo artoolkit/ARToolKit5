@@ -71,17 +71,17 @@ AR2MarkerSetT *ar2ReadMarkerSet( char *filename, char *ext, ARPattHandle  *pattH
     if( get_buff(buf, 256, fp) == NULL ) {
         free( markerSet );
         markerSet = NULL;
-        goto ar2ReadMarkerSet_EXIT;
+        goto done;
     }
     if( sscanf(buf, "%d", &(markerSet->num)) != 1 ) {
         free( markerSet );
         markerSet = NULL;
-        goto ar2ReadMarkerSet_EXIT;
+        goto done;
     }
     if( markerSet->num <= 0 ) {
         free(markerSet);
         markerSet = NULL;
-        goto ar2ReadMarkerSet_EXIT;
+        goto done;
     }
 
     arMalloc( markerSet->marker, AR2MarkerT, markerSet->num );
@@ -91,33 +91,33 @@ AR2MarkerSetT *ar2ReadMarkerSet( char *filename, char *ext, ARPattHandle  *pattH
             free( markerSet->marker );
             free( markerSet );
             markerSet = NULL;
-            goto ar2ReadMarkerSet_EXIT;
+            goto done;
         }
         if( sscanf(buf, "%s", buf1) != 1 ) {
             free( markerSet->marker );
             free( markerSet );
             markerSet = NULL;
-            goto ar2ReadMarkerSet_EXIT;
+            goto done;
         }
         //ar2UtilDivideExt(buf1, buf, buf2);
         if( (markerSet->marker[i].pattId = arPattLoad(pattHandle, buf1)) < 0 ) {
             free( markerSet->marker );
             free( markerSet );
             markerSet = NULL;
-            goto ar2ReadMarkerSet_EXIT;
+            goto done;
         }
 
         if( get_buff(buf, 256, fp) == NULL ) {
             free( markerSet->marker );
             free( markerSet );
             markerSet = NULL;
-            goto ar2ReadMarkerSet_EXIT;
+            goto done;
         }
         if( sscanf(buf, "%f", &(markerSet->marker[i].width)) != 1 ) {
             free( markerSet->marker );
             free( markerSet );
             markerSet = NULL;
-            goto ar2ReadMarkerSet_EXIT;
+            goto done;
         }
 
         for( j = 0; j < 3; j++ ) {
@@ -125,7 +125,7 @@ AR2MarkerSetT *ar2ReadMarkerSet( char *filename, char *ext, ARPattHandle  *pattH
                 free( markerSet->marker );
                 free( markerSet );
                 markerSet = NULL;
-                goto ar2ReadMarkerSet_EXIT;
+                goto done;
             }
             if( sscanf(buf, "%f %f %f %f",
                             &(markerSet->marker[i].transI2M[j][0]),
@@ -135,14 +135,14 @@ AR2MarkerSetT *ar2ReadMarkerSet( char *filename, char *ext, ARPattHandle  *pattH
                 free( markerSet->marker );
                 free( markerSet );
                 markerSet = NULL;
-                goto ar2ReadMarkerSet_EXIT;
+                goto done;
             }
         }
     }
 
-    ar2ReadMarkerSet_EXIT:
-        fclose(fp);
-        return markerSet;
+done:
+    fclose(fp);
+    return markerSet;
 }
 
 static char *get_buff( char *buf, int n, FILE *fp )

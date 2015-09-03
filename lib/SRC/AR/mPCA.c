@@ -177,7 +177,7 @@ static int PCA(ARMat *input, ARMat *output, ARVec *ev)
     if (output->row != min)        return (-1);
     if (ev->clm != min)            return (-1);
 
-    u = arMatrixAlloc(min, min); //function contains two calls to malloc()
+    u = arMatrixAlloc(min, min);
     if (u->row != min || u->clm != min) {
         arMatrixFree(u);
         return (-1);
