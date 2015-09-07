@@ -277,7 +277,7 @@ static int setupCubeMarker(const char *patt_name, ARMultiMarkerInfoT **multiConf
 }
 
 // Report state of ARToolKit tracker.
-static void debugReportMode(ARHandle *arhandle, const ARGL_CONTEXT_SETTINGS_REF arglContextSettings)
+static void debugReportMode(ARHandle *arhandle)
 {
 	int mode;
 	
@@ -286,14 +286,6 @@ static void debugReportMode(ARHandle *arhandle, const ARGL_CONTEXT_SETTINGS_REF 
 		ARLOGe("ProcMode (X)   : FRAME IMAGE\n");
 	} else if (mode == AR_IMAGE_PROC_FIELD_IMAGE) {
 		ARLOGe("ProcMode (X)   : FIELD IMAGE\n");
-	}
-	
-	if (arglDrawModeGet(arglContextSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) {
-		ARLOGe("DrawMode (C)   : GL_DRAW_PIXELS\n");
-	} else if (arglTexmapModeGet(arglContextSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) {
-		ARLOGe("DrawMode (C)   : TEXTURE MAPPING (FULL RESOLUTION)\n");
-	} else {
-		ARLOGe("DrawMode (C)   : TEXTURE MAPPING (HALF RESOLUTION)\n");
 	}
 	
 	arGetPatternDetectionMode(arhandle, &mode);
@@ -335,19 +327,10 @@ static void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 'C':
 		case 'c':
-			mode = arglDrawModeGet(gArglSettings);
-			if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-				arglDrawModeSet(gArglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-				arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-			} else {
-				mode = arglTexmapModeGet(gArglSettings);
-				if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-				else arglDrawModeSet(gArglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-			}
 			ARLOGe("*** Camera - %f (frame/sec)\n", (double)gCallCountMarkerDetect/arUtilTimer());
 			gCallCountMarkerDetect = 0;
 			arUtilTimerReset();
-			debugReportMode(gARHandle, gArglSettings);
+			debugReportMode(gARHandle);
 			break;
 		case '-':
 			threshChange = -5;
@@ -371,7 +354,7 @@ static void Keyboard(unsigned char key, int x, int y)
 		case '/':
 			ARLOG("Keys:\n");
 			ARLOG(" q or [esc]    Quit demo.\n");
-			ARLOG(" c             Change arglDrawMode and arglTexmapMode.\n");
+			ARLOG(" c             Calulcate frame rate.\n");
 			ARLOG(" - and +       Adjust threshhold.\n");
 			ARLOG(" d             Activate / deactivate debug mode.\n");
 			ARLOG(" b             Toggle between detection of black markers and white markers.\n");
@@ -482,7 +465,8 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
-	arglDispImage(gARTImage, &(gCparamLT->param), 1.0, gArglSettings);	// zoom = 1.0.
+    arglPixelBufferDataUpload(gArglSettings, gARTImage);
+	arglDispImage(gArglSettings);
 	gARTImage = NULL; // Invalidate image data.
 				
 	// Projection transformation.
@@ -573,7 +557,7 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
     arglSetupDebugMode(gArglSettings, gARHandle);
-	debugReportMode(gARHandle, gArglSettings);
+	debugReportMode(gARHandle);
 	glEnable(GL_DEPTH_TEST);
 	arUtilTimerReset();
 		

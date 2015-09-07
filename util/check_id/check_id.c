@@ -523,15 +523,6 @@ static void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 'C':
 		case 'c':
-			mode = arglDrawModeGet(gArglSettings);
-			if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-				arglDrawModeSet(gArglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-				arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-			} else {
-				mode = arglTexmapModeGet(gArglSettings);
-				if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-				else arglDrawModeSet(gArglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-			}
 			ARLOGe("*** Camera - %f (frame/sec)\n", (double)gCallCountMarkerDetect/arUtilTimer());
 			gCallCountMarkerDetect = 0;
 			arUtilTimerReset();
@@ -723,7 +714,8 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
-	arglDispImage(gARTImage, &(gCparamLT->param), 1.0, gArglSettings);	// zoom = 1.0.
+    arglPixelBufferDataUpload(gArglSettings, gARTImage);
+	arglDispImage(gArglSettings);
 
     if (gMultiConfigCount) {
         arglCameraFrustumRH(&(gCparamLT->param), VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);
@@ -837,6 +829,7 @@ static void Display(void)
             }
             glRasterPos2f((float)(windowWidth - size*zoom) - 4.0f, (float)(size*zoom) + 4.0f);
             glPixelZoom((float)zoom, (float)-zoom);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glDrawPixels(size, size, GL_LUMINANCE, GL_UNSIGNED_BYTE, ext_patt);
             glPixelZoom(1.0f, 1.0f);
         }
@@ -879,6 +872,8 @@ static void Display(void)
                     pixels[j + 2] = cutoffPhaseColours[i].colour[2];
                 }
                 glRasterPos2f(2.0f, (AR_MARKER_INFO_CUTOFF_PHASE_DESCRIPTION_COUNT - 1 - i) * 12.0f + 2.0f);
+                glPixelZoom(1.0f, 1.0f);
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 glDrawPixels(10, 10, GL_RGB, GL_UNSIGNED_BYTE, pixels);
                 print(arMarkerInfoCutoffPhaseDescriptions[cutoffPhaseColours[i].cutoffPhase], 14.0f, (AR_MARKER_INFO_CUTOFF_PHASE_DESCRIPTION_COUNT - 1 - i) * 12.0f + 2.0f, 0, 0);
             }
@@ -950,7 +945,7 @@ static void printHelpKeys()
         " a             Toggle between available threshold modes.",
         " - and +       Switch to manual threshold mode, and adjust threshhold up/down by 5.",
         " x             Change image processing mode.",
-        " c             Change arglDrawMode and arglTexmapMode.",
+        " c             Calulcate frame rate.",
         " r             Toggle robust multi-marker mode on/off.",
     };
 #define helpTextLineCount (sizeof(helpText)/sizeof(char *))
@@ -1036,13 +1031,8 @@ static void printMode()
         line++;
     }
     
-    // Draw mode.
-    if (arglDrawModeGet(gArglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) text_p = "GL_DRAW_PIXELS";
-    else {
-        if (arglTexmapModeGet(gArglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) text_p = "texture mapping";
-        else text_p = "texture mapping (even field only)";
-    }
-    snprintf(text, sizeof(text), "Drawing using %s into %dx%d window", text_p, windowWidth, windowHeight);
+    // Window size.
+    snprintf(text, sizeof(text), "Drawing into %dx%d window", windowWidth, windowHeight);
     print(text, 2.0f,  (line - 1)*12.0f + 2.0f, 0, 1);
     line++;
     

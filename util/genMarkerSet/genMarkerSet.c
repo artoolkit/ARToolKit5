@@ -282,7 +282,7 @@ static int init( int argc, char *argv[] )
     argViewportSetDispMethod( vp, AR_GL_DISP_METHOD_GL_DRAW_PIXELS );
     argViewportSetDispMode( vp, AR_GL_DISP_MODE_FIT_TO_VIEWPORT );
     argViewportSetDistortionMode( vp, AR_GL_DISTORTION_COMPENSATE_DISABLE );
-    argViewportSetPixFormat( vp, pixFormat );
+    argViewportSetPixFormat( vp, AR_PIXEL_FORMAT_MONO ); // Only ever drawing the debug image.
     argDrawMode2D( vp );
 
     arParamClear( &cparam, xsize, ysize, AR_DIST_FUNCTION_VERSION_DEFAULT );

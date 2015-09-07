@@ -1233,63 +1233,48 @@ bool ARController::updateDebugTexture(const int videoSourceIndex, Color* buffer)
 	if (!buffer) return false;
     ARHandle *arHandle = (videoSourceIndex == 1 ? m_arHandle1 : m_arHandle0);
     if (!arHandle) return false;
+    if (!arHandle->labelInfo.bwImage) return false;
 
 	// Get parameters from the tracker.
-	int w = arHandle->xsize;
-	int h = arHandle->ysize;
-    AR_PIXEL_FORMAT pf = arHandle->arPixelFormat;
-	int pixelSize = arHandle->arPixelSize;
-
-	if (uint8_t *src = arHandle->labelInfo.bwImage) {
-        Color* dest = buffer;
-        if (pf == AR_PIXEL_FORMAT_RGBA || pf == AR_PIXEL_FORMAT_BGRA || pf == AR_PIXEL_FORMAT_RGB || pf == AR_PIXEL_FORMAT_BGR) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    dest->b = (float)(*(src + 0)) / 255.0f;
-                    dest->g = (float)(*(src + 1)) / 255.0f;
-                    dest->r = (float)(*(src + 2)) / 255.0f;
-                    dest->a = 1.0f;
-                    src += pixelSize;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_ARGB || pf == AR_PIXEL_FORMAT_ABGR) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    dest->b = (float)(*(src + 1)) / 255.0f;
-                    dest->g = (float)(*(src + 2)) / 255.0f;
-                    dest->r = (float)(*(src + 3)) / 255.0f;
-                    dest->a = 1.0f;
-                    src += pixelSize;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_MONO || pf == AR_PIXEL_FORMAT_420f ||  pf == AR_PIXEL_FORMAT_NV21 ||  pf == AR_PIXEL_FORMAT_yuvs || pf == AR_PIXEL_FORMAT_420v) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    dest->b = (float)(*src) / 255.0f;
-                    dest->g = (float)(*src) / 255.0f;
-                    dest->r = (float)(*src) / 255.0f;
-                    dest->a = 1.0f;
-                    src++;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_2vuy) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    dest->b = (float)(*(src + 1)) / 255.0f;
-                    dest->g = (float)(*(src + 1)) / 255.0f;
-                    dest->r = (float)(*(src + 1)) / 255.0f;
-                    dest->a = 1.0f;
-                    src++;
-                    dest++;
-                }
+    uint8_t *src;
+    Color* dest = buffer;
+    int h = arHandle->ysize;
+    int arImageProcMode;
+    arGetImageProcMode(arHandle, &arImageProcMode);
+    if (arImageProcMode == AR_IMAGE_PROC_FIELD_IMAGE) {
+        int wdiv2 = arHandle->xsize >> 1;
+        for (int y = 0; y < h; y++) {
+            src = &(arHandle->labelInfo.bwImage[(h >> 1) * wdiv2]);
+            for (int x = 0; x < wdiv2; x++) {
+                dest->b = (float)(*src) / 255.0f;
+                dest->g = (float)(*src) / 255.0f;
+                dest->r = (float)(*src) / 255.0f;
+                dest->a = 1.0f;
+                dest++;
+                dest->b = (float)(*src) / 255.0f;
+                dest->g = (float)(*src) / 255.0f;
+                dest->r = (float)(*src) / 255.0f;
+                dest->a = 1.0f;
+                dest++;
+                src++;
             }
         }
-	}
-
-	return true;
+        
+    } else {
+        src = arHandle->labelInfo.bwImage;
+        int w = arHandle->xsize;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                dest->b = (float)(*src) / 255.0f;
+                dest->g = (float)(*src) / 255.0f;
+                dest->r = (float)(*src) / 255.0f;
+                dest->a = 1.0f;
+                dest++;
+                src++;
+            }
+        }
+    }
+    return true;
 #endif	
 }
 
@@ -1309,50 +1294,37 @@ bool ARController::updateDebugTexture32(const int videoSourceIndex, uint32_t* bu
 	if (!buffer) return false;
     ARHandle *arHandle = (videoSourceIndex == 1 ? m_arHandle1 : m_arHandle0);
     if (!arHandle) return false;
+    if (!arHandle->labelInfo.bwImage) return false;
 
-    // Get parameters from the tracker.
-    int w = arHandle->xsize;
+    uint8_t *src;
+    uint32_t* dest = buffer;
     int h = arHandle->ysize;
-    AR_PIXEL_FORMAT pf = arHandle->arPixelFormat;
-    int pixelSize = arHandle->arPixelSize;
-
-    if (uint8_t *src = arHandle->labelInfo.bwImage) {
-        uint32_t* dest = buffer;
-        if (pf == AR_PIXEL_FORMAT_RGBA || pf == AR_PIXEL_FORMAT_BGRA || pf == AR_PIXEL_FORMAT_RGB || pf == AR_PIXEL_FORMAT_BGR) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    *dest = ((*(src + 0)) << 24) + ((*(src + 1)) << 16) + ((*(src + 2)) << 8) + 255;
-                    src += pixelSize;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_ARGB || pf == AR_PIXEL_FORMAT_ABGR) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    *dest = ((*(src + 1)) << 24) + ((*(src + 2)) << 16) + ((*(src + 3)) << 8) + 255;
-                    src += pixelSize;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_MONO || pf == AR_PIXEL_FORMAT_420f || pf == AR_PIXEL_FORMAT_NV21 ||  pf == AR_PIXEL_FORMAT_yuvs || pf == AR_PIXEL_FORMAT_420v) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    *dest = ((*src) << 24) + ((*src) << 16) + ((*src) << 8) + 255;
-                    src++;
-                    dest++;
-                }
-            }
-        } else if (pf == AR_PIXEL_FORMAT_2vuy) {
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    *dest = ((*(src + 1)) << 24) + ((*(src + 1)) << 16) + ((*(src + 1)) << 8) + 255;
-                    src++;
-                    dest++;
-                }
+    int arImageProcMode;
+    arGetImageProcMode(arHandle, &arImageProcMode);
+    if (arImageProcMode == AR_IMAGE_PROC_FIELD_IMAGE) {
+        int wdiv2 = arHandle->xsize >> 1;
+        for (int y = 0; y < h; y++) {
+            src = &(arHandle->labelInfo.bwImage[(h >> 1) * wdiv2]);
+            for (int x = 0; x < wdiv2; x++) {
+                *dest = ((*src) << 24) + ((*src) << 16) + ((*src) << 8) + 255;
+                dest++;
+                *dest = ((*src) << 24) + ((*src) << 16) + ((*src) << 8) + 255;
+                dest++;
+                src++;
             }
         }
+    } else {
+        src = arHandle->labelInfo.bwImage;
+        int w = arHandle->xsize;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                *dest = ((*src) << 24) + ((*src) << 16) + ((*src) << 8) + 255;
+                src++;
+                dest++;
+            }
+        }
+        
     }
-
 	return true;
 #endif
 }

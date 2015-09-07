@@ -277,7 +277,7 @@ void arglCameraViewRHf(float para[3][4], GLfloat m_modelview[16], const float sc
         the draw mode is AR_DRAW_BY_TEXTURE_MAPPING (see the documentation for
         the global variable arglDrawMode) the field dist_factor of the ARParam
         structure pointed to will be taken as the amount to un-warp the supplied
-        image.		
+        image.
  
         Prior to ARToolKit v5.0.5, the ARParam structure pointed to had to remain
         valid in memory for the duration of the ARGL_CONTEXT_SETTINGS_REF's usage.

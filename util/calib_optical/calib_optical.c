@@ -792,7 +792,6 @@ static void calibModeNext(void)
 
 static void Keyboard(unsigned char key, int x, int y)
 {
-    int i;
 	int mode, threshChange = 0;
     AR_LABELING_THRESH_MODE modea;
 	
@@ -825,19 +824,6 @@ static void Keyboard(unsigned char key, int x, int y)
                 break;
             case 'C':
             case 'c':
-                for (i = 0; i < viewContextCount; i++) {
-                    if (viewContexts[i].arglSettings) {
-                        mode = arglDrawModeGet(viewContexts[i].arglSettings);
-                        if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-                            arglDrawModeSet(viewContexts[i].arglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-                            arglTexmapModeSet(viewContexts[i].arglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-                        } else {
-                            mode = arglTexmapModeGet(viewContexts[i].arglSettings);
-                            if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(viewContexts[i].arglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-                            else arglDrawModeSet(viewContexts[i].arglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-                        }
-                    }
-                }
                 ARLOGe("*** Camera - %f (frame/sec)\n", (double)gCallCountMarkerDetect/arUtilTimer());
                 gCallCountMarkerDetect = 0;
                 arUtilTimerReset();
@@ -1195,7 +1181,8 @@ static void DisplayPerContext(const int contextIndex)
         glViewport(view->viewPort[viewPortIndexLeft], view->viewPort[viewPortIndexBottom], view->viewPort[viewPortIndexWidth], view->viewPort[viewPortIndexHeight]);
 	
         if (gVideoSeeThrough) {
-            arglDispImage(gARTImage, &(gCparamLT->param), 1.0, viewContexts[contextIndex].arglSettings); // Retain 1:1 scaling, since the texture size will automatically be scaled to the viewport.
+            arglPixelBufferDataUpload(viewContexts[contextIndex].arglSettings, gARTImage);
+            arglDispImage(viewContexts[contextIndex].arglSettings); // Retain 1:1 scaling, since the texture size will automatically be scaled to the viewport.
         }
         
         // Only 2D in this app.
@@ -1332,7 +1319,7 @@ static void printHelpKeys(const int contextIndex)
         " a             Toggle between available threshold modes.",
         " - and +       Switch to manual threshold mode, and adjust threshhold up/down by 5.",
         " x             Change image processing mode.",
-        " c             Change arglDrawMode and arglTexmapMode.",
+        " c             Calculate frame rate.",
     };
 #define helpTextLineCount (sizeof(helpText)/sizeof(char *))
 	float hMargin = 2.0f;
@@ -1402,14 +1389,6 @@ static void printMode(const int contextIndex)
     len = (int)strlen(text);
     snprintf(text + len, sizeof(text) - len, ", Pattern detection mode: %s", text_p);
     lines[lineCount++] = strdup(text);
-    
-    // Draw mode.
-    if (arglDrawModeGet(viewContexts[0].arglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) text_p = "GL_DRAW_PIXELS";
-    else {
-        if (arglTexmapModeGet(viewContexts[0].arglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) text_p = "texture mapping";
-        else text_p = "texture mapping (even field only)";
-    }
-    asprintf(&(lines[lineCount++]), "Drawing using %s", text_p);
     
     EdenGLFontDrawBlock(contextIndex, (const unsigned char **)lines, lineCount, hMargin, vMargin, H_OFFSET_VIEW_LEFT_EDGE_TO_TEXT_LEFT_EDGE, V_OFFSET_VIEW_TEXT_TOP_TO_VIEW_TOP);
     

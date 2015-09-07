@@ -124,7 +124,7 @@ int arSetDebugMode( ARHandle *handle, int mode )
             free(handle->labelInfo.bwImage);
             handle->labelInfo.bwImage = NULL;
         } else {
-            arMalloc(handle->labelInfo.bwImage, ARUint8, handle->xsize * handle->ysize * handle->arPixelSize);
+            arMalloc(handle->labelInfo.bwImage, ARUint8, handle->xsize * handle->ysize);
         }
 #endif
     }
@@ -412,12 +412,6 @@ int arSetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT pixFormat )
     handle->arPixelSize   = arUtilGetPixelSize(handle->arPixelFormat);
     
     // Update handle settings that depend on pixel format.
-#if !AR_DISABLE_LABELING_DEBUG_MODE
-    if (handle->labelInfo.bwImage) {
-        free (handle->labelInfo.bwImage);
-        arMalloc(handle->labelInfo.bwImage, ARUint8, handle->xsize * handle->ysize * handle->arPixelSize);
-    }
-#endif
     if (handle->arImageProcInfo) {
         arImageProcFinal(handle->arImageProcInfo);
         handle->arImageProcInfo = arImageProcInit(handle->xsize, handle->ysize, handle->arPixelFormat, 0);

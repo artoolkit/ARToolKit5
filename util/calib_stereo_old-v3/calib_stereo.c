@@ -391,7 +391,7 @@ static void dispImage( void )
 
     argDrawMode2D( vpL );
     if( debugMode == 0 ) argDrawImage( dataPtrL );
-     else                argDrawImage( arHandleL->labelInfo.bwImage );
+    else                 argDrawImage( arHandleL->labelInfo.bwImage );
     if( configL->prevF ) {
         for( i = 0; i < numL; i++ ) {
             for( j = 0; j < configL->marker_num; j++ ) {
@@ -405,7 +405,7 @@ static void dispImage( void )
 
     argDrawMode2D( vpR );
     if( debugMode == 0 ) argDrawImage( dataPtrR );
-     else                argDrawImage( arHandleR->labelInfo.bwImage );
+    else                 argDrawImage( arHandleR->labelInfo.bwImage );
     if( configR->prevF ) {
         for( i = 0; i < numR; i++ ) {
             for( j = 0; j < configR->marker_num; j++ ) {

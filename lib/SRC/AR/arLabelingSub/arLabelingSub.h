@@ -405,7 +405,7 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
 #endif
 
 #ifdef AR_LABELING_DEBUG_ENABLE_F
-    //memset( labelInfo->bwImage, 0, lxsize*lysize*AR_PIXEL_SIZE );
+    //memset( labelInfo->bwImage, 0, lxsize*lysize );
 #endif
 
 	// Set top and bottom rows of labelImage to 0.
@@ -429,21 +429,21 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
     work2 = labelInfo->work2;
     pnt2 = &(labelInfo->labelImage[lxsize + 1]); // Start on 2nd pixel of 2nd row.
 #ifdef AR_LABELING_DEBUG_ENABLE_F
-    dpnt = &(labelInfo->bwImage[(lxsize + 1)*AR_PIXEL_SIZE]);
+    dpnt = &(labelInfo->bwImage[lxsize + 1]);
 #  ifdef AR_LABELING_FRAME_IMAGE_F
     pnt = &(image[(xsize + 1)*AR_PIXEL_SIZE]); // Start on 2nd pixel of 2nd row.
 #    ifdef AR_LABELING_ADAPTIVE
     pnt_thresh = &(image_thresh[(xsize + 1)*AR_PIXEL_SIZE]);
-    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*2, pnt_thresh += AR_PIXEL_SIZE*2, pnt2 += 2, dpnt += AR_PIXEL_SIZE*2) { // Process rows. At end of each row, skips last pixel of row and first pixel of next row.
-        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE, pnt_thresh += AR_PIXEL_SIZE, pnt2++, dpnt += AR_PIXEL_SIZE) { // Process columns.
+    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*2, pnt_thresh += AR_PIXEL_SIZE*2, pnt2 += 2, dpnt += 2) { // Process rows. At end of each row, skips last pixel of row and first pixel of next row.
+        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE, pnt_thresh += AR_PIXEL_SIZE, pnt2++, dpnt++) { // Process columns.
 #    else
-    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*2, pnt2 += 2, dpnt += AR_PIXEL_SIZE*2) { // Process rows. At end of each row, skips last pixel of row and first pixel of next row.
-        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE, pnt2++, dpnt += AR_PIXEL_SIZE) { // Process columns.
+    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*2, pnt2 += 2, dpnt += 2) { // Process rows. At end of each row, skips last pixel of row and first pixel of next row.
+        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE, pnt2++, dpnt++) { // Process columns.
 #    endif
 #  else
     pnt = &(image[(xsize*2 + 2)*AR_PIXEL_SIZE]);
-    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*4, pnt2 += 2, dpnt += AR_PIXEL_SIZE*2) {
-        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE*2, pnt2++, dpnt += AR_PIXEL_SIZE) {
+    for(j = 1; j < lysize - 1; j++, pnt += AR_PIXEL_SIZE*4, pnt2 += 2, dpnt += 2) {
+        for(i = 1; i < lxsize - 1; i++, pnt += AR_PIXEL_SIZE*2, pnt2++, dpnt++) {
 #  endif
 #else
 #  ifdef AR_LABELING_FRAME_IMAGE_F
@@ -467,112 +467,49 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
 // Black region.
 #  if defined(AR_PIXEL_FORMAT_ACCC)
             if( *(pnt+1) + *(pnt+2) + *(pnt+3) <= labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = *(dpnt+3) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_CCC)
             if( *(pnt+0) + *(pnt+1) + *(pnt+2) <= labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-#      ifdef AR_PIXEL_FORMAT_CCC
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = 255;
-#      else
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = *(dpnt+3) = 255;
-#      endif
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_C)
             if( *pnt <= labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *dpnt = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_YC)
             if( *pnt <= labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = 235; // Set luma to full.
-				*(dpnt+1) = 128; // Set chroma value to neutral.
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CY)
 			if( *(pnt+1) <= labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-				*(dpnt+0) = 128; // Set chroma value to neutral.
-				*(dpnt+1) = 235; // Set luma to full.
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCC_565)
             if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xe0) >> 3) + (((*(pnt+1)) & 0x1f) << 3) + 10 <= labelingThresh2 ) { // 10 = 4 + 2 + 4, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA_5551)
             if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xc0) >> 3) + (((*(pnt+1)) & 0x3e) << 2) + 12 <= labelingThresh2 ) { // 12 = 4 + 4 + 4, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA_4444)
             if( ((*(pnt+0)) & 0xf0) + (((*(pnt+0)) & 0x0f) << 4) + ((*(pnt+1)) & 0xf0) + 24 <= labelingThresh2 ) {  // 24 = 8 + 8 + 8, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_LABELING_ADAPTIVE)
             if( *pnt <= *pnt_thresh ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *dpnt = 255;
-#    endif
 #  endif
 #else
 // White region.
 #  if defined(AR_PIXEL_FORMAT_ACCC)
             if( *(pnt+1) + *(pnt+2) + *(pnt+3) > labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = *(dpnt+3) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_CCC)
             if( *(pnt+0) + *(pnt+1) + *(pnt+2) > labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-#      ifdef AR_PIXEL_FORMAT_CCC
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = 255;
-#      else
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = *(dpnt+3) = 255;
-#      endif
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_C)
             if( *pnt > labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *dpnt = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_YC)
 			if( *pnt > labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-				*(dpnt+0) = 235; // Set luma to full.
-				*(dpnt+1) = 128; // Set chroma value to neutral.
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CY)
 			if( *(pnt+1) > labelingThresh2 ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-				*(dpnt+0) = 128; // Set chroma value to neutral.
-				*(dpnt+1) = 235; // Set luma to full.
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCC_565)
             if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xe0) >> 3) + (((*(pnt+1)) & 0x1f) << 3) + 10 > labelingThresh2 ) { // 10 = 4 + 2 + 4, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA_5551)
             if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xc0) >> 3) + (((*(pnt+1)) & 0x3e) << 2) + 12 > labelingThresh2 ) { // 12 = 4 + 4 + 4, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_PIXEL_FORMAT_CCCA_4444)
             if( ((*(pnt+0)) & 0xf0) + (((*(pnt+0)) & 0x0f) << 4) + ((*(pnt+1)) & 0xf0) + 24 > labelingThresh2 ) {  // 24 = 8 + 8 + 8, provides midpoint of missing bits.
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *(dpnt+0) = *(dpnt+1) = 255;
-#    endif
 #  elif defined(AR_LABELING_ADAPTIVE)
             if( *pnt > *pnt_thresh ) {
-#    ifdef AR_LABELING_DEBUG_ENABLE_F
-                *dpnt = 255;
-#    endif
 #  endif
 #endif // !AR_LABELING_WHITE_REGION_F
                 // pnt is in region.
+#  ifdef AR_LABELING_DEBUG_ENABLE_F
+                *dpnt = 255;
+#  endif
                 pnt1 = &(pnt2[-lxsize]);
                 if( *pnt1 > 0 ) {
                     *pnt2 = *pnt1;
@@ -682,29 +619,7 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
                 // pnt is NOT in region.
                 *pnt2 = 0;
 #ifdef AR_LABELING_DEBUG_ENABLE_F
-#  if defined(AR_PIXEL_FORMAT_ACCC)
-                *(dpnt+0) = 255; *(dpnt+1) = *(dpnt+2) = *(dpnt+3) = 0;
-#  elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_CCC)
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = 0; *(dpnt+3) = 255;
-#  elif defined(AR_PIXEL_FORMAT_CCC)
-                *(dpnt+0) = *(dpnt+1) = *(dpnt+2) = 0;
-#  elif defined(AR_PIXEL_FORMAT_C) || defined(AR_LABELING_ADAPTIVE)
 				*dpnt = 0;
-#  elif defined(AR_PIXEL_FORMAT_YC)
-				*(dpnt+0) = 16; // Set luma to none.
-				*(dpnt+1) = 128; // Set chroma value to neutral.
-#  elif defined(AR_PIXEL_FORMAT_CY)
-				*(dpnt+0) = 128; // Set chroma value to neutral.
-				*(dpnt+1) = 16; // Set luma to none.
-#  elif defined(AR_PIXEL_FORMAT_CCC_565)
-				*(dpnt+0) = *(dpnt+1) = 0;
-#  elif defined(AR_PIXEL_FORMAT_CCCA_5551)
-				*(dpnt+0) = 0;
-				*(dpnt+1) = 1;
-#  elif defined(AR_PIXEL_FORMAT_CCCA_4444)
-				*(dpnt+0) = 0;
-				*(dpnt+1) = 15;
-#  endif
 #endif
             }
         }

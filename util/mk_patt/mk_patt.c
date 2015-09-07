@@ -305,8 +305,13 @@ static void   keyEvent( unsigned char key, int x, int y)
     }
     
     if( key == 'd' ) {
-        if( debugMode == AR_DEBUG_DISABLE ) debugMode = AR_DEBUG_ENABLE;
-         else                               debugMode = AR_DEBUG_DISABLE;
+        if( debugMode == AR_DEBUG_DISABLE ) {
+            debugMode = AR_DEBUG_ENABLE;
+            argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO);
+        } else {
+            debugMode = AR_DEBUG_DISABLE;
+            argViewportSetPixFormat(vp, pixelFormat);
+        }
         arSetDebugMode( arHandle, debugMode );
     }
 	
@@ -461,7 +466,7 @@ static void mainLoop(void)
     }
     argDrawMode2D( vp );
     if( debugMode == AR_DEBUG_DISABLE ) argDrawImage( image );
-     else                               argDrawImage( arHandle->labelInfo.bwImage );
+    else                                argDrawImage( arHandle->labelInfo.bwImage );
 
     if( target != NULL ) {
         glLineWidth(2.0f);

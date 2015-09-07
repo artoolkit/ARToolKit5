@@ -95,10 +95,9 @@ extern "C" {
 //	Public types and definitions.
 // ============================================================================
 
-#define AR_DRAW_BY_GL_DRAW_PIXELS 0
-#define AR_DRAW_BY_TEXTURE_MAPPING 1
-#define AR_DRAW_TEXTURE_FULL_IMAGE 0
-#define AR_DRAW_TEXTURE_HALF_IMAGE 1
+#define ARGL_DISABLE_DISP_IMAGE 0
+    
+#if !ARGL_DISABLE_DISP_IMAGE
 
 /*!
     @typedef ARGL_CONTEXT_SETTINGS_REF
@@ -125,15 +124,7 @@ extern "C" {
  */
 typedef struct _ARGL_CONTEXT_SETTINGS *ARGL_CONTEXT_SETTINGS_REF;
 
-// ============================================================================
-//	Public globals.
-// ============================================================================
-
-#ifdef __APPLE__
-extern int arglAppleClientStorage;
-extern int arglAppleTextureRange;
-extern GLuint arglAppleTextureRangeStorageHint;
-#endif // __APPLE__
+#endif
 
 // ============================================================================
 //	Public functions.
@@ -258,6 +249,8 @@ void arglCameraView(const ARdouble para[3][4], ARdouble m_modelview[16], const A
 */
 void arglCameraViewRH(const ARdouble para[3][4], ARdouble m_modelview[16], const ARdouble scale);
 
+#if !ARGL_DISABLE_DISP_IMAGE
+
 /*!
     @function
     @abstract Initialise the gsub_lite library for the current OpenGL context.
@@ -307,6 +300,7 @@ ARGL_CONTEXT_SETTINGS_REF arglSetupForCurrentContext(ARParam *cparam, AR_PIXEL_F
         or NULL if debug functionality is not required. Default is NULL.
 	@result TRUE if the mode was set, FALSE if an error occurred.
 	@availability First appeared in ARToolKit 4.5.12.
+    @seealso arglPixelBufferDataUpload arglPixelBufferDataUpload
 */
 int arglSetupDebugMode(ARGL_CONTEXT_SETTINGS_REF contextSettings, ARHandle *arHandle);
 
@@ -350,26 +344,6 @@ void arglCleanup(ARGL_CONTEXT_SETTINGS_REF contextSettings);
 		the drawing is done in replacement texture environment mode.
 		The depth test enable and lighting enable state and the texture
 		environment mode are restored before the function returns.
-	@param image Pointer to the tightly-packed image data (as returned by
-		arVideoGetImage()). The horizontal and vertical dimensions of the image
-		data must exactly match the values specified in the fields cparam->xsize
-		and cparam->ysize (see below).
- 
-		The first byte of image data corresponds to the first component of the
-		top-left-most pixel in the image. The data continues with the remaining
-		pixels of the first row, followed immediately by the pixels of the second
-		row, and so on to the last byte of the image data, which corresponds to
-		the last component of the bottom-right-most pixel.
-	@param cparam Pointer to a set of ARToolKit camera parameters for the
-		current video source. The size of the source image is taken from the
-		fields xsize and ysize of the ARParam structure pointed to. Also, when
-		the draw mode is AR_DRAW_BY_TEXTURE_MAPPING (see the documentation for
-		the global variable arglDrawMode) the field dist_factor of the ARParam
-		structure pointed to will be taken as the amount to un-warp the supplied
-		image.		
-	@param zoom The amount to scale the video image up or down. To draw the video
-		image double size, use a zoom value of 2.0. To draw the video image
-		half size use a zoom value of 0.5.
 	@param contextSettings A reference to ARGL's settings for the current OpenGL
 		context, as returned by arglSetupForCurrentContext() for this context. It
 		is the callers responsibility to make sure that the current context at the
@@ -377,7 +351,7 @@ void arglCleanup(ARGL_CONTEXT_SETTINGS_REF contextSettings);
 		was created.
 	@availability First appeared in ARToolKit 2.68.
 */
-void arglDispImage(ARUint8 *image, const ARParam *cparam, const double zoom, ARGL_CONTEXT_SETTINGS_REF contextSettings);
+void arglDispImage(ARGL_CONTEXT_SETTINGS_REF contextSettings);
 
 /*!
 	@function
@@ -399,7 +373,7 @@ void arglDispImage(ARUint8 *image, const ARParam *cparam, const double zoom, ARG
 		See the documentation for arglDispImage() for more information.
 	@availability First appeared in ARToolKit 2.68.2.
  */
-void arglDispImageStateful(ARUint8 *image, const ARParam *cparam, const double zoom, ARGL_CONTEXT_SETTINGS_REF contextSettings);
+void arglDispImageStateful(ARGL_CONTEXT_SETTINGS_REF contextSettings);
 
 /*!
     @function
@@ -440,6 +414,24 @@ int arglDistortionCompensationGet(ARGL_CONTEXT_SETTINGS_REF contextSettings, int
 
 /*!
     @function
+    @abstract Set the current video image drawing scalefactor.
+    @param zoom The amount to scale the video image up or down. To draw the video
+        image double size, use a zoom value of 2.0. To draw the video image
+        half size use a zoom value of 0.5.
+ */
+int arglSetPixelZoom(ARGL_CONTEXT_SETTINGS_REF contextSettings, float zoom);
+
+/*!
+    @function
+    @abstract Retrieve the current video image drawing scalefactor.
+    @param zoom The amount to scale the video image up or down. To draw the video
+        image double size, use a zoom value of 2.0. To draw the video image
+        half size use a zoom value of 0.5.
+ */
+int arglGetPixelZoom(ARGL_CONTEXT_SETTINGS_REF contextSettings, float *zoom);
+    
+/*!
+    @function
     @abstract Set the format of pixel data which will be passed to arglDispImage*()
     @discussion (description)
 		In gsub_lite, the format of the pixels (i.e. the arrangement of components
@@ -476,93 +468,122 @@ int arglPixelFormatSet(ARGL_CONTEXT_SETTINGS_REF contextSettings, AR_PIXEL_FORMA
 int arglPixelFormatGet(ARGL_CONTEXT_SETTINGS_REF contextSettings, AR_PIXEL_FORMAT *format, int *size);
 
 /*!
-    @function 
-	@abstract Set method by which arglDispImage() will transfer pixels. 
-	@discussion
-		This setting determines the method by which arglDispImage transfers pixels
-		of an image to OpenGL for display. Setting this
-		variable to a value of AR_DRAW_BY_GL_DRAW_PIXELS specifies the use of the
-		OpenGL DrawPixels functions to do the transfer. Setting this variable to a value of
-		AR_DRAW_BY_TEXTURE_MAPPING specifies the use of OpenGL TexImage2D functions to do the
-		transfer. The DrawPixels method is guaranteed to be available on all
-		implementations, but arglDispImage does not correct the image
-		for camera lens distortion under this method. In contrast, TexImage2D is only
-		available on some implementations, but allows arglDispImage() to apply a correction
-		for camera lens distortion, and additionally offers greater potential for
-		accelerated drawing on some implementations.
-
-		The initial value is AR_DRAW_BY_TEXTURE_MAPPING.
-	@availability First appeared in ARToolKit 2.72.
- */
-void arglDrawModeSet(ARGL_CONTEXT_SETTINGS_REF contextSettings, const int mode);
-
-/*!
-    @function 
-	@abstract Get method by which arglDispImage() is transfering pixels. 
-	@discussion
-		Enquires as to the current method by which arglDispImage() is
-		transferring pixels to OpenGL for display. See arglDrawModeSet() for
-		more information.
-	@availability First appeared in ARToolKit 2.72.
- */
-int arglDrawModeGet(ARGL_CONTEXT_SETTINGS_REF contextSettings);
-
-/*!
     @function
-	@abstract Determines use of full or half-resolution TexImage2D pixel-transfer in arglDispImage().
-	@discussion
-		When arglDrawModeSet(AR_DRAW_BY_TEXTURE_MAPPING) has been called, the value of this
-		setting determines whether full or half-resolution data is transferred to the
-		texture. Calling this function with a mode value of AR_DRAW_TEXTURE_FULL_IMAGE
-		uses all available pixels in the source image data. A value of
-		AR_DRAW_TEXTURE_HALF_IMAGE discards every second row
-		in the source image data, defining a half-height texture which is then drawn stretched
-		vertically to double its height.
+    @abstract   Find out whether ARGL is rotating all OpenGL drawing by 90 degrees.
+    @discussion
+        On some OpenGL ES devices, it may be desirable to rotate all OpenGL drawing by 90
+        degrees in the window coordinate system, in order to swap the horizontal and
+        vertical axes of the device. This may be a higher performance solution than
+        manually swapping rows and columns of submitted data.
  
-		The latter method is well-suited to drawing interlaced images, as would be obtained 
-		from DV camera sources in interlaced mode or composite video sources.
+        This function queries the current state of whether such a rotation is being performed by ARGL or not.
+    @param contextSettings A reference to ARGL's settings for the current OpenGL
+        context, as returned by arglSetupForCurrentContext() for this context.
+    @result    TRUE if a 90 degree rotation is enabled, FALSE if it is disabled.
+*/
+int arglGetRotate90(ARGL_CONTEXT_SETTINGS_REF contextSettings);
+
+/*!
+    @function
+    @abstract   Set or unset a 90 degree rotation in all OpenGL drawing performed by ARGL.
+    @discussion
+        On some OpenGL ES devices, it may be desirable to rotate all OpenGL drawing by 90
+        degrees in the window coordinate system, in order to swap the horizontal and
+        vertical axes of the device. This may be a higher performance solution than
+        manually swapping rows and columns of submitted data.
  
-		The initial value is AR_DRAW_TEXTURE_FULL_IMAGE.
-	@availability First appeared in ARToolKit 2.72.
- */
-void arglTexmapModeSet(ARGL_CONTEXT_SETTINGS_REF contextSettings, const int mode);
-
-/*!
-    @function
-	@abstract Enquire whether full or half-resolution TexImage2D pixel-transfer is being used in arglDispImage().
-	@discussion
-		Enquires as to the current value of the TexmapMode setting. See arglTexmapModeSet()
-		for more info.
-	@availability First appeared in ARToolKit 2.72.
- */
-int arglTexmapModeGet(ARGL_CONTEXT_SETTINGS_REF contextSettings);
-
-/*!
-    @function
-	@abstract Determines use of rectangular TexImage2D pixel-transfer in arglDispImage().
-	@discussion
-		On implementations which support the OpenGL extension for rectangular textures (of
-		non power-of-two size), and when arglDrawMode is set to AR_DRAW_BY_TEXTURE_MAPPING,
-		the value of this variable determines whether rectangular textures or ordinary
-		(power-of-two) textures are used by arglDispImage(). A value of TRUE specifies the
-		use of rectangluar textures. A value of FALSE specifies the use of ordinary textures.
+        This function enables or disables such an axis swap in ARGL with very little 
+        performance cost, by introducing a 90-degree rotation into the OpenGL projection matrix.
  
-		If the OpenGL driver available at runtime does not support for rectangular textures,
-		changing the value of this setting to TRUE will result calls to arglDispImage
-		performing no drawing.
-	@availability First appeared in ARToolKit 2.72.
- */
-void arglTexRectangleSet(ARGL_CONTEXT_SETTINGS_REF contextSettings, const int state);
+        By default, 90 degree rotation is DISABLED.
+    @param contextSettings A reference to ARGL's settings for the current OpenGL.
+        context, as returned by arglSetupForCurrentContext() for this context.
+    @param rotate90 Set to TRUE or 1 to enable 90 degree rotation, FALSE to disable.
+*/
+void arglSetRotate90(ARGL_CONTEXT_SETTINGS_REF contextSettings, int rotate90);
+
+int arglGetFlipH(ARGL_CONTEXT_SETTINGS_REF contextSettings);
+void arglSetFlipH(ARGL_CONTEXT_SETTINGS_REF contextSettings, int flipH);
+int arglGetFlipV(ARGL_CONTEXT_SETTINGS_REF contextSettings);
+void arglSetFlipV(ARGL_CONTEXT_SETTINGS_REF contextSettings, int flipV);
 
 /*!
     @function
-	@abstract Enquire as to use of rectangular TexImage2D pixel-transfer in arglDispImage().
-	@discussion
-		Enquires as to the current value of the TexRectangle setting. See arglTexRectangleSet()
-		for more info.
-	@availability First appeared in ARToolKit 2.72.
+    @abstract   Specify a desired pixel buffer size larger than the camera image size.
+    @discussion
+        By default, the pixel buffer accepted by function arglPixelBufferDataUpload()
+        is assumed to be tightly packed, row-major array of dimensions
+        equal to the calibrated camera image size (as passed in the fields arParam.xsize and arParam.ysize
+        of the ARHandle submitted to arglSetupForCurrentContext().
+
+        The pixel data buffer submitted may, under some circumstances be allowed to be larger than the
+        values of the calibrated camera image size (i.e. padded). This may only occur when the
+        underlying OpenGL ES impementation does not support non-power-of-two textures. For the Apple
+        iPhone family, this applies to the iPhone, the iPhone 3G, the iPod Touch 1st and 2nd Generation.
+        The iPhone 3GS and the iPod Touch 3rd Generation support non-power-of-two textures, and thus
+        padding of the pixel data buffer is not supported on these devices. If padding is desired,
+        the desired buffer size must be submitted using this function. Check that the
+        result from this function is TRUE before attempting to upload such a padded buffer.
+    @param contextSettings A reference to ARGL's settings for the current OpenGL
+        context, as returned by arglSetupForCurrentContext() for this context.
+    @param bufWidth The desired buffer width, in pixels.
+    @param bufHeight The desired buffer height, in pixels.
+    @result TRUE if the desired buffer size is supported, FALSE otherwise.
+*/
+char arglPixelBufferSizeSet(ARGL_CONTEXT_SETTINGS_REF contextSettings, int bufWidth, int bufHeight);
+
+/*!
+    @function
+    @abstract   Query the size of pixel data buffers expected by arglPixelBufferDataUpload().
+    @discussion
+        See function arglPixelBufferSizeSet() for a full discussion.
+    @param contextSettings A reference to ARGL's settings for the current OpenGL
+        context, as returned by arglSetupForCurrentContext() for this context.
+    @param bufWidth A pointer to int, which will be filled out with the buffer width, in pixels, or NULL if this value is not required.
+    @param bufHeight A pointer to int, which will be filled out with the buffer height, in pixels, or NULL if this value is not required..
+    @result TRUE if the buffer size was successfully queried, FALSE otherwise.
  */
-int arglTexRectangleGet(ARGL_CONTEXT_SETTINGS_REF contextSettings);
+char arglPixelBufferSizeGet(ARGL_CONTEXT_SETTINGS_REF contextSettings, int *bufWidth, int *bufHeight);
+
+/*!
+    @function
+    @abstract   Upload a buffer of pixel data to an OpenGL texture for later use by arglDispImage().
+    @discussion
+        ARGL provides the ability to perform distortion-compensated texturing of a camera video image
+        into the OpenGL context, for the purpose of video-see through augmented reality. This function
+        uploads the camera image data to an OpenGL texture, ready for later drawing using the function
+        arglDispImage().
+ 
+        If a pointer to an ARParam structure has been passed in to function arglSetupDebugMode, then
+        a check will be made whether debug mode is enabled, and if it is, then the buffer pointed to
+        by this function will be ignored, and instead the debug image will be loaded for texturing.
+    @param contextSettings A reference to ARGL's settings for the current OpenGL
+        context, as returned by arglSetupForCurrentContext() for this context.
+    @param bufDataPtr A pointer to the pixel buffer, which is a block of memory from which texture
+        data will be read.
+        
+        The layout of pixel data in the memory pointed to by bufDataPtr is assumed to be
+        specified by the value of pixelFormat in the ARHandle submitted to arglSetupForCurrentContext(),
+        but can be changed by calling arglPixelFormatSet() and/or arglPixelBufferSizeSet().
+ 
+        By default, the pixel buffer is assumed to be tightly packed, row-major array of dimensions
+        equal to the calibrated camera image size (as passed in the fields arParam.xsize and arParam.ysize
+        of the ARHandle submitted to arglSetupForCurrentContext().
+ 
+        The pixel data buffer submitted may, under some circumstances be allowed to be larger than the
+        values of the calibrated camera image size (i.e. padded). See the discussion section of the
+        documentation for function arglPixelBufferSizeSet() for more information.
+ 
+        This may only occur when the underlying OpenGL impementation does not support non-power-of-two
+        textures. If padding is desired, the desired buffer size must be submitted using
+        arglPixelBufferSizeSet(). Check that the result from this function is TRUE before attempting to
+        upload such a padded buffer.
+    @result TRUE if the pixel buffer was successfully uploaded to OpenGL, FALSE otherwise.
+    @seealso arglSetupDebugMode arglSetupDebugMode
+*/
+int arglPixelBufferDataUpload(ARGL_CONTEXT_SETTINGS_REF contextSettings, ARUint8 *bufDataPtr);
+
+#endif // !ARGL_DISABLE_DISP_IMAGE
 
 /*!
     @function

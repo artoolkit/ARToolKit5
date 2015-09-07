@@ -690,7 +690,6 @@ static void cleanup(void)
 
 static void Keyboard(unsigned char key, int x, int y)
 {
-    int i, j;
 	int mode, threshChange = 0;
     AR_LABELING_THRESH_MODE modea;
 	
@@ -714,22 +713,6 @@ static void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 'C':
 		case 'c':
-                for (i = 0; i < viewContextCount; i++) {
-                    if (viewContexts[i].contextIndex) glutSetWindow(viewContexts[i].contextIndex);
-                    for (j = 0; j < viewContexts[i].viewCount; j++) {
-                        if (viewContexts[i].views[j]->arglSettings) {
-                            mode = arglDrawModeGet(viewContexts[i].views[j]->arglSettings);
-                            if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-                                arglDrawModeSet(viewContexts[i].views[j]->arglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-                                arglTexmapModeSet(viewContexts[i].views[j]->arglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-                            } else {
-                                mode = arglTexmapModeGet(viewContexts[i].views[j]->arglSettings);
-                                if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(viewContexts[i].views[j]->arglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-                                else arglDrawModeSet(viewContexts[i].views[j]->arglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-                            }
-                        }
-                    }
-                }
 			ARLOGe("*** Camera - %f (frame/sec)\n", (double)gCallCountMarkerDetect/arUtilTimer());
 			gCallCountMarkerDetect = 0;
 			arUtilTimerReset();
@@ -1177,10 +1160,12 @@ static void DisplayPerContext(const int contextIndex)
         glViewport(view->viewPort[viewPortIndexLeft], view->viewPort[viewPortIndexBottom], view->viewPort[viewPortIndexWidth], view->viewPort[viewPortIndexHeight]);
 	
         if (viewEye == VIEW_RIGHTEYE) {
-            arglDispImage(gARTImageR, &(gCparamLTR->param), 1.0, view->arglSettings);	// zoom = 1.0.
+            arglPixelBufferDataUpload(view->arglSettings, gARTImageR);
+            arglDispImage(view->arglSettings);
             gARTImageR = NULL; // Invalidate image data.
         } else {
-            arglDispImage(gARTImageL, &(gCparamLTL->param), 1.0, view->arglSettings);	// zoom = 1.0.
+            arglPixelBufferDataUpload(view->arglSettings, gARTImageL);
+            arglDispImage(view->arglSettings);
             gARTImageL = NULL; // Invalidate image data.
         }
 
@@ -1351,7 +1336,7 @@ static void printHelpKeys(const int contentWidth, const int contentHeight)
         " a             Toggle between available threshold modes.",
         " - and +       Switch to manual threshold mode, and adjust threshhold up/down by 5.",
         " x             Change image processing mode.",
-        " c             Change arglDrawMode and arglTexmapMode.",
+        " c             Calulcate frame rate.",
     };
 #define helpTextLineCount (sizeof(helpText)/sizeof(char *))
 	float hMargin = 2.0f;
@@ -1423,16 +1408,5 @@ static void printMode(const int contentWidth, const int contentHeight)
     len = (int)strlen(text);
     snprintf(text + len, sizeof(text) - len, ", Pattern detection mode: %s", text_p);
     print(text, hMargin,  (line - 1)*(FONT_SIZE + FONT_LINE_SPACING) + vMargin, contentWidth, contentHeight, 0, 1);
-    line++;
-    
-    // Draw mode.
-    if (arglDrawModeGet(views[0].arglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) text_p = "GL_DRAW_PIXELS";
-    else {
-        if (arglTexmapModeGet(views[0].arglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) text_p = "texture mapping";
-        else text_p = "texture mapping (even field only)";
-    }
-    snprintf(text, sizeof(text), "Drawing using %s", text_p);
-    print(text, hMargin,  (line - 1)*(FONT_SIZE + FONT_LINE_SPACING) + vMargin, contentWidth, contentHeight, 0, 1);
-    line++;
-    
+    line++;    
 }

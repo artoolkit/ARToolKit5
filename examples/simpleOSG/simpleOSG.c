@@ -479,15 +479,6 @@ static void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 'C':
 		case 'c':
-			mode = arglDrawModeGet(gArglSettings);
-			if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-				arglDrawModeSet(gArglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-				arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-			} else {
-				mode = arglTexmapModeGet(gArglSettings);
-				if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-				else arglDrawModeSet(gArglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-			}
 			ARLOGe("*** Camera - %f (frame/sec)\n", (double)gCallCountMarkerDetect/arUtilTimer());
 			gCallCountMarkerDetect = 0;
 			arUtilTimerReset();
@@ -697,7 +688,8 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
     
-	arglDispImage(gARTImage, &(gCparamLT->param), 1.0, gArglSettings);	// zoom = 1.0.
+    arglPixelBufferDataUpload(gArglSettings, gARTImage);
+    arglDispImage(gArglSettings);
 	gARTImage = NULL; // Invalidate image data.
 				
     // Set up 3D mode.
@@ -826,7 +818,7 @@ static void printHelpKeys()
         " a             Toggle between available threshold modes.",
         " - and +       Switch to manual threshold mode, and adjust threshhold up/down by 5.",
         " x             Change image processing mode.",
-        " c             Change arglDrawMode and arglTexmapMode.",
+        " c             Calulcate frame rate.",
     };
 #define helpTextLineCount (sizeof(helpText)/sizeof(char *))
 	float hMargin = 2.0f;
@@ -900,13 +892,8 @@ static void printMode()
     print(text, hMargin,  (line - 1)*(FONT_SIZE + FONT_LINE_SPACING) + vMargin, 0, 1);
     line++;
     
-    // Draw mode.
-    if (arglDrawModeGet(gArglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) text_p = "GL_DRAW_PIXELS";
-    else {
-        if (arglTexmapModeGet(gArglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) text_p = "texture mapping";
-        else text_p = "texture mapping (even field only)";
-    }
-    snprintf(text, sizeof(text), "Drawing using %s into %dx%d window", text_p, gWindowW, gWindowH);
+    // Window size.
+    snprintf(text, sizeof(text), "Drawing into %dx%d window", gWindowW, gWindowH);
     print(text, hMargin,  (line - 1)*(FONT_SIZE + FONT_LINE_SPACING) + vMargin, 0, 1);
     line++;
     

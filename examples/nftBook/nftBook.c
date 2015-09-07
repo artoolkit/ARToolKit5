@@ -561,8 +561,6 @@ static void cleanup(void)
 
 static void Keyboard(unsigned char key, int x, int y)
 {
-	int mode;
-	
 	switch (key) {
 		case 0x1B:						// Quit.
 		case 'Q':
@@ -570,30 +568,10 @@ static void Keyboard(unsigned char key, int x, int y)
 			cleanup();
 			exit(0);
 			break;
-		case 'C':
-		case 'c':
-			mode = arglDrawModeGet(gArglSettings);
-			if (mode == AR_DRAW_BY_GL_DRAW_PIXELS) {
-				arglDrawModeSet(gArglSettings, AR_DRAW_BY_TEXTURE_MAPPING);
-				arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_FULL_IMAGE);
-			} else {
-				mode = arglTexmapModeGet(gArglSettings);
-				if (mode == AR_DRAW_TEXTURE_FULL_IMAGE)	arglTexmapModeSet(gArglSettings, AR_DRAW_TEXTURE_HALF_IMAGE);
-				else arglDrawModeSet(gArglSettings, AR_DRAW_BY_GL_DRAW_PIXELS);
-			}
-            if (arglDrawModeGet(gArglSettings) == AR_DRAW_BY_GL_DRAW_PIXELS) {
-                ARLOGe("DrawMode (C)   : GL_DRAW_PIXELS\n");
-            } else if (arglTexmapModeGet(gArglSettings) == AR_DRAW_TEXTURE_FULL_IMAGE) {
-                ARLOGe("DrawMode (C)   : TEXTURE MAPPING (FULL RESOLUTION)\n");
-            } else {
-                ARLOGe("DrawMode (C)   : TEXTURE MAPPING (HALF RESOLUTION)\n");
-            }
-			break;
 		case '?':
 		case '/':
 			ARLOG("Keys:\n");
 			ARLOG(" q or [esc]    Quit demo.\n");
-			ARLOG(" c             Change arglDrawMode and arglTexmapMode.\n");
 			ARLOG(" ? or /        Show this help.\n");
 			ARLOG("\nAdditionally, the ARVideo library supplied the following help text:\n");
 			arVideoDispOption();
@@ -769,7 +747,8 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
     
-	arglDispImage(gARTImage, &(gCparamLT->param), 1.0, gArglSettings);	// zoom = 1.0.
+    arglPixelBufferDataUpload(gArglSettings, gARTImage);
+	arglDispImage(gArglSettings);
 	gARTImage = NULL; // Invalidate image data.
 				
     // Set up 3D mode.
