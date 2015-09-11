@@ -74,6 +74,7 @@
 #define CACHE_INIT_DB_NAME "cparam_cache_init.db"
 #define CACHE_DB_NAME "cparam_cache.db"
 #define CACHE_TIME 31557600L // How long to keep values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
+#define CACHE_TIME_FALLBACK 1209600L // How long to keep fallback values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
 #define CACHE_FLUSH_INTERVAL 86400L // How many seconds between checks in which expired cache entries are flushed.
 #define SEARCH_POST_URL "https://omega.artoolworks.com/app/calib_camera/download.php"
 #define SEARCH_TOKEN_LENGTH 16
@@ -782,9 +783,10 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                             int camera_height = (int)(nx_json_get(record, "camera_height")->int_value);
                                             unsigned char *aspect_ratio = (unsigned char *)(nx_json_get(record, "aspect_ratio")->text_value);
                                             float focal_length = (float)(nx_json_get(record, "focal_length")->dbl_value);
+                                            bool fallback = (nx_json_get(record, "fallback")->int_value ? true : false);
                                             unsigned char *camera_para_base64 = (unsigned char *)(nx_json_get(record, "camera_para_base64")->text_value);
                                             
-                                            //ARLOGe("camera_index=%d, camera_width=%d, camera_height=%d, aspect_ratio='%s', focal_length=%f, camera_para_base64='%s'.\n", camera_index, camera_width, camera_height, aspect_ratio, focal_length, camera_para_base64);
+                                            ARLOGd("camera_index=%d, camera_width=%d, camera_height=%d, aspect_ratio='%s', focal_length=%f, camera_para_base64='%s'%s.\n", camera_index, camera_width, camera_height, aspect_ratio, focal_length, camera_para_base64, (fallback ? ", fallback" : ""));
                                             
                                             // Check validity of values.
                                             if (!camera_width || !camera_height || !aspect_ratio || !camera_para_base64) {
@@ -815,7 +817,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                     }
                                                     
                                                     // Put into cache.
-                                                    if (asprintf(&SQL, "INSERT OR REPLACE INTO cache (device_id,camera_index,focal_length,camera_width,camera_height,aspect_ratio,camera_para_base64,expires) VALUES (?1, %d, %f, %d, %d, ?2, ?3, %ld);", camera_index, focal_length, camera_width, camera_height, nowTime + CACHE_TIME) >= 0) { // ?n will be bound to string values.
+                                                    if (asprintf(&SQL, "INSERT OR REPLACE INTO cache (device_id,camera_index,focal_length,camera_width,camera_height,aspect_ratio,camera_para_base64,expires) VALUES (?1, %d, %f, %d, %d, ?2, ?3, %ld);", camera_index, focal_length, camera_width, camera_height, nowTime + (fallback ? CACHE_TIME_FALLBACK : CACHE_TIME)) >= 0) { // ?n will be bound to string values.
                                                         sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, strlen(SQL), &stmt, NULL);
                                                         free(SQL);
                                                         if (sqliteErr != SQLITE_OK) {
