@@ -548,7 +548,7 @@ bail0:
                     else if (i == 1) planes[i].bytesPerRow = planes[i].width * 2;
                     planes[i].bufDataPtr0 = (unsigned char *)valloc(planes[i].height*planes[i].bytesPerRow);
                     planes[i].bufDataPtr1 = (unsigned char *)valloc(planes[i].height*planes[i].bytesPerRow);
-                    if (!planes[i].bufDataPtr0 || !!planes[i].bufDataPtr1) {
+                    if (!planes[i].bufDataPtr0 || !planes[i].bufDataPtr1) {
                         NSLog(@"Error: Out of memory!\n");
                     }
                 }
