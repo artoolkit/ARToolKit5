@@ -52,10 +52,6 @@
 #import <AR/gsub_es2.h>
 #import <AudioToolbox/AudioToolbox.h> // SystemSoundID, AudioServicesCreateSystemSoundID()
 
-#define VIEW_SCALEFACTOR        1.0f
-#define VIEW_DISTANCE_MIN        5.0f          // Objects closer to the camera than this will not be displayed.
-#define VIEW_DISTANCE_MAX        2000.0f        // Objects further away from the camera than this will not be displayed.
-
 
 const NSString *ARResolutionPresets[] = {
     @"-preset=high",
@@ -84,6 +80,8 @@ const NSString *ARCameraPositionPresets[] = {
     NSInteger       runLoopInterval;
     NSTimeInterval  runLoopTimePrevious;
     BOOL            videoPaused;
+    BOOL            videoAsync;
+    CADisplayLink  *runLoopDisplayLink; // For non-async video.
     
     // Video acquisition
     AR2VideoParamT *gVid;
@@ -123,7 +121,7 @@ const NSString *ARCameraPositionPresets[] = {
     }  else { // UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
         CGSize result = [[UIScreen mainScreen] bounds].size;
         if (result.height == 568) {
-             irisImage = @"Iris-568h.png"; // iPhone 5, iPod touch 5th Gen, etc.
+            irisImage = @"Iris-568h.png"; // iPhone 5, iPod touch 5th Gen, etc.
         } else { // result.height == 480
             irisImage = @"Iris.png";
         }
@@ -150,6 +148,7 @@ const NSString *ARCameraPositionPresets[] = {
     running = FALSE;
     videoPaused = FALSE;
     runLoopTimePrevious = CFAbsoluteTimeGetCurrent();
+    videoAsync = FALSE;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -167,11 +166,17 @@ const NSString *ARCameraPositionPresets[] = {
 - (void)startRunLoop
 {
     if (!running) {
-        // After starting the video, new frames will invoke cameraVideoTookPicture:userData:.
+        // Normally, after starting the video, new frames will invoke cameraVideoTookPicture:userData:.
         if (ar2VideoCapStart(gVid) != 0) {
             NSLog(@"Error: Unable to begin camera data capture.\n");
             [self stop];
             return;
+        }
+        if (!videoAsync) {
+            // But if non-async video (e.g. from a movie file) we'll need to generate regular calls to mainLoop using a display link timer.
+            runLoopDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(mainLoop)];
+            [runLoopDisplayLink setFrameInterval:runLoopInterval];
+            [runLoopDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         }
         running = TRUE;
     }
@@ -181,6 +186,9 @@ const NSString *ARCameraPositionPresets[] = {
 {
     if (running) {
         ar2VideoCapStop(gVid);
+        if (!videoAsync) {
+            [runLoopDisplayLink invalidate];
+        }
         running = FALSE;
     }
 }
@@ -211,6 +219,9 @@ const NSString *ARCameraPositionPresets[] = {
         if (paused) ar2VideoCapStop(gVid);
         else ar2VideoCapStart(gVid);
         videoPaused = paused;
+        if (!videoAsync) {
+            if (runLoopDisplayLink.paused != paused) runLoopDisplayLink.paused = paused;
+        }
 #  ifdef DEBUG
         NSLog(@"Run loop was %s.\n", (paused ? "PAUSED" : "UNPAUSED"));
 #  endif
@@ -225,9 +236,12 @@ static void startCallback(void *userData);
     //char *vconf = "-format=BGRA"; // See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_DEVICE_IPHONE
     NSString *vconf = [NSString stringWithFormat:@"%@ %@ %@", @"-format=BGRA", ARResolutionPresets[ARResolutionPreset], ARCameraPositionPresets[ARCameraPositionPreset]];
     if (!(gVid = ar2VideoOpenAsync(vconf.UTF8String, startCallback, self))) {
-        NSLog(@"Error: Unable to open connection to camera.\n");
-        [self stop];
-        return;
+        if (!(gVid = ar2VideoOpen(vconf.UTF8String))) {
+            NSLog(@"Error: Unable to open connection to camera.\n");
+            [self stop];
+            return;
+        }
+        [self start2];
     }
 }
 
@@ -278,18 +292,29 @@ static void startCallback(void *userData)
     arParamDisp(&cparam);
 #endif
     
-    // libARvideo on iPhone uses an underlying class called CameraVideo. Here, we
-    // access the instance of this class to get/set some special types of information.
-    CameraVideo *cameraVideo = ar2VideoGetNativeVideoInstanceiPhone(gVid->device.iPhone);
-    if (!cameraVideo) {
-        NSLog(@"Error: Unable to set up AR camera: missing CameraVideo instance.\n");
+    // Determine whether ARvideo will return frames asynchronously.
+    int ret0;
+    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_IOS_ASYNC, &ret0) != 0) {
+        NSLog(@"Error: Unable to query video library for status of async support.\n");
         [self stop];
         return;
     }
-    
-    // The camera will be started by -startRunLoop.
-    [cameraVideo setTookPictureDelegate:self];
-    [cameraVideo setTookPictureDelegateUserData:NULL];
+    videoAsync = (BOOL)ret0;
+
+    if (videoAsync) {
+        // libARvideo on iPhone uses an underlying class called CameraVideo. Here, we
+        // access the instance of this class to get/set some special types of information.
+        CameraVideo *cameraVideo = ar2VideoGetNativeVideoInstanceiPhone(gVid->device.iPhone);
+        if (!cameraVideo) {
+            NSLog(@"Error: Unable to set up AR camera: missing CameraVideo instance.\n");
+            [self stop];
+            return;
+        }
+        
+        // The camera will be started by -startRunLoop.
+        [cameraVideo setTookPictureDelegate:self];
+        [cameraVideo setTookPictureDelegateUserData:NULL];
+    }
     
     // Allocate the OpenGL view.
     glView = [[[ARView alloc] initWithFrame:[[UIScreen mainScreen] bounds] pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:NO preserveBackbuffer:NO] autorelease]; // Don't retain it, as it will be retained when added to self.view.
@@ -335,6 +360,13 @@ static void startCallback(void *userData)
      //Create our runloop timer
     [self setRunLoopInterval:2]; // Target 30 fps on a 60 fps device.
     [self startRunLoop];
+}
+
+- (void) mainLoop
+{
+    // Request a video frame.
+    AR2VideoBufferT *buffer = ar2VideoGetImage(gVid);
+    if (buffer) [self processFrame:buffer];
 }
 
 - (void) cameraVideoTookPicture:(id)sender userData:(void *)data
