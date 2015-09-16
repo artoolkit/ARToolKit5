@@ -84,7 +84,7 @@ protected:
 	int videoHeight;					///< Height of the video frame in pixels
 
 	AR_PIXEL_FORMAT pixelFormat;		///< Pixel format from ARToolKit enumeration.
-#ifdef HAVE_ARM_NEON
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     int m_fastPath;
 #endif
 #ifndef _WINRT
