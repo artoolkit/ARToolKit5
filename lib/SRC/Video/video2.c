@@ -261,11 +261,6 @@ void ar2VideoDeleteSourceInfoList(ARVideoSourceInfoListT **p)
 
 AR2VideoParamT *ar2VideoOpen( const char *config_in )
 {
-    return (ar2VideoOpenAsync(config_in, NULL, NULL));
-}
-
-AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *), void *userdata)
-{
     AR2VideoParamT            *vid;
     const char                *config;
     // Some devices won't understand the "-device=" option, so we need to pass
@@ -348,10 +343,7 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
     }
     if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
 #ifdef AR_INPUT_IPHONE
-        if (callback) vid->device.iPhone = ar2VideoOpenAsynciPhone(config, callback, userdata);
-        else vid->device.iPhone = ar2VideoOpeniPhone(config);
-        
-        if (vid->device.iPhone != NULL) return vid;
+        if ((vid->device.iPhone = ar2VideoOpeniPhone(config)) != NULL) return vid;
 #else
         ARLOGe("ar2VideoOpen: Error: device \"iPhone\" not supported on this build/architecture/system.\n");
 #endif
@@ -392,6 +384,33 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
 #endif
     }
     
+    free( vid );
+    return NULL;
+}
+
+AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *), void *userdata)
+{
+    AR2VideoParamT            *vid;
+    const char                *config;
+    // Some devices won't understand the "-device=" option, so we need to pass
+    // only the portion following that option to them.
+    const char                *configStringFollowingDevice = NULL;
+    
+    arMalloc( vid, AR2VideoParamT, 1 );
+    config = ar2VideoGetConfig(config_in);
+    vid->deviceType = ar2VideoGetDeviceWithConfig(config, &configStringFollowingDevice);
+    
+    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
+#ifdef AR_INPUT_IPHONE
+        if (callback) vid->device.iPhone = ar2VideoOpenAsynciPhone(config, callback, userdata);
+        else vid->device.iPhone = NULL;
+        
+        if (vid->device.iPhone != NULL) return vid;
+#else
+        ARLOGe("ar2VideoOpen: Error: device \"iPhone\" not supported on this build/architecture/system.\n");
+#endif
+    }
+
     free( vid );
     return NULL;
 }

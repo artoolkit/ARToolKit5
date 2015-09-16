@@ -143,6 +143,12 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
                 } else if (strcmp(b+8, "BGR") == 0) {
                     vid->format = AR_PIXEL_FORMAT_BGR;                    
                     ARLOGi("Dummy video will return red-green-blue bars in BGR.\n");
+                } else if (strcmp(b+8, "420f") == 0) {
+                    vid->format = AR_PIXEL_FORMAT_420f;
+                    ARLOGi("Dummy video will return red-green-blue bars in 420f.\n");
+                } else if (strcmp(b+8, "NV21") == 0) {
+                    vid->format = AR_PIXEL_FORMAT_NV21;
+                    ARLOGi("Dummy video will return red-green-blue bars in NV21.\n");
                 }
             }
             else if( strcmp( b, "-bufferpow2" ) == 0 )    {
@@ -202,18 +208,27 @@ int ar2VideoCapStopDummy( AR2VideoParamDummyT *vid )
 AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
 {
     static int   k = 0;
-    ARUint8     *p;
+    ARUint8     *p, *p1;
     int          i, j;
 
     if (!vid) return (NULL); // Sanity check.
 
-    // Clear buffer to white.
-    memset(vid->buffer.buff, 255, vid->bufWidth*vid->bufHeight*arVideoUtilGetPixelSize(vid->format));
-
     // Create 100 x 100 square, oscillating in x dimension.
     k++;
     if( k > 100 ) k = -100;
-    p = vid->buffer.buff;
+    if (!vid->buffer.bufPlaneCount) {
+        p = vid->buffer.buff;
+        p1 = NULL;
+    } else {
+        p = vid->buffer.bufPlanes[0];
+        p1 = vid->buffer.bufPlanes[1];
+    }
+    
+    
+    // Clear buffer to white.
+    memset(p, 255, vid->bufWidth*vid->bufHeight*arVideoUtilGetPixelSize(vid->format));
+    if (p1) memset(p1, 128, vid->bufWidth*vid->bufHeight/2);
+    
     for( j = vid->height/2 - 50; j < vid->height/2 - 25; j++ ) {
         for( i = vid->width/2 - 50 + k; i < vid->width/2 + 50 + k; i++ ) {
             switch (vid->format) {
@@ -246,6 +261,11 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
 #else
                     p[(j*vid->bufWidth+i)*2+0] = 0; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
+                    break;
+                case AR_PIXEL_FORMAT_NV21:
+                case AR_PIXEL_FORMAT_420f:
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 0;
                     break;
                 default:
                     break;
@@ -285,6 +305,11 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
 #else
                     p[(j*vid->bufWidth+i)*2+0] = 0; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
+                    break;
+                case AR_PIXEL_FORMAT_NV21:
+                case AR_PIXEL_FORMAT_420f:
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 0;
                     break;
                 default:
                     break;
@@ -331,6 +356,21 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
                     p[(j*vid->bufWidth+i)*2+0] = 0xf0; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
                     break;
+                case AR_PIXEL_FORMAT_NV21:
+                    p[j*vid->bufWidth+i] = 76;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 255; p1[(j/2)*vid->bufWidth+i+1] = 86;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_420f:
+                    p[j*vid->bufWidth+i] = 76;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 86; p1[(j/2)*vid->bufWidth+i+1] = 255;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 76;
+                    break;
                 default:
                     break;
             }
@@ -371,6 +411,20 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
 #else
                     p[(j*vid->bufWidth+i)*2+0] = 0x0f; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
+                case AR_PIXEL_FORMAT_NV21:
+                    p[j*vid->bufWidth+i] = 150;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 21; p1[(j/2)*vid->bufWidth+i+1] = 44;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_420f:
+                    p[j*vid->bufWidth+i] = 150;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 44; p1[(j/2)*vid->bufWidth+i+1] = 21;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 150;
                     break;
                 default:
                     break;
@@ -417,6 +471,21 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
                     p[(j*vid->bufWidth+i)*2+0] = 0; p[(j*vid->bufWidth+i)*2+1] = 0xff;
 #endif
                     break;
+                case AR_PIXEL_FORMAT_NV21:
+                    p[j*vid->bufWidth+i] = 29;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 118; p1[(j/2)*vid->bufWidth+i+1] = 255;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_420f:
+                    p[j*vid->bufWidth+i] = 29;
+                    if ((j & 1) == 0 && (i & 1) == 0) {
+                        p1[(j/2)*vid->bufWidth+i] = 255; p1[(j/2)*vid->bufWidth+i+1] = 118;
+                    }
+                    break;
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 29;
+                    break;
                 default:
                     break;
             }
@@ -453,6 +522,11 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
 #else
                     p[(j*vid->bufWidth+i)*2+0] = 0; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
+                    break;
+                case AR_PIXEL_FORMAT_NV21:
+                case AR_PIXEL_FORMAT_420f:
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 0;
                     break;
                 default:
                     break;
@@ -492,6 +566,11 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
                     p[(j*vid->bufWidth+i)*2+0] = 0; p[(j*vid->bufWidth+i)*2+1] = 0x0f;
 #endif
                     break;
+                case AR_PIXEL_FORMAT_NV21:
+                case AR_PIXEL_FORMAT_420f:
+                case AR_PIXEL_FORMAT_MONO:
+                    p[j*vid->bufWidth+i] = 0;
+                    break;
                 default:
                     break;
             }
@@ -522,13 +601,24 @@ AR_PIXEL_FORMAT ar2VideoGetPixelFormatDummy( AR2VideoParamDummyT *vid )
 
 int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const int height)
 {
+    int i;
     int rowBytes;
     
     if (!vid) return (-1);
 
-    if (vid->buffer.buff) {
-        free (vid->buffer.buff);
-        vid->buffer.buff = NULL;
+    if (vid->buffer.bufPlaneCount) {
+        for (i = 0; i < vid->buffer.bufPlaneCount; i++) {
+            free(vid->buffer.bufPlanes[i]);
+            vid->buffer.bufPlanes[i] = NULL;
+            free(vid->buffer.bufPlanes);
+            vid->buffer.bufPlaneCount = 0;
+            vid->buffer.buff = NULL;
+        }
+    } else {
+        if (vid->buffer.buff) {
+            free (vid->buffer.buff);
+            vid->buffer.buff = NULL;
+        }
     }
     
     if (width && height) {
@@ -537,11 +627,15 @@ int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const 
             return (-1);
         }
         
-        rowBytes = width * arVideoUtilGetPixelSize(ar2VideoGetPixelFormatDummy(vid));
-        vid->buffer.buff = (unsigned char *)malloc(height * rowBytes);
-        if (!vid->buffer.buff) {
-            ARLOGe("Error: Out of memory!\n");
-            return (-1);
+        if (ar2VideoGetPixelFormatDummy(vid) == AR_PIXEL_FORMAT_420f || ar2VideoGetPixelFormatDummy(vid) == AR_PIXEL_FORMAT_NV21) {
+            arMallocClear(vid->buffer.bufPlanes, ARUint8 *, 2);
+            arMalloc(vid->buffer.bufPlanes[0], ARUint8, width*height);
+            arMalloc(vid->buffer.bufPlanes[1], ARUint8, width*height/2);
+            vid->buffer.bufPlaneCount = 2;
+            vid->buffer.buff = vid->buffer.bufPlanes[0];
+        } else {
+            rowBytes = width * arVideoUtilGetPixelSize(ar2VideoGetPixelFormatDummy(vid));
+            arMalloc(vid->buffer.buff, ARUint8, height * rowBytes);
         }
     }
     
@@ -566,6 +660,14 @@ int ar2VideoGetIdDummy( AR2VideoParamDummyT *vid, ARUint32 *id0, ARUint32 *id1 )
 
 int ar2VideoGetParamiDummy( AR2VideoParamDummyT *vid, int paramName, int *value )
 {
+    if (!value) return -1;
+    
+#ifdef AR_INPUT_IPHONE
+    if (paramName == AR_VIDEO_PARAM_IOS_ASYNC) {
+        *value = 0;
+        return 0;
+    }
+#endif
     return -1;
 }
 

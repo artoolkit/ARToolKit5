@@ -528,6 +528,14 @@ int ar2VideoGetIdImage( AR2VideoParamImageT *vid, ARUint32 *id0, ARUint32 *id1 )
 
 int ar2VideoGetParamiImage( AR2VideoParamImageT *vid, int paramName, int *value )
 {
+    if (!value) return -1;
+    
+#ifdef AR_INPUT_IPHONE
+    if (paramName == AR_VIDEO_PARAM_IOS_ASYNC) {
+        *value = 0;
+        return 0;
+    }
+#endif
     return -1;
 }
 
