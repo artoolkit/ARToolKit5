@@ -45,8 +45,12 @@
 // ============================================================================
 #include <AR/gsub_es.h>
 
-#include <stdio.h>        // fprintf(), stderr
+#include <stdio.h>         // fprintf(), stderr
 #include <string.h>        // strchr(), strstr(), strlen()
+#include <stdlib.h>
+#ifdef ANDROID
+#  define valloc(s) memalign(4096,s)
+#endif
 
 #ifdef HAVE_ARM_NEON
 #  include <arm_neon.h>

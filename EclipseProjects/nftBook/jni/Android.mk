@@ -61,7 +61,7 @@ define add_artoolkit_module
 	LOCAL_SRC_FILES:=lib$1.a
 	include $(PREBUILT_STATIC_LIBRARY)
 endef
-ARTOOLKIT_LIBS := ar2 kpm util eden argsub_es armulti arosg ar aricp cpufeatures jpeg arvideo
+ARTOOLKIT_LIBS := ar2 kpm util eden argsub_es armulti arosg ar aricp jpeg arvideo
 ARTOOLKIT_LIBS += OpenThreads osg osgAnimation osgDB osgFX osgGA osgParticle osgPresentation osgShadow osgSim osgTerrain osgText osgViewer osgUtil osgVolume osgWidget osgdb_osg osgdb_ive osgdb_jpeg osgdb_gif gif osgdb_tiff tiff osgdb_bmp osgdb_png png osgdb_tga osgdb_freetype ft2 osgdb_deprecated_osg osgdb_deprecated_osganimation osgdb_deprecated_osgfx  osgdb_deprecated_osgparticle osgdb_deprecated_osgshadow osgdb_deprecated_osgsim osgdb_deprecated_osgterrain osgdb_deprecated_osgtext osgdb_deprecated_osgviewer osgdb_deprecated_osgvolume osgdb_deprecated_osgwidget
 LOCAL_PATH := $(ARTOOLKIT_LIBDIR)
 $(foreach module,$(ARTOOLKIT_LIBS),$(eval $(call add_artoolkit_module,$(module))))
@@ -110,3 +110,5 @@ LOCAL_STATIC_LIBRARIES += osgdb_osg osgdb_ive osgdb_jpeg osgdb_gif gif osgdb_tif
 LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)
+
+$(call import-module,android/cpufeatures)

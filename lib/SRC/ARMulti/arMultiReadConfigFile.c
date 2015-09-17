@@ -83,7 +83,13 @@ ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *p
 
     for( i = 0; i < num; i++ ) {
         get_buff(buf, 256, fp);
-        if (sscanf(buf, "%llu", &(marker[i].globalID)) != 1) { // Try first as matrix code.
+        if (sscanf(buf, 
+#ifdef __LP64__
+                        "%lu",
+#else
+                        "%llu",
+#endif
+                         &(marker[i].globalID)) != 1) { // Try first as matrix code.
             
             if (!pattHandle) {
                 ARLOGe("Error processing multimarker config file '%s': pattern '%s' specified in multimarker configuration while in barcode-only mode.\n", filename, buf);
