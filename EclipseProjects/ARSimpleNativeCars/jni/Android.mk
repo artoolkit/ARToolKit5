@@ -83,10 +83,13 @@ CURL_LIBDIR := $(call host-path, $(CURL_DIR)/libs/$(TARGET_ARCH_ABI))
 define add_curl_module
 	include $(CLEAR_VARS)
 	LOCAL_MODULE:=$1
-	LOCAL_SRC_FILES:=lib$1.so
-	include $(PREBUILT_SHARED_LIBRARY)
+	#LOCAL_SRC_FILES:=lib$1.so
+	#include $(PREBUILT_SHARED_LIBRARY)
+	LOCAL_SRC_FILES:=lib$1.a
+	include $(PREBUILT_STATIC_LIBRARY)
 endef
-CURL_LIBS := curl ssl crypto
+#CURL_LIBS := curl ssl crypto
+CURL_LIBS := curl
 LOCAL_PATH := $(CURL_LIBDIR)
 $(foreach module,$(CURL_LIBS),$(eval $(call add_curl_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
@@ -107,8 +110,8 @@ endif
 
 LOCAL_C_INCLUDES += $(ARTOOLKIT_DIR)/../include/android $(ARTOOLKIT_DIR)/../include
 LOCAL_LDLIBS += -llog -lGLESv1_CM
-LOCAL_SHARED_LIBRARIES += curl ssl crypto
 LOCAL_STATIC_LIBRARIES += eden
 LOCAL_SHARED_LIBRARIES += ARWrapper
+#LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)

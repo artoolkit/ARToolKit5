@@ -54,20 +54,22 @@ LOCAL_PATH := $(ARTOOLKIT_LIBDIR)
 $(foreach module,$(ARTOOLKIT_LIBS),$(eval $(call add_artoolkit_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
 
-# Pull CURL into the build
+# Android arvideo depends on CURL.
 CURL_DIR := $(ARTOOLKIT_DIR)/jni/curl
 CURL_LIBDIR := $(call host-path, $(CURL_DIR)/libs/$(TARGET_ARCH_ABI))
 define add_curl_module
 	include $(CLEAR_VARS)
 	LOCAL_MODULE:=$1
-	LOCAL_SRC_FILES:=lib$1.so
-	include $(PREBUILT_SHARED_LIBRARY)
+	#LOCAL_SRC_FILES:=lib$1.so
+	#include $(PREBUILT_SHARED_LIBRARY)
+	LOCAL_SRC_FILES:=lib$1.a
+	include $(PREBUILT_STATIC_LIBRARY)
 endef
-CURL_LIBS := curl ssl crypto
+#CURL_LIBS := curl ssl crypto
+CURL_LIBS := curl
 LOCAL_PATH := $(CURL_LIBDIR)
 $(foreach module,$(CURL_LIBS),$(eval $(call add_curl_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
-
 
 include $(CLEAR_VARS)
 
@@ -87,9 +89,10 @@ endif
 
 LOCAL_C_INCLUDES += $(ARTOOLKIT_DIR)/../include/android $(ARTOOLKIT_DIR)/../include
 LOCAL_C_INCLUDES += $(CURL_DIR)/include
-LOCAL_LDLIBS += -llog -lGLESv1_CM
-LOCAL_SHARED_LIBRARIES += curl ssl crypto
+LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
 LOCAL_STATIC_LIBRARIES += eden jpeg argsub_es armulti arosg aricp cpufeatures arvideo util
+#LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
+LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)

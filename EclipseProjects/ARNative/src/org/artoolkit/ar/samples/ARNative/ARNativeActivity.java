@@ -79,10 +79,6 @@ public class ARNativeActivity extends Activity {
 	
     // Load the native libraries.
     static {
-		// ARToolKit v5.1.0 and later depend on libcurl.
-		System.loadLibrary("crypto");
-		System.loadLibrary("ssl");
-		System.loadLibrary("curl");
 
     	System.loadLibrary("ARNative");	    	
     }

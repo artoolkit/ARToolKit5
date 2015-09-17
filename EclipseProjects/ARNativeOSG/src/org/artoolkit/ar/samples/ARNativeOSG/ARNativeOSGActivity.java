@@ -82,11 +82,6 @@ public class ARNativeOSGActivity extends Activity {
     static {
     	System.loadLibrary("c++_shared");
 		
-		// ARToolKit v5.1.0 and later depend on libcurl.
-		System.loadLibrary("crypto");
-		System.loadLibrary("ssl");
-		System.loadLibrary("curl");
-
     	System.loadLibrary("ARNativeOSGNative");	    	
     }
     
