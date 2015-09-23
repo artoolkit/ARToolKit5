@@ -545,7 +545,7 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      // 16 pixels of first row done.
                      "    add         %1,     %1,     w4, UXTW   \n" // Advance srcY by rowBytes to move to next row.
                      "    sub         %0,     %0,     #64    \n" // Back up dest by 16 pixels/64 bytes.
-                     "    add         %0,     %0,     w4, LSL #2 \n" // Advance dest by 4xrowBytes.
+                     "    add         %0,     %0,     w4, UXTW #2 \n" // Advance dest by 4xrowBytes.
                      // Read 16 Y from second row.
                      "    ld1         {v5.16b}, [%1],#16     \n" // Load 16 Y pixels into v5.
                      "    ushll2      v6.8h,  v5.16b, #7     \n" // Multiply second 8 pixels by 128, store in v6.
@@ -568,14 +568,14 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    st4         {v28.8b,v29.8b,v30.8b,v31.8b}, [%0],#32 \n" // Interleave.
                      // 16 pixels of second row done.
                      "    sub         %1,     %1,     w4, UXTW   \n" // Back up srcY by rowBytes to move to previous row.
-                     "    sub         %0,     %0,     w4, LSL #2 \n" // Back up dest by 4xrowBytes.
+                     "    sub         %0,     %0,     w4, UXTW #2 \n" // Back up dest by 4xrowBytes.
                      "    subs        w5,     w5,     #1     \n" // Decrement iteration count.
-                     "    bne         1b                     \n" // Repeat unil iteration count is not zero.
+                     "    b.ne        1b                     \n" // Repeat unil iteration count is not zero.
                      // Two rows done.
                      "    add         %1,     %1,     w4, UXTW   \n" // Advance srcY by rowBytes to skip row we've already done.
-                     "    add         %0,     %0,     w4, LSL #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
+                     "    add         %0,     %0,     w4, UXTW #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
                      "    subs        w6,     w6,     #1     \n" // Decrement iteration count.
-                     "    bne         0b                     \n" // Repeat unil iteration count is not zero.
+                     "    b.ne        0b                     \n" // Repeat unil iteration count is not zero.
                      // Pop saved SIMD registers.
                      "    ldp         d8,     d9,     [sp,#0]  \n"
                      "    ldp         d10,    d11,    [sp,#16] \n"
@@ -651,7 +651,7 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      // 16 pixels of first row done.
                      "    add         %1,     %1,     w4, UXTW   \n" // Advance srcY by rowBytes to move to next row.
                      "    sub         %0,     %0,     #64    \n" // Back up dest by 16 pixels/64 bytes.
-                     "    add         %0,     %0,     w4, LSL #2 \n" // Advance dest by 4xrowBytes.
+                     "    add         %0,     %0,     w4, UXTW #2 \n" // Advance dest by 4xrowBytes.
                      // Read 16 Y from second row.
                      "    ld1         {v5.16b}, [%1],#16     \n" // Load 16 Y pixels into v5.
                      "    ushll2      v6.8h,  v5.16b, #7     \n" // Multiply second 8 pixels by 128, store in v6.
@@ -674,14 +674,14 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    st4         {v28.8b,v29.8b,v30.8b,v31.8b}, [%0],#32 \n" // Interleave.
                      // 16 pixels of second row done.
                      "    sub         %1,     %1,     w4, UXTW   \n" // Back up srcY by rowBytes to move to previous row.
-                     "    sub         %0,     %0,     w4, LSL #2 \n" // Back up dest by 4xrowBytes.
+                     "    sub         %0,     %0,     w4, UXTW #2 \n" // Back up dest by 4xrowBytes.
                      "    subs        w5,     w5,     #1     \n" // Decrement iteration count.
-                     "    bne         1b                     \n" // Repeat unil iteration count is not zero.
+                     "    b.ne        1b                     \n" // Repeat unil iteration count is not zero.
                      // Two rows done.
                      "    add         %1,     %1,     w4, UXTW   \n" // Advance srcY by rowBytes to skip row we've already done.
-                     "    add         %0,     %0,     w4, LSL #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
+                     "    add         %0,     %0,     w4, UXTW #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
                      "    subs        w6,     w6,     #1     \n" // Decrement iteration count.
-                     "    bne         0b                     \n" // Repeat unil iteration count is not zero.
+                     "    b.ne        0b                     \n" // Repeat unil iteration count is not zero.
                      // Pop saved SIMD registers.
                      "    ldp         d8,     d9,     [sp,#0]  \n"
                      "    ldp         d10,    d11,    [sp,#16] \n"
