@@ -39,7 +39,7 @@ AR_HOME = ../../..
 
 CC=@CC@
 CXX=@CXX@
-CPPFLAGS = -I$(AR_HOME)/include
+CPPFLAGS = -I$(AR_HOME)/include/@SYSTEM@ -I$(AR_HOME)/include
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
 LDFLAGS = -L$(AR_HOME)/lib @LDFLAG@

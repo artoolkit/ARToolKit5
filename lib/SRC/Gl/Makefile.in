@@ -34,82 +34,92 @@
 #  Author(s): Hirokazu Kato, Philip Lamb
 #
 
-#
-# For instalation. Change this to your settings.
-#
-INC_DIR = ../../../include
-LIB_DIR = ../..
-#
-#  compiler
-#
+UNAME = $(shell uname)
+
+AR_HOME = ../../..
+AR_CPPFLAGS = -I$(AR_HOME)/include/@SYSTEM@ -I$(AR_HOME)/include
+
 CC=@CC@
-LDFLAG=@LDFLAG@ -L$(LIB_DIR)/@SYSTEM@ -L$(LIB_DIR)
-LIBS= -lARgsub -lAR -lARICP -lAR @LIBS@
-CFLAG= @CFLAG@ -I$(INC_DIR)
-#
-# For making the library
-#
+CXX=@CXX@
+CPPFLAGS = $(AR_CPPFLAGS)
+CFLAGS = @CFLAG@
+CXXFLAGS = @CFLAG@
 AR=@AR@
 ARFLAGS=@ARFLAGS@
-RANLIB= @RANLIB@
-#
-#   products
-#
-LIB= ${LIB_DIR}/libARgsub.a
-LIB3= ${LIB_DIR}/libARgsub_lite.a
+RANLIB = @RANLIB@
 
-INCLUDE= ${INC_DIR}/AR/gsub.h     \
-         ${INC_DIR}/AR/config.h   \
-         ${INC_DIR}/AR/arConfig.h \
-         ${INC_DIR}/AR/ar.h       \
-         ${INC_DIR}/AR/matrix.h   \
-         ${INC_DIR}/AR/param.h    \
-	 argPrivate.h
-INCLUDE3= ${INC_DIR}/AR/gsub_lite.h \
-         ${INC_DIR}/AR/gsub_mtx.h \
-         ${INC_DIR}/AR/config.h \
-         ${INC_DIR}/AR/ar.h \
-         ${INC_DIR}/AR/param.h
+TARGET1 = $(AR_HOME)/lib/libARgsub.a
+TARGET3 = $(AR_HOME)/lib/libARgsub_lite.a
 
-#
-#   compilation control
-#
-LIBOBJS= ${LIB}(argBase.o)      \
-	 ${LIB}(argWindow.o)    \
-	 ${LIB}(argFunction.o)  \
-	 ${LIB}(argDrawMode.o)  \
-	 ${LIB}(argDraw.o)      \
-	 ${LIB}(argDrawImage.o)
-LIB3OBJS= ${LIB3}(gsub_lite.o) \
-	 ${LIB3}(gsub_mtx.o)
+HEADERS1 = \
+	$(AR_HOME)/include/AR/gsub.h     \
+    $(AR_HOME)/include/AR/config.h   \
+    $(AR_HOME)/include/AR/arConfig.h \
+    $(AR_HOME)/include/AR/ar.h       \
+    $(AR_HOME)/include/AR/matrix.h   \
+    $(AR_HOME)/include/AR/param.h    \
+	argPrivate.h
 
-all:	${LIBOBJS} ${LIB3OBJS} ./gsubTest
+HEADERS3= \
+	$(AR_HOME)/include/AR/gsub_lite.h \
+    $(AR_HOME)/include/AR/gsub_mtx.h \
+    $(AR_HOME)/include/AR/config.h \
+    $(AR_HOME)/include/AR/ar.h \
+    $(AR_HOME)/include/AR/param.h \
 
-${LIBOBJS}:		${INCLUDE}
-${LIB3OBJS}:		${INCLUDE3}
 
-./gsubTest:	gsubTest.o ${LIB}
-	 ${CC} -o ./gsubTest gsubTest.o $(LDFLAG) $(LIBS)
-.c.a:
-	${CC} -c ${CFLAG} $<
-	${AR} ${ARFLAGS} $@ $*.o
-	${RANLIB}
-	rm -f $*.o
+OBJS1 = \
+	argBase.o      \
+	argWindow.o  \
+	argFunction.o    \
+	argDrawMode.o      \
+	argDraw.o        \
+	argDrawImage.o       \
 
-gsubTest.o:	gsubTest.c ${INCLUDE}
-	${CC} -c $(CFLAG) gsubTest.c
+
+OBJS3 = \
+	gsub_lite.o      \
+	gsub_mtx.o  \
+
+
+# Implicit rule, to compile C++ files with the .cpp suffix (rule already exists for .cc).
+%.o : %.cpp
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+
+default build all: $(TARGET1) $(TARGET3)
+
+$(OBJS1): $(HEADERS1)
+
+$(OBJS3): $(HEADERS3)
+
+$(TARGET1): $(OBJS1)
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@ 
+
+./gsubTest:	gsubTest.o $(TARGET1)
+	$(CC) -o ./gsubTest gsubTest.o $(LDFLAG) $(LIBS)
+
+gsubTest.o:	gsubTest.c $(HEADERS1)
+	$(CC) -c $(CFLAG) gsubTest.c
+
+$(TARGET3): $(OBJS3)
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@
 
 clean:
-	rm -f *.o
-	rm -f ${LIB} ${LIB3}
-	rm -f ./gsubTest
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET1)
+	-rm ./gsubTest
+	-rm $(TARGET3)
 
 allclean:
-	rm -f *.o
-	rm -f ${LIB} ${LIB3}
-	rm -f ./gsubTest
-	rm -f Makefile
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET1)
+	-rm ./gsubTest
+	-rm $(TARGET3)
+	-rm -f Makefile
 
 distclean:
 	rm -f *.o
 	rm -f Makefile
+

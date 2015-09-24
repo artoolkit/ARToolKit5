@@ -38,7 +38,6 @@ all:
 	(cd AR;                make -f Makefile)
 	(cd ARICP;             make -f Makefile)
 	(cd AR2;               make -f Makefile)
-	(cd ARWrapper;         make -f Makefile)
 	(cd KPM;               make -f Makefile)
 	(cd Util;              make -f Makefile)
 	(cd ARMulti;           make -f Makefile)
@@ -55,6 +54,7 @@ all:
 	#(cd ARosg;             make -f Makefile)
 	#(cd ARvrml;            make -f Makefile)
 	(cd Eden;              make -f Makefile)
+	(cd ARWrapper;         make -f Makefile)
 
 clean:
 	(cd AR;                make -f Makefile clean)
@@ -76,6 +76,7 @@ clean:
 	(cd ARosg;             make -f Makefile clean)
 	(cd ARvrml;            make -f Makefile clean)
 	(cd Eden;              make -f Makefile clean)
+	(cd ARWrapper;         make -f Makefile clean)
 
 allclean:
 	(cd AR;                make -f Makefile allclean)
@@ -97,6 +98,7 @@ allclean:
 	(cd ARosg;             make -f Makefile allclean)
 	(cd ARvrml;            make -f Makefile allclean)
 	(cd Eden;              make -f Makefile allclean)
+	(cd ARWrapper;         make -f Makefile allclean)
 	rm -f Makefile
 
 distclean:
@@ -119,5 +121,6 @@ distclean:
 	(cd ARosg;             make -f Makefile distclean)
 	(cd ARvrml;            make -f Makefile distclean)
 	(cd Eden;              make -f Makefile distclean)
+	(cd ARWrapper;         make -f Makefile distclean)
 	rm -f Makefile
 

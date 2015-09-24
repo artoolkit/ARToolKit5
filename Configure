@@ -437,7 +437,7 @@ then
     #CC="cc -arch i386 -arch x86_64"
     CC="cc"
     CXX="c++"
-    CFLAG="-O"
+    CFLAG="-O -DHAVE_NFT=1"
     LDFLAG=""
     AR="libtool"
     ARFLAGS="-static -o"

@@ -183,6 +183,7 @@ std::vector<ARMarker *> ARMarker::newFromConfigDataFile(const char *markersConfi
                 delete tempObject;
                 tempObject = NULL;
             }
+#if HAVE_NFT
         } else if (strcmp(buf1, "NFT") == 0) {
             
             strncpy(markersConfigDataDir + markersConfigDataDirLen, buf, MAXPATHLEN - markersConfigDataDirLen - 1); markersConfigDataDir[MAXPATHLEN - 1] = '\0';
@@ -193,7 +194,7 @@ std::vector<ARMarker *> ARMarker::newFromConfigDataFile(const char *markersConfi
                 delete tempObject;
                 tempObject = NULL;
             }
-        
+#endif
         } else {
             ARLOGe("Error in marker configuration data file; unsupported marker type %s.\n", buf1);
         }

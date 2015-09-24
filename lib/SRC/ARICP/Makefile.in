@@ -34,70 +34,63 @@
 #  Author(s): Hirokazu Kato, Philip Lamb
 #
 
-#
-# For instalation. Change this to your settings.
-#
-INC_DIR = ../../../include
-LIB_DIR = ../..
-#
-#  compiler
-#
+UNAME = $(shell uname)
+
+AR_HOME = ../../..
+AR_CPPFLAGS = -I$(AR_HOME)/include/@SYSTEM@ -I$(AR_HOME)/include
+
 CC=@CC@
-CFLAG= @CFLAG@ -I$(INC_DIR)
-#
-# For making the library
-#
+CXX=@CXX@
+CPPFLAGS = $(AR_CPPFLAGS)
+CFLAGS = @CFLAG@
+CXXFLAGS = @CFLAG@
 AR=@AR@
 ARFLAGS=@ARFLAGS@
-RANLIB= @RANLIB@
-#
-#   products
-#
-LIB= ${LIB_DIR}/libARICP.a
-INCLUDE0= ${INC_DIR}/AR/config.h
-INCLUDE1= ${INC_DIR}/AR/matrix.h
-INCLUDE2= ${INC_DIR}/AR/param.h
-INCLUDE3= ${INC_DIR}/AR/arConfig.h ${INC_DIR}/AR/ar.h
-INCLUDE4= ${INC_DIR}/AR/icp.h ${INC_DIR}/AR/icpCore.h ${INC_DIR}/AR/icpCalib.h
+RANLIB = @RANLIB@
 
-#
-#   compilation control
-#
-LIBOBJS= ${LIB}(icpCore.o)               \
-	 ${LIB}(icpHandle.o)             \
-	 ${LIB}(icpPoint.o)              \
-	 ${LIB}(icpPointRobust.o)        \
-	 ${LIB}(icpLine.o)               \
-	 ${LIB}(icpLineRobust.o)         \
-	 ${LIB}(icpStereoHandle.o)       \
-	 ${LIB}(icpStereoPoint.o)        \
-	 ${LIB}(icpStereoPointRobust.o)  \
-	 ${LIB}(icpCalibStereo.o)        \
-	 ${LIB}(icpUtil.o)
-#	 ${LIB}(icpLinePoint.o)    \
+TARGET = $(AR_HOME)/lib/libARICP.a
 
-all:
-	make -f Makefile libs
+HEADERS = \
+    $(AR_HOME)/include/AR/config.h \
+    $(AR_HOME)/include/AR/matrix.h \
+    $(AR_HOME)/include/AR/param.h \
+    $(AR_HOME)/include/AR/arConfig.h \
+    $(AR_HOME)/include/AR/ar.h \
+    $(AR_HOME)/include/AR/icp.h \
+    $(AR_HOME)/include/AR/icpCore.h \
+    $(AR_HOME)/include/AR/icpCalib.h \
 
-libs:		${LIBOBJS}
 
-${LIBOBJS}:	${INCLUDE0} ${INCLUDE1} ${INCLUDE4}
+OBJS = \
+    icpCore.o               \
+    icpHandle.o             \
+    icpPoint.o              \
+    icpPointRobust.o        \
+    icpStereoHandle.o       \
+    icpStereoPoint.o        \
+    icpStereoPointRobust.o  \
+    icpCalibStereo.o        \
+    icpUtil.o               \
 
-.c.a:
-	${CC} -c ${CFLAG} $<
-	${AR} ${ARFLAGS} $@ $*.o
-	${RANLIB}
-	rm -f $*.o
+
+default build all: $(TARGET)
+
+$(OBJS): $(HEADERS)
+
+$(TARGET): $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@ 
 
 clean:
-	rm -f *.o
-	rm -f ${LIB}
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET)
 
 allclean:
-	rm -f *.o
-	rm -f ${LIB}
-	rm -f Makefile
+	-rm -f *.o *~ *.bak
+	-rm $(TARGET)
+	-rm -f Makefile
 
 distclean:
 	rm -f *.o
 	rm -f Makefile
+

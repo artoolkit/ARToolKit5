@@ -1207,12 +1207,18 @@ int ARController::getMatrixCodeType() const
 
 void ARController::setNFTMultiMode(bool on)
 {
+#if HAVE_NFT
     m_nftMultiMode = on;
+#endif
 }
 
 bool ARController::getNFTMultiMode() const
 {
+#if HAVE_NFT
     return m_nftMultiMode;
+#else
+    return false;
+#endif
 }
 
 // ----------------------------------------------------------------------------------------------------

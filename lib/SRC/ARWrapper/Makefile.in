@@ -83,7 +83,7 @@ $(OBJS_OBJC): $(HEADERS)
 $(OBJS): $(HEADERS)
 
 $(TARGET): $(OBJS) $(OBJS_OBJC)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAG) -shared -o $@ $(OBJS) -L$(AR_HOME)/lib/ $(LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAG) -shared -o $@ $(OBJS) -L$(AR_HOME)/lib/@SYSTEM@ -L$(AR_HOME)/lib/ $(LIBS)
 	$(RANLIB) $@
 
 #-L/home/user/artoolkit5/lib/ -lAR -lAR2

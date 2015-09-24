@@ -2759,6 +2759,7 @@
 		4AC7306F180CF5C90012E1AA /* dispFeatureSet */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dispFeatureSet; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC7525110F77297004D2AD2 /* arImageProc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arImageProc.c; sourceTree = "<group>"; };
 		4AC7525410F772C8004D2AD2 /* arImageProc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arImageProc.h; sourceTree = "<group>"; };
+		4AC8D4171BB3ED67005E9A2F /* Makefile.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		4ACA14E90F71CB4900D9695E /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "/usr/lib/libc++.1.dylib"; sourceTree = "<absolute>"; };
 		4AD15BEA17D184030096F22F /* ARMarkerSquare.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMarkerSquare.c; sourceTree = "<group>"; };
 		4AD15BEB17D184030096F22F /* ARMarkerSquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMarkerSquare.h; sourceTree = "<group>"; };
@@ -5041,6 +5042,7 @@
 				4AEB272C1804BB8A002290C5 /* ARMarkerNFT.cpp */,
 				4A20ECF518592F0D00AEF707 /* trackingSub.h */,
 				4AEB27331804BB8A002290C5 /* trackingSub.c */,
+				4AC8D4171BB3ED67005E9A2F /* Makefile.in */,
 			);
 			path = ARWrapper;
 			sourceTree = "<group>";

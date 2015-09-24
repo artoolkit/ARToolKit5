@@ -84,11 +84,11 @@ typedef struct {
 } AR2SurfaceSetT;
 
 typedef struct {
-        float             sim;
-        float             pos2d[2];
-        float             pos3d[3];
+    float             sim;
+    float             pos2d[2];
+    float             pos3d[3];
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-        int               blurLevel;
+    int               blurLevel;
 #endif
 } AR2Tracking2DResultT;
 
@@ -98,49 +98,49 @@ typedef struct _AR2Tracking2DParamT  AR2Tracking2DParamT;
 
 // Structure to pass parameters to threads spawned to run ar2Tracking2d().
 struct _AR2Tracking2DParamT {
-struct _AR2HandleT              *ar2Handle;  // Reference to parent AR2HandleT.
-        AR2SurfaceSetT          *surfaceSet;
-        AR2TemplateCandidateT   *candidate;
-        ARUint8                 *dataPtr;    // Input image.
-        ARUint8                 *mfImage;    // (Internally allocated buffer same size as input image).
-        AR2TemplateT            *templ;
+    struct _AR2HandleT      *ar2Handle;  // Reference to parent AR2HandleT.
+    AR2SurfaceSetT          *surfaceSet;
+    AR2TemplateCandidateT   *candidate;
+    ARUint8                 *dataPtr;    // Input image.
+    ARUint8                 *mfImage;    // (Internally allocated buffer same size as input image).
+    AR2TemplateT            *templ;
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-        AR2Template2T           *templ2;
+    AR2Template2T           *templ2;
 #endif
-        AR2Tracking2DResultT     result;
-        int                      ret;
+    AR2Tracking2DResultT     result;
+    int                      ret;
 };
 
 struct _AR2HandleT {
-        int               trackingMode;
-        int               xsize;
-        int               ysize;
-        ARParamLT        *cparamLT;
-        ICPHandleT       *icpHandle;
-        AR_PIXEL_FORMAT   pixFormat;
+    int               trackingMode;
+    int               xsize;
+    int               ysize;
+    ARParamLT        *cparamLT;
+    ICPHandleT       *icpHandle;
+    AR_PIXEL_FORMAT   pixFormat;
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-        int               blurMethod;
-        int               blurLevel;
+    int               blurMethod;
+    int               blurLevel;
 #endif
-        int               searchSize;
-        int               templateSize1;
-        int               templateSize2;
-        int               searchFeatureNum;
-        float             simThresh;
-        float             trackingThresh;
-        /*--------------------------------*/
-        float                     wtrans1[AR2_TRACKING_SURFACE_MAX][3][4];
-        float                     wtrans2[AR2_TRACKING_SURFACE_MAX][3][4];
-        float                     wtrans3[AR2_TRACKING_SURFACE_MAX][3][4];
-        float                     pos[AR2_SEARCH_FEATURE_MAX+AR2_THREAD_MAX][2];
-        float                     pos2d[AR2_SEARCH_FEATURE_MAX][2];
-        float                     pos3d[AR2_SEARCH_FEATURE_MAX][3];
-        AR2TemplateCandidateT     candidate[AR2_TRACKING_CANDIDATE_MAX+1];
-        AR2TemplateCandidateT     candidate2[AR2_TRACKING_CANDIDATE_MAX+1];
-        AR2TemplateCandidateT     usedFeature[AR2_SEARCH_FEATURE_MAX];
-        int                       threadNum;
-struct _AR2Tracking2DParamT       arg[AR2_THREAD_MAX];
-        THREAD_HANDLE_T          *threadHandle[AR2_THREAD_MAX];
+    int               searchSize;
+    int               templateSize1;
+    int               templateSize2;
+    int               searchFeatureNum;
+    float             simThresh;
+    float             trackingThresh;
+    /*--------------------------------*/
+    float                     wtrans1[AR2_TRACKING_SURFACE_MAX][3][4];
+    float                     wtrans2[AR2_TRACKING_SURFACE_MAX][3][4];
+    float                     wtrans3[AR2_TRACKING_SURFACE_MAX][3][4];
+    float                     pos[AR2_SEARCH_FEATURE_MAX+AR2_THREAD_MAX][2];
+    float                     pos2d[AR2_SEARCH_FEATURE_MAX][2];
+    float                     pos3d[AR2_SEARCH_FEATURE_MAX][3];
+    AR2TemplateCandidateT     candidate[AR2_TRACKING_CANDIDATE_MAX+1];
+    AR2TemplateCandidateT     candidate2[AR2_TRACKING_CANDIDATE_MAX+1];
+    AR2TemplateCandidateT     usedFeature[AR2_SEARCH_FEATURE_MAX];
+    int                       threadNum;
+    struct _AR2Tracking2DParamT       arg[AR2_THREAD_MAX];
+    THREAD_HANDLE_T          *threadHandle[AR2_THREAD_MAX];
 };
 
 
