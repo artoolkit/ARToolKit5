@@ -323,11 +323,11 @@ handling code.
 <dt><tt><a href="index.html#//apple_ref/c/func/arglDistortionCompensationSet" target="_top">arglDistortionCompensationSet</a></tt></dt>
 <dd><p>Set compensation for camera lens distortion in arglDispImage to off or on.
 </p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglDrawModeGet" target="_top">arglDrawModeGet</a></tt></dt>
-<dd><p>Get method by which arglDispImage() is transfering pixels. 
+<dt><tt><a href="index.html#//apple_ref/c/func/arglGetPixelZoom" target="_top">arglGetPixelZoom</a></tt></dt>
+<dd><p>Retrieve the current video image drawing scalefactor.
 </p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglDrawModeSet" target="_top">arglDrawModeSet</a></tt></dt>
-<dd><p>Set method by which arglDispImage() will transfer pixels. 
+<dt><tt><a href="index.html#//apple_ref/c/func/arglGetRotate90" target="_top">arglGetRotate90</a></tt></dt>
+<dd><p>Find out whether ARGL is rotating all OpenGL drawing by 90 degrees.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arglGLCapabilityCheck" target="_top">arglGLCapabilityCheck</a></tt></dt>
 <dd><p>Checks for the presence of an OpenGL capability by version or extension.
@@ -335,29 +335,32 @@ handling code.
 <dt><tt><a href="index.html#//apple_ref/c/func/arglGluCheckExtension" target="_top">arglGluCheckExtension</a></tt></dt>
 <dd><p>Check for the availability of an OpenGL extension.
 </p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arglPixelBufferDataUpload" target="_top">arglPixelBufferDataUpload</a></tt></dt>
+<dd><p>Upload a buffer of pixel data to an OpenGL texture for later use by arglDispImage().
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arglPixelBufferSizeGet" target="_top">arglPixelBufferSizeGet</a></tt></dt>
+<dd><p>Query the size of pixel data buffers expected by arglPixelBufferDataUpload().
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arglPixelBufferSizeSet" target="_top">arglPixelBufferSizeSet</a></tt></dt>
+<dd><p>Specify a desired pixel buffer size larger than the camera image size.
+</p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arglPixelFormatGet" target="_top">arglPixelFormatGet</a></tt></dt>
 <dd><p>Get the format of pixel data in which arglDispImage*() is expecting data to be passed.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arglPixelFormatSet" target="_top">arglPixelFormatSet</a></tt></dt>
 <dd><p>Set the format of pixel data which will be passed to arglDispImage*()
 </p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arglSetPixelZoom" target="_top">arglSetPixelZoom</a></tt></dt>
+<dd><p>Set the current video image drawing scalefactor.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arglSetRotate90" target="_top">arglSetRotate90</a></tt></dt>
+<dd><p>Set or unset a 90 degree rotation in all OpenGL drawing performed by ARGL.
+</p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arglSetupDebugMode" target="_top">arglSetupDebugMode</a></tt></dt>
 <dd><p>Provide an ARHandle structure from which to extract information about debug mode.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arglSetupForCurrentContext" target="_top">arglSetupForCurrentContext</a></tt></dt>
 <dd><p>Initialise the gsub_lite library for the current OpenGL context.
-</p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglTexmapModeGet" target="_top">arglTexmapModeGet</a></tt></dt>
-<dd><p>Enquire whether full or half-resolution TexImage2D pixel-transfer is being used in arglDispImage().
-</p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglTexmapModeSet" target="_top">arglTexmapModeSet</a></tt></dt>
-<dd><p>Determines use of full or half-resolution TexImage2D pixel-transfer in arglDispImage().
-</p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglTexRectangleGet" target="_top">arglTexRectangleGet</a></tt></dt>
-<dd><p>Enquire as to use of rectangular TexImage2D pixel-transfer in arglDispImage().
-</p></dd>
-<dt><tt><a href="index.html#//apple_ref/c/func/arglTexRectangleSet" target="_top">arglTexRectangleSet</a></tt></dt>
-<dd><p>Determines use of rectangular TexImage2D pixel-transfer in arglDispImage().
 </p></dd>
 </dl>
 <hr class="betweenAPIEntries">
@@ -660,51 +663,11 @@ arglSetupForCurrentContext() again.
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDispImage;name=end --></p>
 <div class="declaration_indent">
 <pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDispImage;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglDispImage" logicalPath="//apple_ref/c/instm/arglDispImage //apple_ref/c/clm/arglDispImage //apple_ref/c/intfcm/arglDispImage //apple_ref/c/intfm/arglDispImage //apple_ref/c/func/arglDispImage" target="_top"><span class="function">arglDispImage</span></a>(
-    <!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><span class="param">image</span>,
-    <span class="keyword">const</span> <a machinegenerated="true" href="../param_h/index.html#//apple_ref/c/tdef/ARParam" logicalPath="//apple_ref/c/cl/ARParam //apple_ref/c/tdef/ARParam" target="_top"><span class="type">ARParam</span></a> <span class="type">*</span><span class="param">cparam</span>,
-    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/double //apple_ref/c/tdef/double //apple_ref/c/tag/double //apple_ref/c/struct/double //apple_ref/c/intf/double //apple_ref/doc/anysymbol/double" machineGenerated="true" --><span class="type">double</span><!-- /a --> <span class="param">zoom</span>,
     <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDispImage;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
 <div class="param_indent">
 <dl>
-<dt>
-<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglDispImage/image;   name=image -->
-<a name="//apple_ref/doc/functionparam/arglDispImage/image"></a>
-<code>image</code>
-</dt>
-<dd>
-<p>Pointer to the tightly-packed image data (as returned by
-arVideoGetImage()). The horizontal and vertical dimensions of the image
-data must exactly match the values specified in the fields cparam-&gt;xsize
-and cparam-&gt;ysize (see below).
-</p>
-<p>The first byte of image data corresponds to the first component of the
-top-left-most pixel in the image. The data continues with the remaining
-pixels of the first row, followed immediately by the pixels of the second
-row, and so on to the last byte of the image data, which corresponds to
-the last component of the bottom-right-most pixel.</p>
-</dd>
-<dt>
-<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglDispImage/cparam;   name=cparam -->
-<a name="//apple_ref/doc/functionparam/arglDispImage/cparam"></a>
-<code>cparam</code>
-</dt>
-<dd><p>Pointer to a set of ARToolKit camera parameters for the
-current video source. The size of the source image is taken from the
-fields xsize and ysize of the ARParam structure pointed to. Also, when
-the draw mode is AR_DRAW_BY_TEXTURE_MAPPING (see the documentation for
-the global variable arglDrawMode) the field dist_factor of the ARParam
-structure pointed to will be taken as the amount to un-warp the supplied
-image.</p></dd>
-<dt>
-<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglDispImage/zoom;   name=zoom -->
-<a name="//apple_ref/doc/functionparam/arglDispImage/zoom"></a>
-<code>zoom</code>
-</dt>
-<dd><p>The amount to scale the video image up or down. To draw the video
-image double size, use a zoom value of 2.0. To draw the video image
-half size use a zoom value of 0.5.</p></dd>
 <dt>
 <!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglDispImage/contextSettings;   name=contextSettings -->
 <a name="//apple_ref/doc/functionparam/arglDispImage/contextSettings"></a>
@@ -754,9 +717,6 @@ environment mode are restored before the function returns.
 <!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDispImageStateful;name=end --></p>
 <div class="declaration_indent">
 <pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDispImageStateful;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglDispImageStateful" logicalPath="//apple_ref/c/instm/arglDispImageStateful //apple_ref/c/clm/arglDispImageStateful //apple_ref/c/intfcm/arglDispImageStateful //apple_ref/c/intfm/arglDispImageStateful //apple_ref/c/func/arglDispImageStateful" target="_top"><span class="function">arglDispImageStateful</span></a>(
-    <!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><span class="param">image</span>,
-    <span class="keyword">const</span> <a machinegenerated="true" href="../param_h/index.html#//apple_ref/c/tdef/ARParam" logicalPath="//apple_ref/c/cl/ARParam //apple_ref/c/tdef/ARParam" target="_top"><span class="type">ARParam</span></a> <span class="type">*</span><span class="param">cparam</span>,
-    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/double //apple_ref/c/tdef/double //apple_ref/c/tag/double //apple_ref/c/struct/double //apple_ref/c/intf/double //apple_ref/doc/anysymbol/double" machineGenerated="true" --><span class="type">double</span><!-- /a --> <span class="param">zoom</span>,
     <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDispImageStateful;name=end --></pre>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
@@ -881,60 +841,67 @@ the camera cparam structure passed to arglDispImage is ignored.
 </dd>
 </dl>
 <hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglDrawModeGet;   name=arglDrawModeGet --><a name="//apple_ref/c/func/arglDrawModeGet"></a>
-<h3><a name="arglDrawModeGet">arglDrawModeGet</a></h3>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglGetPixelZoom;   name=arglGetPixelZoom --><a name="//apple_ref/c/func/arglGetPixelZoom"></a>
+<h3><a name="arglGetPixelZoom">arglGetPixelZoom</a></h3>
 <hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDrawModeGet;name=start --><!-- begin abstract --></p>
-<p>Get method by which arglDispImage() is transfering pixels. 
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDrawModeGet;name=end --></p>
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglGetPixelZoom;name=start --><!-- begin abstract --></p>
+<p>Retrieve the current video image drawing scalefactor.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglGetPixelZoom;name=end --></p>
 <div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDrawModeGet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglDrawModeGet" logicalPath="//apple_ref/c/instm/arglDrawModeGet //apple_ref/c/clm/arglDrawModeGet //apple_ref/c/intfcm/arglDrawModeGet //apple_ref/c/intfm/arglDrawModeGet //apple_ref/c/func/arglDrawModeGet" target="_top"><span class="function">arglDrawModeGet</span></a>(
-    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDrawModeGet;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglDrawModeGet;name=start --><p>Enquires as to the current method by which arglDispImage() is
-transferring pixels to OpenGL for display. See arglDrawModeSet() for
-more information.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglDrawModeGet;name=end --><!-- end discussion -->
-</p>
-<dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
-</dl>
-<hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglDrawModeSet;   name=arglDrawModeSet --><a name="//apple_ref/c/func/arglDrawModeSet"></a>
-<h3><a name="arglDrawModeSet">arglDrawModeSet</a></h3>
-<hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDrawModeSet;name=start --><!-- begin abstract --></p>
-<p>Set method by which arglDispImage() will transfer pixels. 
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglDrawModeSet;name=end --></p>
-<div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDrawModeSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglDrawModeSet" logicalPath="//apple_ref/c/instm/arglDrawModeSet //apple_ref/c/clm/arglDrawModeSet //apple_ref/c/intfcm/arglDrawModeSet //apple_ref/c/intfm/arglDrawModeSet //apple_ref/c/func/arglDrawModeSet" target="_top"><span class="function">arglDrawModeSet</span></a>(
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglGetPixelZoom;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglGetPixelZoom" logicalPath="//apple_ref/c/instm/arglGetPixelZoom //apple_ref/c/clm/arglGetPixelZoom //apple_ref/c/intfcm/arglGetPixelZoom //apple_ref/c/intfm/arglGetPixelZoom //apple_ref/c/func/arglGetPixelZoom" target="_top"><span class="function">arglGetPixelZoom</span></a>(
     <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
-    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">mode</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglDrawModeSet;name=end --></pre>
+    <!-- a logicalPath="//apple_ref/c/cl/float //apple_ref/c/tdef/float //apple_ref/c/tag/float //apple_ref/c/struct/float //apple_ref/c/intf/float //apple_ref/doc/anysymbol/float" machineGenerated="true" --><span class="type">float</span><!-- /a --> <span class="type">*</span><span class="param">zoom</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglGetPixelZoom;name=end --></pre>
 </div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglDrawModeSet;name=start --><p>This setting determines the method by which arglDispImage transfers pixels
-of an image to OpenGL for display. Setting this
-variable to a value of AR_DRAW_BY_GL_DRAW_PIXELS specifies the use of the
-OpenGL DrawPixels functions to do the transfer. Setting this variable to a value of
-AR_DRAW_BY_TEXTURE_MAPPING specifies the use of OpenGL TexImage2D functions to do the
-transfer. The DrawPixels method is guaranteed to be available on all
-implementations, but arglDispImage does not correct the image
-for camera lens distortion under this method. In contrast, TexImage2D is only
-available on some implementations, but allows arglDispImage() to apply a correction
-for camera lens distortion, and additionally offers greater potential for
-accelerated drawing on some implementations.
-</p>
-<p>The initial value is AR_DRAW_BY_TEXTURE_MAPPING.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglDrawModeSet;name=end --><!-- end discussion -->
-</p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
 <dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglGetPixelZoom/zoom;   name=zoom -->
+<a name="//apple_ref/doc/functionparam/arglGetPixelZoom/zoom"></a>
+<code>zoom</code>
+</dt>
+<dd><p>The amount to scale the video image up or down. To draw the video
+image double size, use a zoom value of 2.0. To draw the video image
+half size use a zoom value of 0.5.</p></dd>
 </dl>
+</div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglGetRotate90;   name=arglGetRotate90 --><a name="//apple_ref/c/func/arglGetRotate90"></a>
+<h3><a name="arglGetRotate90">arglGetRotate90</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglGetRotate90;name=start --><!-- begin abstract --></p>
+<p>Find out whether ARGL is rotating all OpenGL drawing by 90 degrees.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglGetRotate90;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglGetRotate90;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglGetRotate90" logicalPath="//apple_ref/c/instm/arglGetRotate90 //apple_ref/c/clm/arglGetRotate90 //apple_ref/c/intfcm/arglGetRotate90 //apple_ref/c/intfm/arglGetRotate90 //apple_ref/c/func/arglGetRotate90" target="_top"><span class="function">arglGetRotate90</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglGetRotate90;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglGetRotate90/contextSettings;   name=contextSettings -->
+<a name="//apple_ref/doc/functionparam/arglGetRotate90/contextSettings"></a>
+<code>contextSettings</code>
+</dt>
+<dd><p>A reference to ARGL's settings for the current OpenGL
+context, as returned by arglSetupForCurrentContext() for this context.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>TRUE if a 90 degree rotation is enabled, FALSE if it is disabled.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglGetRotate90;name=start --><p>On some OpenGL ES devices, it may be desirable to rotate all OpenGL drawing by 90
+degrees in the window coordinate system, in order to swap the horizontal and
+vertical axes of the device. This may be a higher performance solution than
+manually swapping rows and columns of submitted data.
+</p>
+<p>This function queries the current state of whether such a rotation is being performed by ARGL or not.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglGetRotate90;name=end --><!-- end discussion -->
+</p>
 <hr class="betweenAPIEntries">
 <!-- headerDoc=func;  uid=//apple_ref/c/func/arglGLCapabilityCheck;   name=arglGLCapabilityCheck --><a name="//apple_ref/c/func/arglGLCapabilityCheck"></a>
 <h3><a name="arglGLCapabilityCheck">arglGLCapabilityCheck</a></h3>
@@ -1031,6 +998,181 @@ since some platforms don't have GLU version 1.3 or later.
 <dd>First available in ARToolKit 4.5.0.
 </dd>
 </dl>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglPixelBufferDataUpload;   name=arglPixelBufferDataUpload --><a name="//apple_ref/c/func/arglPixelBufferDataUpload"></a>
+<h3><a name="arglPixelBufferDataUpload">arglPixelBufferDataUpload</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=start --><!-- begin abstract --></p>
+<p>Upload a buffer of pixel data to an OpenGL texture for later use by arglDispImage().
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglPixelBufferDataUpload" logicalPath="//apple_ref/c/instm/arglPixelBufferDataUpload //apple_ref/c/clm/arglPixelBufferDataUpload //apple_ref/c/intfcm/arglPixelBufferDataUpload //apple_ref/c/intfm/arglPixelBufferDataUpload //apple_ref/c/func/arglPixelBufferDataUpload" target="_top"><span class="function">arglPixelBufferDataUpload</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/ARUint8 //apple_ref/c/tdef/ARUint8 //apple_ref/c/tag/ARUint8 //apple_ref/c/struct/ARUint8 //apple_ref/c/intf/ARUint8 //apple_ref/doc/anysymbol/ARUint8" machineGenerated="true" --><span class="type">ARUint8</span><!-- /a --> <span class="type">*</span><span class="param">bufDataPtr</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferDataUpload/contextSettings;   name=contextSettings -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferDataUpload/contextSettings"></a>
+<code>contextSettings</code>
+</dt>
+<dd><p>A reference to ARGL's settings for the current OpenGL
+context, as returned by arglSetupForCurrentContext() for this context.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferDataUpload/bufDataPtr;   name=bufDataPtr -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferDataUpload/bufDataPtr"></a>
+<code>bufDataPtr</code>
+</dt>
+<dd>
+<p>A pointer to the pixel buffer, which is a block of memory from which texture
+data will be read.
+</p>
+<p>The layout of pixel data in the memory pointed to by bufDataPtr is assumed to be
+specified by the value of pixelFormat in the ARHandle submitted to arglSetupForCurrentContext(),
+but can be changed by calling arglPixelFormatSet() and/or arglPixelBufferSizeSet().
+</p>
+<p>By default, the pixel buffer is assumed to be tightly packed, row-major array of dimensions
+equal to the calibrated camera image size (as passed in the fields arParam.xsize and arParam.ysize
+of the ARHandle submitted to arglSetupForCurrentContext().
+</p>
+<p>The pixel data buffer submitted may, under some circumstances be allowed to be larger than the
+values of the calibrated camera image size (i.e. padded). See the discussion section of the
+documentation for function arglPixelBufferSizeSet() for more information.
+</p>
+<p>This may only occur when the underlying OpenGL impementation does not support non-power-of-two
+textures. If padding is desired, the desired buffer size must be submitted using
+arglPixelBufferSizeSet(). Check that the result from this function is TRUE before attempting to
+upload such a padded buffer.</p>
+</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>TRUE if the pixel buffer was successfully uploaded to OpenGL, FALSE otherwise.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=start --><p>ARGL provides the ability to perform distortion-compensated texturing of a camera video image
+into the OpenGL context, for the purpose of video-see through augmented reality. This function
+uploads the camera image data to an OpenGL texture, ready for later drawing using the function
+arglDispImage().
+</p>
+<p>If a pointer to an ARParam structure has been passed in to function arglSetupDebugMode, then
+a check will be made whether debug mode is enabled, and if it is, then the buffer pointed to
+by this function will be ignored, and instead the debug image will be loaded for texturing.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferDataUpload;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/arglSetupDebugMode" logicalPath="//apple_ref/c/func/arglSetupDebugMode" target="_top">arglSetupDebugMode</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglPixelBufferSizeGet;   name=arglPixelBufferSizeGet --><a name="//apple_ref/c/func/arglPixelBufferSizeGet"></a>
+<h3><a name="arglPixelBufferSizeGet">arglPixelBufferSizeGet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=start --><!-- begin abstract --></p>
+<p>Query the size of pixel data buffers expected by arglPixelBufferDataUpload().
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=start --><!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglPixelBufferSizeGet" logicalPath="//apple_ref/c/instm/arglPixelBufferSizeGet //apple_ref/c/clm/arglPixelBufferSizeGet //apple_ref/c/intfcm/arglPixelBufferSizeGet //apple_ref/c/intfm/arglPixelBufferSizeGet //apple_ref/c/func/arglPixelBufferSizeGet" target="_top"><span class="function">arglPixelBufferSizeGet</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="type">*</span><span class="param">bufWidth</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="type">*</span><span class="param">bufHeight</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeGet/contextSettings;   name=contextSettings -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeGet/contextSettings"></a>
+<code>contextSettings</code>
+</dt>
+<dd><p>A reference to ARGL's settings for the current OpenGL
+context, as returned by arglSetupForCurrentContext() for this context.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeGet/bufWidth;   name=bufWidth -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeGet/bufWidth"></a>
+<code>bufWidth</code>
+</dt>
+<dd><p>A pointer to int, which will be filled out with the buffer width, in pixels, or NULL if this value is not required.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeGet/bufHeight;   name=bufHeight -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeGet/bufHeight"></a>
+<code>bufHeight</code>
+</dt>
+<dd><p>A pointer to int, which will be filled out with the buffer height, in pixels, or NULL if this value is not required..</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>TRUE if the buffer size was successfully queried, FALSE otherwise.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=start --><p>See function arglPixelBufferSizeSet() for a full discussion.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferSizeGet;name=end --><!-- end discussion -->
+</p>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglPixelBufferSizeSet;   name=arglPixelBufferSizeSet --><a name="//apple_ref/c/func/arglPixelBufferSizeSet"></a>
+<h3><a name="arglPixelBufferSizeSet">arglPixelBufferSizeSet</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=start --><!-- begin abstract --></p>
+<p>Specify a desired pixel buffer size larger than the camera image size.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/struct/char //apple_ref/c/intf/char //apple_ref/doc/anysymbol/char" machineGenerated="true" --><span class="type">char</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglPixelBufferSizeSet" logicalPath="//apple_ref/c/instm/arglPixelBufferSizeSet //apple_ref/c/clm/arglPixelBufferSizeSet //apple_ref/c/intfcm/arglPixelBufferSizeSet //apple_ref/c/intfm/arglPixelBufferSizeSet //apple_ref/c/func/arglPixelBufferSizeSet" target="_top"><span class="function">arglPixelBufferSizeSet</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">bufWidth</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">bufHeight</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeSet/contextSettings;   name=contextSettings -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeSet/contextSettings"></a>
+<code>contextSettings</code>
+</dt>
+<dd><p>A reference to ARGL's settings for the current OpenGL
+context, as returned by arglSetupForCurrentContext() for this context.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeSet/bufWidth;   name=bufWidth -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeSet/bufWidth"></a>
+<code>bufWidth</code>
+</dt>
+<dd><p>The desired buffer width, in pixels.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglPixelBufferSizeSet/bufHeight;   name=bufHeight -->
+<a name="//apple_ref/doc/functionparam/arglPixelBufferSizeSet/bufHeight"></a>
+<code>bufHeight</code>
+</dt>
+<dd><p>The desired buffer height, in pixels.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>TRUE if the desired buffer size is supported, FALSE otherwise.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=start --><p>By default, the pixel buffer accepted by function arglPixelBufferDataUpload()
+is assumed to be tightly packed, row-major array of dimensions
+equal to the calibrated camera image size (as passed in the fields arParam.xsize and arParam.ysize
+of the ARHandle submitted to arglSetupForCurrentContext().
+</p>
+<p>The pixel data buffer submitted may, under some circumstances be allowed to be larger than the
+values of the calibrated camera image size (i.e. padded). This may only occur when the
+underlying OpenGL ES impementation does not support non-power-of-two textures. For the Apple
+iPhone family, this applies to the iPhone, the iPhone 3G, the iPod Touch 1st and 2nd Generation.
+The iPhone 3GS and the iPod Touch 3rd Generation support non-power-of-two textures, and thus
+padding of the pixel data buffer is not supported on these devices. If padding is desired,
+the desired buffer size must be submitted using this function. Check that the
+result from this function is TRUE before attempting to upload such a padded buffer.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglPixelBufferSizeSet;name=end --><!-- end discussion -->
+</p>
 <hr class="betweenAPIEntries">
 <!-- headerDoc=func;  uid=//apple_ref/c/func/arglPixelFormatGet;   name=arglPixelFormatGet --><a name="//apple_ref/c/func/arglPixelFormatGet"></a>
 <h3><a name="arglPixelFormatGet">arglPixelFormatGet</a></h3>
@@ -1139,6 +1281,73 @@ and so you should ensure that ARVideo is generating pixels of the same format.
 </dd>
 </dl>
 <hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglSetPixelZoom;   name=arglSetPixelZoom --><a name="//apple_ref/c/func/arglSetPixelZoom"></a>
+<h3><a name="arglSetPixelZoom">arglSetPixelZoom</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglSetPixelZoom;name=start --><!-- begin abstract --></p>
+<p>Set the current video image drawing scalefactor.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglSetPixelZoom;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglSetPixelZoom;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglSetPixelZoom" logicalPath="//apple_ref/c/instm/arglSetPixelZoom //apple_ref/c/clm/arglSetPixelZoom //apple_ref/c/intfcm/arglSetPixelZoom //apple_ref/c/intfm/arglSetPixelZoom //apple_ref/c/func/arglSetPixelZoom" target="_top"><span class="function">arglSetPixelZoom</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/float //apple_ref/c/tdef/float //apple_ref/c/tag/float //apple_ref/c/struct/float //apple_ref/c/intf/float //apple_ref/doc/anysymbol/float" machineGenerated="true" --><span class="type">float</span><!-- /a --> <span class="param">zoom</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglSetPixelZoom;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglSetPixelZoom/zoom;   name=zoom -->
+<a name="//apple_ref/doc/functionparam/arglSetPixelZoom/zoom"></a>
+<code>zoom</code>
+</dt>
+<dd><p>The amount to scale the video image up or down. To draw the video
+image double size, use a zoom value of 2.0. To draw the video image
+half size use a zoom value of 0.5.</p></dd>
+</dl>
+</div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arglSetRotate90;   name=arglSetRotate90 --><a name="//apple_ref/c/func/arglSetRotate90"></a>
+<h3><a name="arglSetRotate90">arglSetRotate90</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglSetRotate90;name=start --><!-- begin abstract --></p>
+<p>Set or unset a 90 degree rotation in all OpenGL drawing performed by ARGL.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglSetRotate90;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglSetRotate90;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglSetRotate90" logicalPath="//apple_ref/c/instm/arglSetRotate90 //apple_ref/c/clm/arglSetRotate90 //apple_ref/c/intfcm/arglSetRotate90 //apple_ref/c/intfm/arglSetRotate90 //apple_ref/c/func/arglSetRotate90" target="_top"><span class="function">arglSetRotate90</span></a>(
+    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">rotate90</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglSetRotate90;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglSetRotate90/contextSettings;   name=contextSettings -->
+<a name="//apple_ref/doc/functionparam/arglSetRotate90/contextSettings"></a>
+<code>contextSettings</code>
+</dt>
+<dd><p>A reference to ARGL's settings for the current OpenGL.
+context, as returned by arglSetupForCurrentContext() for this context.</p></dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arglSetRotate90/rotate90;   name=rotate90 -->
+<a name="//apple_ref/doc/functionparam/arglSetRotate90/rotate90"></a>
+<code>rotate90</code>
+</dt>
+<dd><p>Set to TRUE or 1 to enable 90 degree rotation, FALSE to disable.</p></dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglSetRotate90;name=start --><p>On some OpenGL ES devices, it may be desirable to rotate all OpenGL drawing by 90
+degrees in the window coordinate system, in order to swap the horizontal and
+vertical axes of the device. This may be a higher performance solution than
+manually swapping rows and columns of submitted data.
+</p>
+<p>This function enables or disables such an axis swap in ARGL with very little 
+performance cost, by introducing a 90-degree rotation into the OpenGL projection matrix.
+</p>
+<p>By default, 90 degree rotation is DISABLED.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglSetRotate90;name=end --><!-- end discussion -->
+</p>
+<hr class="betweenAPIEntries">
 <!-- headerDoc=func;  uid=//apple_ref/c/func/arglSetupDebugMode;   name=arglSetupDebugMode --><a name="//apple_ref/c/func/arglSetupDebugMode"></a>
 <h3><a name="arglSetupDebugMode">arglSetupDebugMode</a></h3>
 <hr class="afterName">
@@ -1174,6 +1383,11 @@ of whether debug mode is enabled or disabled. If enabled, the binarized
 debug image will be drawn instead of the input image.
 <!-- headerDoc=discussion;uid=//apple_ref/c/func/arglSetupDebugMode;name=end --><!-- end discussion -->
 </p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/arglPixelBufferDataUpload" logicalPath="//apple_ref/c/func/arglPixelBufferDataUpload" target="_top">arglPixelBufferDataUpload</a></p></dt>
+<dd></dd>
+</dl></div>
 <dl>
 <dt><b>Availability</b></dt>
 <dd>First appeared in ARToolKit 4.5.12.
@@ -1249,109 +1463,6 @@ when you have finished with the library for this context.
 <dd>First appeared in ARToolKit 2.68.
 </dd>
 </dl>
-<hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglTexmapModeGet;   name=arglTexmapModeGet --><a name="//apple_ref/c/func/arglTexmapModeGet"></a>
-<h3><a name="arglTexmapModeGet">arglTexmapModeGet</a></h3>
-<hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexmapModeGet;name=start --><!-- begin abstract --></p>
-<p>Enquire whether full or half-resolution TexImage2D pixel-transfer is being used in arglDispImage().
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexmapModeGet;name=end --></p>
-<div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexmapModeGet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglTexmapModeGet" logicalPath="//apple_ref/c/instm/arglTexmapModeGet //apple_ref/c/clm/arglTexmapModeGet //apple_ref/c/intfcm/arglTexmapModeGet //apple_ref/c/intfm/arglTexmapModeGet //apple_ref/c/func/arglTexmapModeGet" target="_top"><span class="function">arglTexmapModeGet</span></a>(
-    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexmapModeGet;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexmapModeGet;name=start --><p>Enquires as to the current value of the TexmapMode setting. See arglTexmapModeSet()
-for more info.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexmapModeGet;name=end --><!-- end discussion -->
-</p>
-<dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
-</dl>
-<hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglTexmapModeSet;   name=arglTexmapModeSet --><a name="//apple_ref/c/func/arglTexmapModeSet"></a>
-<h3><a name="arglTexmapModeSet">arglTexmapModeSet</a></h3>
-<hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexmapModeSet;name=start --><!-- begin abstract --></p>
-<p>Determines use of full or half-resolution TexImage2D pixel-transfer in arglDispImage().
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexmapModeSet;name=end --></p>
-<div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexmapModeSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglTexmapModeSet" logicalPath="//apple_ref/c/instm/arglTexmapModeSet //apple_ref/c/clm/arglTexmapModeSet //apple_ref/c/intfcm/arglTexmapModeSet //apple_ref/c/intfm/arglTexmapModeSet //apple_ref/c/func/arglTexmapModeSet" target="_top"><span class="function">arglTexmapModeSet</span></a>(
-    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
-    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">mode</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexmapModeSet;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexmapModeSet;name=start --><p>When arglDrawModeSet(AR_DRAW_BY_TEXTURE_MAPPING) has been called, the value of this
-setting determines whether full or half-resolution data is transferred to the
-texture. Calling this function with a mode value of AR_DRAW_TEXTURE_FULL_IMAGE
-uses all available pixels in the source image data. A value of
-AR_DRAW_TEXTURE_HALF_IMAGE discards every second row
-in the source image data, defining a half-height texture which is then drawn stretched
-vertically to double its height.
-</p>
-<p>The latter method is well-suited to drawing interlaced images, as would be obtained 
-from DV camera sources in interlaced mode or composite video sources.
-</p>
-<p>The initial value is AR_DRAW_TEXTURE_FULL_IMAGE.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexmapModeSet;name=end --><!-- end discussion -->
-</p>
-<dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
-</dl>
-<hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglTexRectangleGet;   name=arglTexRectangleGet --><a name="//apple_ref/c/func/arglTexRectangleGet"></a>
-<h3><a name="arglTexRectangleGet">arglTexRectangleGet</a></h3>
-<hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexRectangleGet;name=start --><!-- begin abstract --></p>
-<p>Enquire as to use of rectangular TexImage2D pixel-transfer in arglDispImage().
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexRectangleGet;name=end --></p>
-<div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexRectangleGet;name=start --><!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglTexRectangleGet" logicalPath="//apple_ref/c/instm/arglTexRectangleGet //apple_ref/c/clm/arglTexRectangleGet //apple_ref/c/intfcm/arglTexRectangleGet //apple_ref/c/intfm/arglTexRectangleGet //apple_ref/c/func/arglTexRectangleGet" target="_top"><span class="function">arglTexRectangleGet</span></a>(
-    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexRectangleGet;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexRectangleGet;name=start --><p>Enquires as to the current value of the TexRectangle setting. See arglTexRectangleSet()
-for more info.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexRectangleGet;name=end --><!-- end discussion -->
-</p>
-<dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
-</dl>
-<hr class="betweenAPIEntries">
-<!-- headerDoc=func;  uid=//apple_ref/c/func/arglTexRectangleSet;   name=arglTexRectangleSet --><a name="//apple_ref/c/func/arglTexRectangleSet"></a>
-<h3><a name="arglTexRectangleSet">arglTexRectangleSet</a></h3>
-<hr class="afterName">
-<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexRectangleSet;name=start --><!-- begin abstract --></p>
-<p>Determines use of rectangular TexImage2D pixel-transfer in arglDispImage().
-<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arglTexRectangleSet;name=end --></p>
-<div class="declaration_indent">
-<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexRectangleSet;name=start --><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/struct/void //apple_ref/c/intf/void //apple_ref/doc/anysymbol/void" machineGenerated="true" --><span class="type">void</span><!-- /a --> <a machinegenerated="true" href="index.html#//apple_ref/c/func/arglTexRectangleSet" logicalPath="//apple_ref/c/instm/arglTexRectangleSet //apple_ref/c/clm/arglTexRectangleSet //apple_ref/c/intfcm/arglTexRectangleSet //apple_ref/c/intfm/arglTexRectangleSet //apple_ref/c/func/arglTexRectangleSet" target="_top"><span class="function">arglTexRectangleSet</span></a>(
-    <a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" logicalPath="//apple_ref/c/cl/ARGL_CONTEXT_SETTINGS_REF //apple_ref/c/tdef/ARGL_CONTEXT_SETTINGS_REF" target="_top"><span class="type">ARGL_CONTEXT_SETTINGS_REF</span></a> <span class="param">contextSettings</span>,
-    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">state</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arglTexRectangleSet;name=end --></pre>
-</div>
-<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexRectangleSet;name=start --><p>On implementations which support the OpenGL extension for rectangular textures (of
-non power-of-two size), and when arglDrawMode is set to AR_DRAW_BY_TEXTURE_MAPPING,
-the value of this variable determines whether rectangular textures or ordinary
-(power-of-two) textures are used by arglDispImage(). A value of TRUE specifies the
-use of rectangluar textures. A value of FALSE specifies the use of ordinary textures.
-</p>
-<p>If the OpenGL driver available at runtime does not support for rectangular textures,
-changing the value of this setting to TRUE will result calls to arglDispImage
-performing no drawing.
-<!-- headerDoc=discussion;uid=//apple_ref/c/func/arglTexRectangleSet;name=end --><!-- end discussion -->
-</p>
-<dl>
-<dt><b>Availability</b></dt>
-<dd>First appeared in ARToolKit 2.72.
-</dd>
-</dl>
 <hr class="betweenSections">
 <a name="HeaderDoc_datatypes"></a>
 <h2 class="h2tight">Typedefs</h2>
@@ -1400,7 +1511,7 @@ memory used by the settings structure.
 <div class="hd_copyright_and_timestamp">
 <p class="hd_copyright">&copy; 2015 Daqri, LLC.
  </p>
-<p class="hd_timestamp">Last Updated: Friday, July 31, 2015
+<p class="hd_timestamp">Last Updated: Tuesday, September 29, 2015
 </p>
 </div>
 </td>

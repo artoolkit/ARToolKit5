@@ -279,48 +279,6 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 <hr class="afterClassOrHeaderInfo">
 <br><a name="HeaderDoc_groups"><h2 class="h2tight">Groups</h2></a>
 
-<h3>"3D calculation".</h3>
-<div class="group_desc_indent">
-</div>
-<h4>Group members:</h4>
-<div class="group_indent">
-<dl>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeCpara" logicalPath="//apple_ref/c/func/ar3DChangeCpara" target="_top">ar3DChangeCpara</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThresh" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThresh" target="_top">ar3DChangeLoopBreakThresh</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" target="_top">ar3DChangeLoopBreakThreshRatio</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeMaxLoopCount" logicalPath="//apple_ref/c/func/ar3DChangeMaxLoopCount" target="_top">ar3DChangeMaxLoopCount</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle" logicalPath="//apple_ref/c/func/ar3DCreateHandle" target="_top">ar3DCreateHandle</a></tt></dt>
-<dd><p>Create handle used for 3D calculation from calibrated camera parameters.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle2" logicalPath="//apple_ref/c/func/ar3DCreateHandle2" target="_top">ar3DCreateHandle2</a></tt></dt>
-<dd><p>Create handle used for 3D calculation from an intrinsic parameters matrix.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DDeleteHandle" logicalPath="//apple_ref/c/func/ar3DDeleteHandle" target="_top">ar3DDeleteHandle</a></tt></dt>
-<dd><p>Delete handle used for 3D calculation.
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMat" logicalPath="//apple_ref/c/func/arGetTransMat" target="_top">arGetTransMat</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatRobust" logicalPath="//apple_ref/c/func/arGetTransMatRobust" target="_top">arGetTransMatRobust</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquare" logicalPath="//apple_ref/c/func/arGetTransMatSquare" target="_top">arGetTransMatSquare</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquareCont" logicalPath="//apple_ref/c/func/arGetTransMatSquareCont" target="_top">arGetTransMatSquareCont</a></tt></dt>
-<dd><p>(description)
-</p></dd>
-</dl>
-</div>
-<p>&nbsp;</p>
 <h3>"Pattern identification".</h3>
 <div class="group_desc_indent">
 </div>
@@ -335,6 +293,9 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattCreateHandle" logicalPath="//apple_ref/c/func/arPattCreateHandle" target="_top">arPattCreateHandle</a></tt></dt>
 <dd><p>Allocate a pattern handle.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattCreateHandle2" logicalPath="//apple_ref/c/func/arPattCreateHandle2" target="_top">arPattCreateHandle2</a></tt></dt>
+<dd><p>Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
 </p></dd>
 <dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattDeactivate" logicalPath="//apple_ref/c/func/arPattDeactivate" target="_top">arPattDeactivate</a></tt></dt>
 <dd><p>Deactivate a previously activated pattern.
@@ -367,25 +328,6 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 <dd><p>Save a pattern to a pattern file.
 </p></dd>
 </dl>
-</div>
-<p>&nbsp;</p>
-<h3>"Utility".</h3>
-<div class="group_desc_indent">
-</div>
-<h4>Group members:</h4>
-<div class="group_indent">
-<dl>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintMtx16" logicalPath="//apple_ref/c/func/arUtilPrintMtx16" target="_top">arUtilPrintMtx16</a></tt></dt>
-<dd><p>Prints a 4x4 row-major matrix via ARLOG(...).
-</p></dd>
-<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintTransMat" logicalPath="//apple_ref/c/func/arUtilPrintTransMat" target="_top">arUtilPrintTransMat</a></tt></dt>
-<dd><p>Prints a transformation matrix via ARLOG(...).
-</p></dd>
-</dl>
-</div>
-<p>&nbsp;</p>
-<h3>"3D calculation by Stereo".</h3>
-<div class="group_desc_indent">
 </div>
 <p>&nbsp;</p>
 <h3>"Square detection".</h3>
@@ -483,6 +425,67 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arSetPixelFormat" logicalPath="//apple_ref/c/func/arSetPixelFormat" target="_top">arSetPixelFormat</a></tt></dt>
 <dd><p>Set the expected pixel format for video frames being passed to arDetectMarker
+</p></dd>
+</dl>
+</div>
+<p>&nbsp;</p>
+<h3>"3D calculation by Stereo".</h3>
+<div class="group_desc_indent">
+</div>
+<p>&nbsp;</p>
+<h3>"3D calculation".</h3>
+<div class="group_desc_indent">
+</div>
+<h4>Group members:</h4>
+<div class="group_indent">
+<dl>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeCpara" logicalPath="//apple_ref/c/func/ar3DChangeCpara" target="_top">ar3DChangeCpara</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThresh" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThresh" target="_top">ar3DChangeLoopBreakThresh</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" logicalPath="//apple_ref/c/func/ar3DChangeLoopBreakThreshRatio" target="_top">ar3DChangeLoopBreakThreshRatio</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DChangeMaxLoopCount" logicalPath="//apple_ref/c/func/ar3DChangeMaxLoopCount" target="_top">ar3DChangeMaxLoopCount</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle" logicalPath="//apple_ref/c/func/ar3DCreateHandle" target="_top">ar3DCreateHandle</a></tt></dt>
+<dd><p>Create handle used for 3D calculation from calibrated camera parameters.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DCreateHandle2" logicalPath="//apple_ref/c/func/ar3DCreateHandle2" target="_top">ar3DCreateHandle2</a></tt></dt>
+<dd><p>Create handle used for 3D calculation from an intrinsic parameters matrix.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/ar3DDeleteHandle" logicalPath="//apple_ref/c/func/ar3DDeleteHandle" target="_top">ar3DDeleteHandle</a></tt></dt>
+<dd><p>Delete handle used for 3D calculation.
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMat" logicalPath="//apple_ref/c/func/arGetTransMat" target="_top">arGetTransMat</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatRobust" logicalPath="//apple_ref/c/func/arGetTransMatRobust" target="_top">arGetTransMatRobust</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquare" logicalPath="//apple_ref/c/func/arGetTransMatSquare" target="_top">arGetTransMatSquare</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arGetTransMatSquareCont" logicalPath="//apple_ref/c/func/arGetTransMatSquareCont" target="_top">arGetTransMatSquareCont</a></tt></dt>
+<dd><p>(description)
+</p></dd>
+</dl>
+</div>
+<p>&nbsp;</p>
+<h3>"Utility".</h3>
+<div class="group_desc_indent">
+</div>
+<h4>Group members:</h4>
+<div class="group_indent">
+<dl>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintMtx16" logicalPath="//apple_ref/c/func/arUtilPrintMtx16" target="_top">arUtilPrintMtx16</a></tt></dt>
+<dd><p>Prints a 4x4 row-major matrix via ARLOG(...).
+</p></dd>
+<dt><tt><a machinegenerated="true" href="index.html#//apple_ref/c/func/arUtilPrintTransMat" logicalPath="//apple_ref/c/func/arUtilPrintTransMat" target="_top">arUtilPrintTransMat</a></tt></dt>
+<dd><p>Prints a transformation matrix via ARLOG(...).
 </p></dd>
 </dl>
 </div>
@@ -594,6 +597,9 @@ For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arPattCreateHandle" target="_top">arPattCreateHandle</a></tt></dt>
 <dd><p>Allocate a pattern handle.
+</p></dd>
+<dt><tt><a href="index.html#//apple_ref/c/func/arPattCreateHandle2" target="_top">arPattCreateHandle2</a></tt></dt>
+<dd><p>Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
 </p></dd>
 <dt><tt><a href="index.html#//apple_ref/c/func/arPattDeactivate" target="_top">arPattDeactivate</a></tt></dt>
 <dd><p>Deactivate a previously activated pattern.
@@ -985,7 +991,9 @@ camera parameters specified by this parameter. This parameter uses the new
 lookup-table based form of the camera parameters introduced in ARToolKit v5.
 An ARParamLT structure may be created from an ARParam structure via the
 call:
-<code>ARParamLT *paramLT = arParamLTCreate(&amp;param, AR_PARAM_LT_DEFAULT_OFFSET);</code></p></dd>
+<code>ARParamLT *paramLT = arParamLTCreate(&amp;param, AR_PARAM_LT_DEFAULT_OFFSET);</code>
+Note that the pointer is only copied, and so the ARParamLT structure must remain
+valid until the ARHandle is disposed of by calling arDeleteHandle.</p></dd>
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
@@ -1317,10 +1325,13 @@ An integer in the range [0,255] (inclusive)</p></dd>
 <!-- end return value --></p>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
 <!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arGetLabelingThresh;name=start --><p>This function queries the current labeling threshold. For,
-AR_LABELING_THRESH_MODE_AUTO_MEDIAN and AR_LABELING_THRESH_MODE_AUTO_OTSU,
+AR_LABELING_THRESH_MODE_AUTO_MEDIAN, AR_LABELING_THRESH_MODE_AUTO_OTSU,
+and AR_LABELING_THRESH_MODE_AUTO_BRACKETING
 the threshold value is only valid until the next auto-update.
-The current threshold mode is not affected by this call.
-The threshold value is not relevant if threshold mode is
+</p>
+<p>The current threshold mode is not affected by this call.
+</p>
+<p>The threshold value is not relevant if threshold mode is
 AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
 <!-- headerDoc=discussion;uid=//apple_ref/c/func/arGetLabelingThresh;name=end --><!-- end discussion -->
 </p>
@@ -1361,7 +1372,8 @@ value of the labeling threshold mode, one of:
 AR_LABELING_THRESH_MODE_MANUAL,
 AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
 AR_LABELING_THRESH_MODE_AUTO_OTSU,
-AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE</p></dd>
+AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
+AR_LABELING_THRESH_MODE_AUTO_BRACKETING</p></dd>
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
@@ -2370,6 +2382,67 @@ freed by calling arPattDeleteHandle().
 <p>Note that a pattern handle is NOT required when using only matrix-
 code (2D barcode) markers.
 <!-- headerDoc=discussion;uid=//apple_ref/c/func/arPattCreateHandle;name=end --><!-- end discussion -->
+</p>
+<p><b>See Also</b></p>
+<div class="list_indent"><dl>
+<dt><p><a href="index.html#//apple_ref/c/func/arPattLoad" logicalPath="//apple_ref/c/func/arPattLoad" target="_top">arPattLoad</a></p></dt>
+<dd></dd>
+<dt><p><a href="index.html#//apple_ref/c/func/arPattDeleteHandle" logicalPath="//apple_ref/c/func/arPattDeleteHandle" target="_top">arPattDeleteHandle</a></p></dt>
+<dd></dd>
+</dl></div>
+<hr class="betweenAPIEntries">
+<!-- headerDoc=func;  uid=//apple_ref/c/func/arPattCreateHandle2;   name=arPattCreateHandle2 --><a name="//apple_ref/c/func/arPattCreateHandle2"></a>
+<h3><a name="arPattCreateHandle2">arPattCreateHandle2</a></h3>
+<hr class="afterName">
+<p><!-- headerDoc=abstract;uid=//apple_ref/c/func/arPattCreateHandle2;name=start --><!-- begin abstract --></p>
+<p>Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
+<!-- end abstract --><!-- headerDoc=abstract;uid=//apple_ref/c/func/arPattCreateHandle2;name=end --></p>
+<div class="declaration_indent">
+<pre><!-- headerDoc=declaration;uid=//apple_ref/c/func/arPattCreateHandle2;name=start --><a machinegenerated="true" href="index.html#//apple_ref/c/tdef/ARPattHandle" logicalPath="//apple_ref/c/cl/ARPattHandle //apple_ref/c/tdef/ARPattHandle" target="_top"><span class="type">ARPattHandle</span></a> <span class="type">*</span><a machinegenerated="true" href="index.html#//apple_ref/c/func/arPattCreateHandle2" logicalPath="//apple_ref/c/instm/arPattCreateHandle2 //apple_ref/c/clm/arPattCreateHandle2 //apple_ref/c/intfcm/arPattCreateHandle2 //apple_ref/c/intfm/arPattCreateHandle2 //apple_ref/c/func/arPattCreateHandle2" target="_top"><span class="function">arPattCreateHandle2</span></a>(
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">pattSize</span>,
+    <span class="keyword">const</span> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <span class="param">patternCountMax</span>);  <!-- headerDoc=declaration;uid=//apple_ref/c/func/arPattCreateHandle2;name=end --></pre>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Parameters</font></h5>
+<div class="param_indent">
+<dl>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arPattCreateHandle2/pattSize;   name=pattSize -->
+<a name="//apple_ref/doc/functionparam/arPattCreateHandle2/pattSize"></a>
+<code>pattSize</code>
+</dt>
+<dd>
+<p>For any square template (pattern) markers, the number of rows and
+columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+</p>
+<p>Pass AR_PATT_SIZE1 for the same behaviour as arPattCreateHandle().</p>
+</dd>
+<dt>
+<!-- headerDoc=functionparam;  uid=//apple_ref/doc/functionparam/arPattCreateHandle2/patternCountMax;   name=patternCountMax -->
+<a name="//apple_ref/doc/functionparam/arPattCreateHandle2/patternCountMax"></a>
+<code>patternCountMax</code>
+</dt>
+<dd>
+<p>For any square template (pattern) markers, the maximum number of
+markers that may be loaded for a single matching pass. Must be &gt; 0.
+</p>
+<p>Pass AR_PATT_NUM_MAX for the same behaviour as arPattCreateHandle().</p>
+</dd>
+</dl>
+</div>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
+<p><!-- begin return value --></p>
+<p>The created pattern handle, or NULL in case of error.
+
+<!-- end return value --></p>
+<h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arPattCreateHandle2;name=start --><p>Allocates an empty pattern handle, into which patterns can
+be loaded by calling arPattLoad().
+When the pattern handle is no longer needed, it should be
+freed by calling arPattDeleteHandle().
+</p>
+<p>Note that a pattern handle is NOT required when using only matrix-
+code (2D barcode) markers.
+<!-- headerDoc=discussion;uid=//apple_ref/c/func/arPattCreateHandle2;name=end --><!-- end discussion -->
 </p>
 <p><b>See Also</b></p>
 <div class="list_indent"><dl>
@@ -3422,10 +3495,16 @@ to have its labeling threshold value set.</p></dd>
 
 <!-- end return value --></p>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
-<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arSetLabelingThresh;name=start --><p>This function forces the labeling threshold mode to 
-AR_LABELING_THRESH_MODE_MANUAL and sets the threshold value.
-The default value is AR_DEFAULT_LABELING_THRESHm which is 100,
+<!-- begin discussion --><!-- headerDoc=discussion;uid=//apple_ref/c/func/arSetLabelingThresh;name=start --><p>This function forces sets the threshold value.
+The default value is AR_DEFAULT_LABELING_THRESH which is 100,
 unless edited in arConfig.h.
+</p>
+<p>The current threshold mode is not affected by this call.
+Typically, this function is used when labeling threshold mode
+is AR_LABELING_THRESH_MODE_MANUAL.
+</p>
+<p>The threshold value is not relevant if threshold mode is
+AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE.
 </p>
 <p>Background: The labeling threshold is the value which
 the AR library uses to differentiate between black and white
@@ -3468,7 +3547,8 @@ to be queried for its labeling threshold mode.</p></dd>
 AR_LABELING_THRESH_MODE_MANUAL,
 AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
 AR_LABELING_THRESH_MODE_AUTO_OTSU,
-AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE</p></dd>
+AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
+AR_LABELING_THRESH_MODE_AUTO_BRACKETING</p></dd>
 </dl>
 </div>
 <h5 class="tight"><font face="Lucida Grande,Helvetica,Arial">Return Value</font></h5>
@@ -4387,6 +4467,8 @@ On Android, change to the applications's (internal) cache directory, and a valid
     <!-- a logicalPath="//apple_ref/c/cl/AR_LABELING_THRESH_MODE //apple_ref/c/tdef/AR_LABELING_THRESH_MODE //apple_ref/c/tag/AR_LABELING_THRESH_MODE //apple_ref/c/struct/AR_LABELING_THRESH_MODE //apple_ref/c/intf/AR_LABELING_THRESH_MODE //apple_ref/doc/anysymbol/AR_LABELING_THRESH_MODE" machineGenerated="true" --><span class="type">AR_LABELING_THRESH_MODE</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/arLabelingThreshMode //apple_ref/c/data/arLabelingThreshMode //apple_ref/c/clconst/arLabelingThreshMode " machineGenerated="true" --><span class="var">arLabelingThreshMode</span><!-- /a -->; 
     <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/arLabelingThreshAutoInterval //apple_ref/c/data/arLabelingThreshAutoInterval //apple_ref/c/clconst/arLabelingThreshAutoInterval " machineGenerated="true" --><span class="var">arLabelingThreshAutoInterval</span><!-- /a -->; 
     <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/arLabelingThreshAutoIntervalTTL //apple_ref/c/data/arLabelingThreshAutoIntervalTTL //apple_ref/c/clconst/arLabelingThreshAutoIntervalTTL " machineGenerated="true" --><span class="var">arLabelingThreshAutoIntervalTTL</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/arLabelingThreshAutoBracketOver //apple_ref/c/data/arLabelingThreshAutoBracketOver //apple_ref/c/clconst/arLabelingThreshAutoBracketOver " machineGenerated="true" --><span class="var">arLabelingThreshAutoBracketOver</span><!-- /a -->; 
+    <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/struct/int //apple_ref/c/intf/int //apple_ref/doc/anysymbol/int" machineGenerated="true" --><span class="type">int</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/arLabelingThreshAutoBracketUnder //apple_ref/c/data/arLabelingThreshAutoBracketUnder //apple_ref/c/clconst/arLabelingThreshAutoBracketUnder " machineGenerated="true" --><span class="var">arLabelingThreshAutoBracketUnder</span><!-- /a -->; 
     <!-- a logicalPath="//apple_ref/c/cl/ARImageProcInfo //apple_ref/c/tdef/ARImageProcInfo //apple_ref/c/tag/ARImageProcInfo //apple_ref/c/struct/ARImageProcInfo //apple_ref/c/intf/ARImageProcInfo //apple_ref/doc/anysymbol/ARImageProcInfo" machineGenerated="true" --><span class="type">ARImageProcInfo</span><!-- /a --> <span class="type">*</span><!-- a logicalPath="//apple_ref/c/econst/arImageProcInfo //apple_ref/c/data/arImageProcInfo //apple_ref/c/clconst/arImageProcInfo " machineGenerated="true" --><span class="var">arImageProcInfo</span><!-- /a -->; 
     <!-- a logicalPath="//apple_ref/c/cl/ARdouble //apple_ref/c/tdef/ARdouble //apple_ref/c/tag/ARdouble //apple_ref/c/struct/ARdouble //apple_ref/c/intf/ARdouble //apple_ref/doc/anysymbol/ARdouble" machineGenerated="true" --><span class="type">ARdouble</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/pattRatio //apple_ref/c/data/pattRatio //apple_ref/c/clconst/pattRatio " machineGenerated="true" --><span class="var">pattRatio</span><!-- /a -->; 
     <!-- a logicalPath="//apple_ref/c/cl/AR_MATRIX_CODE_TYPE //apple_ref/c/tdef/AR_MATRIX_CODE_TYPE //apple_ref/c/tag/AR_MATRIX_CODE_TYPE //apple_ref/c/struct/AR_MATRIX_CODE_TYPE //apple_ref/c/intf/AR_MATRIX_CODE_TYPE //apple_ref/doc/anysymbol/AR_MATRIX_CODE_TYPE" machineGenerated="true" --><span class="type">AR_MATRIX_CODE_TYPE</span><!-- /a --> <!-- a logicalPath="//apple_ref/c/econst/matrixCodeType //apple_ref/c/data/matrixCodeType //apple_ref/c/clconst/matrixCodeType " machineGenerated="true" --><span class="var">matrixCodeType</span><!-- /a -->; 
@@ -4980,7 +5062,7 @@ the set level will not be logged by arLog().
 <div class="hd_copyright_and_timestamp">
 <p class="hd_copyright">&copy; 2015 Daqri, LLC.
  </p>
-<p class="hd_timestamp">Last Updated: Friday, July 31, 2015
+<p class="hd_timestamp">Last Updated: Tuesday, September 29, 2015
 </p>
 </div>
 </td>

@@ -543,6 +543,8 @@ typedef struct {
         An ARParamLT structure may be created from an ARParam structure via the
         call:
         <code>ARParamLT *paramLT = arParamLTCreate(&param, AR_PARAM_LT_DEFAULT_OFFSET);</code>
+        Note that the pointer is only copied, and so the ARParamLT structure must remain
+        valid until the ARHandle is disposed of by calling arDeleteHandle.
     @result     An ARHandle which should be passed to other functions which
 		deal with the operations of the ARToolKit tracker.
     @seealso arSetPixelFormat arSetPixelFormat
@@ -1118,7 +1120,7 @@ ARPattHandle  *arPattCreateHandle(void);
         columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
         
         Pass AR_PATT_SIZE1 for the same behaviour as arPattCreateHandle().
-    @param pattCountMax For any square template (pattern) markers, the maximum number of
+    @param patternCountMax For any square template (pattern) markers, the maximum number of
         markers that may be loaded for a single matching pass. Must be > 0.
  
         Pass AR_PATT_NUM_MAX for the same behaviour as arPattCreateHandle().
