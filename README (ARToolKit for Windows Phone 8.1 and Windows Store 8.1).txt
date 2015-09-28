@@ -18,16 +18,16 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries and utilities for Windows Phone 8.1 and Windows Store 8.1, version 5.3.
+This archive contains the ARToolKit libraries and utilities for Windows Phone 8.1 and Windows Store 8.1, version 5.3.1.
 
-ARToolKit version 5.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Microsoft's Windows Store or any other commercial marketplace, you must use your own package name, and not the org.artoolkit package name.
 
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-07-31
+    2015-09-30
 
 
 Requirements.
@@ -78,16 +78,16 @@ checkResolution.exe Data\camera_para.dat (change camera_para.dat to the correct 
 
 Release notes.
 --------------
-This release contains ARToolKit Professional v5.3 for Windows Phone 8.1 and Windows Store 8.1.
+This release contains ARToolKit Professional v5.3.1 for Windows Phone 8.1 and Windows Store 8.1.
 
-- This release is designed only to be used in third-party applications. No support for rendering of video backgrounds via DirectX is provided, and no sample applications are provided. Sample XAML apps will be provided in a future release.
+- This release introduces a new WinRT component to assist rendering of video backgrounds, libARgsubD3D, and set of native XAML application examples. The examples demonstrate basic square tracking, multimarker tracking, NFT tracking, rendering of UI controls into the AR scene. With these examples, ARToolKit becomes the first full-featured SDK for developing augmented reality apps on Microsoft's newest platform, and we hope that Windows developers are able to create some great apps with the support we've provided. Many thanks to Rene Schulte for his work on these examples, and DAQRI for sponsoring the development work.
 - A C++/CX-based WinRT Component is provided. Component binaries and metadata can be found in the appropriate "bin" subdirectory.
 - ARWrapper is provided both as a native WinRT DLL accessible via P/Invoke and a static library available for direct linking in a XAML C++ app.
 - libARvideo on Windows Phone 8.1 and Windows Store 8.1 uses a new video module, "WinMC" (based on Windows.Media.Capture) by default. The WinMF module (based on Windows Media Foundation) is also present but provides only support for video capture from file, not from a device camera.
 
 Please see the ChangeLog.txt for details of changes in this and earlier releases.
 
-The major change in ARToolKit version 5.3 is a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
+The major change in ARToolKit v5.3 was a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
 ARToolKit v5.2 was the first major release under an open source license in several years, and represented several years of commercial development of ARToolKit by ARToolworks during this time. It was a significant change to previous users of ARToolKit v2.x. Please see http://www.artoolkit.org/documentation/ARToolKit_feature_comparison for more information.
 
