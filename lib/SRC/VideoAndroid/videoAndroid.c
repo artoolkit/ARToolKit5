@@ -47,6 +47,7 @@
 #  include "videoAndroidNativeCapture.h"
 #  include "color_convert_common.h"
 #endif
+#include <dlfcn.h>
 
 struct _AR2VideoParamAndroidT {
     char               device_id[PROP_VALUE_MAX*3+2]; // From <sys/system_properties.h>. 3 properties plus separators.
@@ -498,6 +499,29 @@ static void cparamSeachCallback(CPARAM_SEARCH_STATE state, float progress, const
     }
     if (final) vid->cparamSearchCallback = vid->cparamSearchUserdata = NULL;
 }
+
+#if (__ANDROID_API__ >= 21) 
+// Android 'L' makes __system_property_get a non-global symbol.
+// Here we provide a stub which loads the symbol from libc via dlsym.
+typedef int (*PFN_SYSTEM_PROP_GET)(const char *, char *);
+int __system_property_get(const char* name, char* value)
+{
+    static PFN_SYSTEM_PROP_GET __real_system_property_get = NULL;
+    if (!__real_system_property_get) {
+        // libc.so should already be open, get a handle to it.
+        void *handle = dlopen("libc.so", RTLD_NOLOAD);
+        if (!handle) {
+            ARLOGe("Cannot dlopen libc.so: %s.\n", dlerror());
+        } else {
+            __real_system_property_get = (PFN_SYSTEM_PROP_GET)dlsym(handle, "__system_property_get");
+        }
+        if (!__real_system_property_get) {
+            ARLOGe("Cannot resolve __system_property_get(): %s.\n", dlerror());
+        }
+    }
+    return (*__real_system_property_get)(name, value);
+} 
+#endif // __ANDROID_API__ >= 21
 
 int ar2VideoGetCParamAsyncAndroid(AR2VideoParamAndroidT *vid, void (*callback)(const ARParam *, void *), void *userdata)
 {
