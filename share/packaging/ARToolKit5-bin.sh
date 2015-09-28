@@ -40,4 +40,6 @@ tar czvf "$PACKAGE" \
 	--exclude "*.pbxuser" \
 	--exclude ".DS_Store" \
 	--exclude "xcuserdata" \
+    --exclude "*.xccheckout" \
+    --exclude "*.xcscmblueprint" \
 

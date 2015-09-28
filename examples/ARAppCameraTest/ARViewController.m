@@ -158,7 +158,7 @@ const NSString *ARCameraPositionPresets[] = {
 }
 
 // On iOS 6.0 and later, we must explicitly report which orientations this view controller supports.
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
 }

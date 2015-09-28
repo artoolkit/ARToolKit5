@@ -6416,7 +6416,7 @@
 		78BB3DD408E482DA00D7CA2D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					4A3AB7051AEA008B007691DA = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -8120,6 +8120,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.simpleOSG;
 				PRODUCT_NAME = simpleOSG;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8147,6 +8148,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.simpleOSG;
 				PRODUCT_NAME = simpleOSG;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8206,6 +8208,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleLite;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8229,6 +8232,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleLite;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8380,6 +8384,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftSimple;
 				PRODUCT_NAME = nftSimple;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8407,6 +8412,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftSimple;
 				PRODUCT_NAME = nftSimple;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8430,6 +8436,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiTest;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8453,6 +8460,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiTest;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8597,6 +8605,7 @@
 					"-lplds4",
 					"-lstdc++.6",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleVRML;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8637,6 +8646,7 @@
 					"-lplds4",
 					"-lstdc++.6",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleVRML;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8660,6 +8670,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiWin;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8683,6 +8694,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiWin;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8900,6 +8912,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftBook;
 				PRODUCT_NAME = nftBook;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8927,6 +8940,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftBook;
 				PRODUCT_NAME = nftBook;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9043,6 +9057,7 @@
 					"-Wmost",
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
+					"-Wno-unused-local-typedefs",
 				);
 			};
 			name = Debug;
@@ -9066,6 +9081,7 @@
 					"-Wmost",
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
+					"-Wno-unused-local-typedefs",
 				);
 			};
 			name = Release;
@@ -9085,6 +9101,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleMovie;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9109,6 +9126,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleMovie;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9322,6 +9340,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiCube;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9345,6 +9364,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiCube;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9568,6 +9588,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = opticalStereo;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9595,6 +9616,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = opticalStereo;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9634,6 +9656,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
 				STRIPFLAGS = "-R $(SRCROOT)/Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt";
@@ -9670,6 +9693,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
 				STRIPFLAGS = "-R $(SRCROOT)/Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt";
@@ -9731,6 +9755,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = optical;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9758,6 +9783,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = optical;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9801,6 +9827,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = stereo;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9828,6 +9855,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = stereo;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -9855,6 +9883,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_TESTABILITY = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -10085,6 +10114,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleTest;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -10108,6 +10138,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleTest;
 				WARNING_CFLAGS = (
 					"-Wmost",

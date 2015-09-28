@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>nftBook</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.artoolkit.nftBook</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

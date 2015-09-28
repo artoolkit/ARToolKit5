@@ -80,6 +80,8 @@ extern void SetOrigin(short, short);
 extern void SetPort(GrafPtr);
 extern void SetPortClipRegion(CGrafPtr, RgnHandle);
 extern void SetPortVisibleRegion(CGrafPtr, RgnHandle);
+extern OSStatus QDBeginCGContext(CGrafPtr, CGContextRef*);
+extern OSStatus QDEndCGContext(CGrafPtr, CGContextRef*);
 
 enum {
     blackColor = 33,

@@ -40,6 +40,7 @@ xcuserdata/
 *.mode1*
 *.pbxuser
 *.xccheckout
+*.xcscmblueprint
 
 #### Other VCS
 .svn/

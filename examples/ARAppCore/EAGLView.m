@@ -107,6 +107,11 @@
 	return [CAEAGLLayer class];
 }
 
+- (id) initWithFrame:(CGRect)frame
+{
+    return [self initWithFrame:frame renderingAPI:kEAGLRenderingAPIOpenGLES1 pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];
+}
+
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api
 {
 	return [self initWithFrame:frame renderingAPI:api pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];

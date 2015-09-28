@@ -84,7 +84,7 @@ ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *p
     for( i = 0; i < num; i++ ) {
         get_buff(buf, 256, fp);
         if (sscanf(buf, 
-#ifdef __LP64__
+#if defined(__LP64__) && !defined(__APPLE__)
                         "%lu",
 #else
                         "%llu",

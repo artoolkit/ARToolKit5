@@ -54,4 +54,6 @@ tar czvf "../ARToolKit5-bin-${VERSION}-iOS.tar.gz" \
 	--exclude "*.pbxuser" \
 	--exclude ".DS_Store" \
 	--exclude "xcuserdata" \
+    --exclude "*.xccheckout" \
+    --exclude "*.xcscmblueprint" \
 
