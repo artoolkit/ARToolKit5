@@ -26,6 +26,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{c22dabf8-a7aa-4e2a-8d0e-3748a9c76ba5}</ProjectGuid>
     <ProjectName>ARToolKitComponent</ProjectName>
@@ -94,8 +97,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-x86\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-x86\Debug\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -106,8 +109,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <GenerateManifest>false</GenerateManifest>
-    <TargetName>$(ProjectName)d</TargetName>
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-arm\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-arm\Debug\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -117,8 +120,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <GenerateManifest>false</GenerateManifest>
-    <TargetName>$(ProjectName)d</TargetName>
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-x64\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)..\..\..\bin-winrt-w8_1-x64\Debug\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,8 +145,8 @@
       <AdditionalDependencies>ARWrapper-staticd.lib;ARd.lib;ARgsub_es2d.lib;ARICPd.lib;ARMultid.lib;KPMd.lib;AR2d.lib;ARUtild.lib;ARvideod.lib;libjpeg.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\lib\winrt-w8_1-x86\;$(ProjectDir)..\..\..\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-x86\$(TargetName).lib</ImportLibrary>
-      <WindowsMetadataFile>$(OutDir)$(RootNamespace)d.winmd</WindowsMetadataFile>
+      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-x86\Debug\$(TargetName).lib</ImportLibrary>
+      <WindowsMetadataFile>$(OutDir)$(RootNamespace).winmd</WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -181,8 +184,8 @@
       <AdditionalDependencies>ARWrapper-staticd.lib;ARd.lib;ARgsub_es2d.lib;ARICPd.lib;ARMultid.lib;KPMd.lib;AR2d.lib;ARUtild.lib;ARvideod.lib;libjpeg.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\lib\winrt-w8_1-arm\;$(ProjectDir)..\..\..\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-arm\$(TargetName).lib</ImportLibrary>
-      <WindowsMetadataFile>$(OutDir)$(RootNamespace)d.winmd</WindowsMetadataFile>
+      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-arm\Debug\$(TargetName).lib</ImportLibrary>
+      <WindowsMetadataFile>$(OutDir)$(RootNamespace).winmd</WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -220,8 +223,8 @@
       <AdditionalDependencies>ARWrapper-staticd.lib;ARd.lib;ARgsub_es2d.lib;ARICPd.lib;ARMultid.lib;KPMd.lib;AR2d.lib;ARUtild.lib;ARvideod.lib;libjpeg.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\lib\winrt-w8_1-x64\;$(ProjectDir)..\..\..\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-x64\$(TargetName).lib</ImportLibrary>
-      <WindowsMetadataFile>$(OutDir)$(RootNamespace)d.winmd</WindowsMetadataFile>
+      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-w8_1-x64\Debug\$(TargetName).lib</ImportLibrary>
+      <WindowsMetadataFile>$(OutDir)$(RootNamespace).winmd</WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

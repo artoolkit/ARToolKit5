@@ -86,7 +86,7 @@ const char* GetTimeStamp()
     String^ TS = "TS:" + CInstance->HourAsPaddedString(2) + "h:" + CInstance->MinuteAsPaddedString(2) + "m:" +
                      CInstance->SecondAsPaddedString(2) + "s:" +
                      CInstance->PeriodAsString() + ":" + ref new String(Buf) + "ms";
-    return(ps_to_ansicstr(TS));
+    return(ps_to_ansis(TS).c_str());
 }
 
 static const char *locationNameFromEnum(const Windows::Devices::Enumeration::Panel location)
@@ -554,7 +554,7 @@ void WindowsMediaCapture::showSettings()
 //                                 Windows::Media::Capture::MediaCaptureFailedEventArgs^ currentFailure)
 //{
 //    String ^message = "Fatal error: " + currentFailure->Message;
-//    ARLOGe(ps_to_ansicstr(message));
+//    ARLOGe(ps_to_ansis(message).c_str());
 //    //create_task(Dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
 //    //                                 ref new Windows::UI::Core::DispatchedHandler([this, message]()
 //    //                                                                              {

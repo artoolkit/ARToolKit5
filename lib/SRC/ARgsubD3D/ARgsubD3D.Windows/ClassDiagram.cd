@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ARgsubD3D::ArD3dPanel">
+    <Position X="3.25" Y="0.5" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAAAAAE4AgWBFBgEB4ABAAAAABAAIBIBACBAAAAIAAA=</HashCode>
+      <FileName>..\..\..\lib\SRC\ARgsubD3D\ARgsubD3D.Shared\ArD3dPanel.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Context" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ARgsubD3D::ArD3dImage">
+    <Position X="8" Y="6.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACACACAACAAAIAQAAABAAAAEAAAAAAAAIAAA=</HashCode>
+      <FileName>..\..\..\lib\SRC\ARgsubD3D\ARgsubD3D.Shared\ArD3dImage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARgsubD3D::ArD3dDeviceContext">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAIgAAAAAIAAAEEAEIEAAAAABAAAAAAEAIAAAAAAIA=</HashCode>
+      <FileName>..\..\..\lib\SRC\ARgsubD3D\ARgsubD3D.Shared\ArD3dDeviceContext.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARgsubD3D::ArD3dCube">
+    <Position X="8" Y="2.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>QAAAAAAYCAAAAAEAQCIAAQAg0AEAAlAAAAJIAAAAAAA=</HashCode>
+      <FileName>..\..\..\lib\SRC\ARgsubD3D\ARgsubD3D.Shared\ArD3dCube.h</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="ARgsubD3D::ArD3dIObject">
+    <Position X="8" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>..\..\..\lib\SRC\ARgsubD3D\ARgsubD3D.Shared\ArD3dIObject.h</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

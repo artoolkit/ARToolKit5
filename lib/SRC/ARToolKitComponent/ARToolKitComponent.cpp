@@ -40,6 +40,8 @@
 #include "windows.h"
 
 #include <ARWrapper/ARToolKitWrapperExportedAPI.h>
+#include <AR/config.h>
+#include <AR/ar.h>
 
 using namespace ARToolKitComponent;
 using namespace Platform;
@@ -88,12 +90,6 @@ static Platform::String ^ansicstr_to_ps(const char *text)
 	return ansis_to_ps(std::string(text));
 }
 
-// Convert a Platform::String to an ANSI C string.
-static const char *ps_to_ansicstr(Platform::String^ ps)
-{	
-	return ps_to_ansis(ps).c_str();
-}
-
 // Convert a UTF16 std::wstring to a UTF8 std::string.
 static std::string utf16ws_to_utf8s(const std::wstring &wstr)
 {
@@ -132,12 +128,6 @@ static Platform::String ^utf8cstr_to_ps(const char *text)
 	return utf8s_to_ps(std::string(text));
 }
 
-// Convert a Platform::String to a UTF8 C string.
-static const char *ps_to_utf8cstr(Platform::String^ ps)
-{	
-	return ps_to_utf8s(ps).c_str();
-}
-
 static ARToolKitComponent::ATOOLKITCOMPONENT_DELEGATE_LOG^ logCallback;
 void CALL_CONV ARToolKitComponent_log(const char *msg)
 {
@@ -156,6 +146,10 @@ ARWrapper::ARWrapper()
 
 void ARWrapper::arwRegisterLogCallback(ATOOLKITCOMPONENT_DELEGATE_LOG^ callback)
 {
+#ifdef _DEBUG
+	arLogLevel = AR_LOG_LEVEL_DEBUG;
+#endif
+
 	logCallback = callback;
 	if (callback == nullptr) {
 		::arwRegisterLogCallback(NULL);
@@ -193,8 +187,8 @@ int ARWrapper::arwGetError()
 
 bool ARWrapper::arwStartRunning(Platform::String^ vconf, Platform::String^ cparaName, float nearPlane, float farPlane)
 {
-	const char *vconf_c = ps_to_ansicstr(vconf);
-	const char *cparaName_c = ps_to_ansicstr(cparaName);
+	const char *vconf_c = ps_to_ansis(vconf).c_str();
+	const char *cparaName_c = ps_to_ansis(cparaName).c_str();
 
 	return ::arwStartRunning(vconf_c, cparaName_c, nearPlane, farPlane);
 }
@@ -203,7 +197,8 @@ bool ARWrapper::arwStartRunningB(Platform::String^ vconf, const Platform::Array<
 {
 	if (cparaBuff == nullptr) return false;
 
-	const char *vconf_c = ps_to_ansicstr(vconf);
+	auto str = ps_to_ansis(vconf);
+	const char *vconf_c = str.c_str();
 	unsigned int cparaBuffLen = cparaBuff->Length;
 	char *cparaBuff_c = (char *)malloc(cparaBuffLen);
 	for (unsigned int i = 0; i < cparaBuffLen; i++) cparaBuff_c[i] = cparaBuff[i];
@@ -217,11 +212,11 @@ bool ARWrapper::arwStartRunningB(Platform::String^ vconf, const Platform::Array<
 
 bool ARWrapper::arwStartRunningStereo(Platform::String^ vconfL, Platform::String^ cparaNameL, Platform::String^ vconfR, Platform::String^ cparaNameR, Platform::String^ transL2RName, float nearPlane, float farPlane)
 {
-	const char *vconfL_c = ps_to_ansicstr(vconfL);
-	const char *cparaNameL_c = ps_to_ansicstr(cparaNameL);
-	const char *vconfR_c = ps_to_ansicstr(vconfR);
-	const char *cparaNameR_c = ps_to_ansicstr(cparaNameR);
-	const char *transL2RName_c = ps_to_ansicstr(transL2RName);
+	const char *vconfL_c = ps_to_ansis(vconfL).c_str();
+	const char *cparaNameL_c = ps_to_ansis(cparaNameL).c_str();
+	const char *vconfR_c = ps_to_ansis(vconfR).c_str();
+	const char *cparaNameR_c = ps_to_ansis(cparaNameR).c_str();
+	const char *transL2RName_c = ps_to_ansis(transL2RName).c_str();
 	return ::arwStartRunningStereo(vconfL_c, cparaNameL_c, vconfR_c, cparaNameR_c, transL2RName_c, nearPlane, farPlane);
 }
 
@@ -229,8 +224,8 @@ bool ARWrapper::arwStartRunningStereoB(Platform::String^ vconfL, const Platform:
 {
 	if (cparaBuffL == nullptr || cparaBuffR == nullptr) return false;
 
-	const char *vconfL_c = ps_to_ansicstr(vconfL);
-	const char *vconfR_c = ps_to_ansicstr(vconfR);
+	const char *vconfL_c = ps_to_ansis(vconfL).c_str();
+	const char *vconfR_c = ps_to_ansis(vconfR).c_str();
 	unsigned int cparaBuffLenL = cparaBuffL->Length;
 	unsigned int cparaBuffLenR = cparaBuffR->Length;
 	unsigned int transL2RBuffLen = transL2RBuff->Length;
@@ -376,14 +371,14 @@ int  ARWrapper::arwGetVideoThreshold()
 	return ::arwGetVideoThreshold();
 }
 
-void ARWrapper::arwSetVideoThresholdMode(int mode)
+void ARWrapper::arwSetVideoThresholdMode(ArThresholdMode mode)
 {
-	::arwSetVideoThresholdMode(mode);
+	::arwSetVideoThresholdMode((int)mode);
 }
 
-int  ARWrapper::arwGetVideoThresholdMode()
+ArThresholdMode  ARWrapper::arwGetVideoThresholdMode()
 {
-	return ::arwGetVideoThresholdMode();
+	return (ArThresholdMode)::arwGetVideoThresholdMode();
 }
 
 void ARWrapper::arwSetLabelingMode(int mode)
@@ -396,14 +391,14 @@ int  ARWrapper::arwGetLabelingMode()
 	return ::arwGetLabelingMode();
 }
 
-void ARWrapper::arwSetPatternDetectionMode(int mode)
+void ARWrapper::arwSetPatternDetectionMode(ArPatternDetectionMode mode)
 {
-	::arwSetPatternDetectionMode(mode);
+	::arwSetPatternDetectionMode((int)mode);
 }
 
-int  ARWrapper::arwGetPatternDetectionMode()
+ArPatternDetectionMode ARWrapper::arwGetPatternDetectionMode()
 {
-	return ::arwGetPatternDetectionMode();
+	return (ArPatternDetectionMode)::arwGetPatternDetectionMode();
 }
 
 void ARWrapper::arwSetBorderSize(float size)
@@ -426,14 +421,14 @@ int  ARWrapper::arwGetMatrixCodeType()
 	return ::arwGetMatrixCodeType();
 }
 
-void ARWrapper::arwSetImageProcMode(int mode)
+void ARWrapper::arwSetImageProcMode(ArImageProcMode mode)
 {
-	::arwSetImageProcMode(mode);
+	::arwSetImageProcMode((int)mode);
 }
 
-int  ARWrapper::arwGetImageProcMode()
+ArImageProcMode  ARWrapper::arwGetImageProcMode()
 {
-	return ::arwGetImageProcMode();
+	return (ArImageProcMode)::arwGetImageProcMode();
 }
 
 void ARWrapper::arwSetNFTMultiMode(bool on)
@@ -448,8 +443,8 @@ bool ARWrapper::arwGetNFTMultiMode()
 
 int ARWrapper::arwAddMarker(Platform::String^ cfg)
 {
-	const char *cfg_c = ps_to_ansicstr(cfg);
-	return ::arwAddMarker(cfg_c);
+	auto str = ps_to_ansis(cfg);
+	return ::arwAddMarker(str.c_str());
 }
 
 bool ARWrapper::arwRemoveMarker(int markerUID)
@@ -500,34 +495,34 @@ bool ARWrapper::arwGetMarkerPatternImage(int markerUID, int patternID, Platform:
 	return ::arwGetMarkerPatternImage(markerUID, patternID, (::Color *)(buffer->Data));
 }
 
-void ARWrapper::arwSetMarkerOptionBool(int markerUID, int option, bool value)
+void ARWrapper::arwSetMarkerOptionBool(int markerUID, ArMarkerOption option, bool value)
 {
-	::arwSetMarkerOptionBool(markerUID, option, value);
+	::arwSetMarkerOptionBool(markerUID, (int)option, value);
 }
 
-void ARWrapper::arwSetMarkerOptionInt(int markerUID, int option, int value)
+void ARWrapper::arwSetMarkerOptionInt(int markerUID, ArMarkerOption option, int value)
 {
-	::arwSetMarkerOptionInt(markerUID, option, value);
+	::arwSetMarkerOptionInt(markerUID, (int)option, value);
 }
 
-void ARWrapper::arwSetMarkerOptionFloat(int markerUID, int option, float value)
+void ARWrapper::arwSetMarkerOptionFloat(int markerUID, ArMarkerOption option, float value)
 {
-	::arwSetMarkerOptionFloat(markerUID, option, value);
+	::arwSetMarkerOptionFloat(markerUID, (int)option, value);
 }
 
-bool ARWrapper::arwGetMarkerOptionBool(int markerUID, int option)
+bool ARWrapper::arwGetMarkerOptionBool(int markerUID, ArMarkerOption option)
 {
-	return ::arwGetMarkerOptionBool(markerUID, option);
+	return ::arwGetMarkerOptionBool(markerUID, (int)option);
 }
 
-int ARWrapper::arwGetMarkerOptionInt(int markerUID, int option)
+int ARWrapper::arwGetMarkerOptionInt(int markerUID, ArMarkerOption option)
 {
-	return ::arwGetMarkerOptionInt(markerUID, option);
+	return ::arwGetMarkerOptionInt(markerUID, (int)option);
 }
 
-float ARWrapper::arwGetMarkerOptionFloat(int markerUID, int option)
+float ARWrapper::arwGetMarkerOptionFloat(int markerUID, ArMarkerOption option)
 {
-	return ::arwGetMarkerOptionFloat(markerUID, option);
+	return ::arwGetMarkerOptionFloat(markerUID, (int)option);
 }
 
 bool ARWrapper::arwLoadOpticalParams(Platform::String^ optical_param_name, const Platform::Array<uint8>^ optical_param_buff, float *fovy_p, float *aspect_p, Platform::WriteOnlyArray<float>^ m16, Platform::WriteOnlyArray<float>^ p16)
@@ -535,7 +530,7 @@ bool ARWrapper::arwLoadOpticalParams(Platform::String^ optical_param_name, const
 	if ((optical_param_name == nullptr && optical_param_buff == nullptr) || fovy_p == nullptr || aspect_p == nullptr || m16->Length != 16 || p16->Length != 16) return false;
 
 	if (optical_param_name != nullptr) {
-		const char *optical_param_name_c = ps_to_ansicstr(optical_param_name);
+		const char *optical_param_name_c = ps_to_ansis(optical_param_name).c_str();
 		return ::arwLoadOpticalParams(optical_param_name_c, NULL, 0, fovy_p, aspect_p, m16->Data, p16->Data);
 	} else {
 		unsigned int optical_param_buffLen = optical_param_buff->Length;

@@ -1,6 +1,6 @@
 [Setup]
 AppName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1"
-AppVerName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1 v5.3"
+AppVerName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1 v5.3.1"
 AppVersion=5.3
 AppPublisher="Daqri, LLC."
 AppPublisherURL=http://www.artoolkit.org/
@@ -12,7 +12,7 @@ InfoBeforeFile=README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).tx
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit for Windows Phone 8.1 and Windows 8.1 v5.3 Setup (bin-win64-vs120)"
+OutputBaseFilename="ARToolKit for Windows Phone 8.1 and Windows 8.1 v5.3.1 Setup (bin-win64-vs120)"
 OutputDir=..
 ChangesEnvironment=yes
 
@@ -166,6 +166,7 @@ Source: "lib\SRC\ARosg\*"; Excludes: "Makefile.in"; Components: dev and src; Des
 Source: "lib\SRC\ARWrapper\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARWrapper"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Eden\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Eden"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Gl\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Gl"; Flags: recursesubdirs ignoreversion
+Source: "lib\SRC\ARgsubD3D\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: dev and src; DestDir: "{app}\lib\SRC\ARgsubD3D"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Video\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Video"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\VideoDummy\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\VideoDummy"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\VideoImage\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\VideoImage"; Flags: recursesubdirs ignoreversion
@@ -198,7 +199,7 @@ Source: "lib\winrt-w8_1-arm\libjpeg.lib"; Components: dev and src; DestDir: "{ap
 Source: "lib\winrt-w8_1-x86\libjpeg.lib"; Components: dev and src; DestDir: "{app}\lib\winrt-w8_1-x86"; Flags: ignoreversion
 Source: "lib\winrt-w8_1-x64\libjpeg.lib"; Components: dev and src; DestDir: "{app}\lib\winrt-w8_1-x64"; Flags: ignoreversion
 Source: "Configure-winrt.*"; Components: dev and src; DestDir: "{app}"; Flags: ignoreversion
-Source: "VisualStudio\vs120-winrt\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf,.svn\*"; Components: dev and src; DestDir: "{app}\VisualStudio\vs120-winrt"; Flags: recursesubdirs ignoreversion
+Source: "VisualStudio\vs120-winrt\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: dev and src; DestDir: "{app}\VisualStudio\vs120-winrt"; Flags: recursesubdirs ignoreversion
 Source: "share\packaging\ARToolKit5-bin-winrt-vs120*"; Components: dev and src; DestDir: "{app}\share\packaging"; Flags: ignoreversion
 ;Source: "share\*"; Excludes: "artoolkit5-config.in,artoolkit5-setenv,artoolkit5-unsetenv"; Components: dev and src; DestDir: "{app}\share"; Flags: ignoreversion
 
@@ -214,11 +215,26 @@ Source: "bin\Data\patt.calib"; Components: utils; DestDir: "{app}\bin\Data"; Fla
 ; Utilities, source
 
 ; Examples
-;Source: "bin-winrt-wp8_1-arm\simpleARApp.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
-;Source: "bin-winrt-wp8_1-x86\simpleARApp.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
-;Source: "bin-winrt-w8_1-arm\simpleARApp.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
-;Source: "bin-winrt-w8_1-x86\simpleARApp.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
-;Source: "bin-winrt-w8_1-x64\simpleARApp.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-arm\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-x86\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-arm\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x86\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x64\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-arm\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-x86\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-arm\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x86\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x64\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-arm\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-x86\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-arm\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x86\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x64\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-arm\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-wp8_1-x86\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-arm\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x86\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
+Source: "bin-winrt-w8_1-x64\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
 
 ;Source: "bin\Data\cparaL.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\cparaR.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
@@ -235,7 +251,11 @@ Source: "bin\Data2\*"; Components: examples; DestDir: "{app}\bin\Data2"; Flags: 
 Source: "bin\DataNFT\*"; Components: examples; DestDir: "{app}\bin\DataNFT"; Flags: recursesubdirs ignoreversion
 
 ; Examples, source
-;Source: "examples\simpleARApp-WP8_1\*"; Excludes: "Makefile.in,*-Info.plist,obj\*"; Components: examples and src; DestDir: "{app}\examples\simpleARApp-WP8_1"; Flags: recursesubdirs ignoreversion
+Source: "examples\CommonWinRT\*"; Components: examples and src; DestDir: "{app}\examples\CommonWinRT"; Flags: recursesubdirs ignoreversion
+Source: "examples\simpleLiteWinRT\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: examples and src; DestDir: "{app}\examples\simpleLiteWinRT"; Flags: recursesubdirs ignoreversion
+Source: "examples\nftSimpleWinRT\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: examples and src; DestDir: "{app}\examples\nftSimpleWinRT"; Flags: recursesubdirs ignoreversion
+Source: "examples\multiCubeWinRT\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: examples and src; DestDir: "{app}\examples\multiCubeWinRT"; Flags: recursesubdirs ignoreversion
+Source: "examples\uiControlsWinRT\*"; Excludes: "Generated Files\*,Debug*\*,Release*\*,ARM\*,Win32\*,x64\*,ipch\*,*.ncb,*.suo,*.user,*.opensdf,*.sdf"; Components: examples and src; DestDir: "{app}\examples\uiControlsWinRT"; Flags: recursesubdirs ignoreversion
 
 ; Documentation
 Source: "doc\*"; Components: docs; DestDir: "{app}\doc"; Flags: recursesubdirs ignoreversion

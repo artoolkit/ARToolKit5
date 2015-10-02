@@ -69,8 +69,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)d</TargetName>
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-x86\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-x86\Debug\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -80,8 +80,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <TargetName>$(ProjectName)d</TargetName>
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-arm\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-arm\Debug\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -105,10 +105,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-wp8_1-x86\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-wp8_1-x86\Debug\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>ARWrapper-staticd.lib;ARd.lib;ARgsub_es2d.lib;ARICPd.lib;ARMultid.lib;KPMd.lib;AR2d.lib;ARUtild.lib;ARvideod.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\lib\winrt-wp8_1-x86\;$(ProjectDir)..\..\..\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <WindowsMetadataFile>$(OutDir)$(RootNamespace)d.winmd</WindowsMetadataFile>
+      <WindowsMetadataFile>$(OutDir)$(RootNamespace).winmd</WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -144,10 +144,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-wp8_1-arm\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(ProjectDir)..\..\..\lib\winrt-wp8_1-arm\Debug\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>ARWrapper-staticd.lib;ARd.lib;ARgsub_es2d.lib;ARICPd.lib;ARMultid.lib;KPMd.lib;AR2d.lib;ARUtild.lib;ARvideod.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\lib\winrt-wp8_1-arm\;$(ProjectDir)..\..\..\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <WindowsMetadataFile>$(OutDir)$(RootNamespace)d.winmd</WindowsMetadataFile>
+      <WindowsMetadataFile>$(OutDir)$(RootNamespace).winmd</WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">

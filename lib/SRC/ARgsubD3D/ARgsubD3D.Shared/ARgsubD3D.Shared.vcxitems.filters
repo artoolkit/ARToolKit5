@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ShaderConstantsDefinitons.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArD3dCube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArD3dPanel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArD3dDeviceContext.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArD3dImage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArD3dIObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Helper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ArD3dCube.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ArD3dPanel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ArD3dDeviceContext.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ArD3dImage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{312354ae-a578-445d-b778-a36b058905d9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="$(MSBuildThisFileDirectory)SimplePixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="$(MSBuildThisFileDirectory)SimpleVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="$(MSBuildThisFileDirectory)SolidColorPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

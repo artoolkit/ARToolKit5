@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmFopen.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmHandle.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmMatching.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmRefDataSet.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmResult.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmUtil.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\DoG_scale_invariant_detector.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\gaussian_scale_space_pyramid.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\gradients.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\harris.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\orientation_assignment.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\pyramid.cpp">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\freak.cpp">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\hough_similarity_voting.cpp">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\facade\visual_database_facade.cpp">
+      <Filter>FreakMatcher\facade</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\date_time.cpp">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\image.cpp">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\logger.cpp">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\timers.cpp">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\KPM\kpm.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\KPM\kpmType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmFopen.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\DoG_scale_invariant_detector.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\gaussian_scale_space_pyramid.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\gradients.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\harris.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\harris-inline.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\interpolate.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\orientation_assignment.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\pyramid.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\detectors\pyramid-inline.h">
+      <Filter>FreakMatcher\detectors</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\binary_hierarchical_clustering.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\feature_matcher.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\feature_matcher-inline.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\feature_point.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\feature_store.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\freak.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\freak84-inline.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\hough_similarity_voting.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\keyframe.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\kmedoids.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\matcher_types.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\visual_database.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\visual_database_types.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\matchers\visual_database-inline.h">
+      <Filter>FreakMatcher\matchers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\facade\visual_database_facade.h">
+      <Filter>FreakMatcher\facade</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\date_time.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\error.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\exception.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\image.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\image_utils.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\logger.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\framework\timers.h">
+      <Filter>FreakMatcher\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\homography_estimation\homography_solver.h">
+      <Filter>FreakMatcher\homography_estimation</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\homography_estimation\robust_homography.h">
+      <Filter>FreakMatcher\homography_estimation</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\cholesky.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\cholesky_linear_solvers.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\geometry.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\hamming.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\homography.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\indexing.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\linear_algebra.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\linear_solvers.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\math_utils.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\matrix.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\polynomial.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\quaternion.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\rand.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\math\robustifiers.h">
+      <Filter>FreakMatcher\math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\utils\feature_drawing.h">
+      <Filter>FreakMatcher\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\utils\partial_sort.h">
+      <Filter>FreakMatcher\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\utils\point.h">
+      <Filter>FreakMatcher\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\kpmPrivate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="FreakMatcher">
+      <UniqueIdentifier>{d429ba12-8f07-4d62-9ef4-87f7f6ae5151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\detectors">
+      <UniqueIdentifier>{b4333f18-9e1b-4f8d-b432-e1a7c1b22565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\matchers">
+      <UniqueIdentifier>{74752a20-53e1-49ec-8bd8-530184c64ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\facade">
+      <UniqueIdentifier>{dc19911a-291d-4dd3-aee9-968b690677ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\framework">
+      <UniqueIdentifier>{af0f82be-fd63-4646-92b0-631081220b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\Eigen">
+      <UniqueIdentifier>{1a0fa8ee-0262-4f77-966b-6d40aff72581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\Eigen\src">
+      <UniqueIdentifier>{fca8f9d3-14ac-4cb2-85bf-eaf38ecebe9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\homography_estimation">
+      <UniqueIdentifier>{76bd2489-b843-4e63-8b1a-f1d96bfd31e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\math">
+      <UniqueIdentifier>{49cd5d86-3686-4fee-8b9f-7b4d75e7b302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\unsupported">
+      <UniqueIdentifier>{14863cf2-309c-4ef9-a99e-02030c1b2e00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\utils">
+      <UniqueIdentifier>{4254197a-0a3f-4137-bdb2-e200dc9a6239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FreakMatcher\unsupported\Eigen">
+      <UniqueIdentifier>{b2185e10-f4c3-4170-aa08-7317927888f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Array">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Cholesky">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Core">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Dense">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Eigen">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Eigen2Support">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Eigenvalues">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Geometry">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Householder">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Jacobi">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\LeastSquares">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\LU">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\QR">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\QtAlignedMalloc">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\Sparse">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\StdDeque">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\StdList">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\StdVector">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\SVD">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\KPM\FreakMatcher\Eigen\CMakeLists.txt">
+      <Filter>FreakMatcher\Eigen</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

@@ -47,6 +47,53 @@ namespace ARToolKitComponent
 {
 	typedef float Color;		  // Actually passed in groups of 4 floats, with R lowest in memory, then G, then B, then A.
 	typedef unsigned int Color32; // On a little-endian system, R occupies the lowest 8 bits, then G, then B, then A the highest 8 bits.
+	typedef unsigned char Color8; // Actually passed in groups of 4 bytes, with R lowest in memory, then G, then B, then A.
+
+	public enum class ArThresholdMode
+	{
+		Manual = 0,
+		AutoMedian,
+		AutoOtsu,
+		AutoAdaptive
+	};
+
+	public enum class ArMarkerOption
+	{
+		Filtered = 1,                        ///< bool, true for filtering enabled.
+		FilterSampleRate = 2,                ///< float, sample rate for filter calculations.
+		FilterCutoffFreq = 3,                ///< float, cutoff frequency of filter.
+		SquareUseContPoseEstimation = 4,     ///< bool, true to use continuous pose estimate.
+		SquareConfidence = 5,                ///< float, confidence value of most recent marker match
+		SquareConfidenceCutoff = 6,          ///< float, minimum allowable confidence value used in marker matching.
+		NftScale = 7                         ///< float, scale factor applied to nft marker size.
+	};
+
+	//When the image processing mode is AR_IMAGE_PROC_FRAME_IMAGE,
+	//ARToolKit processes all pixels in each incoming image
+	//to locate markers.When the mode is AR_IMAGE_PROC_FIELD_IMAGE,
+	//ARToolKit processes pixels in only every second pixel row and
+	//column.This is useful both for handling images from interlaced
+	//video sources(where alternate lines are assembled from alternate
+	//fields and thus have one field time - difference, resulting in a
+	//"comb" effect) such as Digital Video cameras.
+	//The effective reduction by 75 % in the pixels processed also
+	//has utility in accelerating tracking by effectively reducing
+	//the image size to one quarter size, at the cost of pose accuraccy.
+	public enum class ArImageProcMode
+	{
+		FrameImage = 0,
+		FieldImage
+	};
+
+	public enum class ArPatternDetectionMode
+	{
+		TemplateMatchingColor = 0,
+		TemplateMatchingMono = 1,
+		MatrixCodeDetection = 2,
+		TemplateMatchingColorAndMatrix = 3,
+		TemplateMatchingMonoAndMatrix = 4
+	};
+
 
 	public delegate void ATOOLKITCOMPONENT_DELEGATE_LOG(Platform::String^ message);
 
@@ -96,18 +143,18 @@ namespace ARToolKitComponent
 		
 		void arwSetVideoThreshold(int threshold);
 		int  arwGetVideoThreshold();
-		void arwSetVideoThresholdMode(int mode);
-		int  arwGetVideoThresholdMode();
+		void arwSetVideoThresholdMode(ArThresholdMode mode);
+		ArThresholdMode  arwGetVideoThresholdMode();
 		void arwSetLabelingMode(int mode);
 		int  arwGetLabelingMode();
-		void arwSetPatternDetectionMode(int mode);
-		int  arwGetPatternDetectionMode();
+		void arwSetPatternDetectionMode(ArPatternDetectionMode mode);
+		ArPatternDetectionMode arwGetPatternDetectionMode();
 		void arwSetBorderSize(float size);
 		float arwGetBorderSize();
 		void arwSetMatrixCodeType(int type);
 		int  arwGetMatrixCodeType();
-		void arwSetImageProcMode(int mode);
-		int  arwGetImageProcMode();
+		void arwSetImageProcMode(ArImageProcMode mode);
+		ArImageProcMode  arwGetImageProcMode();
 		void arwSetNFTMultiMode(bool on);
 		bool arwGetNFTMultiMode();
 
@@ -124,12 +171,12 @@ namespace ARToolKitComponent
 		int arwGetMarkerPatternCount(int markerUID);
 		bool arwGetMarkerPatternConfig(int markerUID, int patternID, Platform::WriteOnlyArray<float32>^ matrix16, float *width, float *height, int *imageSizeX, int *imageSizeY);
 		bool arwGetMarkerPatternImage(int markerUID, int patternID, Platform::WriteOnlyArray<Color>^ buffer);
-		void arwSetMarkerOptionBool(int markerUID, int option, bool value);
-		void arwSetMarkerOptionInt(int markerUID, int option, int value);
-		void arwSetMarkerOptionFloat(int markerUID, int option, float value);
-		bool arwGetMarkerOptionBool(int markerUID, int option);
-		int arwGetMarkerOptionInt(int markerUID, int option);
-		float arwGetMarkerOptionFloat(int markerUID, int option);
+		void arwSetMarkerOptionBool(int markerUID, ArMarkerOption option, bool value);
+		void arwSetMarkerOptionInt(int markerUID, ArMarkerOption option, int value);
+		void arwSetMarkerOptionFloat(int markerUID, ArMarkerOption option, float value);
+		bool arwGetMarkerOptionBool(int markerUID, ArMarkerOption option);
+		int arwGetMarkerOptionInt(int markerUID, ArMarkerOption option);
+		float arwGetMarkerOptionFloat(int markerUID, ArMarkerOption option);
 
 		// ----------------------------------------------------------------------------------------------------
 		//  Utility
