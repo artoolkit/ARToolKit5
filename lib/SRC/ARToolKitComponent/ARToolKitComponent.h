@@ -180,7 +180,7 @@ namespace ARToolKitComponent
 
 		// ----------------------------------------------------------------------------------------------------
 		//  Utility
-		 // ----------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------
 		bool arwLoadOpticalParams(Platform::String^ optical_param_name, const Platform::Array<uint8>^ optical_param_buff, float *fovy_p, float *aspect_p, Platform::WriteOnlyArray<float32>^ m16, Platform::WriteOnlyArray<float32>^ p16);
 
 	private:

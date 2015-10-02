@@ -86,7 +86,7 @@ static Platform::String ^ansis_to_ps(std::string s)
 
 // Convert an ANSI C string to a Platform::String.
 static Platform::String ^ansicstr_to_ps(const char *text)
-{	
+{
 	return ansis_to_ps(std::string(text));
 }
 
@@ -124,7 +124,7 @@ static Platform::String ^utf8s_to_ps(std::string s)
 
 // Convert a UTF8 C string to a Platform::String.
 static Platform::String ^utf8cstr_to_ps(const char *text)
-{	
+{
 	return utf8s_to_ps(std::string(text));
 }
 
@@ -274,7 +274,7 @@ bool ARWrapper::arwGetProjectionMatrix(Platform::WriteOnlyArray<float>^ p)
 	return ::arwGetProjectionMatrix(p->Data);
 }
 
-bool ARWrapper::arwGetProjectionMatrixStereo(Platform::WriteOnlyArray<float>^ p16L,Platform::WriteOnlyArray<float>^ p16R)
+bool ARWrapper::arwGetProjectionMatrixStereo(Platform::WriteOnlyArray<float>^ p16L, Platform::WriteOnlyArray<float>^ p16R)
 {
 	if (p16L->Length != 16 || p16R->Length != 16) return false;
 
@@ -469,7 +469,7 @@ bool ARWrapper::arwQueryMarkerTransformation(int markerUID, Platform::WriteOnlyA
 	return ::arwQueryMarkerTransformation(markerUID, matrix16->Data);
 }
 
-bool ARWrapper::arwQueryMarkerTransformationStereo(int markerUID, Platform:: WriteOnlyArray<float>^ matrix16L, Platform::WriteOnlyArray<float>^ matrix16R)
+bool ARWrapper::arwQueryMarkerTransformationStereo(int markerUID, Platform::WriteOnlyArray<float>^ matrix16L, Platform::WriteOnlyArray<float>^ matrix16R)
 {
 	if (matrix16L->Length != 16 || matrix16R->Length != 16) return false;
 

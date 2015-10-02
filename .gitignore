@@ -184,3 +184,33 @@ VisualStudio/vs120-winrt/**/x64/
 bin/libopencv_*.dylib
 bin/libpng15*.dylib
 
+# ARgsubD3D component
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/Win32/Debug/*
+lib/SRC/ARgsubD3D/ARgsubD3D.WindowsPhone/Win32/Debug/*
+lib/SRC/ARgsubD3D/ARgsubD3D.WindowsPhone/ARM/Debug/*
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/ARM/Debug/*
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/x64/Debug/*
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/Win32/Release/*
+lib/SRC/ARgsubD3D/ARgsubD3D.WindowsPhone/Win32/Release/*
+lib/SRC/ARgsubD3D/ARgsubD3D.WindowsPhone/ARM/Release/*
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/ARM/Release/*
+lib/SRC/ARgsubD3D/ARgsubD3D.Windows/x64/Release/*
+
+# WinRT samples
+examples/simpleLiteWinRT/simpleLiteWinRT.Windows/bin/*
+examples/simpleLiteWinRT/simpleLiteWinRT.Windows/obj/*
+examples/simpleLiteWinRT/simpleLiteWinRT.WindowsPhone/bin/*
+examples/simpleLiteWinRT/simpleLiteWinRT.WindowsPhone/obj/*
+examples/multiCubeWinRT/multiCubeWinRT.Windows/bin/*
+examples/multiCubeWinRT/multiCubeWinRT.Windows/obj/*
+examples/multiCubeWinRT/multiCubeWinRT.WindowsPhone/bin/*
+examples/multiCubeWinRT/multiCubeWinRT.WindowsPhone/obj/*
+examples/nftSimpleWinRT/nftSimpleWinRT.Windows/bin/*
+examples/nftSimpleWinRT/nftSimpleWinRT.Windows/obj/*
+examples/nftSimpleWinRT/nftSimpleWinRT.WindowsPhone/bin/*
+examples/nftSimpleWinRT/nftSimpleWinRT.WindowsPhone/obj/*
+examples/uiControlsWinRT/uiControlsWinRT.Windows/bin/*
+examples/uiControlsWinRT/uiControlsWinRT.Windows/obj/*
+examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/bin/*
+examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/obj/*
+
