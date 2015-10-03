@@ -77,7 +77,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-x86\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\..\bin-winrt-wp8_1-x86\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -86,7 +86,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <OutDir>$(ProjectDir)..\..\..\bin-winrt-wp8_1-arm\</OutDir>
+    <OutDir>$(ProjectDir)..\..\..\..\bin-winrt-wp8_1-arm\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

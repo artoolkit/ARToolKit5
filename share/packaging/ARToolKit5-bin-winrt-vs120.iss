@@ -215,26 +215,6 @@ Source: "bin\Data\patt.calib"; Components: utils; DestDir: "{app}\bin\Data"; Fla
 ; Utilities, source
 
 ; Examples
-Source: "bin-winrt-wp8_1-arm\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-x86\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-arm\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x86\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x64\simpleLiteWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-arm\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-x86\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-arm\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x86\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x64\nftSimpleWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-arm\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-x86\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-arm\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x86\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x64\multiCubeWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-arm\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-wp8_1-x86\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-wp8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-arm\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-arm"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x86\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x86"; Flags: ignoreversion
-Source: "bin-winrt-w8_1-x64\uiControlsWinRT.exe"; Components: examples; DestDir: "{app}\bin-winrt-w8_1-x64"; Flags: ignoreversion
 
 ;Source: "bin\Data\cparaL.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\cparaR.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
