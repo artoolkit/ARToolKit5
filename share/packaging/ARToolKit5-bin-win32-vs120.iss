@@ -1,7 +1,7 @@
 [Setup]
 AppName="ARToolKit"
-AppVerName="ARToolKit v5.3"
-AppVersion=5.3
+AppVerName="ARToolKit v5.3.1"
+AppVersion=5.3.1
 AppPublisher="Daqri LLC"
 AppPublisherURL=http://www.artoolkit.org/
 AppSupportURL=http://www.artoolkit.org/documentation
@@ -12,7 +12,7 @@ InfoBeforeFile=README.txt
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit v5.3 Setup (bin-win32-vs120)"
+OutputBaseFilename="ARToolKit v5.3.1 Setup (bin-win32-vs120)"
 OutputDir=..
 ChangesEnvironment=yes
 
@@ -89,6 +89,10 @@ Source: "include\glStateCache.h"; Components: dev; DestDir: "{app}\include"; Fla
 Source: "include\glStateCache2.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\win32-i386\stdint.h"; Components: dev; DestDir: "{app}\include\win32-i386"; Flags: ignoreversion
 Source: "include\win64-x64\stdint.h"; Components: dev; DestDir: "{app}\include\win64-x64"; Flags: ignoreversion
+Source: "include\win32-i386\GL\glext.h"; Components: dev; DestDir: "{app}\include\win32-i386\GL"; Flags: ignoreversion
+Source: "include\win64-x64\GL\glext.h"; Components: dev; DestDir: "{app}\include\win64-x64\GL"; Flags: ignoreversion
+Source: "include\win32-i386\GL\wglext.h"; Components: dev; DestDir: "{app}\include\win32-i386\GL"; Flags: ignoreversion
+Source: "include\win64-x64\GL\wglext.h"; Components: dev; DestDir: "{app}\include\win64-x64\GL"; Flags: ignoreversion
 Source: "lib\win32-i386\AR*"; Components: dev; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win64-x64\AR*"; Components: dev; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win32-i386\KPM*"; Components: dev; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion

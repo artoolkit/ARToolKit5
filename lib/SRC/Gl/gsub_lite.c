@@ -46,8 +46,13 @@
 #include <string.h>		// strchr(), strstr(), strlen()
 #ifndef __APPLE__
 #  include <GL/glu.h>
-#  ifdef GL_VERSION_1_2
-#    include <GL/glext.h>
+#  ifdef _WIN32
+#    include "GL/glext.h"
+#    include "GL/wglext.h"
+#  else
+#    ifdef GL_VERSION_1_2
+#      include <GL/glext.h>
+#    endif
 #  endif
 #else
 #  include <OpenGL/glu.h>
@@ -126,6 +131,16 @@
 #  define GL_YCBCR_MESA						0x8757
 #  define GL_UNSIGNED_SHORT_8_8_MESA		0x85BA
 #  define GL_UNSIGNED_SHORT_8_8_REV_MESA	0x85BB
+#endif
+
+// On Windows, all OpenGL v1.5 and later API must be dynamically resolved against the actual driver.
+#ifdef _WIN32
+PFNGLGENBUFFERSPROC glGenBuffers = NULL; // (PFNGLGENBUFFERSPROC)wglGetProcAddress("glGenBuffersARB");
+PFNGLDELETEBUFFERSPROC glDeleteBuffers = NULL;
+PFNGLBINDBUFFERPROC glBindBuffer = NULL;
+PFNGLBUFFERDATAPROC glBufferData = NULL;
+PFNGLACTIVETEXTUREPROC glActiveTexture = NULL;
+PFNGLCLIENTACTIVETEXTUREPROC glClientActiveTexture = NULL;
 #endif
 
 //#define ARGL_DEBUG
@@ -485,6 +500,24 @@ ARGL_CONTEXT_SETTINGS_REF arglSetupForCurrentContext(ARParam *cparam, AR_PIXEL_F
 {
     ARGL_CONTEXT_SETTINGS_REF contextSettings;
     
+	// OpenGL 1.5 required.
+	if (!arglGLCapabilityCheck(0x0150, NULL)) {
+		ARLOGe("Error: OpenGL v1.5 or later is required, but not found. Renderer reported '%s'\n", glGetString(GL_VERSION));
+		return (NULL);
+	}
+#ifdef _WIN32
+	if (!glGenBuffers) glGenBuffers = (PFNGLGENBUFFERSPROC)wglGetProcAddress("glGenBuffers");
+	if (!glDeleteBuffers) glDeleteBuffers = (PFNGLDELETEBUFFERSPROC)wglGetProcAddress("glDeleteBuffers");
+	if (!glBindBuffer) glBindBuffer = (PFNGLBINDBUFFERPROC)wglGetProcAddress("glBindBuffer");
+	if (!glBufferData) glBufferData = (PFNGLBUFFERDATAPROC)wglGetProcAddress("glBufferData");
+	if (!glActiveTexture) glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
+	if (!glClientActiveTexture) glClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC)wglGetProcAddress("glClientActiveTexture");
+	if (!glGenBuffers || !glDeleteBuffers || !glBindBuffer || !glBufferData || !glActiveTexture || !glClientActiveTexture) {
+		ARLOGe("Error: a required OpenGL function counld not be bound.\n");
+		return (NULL);
+	}
+#endif
+
     contextSettings = (ARGL_CONTEXT_SETTINGS_REF)calloc(1, sizeof(ARGL_CONTEXT_SETTINGS));
     contextSettings->arParam = *cparam; // Copy it.
     contextSettings->arhandle = NULL;
