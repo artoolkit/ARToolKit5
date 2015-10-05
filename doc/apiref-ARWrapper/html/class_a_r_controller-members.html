@@ -134,8 +134,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr class="even"><td class="entry"><a class="el" href="class_a_r_controller.html#abd0732b11285bc113134d1b891a361f2">startRunningStereo</a>(const char *vconfL, const char *cparaNameL, const char *cparaBuffL, const long cparaBuffLenL, const char *vconfR, const char *cparaNameR, const char *cparaBuffR, const long cparaBuffLenR, const char *transL2RName, const char *transL2RBuff, const long transL2RBuffLen)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_r_controller.html#a889dbbe581e771d1f4f2e28fad3f686b">stopRunning</a>()</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_r_controller.html#ac726b34aac45206f4608e9a15875db82">update</a>()</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_a_r_controller.html#a17db1749663c70d876d39fbf19274aed">updateDebugTexture</a>(Color *buffer, float alpha)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_a_r_controller.html#ae89b3a39075cd393cc30ab1904d24473">updateDebugTextureB</a>(ARUint8 *buffer, ARUint8 alpha, bool flipY)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_a_r_controller.html#a8278aebc7233d808ce3742462fa4da71">updateDebugTexture</a>(const int videoSourceIndex, Color *buffer)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_a_r_controller.html#a6bc7b12b0b3fa9a1ee1fa638abe21030">updateDebugTexture32</a>(const int videoSourceIndex, uint32_t *buffer)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_r_controller.html#a3a39007194f7a2dd42e81f393cf588d8">updateTexture</a>(const int videoSourceIndex, Color *buffer)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_a_r_controller.html#ac580d4ef4f76a38b6dd06322ae645e34">updateTexture32</a>(const int videoSourceIndex, uint32_t *buffer)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_a_r_controller.html#a5d6c658c56c5c839a77e03dd85f1e2d6">updateTextureGL</a>(const int videoSourceIndex, const int textureID)</td><td class="entry"><a class="el" href="class_a_r_controller.html">ARController</a></td><td class="entry"></td></tr>
@@ -145,7 +145,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 31 2015 02:11:17 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Oct 5 2015 21:08:48 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

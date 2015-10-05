@@ -190,9 +190,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a355b57ff8a6b5d51330654a19579a5f1"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a355b57ff8a6b5d51330654a19579a5f1">arwGetVideoDebugMode</a> ()</td></tr>
 <tr class="memdesc:a355b57ff8a6b5d51330654a19579a5f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether debug mode is currently enabled.  <a href="#a355b57ff8a6b5d51330654a19579a5f1">More...</a><br/></td></tr>
 <tr class="separator:a355b57ff8a6b5d51330654a19579a5f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b2516dfe56e96b0d76d69d99f266eef"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a5b2516dfe56e96b0d76d69d99f266eef">arwUpdateDebugTexture</a> (<a class="el" href="struct_color.html">Color</a> *buffer, float alpha)</td></tr>
-<tr class="memdesc:a5b2516dfe56e96b0d76d69d99f266eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populates the provided color buffer with the contents of the debug image.  <a href="#a5b2516dfe56e96b0d76d69d99f266eef">More...</a><br/></td></tr>
-<tr class="separator:a5b2516dfe56e96b0d76d69d99f266eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b3322d34e3ef394158277d7a68f768b"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a2b3322d34e3ef394158277d7a68f768b">arwUpdateDebugTexture</a> (<a class="el" href="struct_color.html">Color</a> *buffer)</td></tr>
+<tr class="memdesc:a2b3322d34e3ef394158277d7a68f768b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populates the provided color buffer with the current contents of the debug image.  <a href="#a2b3322d34e3ef394158277d7a68f768b">More...</a><br/></td></tr>
+<tr class="separator:a2b3322d34e3ef394158277d7a68f768b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af621de40349f5f1550504c392c5e2940"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#af621de40349f5f1550504c392c5e2940">arwUpdateDebugTexture32</a> (unsigned int *buffer)</td></tr>
+<tr class="memdesc:af621de40349f5f1550504c392c5e2940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populates the provided buffer with the current contents of the debug image.  <a href="#af621de40349f5f1550504c392c5e2940">More...</a><br/></td></tr>
+<tr class="separator:af621de40349f5f1550504c392c5e2940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a646ff12c3cf44cd18915faca15340665"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a646ff12c3cf44cd18915faca15340665">arwUpdateTextureGL</a> (const int textureID)</td></tr>
 <tr class="memdesc:a646ff12c3cf44cd18915faca15340665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses OpenGL to directly updated the specified texture with the current video frame.  <a href="#a646ff12c3cf44cd18915faca15340665">More...</a><br/></td></tr>
 <tr class="separator:a646ff12c3cf44cd18915faca15340665"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1136,8 +1139,8 @@ Functions</h2></td></tr>
 <p>Initialises the ARToolKit with non-default options for size and number of square markers. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pattSize</td><td>For any square template (pattern) markers, the number of rows and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX. </td></tr>
-    <tr><td class="paramname">pattCountMax</td><td>For any square template (pattern) markers, the maximum number of markers that may be loaded for a single matching pass. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">pattSize</td><td>For any square template (pattern) markers, the number of rows and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX. Pass AR_PATT_SIZE1 for the same behaviour as <a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a599ffcf785a4864d3610d4814c7aaa83" title="Initialises the ARToolKit.">arwInitialiseAR()</a>. </td></tr>
+    <tr><td class="paramname">pattCountMax</td><td>For any square template (pattern) markers, the maximum number of markers that may be loaded for a single matching pass. Must be &gt; 0. Pass AR_PATT_NUM_MAX for the same behaviour as <a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a599ffcf785a4864d3610d4814c7aaa83" title="Initialises the ARToolKit.">arwInitialiseAR()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2050,7 +2053,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5b2516dfe56e96b0d76d69d99f266eef"></a>
+<a class="anchor" id="a2b3322d34e3ef394158277d7a68f768b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2058,31 +2061,44 @@ Functions</h2></td></tr>
           <td class="memname">EXPORT_API bool arwUpdateDebugTexture </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_color.html">Color</a> *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>alpha</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Populates the provided color buffer with the contents of the debug image. </p>
+<p>Populates the provided color buffer with the current contents of the debug image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buffer</td><td>The color buffer to fill with the debug image </td></tr>
-    <tr><td class="paramname">alpha</td><td>The alpha value to apply to each pixel </td></tr>
+    <tr><td class="paramname">buffer</td><td>Pointer to a buffer of pixels (of type '<a class="el" href="struct_color.html" title="Simple color representation using four float values.">Color</a>') to be filled. It is the caller's responsibility to ensure that the buffer is of sufficient size. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if successful, false if an error occurred </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af621de40349f5f1550504c392c5e2940"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">EXPORT_API bool arwUpdateDebugTexture32 </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Populates the provided buffer with the current contents of the debug image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>Pointer to a buffer of pixels (of type 'uint32_t') to be filled. It is the caller's responsibility to ensure that the buffer is of sufficient size. The pixels are RGBA in little-endian systems, or ABGR in big-endian systems. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2252,7 +2268,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 31 2015 02:11:17 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Oct 5 2015 21:08:48 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

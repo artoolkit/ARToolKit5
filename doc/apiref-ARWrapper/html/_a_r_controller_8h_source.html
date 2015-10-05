@@ -330,66 +330,67 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    </div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a3a39007194f7a2dd42e81f393cf588d8" title="Asks the video source to push the most recent frame into the passed-in buffer.">updateTexture</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, <a class="code" href="struct_color.html" title="Simple color representation using four float values.">Color</a>* buffer);</div>
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    </div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac580d4ef4f76a38b6dd06322ae645e34">updateTexture32</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, uint32_t *buffer);</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    </div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="preprocessor">#ifndef _WINRT</span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a5d6c658c56c5c839a77e03dd85f1e2d6" title="Asks the video source to push the most recent frame into the OpenGL texture with the passed-in ID/nam...">updateTextureGL</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, <span class="keyword">const</span> <span class="keywordtype">int</span> textureID);</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="preprocessor">#endif // !_WINRT</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac580d4ef4f76a38b6dd06322ae645e34" title="Asks the video source to push the most recent frame into the passed-in buffer.">updateTexture32</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, uint32_t *buffer);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="preprocessor">#ifndef _WINRT</span></div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac726b34aac45206f4608e9a15875db82" title="Performs marker detection and updates all markers.">update</a>();</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a4287d63e3291a4bf0d6a24387895ea2d" title="Enables or disables debug mode in the tracker.">setDebugMode</a>(<span class="keywordtype">bool</span> debug);</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    </div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac385b8f5be31e172a34e9aef3f3ac82a" title="Returns whether debug mode is currently enabled.">getDebugMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    </div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ab80ab5239c37941427bcc51e382af178">setImageProcMode</a>(<span class="keywordtype">int</span> mode);</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#aa51e7898c99e5fac6658a5d6e594bce6">getImageProcMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a2c20dfcb712449a58bdc71c50b5ab63b" title="Sets the threshold value used for image binarization.">setThreshold</a>(<span class="keywordtype">int</span> thresh);</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a7106f4c7c2d4e4691900fdf2dd4a7dd6" title="Returns the current threshold value used for image binarization.">getThreshold</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    </div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a9b18e16d0c7d694b495614a332c9ae9e" title="Sets the thresholding mode to use.">setThresholdMode</a>(<span class="keywordtype">int</span> mode);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#ac873cfc23a294a6ae6d339c946391e36" title="Returns the current thresholding mode.">getThresholdMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        </div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ae6ce742333a35487de8fa2a8ae5e507f" title="Sets the labeling mode to use.">setLabelingMode</a>(<span class="keywordtype">int</span> mode);</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    </div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a9fa24578408ae5a2d1b4cb215b5c5c32" title="Returns the current labeling mode.">getLabelingMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        </div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#aa25c5bef4b35ea189b1c5b3d82a48812">setPatternDetectionMode</a>(<span class="keywordtype">int</span> mode);</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    </div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a30a76aa6929b088f8a785593bad08d9e">getPatternDetectionMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ad346222158ad690f071420d5fe1b5e4a">setPattRatio</a>(<span class="keywordtype">float</span> ratio);</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    </div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_a_r_controller.html#a17c3ba43ab7ffd6713f30b699539cbf1">getPattRatio</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    </div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a38ae06d947f7995156bcb30155d01d29">setMatrixCodeType</a>(<span class="keywordtype">int</span> type);</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a5d6c658c56c5c839a77e03dd85f1e2d6" title="Asks the video source to push the most recent frame into the OpenGL texture with the passed-in ID/nam...">updateTextureGL</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, <span class="keyword">const</span> <span class="keywordtype">int</span> textureID);</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="preprocessor">#endif // !_WINRT</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac726b34aac45206f4608e9a15875db82" title="Performs marker detection and updates all markers.">update</a>();</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a4287d63e3291a4bf0d6a24387895ea2d" title="Enables or disables debug mode in the tracker.">setDebugMode</a>(<span class="keywordtype">bool</span> debug);</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ac385b8f5be31e172a34e9aef3f3ac82a" title="Returns whether debug mode is currently enabled.">getDebugMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ab80ab5239c37941427bcc51e382af178">setImageProcMode</a>(<span class="keywordtype">int</span> mode);</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    </div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#aa51e7898c99e5fac6658a5d6e594bce6">getImageProcMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    </div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a2c20dfcb712449a58bdc71c50b5ab63b" title="Sets the threshold value used for image binarization.">setThreshold</a>(<span class="keywordtype">int</span> thresh);</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a7106f4c7c2d4e4691900fdf2dd4a7dd6" title="Returns the current threshold value used for image binarization.">getThreshold</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    </div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a9b18e16d0c7d694b495614a332c9ae9e" title="Sets the thresholding mode to use.">setThresholdMode</a>(<span class="keywordtype">int</span> mode);</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#ac873cfc23a294a6ae6d339c946391e36" title="Returns the current thresholding mode.">getThresholdMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        </div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ae6ce742333a35487de8fa2a8ae5e507f" title="Sets the labeling mode to use.">setLabelingMode</a>(<span class="keywordtype">int</span> mode);</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    </div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a9fa24578408ae5a2d1b4cb215b5c5c32" title="Returns the current labeling mode.">getLabelingMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        </div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#aa25c5bef4b35ea189b1c5b3d82a48812">setPatternDetectionMode</a>(<span class="keywordtype">int</span> mode);</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    </div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a2fc4ed6f4135d4cb07b2de19e820b418">getMatrixCodeType</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    </div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#abceb36df8bacdaceaab8b234a3c56f29">setNFTMultiMode</a>(<span class="keywordtype">bool</span> on);</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a30a76aa6929b088f8a785593bad08d9e">getPatternDetectionMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#ad346222158ad690f071420d5fe1b5e4a">setPattRatio</a>(<span class="keywordtype">float</span> ratio);</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    </div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a1de2d0e95a6827a4bcbedbc6e24df079">getNFTMultiMode</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a17db1749663c70d876d39fbf19274aed" title="Populates the provided color buffer with the current contents of the debug image.">updateDebugTexture</a>(<a class="code" href="struct_color.html" title="Simple color representation using four float values.">Color</a>* buffer, <span class="keywordtype">float</span> alpha);</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#ae89b3a39075cd393cc30ab1904d24473">updateDebugTextureB</a>(ARUint8* buffer, ARUint8 alpha, <span class="keywordtype">bool</span> flipY);</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a92b12f11df6aa75041ff1c4a2a4095b4" title="Populates the provided color buffer with the image for the specified pattern.">getPatternImage</a>(<span class="keywordtype">int</span> patternID, <a class="code" href="struct_color.html" title="Simple color representation using four float values.">Color</a>* buffer);</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a3982e9c73c04403940f6de22dceafbbc" title="Loads an optical parameters structure from file or from buffer.">loadOpticalParams</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *optical_param_name, <span class="keyword">const</span> <span class="keywordtype">char</span> *optical_param_buff, <span class="keyword">const</span> <span class="keywordtype">long</span> optical_param_buffLen, ARdouble *fovy_p, ARdouble *aspect_p, ARdouble m[16], ARdouble p[16]);</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    </div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;};</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="preprocessor">#endif // !ARCONTROLLER_H</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordtype">float</span> <a class="code" href="class_a_r_controller.html#a17c3ba43ab7ffd6713f30b699539cbf1">getPattRatio</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    </div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#a38ae06d947f7995156bcb30155d01d29">setMatrixCodeType</a>(<span class="keywordtype">int</span> type);</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_a_r_controller.html#a2fc4ed6f4135d4cb07b2de19e820b418">getMatrixCodeType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    </div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_a_r_controller.html#abceb36df8bacdaceaab8b234a3c56f29">setNFTMultiMode</a>(<span class="keywordtype">bool</span> on);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    </div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a1de2d0e95a6827a4bcbedbc6e24df079">getNFTMultiMode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a8278aebc7233d808ce3742462fa4da71" title="Populates the provided color buffer with the current contents of the debug image.">updateDebugTexture</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, <a class="code" href="struct_color.html" title="Simple color representation using four float values.">Color</a>* buffer);</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a6bc7b12b0b3fa9a1ee1fa638abe21030" title="Populates the provided buffer with the current contents of the debug image.">updateDebugTexture32</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> videoSourceIndex, uint32_t* buffer);</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a92b12f11df6aa75041ff1c4a2a4095b4" title="Populates the provided color buffer with the image for the specified pattern.">getPatternImage</a>(<span class="keywordtype">int</span> patternID, <a class="code" href="struct_color.html" title="Simple color representation using four float values.">Color</a>* buffer);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    </div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_a_r_controller.html#a3982e9c73c04403940f6de22dceafbbc" title="Loads an optical parameters structure from file or from buffer.">loadOpticalParams</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *optical_param_name, <span class="keyword">const</span> <span class="keywordtype">char</span> *optical_param_buff, <span class="keyword">const</span> <span class="keywordtype">long</span> optical_param_buffLen, ARdouble *fovy_p, ARdouble *aspect_p, ARdouble m[16], ARdouble p[16]);</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;    </div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;};</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="preprocessor">#endif // !ARCONTROLLER_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 31 2015 02:11:16 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Oct 5 2015 21:08:48 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>
