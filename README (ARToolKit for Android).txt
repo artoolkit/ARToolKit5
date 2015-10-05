@@ -28,7 +28,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-09-30
+    2015-10-05
 
 
 Requirements.

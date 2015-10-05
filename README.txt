@@ -26,7 +26,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-09-30
+    2015-10-05
 
 
 Installing
@@ -105,6 +105,7 @@ Required external software
   Where ARToolKit libraries require external DLLs, these are generally supplied with ARToolKit. Exceptions are listed below.
 
   Windows
+    * OpenGL version 1.5 or later is required. This is usually provided by the display drivers, as the base system supports only OpenGL v1.4.
 	The optional video capture sources require some external software:
 	* QuickTime movie files as video source: QuickTime 6.4 or later must be installed. Download from http://www.apple.com/quicktime/download/.
 	* Point Grey camera: The Flycapture SDK (distributed with Point Grey Cameras) must be installed.
