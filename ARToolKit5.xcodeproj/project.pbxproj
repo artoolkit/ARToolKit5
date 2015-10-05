@@ -8120,7 +8120,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.simpleOSG;
 				PRODUCT_NAME = simpleOSG;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8148,7 +8148,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.simpleOSG;
 				PRODUCT_NAME = simpleOSG;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8384,7 +8384,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftSimple;
 				PRODUCT_NAME = nftSimple;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8412,7 +8412,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftSimple;
 				PRODUCT_NAME = nftSimple;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8912,7 +8912,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftBook;
 				PRODUCT_NAME = nftBook;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8940,7 +8940,7 @@
 					"-framework",
 					QuickTime,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.${PRODUCT_NAME};
+				PRODUCT_BUNDLE_IDENTIFIER = org.artoolkit.nftBook;
 				PRODUCT_NAME = nftBook;
 				WARNING_CFLAGS = (
 					"-Wmost",
