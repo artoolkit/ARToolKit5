@@ -206,11 +206,38 @@ Source: "share\packaging\ARToolKit5-bin-winrt-vs120*"; Components: dev and src; 
 ; Libraries and headers, source: external dependencies.
 
 ; Utilities
+Source: "bin\calib_*.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\mk_patt.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\check_id.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\genTexData.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\dispImageSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\dispFeatureSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\checkResolution.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\genMarkerSet.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_core2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_flann2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_calib3d2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_imgproc2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\opencv_features2d2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+
 Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\patt.hiro"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\patt.kanji"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\patt.calib"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
+Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\patt.hiro"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\patt.kanji"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\patt.calib"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+
+Source: "bin\ARvideo*.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\pthreadVC2.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\DSVL.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin\glut32.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
+
+; runtime
+Source: "bin\vcredist_x86.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 
 ; Utilities, source
 
