@@ -122,6 +122,28 @@ bin/nftSimple.exe
 bin/nftBook.exe
 bin/ARWrapper.dll
 
+# Windows dependent DLLs.
+bin/ARvideo.dll
+bin/DSVL.dll
+bin/glut32.dll
+bin/opencv_calib3d2410.dll
+bin/opencv_core2410.dll
+bin/opencv_features2d2410.dll
+bin/opencv_flann2410.dll
+bin/opencv_imgproc2410.dll
+bin/vcredist_x86.exe
+bin/pthreadVC2.dll
+bin64/ARvideo.dll
+bin64/DSVL.dll
+bin64/glut64.dll
+bin64/opencv_calib3d2410.dll
+bin64/opencv_core2410.dll
+bin64/opencv_features2d2410.dll
+bin64/opencv_flann2410.dll
+bin64/opencv_imgproc2410.dll
+bin64/vcredist_x64.exe
+bin64/pthreadVC2.dll
+
 bin-winrt-w8_1-arm/
 bin-winrt-w8_1-x86/
 bin-winrt-w8_1-x64/
@@ -148,10 +170,8 @@ android/obj/local/**/libeden.a
 android/obj/local/**/libkpm.a
 android/obj/local/**/libutil.a
 android/obj/local/**/libc++_shared.so
+android/obj/local/**/libcpufeatures.a
 android/libs/**/libARWrapper.so
-android/libs/**/libcrypto.so
-android/libs/**/libcurl.so
-android/libs/**/libssl.so
 android/libs/**/libc++_shared.so
 EclipseProjects/**/bin/
 EclipseProjects/**/gen/
