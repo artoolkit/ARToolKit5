@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ARMultiProj.iml" filepath="$PROJECT_DIR$/ARMultiProj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" filepath="$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aRMulti/aRMulti.iml" filepath="$PROJECT_DIR$/aRMulti/aRMulti.iml" />
+    </modules>
+  </component>
+</project>

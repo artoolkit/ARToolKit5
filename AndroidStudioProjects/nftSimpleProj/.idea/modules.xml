@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" filepath="$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nftSimple/nftSimple.iml" filepath="$PROJECT_DIR$/nftSimple/nftSimple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nftSimpleProj.iml" filepath="$PROJECT_DIR$/nftSimpleProj.iml" />
+    </modules>
+  </component>
+</project>

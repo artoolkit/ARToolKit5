@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ARSimpleProj.iml" filepath="$PROJECT_DIR$/ARSimpleProj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" filepath="$PROJECT_DIR$/aRBaseLib/aRBaseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aRSimple/aRSimple.iml" filepath="$PROJECT_DIR$/aRSimple/aRSimple.iml" />
+    </modules>
+  </component>
+</project>

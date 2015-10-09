@@ -96,9 +96,13 @@ JDK_PROJS=" \
 "
 for i in $JDK_PROJS
 do
-	if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
-	    mkdir ../EclipseProjects/${i}/libs/
-	fi
+    if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
+        mkdir ../EclipseProjects/${i}/libs/
+    fi
     cp -Rpv -f libs/* ../EclipseProjects/${i}/libs/
+    FirstChar=${i:0:1}
+    LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
+    ModName=$LCFirstChar${i:1}
+    cp -Rpv -f libs/* ../AndroidStudioProjects/${i}Proj/$ModName/src/main/jniLibs/
 done
 fi

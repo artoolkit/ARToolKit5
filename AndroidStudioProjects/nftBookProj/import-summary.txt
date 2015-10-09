@@ -1,0 +1,193 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Manifest Merging:
+-----------------
+Your project uses libraries that provide manifests, and your Eclipse
+project did not explicitly turn on manifest merging. In Android Gradle
+projects, manifests are always merged (meaning that contents from your
+libraries' manifests will be merged into the app manifest. If you had
+manually copied contents from library manifests into your app manifest
+you may need to remove these for the app to build correctly.
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From ARBaseLib:
+* doc/
+* doc/allclasses-frame.html
+* doc/allclasses-noframe.html
+* doc/constant-values.html
+* doc/deprecated-list.html
+* doc/help-doc.html
+* doc/index-files/
+* doc/index-files/index-1.html
+* doc/index-files/index-10.html
+* doc/index-files/index-11.html
+* doc/index-files/index-12.html
+* doc/index-files/index-13.html
+* doc/index-files/index-14.html
+* doc/index-files/index-15.html
+* doc/index-files/index-16.html
+* doc/index-files/index-17.html
+* doc/index-files/index-18.html
+* doc/index-files/index-19.html
+* doc/index-files/index-2.html
+* doc/index-files/index-20.html
+* doc/index-files/index-3.html
+* doc/index-files/index-4.html
+* doc/index-files/index-5.html
+* doc/index-files/index-6.html
+* doc/index-files/index-7.html
+* doc/index-files/index-8.html
+* doc/index-files/index-9.html
+* doc/index.html
+* doc/org/
+* doc/org/artoolkit/
+* doc/org/artoolkit/ar/
+* doc/org/artoolkit/ar/base/
+* doc/org/artoolkit/ar/base/ARActivity.html
+* doc/org/artoolkit/ar/base/ARToolKit.html
+* doc/org/artoolkit/ar/base/AndroidUtils.html
+* doc/org/artoolkit/ar/base/BuildConfig.html
+* doc/org/artoolkit/ar/base/FPSCounter.html
+* doc/org/artoolkit/ar/base/NativeInterface.html
+* doc/org/artoolkit/ar/base/R.array.html
+* doc/org/artoolkit/ar/base/R.attr.html
+* doc/org/artoolkit/ar/base/R.drawable.html
+* doc/org/artoolkit/ar/base/R.html
+* doc/org/artoolkit/ar/base/R.id.html
+* doc/org/artoolkit/ar/base/R.menu.html
+* doc/org/artoolkit/ar/base/R.string.html
+* doc/org/artoolkit/ar/base/R.xml.html
+* doc/org/artoolkit/ar/base/assets/
+* doc/org/artoolkit/ar/base/assets/AssetFileTransfer.html
+* doc/org/artoolkit/ar/base/assets/AssetFileTransferException.html
+* doc/org/artoolkit/ar/base/assets/AssetHelper.html
+* doc/org/artoolkit/ar/base/assets/HashComputationException.html
+* doc/org/artoolkit/ar/base/assets/Hasher.html
+* doc/org/artoolkit/ar/base/assets/class-use/
+* doc/org/artoolkit/ar/base/assets/class-use/AssetFileTransfer.html
+* doc/org/artoolkit/ar/base/assets/class-use/AssetFileTransferException.html
+* doc/org/artoolkit/ar/base/assets/class-use/AssetHelper.html
+* doc/org/artoolkit/ar/base/assets/class-use/HashComputationException.html
+* doc/org/artoolkit/ar/base/assets/class-use/Hasher.html
+* doc/org/artoolkit/ar/base/assets/package-frame.html
+* doc/org/artoolkit/ar/base/assets/package-summary.html
+* doc/org/artoolkit/ar/base/assets/package-tree.html
+* doc/org/artoolkit/ar/base/assets/package-use.html
+* doc/org/artoolkit/ar/base/camera/
+* doc/org/artoolkit/ar/base/camera/CameraEventListener.html
+* doc/org/artoolkit/ar/base/camera/CameraPreferencesActivity.ASPECT_RATIO.html
+* doc/org/artoolkit/ar/base/camera/CameraPreferencesActivity.html
+* doc/org/artoolkit/ar/base/camera/CameraWrapper.html
+* doc/org/artoolkit/ar/base/camera/CaptureCameraPreview.html
+* doc/org/artoolkit/ar/base/camera/class-use/
+* doc/org/artoolkit/ar/base/camera/class-use/CameraEventListener.html
+* doc/org/artoolkit/ar/base/camera/class-use/CameraPreferencesActivity.ASPECT_RATIO.html
+* doc/org/artoolkit/ar/base/camera/class-use/CameraPreferencesActivity.html
+* doc/org/artoolkit/ar/base/camera/class-use/CaptureCameraPreview.html
+* doc/org/artoolkit/ar/base/camera/package-frame.html
+* doc/org/artoolkit/ar/base/camera/package-summary.html
+* doc/org/artoolkit/ar/base/camera/package-tree.html
+* doc/org/artoolkit/ar/base/camera/package-use.html
+* doc/org/artoolkit/ar/base/class-use/
+* doc/org/artoolkit/ar/base/class-use/ARActivity.html
+* doc/org/artoolkit/ar/base/class-use/ARToolKit.html
+* doc/org/artoolkit/ar/base/class-use/AndroidUtils.html
+* doc/org/artoolkit/ar/base/class-use/BuildConfig.html
+* doc/org/artoolkit/ar/base/class-use/FPSCounter.html
+* doc/org/artoolkit/ar/base/class-use/NativeInterface.html
+* doc/org/artoolkit/ar/base/class-use/R.array.html
+* doc/org/artoolkit/ar/base/class-use/R.attr.html
+* doc/org/artoolkit/ar/base/class-use/R.drawable.html
+* doc/org/artoolkit/ar/base/class-use/R.html
+* doc/org/artoolkit/ar/base/class-use/R.id.html
+* doc/org/artoolkit/ar/base/class-use/R.menu.html
+* doc/org/artoolkit/ar/base/class-use/R.string.html
+* doc/org/artoolkit/ar/base/class-use/R.xml.html
+* doc/org/artoolkit/ar/base/package-frame.html
+* doc/org/artoolkit/ar/base/package-summary.html
+* doc/org/artoolkit/ar/base/package-tree.html
+* doc/org/artoolkit/ar/base/package-use.html
+* doc/org/artoolkit/ar/base/rendering/
+* doc/org/artoolkit/ar/base/rendering/ARRenderer.html
+* doc/org/artoolkit/ar/base/rendering/Cube.html
+* doc/org/artoolkit/ar/base/rendering/RenderUtils.html
+* doc/org/artoolkit/ar/base/rendering/class-use/
+* doc/org/artoolkit/ar/base/rendering/class-use/ARRenderer.html
+* doc/org/artoolkit/ar/base/rendering/class-use/Cube.html
+* doc/org/artoolkit/ar/base/rendering/class-use/RenderUtils.html
+* doc/org/artoolkit/ar/base/rendering/package-frame.html
+* doc/org/artoolkit/ar/base/rendering/package-summary.html
+* doc/org/artoolkit/ar/base/rendering/package-tree.html
+* doc/org/artoolkit/ar/base/rendering/package-use.html
+* doc/overview-frame.html
+* doc/overview-summary.html
+* doc/overview-tree.html
+* doc/package-list
+* doc/resources/
+* doc/resources/inherit.gif
+* doc/script.js
+* doc/serialized-form.html
+* doc/stylesheet.css
+* javadoc.xml
+* proguard.cfg
+From nftBook:
+* build.bat
+* build.bsh
+* proguard.cfg
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In ARBaseLib:
+* AndroidManifest.xml => aRBaseLib/src/main/AndroidManifest.xml
+* res/ => aRBaseLib/src/main/res/
+* src/ => aRBaseLib/src/main/java/
+In nftBook:
+* AndroidManifest.xml => nftBook/src/main/AndroidManifest.xml
+* assets/ => nftBook/src/main/assets/
+* jni/ => nftBook/src/main/jni/
+* libs/armeabi-v7a/libc++_shared.so => nftBook/src/main/jniLibs/armeabi-v7a/libc++_shared.so
+* libs/armeabi-v7a/libcrypto.so => nftBook/src/main/jniLibs/armeabi-v7a/libcrypto.so
+* libs/armeabi-v7a/libcurl.so => nftBook/src/main/jniLibs/armeabi-v7a/libcurl.so
+* libs/armeabi-v7a/libnftBookNative.so => nftBook/src/main/jniLibs/armeabi-v7a/libnftBookNative.so
+* libs/armeabi-v7a/libssl.so => nftBook/src/main/jniLibs/armeabi-v7a/libssl.so
+* libs/armeabi/libc++_shared.so => nftBook/src/main/jniLibs/armeabi/libc++_shared.so
+* libs/armeabi/libcrypto.so => nftBook/src/main/jniLibs/armeabi/libcrypto.so
+* libs/armeabi/libcurl.so => nftBook/src/main/jniLibs/armeabi/libcurl.so
+* libs/armeabi/libnftBookNative.so => nftBook/src/main/jniLibs/armeabi/libnftBookNative.so
+* libs/armeabi/libssl.so => nftBook/src/main/jniLibs/armeabi/libssl.so
+* libs/mips/libc++_shared.so => nftBook/src/main/jniLibs/mips/libc++_shared.so
+* libs/mips/libcrypto.so => nftBook/src/main/jniLibs/mips/libcrypto.so
+* libs/mips/libcurl.so => nftBook/src/main/jniLibs/mips/libcurl.so
+* libs/mips/libnftBookNative.so => nftBook/src/main/jniLibs/mips/libnftBookNative.so
+* libs/mips/libssl.so => nftBook/src/main/jniLibs/mips/libssl.so
+* libs/x86/libc++_shared.so => nftBook/src/main/jniLibs/x86/libc++_shared.so
+* libs/x86/libcrypto.so => nftBook/src/main/jniLibs/x86/libcrypto.so
+* libs/x86/libcurl.so => nftBook/src/main/jniLibs/x86/libcurl.so
+* libs/x86/libnftBookNative.so => nftBook/src/main/jniLibs/x86/libnftBookNative.so
+* libs/x86/libssl.so => nftBook/src/main/jniLibs/x86/libssl.so
+* res/ => nftBook/src/main/res/
+* src/ => nftBook/src/main/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

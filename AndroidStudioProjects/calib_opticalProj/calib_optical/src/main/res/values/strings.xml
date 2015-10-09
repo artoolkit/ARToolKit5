@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ARToolKit Optical Calibrator</string>
+    <string name="menuItem_help">Help</string>
+    <string name="menuItem_info">Info</string>
+    <string name="menuItem_toggleVideoSeeThrough">Video see-through</string>
+    <string name="menuItem_toggleVideoSeeThrough_short">Video</string>
+    
+    <string name="prefCategory_title_display">Display settings</string>
+    <string name="pref_title_stereoDisplay">Stereo display</string>
+    <string name="pref_summary_stereoDisplayOff">Use a monocular or monoscopic display</string>
+    <string name="pref_summary_stereoDisplayOn">Use a stereoscopic display</string>
+    <string name="pref_title_stereoDisplayMode">Stereo display mode</string>
+    <string-array name="pref_entries_stereoDisplayMode">
+        <!-- <item>Inactive</item> -->
+        <!-- <item>Dual output</item> -->
+        <!-- <item>Quadbuffered</item> -->
+        <item>Frame sequential</item>
+        <item>Side-by-side</item>
+        <item>Over-under</item>
+        <item>Half side-by-side</item>
+        <item>Over-under half-height</item>
+        <!-- <item>Row interlaced</item> -->
+        <!-- <item>Column interlaced</item> -->
+        <!-- <item>Checkerboard</item> -->
+        <item>Anaglyph red-blue</item>
+        <item>Anaglyph red-green</item>
+    </string-array>
+    <string-array name="pref_entryValues_stereoDisplayMode">
+        <!-- <item>0</item> -->
+        <!-- <item>1</item> -->
+        <!-- <item>2</item> -->
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <!-- <item>8</item> -->
+        <!-- <item>9</item> -->
+        <!-- <item>10</item> -->
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <string name="pref_defaultValue_stereoDisplayMode">6</string>
+    <string name="pref_title_forceLandscape">Force landscape display</string>
+    <string name="pref_summary_forceLandscapeOff">Display responds to device orientation</string>
+    <string name="pref_summary_forceLandscapeOn">Display is locked to landscape orientation</string>
+
+    <string name="prefCategory_title_calibration">Calibration settings</string>
+    <string name="pref_title_eyeSelection">Eye selection</string>
+    <string-array name="pref_entries_eyeSelection">
+        <item>Left eye</item>
+        <item>Right eye</item>
+    </string-array>
+    <string-array name="pref_entryValues_eyeSelection">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    
+    <string name="prefCategory_title_camera">Camera settings</string>
+    <string name="pref_title_cameraResolution">Camera resolution</string>
+    <string-array name="pref_entries_cameraResolution">
+        <item>320x240   (4:3)</item>
+    </string-array>
+    <string-array name="pref_entryValues_cameraResolution">
+        <item>320x240</item>
+    </string-array>
+    <string name="pref_defaultValue_cameraResolution">320x240</string>
+    
+    <string name="pref_title_cameraIndex">Change camera</string>
+    <string-array name="pref_entries_cameraIndex">
+        <item>Rear camera</item>
+    </string-array>
+    <string-array name="pref_entryValues_cameraIndex">
+        <item>0</item>
+    </string-array>
+</resources>
