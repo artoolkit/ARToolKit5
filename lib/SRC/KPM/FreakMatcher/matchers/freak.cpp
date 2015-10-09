@@ -74,7 +74,7 @@ void FREAKExtractor::layout84(std::vector<receptor>& receptors,
     const float radius_b = 2;
     
     const float sigma_m = 2;
-    const float sigma_b = std::sqrt(2);
+    const float sigma_b = std::sqrt(2.0f);
     
     float max_radius = -1;
     float max_sigma = -1;
