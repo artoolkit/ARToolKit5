@@ -65,6 +65,7 @@ int arDetectMarker( ARHandle *arHandle, ARUint8 *dataPtr )
     int         cid, cdir;
     int         i, j, k;
     int         detectionIsDone = 0;
+	int threshDiff;
 
 #if DEBUG_PATT_GETID
 cnt = 0;
@@ -109,7 +110,7 @@ cnt = 0;
                 detectionIsDone = 1;
             } else {
                 arHandle->arLabelingThresh = (marker_nums[0] >= marker_nums[1] ? thresholds[0] : thresholds[1]);
-                int threshDiff = arHandle->arLabelingThresh - thresholds[2];
+                threshDiff = arHandle->arLabelingThresh - thresholds[2];
                 if (threshDiff > 0) {
                     arHandle->arLabelingThreshAutoBracketOver = threshDiff;
                     arHandle->arLabelingThreshAutoBracketUnder = 1;
