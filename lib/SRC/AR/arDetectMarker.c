@@ -65,7 +65,7 @@ int arDetectMarker( ARHandle *arHandle, ARUint8 *dataPtr )
     int         cid, cdir;
     int         i, j, k;
     int         detectionIsDone = 0;
-	int threshDiff;
+    int         threshDiff;
 
 #if DEBUG_PATT_GETID
 cnt = 0;
