@@ -56,6 +56,8 @@ NSString *const CameraVideoiOSDeviceiPhone5 = @"iPhone 5";
 NSString *const CameraVideoiOSDeviceiPhone5s = @"iPhone 5s";
 NSString *const CameraVideoiOSDeviceiPhone5c = @"iPhone 5c";
 NSString *const CameraVideoiOSDeviceiPhone6 = @"iPhone 6";
+NSString *const CameraVideoiOSDeviceiPhone6SPlus = @"iPhone 6s Plus";
+NSString *const CameraVideoiOSDeviceiPhone6S = @"iPhone 6s";
 NSString *const CameraVideoiOSDeviceiPhone6Plus = @"iPhone 6 Plus";
 NSString *const CameraVideoiOSDeviceiPodTouch4 = @"iPod Touch (4th Generation)";
 NSString *const CameraVideoiOSDeviceiPodTouch5 = @"iPod Touch (5th Generation)";
@@ -67,6 +69,7 @@ NSString *const CameraVideoiOSDeviceiPadAir2 = @"iPad Air 2";
 NSString *const CameraVideoiOSDeviceiPadMini = @"iPad mini";
 NSString *const CameraVideoiOSDeviceiPadMini2 = @"iPad mini (2nd generation)";
 NSString *const CameraVideoiOSDeviceiPadMini3 = @"iPad mini (3rd generation)";
+NSString *const CameraVideoiOSDeviceiPadMini4 = @"iPad mini (4th generation)";
 NSString *const CameraVideoiOSDeviceiPhoneX = @"iPhone (Unknown model)";
 NSString *const CameraVideoiOSDeviceiPodX = @"iPod (Unknown model)";
 NSString *const CameraVideoiOSDeviceiPadX = @"iPad (Unknown model)";
@@ -151,6 +154,7 @@ typedef struct {
         else if ([machine isEqualToString:@"iPad3,4"] || [machine isEqualToString:@"iPad3,5"] || [machine isEqualToString:@"iPad3,6"]) iOSDevice = CameraVideoiOSDeviceiPad4; // 4=Wifi, 5=Wifi+GSM, 6=Wifi+CDMA.
         else if ([machine isEqualToString:@"iPad4,4"] || [machine isEqualToString:@"iPad4,5"] || [machine isEqualToString:@"iPad4,6"]) iOSDevice = CameraVideoiOSDeviceiPadMini2; // 4=Wifi, 5=Wifi+Cellular, 6=Wifi+Cellular(China).
         else if ([machine isEqualToString:@"iPad4,7"] || [machine isEqualToString:@"iPad4,8"] || [machine isEqualToString:@"iPad4,9"]) iOSDevice = CameraVideoiOSDeviceiPadMini3; // 7=Wifi, 8=Wifi+Cellular, 9=Wifi+Cellular(China).
+        else if ([machine isEqualToString:@"iPad5,1"] || [machine isEqualToString:@"iPad5,2"]) iOSDevice = CameraVideoiOSDeviceiPadMini4;
         else if ([machine isEqualToString:@"iPad5,3"] || [machine isEqualToString:@"iPad5,4"]) iOSDevice = CameraVideoiOSDeviceiPadAir2; // 3=Wifi, 4=Wifi+Cellular.
         else if ([machine isEqualToString:@"iPhone2,1"]) iOSDevice = CameraVideoiOSDeviceiPhone3GS;
         else if ([machine isEqualToString:@"iPhone2,1"]) iOSDevice = CameraVideoiOSDeviceiPhone3GS;
@@ -158,6 +162,8 @@ typedef struct {
         else if ([machine isEqualToString:@"iPhone5,3"] || [machine isEqualToString:@"iPhone5,4"]) iOSDevice = CameraVideoiOSDeviceiPhone5c; //
         else if ([machine isEqualToString:@"iPhone7,1"]) iOSDevice = CameraVideoiOSDeviceiPhone6Plus;
         else if ([machine isEqualToString:@"iPhone7,2"]) iOSDevice = CameraVideoiOSDeviceiPhone6;
+        else if ([machine isEqualToString:@"iPhone8,1"]) iOSDevice = CameraVideoiOSDeviceiPhone6S;
+        else if ([machine isEqualToString:@"iPhone8,2"]) iOSDevice = CameraVideoiOSDeviceiPhone6SPlus;
         // Either: all known devices with same major number have identical cameras,
         // or: no known match found, provide best attempt at matching.
         else if ([machine hasPrefix:@"iPad4,"]) iOSDevice = CameraVideoiOSDeviceiPadAir; // 1=Wifi, 2=Wifi+Cellular, 3=Wifi+GSM Cellular (China).

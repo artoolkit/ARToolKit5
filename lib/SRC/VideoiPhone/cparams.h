@@ -116,5 +116,12 @@ const unsigned char camera_para_iPad_Air_2_rear_640x480_inf[cparam_size];
 const unsigned char camera_para_iPad_Air_2_rear_640x480_macro[cparam_size];
 const unsigned char camera_para_iPad_Air_2_front_1280x720[cparam_size];
 const unsigned char camera_para_iPad_Air_2_front_640x480[cparam_size];
+const unsigned char camera_para_iPhone_6s_Plus_rear_1280x720[cparam_size];
+const unsigned char camera_para_iPhone_6s_Plus_front_1280x720[cparam_size];
+const unsigned char camera_para_iPhone_6s_rear_1280x720[cparam_size];
+const unsigned char camera_para_iPhone_6s_front_1280x720[cparam_size];
+const unsigned char camera_para_iPad_mini_4_rear_1280x720[cparam_size];
+const unsigned char camera_para_iPad_mini_4_front_1280x720[cparam_size];
+
 
 #endif // !__cparams_h__
