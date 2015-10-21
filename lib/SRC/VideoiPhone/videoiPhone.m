@@ -1130,6 +1130,21 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                 }
             }
         }
+        else if (iOSDevice == CameraVideoiOSDeviceiPhone6) {
+            if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
+                vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetiFrame960x540) {
+                if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
+                    cparambytes = camera_para_iPhone_6_front_1280x720;
+                    cparamname = "camera_para_iPhone_6_front_1280x720.dat";
+                } else
+                {
+                    cparambytes = camera_para_iPhone_6_rear_1280x720;
+                    cparamname = "camera_para_iPhone_6_rear_1280x720_0_3m.dat";
+                }
+            }
+        }
         else if (iOSDevice == CameraVideoiOSDeviceiPhone6SPlus) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
