@@ -114,10 +114,12 @@ static const char *locationNameFromEnum(const Windows::Devices::Enumeration::Pan
 //---------------------------------------------------------
 
 WindowsMediaCapture::WindowsMediaCapture(void) :
-	m_started(false),
-	m_frameGrabberInited(false),
+    m_started(false),
+    m_frameGrabberInited(false),
     m_frameGrabberIsDone(false),
-    m_stopLockCondVar {}
+    m_stopLockCondVar {},
+    m_aspectRatio(AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET),
+    m_captureResConfigOption(AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET)
 {
     ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::ctor(): called");
 }
@@ -147,9 +149,89 @@ bool WindowsMediaCapture::initDevices()
 	return true;
 }
 
+/*private: */bool  WindowsMediaCapture::FindResolutionBasedOnAspectRatio(VideoDeviceController^ vDC_Handle, unsigned int& resultW, unsigned int& resultH)
+{
+    bool FoundMatch = false;
+    if ((AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET == m_aspectRatio) ||
+        ((AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_1_1 != m_aspectRatio) &&
+         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9 != m_aspectRatio) &&
+         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3 != m_aspectRatio) &&
+         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_8_5 != m_aspectRatio)) ||
+        (AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET == m_captureResConfigOption) ||
+        ((0 == m_width) && (0 == m_height)))
+        return(FoundMatch);
+
+    int minOrMaxW = 0, minOrMaxH = 0;
+    IVectorView<IMediaEncodingProperties^>^ resultVector = vDC_Handle->GetAvailableMediaStreamProperties(MediaStreamType::VideoPreview);
+    unsigned int numOfSupportedRes = resultVector->Size;
+    for (unsigned int ii = 0; ii < numOfSupportedRes; ii++)
+    {
+        IMediaEncodingProperties^ ME_Props = resultVector->GetAt(ii);
+        VideoEncodingProperties^ VE_Props = (VideoEncodingProperties^)ME_Props;
+
+        AR_VIDEO_ASPECT_RATIO derivedPixelAspect = arVideoUtilFindAspectRatio(VE_Props->Width, VE_Props->Height);
+        if (m_aspectRatio != derivedPixelAspect)
+            continue;
+
+        switch (m_captureResConfigOption)
+        {
+            case AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_W:
+                if (0 == m_width)
+                    return(FoundMatch);
+                if ((VE_Props->Width >= m_width) && ((VE_Props->Width < minOrMaxW) || (0 == minOrMaxW)))
+                {
+                    minOrMaxW = VE_Props->Width;
+                    resultW = VE_Props->Width;
+                    resultH = VE_Props->Height;
+                    FoundMatch = true;
+                }
+            break;
+            case AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_H:
+                if (0 == m_height)
+                    return(FoundMatch);
+                if ((VE_Props->Height >= m_height) && ((VE_Props->Height < minOrMaxH) || (0 == minOrMaxH)))
+                {
+                    minOrMaxH = VE_Props->Height;
+                    resultW = VE_Props->Width;
+                    resultH = VE_Props->Height;
+                    FoundMatch = true;
+                }
+            break;
+            case AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MAX_RES_BASED_ON_W:
+                if (0 == m_width)
+                    return(FoundMatch);
+                if ((VE_Props->Width <= m_width) && ((VE_Props->Width > minOrMaxW) || (0 == minOrMaxW)))
+                {
+                    minOrMaxW = VE_Props->Width;
+                    resultW = VE_Props->Width;
+                    resultH = VE_Props->Height;
+                    FoundMatch = true;
+                }
+            break;
+            case AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MAX_RES_BASED_ON_H:
+                if (0 == m_height)
+                    return(FoundMatch);
+                if ((VE_Props->Height <= m_height) && ((VE_Props->Height > minOrMaxH) || (0 == minOrMaxH)))
+                {
+                    minOrMaxH = VE_Props->Height;
+                    resultW = VE_Props->Width;
+                    resultH = VE_Props->Height;
+                    FoundMatch = true;
+                }
+            break;
+        }
+    }
+    return(FoundMatch);
+}
+
 // This must initialize the camera, get the resolutions and prep for the start.
-bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelFormat, int preferredDeviceIndex, Windows::Devices::Enumeration::Panel preferredLocation,
-                                       void (*errorCallback)(void *), void *errorCallbackUserdata) 
+bool WindowsMediaCapture::StartCapture(int width, int height,
+                                       AR_VIDEO_ASPECT_RATIO aspectRatio, AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO captureResConfigOption,
+                                       String^ pixelFormat,
+                                       int preferredDeviceIndex,
+                                       Windows::Devices::Enumeration::Panel preferredLocation,
+                                       void (*errorCallback)(void *),
+                                       void *errorCallbackUserdata)
 {
     ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): called (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
 
@@ -171,6 +253,8 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 	// Stash parameters.
 	m_width = width;
 	m_height = height;
+    m_aspectRatio = aspectRatio;
+    m_captureResConfigOption = captureResConfigOption;
 	m_pixelFormat = pixelFormat;
     m_errorCallback = errorCallback;
     m_errorCallbackUserdata = errorCallbackUserdata;
@@ -223,8 +307,11 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 	captureInitSettings->AudioDeviceId = nullptr;
 	captureInitSettings->StreamingCaptureMode = StreamingCaptureMode::Video;
 
+    auto mediaCapture = ref new Windows::Media::Capture::MediaCapture();
+
 	try {
-		auto mediaCapture = ref new Windows::Media::Capture::MediaCapture();
+		//auto mediaCapture = ref new Windows::Media::Capture::MediaCapture();
+        //mediaCapture = ref new Windows::Media::Capture::MediaCapture();
         if (mediaCapture == nullptr) {
             ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null MediaCapture, exiting returning false");
             m_started = false;
@@ -251,88 +338,133 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 			return false;
 		}
 
-		cd->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
-			         ref new Windows::UI::Core::DispatchedHandler(
-            [this, captureInitSettings]()
-		    {
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda) executing, (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
-			    // Code here will execute on UI thread.
+        task_completion_event<void> WaitUntil_W_H_AreSet;
+        task<void> W_H_SetEvent(WaitUntil_W_H_AreSet);
+
+        cd->RunAsync(
+            Windows::UI::Core::CoreDispatcherPriority::Normal,
+            ref new Windows::UI::Core::DispatchedHandler(
+                [this, captureInitSettings, WaitUntil_W_H_AreSet]()
+                {
+                    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda) executing, (ThdID-%d, %s)", GetCurrentThreadId(),
+                           GetTimeStamp());
+			        // Code here will execute on UI thread.
 		
-			    // InitializeAsync must run on UI STA thread, so that it can get access to the WebCam.
-                task<void> initTask = create_task(m_mediaCapture->InitializeAsync(captureInitSettings));
-			    auto initTask2 = initTask.then(
-				    //.then([this](task<void> initTask) // Task-based continuation
-				    [this]() // Value-based continuation, does not run if InitializeAsync() throws.
-			        {
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) executing, (ThdID-%d)",
-                                    GetCurrentThreadId());
-				        //try {
-				        //	initTask.get(); // Also needs to be surrounded with try{} catch() {}.
-				        //} catch (Exception ^ e) {
-				        //	ARLOGe("Error: unable to initialise Windows::Media::Capture::MediaCapture.\n");
-				        //	ARLOGe(ps_to_ansicstr(e->Message));
-				        //	//if (m_errorCallback) (*m_errorCallback)(m_errorCallbackUserdata);
-				        //	return;
-				        //}
-			
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) before Agile<Windows::MediaCapture>.Get()");
-				        auto mediaCapture = m_mediaCapture.Get();
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) after Agile<Windows::MediaCapture>.Get()");
-
-				        //ShowStatusMessage("Device initialized OK");
-				
-				        // Can't currently use this function, as we're not a ref class.
-				        //mediaCapture->Failed += ref new Windows::Media::Capture::MediaCaptureFailedEventHandler(this, &WindowsMediaCapture::Failed);
-
-				        //IVectorView<IMediaEncodingProperties^>^ res = mediaCapture->VideoDeviceController->GetAvailableMediaStreamProperties(MediaStreamType::Photo);
-				        // Now iterate through and examine supported resolutions.
-				        // NOT YET IMPLEMENTED. Instead:
-				        auto props = safe_cast<VideoEncodingProperties^>(mediaCapture->VideoDeviceController->GetMediaStreamProperties(MediaStreamType::VideoPreview));
-				        props->Subtype = m_pixelFormat;
-				        props->Width = m_width;
-				        props->Height = m_height;
-
-				        // Allocate buffers.
-				        if      (m_pixelFormat == MediaEncodingSubtypes::Rgb24) m_Bpp = 3;
-				        else if	(m_pixelFormat == MediaEncodingSubtypes::Rgb32 || m_pixelFormat == MediaEncodingSubtypes::Argb32 || m_pixelFormat == MediaEncodingSubtypes::Bgra8) m_Bpp = 4;
-				        else if (m_pixelFormat == MediaEncodingSubtypes::Yuy2) m_Bpp = 2;
-				        //else if (m_pixelFormat == MediaEncodingSubtypes::Nv12) m_Bpp = 1.5; // 2 planes.
-				        //else if (m_pixelFormat == MediaEncodingSubtypes::Yv12 || m_pixelFormat == MediaEncodingSubtypes::Iyuv) m_Bpp = 1.5; // 3 planes. Also, Iyuv == I420. 
-				        else {
-					        ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
-					        throw ref new InvalidArgumentException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
-				        }
-				        size_t bufSize = m_width * m_Bpp * m_height;
-				        m_buf0 = (uint8_t *)malloc(bufSize);
-				        m_buf1 = (uint8_t *)malloc(bufSize);
-				        if (!m_buf0 || !m_buf1) {
-					        ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
-					        throw ref new OutOfMemoryException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to " +
-                                                               "allocate frame buffers");
-				        }
-				        m_frameCountOut = m_frameCountIn = 0L;
-				        m_bufNext = 0;
-
-				        return ::Media::CaptureFrameGrabber::CreateAsync(mediaCapture, props);
-
-			        }).then(
-                        [this](::Media::CaptureFrameGrabber^ frameGrabber) // Value-based continuation, does not run if preceding block throws.
+			        // InitializeAsync must run on UI STA thread, so that it can get access to the WebCam.
+                    task<void> initTask = create_task(m_mediaCapture->InitializeAsync(captureInitSettings));
+			        auto initTask2 = initTask.then(
+				        //[this](task<void> initTask)  // Task-based continuation - passing a task as the continuation task will cause the passed task 
+                        //                             // to always be scheduled for execution when the antecedent task finishes, even when the
+                                                       // antecedent task is canceled or throws an exception.
+				        [this, WaitUntil_W_H_AreSet]() // Value-based continuation, does not run if antecedent task, InitializeAsync(), is canceled or
+                                                       // throws.
 			            {
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) executing, m_frameGrabberInited=true, m_frameGrabberIsDone=false, (ThdID-%d)",
-                                        GetCurrentThreadId());
-				            m_frameGrabber = frameGrabber;
-				            m_frameGrabberInited = true;
-                            m_frameGrabberIsDone = false;
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): calling _GrabFrameAsync() to start frame grabber task (%s)",
-                                        GetTimeStamp());
-				            _GrabFrameAsync(frameGrabber);
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) exiting(End of StartAR(%s))",
-                                        GetTimeStamp());
-			            });
-		    }));//end: cd->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
-                //                  ref new Windows::UI::Core::DispatchedHandler(
-                //                      [this, captureInitSettings]()
-	} catch (Exception ^ e) {
+                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).initTask.then(initTask2) executing, (ThdID-%d)",
+                                   GetCurrentThreadId());
+				            //try {
+				            //	initTask.get(); // Also needs to be surrounded with try{} catch() {}.
+				            //} catch (Exception ^ e) {
+				            //	ARLOGe("Error: unable to initialise Windows::Media::Capture::MediaCapture.\n");
+				            //	ARLOGe(ps_to_ansicstr(e->Message));
+				            //	//if (m_errorCallback) (*m_errorCallback)(m_errorCallbackUserdata);
+				            //	return;
+				            //}
+
+                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) before Agile<Windows::MediaCapture>.Get()");
+				            auto mediaCapture = m_mediaCapture.Get();
+                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) after Agile<Windows::MediaCapture>.Get()");
+
+                            //ShowStatusMessage("Device initialized OK");
+
+                            //Can't currently use this function, as we're not a ref class.
+                            //    mediaCapture->Failed += ref new Windows::Media::Capture::MediaCaptureFailedEventHandler(
+                            //                                                                 this,
+                            //                                                                 &WindowsMediaCapture::Failed);
+
+                            //IVectorView<IMediaEncodingProperties^>^ res =
+                            //    mediaCapture->VideoDeviceController->GetAvailableMediaStreamProperties(MediaStreamType::VideoPreview);
+                            //Example:
+                            //    Now iterate through and examine supported resolutions.
+                            //    for (int ii = 0; ii < res->Size; ii++)
+                            //    {
+                            //        IMediaEncodingProperties^ foo = res->GetAt(ii);
+                            //        VideoEncodingProperties^ foo2 = (VideoEncodingProperties^)foo;
+                            //        UINT jj = foo2->Height;
+                            //        UINT kk = foo2->Width;
+                            //        Platform::String^ Par = foo2->PixelAspectRatio->ToString();
+                            //        Platform::String^ Subtype = foo2->Subtype;
+                            //    }
+
+                            auto props = safe_cast<VideoEncodingProperties^>(mediaCapture->VideoDeviceController->GetMediaStreamProperties(MediaStreamType::VideoPreview));
+                            props->Subtype = m_pixelFormat;
+
+                            if (AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET != m_captureResConfigOption)
+                            {
+                                unsigned int newW, newH;
+                                if (WindowsMediaCapture::FindResolutionBasedOnAspectRatio(mediaCapture->VideoDeviceController, newW, newH))
+                                {
+                                    m_width = newW;
+                                    m_height = newH;
+                                }
+                                else
+                                {   //Reset to device default
+                                    m_width = props->Width; //e.g.: 1024
+                                    m_height = props->Height; //e.g.: 640
+                                    m_aspectRatio = arVideoUtilFindAspectRatio(m_width, m_height); //e.g. aspect ratio: 8:5 (AR_VIDEO_ASPECT_RATIO_8_5)
+                                }
+                            }
+
+                            props->Width = m_width;
+                            props->Height = m_height;
+
+				            // Allocate buffers.
+				            if      (m_pixelFormat == MediaEncodingSubtypes::Rgb24) m_Bpp = 3;
+				            else if	(m_pixelFormat == MediaEncodingSubtypes::Rgb32 || m_pixelFormat == MediaEncodingSubtypes::Argb32 ||
+                                     m_pixelFormat == MediaEncodingSubtypes::Bgra8) m_Bpp = 4;
+				            else if (m_pixelFormat == MediaEncodingSubtypes::Yuy2) m_Bpp = 2;
+				            //else if (m_pixelFormat == MediaEncodingSubtypes::Nv12) m_Bpp = 1.5; // 2 planes.
+				            //else if (m_pixelFormat == MediaEncodingSubtypes::Yv12 || m_pixelFormat == MediaEncodingSubtypes::Iyuv) m_Bpp = 1.5;
+                            //     3 planes. Also, Iyuv == I420.
+				            else {
+					            ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+					            throw ref new InvalidArgumentException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+				            }
+                            size_t bufSize = m_width * m_Bpp * m_height;
+				            m_buf0 = (uint8_t *)malloc(bufSize);
+				            m_buf1 = (uint8_t *)malloc(bufSize);
+				            if (!m_buf0 || !m_buf1) {
+					            ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
+					            throw ref new OutOfMemoryException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to " +
+                                                                   "allocate frame buffers");
+				            }
+				            m_frameCountOut = m_frameCountIn = 0L;
+				            m_bufNext = 0;
+
+                            WaitUntil_W_H_AreSet.set();
+                            return(::Media::CaptureFrameGrabber::CreateAsync(mediaCapture, props));
+
+                        }).then(
+                            [this](::Media::CaptureFrameGrabber^ frameGrabber) // Value-based continuation, does not run if preceding block throws.
+			                {
+                                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) executing, m_frameGrabberInited=true, m_frameGrabberIsDone=false, (ThdID-%d)",
+                                            GetCurrentThreadId());
+				                m_frameGrabber = frameGrabber;
+				                m_frameGrabberInited = true;
+                                m_frameGrabberIsDone = false;
+                                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): calling _GrabFrameAsync() to start frame grabber task (%s)",
+                                            GetTimeStamp());
+				                _GrabFrameAsync(frameGrabber);
+                                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) exiting(End of StartAR(%s))",
+                                            GetTimeStamp());
+			                });
+                }));//end: cd->RunAsync(
+                    //         Windows::UI::Core::CoreDispatcherPriority::Normal,
+                    //         ref new Windows::UI::Core::DispatchedHandler(
+                    //             [this, captureInitSettings](){}))
+
+        W_H_SetEvent.then([](){}).get();
+
+    } catch (Exception ^ e) {
 		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-unable to initialise Windows::Media::Capture::MediaCapture, exiting returning false");
 		ARLOGe(ps_to_ansicstr(e->Message));
         m_started = false;
@@ -510,12 +642,12 @@ void WindowsMediaCapture::StopCapture()
 
 int WindowsMediaCapture::width() const
 {
-	return m_width;
+   return m_width;
 }
 
 int WindowsMediaCapture::height() const
 {
-	return m_height;
+   return m_height;
 }
 
 int WindowsMediaCapture::Bpp() const

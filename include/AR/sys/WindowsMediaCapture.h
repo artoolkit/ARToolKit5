@@ -38,6 +38,7 @@
 #pragma once
 
 #include <AR/config.h>
+#include <AR/video.h>
 
 #include <wrl/client.h>
 #include <agile.h>
@@ -57,14 +58,17 @@ public:
 	// Setup/tear down functions
 	bool StartCapture(int width,
 					  int height,
-					  Platform::String^ pixelFormat = Windows::Media::MediaProperties::MediaEncodingSubtypes::Rgb24, // Raw formats: Rgb24, Rgb32, Nv12, Argb32, Bgra8, Yv12, Yuy2, Iyuv
+                      AR_VIDEO_ASPECT_RATIO aspectRatio, AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO captureResConfigOption,
+					  Platform::String^ pixelFormat = Windows::Media::MediaProperties::MediaEncodingSubtypes::Rgb24, // Raw formats: Rgb24, Rgb32, Nv12, Argb32,
+                                                                                                                     // Bgra8, Yv12, Yuy2, Iyuv
 					  int preferredDeviceIndex = 0,
 					  Windows::Devices::Enumeration::Panel preferredLocation = Windows::Devices::Enumeration::Panel::Unknown,
 					  void (*errorCallback)(void *) = NULL,
 				      void *errorCallbackUserdata = NULL
 					);
 	bool Capturing() const; // Returns true if between StartCapture() and StopCapture().
-	uint8_t *GetFrame(); // Returns NULL if no new frame available, or pointer to frame buffer if new frame is available. Dimensions of buffer are width()*height()*Bpp(). If non-NULL buffer returned, then any previous non-NULL buffer is invalidated.
+	uint8_t *GetFrame(); // Returns NULL if no new frame available, or pointer to frame buffer if new frame is available. Dimensions of buffer are
+                         // width()*height()*Bpp(). If non-NULL buffer returned, then any previous non-NULL buffer is invalidated.
 	void StopCapture();
 
 	int width() const;
@@ -87,10 +91,13 @@ private:
 
 	bool initDevices();
 	void _GrabFrameAsync(Media::CaptureFrameGrabber^ frameGrabber);
+    bool FindResolutionBasedOnAspectRatio(Windows::Media::Devices::VideoDeviceController^ vDC_Handle, unsigned int& w, unsigned int& h);
 
 	bool m_started;
-	int m_width;
-	int m_height;
+	unsigned int m_width;
+	unsigned int m_height;
+    AR_VIDEO_ASPECT_RATIO m_aspectRatio;
+    AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO m_captureResConfigOption;
 	int m_Bpp;
     bool m_flipV;
 	Platform::String^ m_pixelFormat;

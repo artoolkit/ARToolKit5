@@ -45,10 +45,12 @@ struct _ASPECT_RATIOS_ENTRY {
 
 const static struct _ASPECT_RATIOS_ENTRY aspectRatios[] =
 {
+    //int width, int height, AR_VIDEO_ASPECT_RATIO aspectRatio, char *name;
     {1,  1,  AR_VIDEO_ASPECT_RATIO_1_1, "1:1"},    // 1.0:
     {11, 9,  AR_VIDEO_ASPECT_RATIO_11_9, "11:9"},  // 1.222: 176x144 (QCIF), 352x288 (CIF)
     {5,  4,  AR_VIDEO_ASPECT_RATIO_5_4, "5:4"},    // 1.25:  1280x1024 (SXGA), 2560x2048
-    {4,  3,  AR_VIDEO_ASPECT_RATIO_4_3, "4:3"},    // 1.333: 320x240 (QVGA), 480x360, 640x480 (VGA), 768x576 (576p), 800x600 (SVGA), 832x624, 960x720, 1024x768 (XGA), 1152x864, 1280x960, 1400x1050, 1600x1200, 2048x1536
+    {4,  3,  AR_VIDEO_ASPECT_RATIO_4_3, "4:3"},    // 1.333: 320x240 (QVGA), 480x360, 640x480 (VGA), 768x576 (576p), 800x600 (SVGA), 832x624, 960x720, 1024x768 (XGA),
+                                                   //        1152x864, 1280x960, 1400x1050, 1600x1200, 2048x1536
     {3,  2,  AR_VIDEO_ASPECT_RATIO_3_2, "3:2"},    // 1.5:   240x160, 480x320, 960x640, 720x480 (480p), 1152x768, 1280x854, 1440x960
     {14, 9,  AR_VIDEO_ASPECT_RATIO_14_9, "14:9"},  // 1.556:
     {8,  5,  AR_VIDEO_ASPECT_RATIO_8_5, "8:5"},    // 1.6:   320x200, 1280x800, 1440x900, 1680x1050, 1920x1200, 2560x1600
@@ -83,13 +85,15 @@ AR_VIDEO_ASPECT_RATIO arVideoUtilFindAspectRatio(int w, int h)
     for (i = 0; i < PRIMES_COUNT; i++) {
         int prime = primes[i];
         while (w_lcd >= prime && h_lcd >= prime && w_lcd % prime == 0 && h_lcd % prime == 0) {
-            w_lcd /= prime; h_lcd /= prime;
+            w_lcd /= prime;
+            h_lcd /= prime;
         }
     }
     
     // Find.
     for (i = 0; i < _ASPECT_RATIOS_COUNT; i++) {
-        if (w_lcd == aspectRatios[i].width && h_lcd == aspectRatios[i].height) return aspectRatios[i].aspectRatio;
+        if (w_lcd == aspectRatios[i].width && h_lcd == aspectRatios[i].height)
+            return aspectRatios[i].aspectRatio;
     }
     return (AR_VIDEO_ASPECT_RATIO_UNIQUE);
 }

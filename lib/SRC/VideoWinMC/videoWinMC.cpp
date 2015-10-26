@@ -28,7 +28,7 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2015 DAQRI, LLC.
  *  Copyright 2014-2015 ARToolworks, Inc.
  *
  *  Author(s): Philip Lamb
@@ -126,7 +126,8 @@ static void errorWMC(void *userdata)
 	stopWMC(vid);
 }
 
-static bool startWMC(AR2VideoParamWinMCT *vid, const int width, const int height)
+static bool startWMC(AR2VideoParamWinMCT *vid, const int width, const int height,
+                     AR_VIDEO_ASPECT_RATIO aspectRatio, AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO captureResConfigOption)
 {
 	if (!vid || !vid->wmc) return false;
 
@@ -135,7 +136,13 @@ static bool startWMC(AR2VideoParamWinMCT *vid, const int width, const int height
 		return false;
 	}
 
-	if (!vid->wmc->StartCapture(width, height, getWMCVideoMediaSubTypeForARPixelFormat(vid->format), vid->devNum - 1, vid->preferredDeviceLocation, errorWMC, (void *)vid)) {
+	if (!vid->wmc->StartCapture(width, height,
+                                aspectRatio, captureResConfigOption,
+                                getWMCVideoMediaSubTypeForARPixelFormat(vid->format),
+                                vid->devNum - 1,
+                                vid->preferredDeviceLocation,
+                                errorWMC,
+                                (void *)vid)) {
 		ARLOGe("Error starting capture.\n");
 		return false;
 	}
@@ -148,6 +155,8 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
     AR2VideoParamWinMCT     *vid;
 	int					     width = 320;
 	int					     height = 240;
+    AR_VIDEO_ASPECT_RATIO    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
+    AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET;
     int                      flipH = 0, flipV = 0;
 	int						 devNum = 0;
 	int						 showDialog = -1;
@@ -235,17 +244,45 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
                 if( sscanf( &b[7], "%d", &width ) == 0 ) err_i = 1;
             } else if( strncmp( b, "-height=", 8 ) == 0 ) {
                 if( sscanf( &b[8], "%d", &height ) == 0 ) err_i = 1;
-            } else if (strcmp(b, "-showDialog") == 0)    {
+            } else if (strncmp(b, "-aspectRatio=", 13) == 0) {
+                char AspRat[6];
+                if (sscanf(&b[13], "%s", &AspRat) == 0)
+                    err_i = 1;
+                else if (0 == strcmp(AspRat, "16:9"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9;
+                else if (0 == strcmp(AspRat, "4:3"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
+                else if (0 == strcmp(AspRat, "1:1"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_1_1;
+                else if (0 == strcmp(AspRat, "8:5"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_8_5;
+                else
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET;
+            /*e.g.: "-width_min=1024" or "-height_min=768" or "-width_max=1024" or "-height_max=768"*/
+            } else if ((strncmp(b, "-width_min=", 11) == 0) || (strncmp(b, "-width_max=", 11) == 0)) {
+                if (sscanf(&b[11], "%d", &width) == 0) err_i = 1;
+                if (NULL != strstr(b, "_min"))
+                    captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_W;
+                else // "_max"
+                    captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MAX_RES_BASED_ON_W;
+            }
+            else if ((strncmp(b, "-height_min=", 12) == 0) || (strncmp(b, "-height_max=", 12) == 0)) {
+                if (sscanf(&b[12], "%d", &height) == 0) err_i = 1;
+                if (NULL != strstr(b, "_min"))
+                    captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_H;
+                else // "_max
+                    captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MAX_RES_BASED_ON_H;
+            } else if (strcmp(b, "-showDialog") == 0) {
 				showDialog = 1;
-            } else if (strcmp(b, "-noShowDialog") == 0)    {
+            } else if (strcmp(b, "-noShowDialog") == 0) {
 				showDialog = 0;
-            } else if (strcmp(b, "-flipH") == 0)    {
+            } else if (strcmp(b, "-flipH") == 0) {
 				flipH = 1;
-            } else if (strcmp(b, "-noFlipH") == 0)    {
+            } else if (strcmp(b, "-noFlipH") == 0) {
 				flipH = 0;
-            } else if (strcmp(b, "-flipV") == 0)    {
+            } else if (strcmp(b, "-flipV") == 0) {
 				flipV = 1;
-            } else if (strcmp(b, "-noFlipV") == 0)    {
+            } else if (strcmp(b, "-noFlipV") == 0) {
 				flipV = 0;
             } else if (strcmp(b, "-device=WinMC") == 0) {
 				//ARLOG("Device set to WinMC\n");
@@ -261,18 +298,17 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
         }
     }
 
-
 	// Defaults.
 	if (vid->format == AR_PIXEL_FORMAT_INVALID) vid->format = AR_PIXEL_FORMAT_BGR;
 
-	// Alloc and init WindowsMediaCapture.
+	// Allocate and init WindowsMediaCapture.
 	vid->wmc = new WindowsMediaCapture;
 	if (!vid->wmc) {
 		ARLOGe("Error creating instance of Windows.Media.Capture.\n");
 		goto bail;
 	}
     if (flipV) vid->wmc->setFlipV(true);
-	if (!startWMC(vid, width, height)) goto bail1;
+    if (!startWMC(vid, width, height, aspectRatio, captureResConfigOption)) goto bail1;
 	    
 	return vid;
 

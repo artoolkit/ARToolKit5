@@ -683,7 +683,7 @@ int ar2VideoGetId( AR2VideoParamT *vid, ARUint32 *id0, ARUint32 *id1 )
     return (-1);
 }
 
-int ar2VideoGetSize(AR2VideoParamT *vid, int *x,int *y)
+int ar2VideoGetSize(AR2VideoParamT *vid, int *x, int *y)
 {
     if (!vid) return -1;
 #ifdef AR_INPUT_DUMMY

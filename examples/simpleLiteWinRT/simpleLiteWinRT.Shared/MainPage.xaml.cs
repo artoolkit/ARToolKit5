@@ -196,9 +196,15 @@ namespace simpleLiteWinRT
             // Load video configuration which is deployed with the app in its app-local storage
             var cameraCalibrationData = await PathIO.ReadBufferAsync("ms-appx:///data/camera_para.dat");
             var desiredVideoCameraPosition = await Helper.GetDefaultVideoDeviceLocation();
-            var videoConfiguration0 = string.Format("-device=WinMC -width={0} -height={1} -format=BGRA -position={2}", DesiredVideoWidth, DesiredVideoHeight, desiredVideoCameraPosition);
 
-            // Start capturing by passing the the video config and the Near and Far plane for the projection
+            //var videoConfiguration0 = string.Format("-device=WinMC -aspectRatio=1:1 -height_max=800 -format=BGRA -position={0}",
+            //                                        desiredVideoCameraPosition);
+            //var videoConfiguration0 = string.Format("-device=WinMC -aspectRatio=4:3 -width_max=650 -format=BGRA -position={0}",
+            //                                        desiredVideoCameraPosition);
+            var videoConfiguration0 = string.Format("-device=WinMC -width={0} -height={1} -format=BGRA -position={2}",
+                                                    DesiredVideoWidth, DesiredVideoHeight, desiredVideoCameraPosition);
+
+            // Start capturing by passing the video config and the Near and Far plane for the projection
             _isRunning = _arWrapper.arwStartRunningB(videoConfiguration0, cameraCalibrationData.ToArray(), NearPlane, FarPlane);
             if (!_isRunning)
             {
