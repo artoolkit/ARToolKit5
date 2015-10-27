@@ -197,7 +197,7 @@ namespace simpleLiteWinRT
             var cameraCalibrationData = await PathIO.ReadBufferAsync("ms-appx:///data/camera_para.dat");
             var desiredVideoCameraPosition = await Helper.GetDefaultVideoDeviceLocation();
 
-            //var videoConfiguration0 = string.Format("-device=WinMC -aspectRatio=1:1 -height_max=800 -format=BGRA -position={0}",
+            //var videoConfiguration0 = string.Format("-device=WinMC -aspectRatio=17:9 -height_max=1500 -format=BGRA -position={0}",
             //                                        desiredVideoCameraPosition);
             //var videoConfiguration0 = string.Format("-device=WinMC -aspectRatio=4:3 -width_max=650 -format=BGRA -position={0}",
             //                                        desiredVideoCameraPosition);

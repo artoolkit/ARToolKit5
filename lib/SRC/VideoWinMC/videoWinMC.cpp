@@ -248,17 +248,31 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
                 char AspRat[6];
                 if (sscanf(&b[13], "%s", &AspRat) == 0)
                     err_i = 1;
-                else if (0 == strcmp(AspRat, "16:9"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9;
-                else if (0 == strcmp(AspRat, "4:3"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
                 else if (0 == strcmp(AspRat, "1:1"))
                     aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_1_1;
+                else if (0 == strcmp(AspRat, "11:9"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_11_9;
+                else if (0 == strcmp(AspRat, "5:4"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_5_4;
+                else if (0 == strcmp(AspRat, "4:3"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
+                else if (0 == strcmp(AspRat, "3:2"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_3_2;
+                else if (0 == strcmp(AspRat, "14:9"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_14_9;
                 else if (0 == strcmp(AspRat, "8:5"))
                     aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_8_5;
+                else if (0 == strcmp(AspRat, "5:3"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_5_3;
+                else if (0 == strcmp(AspRat, "16:9"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9;
+                else if (0 == strcmp(AspRat, "9:5"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_9_5;
+                else if (0 == strcmp(AspRat, "17:9"))
+                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_17_9;
                 else
                     aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET;
-            /*e.g.: "-width_min=1024" or "-height_min=768" or "-width_max=1024" or "-height_max=768"*/
+            //e.g.: "-width_min=1024" or "-height_min=768" or "-width_max=1024" or "-height_max=768"
             } else if ((strncmp(b, "-width_min=", 11) == 0) || (strncmp(b, "-width_max=", 11) == 0)) {
                 if (sscanf(&b[11], "%d", &width) == 0) err_i = 1;
                 if (NULL != strstr(b, "_min"))

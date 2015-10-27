@@ -153,10 +153,6 @@ bool WindowsMediaCapture::initDevices()
 {
     bool FoundMatch = false;
     if ((AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET == m_aspectRatio) ||
-        ((AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_1_1 != m_aspectRatio) &&
-         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9 != m_aspectRatio) &&
-         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3 != m_aspectRatio) &&
-         (AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_8_5 != m_aspectRatio)) ||
         (AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET == m_captureResConfigOption) ||
         ((0 == m_width) && (0 == m_height)))
         return(FoundMatch);
@@ -426,16 +422,17 @@ bool WindowsMediaCapture::StartCapture(int width, int height,
 				            //else if (m_pixelFormat == MediaEncodingSubtypes::Yv12 || m_pixelFormat == MediaEncodingSubtypes::Iyuv) m_Bpp = 1.5;
                             //     3 planes. Also, Iyuv == I420.
 				            else {
-					            ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
-					            throw ref new InvalidArgumentException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+                                ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+                                throw ref new InvalidArgumentException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for " +
+                                                                           "unsupported pixel format");
 				            }
                             size_t bufSize = m_width * m_Bpp * m_height;
 				            m_buf0 = (uint8_t *)malloc(bufSize);
 				            m_buf1 = (uint8_t *)malloc(bufSize);
 				            if (!m_buf0 || !m_buf1) {
-					            ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
-					            throw ref new OutOfMemoryException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to " +
-                                                                   "allocate frame buffers");
+                                ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
+                                throw ref new OutOfMemoryException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while " +
+                                                                       "attempting to allocate frame buffers");
 				            }
 				            m_frameCountOut = m_frameCountIn = 0L;
 				            m_bufNext = 0;
