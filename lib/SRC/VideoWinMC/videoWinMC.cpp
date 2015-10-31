@@ -155,7 +155,7 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
     AR2VideoParamWinMCT     *vid;
 	int					     width = 320;
 	int					     height = 240;
-    AR_VIDEO_ASPECT_RATIO    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
+    AR_VIDEO_ASPECT_RATIO    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET;
     AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::NOT_SET;
     int                      flipH = 0, flipV = 0;
 	int						 devNum = 0;
@@ -245,42 +245,26 @@ AR2VideoParamWinMCT *ar2VideoOpenWinMC(const char *config)
             } else if( strncmp( b, "-height=", 8 ) == 0 ) {
                 if( sscanf( &b[8], "%d", &height ) == 0 ) err_i = 1;
             } else if (strncmp(b, "-aspectRatio=", 13) == 0) {
-                char AspRat[6];
-                if (sscanf(&b[13], "%s", &AspRat) == 0)
+                int ax, ay;
+                if (sscanf(&b[13], "%d:%d", &ax, &ay) < 2) {
                     err_i = 1;
-                else if (0 == strcmp(AspRat, "1:1"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_1_1;
-                else if (0 == strcmp(AspRat, "11:9"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_11_9;
-                else if (0 == strcmp(AspRat, "5:4"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_5_4;
-                else if (0 == strcmp(AspRat, "4:3"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_4_3;
-                else if (0 == strcmp(AspRat, "3:2"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_3_2;
-                else if (0 == strcmp(AspRat, "14:9"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_14_9;
-                else if (0 == strcmp(AspRat, "8:5"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_8_5;
-                else if (0 == strcmp(AspRat, "5:3"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_5_3;
-                else if (0 == strcmp(AspRat, "16:9"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_16_9;
-                else if (0 == strcmp(AspRat, "9:5"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_9_5;
-                else if (0 == strcmp(AspRat, "17:9"))
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_17_9;
-                else
-                    aspectRatio = AR_VIDEO_ASPECT_RATIO::AR_VIDEO_ASPECT_RATIO_NOT_SET;
+                } else {
+                    AR_VIDEO_ASPECT_RATIO arTemp = arVideoUtilFindAspectRatio(ax, ay);
+                    if (arTemp == AR_VIDEO_ASPECT_RATIO_NOT_SET || arTemp == AR_VIDEO_ASPECT_RATIO_UNIQUE) {
+                    	ARLOGw("Warning: Ignoring request for aspect ratio %d:%d.\n", ax, ay);
+                    } else {
+                    	aspectRatio = arTemp;
+                    }
+                }
             //e.g.: "-width_min=1024" or "-height_min=768" or "-width_max=1024" or "-height_max=768"
             } else if ((strncmp(b, "-width_min=", 11) == 0) || (strncmp(b, "-width_max=", 11) == 0)) {
                 if (sscanf(&b[11], "%d", &width) == 0) err_i = 1;
-                if (NULL != strstr(b, "_min"))
+                if (NULL != strstr(b, "_min")) {
                     captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_W;
-                else // "_max"
+                } else { // "_max"
                     captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MAX_RES_BASED_ON_W;
-            }
-            else if ((strncmp(b, "-height_min=", 12) == 0) || (strncmp(b, "-height_max=", 12) == 0)) {
+                }
+            } else if ((strncmp(b, "-height_min=", 12) == 0) || (strncmp(b, "-height_max=", 12) == 0)) {
                 if (sscanf(&b[12], "%d", &height) == 0) err_i = 1;
                 if (NULL != strstr(b, "_min"))
                     captureResConfigOption = AR_VIDEO_SUPPORTED_MIN_MAX_RES_FOR_ASPECT_RATIO::SET_MIN_RES_BASED_ON_H;
