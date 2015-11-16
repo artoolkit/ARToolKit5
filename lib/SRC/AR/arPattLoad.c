@@ -74,7 +74,7 @@ int arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer) {
     if( i == pattHandle->patt_num_max ) return -1;
     patno = i;
 
-    if (!(bufCopy = strdup(buffer))) { // Make a mutable copy.
+    if (!(bufCopy = _strdup(buffer))) { // Make a mutable copy.
         ARLOGe("Error: out of memory.\n");
         return (-1);
     }
