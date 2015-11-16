@@ -48,12 +48,14 @@ import org.artoolkit.ar.base.R;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -95,6 +97,8 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
      * Listener to inform of camera related events: start, frame, and stop.
      */
     private CameraEventListener listener;
+
+	private Activity mActivity;
     
     /**
      * Constructor takes a {@link CameraEventListener} which will be called on 
@@ -102,8 +106,9 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
      * @param cel CameraEventListener to use. Can be null.
      */
     @SuppressWarnings("deprecation")
-	public CaptureCameraPreview(Context context, CameraEventListener cel) {
-        super(context);
+	public CaptureCameraPreview(Activity activity, CameraEventListener cel) {
+        super(activity);
+        mActivity = activity;
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);      
@@ -111,6 +116,30 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
         setCameraEventListener(cel);
         
+    }
+    
+    public void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+        int rotation = mActivity.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
     
     /**
@@ -142,6 +171,7 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
             
         try {
 
+        	setCameraDisplayOrientation(cameraIndex, camera);
         	camera.setPreviewDisplay(holder);
                
         } catch (IOException exception) {

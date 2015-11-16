@@ -328,7 +328,8 @@ public class ARToolKit {
 	public boolean convertAndDetect(byte[] frame) {
 
 		if (!initedNative) return false;
-		if (frame == null) return false;
+		if (frame == null) return false;		
+		
 		if (!NativeInterface.arwAcceptVideoImage(frame, frameWidth, frameHeight, cameraIndex, cameraIsFrontFacing)) return false;
 		if (!NativeInterface.arwCapture()) return false;
 		return NativeInterface.arwUpdateAR();
