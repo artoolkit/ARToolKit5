@@ -327,6 +327,7 @@ enum {
 #include <windows.h>
 
 #define AR_CALLBACK __stdcall
+#define strdup _strdup
 
 // Define _WINRT for support Windows Runtime platforms.
 #if defined(WINAPI_FAMILY)
@@ -335,7 +336,6 @@ enum {
 #      define _WINRT
 #      define LIBARVIDEO_STATIC
 #      define ARDOUBLE_IS_FLOAT
-#      define strdup _strdup
 #    else
 #      error ARToolKit for Windows Phone requires Windows Phone 8.1 or later. Please compile with Visual Studio 2013 or later with Windows Phone 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).
 #    endif
@@ -344,7 +344,6 @@ enum {
 #      define _WINRT
 #      define LIBARVIDEO_STATIC
 #      define ARDOUBLE_IS_FLOAT
-#      define strdup _strdup
 #    else
 #      error ARToolKit for Windows Store requires Windows 8.1 or later. Please compile with Visual Studio 2013 or later with Windows 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).
 #    endif
