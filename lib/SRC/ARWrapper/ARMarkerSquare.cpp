@@ -84,12 +84,12 @@ bool ARMarkerSquare::initWithPatternFile(const char* path, ARdouble width, ARPat
     
     if (m_loaded) unload();
 
-	ARController::logv("Loading single AR marker from file '%s', width %f.", path, width);
+	ARController::logv(AR_LOG_LEVEL_INFO, "Loading single AR marker from file '%s', width %f.", path, width);
 	
     m_arPattHandle = arPattHandle;
 	patt_id = arPattLoad(m_arPattHandle, path);
 	if (patt_id < 0) {
-		ARController::logv("Error: unable to load single AR marker from file '%s'.", path);
+		ARController::logv(AR_LOG_LEVEL_ERROR, "Error: unable to load single AR marker from file '%s'.", path);
         arPattHandle = NULL;
 		return false;
 	}
@@ -114,12 +114,12 @@ bool ARMarkerSquare::initWithPatternFromBuffer(const char* buffer, ARdouble widt
 
     if (m_loaded) unload();
 
-	ARController::logv("Loading single AR marker from buffer, width %f.", width);
+	ARController::logv(AR_LOG_LEVEL_INFO, "Loading single AR marker from buffer, width %f.", width);
 	
     m_arPattHandle = arPattHandle;
 	patt_id = arPattLoadFromBuffer(m_arPattHandle, buffer);
 	if (patt_id < 0) {
-		ARController::logv("Error: unable to load single AR marker from buffer.");
+		ARController::logv(AR_LOG_LEVEL_ERROR, "Error: unable to load single AR marker from buffer.");
 		return false;
 	}
 	
@@ -142,7 +142,7 @@ bool ARMarkerSquare::initWithBarcode(int barcodeID, ARdouble width)
     
     if (m_loaded) unload();
 
-	ARController::logv("Adding single AR marker with barcode %d, width %f.", barcodeID, width);
+	ARController::logv(AR_LOG_LEVEL_INFO, "Adding single AR marker with barcode %d, width %f.", barcodeID, width);
 	
 	patt_id = barcodeID;
 	

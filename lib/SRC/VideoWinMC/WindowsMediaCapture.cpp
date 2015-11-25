@@ -119,14 +119,14 @@ WindowsMediaCapture::WindowsMediaCapture(void) :
     m_frameGrabberIsDone(false),
     m_stopLockCondVar {}
 {
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::ctor(): called");
+    ARLOGd("WindowsMediaCapture::ctor(): called");
 }
 
 WindowsMediaCapture::~WindowsMediaCapture(void)
 {
-    ARLOGi("ARWrap::ARVideo::WindowsMediaCapture::~dtor(): called");
+    ARLOGi("WindowsMediaCapture::~dtor(): called");
 	if (m_started) {
-        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::~dtor(): calling StopCapture(%s)", GetTimeStamp());
+        ARLOGd("WindowsMediaCapture::~dtor(): calling StopCapture(%s)", GetTimeStamp());
         StopCapture();
     }
 }
@@ -138,7 +138,7 @@ bool WindowsMediaCapture::initDevices()
 	auto deviceEnumTask2 = deviceEnumTask.
         then([this](DeviceInformationCollection^ devices) // value-based continuation, does not run if
         {                                                 // FindAllAsync() throws.
-            ARLOGi("ARWrap::ARVideo::WindowsMediaCapture::initDevices(): found %d video capture devices",
+            ARLOGi("WindowsMediaCapture::initDevices(): found %d video capture devices",
                         devices->Size);
 		    m_devices = devices;
 	    });
@@ -151,17 +151,17 @@ bool WindowsMediaCapture::initDevices()
 bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelFormat, int preferredDeviceIndex, Windows::Devices::Enumeration::Panel preferredLocation,
                                        void (*errorCallback)(void *), void *errorCallbackUserdata) 
 {
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): called (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
+    ARLOGd("WindowsMediaCapture::StartCapture(): called (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
 
 	if (m_started) {
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-capture already started");
+		ARLOGe("WindowsMediaCapture::StartCapture(): error-capture already started");
 	}
 	m_started = true;
 
 	if (!m_devices.Get()) {
 		initDevices();
 		if (!m_devices.Get()) {
-			ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-unable to list video capture devices, exiting returning false");
+			ARLOGe("WindowsMediaCapture::StartCapture(): error-unable to list video capture devices, exiting returning false");
 			//rootPage->NotifyUser("Error getting list of camera devices.", NotifyType::ErrorMessage);
             m_started = false;
 			return false;
@@ -183,7 +183,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 		while (i < m_devices->Size) {
 			DeviceInformation^ di = m_devices->GetAt(i);
             if (di->EnclosureLocation == nullptr) {
-                ARLOGw("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): warning-requested device location %s but device %d '%s' cannot supply a location",
+                ARLOGw("WindowsMediaCapture::StartCapture(): warning-requested device location %s but device %d '%s' cannot supply a location",
                        locationNameFromEnum(preferredLocation), i + 1, ps_to_ansicstr(di->Name));
             } else {
                 if (di->EnclosureLocation->Panel == preferredLocation) {
@@ -199,7 +199,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 	}
 
 	if (deviceIndex0 < 0) {
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-no video devices available, exiting returning false");
+		ARLOGe("WindowsMediaCapture::StartCapture(): error-no video devices available, exiting returning false");
 		//rootPage->NotifyUser("No camera device found.", NotifyType::ErrorMessage);
         m_started = false;
 		return false;
@@ -207,7 +207,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 
 	DeviceInformation^ di = m_devices->GetAt(deviceIndex0);
 	if (di == nullptr) { // Sanity check.
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null DeviceInformation, exiting returning false");
+		ARLOGe("WindowsMediaCapture::StartCapture(): error-null DeviceInformation, exiting returning false");
         m_started = false;
 		return false;
 	}
@@ -215,7 +215,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 	m_deviceName = ps_to_ansis(di->Name);
 	if (di->EnclosureLocation == nullptr) m_deviceLocation = Windows::Devices::Enumeration::Panel::Unknown;
 	else m_deviceLocation = di->EnclosureLocation->Panel;
-	ARLOGi("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): using device %d '%s' (location:%s)",
+	ARLOGi("WindowsMediaCapture::StartCapture(): using device %d '%s' (location:%s)",
                 deviceIndex0 + 1, m_deviceName.c_str(), locationNameFromEnum(m_deviceLocation));
 
 	Windows::Media::Capture::MediaCaptureInitializationSettings^ captureInitSettings = ref new MediaCaptureInitializationSettings();
@@ -226,7 +226,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 	try {
 		auto mediaCapture = ref new Windows::Media::Capture::MediaCapture();
         if (mediaCapture == nullptr) {
-            ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null MediaCapture, exiting returning false");
+            ARLOGe("WindowsMediaCapture::StartCapture(): error-null MediaCapture, exiting returning false");
             m_started = false;
             return false;
         }
@@ -234,19 +234,19 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 
 		Windows::ApplicationModel::Core::CoreApplicationView^ cav = Windows::ApplicationModel::Core::CoreApplication::MainView;
 		if (cav == nullptr) {
-			ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null CoreApplicationView, exiting returning false");
+			ARLOGe("WindowsMediaCapture::StartCapture(): error-null CoreApplicationView, exiting returning false");
             m_started = false;
 			return false;
 		}
 		Windows::UI::Core::CoreWindow^ cw = cav->CoreWindow;
 		if (cw == nullptr) {
-			ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null CoreWindow, exiting returning false");
+			ARLOGe("WindowsMediaCapture::StartCapture(): error-null CoreWindow, exiting returning false");
             m_started = false;
 			return false;
 		}
 		Windows::UI::Core::CoreDispatcher^ cd = cw->Dispatcher;
 		if (cd == nullptr) {
-			ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-null CoreDispatcher, exiting returning false");
+			ARLOGe("WindowsMediaCapture::StartCapture(): error-null CoreDispatcher, exiting returning false");
             m_started = false;
 			return false;
 		}
@@ -255,7 +255,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 			         ref new Windows::UI::Core::DispatchedHandler(
             [this, captureInitSettings]()
 		    {
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda) executing, (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
+                ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda) executing, (ThdID-%d, %s)", GetCurrentThreadId(), GetTimeStamp());
 			    // Code here will execute on UI thread.
 		
 			    // InitializeAsync must run on UI STA thread, so that it can get access to the WebCam.
@@ -264,7 +264,7 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 				    //.then([this](task<void> initTask) // Task-based continuation
 				    [this]() // Value-based continuation, does not run if InitializeAsync() throws.
 			        {
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) executing, (ThdID-%d)",
+                        ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) executing, (ThdID-%d)",
                                     GetCurrentThreadId());
 				        //try {
 				        //	initTask.get(); // Also needs to be surrounded with try{} catch() {}.
@@ -275,9 +275,9 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 				        //	return;
 				        //}
 			
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) before Agile<Windows::MediaCapture>.Get()");
+                        ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) before Agile<Windows::MediaCapture>.Get()");
 				        auto mediaCapture = m_mediaCapture.Get();
-                        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) after Agile<Windows::MediaCapture>.Get()");
+                        ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2) after Agile<Windows::MediaCapture>.Get()");
 
 				        //ShowStatusMessage("Device initialized OK");
 				
@@ -299,15 +299,15 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 				        //else if (m_pixelFormat == MediaEncodingSubtypes::Nv12) m_Bpp = 1.5; // 2 planes.
 				        //else if (m_pixelFormat == MediaEncodingSubtypes::Yv12 || m_pixelFormat == MediaEncodingSubtypes::Iyuv) m_Bpp = 1.5; // 3 planes. Also, Iyuv == I420. 
 				        else {
-					        ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
-					        throw ref new InvalidArgumentException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+					        ARLOGe("WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
+					        throw ref new InvalidArgumentException("WindowsMediaCapture::StartCapture(): error-request for unsupported pixel format");
 				        }
 				        size_t bufSize = m_width * m_Bpp * m_height;
 				        m_buf0 = (uint8_t *)malloc(bufSize);
 				        m_buf1 = (uint8_t *)malloc(bufSize);
 				        if (!m_buf0 || !m_buf1) {
-					        ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
-					        throw ref new OutOfMemoryException("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-out of memory while attempting to " +
+					        ARLOGe("WindowsMediaCapture::StartCapture(): error-out of memory while attempting to allocate frame buffers");
+					        throw ref new OutOfMemoryException("WindowsMediaCapture::StartCapture(): error-out of memory while attempting to " +
                                                                "allocate frame buffers");
 				        }
 				        m_frameCountOut = m_frameCountIn = 0L;
@@ -318,28 +318,28 @@ bool WindowsMediaCapture::StartCapture(int width, int height, String^ pixelForma
 			        }).then(
                         [this](::Media::CaptureFrameGrabber^ frameGrabber) // Value-based continuation, does not run if preceding block throws.
 			            {
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) executing, m_frameGrabberInited=true, m_frameGrabberIsDone=false, (ThdID-%d)",
+                            ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) executing, m_frameGrabberInited=true, m_frameGrabberIsDone=false, (ThdID-%d)",
                                         GetCurrentThreadId());
 				            m_frameGrabber = frameGrabber;
 				            m_frameGrabberInited = true;
                             m_frameGrabberIsDone = false;
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): calling _GrabFrameAsync() to start frame grabber task (%s)",
+                            ARLOGd("WindowsMediaCapture::StartCapture(): calling _GrabFrameAsync() to start frame grabber task (%s)",
                                         GetTimeStamp());
 				            _GrabFrameAsync(frameGrabber);
-                            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) exiting(End of StartAR(%s))",
+                            ARLOGd("WindowsMediaCapture::StartCapture(): RunAsync(lambda).task(initTask).then(initTask2).then(lambda) exiting(End of StartAR(%s))",
                                         GetTimeStamp());
 			            });
 		    }));//end: cd->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
                 //                  ref new Windows::UI::Core::DispatchedHandler(
                 //                      [this, captureInitSettings]()
 	} catch (Exception ^ e) {
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): error-unable to initialise Windows::Media::Capture::MediaCapture, exiting returning false");
+		ARLOGe("WindowsMediaCapture::StartCapture(): error-unable to initialise Windows::Media::Capture::MediaCapture, exiting returning false");
 		ARLOGe(ps_to_ansicstr(e->Message));
         m_started = false;
         return false;
 	}
 
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StartCapture(): exiting returning true");
+    ARLOGd("WindowsMediaCapture::StartCapture(): exiting returning true");
 	return true;
 }
 
@@ -350,9 +350,9 @@ bool WindowsMediaCapture::Capturing() const
 
 void WindowsMediaCapture::_GrabFrameAsync(Media::CaptureFrameGrabber^ frameGrabber)
 {
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): called (ThdID-%d)", GetCurrentThreadId());
+    ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): called (ThdID-%d)", GetCurrentThreadId());
 	if (frameGrabber == nullptr) { // Sanity check.
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): error-NULL frameGrabber, exiting");
+		ARLOGe("WindowsMediaCapture::_GrabFrameAsync(): error-NULL frameGrabber, exiting");
 		return;
 	}
 	
@@ -361,11 +361,11 @@ void WindowsMediaCapture::_GrabFrameAsync(Media::CaptureFrameGrabber^ frameGrabb
         [this, frameGrabber](task<ComPtr<IMF2DBuffer2>> task1)
         {
             bool grabbedOK = false;
-            ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): getFrameTask2 (frameGrabber->GetFrameAsync() task).then(lambda exp) entered (ThdID-%d)", GetCurrentThreadId());
+            ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): getFrameTask2 (frameGrabber->GetFrameAsync() task).then(lambda exp) entered (ThdID-%d)", GetCurrentThreadId());
         
             ComPtr<IMF2DBuffer2>& buffer = task1.get();
 		    if (!buffer) { // If CaptureFrameGrabber::GetFrameAsync() fails, buffer will be NULL.
-                ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): error-NULL task<ComPtr<IMF2DBuffer2>> param");
+                ARLOGe("WindowsMediaCapture::_GrabFrameAsync(): error-NULL task<ComPtr<IMF2DBuffer2>> param");
             } else {
                 if (m_frameGrabberInited) {
                     std::lock_guard<std::mutex> lock(m_bufLock); // Locks when constructed, unlocks when deleted (deleted when it goes out of scope).
@@ -373,7 +373,7 @@ void WindowsMediaCapture::_GrabFrameAsync(Media::CaptureFrameGrabber^ frameGrabb
                     // Copy the pixels from the IMF2DBuffer2
                     uint8_t* buf = (m_bufNext ? m_buf1 : m_buf0);
                     if (!buf || !m_width || !m_height || !m_Bpp) {
-                        ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): error-video parameters are incomplete");
+                        ARLOGe("WindowsMediaCapture::_GrabFrameAsync(): error-video parameters are incomplete");
                     } else {
                         size_t bufRowBytes = m_width * m_Bpp;
 
@@ -426,20 +426,20 @@ void WindowsMediaCapture::_GrabFrameAsync(Media::CaptureFrameGrabber^ frameGrabb
             // task_continuation_context::use_current(), it won't actually begin to execute
             // until this task is done.
             if (m_frameGrabberInited && grabbedOK) {
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): if (m_frameGrabberInited && grabbedOK) true");
+                ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): if (m_frameGrabberInited && grabbedOK) true");
                 _GrabFrameAsync(frameGrabber);
             } else {
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): done, locking m_stopLockMutex, setting m_frameGrabberIsDone=true, notifying m_stopLockCondVar wait thread");
+                ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): done, locking m_stopLockMutex, setting m_frameGrabberIsDone=true, notifying m_stopLockCondVar wait thread");
                 std::unique_lock<std::mutex> lock(m_stopLockMutex);
 			    m_frameGrabberIsDone = true;
 			    lock.unlock(); // Manual unlocking is done before notifying, to avoid waking up any waiting thread only to block again (see notify_one for details).
                 m_stopLockCondVar.notify_one();
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): notified m_stopLockCondVar StopCapture thread");
+                ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): notified m_stopLockCondVar StopCapture thread");
 		    }
         }, //end: continuation task param arg 1: [this, frameGrabber](task<ComPtr<IMF2DBuffer2>> task1){}
         task_continuation_context::use_current() //end: continuation task param arg 2
     ); //end: getFrameTask2([this, frameGrabber](task<ComPtr<IMF2DBuffer2>> task1), task_continuation_context::use_current())
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::_GrabFrameAsync(): exiting (ThdID-%d)", GetCurrentThreadId());
+    ARLOGd("WindowsMediaCapture::_GrabFrameAsync(): exiting (ThdID-%d)", GetCurrentThreadId());
 }
 
 uint8_t *WindowsMediaCapture::GetFrame()
@@ -462,22 +462,22 @@ uint8_t *WindowsMediaCapture::GetFrame()
 
 void WindowsMediaCapture::StopCapture()
 {
-    ARLOGi("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): called (ThdID-%d)\n", GetCurrentThreadId());
+    ARLOGi("WindowsMediaCapture::StopCapture(): called (ThdID-%d)\n", GetCurrentThreadId());
 	if (!m_started) {
-		ARLOGe("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): Error-capture already stopped\n");
+		ARLOGe("WindowsMediaCapture::StopCapture(): Error-capture already stopped\n");
 		return;
 	}
 	m_started = false;
 
 	m_frameGrabberInited = false; // At the end of the current grab, framegrabber will not start a new grab.
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): m_frameGrabberInited was just set to false");
+    ARLOGd("WindowsMediaCapture::StopCapture(): m_frameGrabberInited was just set to false");
     if (m_frameGrabber != nullptr) {
-        ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): if (m_frameGrabber != nullptr) true\n");
+        ARLOGd("WindowsMediaCapture::StopCapture(): if (m_frameGrabber != nullptr) true\n");
         // Wait for framegrabber to exit.
         {
             std::unique_lock<std::mutex> lock(m_stopLockMutex);
             if (!m_frameGrabberIsDone) {
-                ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): if (!m_frameGrabberIsDone) true, calling m_stopLockCondVar.wait()\n");
+                ARLOGd("WindowsMediaCapture::StopCapture(): if (!m_frameGrabberIsDone) true, calling m_stopLockCondVar.wait()\n");
                 // Atomically releases lock and enters a wait/sleep state. Atomically grabs lock and comes out of sleep state when predicate becomes true.
                 // While passed in predicate evaluates to false, m_stopLockCondVar continues to wait.
                 m_stopLockCondVar.wait(lock,
@@ -488,7 +488,7 @@ void WindowsMediaCapture::StopCapture()
             }
 		}
 
-        ARLOGi("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): m_frameGrabberIsDone must be true (%s)\n", ((m_frameGrabberIsDone)? "true" : "false"));
+        ARLOGi("WindowsMediaCapture::StopCapture(): m_frameGrabberIsDone must be true (%s)\n", ((m_frameGrabberIsDone)? "true" : "false"));
 		auto finishTask = create_task(m_frameGrabber->FinishAsync());
 		auto finishTask2 = finishTask.then([this]
 		                                   {
@@ -505,7 +505,7 @@ void WindowsMediaCapture::StopCapture()
 		free(m_buf1);
 		m_buf1 = NULL;
 	}
-    ARLOGd("ARWrap::ARVideo::WindowsMediaCapture::StopCapture(): exiting(End of StopAR(%s))", GetTimeStamp());
+    ARLOGd("WindowsMediaCapture::StopCapture(): exiting(End of StopAR(%s))", GetTimeStamp());
 }
 
 int WindowsMediaCapture::width() const

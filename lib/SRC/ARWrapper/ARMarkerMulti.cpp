@@ -65,7 +65,7 @@ bool ARMarkerMulti::load(const char *multiConfig, ARPattHandle *arPattHandle)
     config = arMultiReadConfigFile(multiConfig, arPattHandle);
 	
 	if (!config) {
-		ARController::logv("Error loading multimarker config %s", multiConfig);
+		ARController::logv(AR_LOG_LEVEL_ERROR, "Error loading multimarker config %s", multiConfig);
 		return false;
 	}
 	

@@ -154,22 +154,22 @@ int ARController::getError()
 
 bool ARController::initialiseBase(const int patternSize, const int patternCountMax)
 {
-    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::initialiseBase(): called");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::initialiseBase(): called");
 	if (state != NOTHING_INITIALISED) {
         logv(AR_LOG_LEVEL_ERROR, "Initialise called while already initialised. Will shutdown first, exiting, returning false");
 		if (!shutdown())
             return false;
 	}
-	logv(AR_LOG_LEVEL_INFO, "ARWrap::ARController::initialiseBase(): Initialising...");
+	logv(AR_LOG_LEVEL_INFO, "ARWrapper::ARController::initialiseBase(): Initialising...");
 
 	// Check libAR version matches libARvideo version.
 	ARUint32 version = arGetVersion(NULL);
 #if !TARGET_PLATFORM_ANDROID 
     ARUint32 videoVersion = arVideoGetVersion();
     if (version != videoVersion)
-        logv(AR_LOG_LEVEL_WARN, "ARWrap::ARController::initialiseBase(): ARToolKit libAR version (%06x) does not match libARvideo version (%06x)", version >> 8, videoVersion >> 8);
+        logv(AR_LOG_LEVEL_WARN, "ARWrapper::ARController::initialiseBase(): ARToolKit libAR version (%06x) does not match libARvideo version (%06x)", version >> 8, videoVersion >> 8);
     if (videoVersion < 0x04050b00) { // Minimum version 4.5.11 required.
-        logv(AR_LOG_LEVEL_ERROR, "ARWrap::ARController::initialiseBase(): ARToolKit libARvideo version (%06x) is too old. Version 04050b required, exiting, returning false", videoVersion >> 8);
+        logv(AR_LOG_LEVEL_ERROR, "ARWrapper::ARController::initialiseBase(): ARToolKit libARvideo version (%06x) is too old. Version 04050b required, exiting, returning false", videoVersion >> 8);
         return (false);
     }
 #endif
@@ -182,7 +182,7 @@ bool ARController::initialiseBase(const int patternSize, const int patternCountM
 
 	state = BASE_INITIALISED;
 
-    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::initialiseBase(): Initialised, exiting, returning true");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::initialiseBase(): Initialised, exiting, returning true");
 	return true;
 }
 
@@ -382,18 +382,18 @@ bool ARController::capture()
 {
     // First check there is a video source and it's open.
     if (!m_videoSource0 || !m_videoSource0->isOpen() || (m_videoSourceIsStereo && (!m_videoSource1 || !m_videoSource1->isOpen()))) {
-        logv(AR_LOG_LEVEL_ERROR, "ARWrap::ARController::capture(): Error-no video source or video source is closed, returning false");
+        logv(AR_LOG_LEVEL_ERROR, "ARWrapper::ARController::capture(): Error-no video source or video source is closed, returning false");
         return false;
     }
 
     if (!m_videoSource0->captureFrame()) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::capture(): m_videoSource0->captureFrame() returned false, exiting returning false");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::capture(): m_videoSource0->captureFrame() returned false, exiting returning false");
         return false;
     }
     
     if (m_videoSourceIsStereo) {
         if (!m_videoSource1->captureFrame()) {
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::capture(): m_videoSource1->captureFrame() returned false, exiting returning false");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::capture(): m_videoSource1->captureFrame() returned false, exiting returning false");
             return false;
         }
     }
@@ -448,14 +448,14 @@ bool ARController::update()
 	if (state != DETECTION_RUNNING) {
         if (state != WAITING_FOR_VIDEO) {
             // State is NOTHING_INITIALISED or BASE_INITIALISED.
-            logv(AR_LOG_LEVEL_ERROR, "ARWrap::ARController::update(): Error-if (state != WAITING_FOR_VIDEO) true, exiting returning false");
+            logv(AR_LOG_LEVEL_ERROR, "ARWrapper::ARController::update(): Error-if (state != WAITING_FOR_VIDEO) true, exiting returning false");
             return false;
             
         } else {
            
             // First check there is a video source and it's open.
             if (!m_videoSource0 || !m_videoSource0->isOpen() || (m_videoSourceIsStereo && (!m_videoSource1 || !m_videoSource1->isOpen()))) {
-                logv(AR_LOG_LEVEL_ERROR, "ARWrap::ARController::update(): Error-no video source or video source is closed, exiting returning false");
+                logv(AR_LOG_LEVEL_ERROR, "ARWrapper::ARController::update(): Error-no video source or video source is closed, exiting returning false");
                 return false;
             }
 
@@ -465,7 +465,7 @@ bool ARController::update()
             if (!m_videoSource0->isRunning() || (m_videoSourceIsStereo && !m_videoSource1->isRunning())) {
                 
                 if (!stateWaitingMessageLogged) {
-                    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): \"Waiting for video\" message logged, exiting returning true");
+                    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): \"Waiting for video\" message logged, exiting returning true");
                     stateWaitingMessageLogged = true;
                 }
                 return true;
@@ -481,9 +481,9 @@ bool ARController::update()
             if (m_videoSourceIsStereo) arglCameraFrustumRH(&m_videoSource1->getCameraParameters()->param, m_projectionNearPlane, m_projectionFarPlane, m_projectionMatrix1);
 #endif
             m_projectionMatrixSet = true;
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): Video ready, computed projection matrix using near=%f far=%f",
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): Video ready, computed projection matrix using near=%f far=%f",
                      m_projectionNearPlane, m_projectionFarPlane);
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): setting state to DETECTION_RUNNING");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): setting state to DETECTION_RUNNING");
             state = DETECTION_RUNNING;
         }
 	}
@@ -493,13 +493,13 @@ bool ARController::update()
     int frameStamp0, frameStamp1;
     image0 = m_videoSource0->getFrame();
     if (!image0) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): mm_videoSource0->getFrame() called but no frame returned, exiting returning true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): mm_videoSource0->getFrame() called but no frame returned, exiting returning true");
         return true;
     }
     if (m_videoSourceIsStereo) {
         image1 = m_videoSource1->getFrame();
         if (!image1) {
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): m_videoSource1->getFrame() called but no frame returned, exiting returning true");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): m_videoSource1->getFrame() called but no frame returned, exiting returning true");
             return true;
         }
     }
@@ -507,13 +507,13 @@ bool ARController::update()
     // Check framestamp(s);
 	frameStamp0 = m_videoSource0->getFrameStamp();
     if (frameStamp0 == m_videoSourceFrameStamp0) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): if (frameStamp0 == m_videoSourceFrameStamp0) true, exiting returning true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): if (frameStamp0 == m_videoSourceFrameStamp0) true, exiting returning true");
         return true;
     }
     if (m_videoSourceIsStereo) {
         frameStamp1 = m_videoSource1->getFrameStamp();
         if (frameStamp1 == m_videoSourceFrameStamp1) {
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): if (frameStamp1 == m_videoSourceFrameStamp1) true, exiting returning true");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): if (frameStamp1 == m_videoSourceFrameStamp1) true, exiting returning true");
             return true;
         }
         m_videoSourceFrameStamp1 = frameStamp1;
@@ -526,7 +526,7 @@ bool ARController::update()
     //
     
     if (doMarkerDetection) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): if (doMarkerDetection) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): if (doMarkerDetection) true");
         
         ARMarkerInfo *markerInfo0 = NULL;
         ARMarkerInfo *markerInfo1 = NULL;
@@ -580,7 +580,7 @@ bool ARController::update()
     
 #if HAVE_NFT
     if (doNFTMarkerDetection) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): if (doNFTMarkerDetection) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): if (doNFTMarkerDetection) true");
         
         if (!m_kpmHandle || !m_ar2Handle) {
             if (!initNFT()) {
@@ -653,7 +653,7 @@ bool ARController::update()
         } // trackingThreadHandle
     } // doNFTMarkerDetection
 #endif // HAVE_NFT
-    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::update(): exiting, returning true");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): exiting, returning true");
     
 	return true;
 }
@@ -866,7 +866,7 @@ bool ARController::loadNFTData(void)
 
 bool ARController::stopRunning()
 {
-	logv("ARWrap::ARController::stopRunning(): called");
+	logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): called");
 	if (state != DETECTION_RUNNING && state != WAITING_FOR_VIDEO) {
         logv(AR_LOG_LEVEL_ERROR, "ARController::stopRunning(): Error: Not running.");
 		return false;
@@ -877,17 +877,17 @@ bool ARController::stopRunning()
     // video source will dispose of the camera parameters, thus invalidating this reference.
     // So must stop tracking before closing the video source.
     if (trackingThreadHandle) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling unloadNFTData()");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling unloadNFTData()");
         unloadNFTData();
     }
 #endif
 
     lockVideoSource();
-    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): called lockVideoSource()");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): called lockVideoSource()");
     if (m_videoSource0) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): if (m_videoSource0) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): if (m_videoSource0) true");
         if (m_videoSource0->isOpen()) {
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling m_videoSource0->close()");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling m_videoSource0->close()");
             m_videoSource0->close();
         }
         delete m_videoSource0;
@@ -895,50 +895,50 @@ bool ARController::stopRunning()
     }
 
     if (m_videoSource1) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): if (m_videoSource1) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): if (m_videoSource1) true");
         if (m_videoSource1->isOpen()) {
-            logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling m_videoSource1->close()");
+            logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling m_videoSource1->close()");
             m_videoSource1->close();
         }
         delete m_videoSource1;
         m_videoSource1 = NULL;
     }
     unlockVideoSource();
-    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): called unlockVideoSource()");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): called unlockVideoSource()");
 	m_projectionMatrixSet = false;
     
 #if HAVE_NFT
     // NFT cleanup.
     //logv("Cleaning up ARToolKit NFT handles.");
     if (m_ar2Handle) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling ar2DeleteHandle(&m_ar2Handle)");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling ar2DeleteHandle(&m_ar2Handle)");
         ar2DeleteHandle(&m_ar2Handle); // Sets m_ar2Handle to NULL.
     }
     if (m_kpmHandle) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling kpmDeleteHandle(&m_kpmHandle)");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling kpmDeleteHandle(&m_kpmHandle)");
         kpmDeleteHandle(&m_kpmHandle); // Sets m_kpmHandle to NULL.
     }
 #endif
     
 	//logv("Cleaning up ARToolKit handles.");
 	if (m_ar3DHandle) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling ar3DDeleteHandle(&m_ar3DHandle)");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling ar3DDeleteHandle(&m_ar3DHandle)");
         ar3DDeleteHandle(&m_ar3DHandle); // Sets ar3DHandle0 to NULL.
     }
 	if (m_ar3DStereoHandle) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): calling ar3DStereoDeleteHandle(&m_ar3DStereoHandle)");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): calling ar3DStereoDeleteHandle(&m_ar3DStereoHandle)");
         ar3DStereoDeleteHandle(&m_ar3DStereoHandle); // Sets ar3DStereoHandle to NULL.
     }
 	
     if (m_arHandle0) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): if (m_arHandle0) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): if (m_arHandle0) true");
 		arPattDetach(m_arHandle0);
 		arDeleteHandle(m_arHandle0);
 		m_arHandle0 = NULL;
 	}
 	
     if (m_arHandle1) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::stopRunning(): if (m_arHandle1) true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): if (m_arHandle1) true");
 		arPattDetach(m_arHandle1);
 		arDeleteHandle(m_arHandle1);
 		m_arHandle1 = NULL;
@@ -946,24 +946,24 @@ bool ARController::stopRunning()
 
 	state = BASE_INITIALISED;
 
-    logv("ARWrap::ARController::stopRunning(): exiting, returning true");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::stopRunning(): exiting, returning true");
 	return true;
 }
 
 bool ARController::shutdown()
 {
-    logv("ARWrap::ARController::shutdown(): called");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::shutdown(): called");
     do {
         switch (state) {
             case DETECTION_RUNNING:
             case WAITING_FOR_VIDEO:
-                logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::shutdown(): DETECTION_RUNNING or WAITING_FOR_VIDEO, forcing stop.");
+                logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::shutdown(): DETECTION_RUNNING or WAITING_FOR_VIDEO, forcing stop.");
                 stopRunning();
             break;
 
             case BASE_INITIALISED:
                 if (countMarkers() > 0) {
-                    logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::shutdown(): BASE_INITIALISED, cleaning up markers.");
+                    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::shutdown(): BASE_INITIALISED, cleaning up markers.");
                     removeAllMarkers();
                 }
                 
@@ -975,12 +975,12 @@ bool ARController::shutdown()
                 state = NOTHING_INITIALISED;
                 // Fall though.
             case NOTHING_INITIALISED:
-                logv(AR_LOG_LEVEL_DEBUG, "ARWrap::ARController::shutdown(): NOTHING_INITIALISED, complete");
+                logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::shutdown(): NOTHING_INITIALISED, complete");
             break;
         }
     } while (state != NOTHING_INITIALISED);
     
-    logv("ARWrap::ARController::shutdown(): exiting, returning true");
+    logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::shutdown(): exiting, returning true");
 	return true;
 }
 
@@ -1047,12 +1047,12 @@ void ARController::setDebugMode(bool debug)
     debugMode = debug;
 	if (m_arHandle0) {
 		if (arSetDebugMode(m_arHandle0, debugMode ? AR_DEBUG_ENABLE : AR_DEBUG_DISABLE) == 0) {
-			logv("Debug mode set to %s", debug ? "on." : "off.");
+			logv(AR_LOG_LEVEL_INFO, "Debug mode set to %s", debug ? "on." : "off.");
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetDebugMode(m_arHandle1, debugMode ? AR_DEBUG_ENABLE : AR_DEBUG_DISABLE) == 0) {
-			logv("Debug mode set to %s", debug ? "on." : "off.");
+			logv(AR_LOG_LEVEL_INFO, "Debug mode set to %s", debug ? "on." : "off.");
 		}
 	}
 }
@@ -1068,12 +1068,12 @@ void ARController::setImageProcMode(int mode)
     
     if (m_arHandle0) {
         if (arSetImageProcMode(m_arHandle0, mode) == 0) {
-            logv("Image proc. mode set to %d.", imageProcMode);
+            logv(AR_LOG_LEVEL_INFO, "Image proc. mode set to %d.", imageProcMode);
         }
     }
     if (m_arHandle1) {
         if (arSetImageProcMode(m_arHandle1, mode) == 0) {
-            logv("Image proc. mode set to %d.", imageProcMode);
+            logv(AR_LOG_LEVEL_INFO, "Image proc. mode set to %d.", imageProcMode);
         }
     }
 }
@@ -1089,12 +1089,12 @@ void ARController::setThreshold(int thresh)
     threshold = thresh;
 	if (m_arHandle0) {
 		if (arSetLabelingThresh(m_arHandle0, threshold) == 0) {
-			logv("Threshold set to %d", threshold);
+			logv(AR_LOG_LEVEL_INFO, "Threshold set to %d", threshold);
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetLabelingThresh(m_arHandle1, threshold) == 0) {
-			logv("Threshold set to %d", threshold);
+			logv(AR_LOG_LEVEL_INFO, "Threshold set to %d", threshold);
 		}
 	}
 }
@@ -1109,12 +1109,12 @@ void ARController::setThresholdMode(int mode)
     thresholdMode = (AR_LABELING_THRESH_MODE)mode;
 	if (m_arHandle0) {
 		if (arSetLabelingThreshMode(m_arHandle0, thresholdMode) == 0) {
-			logv("Threshold mode set to %d", (int)thresholdMode);
+			logv(AR_LOG_LEVEL_INFO, "Threshold mode set to %d", (int)thresholdMode);
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetLabelingThreshMode(m_arHandle1, thresholdMode) == 0) {
-			logv("Threshold mode set to %d", (int)thresholdMode);
+			logv(AR_LOG_LEVEL_INFO, "Threshold mode set to %d", (int)thresholdMode);
 		}
 	}
 }
@@ -1129,12 +1129,12 @@ void ARController::setLabelingMode(int mode)
     labelingMode = mode;
 	if (m_arHandle0) {
 		if (arSetLabelingMode(m_arHandle0, labelingMode) == 0) {
-			logv("Labeling mode set to %d", labelingMode);
+			logv(AR_LOG_LEVEL_INFO, "Labeling mode set to %d", labelingMode);
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetLabelingMode(m_arHandle1, labelingMode) == 0) {
-			logv("Labeling mode set to %d", labelingMode);
+			logv(AR_LOG_LEVEL_INFO, "Labeling mode set to %d", labelingMode);
 		}
 	}
 }
@@ -1149,12 +1149,12 @@ void ARController::setPatternDetectionMode(int mode)
     patternDetectionMode = mode;
 	if (m_arHandle0) {
 		if (arSetPatternDetectionMode(m_arHandle0, patternDetectionMode) == 0) {
-			logv("Pattern detection mode set to %d.", patternDetectionMode);
+			logv(AR_LOG_LEVEL_INFO, "Pattern detection mode set to %d.", patternDetectionMode);
 		}
 	}    
 	if (m_arHandle1) {
 		if (arSetPatternDetectionMode(m_arHandle1, patternDetectionMode) == 0) {
-			logv("Pattern detection mode set to %d.", patternDetectionMode);
+			logv(AR_LOG_LEVEL_INFO, "Pattern detection mode set to %d.", patternDetectionMode);
 		}
 	}
 }
@@ -1170,12 +1170,12 @@ void ARController::setPattRatio(float ratio)
     pattRatio = (ARdouble)ratio;
 	if (m_arHandle0) {
 		if (arSetPattRatio(m_arHandle0, pattRatio) == 0) {
-			logv("Pattern ratio size set to %d.", pattRatio);
+			logv(AR_LOG_LEVEL_INFO, "Pattern ratio size set to %d.", pattRatio);
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetPattRatio(m_arHandle1, pattRatio) == 0) {
-			logv("Pattern ratio size set to %d.", pattRatio);
+			logv(AR_LOG_LEVEL_INFO, "Pattern ratio size set to %d.", pattRatio);
 		}
 	}
 }
@@ -1190,12 +1190,12 @@ void ARController::setMatrixCodeType(int type)
     matrixCodeType = (AR_MATRIX_CODE_TYPE)type;
 	if (m_arHandle0) {
 		if (arSetMatrixCodeType(m_arHandle0, matrixCodeType) == 0) {
-			logv("Matrix code type set to %d.", matrixCodeType);
+			logv(AR_LOG_LEVEL_INFO, "Matrix code type set to %d.", matrixCodeType);
 		}
 	}
 	if (m_arHandle1) {
 		if (arSetMatrixCodeType(m_arHandle1, matrixCodeType) == 0) {
-			logv("Matrix code type set to %d.", matrixCodeType);
+			logv(AR_LOG_LEVEL_INFO, "Matrix code type set to %d.", matrixCodeType);
 		}
 	}
 }
@@ -1227,11 +1227,11 @@ bool ARController::getNFTMultiMode() const
 bool ARController::updateDebugTexture(const int videoSourceIndex, Color* buffer)
 {
 #ifdef AR_DISABLE_LABELING_DEBUG_MODE
-    logv("Debug texture not supported.");
+    logv(AR_LOG_LEVEL_ERROR, "Debug texture not supported.");
     return false;
 #else  
 	if (state != DETECTION_RUNNING) {
-		logv("Cannot update debug texture. Wrong state.");
+		logv(AR_LOG_LEVEL_ERROR, "Cannot update debug texture. Wrong state.");
 		return false;
 	}
 
@@ -1288,11 +1288,11 @@ bool ARController::updateDebugTexture(const int videoSourceIndex, Color* buffer)
 bool ARController::updateDebugTexture32(const int videoSourceIndex, uint32_t* buffer)
 {
 #ifdef AR_DISABLE_LABELING_DEBUG_MODE
-    logv("Debug texture not supported.");
+    logv(AR_LOG_LEVEL_ERROR, "Debug texture not supported.");
     return false;
 #else
 	if (state != DETECTION_RUNNING) {
-		logv("Cannot update debug texture. Wrong state.");
+		logv(AR_LOG_LEVEL_ERROR, "Cannot update debug texture. Wrong state.");
 		return false;
 	}
 
@@ -1342,13 +1342,13 @@ bool ARController::updateDebugTexture32(const int videoSourceIndex, uint32_t* bu
 int ARController::addMarker(const char* cfg)
 {
 	if (!canAddMarker()) {
-		logv("Error: Cannot add marker. ARToolKit not initialised");
+		logv(AR_LOG_LEVEL_ERROR, "Error: Cannot add marker. ARToolKit not initialised");
 		return -1;
 	}
     
     ARMarker *marker = ARMarker::newWithConfig(cfg, m_arPattHandle);
     if (!marker) {
-        logv("Error: Failed to load marker.\n");
+        logv(AR_LOG_LEVEL_ERROR, "Error: Failed to load marker.\n");
         return -1;
     }
     if (!addMarker(marker)) {
@@ -1360,7 +1360,7 @@ int ARController::addMarker(const char* cfg)
 // private
 bool ARController::addMarker(ARMarker* marker)
 {
-    logv("ARController::addMarker(): called");
+    logv(AR_LOG_LEVEL_DEBUG, "ARController::addMarker(): called");
 	if (!canAddMarker()) {
         logv(AR_LOG_LEVEL_ERROR, "Error: Cannot add marker. ARToolKit not initialised, exiting, returning false");
 		return false;
@@ -1388,7 +1388,7 @@ bool ARController::addMarker(ARMarker* marker)
     }
 #endif
 
-	logv(AR_LOG_LEVEL_INFO, "ARController::addMarker(): Added marker (UID=%d), total markers loaded: %d, exiting, returning true", marker->UID, countMarkers());
+	logv(AR_LOG_LEVEL_INFO, "Added marker (UID=%d), total markers loaded: %d.", marker->UID, countMarkers());
 	return true;
 }
 
@@ -1405,7 +1405,7 @@ bool ARController::removeMarker(int UID)
 // private
 bool ARController::removeMarker(ARMarker* marker)
 {
-    logv("ARController::removeMarker(): called");
+    logv(AR_LOG_LEVEL_DEBUG, "ARController::removeMarker(): called");
 	if (!marker) {
         logv(AR_LOG_LEVEL_ERROR, "ARController::removeMarker(): no marker specified, exiting, returning false");
 		return false;
@@ -1414,50 +1414,49 @@ bool ARController::removeMarker(ARMarker* marker)
 	int UID = marker->UID;
     std::vector<ARMarker *>::iterator position = std::find(markers.begin(), markers.end(), marker);
     bool found = (position != markers.end());
-    if (!found)
-    {
+    if (!found) {
         logv(AR_LOG_LEVEL_ERROR, "ARController::removeMarker(): Could not find marker (UID=%d), exiting, returning false", UID);
         return false;
     }
-#   if HAVE_NFT
-        if (marker->type == ARMarker::NFT && trackingThreadHandle) {
-            unloadNFTData(); // If at least 1 NFT marker remains, loadNFTData() will be called on next update().
-        }
-#   endif
+#if HAVE_NFT
+    if (marker->type == ARMarker::NFT && trackingThreadHandle) {
+        unloadNFTData(); // If at least 1 NFT marker remains, loadNFTData() will be called on next update().
+    }
+#endif
 
     delete marker; // std::vector does not call destructor if it's a raw pointer being stored, so explicitly delete it.
     markers.erase(position);
         
-#   if HAVE_NFT
-        // Count each type of marker.
-        int nftMarkerCount = 0;
-        int nonNFTMarkerCount = 0;
-        std::vector<ARMarker *>::const_iterator it = markers.begin();
-        while (it != markers.end()) {
-            if ((*it)->type == ARMarker::NFT ) nftMarkerCount++;
-            else nonNFTMarkerCount++;
-            ++it;
-        }
-        if (nftMarkerCount == 0) {
-            if (doNFTMarkerDetection)
-                logv(AR_LOG_LEVEL_INFO, "ARController::removeMarker(): Last NFT marker removed; disabling NFT marker detection.");
-            doNFTMarkerDetection = false;
-        }
-        if (nonNFTMarkerCount == 0) {
-            if (doMarkerDetection)
-                logv(AR_LOG_LEVEL_INFO, "ARController::removeMarker(): Last square marker removed; disabling square marker detection.");
-            doMarkerDetection = false;
-        }
-        int markerCount = nftMarkerCount + nonNFTMarkerCount;
-#   else
-        int markerCount = countMarkers();
-        if (markerCount == 0) {
-            logv("Last square marker removed; disabling square marker detection.");
-            doMarkerDetection = false;
-        }
-#   endif
+#if HAVE_NFT
+    // Count each type of marker.
+    int nftMarkerCount = 0;
+    int nonNFTMarkerCount = 0;
+    std::vector<ARMarker *>::const_iterator it = markers.begin();
+    while (it != markers.end()) {
+        if ((*it)->type == ARMarker::NFT ) nftMarkerCount++;
+        else nonNFTMarkerCount++;
+        ++it;
+    }
+    if (nftMarkerCount == 0) {
+        if (doNFTMarkerDetection)
+            logv(AR_LOG_LEVEL_INFO, "Last NFT marker removed; disabling NFT marker detection.");
+        doNFTMarkerDetection = false;
+    }
+    if (nonNFTMarkerCount == 0) {
+        if (doMarkerDetection)
+            logv(AR_LOG_LEVEL_INFO, "Last square marker removed; disabling square marker detection.");
+        doMarkerDetection = false;
+    }
+    int markerCount = nftMarkerCount + nonNFTMarkerCount;
+#else
+    int markerCount = countMarkers();
+    if (markerCount == 0) {
+        logv(AR_LOG_LEVEL_INFO, "Last square marker removed; disabling square marker detection.");
+        doMarkerDetection = false;
+    }
+#endif
 
-    logv(AR_LOG_LEVEL_INFO, "ARController::removeMarker(): Removed marker (UID=%d), now %d markers loaded", UID, markerCount);
+    logv(AR_LOG_LEVEL_INFO, "Removed marker (UID=%d), now %d markers loaded", UID, markerCount);
     logv(AR_LOG_LEVEL_DEBUG, "ARController::removeMarker(): exiting, returning %s", ((found) ? "true" : "false"));
     return (found);
 }
@@ -1475,7 +1474,7 @@ int ARController::removeAllMarkers()
 #if HAVE_NFT
     doNFTMarkerDetection = false;
 #endif
-	logv("Removed all %d markers.", count);
+	logv(AR_LOG_LEVEL_INFO, "Removed all %d markers.", count);
 
 	return count;
 }
@@ -1522,6 +1521,8 @@ ARMarker* ARController::findMarker(int UID)
         ErrOrWarnBuf = "[error]";
     else if (AR_LOG_LEVEL_WARN == logLevel)
         ErrOrWarnBuf = "[warning]";
+    else if (AR_LOG_LEVEL_INFO == logLevel)
+        ErrOrWarnBuf = "[info]";
     else if (AR_LOG_LEVEL_DEBUG == logLevel)
         ErrOrWarnBuf = "[debug]";
     else
@@ -1590,12 +1591,12 @@ bool ARController::loadOpticalParams(const char *optical_param_name, const char 
     // Load the optical parameters.
     if (optical_param_name) {
         if (arParamLoadOptical(optical_param_name, fovy_p, aspect_p, m) < 0) {
-            logv("Error: loading optical parameters from file '%s'.\n", optical_param_name);
+            logv(AR_LOG_LEVEL_ERROR, "Error: loading optical parameters from file '%s'.\n", optical_param_name);
             return false;
         }
     } else if (optical_param_buff && optical_param_buffLen) {
         if (arParamLoadOpticalFromBuffer(optical_param_buff, optical_param_buffLen, fovy_p, aspect_p, m) < 0) {
-            logv("Error: loading optical parameters from buffer.\n");
+            logv(AR_LOG_LEVEL_ERROR, "Error: loading optical parameters from buffer.\n");
             return false;
         }
     } else return false;

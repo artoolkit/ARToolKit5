@@ -120,7 +120,7 @@ bool ARPattern::loadMatrix(int barcodeID, AR_MATRIX_CODE_TYPE type, float width)
 #if HAVE_NFT
 bool ARPattern::loadISet(const AR2ImageSetT *imageSet, float nftScale)
 {
-    // TODO: implement imageset code to imag.
+    // TODO: implement imageset to image.
     if (imageSet && imageSet->scale) {
         AR2ImageT *image = imageSet->scale[0]; // Assume best scale (largest image) is first entry in array scale[index] (index is in range [0, imageSet->num - 1]).
         m_width = image->xsize * 25.4f / image->dpi * nftScale;

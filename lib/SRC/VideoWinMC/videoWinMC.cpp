@@ -102,17 +102,17 @@ int ar2VideoDispOptionWinMC(void)
 
 static void stopWMC(AR2VideoParamWinMCT *vid)
 {
-    ARLOGd("ARWrap::ARvideo::stopWMC(): called");
+    ARLOGd("stopWMC(): called");
 	if (!vid || !vid->wmc) return;
 
-    ARLOGd("ARWrap::ARvideo::stopWMC(): calling vid->wmc->Capturing()");
+    ARLOGd("stopWMC(): calling vid->wmc->Capturing()");
 	if (!vid->wmc->Capturing()) {
-		ARLOGe("ARWrap::ARvideo::stopWMC(): Windows.Media.Capture already stopped, exiting");
+		ARLOGe("stopWMC(): Windows.Media.Capture already stopped, exiting");
 		return;
 	}
 
 	vid->wmc->StopCapture();
-    ARLOGd("ARWrap::ARvideo::stopWMC(): exiting");
+    ARLOGd("stopWMC(): exiting");
 }
 
 static void errorWMC(void *userdata)
@@ -289,7 +289,7 @@ bail:
 
 int ar2VideoCloseWinMC(AR2VideoParamWinMCT *vid)
 {
-    ARLOGd("ARWrap::ARvideo::ar2VideoCloseWinMC(): called");
+    ARLOGd("ar2VideoCloseWinMC(): called");
     stopWMC(vid);
 	if (vid->wmc) {
 		delete vid->wmc;
@@ -301,7 +301,7 @@ int ar2VideoCloseWinMC(AR2VideoParamWinMCT *vid)
     ar2VideoWinMCRefCount--;
     if (ar2VideoWinMCRefCount == 0) ar2VideoWinMCFinal2();
     
-    ARLOGd("ARWrap::ARvideo::ar2VideoCloseWinMC(): exiting, returning 0");
+    ARLOGd("ar2VideoCloseWinMC(): exiting, returning 0");
     return 0;
 } 
 

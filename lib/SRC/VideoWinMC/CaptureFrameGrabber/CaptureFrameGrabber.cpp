@@ -131,12 +131,12 @@ task<void> Media::CaptureFrameGrabber::FinishAsync()
 
 task<ComPtr<IMF2DBuffer2>> Media::CaptureFrameGrabber::GetFrameAsync()
 {
-    ARLOGd("ARWrap::Media::CaptureFrameGrabber::GetFrameAsync(): called");
+    ARLOGd("Media::CaptureFrameGrabber::GetFrameAsync(): called");
     auto lock = _lock.LockExclusive();
 
     if (_state != State::Started)
     {
-        ARLOGe("ARWrap::Media::CaptureFrameGrabber::GetFrameAsync(): throwing E_UNEXPECTED State");
+        ARLOGe("Media::CaptureFrameGrabber::GetFrameAsync(): throwing E_UNEXPECTED State");
         throw ref new COMException(E_UNEXPECTED, L"State");
     }
 
@@ -146,7 +146,7 @@ task<ComPtr<IMF2DBuffer2>> Media::CaptureFrameGrabber::GetFrameAsync()
     _videoSampleRequestQueue.push(taskEvent);
 
     return create_task(taskEvent);
-    ARLOGd("ARWrap::Media::CaptureFrameGrabber::GetFrameAsync(): exiting");
+    ARLOGd("Media::CaptureFrameGrabber::GetFrameAsync(): exiting");
 }
 
 void Media::CaptureFrameGrabber::ProcessSample(_In_ MediaSample^ sample)

@@ -360,12 +360,12 @@ ARMarker* ARMarker::newWithConfig(const char* cfg, ARPattHandle *arPattHandle)
                 }
 			}
 #else
-            ARController::logv("Error: NFT markers not supported in this build/platform.\n");			
+            ARController::logv(AR_LOG_LEVEL_ERROR, "Error: NFT markers not supported in this build/platform.\n");
 #endif // HAVE_NFT
 		} else {
             
 			// Unknown marker type
-			ARController::logv("Error: Unknown marker type '%s' in config '%s'", markerTypePtr, cfg);
+			ARController::logv(AR_LOG_LEVEL_ERROR, "Error: Unknown marker type '%s' in config '%s'.", markerTypePtr, cfg);
 		}
         
 	}
