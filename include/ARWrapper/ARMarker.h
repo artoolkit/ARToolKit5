@@ -117,7 +117,7 @@ public:
      * and trans[3][4] then call ARMarker::update().
 	 * @return true if successful, false if an error occurred
 	 */
-    virtual bool update(ARdouble transL2R[3][4] = NULL);
+    virtual bool update(const ARdouble transL2R[3][4] = NULL);
 
 	/**
 	 * Returns the specified pattern within this marker.

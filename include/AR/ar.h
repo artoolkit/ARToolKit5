@@ -1641,20 +1641,20 @@ int                  arGetStereoMatching( AR3DStereoHandle *handle,
  */
 ARUint32 arGetVersion(char **versionStringRef);
 
-int            arUtilMatInv( ARdouble s[3][4], ARdouble d[3][4] );
-int            arUtilMatMul( ARdouble s1[3][4], ARdouble s2[3][4], ARdouble d[3][4] );
+int            arUtilMatInv( const ARdouble s[3][4], ARdouble d[3][4] );
+int            arUtilMatMul( const ARdouble s1[3][4], const ARdouble s2[3][4], ARdouble d[3][4] );
 
 #ifdef ARDOUBLE_IS_FLOAT
 #define arUtilMatInvf arUtilMatInv
 #define arUtilMatMulf arUtilMatMul
 #define arUtilMatMuldff arUtilMatMul
 #else
-int            arUtilMatInvf( float s[3][4], float d[3][4] );
-int            arUtilMatMulf( float s1[3][4], float s2[3][4], float d[3][4] );
-int            arUtilMatMuldff( ARdouble s1[3][4], float s2[3][4], float d[3][4] );
+int            arUtilMatInvf( const float s[3][4], float d[3][4] );
+int            arUtilMatMulf( const float s1[3][4], const float s2[3][4], float d[3][4] );
+int            arUtilMatMuldff( const ARdouble s1[3][4], const float s2[3][4], float d[3][4] );
 #endif
-int            arUtilMat2QuatPos( ARdouble m[3][4], ARdouble q[4], ARdouble p[3] );
-int            arUtilQuatPos2Mat( ARdouble q[4], ARdouble p[3], ARdouble m[3][4] );
+int            arUtilMat2QuatPos( const ARdouble m[3][4], ARdouble q[4], ARdouble p[3] );
+int            arUtilQuatPos2Mat( const ARdouble q[4], const ARdouble p[3], ARdouble m[3][4] );
 int            arUtilQuatNorm(ARdouble q[4]);
 
 double         arUtilTimer(void);

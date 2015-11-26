@@ -450,7 +450,7 @@ ARdouble ARMarker::positionScalefactor()
     return m_positionScaleFactor;
 }
 
-bool ARMarker::update(ARdouble transL2R[3][4])
+bool ARMarker::update(const ARdouble transL2R[3][4])
 {
     // Subclasses will have already determined visibility and set/cleared 'visible' and 'visiblePrev',
     // as well as setting 'trans'.

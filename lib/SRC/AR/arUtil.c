@@ -272,7 +272,7 @@ int arUtilGetSquareCenter( ARdouble vertex[4][2], ARdouble *x, ARdouble *y )
     return 0;
 }
 
-int arUtilMatMul( ARdouble s1[3][4], ARdouble s2[3][4], ARdouble d[3][4] )
+int arUtilMatMul( const ARdouble s1[3][4], const ARdouble s2[3][4], ARdouble d[3][4] )
 {
     int     i, j;
 
@@ -289,7 +289,7 @@ int arUtilMatMul( ARdouble s1[3][4], ARdouble s2[3][4], ARdouble d[3][4] )
 }
 
 #ifndef ARDOUBLE_IS_FLOAT
-int arUtilMatMuldff( ARdouble s1[3][4], float s2[3][4], float d[3][4] )
+int arUtilMatMuldff( const ARdouble s1[3][4], const float s2[3][4], float d[3][4] )
 {
     int     i, j;
     
@@ -305,7 +305,7 @@ int arUtilMatMuldff( ARdouble s1[3][4], float s2[3][4], float d[3][4] )
     return 0;
 }
 
-int arUtilMatMulf( float s1[3][4], float s2[3][4], float d[3][4] )
+int arUtilMatMulf( const float s1[3][4], const float s2[3][4], float d[3][4] )
 {
     int     i, j;
     
@@ -322,7 +322,7 @@ int arUtilMatMulf( float s1[3][4], float s2[3][4], float d[3][4] )
 }
 #endif
 
-int arUtilMatInv( ARdouble s[3][4], ARdouble d[3][4] )
+int arUtilMatInv( const ARdouble s[3][4], ARdouble d[3][4] )
 {
     ARMat       *mat;
     int         i, j;
@@ -347,7 +347,7 @@ int arUtilMatInv( ARdouble s[3][4], ARdouble d[3][4] )
 }
 
 #ifndef ARDOUBLE_IS_FLOAT
-int arUtilMatInvf( float s[3][4], float d[3][4] )
+int arUtilMatInvf( const float s[3][4], float d[3][4] )
 {
     ARMat       *mat;
     int         i, j;
@@ -372,7 +372,7 @@ int arUtilMatInvf( float s[3][4], float d[3][4] )
 }
 #endif
 
-int arUtilMat2QuatPos( ARdouble m[3][4], ARdouble q[4], ARdouble p[3] )
+int arUtilMat2QuatPos( const ARdouble m[3][4], ARdouble q[4], ARdouble p[3] )
 {
     ARdouble   t, s;
 
@@ -443,7 +443,7 @@ int arUtilMat2QuatPos( ARdouble m[3][4], ARdouble q[4], ARdouble p[3] )
     return 0;
 }
 
-int arUtilQuatPos2Mat( ARdouble q[4], ARdouble p[3], ARdouble m[3][4] )
+int arUtilQuatPos2Mat( const ARdouble q[4], const ARdouble p[3], ARdouble m[3][4] )
 {
     ARdouble    x2, y2, z2;
     ARdouble    xx, xy, xz;
