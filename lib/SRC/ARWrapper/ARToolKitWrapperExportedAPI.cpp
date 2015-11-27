@@ -88,6 +88,8 @@ static int arwUnityRenderEventUpdateTextureGLTextureID_R = 0;
 
 // When handed a logging callback, install it for use by our own log function,
 // and pass our own log function as the callback instead.
+// This allows us to use buffering to ensure that logging occurs only on the
+// same thread that registered the log callback, as required e.g. by C# interop.
 
 void CALL_CONV log(const char *msg);
 void CALL_CONV log(const char *msg)
@@ -127,6 +129,13 @@ EXPORT_API void arwRegisterLogCallback(PFN_LOGCALLBACK callback)
 	//_snprintf(buf, 256, "Registering log callback on thread %d.\n", logThreadID);
 	//log(buf);
 #endif
+}
+
+EXPORT_API void arwSetLogLevel(const int logLevel)
+{
+    if (logLevel >= 0) {
+        arLogLevel = logLevel;
+    }
 }
 
 // ----------------------------------------------------------------------------------------------------

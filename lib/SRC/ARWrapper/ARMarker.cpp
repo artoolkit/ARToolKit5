@@ -459,12 +459,12 @@ bool ARMarker::update(const ARdouble transL2R[3][4])
         // Filter the pose estimate.
         if (m_ftmi) {
             if (arFilterTransMat(m_ftmi, trans, !visiblePrev) < 0) {
-                ARController::logv("arFilterTransMat error with marker %d.\n", UID);
+                ARController::logv(AR_LOG_LEVEL_ERROR, "arFilterTransMat error with marker %d.\n", UID);
             }
         }
         
         if (!visiblePrev) {
-            ARController::logv("Marker %d now visible", UID);
+            ARController::logv(AR_LOG_LEVEL_INFO, "Marker %d now visible", UID);
         }
         
         // Convert to GL matrix.
@@ -489,7 +489,7 @@ bool ARMarker::update(const ARdouble transL2R[3][4])
     } else {
         
         if (visiblePrev) {
-            ARController::logv("Marker %d no longer visible", UID);
+            ARController::logv(AR_LOG_LEVEL_INFO, "Marker %d no longer visible", UID);
         }
         
     }

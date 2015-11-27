@@ -56,6 +56,8 @@ extern "C" {
 	 */
 	EXPORT_API void arwRegisterLogCallback(PFN_LOGCALLBACK callback);
 
+    EXPORT_API void arwSetLogLevel(const int logLevel);
+    
     // ----------------------------------------------------------------------------------------------------
 #pragma mark  ARToolKit lifecycle functions
     // ----------------------------------------------------------------------------------------------------

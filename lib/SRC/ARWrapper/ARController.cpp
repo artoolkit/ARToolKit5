@@ -493,7 +493,7 @@ bool ARController::update()
     int frameStamp0, frameStamp1;
     image0 = m_videoSource0->getFrame();
     if (!image0) {
-        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): mm_videoSource0->getFrame() called but no frame returned, exiting returning true");
+        logv(AR_LOG_LEVEL_DEBUG, "ARWrapper::ARController::update(): m_videoSource0->getFrame() called but no frame returned, exiting returning true");
         return true;
     }
     if (m_videoSourceIsStereo) {

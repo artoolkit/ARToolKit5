@@ -133,7 +133,7 @@ void VideoSource::configure(const char* vconf, const char* cparaName, const char
 		size_t len = strlen(vconf);
 		videoConfiguration = (char*)malloc(sizeof(char) * len + 1);
 		strcpy(videoConfiguration, vconf);
-        ARController::logv(AR_LOG_LEVEL_INFO, "Setting video configuration 's'.", videoConfiguration);
+        ARController::logv(AR_LOG_LEVEL_INFO, "Setting video configuration '%s'.", videoConfiguration);
 	}
 
 	if (cparaName) {
