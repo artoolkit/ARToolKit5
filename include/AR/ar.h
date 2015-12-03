@@ -63,6 +63,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #ifndef _WIN32 // errno is defined in stdlib.h on Windows.
 #  include <sys/errno.h>
 #endif 

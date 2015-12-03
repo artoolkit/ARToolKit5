@@ -75,7 +75,8 @@ extern "C" {
 #define  AR_VIDEO_DEVICE_ANDROID            15
 #define  AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION 16
 #define  AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE 17
-#define  AR_VIDEO_DEVICE_MAX                17
+#define  AR_VIDEO_DEVICE_V4L2               18
+#define  AR_VIDEO_DEVICE_MAX                18
 
 
 #define  AR_VIDEO_1394_BRIGHTNESS                      65
@@ -220,6 +221,9 @@ typedef void (*AR_VIDEO_FRAME_READY_CALLBACK)(void *);
 #ifdef AR_INPUT_V4L
 #include <AR/sys/videoLinuxV4L.h>
 #endif
+#ifdef AR_INPUT_V4L2
+#include <AR/sys/videoLinuxV4L2.h>
+#endif
 #ifdef AR_INPUT_DV
 #include <AR/sys/videoLinuxDV.h>
 #endif
@@ -270,6 +274,9 @@ typedef union {
 #endif
 #ifdef AR_INPUT_V4L
     AR2VideoParamV4LT           *v4l;
+#endif
+#ifdef AR_INPUT_V4L2
+    AR2VideoParamV4L2T          *v4l2;
 #endif
 #ifdef AR_INPUT_DV
     AR2VideoParamDVT            *dv;

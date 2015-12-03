@@ -34,68 +34,53 @@
 #  Author(s): Hirokazu Kato, Philip Lamb
 #
 
-UNAME = $(shell uname)
-
-AR_HOME = ../../..
-AR_CPPFLAGS = -I$(AR_HOME)/include
-
-LIBS= -lARgsub_lite -lARvideo -lAR -lARICP -lAR2 -lKPM $(STDCXXLIB) -lARUtil -lARMulti -lEden -lAR @LIBS@
-
-CC=@CC@
-CXX=@CXX@
-CPPFLAGS = $(AR_CPPFLAGS)
-CFLAGS = @CFLAG@
-CXXFLAGS = @CFLAG@
+#
+# For instalation. Change this to your settings.
+#
+INC_DIR = ../../../include
+LIB_DIR = ../..
+#
+#  compiler
+#
+CC= @CC@
+CFLAG= @CFLAG@ -I$(INC_DIR)
+#
+# For making the library
+#
 AR=@AR@
 ARFLAGS=@ARFLAGS@
-RANLIB = @RANLIB@
+#
+#   products
+#
+LIB= ${LIB_DIR}/libARvideo.a
+INCLUDE= ${INC_DIR}/AR/config.h       \
+         ${INC_DIR}/AR/arConfig.h     \
+         ${INC_DIR}/AR/video.h        \
+         ${INC_DIR}/AR/videoConfig.h  \
+         ${INC_DIR}/AR/sys/videoLinuxV4L2.h
 
-TARGET = $(AR_HOME)/lib/ARWrapper.so
+#
+#   compilation control
+#
+LIBOBJS= ${LIB}(videoV4L2.o)
 
-HEADERS = \
-trackingSub.h \
+all:		${LIBOBJS}
 
+${LIBOBJS}:	${INCLUDE}
 
-OBJS = \
-AndroidFeatures.o \
-AndroidVideoSource.o \
-ARController.o \
-ARMarker.o \
-ARMarkerMulti.o \
-ARMarkerNFT.o \
-ARMarkerSquare.o \
-ARPattern.o \
-ARToolKitVideoSource.o \
-ARToolKitWrapperExportedAPI.o \
-ColorConversion.o \
-trackingSub.o \
-VideoSource.o \
-
-# Implicit rule, to compile C++ files with the .cpp suffix (rule already exists for .cc).
-%.o : %.cpp
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
-
-default build all: $(TARGET)
-
-$(OBJS_OBJC): $(HEADERS)
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c -ObjC -o $@ $*.c
-
-$(OBJS): $(HEADERS)
-
-$(TARGET): $(OBJS) $(OBJS_OBJC)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAG) -shared -o $@ $(OBJS) -L$(AR_HOME)/lib/@SYSTEM@ -L$(AR_HOME)/lib/ $(LIBS)
-	$(RANLIB) $@
-
-#-L/home/user/artoolkit5/lib/ -lAR -lAR2
+.c.a:
+	${CC} -c ${CFLAG} $<
+	${AR} ${ARFLAGS} $@ $*.o
+	rm -f $*.o
 
 clean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
+	rm -f *.o
+	rm -f ${LIB}
 
 allclean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
-	-rm -f Makefile
+	rm -f *.o
+	rm -f ${LIB}
+	rm -f Makefile
 
 distclean:
 	rm -f *.o

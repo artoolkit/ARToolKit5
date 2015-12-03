@@ -45,6 +45,7 @@
 MDIR=".                              \
       lib/SRC                        \
       lib/SRC/AR                     \
+
       lib/SRC/ARICP                  \
       lib/SRC/AR2                    \
       lib/SRC/ARWrapper              \
@@ -56,6 +57,7 @@ MDIR=".                              \
       lib/SRC/VideoDummy             \
       lib/SRC/VideoImage             \
       lib/SRC/VideoLinuxV4L          \
+      lib/SRC/VideoLinuxV4L2         \
       lib/SRC/VideoLinux1394Cam      \
       lib/SRC/VideoLinux1394Cam/ver1 \
       lib/SRC/VideoLinux1394Cam/ver2 \
@@ -110,8 +112,50 @@ MACHINE=`uname -m`
 if [ "$E" = "Linux" ]
 then
     SYSTEM="linux-$MACHINE"
+    echo "Do you want to use the Clang compiler? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        CLANGCC="y"
+    elif [ "$ANS" = "n" ]
+    then
+        CLANGCC="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
 
     DEFAULT_CAP_DEVICE=""
+    echo "Do you want to enable the Video4Linux2 capture module? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        INPUT_V4L2="y"
+    elif [ "$ANS" = "n" ]
+    then
+        INPUT_V4L2="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
+    if [ "$INPUT_V4L2" = "y" ]
+    then
+        echo "Do you want to use it as the default input device? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            DEFAULT_CAP_DEVICE="V4L2"
+        elif [ "$ANS" = "n" ]
+        then
+            DEFAULT_CAP_DEVICE=""
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
+    fi
     echo "Do you want to enable the Video4Linux capture module? (y or n)"
     echo -n "Enter : "
     read ANS
@@ -125,6 +169,8 @@ then
         echo "Please enter y or n."
         exit 0
     fi
+    if [ "$DEFAULT_CAP_DEVICE" = "" ]
+    then
     if [ "$INPUT_V4L" = "y" ]
     then
         echo "Do you want to use it as the default input device? (y or n)"
@@ -140,6 +186,7 @@ then
             echo "Please enter y or n."
             exit 0
         fi
+    fi
     fi
 
     echo "Do you want to enable the IEEE 1394 Digital Video Camera capture module? (y or n)"
@@ -283,21 +330,32 @@ then
     fi
 
 
-    CC="clang"
-    CXX="clang++ -std=c++11 -stdlib=libc++"
-    #CFLAG="-O3 -fPIC -march=i686"
-    #CFLAG="-O3 -fPIC -march=pentium4"
-    CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
- 
+    if [ "$CLANGCC" = "y" ]
+    then
+        CC="clang"
+        CXX="clang++ -std=c++11 -stdlib=libc++"
+        #CFLAG="-O3 -fPIC -march=i686"
+        #CFLAG="-O3 -fPIC -march=pentium4"
+        CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
+        STDCXXLIB="-lc++"
+    else
+        CC="gcc"
+        CXX="g++ -std=c++11 "
+        #CFLAG="-O"
+        #CFLAG="-O3 -march=pentium4"
+        CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
+        STDCXXLIB="-lstdc++"
+    fi
+
     if [ "$MACHINE" = "x86_64" ]
     then
         CFLAG="$CFLAG -I/usr/include/x86_64-linux-gnu"
-        LDFLAG="-L/usr/lib/x86_64-linux-gnu"
+        LDFLAG="-L/usr/lib/x86_64-linux-gnu -L/usr/lib64"
     else
         CFLAG="$CFLAG -I/usr/include/i386-linux-gnu"
-        LDFLAG="-L/usr/lib/i386-linux-gnu"
+        LDFLAG="-L/usr/lib/i386-linux-gnu -L/usr/lib"
     fi
-
+    
     AR="ar"
     ARFLAGS="rs"
     RANLIB="true"
@@ -439,12 +497,12 @@ then
     CXX="c++"
     CFLAG="-O -DHAVE_NFT=1"
     LDFLAG=""
-    AR="libtool"
-    ARFLAGS="-static -o"
-    RANLIB="true"
-    #AR="ar"
-    #ARFLAGS="-r -u"
+    #AR="libtool"
+    #ARFLAGS="-static -o"
     #RANLIB="true"
+    AR="ar"
+    ARFLAGS="-r -u"
+    RANLIB="true"
     LIBS="-framework Accelerate -framework QTKit -framework CoreVideo -framework Carbon -framework GLUT -framework OpenGL -framework Cocoa -ljpeg"
     if [ "$INPUT_QUICKTIME" = "y" ]
     then
@@ -576,6 +634,13 @@ s/#(cd VideoLinuxV4L;     make -f Makefile)/(cd VideoLinuxV4L;     make -f Makef
 EOF
 fi
 
+if [ "$INPUT_V4L2" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd VideoLinuxV4L2;    make -f Makefile)/(cd VideoLinuxV4L2;    make -f Makefile)/
+EOF
+fi
+
 if [ "$INPUT_CAM1394" = "y" ]
 then
 cat >> $SED <<EOF
@@ -678,10 +743,16 @@ fi
 if [ "$INPUT_V4L" = "y" ]
 then
 cat >> $SED <<EOF
-s/#undef  AR_INPUT_V4L/#define AR_INPUT_V4L/
+s/#undef  AR_INPUT_V4L(?!2)/#define AR_INPUT_V4L/
 EOF
 fi
 
+if [ "$INPUT_V4L2" = "y" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_INPUT_V4L2/#define AR_INPUT_V4L2/
+EOF
+fi
 if [ "$INPUT_CAM1394" = "y" ]
 then
 cat >> $SED <<EOF
@@ -736,6 +807,11 @@ if [ "$DEFAULT_CAP_DEVICE" = "V4L" ]
 then
 cat >> $SED <<EOF
 s/#undef  AR_DEFAULT_INPUT_V4L/#define AR_DEFAULT_INPUT_V4L/
+EOF
+elif [ "$DEFAULT_CAP_DEVICE" = "V4L2" ]
+then
+cat >> $SED <<EOF
+s/#undef  AR_DEFAULT_INPUT_V4L/#define AR_DEFAULT_INPUT_V4L2/
 EOF
 elif [ "$DEFAULT_CAP_DEVICE" = "CAM1394" ]
 then

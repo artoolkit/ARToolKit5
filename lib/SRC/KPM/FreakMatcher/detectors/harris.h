@@ -35,6 +35,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <vector>
 #include "utils/point.h"
 

@@ -48,6 +48,8 @@ int arVideoGetDefaultDevice( void )
 {
 #if defined(AR_DEFAULT_INPUT_V4L)
     return AR_VIDEO_DEVICE_V4L;
+#elif defined(AR_DEFAULT_INPUT_V4L2)
+    return AR_VIDEO_DEVICE_V4L2;
 #elif defined(AR_DEFAULT_INPUT_DV)
     return AR_VIDEO_DEVICE_DV;
 #elif defined(AR_DEFAULT_INPUT_1394CAM)

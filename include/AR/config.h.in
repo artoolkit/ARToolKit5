@@ -224,6 +224,7 @@ enum {
 /*                                                            */
 /*  For Linux                                                 */
 /*    AR_INPUT_V4L:     use of standard Video4Linux Library   */
+/*    AR_INPUT_V4L2:    use of standard Video4Linux2 Library   */
 /*    AR_INPUT_DV:      use of DV Camera                      */
 /*    AR_INPUT_1394CAM: use of 1394 Digital Camara            */
 /*    AR_INPUT_GSTREAMER: use of GStreamer library            */
@@ -246,6 +247,7 @@ enum {
 
 // Input modules. This is edited by the configure script.
 #undef  AR_INPUT_V4L
+#undef  AR_INPUT_V4L2
 #undef  AR_INPUT_DV
 #undef  AR_INPUT_1394CAM
 #undef  AR_INPUT_GSTREAMER
@@ -254,6 +256,7 @@ enum {
 
 // Default input module. This is edited by the configure script.
 #undef  AR_DEFAULT_INPUT_V4L
+#undef  AR_DEFAULT_INPUT_V4L2
 #undef  AR_DEFAULT_INPUT_DV
 #undef  AR_DEFAULT_INPUT_1394CAM
 #undef  AR_DEFAULT_INPUT_GSTREAMER
@@ -271,6 +274,12 @@ enum {
 /* #define  AR_INPUT_V4L_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGR  */
 /* #define  AR_INPUT_V4L_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGRA */
 #define AR_INPUT_V4L_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGR
+#endif
+
+#ifdef AR_INPUT_V4L2
+/* #define  AR_INPUT_V4L2_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGR  */
+/* #define  AR_INPUT_V4L2_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGRA */
+#define AR_INPUT_V4L2_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGR
 #endif
 
 #ifdef  AR_INPUT_DV
@@ -533,6 +542,8 @@ enum {
 #  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_DUMMY_DEFAULT_PIXEL_FORMAT
 #elif defined(AR_DEFAULT_INPUT_V4L)
 #  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_V4L_DEFAULT_PIXEL_FORMAT
+#elif defined(AR_DEFAULT_INPUT_V4L2)
+#  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_V4L2_DEFAULT_PIXEL_FORMAT
 #elif defined(AR_DEFAULT_INPUT_DV)
 #  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_DV_DEFAULT_PIXEL_FORMAT
 #elif defined(AR_DEFAULT_INPUT_1394CAM)
