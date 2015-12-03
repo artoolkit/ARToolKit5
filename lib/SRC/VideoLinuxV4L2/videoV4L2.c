@@ -45,16 +45,19 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <sys/time.h> // gettimeofday(), struct timeval
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> // memset()
 #include <errno.h>
 #include <linux/types.h>
 #include <linux/videodev2.h>
 #include <AR/ar.h>
 #include <AR/video.h>
+
+
 
 // V4L2 code from https://gist.github.com/jayrambhia/5866483
 static int xioctl(int fd, int request, void *arg)
@@ -68,28 +71,28 @@ static int xioctl(int fd, int request, void *arg)
 #define MAXCHANNEL   10
 
 static void printPalette(int p) {
-    switch(p) {
+    switch (p) {
             //YUV formats
-        case (V4L2_PIX_FMT_GREY): printf("  Pix Fmt: Grey\n"); break;
-        case (V4L2_PIX_FMT_YUYV): printf("  Pix Fmt: YUYV\n"); break;
-        case (V4L2_PIX_FMT_UYVY): printf("  Pix Fmt: UYVY\n"); break;
-        case (V4L2_PIX_FMT_Y41P): printf("  Pix Fmt: Y41P\n"); break;
-        case (V4L2_PIX_FMT_YVU420): printf("  Pix Fmt: YVU420\n"); break;
-        case (V4L2_PIX_FMT_YVU410): printf("  Pix Fmt: YVU410\n"); break;
-        case (V4L2_PIX_FMT_YUV422P): printf("  Pix Fmt: YUV422P\n"); break;
-        case (V4L2_PIX_FMT_YUV411P): printf("  Pix Fmt: YUV411P\n"); break;
-        case (V4L2_PIX_FMT_NV12): printf("  Pix Fmt: NV12\n"); break;
-        case (V4L2_PIX_FMT_NV21): printf("  Pix Fmt: NV21\n"); break;
+        case (V4L2_PIX_FMT_GREY): ARLOGi("  Pix Fmt: Grey\n"); break;
+        case (V4L2_PIX_FMT_YUYV): ARLOGi("  Pix Fmt: YUYV\n"); break;
+        case (V4L2_PIX_FMT_UYVY): ARLOGi("  Pix Fmt: UYVY\n"); break;
+        case (V4L2_PIX_FMT_Y41P): ARLOGi("  Pix Fmt: Y41P\n"); break;
+        case (V4L2_PIX_FMT_YVU420): ARLOGi("  Pix Fmt: YVU420\n"); break;
+        case (V4L2_PIX_FMT_YVU410): ARLOGi("  Pix Fmt: YVU410\n"); break;
+        case (V4L2_PIX_FMT_YUV422P): ARLOGi("  Pix Fmt: YUV422P\n"); break;
+        case (V4L2_PIX_FMT_YUV411P): ARLOGi("  Pix Fmt: YUV411P\n"); break;
+        case (V4L2_PIX_FMT_NV12): ARLOGi("  Pix Fmt: NV12\n"); break;
+        case (V4L2_PIX_FMT_NV21): ARLOGi("  Pix Fmt: NV21\n"); break;
             // RGB formats
-        case (V4L2_PIX_FMT_RGB332): printf("  Pix Fmt: RGB332\n"); break;
-        case (V4L2_PIX_FMT_RGB555): printf("  Pix Fmt: RGB555\n"); break;
-        case (V4L2_PIX_FMT_RGB565): printf("  Pix Fmt: RGB565\n"); break;
-        case (V4L2_PIX_FMT_RGB555X): printf("  Pix Fmt: RGB555X\n"); break;
-        case (V4L2_PIX_FMT_RGB565X): printf("  Pix Fmt: RGB565X\n"); break;
-        case (V4L2_PIX_FMT_BGR24): printf("  Pix Fmt: BGR24\n"); break;
-        case (V4L2_PIX_FMT_RGB24): printf("  Pix Fmt: RGB24\n"); break;
-        case (V4L2_PIX_FMT_BGR32): printf("  Pix Fmt: BGR32\n"); break;
-        case (V4L2_PIX_FMT_RGB32): printf("  Pix Fmt: RGB32\n"); break;
+        case (V4L2_PIX_FMT_RGB332): ARLOGi("  Pix Fmt: RGB332\n"); break;
+        case (V4L2_PIX_FMT_RGB555): ARLOGi("  Pix Fmt: RGB555\n"); break;
+        case (V4L2_PIX_FMT_RGB565): ARLOGi("  Pix Fmt: RGB565\n"); break;
+        case (V4L2_PIX_FMT_RGB555X): ARLOGi("  Pix Fmt: RGB555X\n"); break;
+        case (V4L2_PIX_FMT_RGB565X): ARLOGi("  Pix Fmt: RGB565X\n"); break;
+        case (V4L2_PIX_FMT_BGR24): ARLOGi("  Pix Fmt: BGR24\n"); break;
+        case (V4L2_PIX_FMT_RGB24): ARLOGi("  Pix Fmt: RGB24\n"); break;
+        case (V4L2_PIX_FMT_BGR32): ARLOGi("  Pix Fmt: BGR32\n"); break;
+        case (V4L2_PIX_FMT_RGB32): ARLOGi("  Pix Fmt: RGB32\n"); break;
     };
     
 }
@@ -104,21 +107,21 @@ static int getControl(int fd, int type, int *value) {
     
     if (-1 == xioctl (fd, VIDIOC_QUERYCTRL, &queryctrl)) {
         if (errno != EINVAL) {
-            fprintf(stderr, "Error calling VIDIOC_QUERYCTRL\n");
+            ARLOGe("Error calling VIDIOC_QUERYCTRL\n");
             return 1;
         } else {
-            printf ("Control %d is not supported\n", type);
+            ARLOGe("Control %d is not supported\n", type);
             return 1;
         }
     } else if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
-        printf ("Control %s is not supported\n", queryctrl.name);
+        ARLOGe("Control %s is not supported\n", queryctrl.name);
         return 1;
     } else {
         memset (&control, 0, sizeof (control));
         control.id = type;
         
         if (-1 == xioctl (fd, VIDIOC_G_CTRL, &control)) {
-            fprintf(stderr, "Error getting control %s value\n", queryctrl.name);
+            ARLOGe("Error getting control %s value\n", queryctrl.name);
             return 1;
         }
         *value = control.value;
@@ -136,14 +139,14 @@ static int setControl(int fd, int type, int value) {
     
     if (-1 == xioctl (fd, VIDIOC_QUERYCTRL, &queryctrl)) {
         if (errno != EINVAL) {
-            fprintf(stderr, "Error calling VIDIOC_QUERYCTRL\n");
+            ARLOGe("Error calling VIDIOC_QUERYCTRL\n");
             return 1;
         } else {
-            printf ("Control %d is not supported\n", type);
+            ARLOGe("Control %d is not supported\n", type);
             return 1;
         }
     } else if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
-        printf ("Control %s is not supported\n", queryctrl.name);
+        ARLOGe("Control %s is not supported\n", queryctrl.name);
         return 1;
     } else {
         memset (&control, 0, sizeof (control));
@@ -153,7 +156,7 @@ static int setControl(int fd, int type, int value) {
         control.value = (value == -1) ? (queryctrl.default_value) : (value);
         
         if (-1 == xioctl (fd, VIDIOC_S_CTRL, &control)) {
-            fprintf(stderr, "Error setting control %s to %d\n", queryctrl.name, value);
+            ARLOGe("Error setting control %s to %d\n", queryctrl.name, value);
             return 1;
         }
     }
@@ -164,37 +167,37 @@ static int setControl(int fd, int type, int value) {
 
 int ar2VideoDispOptionV4L2( void )
 {
-    printf("ARVideo may be configured using one or more of the following options,\n");
-    printf("separated by a space:\n\n");
-    printf("DEVICE CONTROLS:\n");
-    printf(" -dev=filepath\n");
-    printf("    specifies device file.\n");
-    printf(" -channel=N\n");
-    printf("    specifies source channel.\n");
-    printf(" -width=N\n");
-    printf("    specifies expected width of image.\n");
-    printf(" -height=N\n");
-    printf("    specifies expected height of image.\n");
-    printf(" -palette=[RGB|YUV420P]\n");
-    printf("    specifies the camera palette (WARNING:all are not supported on each camera !!).\n");
-    printf("IMAGE CONTROLS (WARNING: every options are not supported by all camera !!):\n");
-    printf(" -brightness=N\n");
-    printf("    specifies brightness. (0.0 <-> 1.0)\n");
-    printf(" -contrast=N\n");
-    printf("    specifies contrast. (0.0 <-> 1.0)\n");
-    printf(" -saturation=N\n");
-    printf("    specifies saturation (color). (0.0 <-> 1.0) (for color camera only)\n");
-    printf(" -hue=N\n");
-    printf("    specifies hue. (0.0 <-> 1.0) (for color camera only)\n");
-    printf("OPTION CONTROLS:\n");
-    printf(" -mode=[PAL|NTSC|SECAM]\n");
-    printf("    specifies TV signal mode (for tv/capture card).\n");
-    printf("\n");
+    ARLOG(" -device=LinuxV4L2\n");
+    ARLOG("\n");
+    ARLOG("DEVICE CONTROLS:\n");
+    ARLOG(" -dev=filepath\n");
+    ARLOG("    specifies device file.\n");
+    ARLOG(" -channel=N\n");
+    ARLOG("    specifies source channel.\n");
+    ARLOG(" -width=N\n");
+    ARLOG("    specifies expected width of image.\n");
+    ARLOG(" -height=N\n");
+    ARLOG("    specifies expected height of image.\n");
+    ARLOG(" -palette=[RGB|YUV420P]\n");
+    ARLOG("    specifies the camera palette (WARNING:all are not supported on each camera !!).\n");
+    ARLOG("IMAGE CONTROLS (WARNING: every options are not supported by all camera !!):\n");
+    ARLOG(" -brightness=N\n");
+    ARLOG("    specifies brightness. (0.0 <-> 1.0)\n");
+    ARLOG(" -contrast=N\n");
+    ARLOG("    specifies contrast. (0.0 <-> 1.0)\n");
+    ARLOG(" -saturation=N\n");
+    ARLOG("    specifies saturation (color). (0.0 <-> 1.0) (for color camera only)\n");
+    ARLOG(" -hue=N\n");
+    ARLOG("    specifies hue. (0.0 <-> 1.0) (for color camera only)\n");
+    ARLOG("OPTION CONTROLS:\n");
+    ARLOG(" -mode=[PAL|NTSC|SECAM]\n");
+    ARLOG("    specifies TV signal mode (for tv/capture card).\n");
+    ARLOG("\n");
     
     return 0;
 }
 
-AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
+AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
 {
     
     // Warning, this function leaks badly when an error occurs.
@@ -204,25 +207,9 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     struct v4l2_input  ipt;
     struct v4l2_requestbuffers req;
     
-    const char                      *config, *a;
+    const char *a;
     char line[256];
     int value;
-    
-    /* If no config string is supplied, we should use the environment variable, otherwise set a sane default */
-    if (!config_in || !(config_in[0])) {
-        /* None suppplied, lets see if the user supplied one from the shell */
-        char *envconf = getenv ("ARTOOLKIT_CONFIG");
-        if (envconf && envconf[0]) {
-            config = envconf;
-            printf ("Using config string from environment [%s].\n", envconf);
-        } else {
-            config = NULL;
-            printf ("No video config string supplied, using defaults.\n");
-        }
-    } else {
-        config = config_in;
-        printf ("Using supplied video config string [%s].\n", config_in);
-    }
     
     arMalloc( vid, AR2VideoParamV4L2T, 1 );
     strcpy( vid->dev, AR_VIDEO_V4L2_DEFAULT_DEVICE );
@@ -248,8 +235,10 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
         for(;;) {
             while( *a == ' ' || *a == '\t' ) a++;
             if( *a == '\0' ) break;
+
+            if (sscanf( a, "%s", line ) == 0) break;
+
             if( strncmp( a, "-dev=", 5 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[5], "%s", vid->dev ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -257,7 +246,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-channel=", 9 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[9], "%d", &vid->channel ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -265,7 +253,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-width=", 7 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[7], "%d", &vid->width ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -273,7 +260,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-height=", 8 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[8], "%d", &vid->height ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -310,7 +296,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-contrast=", 10 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[10], "%d", &vid->contrast ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -318,7 +303,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-brightness=", 12 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[12], "%d", &vid->brightness ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -326,7 +310,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-saturation=", 12 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[12], "%d", &vid->saturation ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -334,7 +317,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-hue=", 5 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[5], "%d", &vid->hue ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -342,7 +324,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-gamma=", 7 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[7], "%d", &vid->gamma ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -350,7 +331,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-exposure=", 10 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[10], "%d", &vid->exposure ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -358,7 +338,6 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                 }
             }
             else if( strncmp( a, "-gain=", 6 ) == 0 ) {
-                sscanf( a, "%s", line );
                 if( sscanf( &line[6], "%d", &vid->gain ) == 0 ) {
                     ar2VideoDispOptionV4L2();
                     free( vid );
@@ -375,12 +354,13 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
                     return 0;
                 }
             }
-            else if( strncmp( a, "-debug", 6 ) == 0 ) {
+            else if( strcmp( line, "-debug" ) == 0 ) {
                 vid->debug = 1;
             }
-            else if( strcmp( a, "-device=LinuxV4L2" ) == 0 )    {
+            else if( strcmp( line, "-device=LinuxV4L2" ) == 0 )    {
             }
             else {
+                ARLOGe("Error: unrecognised configuration option '%s'.\n", a);
                 ar2VideoDispOptionV4L2();
                 free( vid );
                 return 0;
@@ -392,28 +372,28 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     
     vid->fd = open(vid->dev, O_RDWR);// O_RDONLY ?
     if(vid->fd < 0){
-        printf("video device (%s) open failed\n",vid->dev);
+        ARLOGe("video device (%s) open failed\n",vid->dev);
         free( vid );
         return 0;
     }
     
     if(xioctl(vid->fd,VIDIOC_QUERYCAP,&vd) < 0){
-        printf("xioctl failed\n");
+        ARLOGe("xioctl failed\n");
         free( vid );
         return 0;
     }
     
     if (!(vd.capabilities & V4L2_CAP_STREAMING)) {
-        fprintf (stderr, "Device does not support streaming i/o\n");
+        ARLOGe("Device does not support streaming i/o\n");
     }
     
-    if(vid->debug ) {
-        printf("=== debug info ===\n");
-        printf("  vd.driver        =   %s\n",vd.driver);
-        printf("  vd.card          =   %s\n",vd.card);
-        printf("  vd.bus_info      =   %s\n",vd.bus_info);
-        printf("  vd.version       =   %d\n",vd.version);
-        printf("  vd.capabilities  =   %d\n",vd.capabilities);
+    if (vid->debug) {
+        ARLOGe("=== debug info ===\n");
+        ARLOGe("  vd.driver        =   %s\n",vd.driver);
+        ARLOGe("  vd.card          =   %s\n",vd.card);
+        ARLOGe("  vd.bus_info      =   %s\n",vd.bus_info);
+        ARLOGe("  vd.version       =   %d\n",vd.version);
+        ARLOGe("  vd.capabilities  =   %d\n",vd.capabilities);
     }
     
     memset(&fmt, 0, sizeof(fmt));
@@ -434,7 +414,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     if (xioctl (vid->fd, VIDIOC_S_FMT, &fmt) < 0) {
         close(vid->fd);
         free( vid );
-        printf("ar2VideoOpen: Error setting video format (%d)\n", errno);
+        ARLOGe("ar2VideoOpen: Error setting video format (%d)\n", errno);
         return 0;
     }
     
@@ -444,8 +424,8 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     vid->height = fmt.fmt.pix.height;
     
     if (vid->debug) {
-        printf("  Width: %d\n", fmt.fmt.pix.width);
-        printf("  Height: %d\n", fmt.fmt.pix.height);
+        ARLOGe("  Width: %d\n", fmt.fmt.pix.width);
+        ARLOGe("  Height: %d\n", fmt.fmt.pix.height);
         printPalette(fmt.fmt.pix.pixelformat);
     }
     
@@ -454,8 +434,8 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     ipt.index = vid->channel;
     ipt.std = vid->mode;
     
-    if(xioctl(vid->fd,VIDIOC_ENUMINPUT,&ipt) < 0) {
-        printf("arVideoOpen: Error querying input device type\n");
+    if (xioctl(vid->fd,VIDIOC_ENUMINPUT,&ipt) < 0) {
+        ARLOGe("arVideoOpen: Error querying input device type\n");
         close(vid->fd);
         free( vid );
         return 0;
@@ -463,16 +443,16 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     
     if (vid->debug) {
         if (ipt.type == V4L2_INPUT_TYPE_TUNER) {
-            printf("  Type: Tuner\n");
+            ARLOGe("  Type: Tuner\n");
         }
         if (ipt.type == V4L2_INPUT_TYPE_CAMERA) {
-            printf("  Type: Camera\n");
+            ARLOGe("  Type: Camera\n");
         }
     }
     
     // Set channel
     if (xioctl(vid->fd, VIDIOC_S_INPUT, &ipt)) {
-        printf("arVideoOpen: Error setting video input\n");
+        ARLOGe("arVideoOpen: Error setting video input\n");
         close(vid->fd);
         free( vid );
         return 0;
@@ -489,27 +469,27 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     setControl(vid->fd, V4L2_CID_GAIN, vid->gain);
     
     // Print out current control values
-    if(vid->debug ) {
+    if (vid->debug ) {
         if (!getControl(vid->fd, V4L2_CID_BRIGHTNESS, &value)) {
-            printf("Brightness: %d\n", value);
+            ARLOGe("Brightness: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_CONTRAST, &value)) {
-            printf("Contrast: %d\n", value);
+            ARLOGe("Contrast: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_SATURATION, &value)) {
-            printf("Saturation: %d\n", value);
+            ARLOGe("Saturation: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_HUE, &value)) {
-            printf("Hue: %d\n", value);
+            ARLOGe("Hue: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_GAMMA, &value)) {
-            printf("Gamma: %d\n", value);
+            ARLOGe("Gamma: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_EXPOSURE, &value)) {
-            printf("Exposure: %d\n", value);
+            ARLOGe("Exposure: %d\n", value);
         }
         if (!getControl(vid->fd, V4L2_CID_GAIN, &value)) {
-            printf("Gain: %d\n", value);
+            ARLOGe("Gain: %d\n", value);
         }
     }
     
@@ -526,7 +506,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     req.memory = V4L2_MEMORY_MMAP;
     
     if (xioctl(vid->fd, VIDIOC_REQBUFS, &req)) {
-        printf("Error calling VIDIOC_REQBUFS\n");
+        ARLOGe("Error calling VIDIOC_REQBUFS\n");
         close(vid->fd);
         if(vid->videoBuffer!=NULL) free(vid->videoBuffer);
         free( vid );
@@ -534,8 +514,8 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     }
     
     if (req.count < 2) {
-        printf("this device can not be supported by libARvideo.\n");
-        printf("(req.count < 2)\n");
+        ARLOGe("this device can not be supported by libARvideo.\n");
+        ARLOGe("(req.count < 2)\n");
         close(vid->fd);
         if(vid->videoBuffer!=NULL) free(vid->videoBuffer);
         free( vid );
@@ -546,7 +526,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
     vid->buffers = (struct buffer_ar_v4l2 *)calloc(req.count , sizeof(*vid->buffers));
     
     if (vid->buffers == NULL ) {
-        printf("ar2VideoOpen: Error allocating buffer memory\n");
+        ARLOGe("ar2VideoOpen: Error allocating buffer memory\n");
         close(vid->fd);
         if(vid->videoBuffer!=NULL) free(vid->videoBuffer);
         free( vid );
@@ -561,7 +541,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
         buf.index       = vid->n_buffers;
         
         if (xioctl (vid->fd, VIDIOC_QUERYBUF, &buf)) {
-            printf ("error VIDIOC_QUERYBUF\n");
+            ARLOGe("error VIDIOC_QUERYBUF\n");
             close(vid->fd);
             if(vid->videoBuffer!=NULL) free(vid->videoBuffer);
             free( vid );
@@ -577,7 +557,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
               vid->fd, buf.m.offset);
         
         if (MAP_FAILED == vid->buffers[vid->n_buffers].start) {
-            printf("Error mmap\n");
+            ARLOGe("Error mmap\n");
             close(vid->fd);
             if(vid->videoBuffer!=NULL) free(vid->videoBuffer);
             free( vid );
@@ -592,40 +572,39 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config_in )
 
 int ar2VideoCloseV4L2( AR2VideoParamV4L2T *vid )
 {
-    if(vid->video_cont_num >= 0){
+    if (vid->video_cont_num >= 0){
         ar2VideoCapStopV4L2( vid );
     }
     close(vid->fd);
-    if(vid->videoBuffer!=NULL)
-        free(vid->videoBuffer);
-    free( vid );
+    free(vid->videoBuffer);
+    free(vid);
     
     return 0;
 }
 
 int ar2VideoGetIdV4L2( AR2VideoParamV4L2T *vid, ARUint32 *id0, ARUint32 *id1 )
 {
-    if( vid == NULL ) return -1;
+    if (!vid) return -1;
     
-    *id0 = 0;
-    *id1 = 0;
+    if (id0) *id0 = 0;
+    if (id1) *id1 = 0;
     
     return -1;
 }
 
 int ar2VideoGetSizeV4L2(AR2VideoParamV4L2T *vid, int *x,int *y)
 {
-    if( vid == NULL ) return -1;
+    if (!vid) return -1;
     
-    *x = vid->width;
-    *y = vid->height;
+    if (x) *x = vid->width;
+    if (y) *y = vid->height;
     
     return 0;
 }
 
 AR_PIXEL_FORMAT ar2VideoGetPixelFormatV4L2( AR2VideoParamV4L2T *vid )
 {
-    if( vid == NULL ) return AR_PIXEL_FORMAT_INVALID;
+    if (!vid) return AR_PIXEL_FORMAT_INVALID;
     
     return vid->format;
 }
@@ -637,7 +616,7 @@ int ar2VideoCapStartV4L2( AR2VideoParamV4L2T *vid )
     int i;
     
     if (vid->video_cont_num >= 0){
-        printf("arVideoCapStart has already been called.\n");
+        ARLOGe("arVideoCapStart has already been called.\n");
         return -1;
     }
     
@@ -649,37 +628,15 @@ int ar2VideoCapStartV4L2( AR2VideoParamV4L2T *vid )
         buf.memory = V4L2_MEMORY_MMAP;
         buf.index = i;
         if (xioctl(vid->fd, VIDIOC_QBUF, &buf)) {
-            printf("ar2VideoCapStart: Error calling VIDIOC_QBUF: %d\n", errno);
+            ARLOGe("ar2VideoCapStart: Error calling VIDIOC_QBUF: %d\n", errno);
             return -1;
         }
     }
     
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (xioctl(vid->fd, VIDIOC_STREAMON, &type)) {
-        printf("ar2VideoCapStart: Error calling VIDIOC_STREAMON\n");
+        ARLOGe("ar2VideoCapStart: Error calling VIDIOC_STREAMON\n");
         return -1;
-    }
-    
-    return 0;
-}
-
-int ar2VideoCapNextV4L2( AR2VideoParamV4L2T *vid )
-{
-    struct v4l2_buffer buf;
-    
-    if (vid->video_cont_num < 0){
-        printf("arVideoCapStart has never been called.\n");
-        return -1;
-    }
-    
-    memset(&buf, 0, sizeof(buf));
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-    buf.index = vid->video_cont_num;
-    
-    if (xioctl(vid->fd, VIDIOC_QBUF, &buf)) {
-        printf("ar2VideoCapNext: Error calling VIDIOC_QBUF: %d\n", errno);
-        return 1;
     }
     
     return 0;
@@ -687,16 +644,18 @@ int ar2VideoCapNextV4L2( AR2VideoParamV4L2T *vid )
 
 int ar2VideoCapStopV4L2( AR2VideoParamV4L2T *vid )
 {
-    enum v4l2_buf_type type;
-    if(vid->video_cont_num < 0){
-        printf("arVideoCapStart has never been called.\n");
+    if (!vid) return -1;
+
+    if (vid->video_cont_num < 0){
+        ARLOGe("arVideoCapStart has never been called.\n");
         return -1;
     }
     
+    enum v4l2_buf_type type;
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     
     if (xioctl(vid->fd, VIDIOC_STREAMOFF, &type)) {
-        printf("Error calling VIDIOC_STREAMOFF\n");
+        ARLOGe("Error calling VIDIOC_STREAMOFF\n");
         return -1;
     }
     
@@ -826,24 +785,24 @@ static void yuyv_to_rgb24(int width, int height, const void *src, void *dst)
 
 AR2VideoBufferT *ar2VideoGetImageV4L2( AR2VideoParamV4L2T *vid )
 {
-    ARUint8 *buffer;
+    if (!vid) return NULL;
+   
+    if (vid->video_cont_num < 0){
+        ARLOGe("arVideoCapStart has never been called.\n");
+        return NULL;
+    }
     
-    AR2VideoBufferT * out = &(vid->buffer.out);
+    ARUint8 *buffer;
+    AR2VideoBufferT *out = &(vid->buffer.out);
     memset(out, 0, sizeof(*out));
     
     struct v4l2_buffer buf;
-    
-    if(vid->video_cont_num < 0){
-        printf("arVideoCapStart has never been called.\n");
-        return out;
-    }
-    
     memset(&buf, 0, sizeof(buf));
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
     
     if (xioctl(vid->fd, VIDIOC_DQBUF, &buf) < 0) {
-        printf("Error calling VIDIOC_DQBUF: %d\n", errno);
+        ARLOGe("Error calling VIDIOC_DQBUF: %d\n", errno);
         return out;
     }
     
@@ -863,19 +822,18 @@ AR2VideoBufferT *ar2VideoGetImageV4L2( AR2VideoParamV4L2T *vid )
         out->fillFlag = 1;
     }
     
-    ar2VideoCapNextV4L2(vid);
+    struct v4l2_buffer buf_next;
+    memset(&buf_next, 0, sizeof(buf_next));
+    buf_next.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf_next.memory = V4L2_MEMORY_MMAP;
+    buf_next.index = vid->video_cont_num;
+    
+    if (xioctl(vid->fd, VIDIOC_QBUF, &buf_next)) {
+        ARLOGe("ar2VideoCapNext: Error calling VIDIOC_QBUF: %d\n", errno);
+    }
+
     return out;
-    
 }
-
-int ar2VideoInqSizeV4L2(AR2VideoParamV4L2T *vid, int *x,int *y)
-{
-    *x = vid->width;
-    *y = vid->height;
-    
-    return 0;
-}
-
 
 int ar2VideoGetParamiV4L2( AR2VideoParamV4L2T *vid, int paramName, int *value )
 {

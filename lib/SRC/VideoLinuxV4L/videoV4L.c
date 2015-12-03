@@ -39,7 +39,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <sys/time.h>
+#include <sys/time.h> // gettimeofday(), struct timeval
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -401,8 +401,8 @@ int ar2VideoGetIdV4L( AR2VideoParamV4LT *vid, ARUint32 *id0, ARUint32 *id1 )
 {
     if( vid == NULL ) return -1;
     
-    *id0 = 0;
-    *id1 = 0;
+    if (id0) *id0 = 0;
+    if (id1) *id1 = 0;
     
     return -1;
 }
@@ -411,8 +411,8 @@ int ar2VideoGetSizeV4L(AR2VideoParamV4LT *vid, int *x,int *y)
 {
     if( vid == NULL ) return -1;
     
-    *x = vid->vmm.width;
-    *y = vid->vmm.height;
+    if (x) *x = vid->vmm.width;
+    if (y) *y = vid->vmm.height;
     
     return 0;
 }
@@ -529,30 +529,17 @@ static void ar2VideoBufferInitV4L( AR2VideoBufferV4LT *buffer, int size )
 
 static void ar2VideoGetTimeStampV4L(ARUint32 *t_sec, ARUint32 *t_usec)
 {
-#ifdef _WIN32
-    struct _timeb sys_time;
-    double             tt;
-    int                s1, s2;
-    
-    _ftime(&sys_time);
-    *t_sec  = sys_time.time;
-    *t_usec = sys_time.millitm * 1000;
-#else
     struct timeval     time;
     double             tt;
     int                s1, s2;
     
-#  if defined(__linux) || defined(__APPLE__)
     gettimeofday( &time, NULL );
-#  else
-    gettimeofday( &time );
-#  endif
     *t_sec  = time.tv_sec;
     *t_usec = time.tv_usec;
-#endif
     
     return;
 }
+
 int ar2VideoGetParamiV4L( AR2VideoParamV4LT *vid, int paramName, int *value )
 {
     return -1;

@@ -1,5 +1,5 @@
 /*
- *	videoLinuxV4L2.h
+ *  videoLinuxV4L2.h
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -74,8 +74,8 @@ typedef struct {
 struct buffer_ar_v4l2 {
     ARUint8   *start;
     size_t    length;
-    
-} ;
+};
+
 typedef struct {
     char                   dev[256];
     int                    width;
@@ -101,15 +101,15 @@ typedef struct {
     ARUint8                *videoBuffer;
 
     pthread_t              capture;
-    AR2VideoBufferV4L2T     buffer;
+    AR2VideoBufferV4L2T    buffer;
     
-    struct buffer_ar_v4l2 *        buffers;
+    struct buffer_ar_v4l2 *buffers;
     int                    n_buffers;
 } AR2VideoParamV4L2T;
 
 
 int                  ar2VideoDispOptionV4L2     ( void );
-AR2VideoParamV4L2T   *ar2VideoOpenV4L2           ( const char *config );
+AR2VideoParamV4L2T   *ar2VideoOpenV4L2          ( const char *config );
 int                  ar2VideoCloseV4L2          ( AR2VideoParamV4L2T *vid );
 int                  ar2VideoGetIdV4L2          ( AR2VideoParamV4L2T *vid, ARUint32 *id0, ARUint32 *id1 );
 int                  ar2VideoGetSizeV4L2        ( AR2VideoParamV4L2T *vid, int *x,int *y );
@@ -118,10 +118,10 @@ AR2VideoBufferT     *ar2VideoGetImageV4L2       ( AR2VideoParamV4L2T *vid );
 int                  ar2VideoCapStartV4L2       ( AR2VideoParamV4L2T *vid );
 int                  ar2VideoCapStopV4L2        ( AR2VideoParamV4L2T *vid );
 
-int                    ar2VideoGetParamiV4L2    ( AR2VideoParamV4L2T *vid, int paramName, int *value );
-int                    ar2VideoSetParamiV4L2    ( AR2VideoParamV4L2T *vid, int paramName, int  value );
-int                    ar2VideoGetParamdV4L2    ( AR2VideoParamV4L2T *vid, int paramName, double *value );
-int                    ar2VideoSetParamdV4L2    ( AR2VideoParamV4L2T *vid, int paramName, double  value );
+int                  ar2VideoGetParamiV4L2      ( AR2VideoParamV4L2T *vid, int paramName, int *value );
+int                  ar2VideoSetParamiV4L2      ( AR2VideoParamV4L2T *vid, int paramName, int  value );
+int                  ar2VideoGetParamdV4L2      ( AR2VideoParamV4L2T *vid, int paramName, double *value );
+int                  ar2VideoSetParamdV4L2      ( AR2VideoParamV4L2T *vid, int paramName, double  value );
 
 
 #ifdef  __cplusplus
