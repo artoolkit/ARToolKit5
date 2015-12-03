@@ -378,10 +378,18 @@ then
             LIBS="$LIBS -lraw1394 -ldc1394_control"
         fi
     fi
-    #CV_CFLAG=`pkg-config opencv --cflags`
-    #CV_LIBS=`pkg-config opencv --libs`
-    CV_CFLAG=""
-    CV_LIBS="-lopencv_calib3d -lopencv_features2d -lopencv_imgproc -lopencv_flann -lopencv_core -lz"
+
+    # When linking against libc++, use supplied opencv rather than system opencv.
+    if [ "$STDCXXLIB" = "-lc++" ]
+    then
+        CV_CFLAG="-I\$(INC_DIR)/$SYSTEM"
+        CV_LIBS="-L\$(LIB_DIR)/$SYSTEM -lopencv_calib3d -lopencv_features2d -lopencv_imgproc -lopencv_flann -lopencv_core -lz"
+    else
+        CV_CFLAG=`pkg-config opencv --cflags`
+        CV_LIBS=`pkg-config opencv --libs`
+        #CV_CFLAG=""
+        #CV_LIBS="-lopencv_calib3d -lopencv_features2d -lopencv_imgproc -lopencv_flann -opencv_core -lz"
+    fi
 elif [ "$E" = "IRIX" ]
 then
     SYSTEM="irix"
@@ -743,7 +751,7 @@ fi
 if [ "$INPUT_V4L" = "y" ]
 then
 cat >> $SED <<EOF
-s/#undef  AR_INPUT_V4L(?!2)/#define AR_INPUT_V4L/
+s/#undef  AR_INPUT_V4L\b/#define AR_INPUT_V4L/
 EOF
 fi
 
@@ -806,12 +814,12 @@ fi
 if [ "$DEFAULT_CAP_DEVICE" = "V4L" ]
 then
 cat >> $SED <<EOF
-s/#undef  AR_DEFAULT_INPUT_V4L/#define AR_DEFAULT_INPUT_V4L/
+s/#undef  AR_DEFAULT_INPUT_V4L\b/#define AR_DEFAULT_INPUT_V4L/
 EOF
 elif [ "$DEFAULT_CAP_DEVICE" = "V4L2" ]
 then
 cat >> $SED <<EOF
-s/#undef  AR_DEFAULT_INPUT_V4L/#define AR_DEFAULT_INPUT_V4L2/
+s/#undef  AR_DEFAULT_INPUT_V4L2/#define AR_DEFAULT_INPUT_V4L2/
 EOF
 elif [ "$DEFAULT_CAP_DEVICE" = "CAM1394" ]
 then

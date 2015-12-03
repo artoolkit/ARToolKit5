@@ -39,9 +39,9 @@ LIB_DIR= ../../lib
 BIN_DIR= ../../bin
 
 CXX=@CXX@
-LDFLAG=@LDFLAG@ -L$(LIB_DIR)/@SYSTEM@ -L$(LIB_DIR)
+LDFLAG=@LDFLAG@ -L$(LIB_DIR)
 LIBS= -lARgsub -lARvideo -lAR -lARICP -lAR @CV_LIBS@ @LIBS@
-CFLAG= @CFLAG@ @CV_CFLAG@ -I$(INC_DIR)/@SYSTEM@ -I$(INC_DIR)
+CFLAG= @CFLAG@ @CV_CFLAG@ -I$(INC_DIR)
 
 
 all: $(BIN_DIR)/calib_camera

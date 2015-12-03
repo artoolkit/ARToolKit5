@@ -91,7 +91,7 @@ bin/simpleVRML
 bin/stereo
 bin/nftSimple
 bin/nftBook
-bin/ARWrapper.so
+lib/ARWrapper.so
 
 bin/multiCube.app/
 bin/multiTest.app/

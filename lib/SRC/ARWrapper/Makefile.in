@@ -89,14 +89,15 @@ $(TARGET): $(OBJS) $(OBJS_OBJC)
 #-L/home/user/artoolkit5/lib/ -lAR -lAR2
 
 clean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
+	-rm -f $(OBJS)
+	-rm -f $(TARGET)
 
 allclean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
+	-rm -f $(OBJS)
+	-rm -f $(TARGET)
 	-rm -f Makefile
 
 distclean:
-	rm -f *.o
+	rm -f $(OBJS)
 	rm -f Makefile
+

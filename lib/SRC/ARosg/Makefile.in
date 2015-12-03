@@ -74,14 +74,15 @@ $(TARGET): $(OBJS)
 	$(RANLIB) $@ 
 
 clean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
+	-rm -f $(OBJS)
+	-rm -f $(TARGET)
 
 allclean:
-	-rm -f *.o *~ *.bak
-	-rm $(TARGET)
+	-rm -f $(OBJS)
+	-rm -f $(TARGET)
 	-rm -f Makefile
 
 distclean:
-	rm -f *.o
+	rm -f $(OBJS)
 	rm -f Makefile
+
