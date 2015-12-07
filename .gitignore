@@ -28,6 +28,7 @@ ipch/
 local.properties
 EclipseProjects/**/.settings/
 .metadata/
+
 # MonoDevelop/Xamarin Studio
 *.userprefs
 # Visual Studio
@@ -35,12 +36,21 @@ EclipseProjects/**/.settings/
 *.user
 *.userosscache
 *.sln.docstates
+
 # Xcode
 xcuserdata/
 *.mode1*
 *.pbxuser
 *.xccheckout
 *.xcscmblueprint
+
+# Android Studio
+*.iml
+.gradle
+/local.properties
+**/.idea/workspace.xml
+**/.idea/libraries
+/captures
 
 #### Other VCS
 .svn/
