@@ -38,19 +38,20 @@ UNAME = $(shell uname)
 
 AR_HOME = ../../..
 AR_CPPFLAGS = -I$(AR_HOME)/include
-
-LIBS= -lARgsub_lite -lARvideo -lAR -lARICP -lAR2 -lKPM $(STDCXXLIB) -lARUtil -lARMulti -lEden -lAR @LIBS@
+AR_LDFLAGS = -L$(AR_HOME)/lib/@SYSTEM@ -L$(AR_HOME)/lib
 
 CC=@CC@
 CXX=@CXX@
 CPPFLAGS = $(AR_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
+LDFLAGS = $(AR_LDFLAGS) @LDFLAG@
+LIBS= -lARgsub_lite -lARvideo -lAR -lARICP -lAR2 -lKPM $(STDCXXLIB) -lARUtil -lARMulti -lEden -lAR @LIBS@
 AR=@AR@
 ARFLAGS=@ARFLAGS@
 RANLIB = @RANLIB@
 
-TARGET = $(AR_HOME)/lib/ARWrapper.so
+TARGET = $(AR_HOME)/lib/libARWrapper.so
 
 HEADERS = \
 trackingSub.h \
@@ -83,10 +84,7 @@ $(OBJS_OBJC): $(HEADERS)
 $(OBJS): $(HEADERS)
 
 $(TARGET): $(OBJS) $(OBJS_OBJC)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAG) -shared -o $@ $(OBJS) -L$(AR_HOME)/lib/@SYSTEM@ -L$(AR_HOME)/lib/ $(LIBS)
-	$(RANLIB) $@
-
-#-L/home/user/artoolkit5/lib/ -lAR -lAR2
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) $(LIBS)
 
 clean:
 	-rm -f $(OBJS)

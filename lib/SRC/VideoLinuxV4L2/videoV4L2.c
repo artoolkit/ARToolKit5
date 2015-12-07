@@ -178,9 +178,11 @@ int ar2VideoDispOptionV4L2( void )
     ARLOG("    specifies expected width of image.\n");
     ARLOG(" -height=N\n");
     ARLOG("    specifies expected height of image.\n");
-    ARLOG(" -palette=[RGB|YUV420P]\n");
-    ARLOG("    specifies the camera palette (WARNING:all are not supported on each camera !!).\n");
-    ARLOG("IMAGE CONTROLS (WARNING: every options are not supported by all camera !!):\n");
+    ARLOG(" -palette=[GREY|HI240|RGB565|RGB555|BGR24|BGR32|YUYV|UYVY|\n");
+    ARLOG("    Y41P|YUV422P|YUV411P|YVU420|YVU410]\n");
+    ARLOG("    specifies the camera palette (WARNING: not all options are supported by\n");
+    ARLOG("    every camera).\n");
+    ARLOG("IMAGE CONTROLS (WARNING: not all options are not supported by every camera):\n");
     ARLOG(" -brightness=N\n");
     ARLOG("    specifies brightness. (0.0 <-> 1.0)\n");
     ARLOG(" -contrast=N\n");

@@ -180,8 +180,8 @@ int arGetStereoMatching(AR3DStereoHandle *handle, ARdouble pos2dL[2], ARdouble p
     ARMat   *matPt, *matR, *matS, *matT;
     ARdouble   wL[3][4], wR[3][4];
 
-    arUtilMatMul( handle->icpStereoHandle->matXcl2Ul, handle->icpStereoHandle->matC2L, wL );
-    arUtilMatMul( handle->icpStereoHandle->matXcr2Ur, handle->icpStereoHandle->matC2R, wR );
+    arUtilMatMul( (const ARdouble (*)[4])(handle->icpStereoHandle->matXcl2Ul), (const ARdouble (*)[4])(handle->icpStereoHandle->matC2L), wL );
+    arUtilMatMul( (const ARdouble (*)[4])(handle->icpStereoHandle->matXcr2Ur), (const ARdouble (*)[4])(handle->icpStereoHandle->matC2R), wR );
 
     matP  = arMatrixAlloc(4,3);
     matPt = arMatrixAlloc(3,4);

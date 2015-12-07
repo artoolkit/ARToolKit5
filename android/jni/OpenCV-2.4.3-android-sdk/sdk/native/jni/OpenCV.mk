@@ -31,15 +31,15 @@ ifeq ($(OPENCV_LIB_TYPE),SHARED)
     OPENCV_3RDPARTY_COMPONENTS:=
     OPENCV_EXTRA_COMPONENTS:=
 else
-# ARToolKit does not use highgui, so no need for external file format handling libs.
-#    OPENCV_3RDPARTY_COMPONENTS:=libjpeg libpng libtiff libjasper IlmImf
+    # ARToolKit does not use highgui, so no need for external file format handling libs.
+    #    OPENCV_3RDPARTY_COMPONENTS:=libjpeg libpng libtiff libjasper IlmImf
     OPENCV_3RDPARTY_COMPONENTS:=
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    OPENCV_3RDPARTY_COMPONENTS+=tbb
-endif
-ifeq ($(TARGET_ARCH_ABI),x86)
-    OPENCV_3RDPARTY_COMPONENTS+=tbb
-endif
+    ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+        OPENCV_3RDPARTY_COMPONENTS+=tbb
+    endif
+    ifeq ($(TARGET_ARCH_ABI),x86)
+        OPENCV_3RDPARTY_COMPONENTS+=tbb
+    endif
     OPENCV_EXTRA_COMPONENTS:=c log m dl z
 endif
 

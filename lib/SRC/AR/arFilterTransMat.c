@@ -101,7 +101,7 @@ int arFilterTransMat(ARFilterTransMatInfo *ftmi, ARdouble m[3][4], const int res
     
     if (!ftmi) return (-1);
     
-    if (arUtilMat2QuatPos(m, q, p) < 0) return (-2);
+    if (arUtilMat2QuatPos((const ARdouble (*)[4])m, q, p) < 0) return (-2);
     arUtilQuatNorm(q);
     
     if (reset) {

@@ -45,10 +45,9 @@
  *
  *******************************************************/
 
+#define _GNU_SOURCE   // asprintf()/vasprintf() on Linux.
 #include <AR/ar.h>
-#include <stdio.h>
 #include <math.h>
-#include <string.h>
 #include <stdarg.h>
 #include <ctype.h>    // tolower()
 #ifdef _WIN32

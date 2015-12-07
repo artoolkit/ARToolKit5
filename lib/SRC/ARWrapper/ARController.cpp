@@ -873,6 +873,7 @@ bool ARController::stopRunning()
 	}
 
 #if HAVE_NFT
+    mTrackerWasUpdated = false;
     // Tracking thread is holding a reference to the camera parameters. Closing the
     // video source will dispose of the camera parameters, thus invalidating this reference.
     // So must stop tracking before closing the video source.
@@ -1430,11 +1431,11 @@ bool ARController::removeMarker(ARMarker* marker)
 #if HAVE_NFT
     // Count each type of marker.
     int nftMarkerCount = 0;
-    int nonNFTMarkerCount = 0;
+    int squareMarkerCount = 0;
     std::vector<ARMarker *>::const_iterator it = markers.begin();
     while (it != markers.end()) {
         if ((*it)->type == ARMarker::NFT ) nftMarkerCount++;
-        else nonNFTMarkerCount++;
+        else squareMarkerCount++;
         ++it;
     }
     if (nftMarkerCount == 0) {
@@ -1442,12 +1443,12 @@ bool ARController::removeMarker(ARMarker* marker)
             logv(AR_LOG_LEVEL_INFO, "Last NFT marker removed; disabling NFT marker detection.");
         doNFTMarkerDetection = false;
     }
-    if (nonNFTMarkerCount == 0) {
+    if (squareMarkerCount == 0) {
         if (doMarkerDetection)
             logv(AR_LOG_LEVEL_INFO, "Last square marker removed; disabling square marker detection.");
         doMarkerDetection = false;
     }
-    int markerCount = nftMarkerCount + nonNFTMarkerCount;
+    int markerCount = nftMarkerCount + squareMarkerCount;
 #else
     int markerCount = countMarkers();
     if (markerCount == 0) {
