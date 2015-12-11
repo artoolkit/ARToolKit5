@@ -58,28 +58,22 @@ import org.artoolkit.ar.base.rendering.ARRenderer;
 import android.util.Log;
 
 public class SimpleNativeRenderer extends ARRenderer {
-	
+
     // Load the native libraries.
     static {
     	System.loadLibrary("c++_shared");
-		
-		// ARToolKit v5.1.0 and later depend on libcurl.
-		System.loadLibrary("crypto");
-		System.loadLibrary("ssl");
-		System.loadLibrary("curl");
-
-    	System.loadLibrary("ARWrapper");	  
-    	System.loadLibrary("ARWrapperNativeCarsExample");	    	
+    	System.loadLibrary("ARWrapper");
+    	System.loadLibrary("ARWrapperNativeCarsExample");
     }
-    
+
     public static native void demoInitialise();
     public static native void demoShutdown();
     public static native void demoSurfaceCreated();
     public static native void demoSurfaceChanged(int w, int h);
-    public static native void demoDrawFrame();  
-    
+    public static native void demoDrawFrame();
+
     private FPSCounter counter = new FPSCounter();
-    
+
 	/**
      * By overriding {@link configureARScene}, the markers and other settings can be configured
      * after the native library is initialised, but prior to the rendering actually starting.
@@ -91,11 +85,11 @@ public class SimpleNativeRenderer extends ARRenderer {
     	SimpleNativeRenderer.demoInitialise();
     	return true;
     }
-    
+
     @Override
-    public void onSurfaceChanged(GL10 gl, int w, int h) {       
+    public void onSurfaceChanged(GL10 gl, int w, int h) {
     	super.onSurfaceChanged(gl, w, h);
-    	SimpleNativeRenderer.demoSurfaceChanged(w, h);        
+    	SimpleNativeRenderer.demoSurfaceChanged(w, h);
     }
 
     @Override
@@ -103,14 +97,14 @@ public class SimpleNativeRenderer extends ARRenderer {
     	super.onSurfaceCreated(gl, config);
     	SimpleNativeRenderer.demoSurfaceCreated();
     }
-    
+
     @Override
     public void draw(GL10 gl) {
     	SimpleNativeRenderer.demoDrawFrame();
-    	
+
     	if (counter.frame()) Log.i("demo", counter.toString());
-    	
+
     }
-    
+
 }
 

@@ -68,21 +68,15 @@ import android.widget.FrameLayout;
 import jp.epson.moverio.bt200.DisplayControl;
 
 public class calib_optical_Activity extends Activity {
-    
+
     private static final String TAG = "calib_optical";
-	
+
     // Load the native libraries.
     static {
     	System.loadLibrary("c++_shared");
-    	
-		// ARToolKit v5.1.0 and later depend on libcurl.
-		System.loadLibrary("crypto");
-		System.loadLibrary("ssl");
-		System.loadLibrary("curl");
-
-    	System.loadLibrary("calib_optical_Native");	    	
+    	System.loadLibrary("calib_optical_Native");
     }
-    
+
 	// Lifecycle functions.
     public static native boolean nativeCreate(Context ctx);
     public static native boolean nativeStart();
@@ -99,36 +93,36 @@ public class calib_optical_Activity extends Activity {
     public static native void nativeHandleTouchAtLocation(int x, int y);
     public static native boolean nativeHandleBackButton(); // Returns true if handled on native side, false otherwise.
     public static native boolean nativeHandleMenuToggleVideoSeeThrough();
-    
+
     // Other functions.
     public static native void nativeDisplayParametersChanged(int orientation, int w, int h, int dpi, int stereoDisplayMode); // 0 = portrait, 1 = landscape (device rotated 90 degrees ccw), 2 = portrait upside down, 3 = landscape reverse (device rotated 90 degrees cw).
     public static native boolean nativeSetCalibrationParameters(int eyeSelection); // 0 = left, 1 = right (or for stereo, 0 = left then right, 1 = right then left).
-    
+
     private boolean forceLandscape;
 	private GLSurfaceView glView;
 	private CameraSurface camSurface;
-	
+
 	private FrameLayout mainLayout;
-	
+
 	private OrientationEventListener orientationListener;
 	private int currentOrientation;
-	
+
 	// For Epson Moverio BT-200.
 	private DisplayControl mDisplayControl = null;
-	
-	
+
+
 	/** Called when the activity is first created. */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        
+
 		forceLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_forceLandscape", false);
-		
+
 		boolean needActionBar = false;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-				if (!ViewConfiguration.get(this).hasPermanentMenuKey() && 
+				if (!ViewConfiguration.get(this).hasPermanentMenuKey() &&
 					!(Build.MANUFACTURER.equals("EPSON") && Build.MODEL.equals("embt2"))) {
 					needActionBar = true;
 				}
@@ -139,45 +133,45 @@ public class calib_optical_Activity extends Activity {
 		if (needActionBar) {
 			requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		} else {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);        	
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
+
         // For Epson Moverio BT-200.
         if (Build.MANUFACTURER.equals("EPSON") && Build.MODEL.equals("embt2")) {
         	mDisplayControl = new DisplayControl(this);
             //private static final int FLAG_SMARTFULLSCREEN = 0x80000000; // For Epson Moverio BT-200.
         	getWindow().addFlags(0x80000000);
         }
-        
+
         if (forceLandscape) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); // Force landscape-only.
-        
+
         setContentView(R.layout.main);
-        
+
 		calib_optical_Activity.nativeCreate(this);
     }
-    
+
     @Override
-    public void onStart() 
+    public void onStart()
     {
    	    super.onStart();
-		
+
    	    // If the user changed preferences, here is the first opportunity to take those changes into account.
    	    boolean forceLandscapeNew = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_forceLandscape", false);
    	    if (forceLandscape != forceLandscapeNew) {
    	    	forceLandscape = forceLandscapeNew;
    	    	setRequestedOrientation(forceLandscape ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
    	    }
-   	    
-   	    // For Epson Moverio BT-200, enable stereo mode. 
+
+   	    // For Epson Moverio BT-200, enable stereo mode.
    	    if (Build.MANUFACTURER.equals("EPSON") && Build.MODEL.equals("embt2")) {
    	    	boolean stereo = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_stereoDisplay", false);
    	    	//int dimension = (stereo ? DIMENSION_3D : DIMENSION_2D);
    	    	//set2d3d(dimension);
    	    	mDisplayControl.setMode(stereo ? DisplayControl.DISPLAY_MODE_3D : DisplayControl.DISPLAY_MODE_2D, stereo); // Last parameter is 'toast'.
    	    }
-   	    
+
         // Orientation management.
         updateNativeDisplayParameters();
         if (!forceLandscape) {
@@ -193,16 +187,16 @@ public class calib_optical_Activity extends Activity {
                 			updateNativeDisplayParameters();
                 		}
             		}
-            	}        	
+            	}
             };
         }
         nativeSetCalibrationParameters(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_eyeSelection", "0")));
 
     	mainLayout = (FrameLayout)this.findViewById(R.id.mainLayout);
-        
+
 		calib_optical_Activity.nativeStart();
     }
-    
+
     @SuppressWarnings("deprecation") // FILL_PARENT still required for API level 7 (Android 2.1)
     @Override
     public void onResume() {
@@ -214,16 +208,16 @@ public class calib_optical_Activity extends Activity {
    		// To work around this, we also recreate GLSurfaceView. This is not a lot of extra
    		// work, since Android has already destroyed the OpenGL context too, requiring us to
    		// recreate that and reload textures etc.
-   	
+
 		// Create the camera view.
 		camSurface = new CameraSurface(this);
 
 		// Create/recreate the GL view.
-	    glView = new ARSurfaceView(this);    		
+	    glView = new ARSurfaceView(this);
 		//glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // Do we actually need a transparent surface? I think not, (default is RGB888 with depth=16) and anyway, Android 2.2 barfs on this.
 		glView.setRenderer(new Renderer());
 		glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
-        		
+
         mainLayout.addView(camSurface, new LayoutParams(128, 128));
  		mainLayout.addView(glView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
@@ -236,7 +230,7 @@ public class calib_optical_Activity extends Activity {
 	protected void onPause() {
 	    super.onPause();
 	    if (glView != null) glView.onPause();
-	    
+
         if (orientationListener != null) orientationListener.disable();
 
         // System hardware must be release in onPause(), so it's available to
@@ -247,23 +241,23 @@ public class calib_optical_Activity extends Activity {
 	    mainLayout.removeView(camSurface);
 	}
 
-	@Override 
-	public void onStop() {		
-		super.onStop();		
+	@Override
+	public void onStop() {
+		super.onStop();
 
 		orientationListener = null;
-		
+
 		calib_optical_Activity.nativeStop();
 	}
-	
+
     @Override
-    public void onDestroy() 
+    public void onDestroy()
     {
    	    super.onDestroy();
-   	    
+
 		calib_optical_Activity.nativeDestroy();
     }
-  
+
     private void updateNativeDisplayParameters()
     {
     	boolean forceLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_forceLandscape", false);
@@ -276,28 +270,28 @@ public class calib_optical_Activity extends Activity {
     	int dpi = dm.densityDpi;
     	boolean stereoDisplay = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_stereoDisplay", false);
     	int stereoDisplayMode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_stereoDisplayMode", "0"));
-        nativeDisplayParametersChanged((forceLandscape ? 1 : currentOrientation), w, h, dpi, (stereoDisplay ? stereoDisplayMode : 0));    	
+        nativeDisplayParametersChanged((forceLandscape ? 1 : currentOrientation), w, h, dpi, (stereoDisplay ? stereoDisplayMode : 0));
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
     	super.onConfigurationChanged(newConfig);
-    	
+
         //int nativeOrientation;
         //int orientation = newConfig.orientation; // Only portrait or landscape.
     	//if (orientation == Configuration.ORIENTATION_LANSCAPE) nativeOrientation = 0;
         //else /* orientation == Configuration.ORIENTATION_PORTRAIT) */ nativeOrientation = 1;
     	updateNativeDisplayParameters();
     }
-    
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.options, menu);
 	    return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    if (item.getItemId() == R.id.settings) {
@@ -313,7 +307,7 @@ public class calib_optical_Activity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public void onBackPressed()
 	{
@@ -321,10 +315,10 @@ public class calib_optical_Activity extends Activity {
 			super.onBackPressed();
 		}
 	}
-	
+
 //	public void finishFromNative()
 //	{
 //		finish();
 //	}
-	
+
 }

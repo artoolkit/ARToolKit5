@@ -76,23 +76,17 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class ARMovieActivity extends Activity {
-    
+
     private static final String TAG = "ARMovieActivity";
-    
+
     private static final String movieFile = "Data/sample.mp4";
-	
+
     // Load the native libraries.
     static {
     	System.loadLibrary("c++_shared");
-		
-		// ARToolKit v5.1.0 and later depend on libcurl.
-		System.loadLibrary("crypto");
-		System.loadLibrary("ssl");
-		System.loadLibrary("curl");
-
-    	System.loadLibrary("ARMovieNative");	    	
+    	System.loadLibrary("ARMovieNative");
     }
-    
+
 	// Lifecycle functions.
     public static native boolean nativeCreate(Context ctx);
     public static native boolean nativeStart();
@@ -111,22 +105,22 @@ public class ARMovieActivity extends Activity {
     // Other functions.
     public static native void nativeDisplayParametersChanged(int orientation, int w, int h, int dpi); // 0 = portrait, 1 = landscape (device rotated 90 degrees ccw), 2 = portrait upside down, 3 = landscape reverse (device rotated 90 degrees cw).
     public static native void nativeSetInternetState(int state);
-    
+
 	private GLSurfaceView glView;
 	private CameraSurface camSurface;
-	
+
 	private FrameLayout mainLayout;
-	
+
 	private MovieController movieController;
 	private boolean movieControllerPausedByUs;
-	
+
 	/** Called when the activity is first created. */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
     public void onCreate(Bundle savedInstanceState) {
     	Log.i(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
-        
+
 		boolean needActionBar = false;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -138,27 +132,27 @@ public class ARMovieActivity extends Activity {
 		if (needActionBar) {
 			requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		} else {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);        	
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); // Force landscape-only.
         updateNativeDisplayParameters();
-             
+
         setContentView(R.layout.main);
 
 		ARMovieActivity.nativeCreate(this);
     }
-    
+
     @Override
-    public void onStart() 
+    public void onStart()
     {
     	Log.i(TAG, "onStart()");
    	    super.onStart();
-		
+
     	mainLayout = (FrameLayout)this.findViewById(R.id.mainLayout);
-        
+
         try {
 			movieController = new MovieController(this.getCacheDir() + "/" + movieFile);
 	        movieController.mLoop = true;
@@ -170,13 +164,13 @@ public class ARMovieActivity extends Activity {
 
 		ARMovieActivity.nativeStart();
     }
-    
+
     @SuppressWarnings("deprecation") // FILL_PARENT still required for API level 7 (Android 2.1)
     @Override
     public void onResume() {
     	Log.i(TAG, "onResume()");
     	super.onResume();
-    	
+
     	// Update info on whether we have an Internet connection.
     	ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
     	NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -189,18 +183,18 @@ public class ARMovieActivity extends Activity {
    		// To work around this, we also recreate GLSurfaceView. This is not a lot of extra
    		// work, since Android has already destroyed the OpenGL context too, requiring us to
    		// recreate that and reload textures etc.
-   	
+
 		// Create the camera view.
 		camSurface = new CameraSurface(this);
 
 		// Create/recreate the GL view.
-	    glView = new GLSurfaceView(this);    		
+	    glView = new GLSurfaceView(this);
 		//glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // Do we actually need a transparent surface? I think not, (default is RGB888 with depth=16) and anyway, Android 2.2 barfs on this.
 		Renderer r = new Renderer();
 		r.setMovieController(movieController);
-		glView.setRenderer(r);		
+		glView.setRenderer(r);
 		glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
-        		
+
         mainLayout.addView(camSurface, new LayoutParams(128, 128));
  		mainLayout.addView(glView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
@@ -214,12 +208,12 @@ public class ARMovieActivity extends Activity {
 	protected void onPause() {
     	Log.i(TAG, "onPause()");
 	    super.onPause();
-	    
+
 	    // Pause movieController before pausing glView.
 	    if (movieController != null) movieController.onPause(glView);
-	    
+
 	    if (glView != null) glView.onPause();
-	    
+
 	    // System hardware must be release in onPause(), so it's available to
 	    // any incoming activity. Removing the CameraPreview will do this for the
 	    // camera. Also do it for the GLSurfaceView, since it serves no purpose
@@ -228,28 +222,28 @@ public class ARMovieActivity extends Activity {
 	    mainLayout.removeView(camSurface);
 	}
 
-	@Override 
-	public void onStop() {		
+	@Override
+	public void onStop() {
     	Log.i(TAG, "onStop()");
-		super.onStop();		
+		super.onStop();
 
 	    if (movieController != null) {
 	    	movieController.finish();
 	    	movieController = null;
 	    }
-	    
+
 		ARMovieActivity.nativeStop();
-	}    
-	
+	}
+
     @Override
-    public void onDestroy() 
+    public void onDestroy()
     {
     	Log.i(TAG, "onDestroy()");
    	    super.onDestroy();
-   	    
+
 		ARMovieActivity.nativeDestroy();
     }
-  
+
     private void updateNativeDisplayParameters()
     {
     	Display d = getWindowManager().getDefaultDisplay();
@@ -259,14 +253,14 @@ public class ARMovieActivity extends Activity {
     	int w = dm.widthPixels;
     	int h = dm.heightPixels;
     	int dpi = dm.densityDpi;
-        nativeDisplayParametersChanged(orientation, w, h, dpi);    	
+        nativeDisplayParametersChanged(orientation, w, h, dpi);
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
     	super.onConfigurationChanged(newConfig);
-    	
+
     	// We won't use the orientation from the config, as it only tells us the layout type
     	// and not the actual orientation angle.
         //int nativeOrientation;
@@ -275,14 +269,14 @@ public class ARMovieActivity extends Activity {
         //else /* orientation == Configuration.ORIENTATION_PORTRAIT) */ nativeOrientation = 1;
     	updateNativeDisplayParameters();
     }
-    
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.options, menu);
 	    return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    if (item.getItemId() == R.id.settings) {
@@ -292,5 +286,5 @@ public class ARMovieActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 }
