@@ -6,7 +6,7 @@ model {
         buildToolsVersion = "23.0.2"
 
         defaultConfig.with {
-            applicationId = "org.artoolkit.ar.samples.ARSimple"
+            applicationId = "org.artoolkit.ar.samples.ARNativeES1"
             minSdkVersion.apiLevel = 15
             targetSdkVersion.apiLevel = 22
             versionCode = 1     //Integer type incremented by 1 for every release, major or minor, to Google store
@@ -18,6 +18,10 @@ model {
                     name = "VALUE"   //See: [app or lib]/build/generated/source/buildConfig/[package path]/
                     value = "1"      //     BuildConfig.java
                 }
+            }
+
+            ndk.with {
+                moduleName = "ARNativeES1"
             }
         }
     }
@@ -43,6 +47,11 @@ model {
                 srcDirs = ['src/main/libs']
             }
         }
+    }
+
+    android.compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 

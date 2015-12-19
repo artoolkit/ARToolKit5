@@ -37,6 +37,16 @@ model {
     }
 
     android.sources {
+        main.jni {
+            source {
+                srcDirs = ['src/main/nop']
+            }
+        }
+        main.jniLibs {
+            source {
+                srcDirs = ['src/main/libs']
+            }
+        }
     }
 
     android.compileOptions {
