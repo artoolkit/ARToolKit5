@@ -88,6 +88,8 @@ $NDK/ndk-build -j $CPUS $1
 #
 $NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
 
+ARTK_LibsDir=libs
+
 if [ "$1" != "clean" ] ; then
 JDK_PROJS=" \
     ARSimple \
@@ -96,13 +98,13 @@ JDK_PROJS=" \
 "
 for i in $JDK_PROJS
 do
-    if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
-        mkdir ../EclipseProjects/${i}/libs/
-    fi
-    cp -Rpv -f libs/* ../EclipseProjects/${i}/libs/
+#    if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
+#        mkdir ../EclipseProjects/${i}/libs
+#    fi
+    cp -Rpvf ${ARTK_LibsDir} ../EclipseProjects/${i}/
     FirstChar=${i:0:1}
     LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
     ModName=$LCFirstChar${i:1}
-    cp -Rpv -f libs/* ../AndroidStudioProjects/${i}Proj/$ModName/src/main/jniLibs/
+    cp -Rpvf ${ARTK_LibsDir} ../AndroidStudioProjects/${i}Proj/$ModName/src/main/
 done
 fi

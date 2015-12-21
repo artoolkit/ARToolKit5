@@ -873,7 +873,6 @@ bool ARController::stopRunning()
 	}
 
 #if HAVE_NFT
-    mTrackerWasUpdated = false;
     // Tracking thread is holding a reference to the camera parameters. Closing the
     // video source will dispose of the camera parameters, thus invalidating this reference.
     // So must stop tracking before closing the video source.

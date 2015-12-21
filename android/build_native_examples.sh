@@ -71,6 +71,8 @@ if [ "$1" == "clean" ] ; then
     CPUS=1
 fi
 
+ARTK_LibsDir=libs
+
 #
 # Build native targets
 #
@@ -84,11 +86,20 @@ NATIVE_PROJS=" \
     nftBook \
     ARMovie \
 "
-cd EclipseProjects
 for i in $NATIVE_PROJS
 do
-    cd $i
+    echo from `pwd`: going to EclipseProjects/$i
+    cd EclipseProjects/$i
     $NDK/ndk-build -j $CPUS $1
-    cd ..
+    cd ../..
+    FirstChar=${i:0:1}
+    LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
+    ModuleName=$LCFirstChar${i:1}
+    echo from `pwd`: going to AndroidStudioProjects/${i}Proj/$ModuleName
+    cd AndroidStudioProjects/${i}Proj/$ModuleName/src/main
+    $NDK/ndk-build -j $CPUS $1
+#   cp=copy: -R=recursively, -p=preserve file attributes, -v=verbose, -f=remove existing destinations
+#   cp -Rpvf ${ARTK_LibsDir} jniLibs
+    cd ../../../../..
 done
 cd ..
