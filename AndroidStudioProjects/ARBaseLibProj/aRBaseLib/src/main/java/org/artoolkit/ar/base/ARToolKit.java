@@ -344,14 +344,24 @@ public class ARToolKit {
 	public float[] calculateReferenceMatrix(int idMarkerBase, int idMarker2){
 		float [] referenceMarkerTranslationMatrix = this.queryMarkerTransformation(idMarkerBase);
 		float [] secondMarkerTranslationMatrix = this.queryMarkerTransformation(idMarker2);
-		float[] invertedMatrixOfReferenceMarker = new float[16];
 
-		Matrix.invertM(invertedMatrixOfReferenceMarker, 0, referenceMarkerTranslationMatrix, 0);
+		if(referenceMarkerTranslationMatrix != null && secondMarkerTranslationMatrix != null) {
+			float[] invertedMatrixOfReferenceMarker = new float[16];
 
-		float[] transformationFromMarker1ToMarker2 = new float[16];
-		Matrix.multiplyMM(transformationFromMarker1ToMarker2, 0, invertedMatrixOfReferenceMarker, 0, secondMarkerTranslationMatrix, 0);
+			Matrix.invertM(invertedMatrixOfReferenceMarker, 0, referenceMarkerTranslationMatrix, 0);
 
-		return transformationFromMarker1ToMarker2;
+			float[] transformationFromMarker1ToMarker2 = new float[16];
+			Matrix.multiplyMM(transformationFromMarker1ToMarker2, 0, invertedMatrixOfReferenceMarker, 0, secondMarkerTranslationMatrix, 0);
+
+			return transformationFromMarker1ToMarker2;
+		}
+		else{
+			//It seems like ARToolkit might be faster with updating then the Android part. Because of that
+			//it can happen that, even though one ensured in there Android-App that both markers are visible,
+			//ARToolkit might not return a transformation matrix for both markers. In that case this RuntimeException is thrown.
+			Log.e(TAG,"Currently there are no two markers visible at the same time");
+			return null;
+		}
 	}
 
 	/**
@@ -363,15 +373,19 @@ public class ARToolKit {
 	public float distance(int referenceMarker, int markerId2){
 
 		float[] referenceMatrix = calculateReferenceMatrix(referenceMarker,markerId2);
-		float distanceX = referenceMatrix[12];
-		float distanceY = referenceMatrix[13];
-		float distanceZ = referenceMatrix[14];
 
-		Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
-		float length = Matrix.length(distanceX,distanceY,distanceZ);
-		Log.d(TAG, "Absolute distance: " + length);
+		if(referenceMatrix != null) {
+			float distanceX = referenceMatrix[12];
+			float distanceY = referenceMatrix[13];
+			float distanceZ = referenceMatrix[14];
 
-		return length;
+			Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
+			float length = Matrix.length(distanceX, distanceY, distanceZ);
+			Log.d(TAG, "Absolute distance: " + length);
+
+			return length;
+		}
+		return 0;
 	}
 
 	/**
@@ -385,9 +399,11 @@ public class ARToolKit {
 		float[] positionVector = new float[4];
 
 		float[] transformationMatrix = calculateReferenceMatrix(referenceMarkerId,markerIdToGetThePositionFor);
-		Matrix.multiplyMV(positionVector, 0, transformationMatrix, 0, initialVector, 0);
-
-		return positionVector;
+		if(transformationMatrix != null){
+			Matrix.multiplyMV(positionVector, 0, transformationMatrix, 0, initialVector, 0);
+			return positionVector;
+		}
+		return null;
 	}
 
 }
