@@ -13,3 +13,5 @@
 /**/jniLibs
 /**/libs
 /**/obj
+/**/build
+/**/.idea
