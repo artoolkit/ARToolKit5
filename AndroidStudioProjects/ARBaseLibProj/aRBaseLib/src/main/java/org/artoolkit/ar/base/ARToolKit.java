@@ -37,10 +37,9 @@
 
 package org.artoolkit.ar.base;
 
-import org.artoolkit.ar.base.NativeInterface;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.opengl.Matrix;
 import android.util.Log;
 
 /**
@@ -326,6 +325,85 @@ public class ARToolKit {
 		debugBitmap = null;
 
 		initedNative = false;
+	}
+
+	public void setBorderSize(float size){
+		NativeInterface.arwSetBorderSize(size);
+	}
+
+	public float getBorderSize(){
+		return NativeInterface.arwGetBorderSize();
+	}
+
+	/**
+	 * Calculates the reference matrix for the given markers. First marker is the base.
+	 * @param idMarkerBase Reference base
+	 * @param idMarker2 Marker that will be depending on that base
+	 * @return Matrix that contains the transformation from @idMarkerBase to @idMarker2
+	 */
+	public float[] calculateReferenceMatrix(int idMarkerBase, int idMarker2){
+		float [] referenceMarkerTranslationMatrix = this.queryMarkerTransformation(idMarkerBase);
+		float [] secondMarkerTranslationMatrix = this.queryMarkerTransformation(idMarker2);
+
+		if(referenceMarkerTranslationMatrix != null && secondMarkerTranslationMatrix != null) {
+			float[] invertedMatrixOfReferenceMarker = new float[16];
+
+			Matrix.invertM(invertedMatrixOfReferenceMarker, 0, referenceMarkerTranslationMatrix, 0);
+
+			float[] transformationFromMarker1ToMarker2 = new float[16];
+			Matrix.multiplyMM(transformationFromMarker1ToMarker2, 0, invertedMatrixOfReferenceMarker, 0, secondMarkerTranslationMatrix, 0);
+
+			return transformationFromMarker1ToMarker2;
+		}
+		else{
+			//It seems like ARToolkit might be faster with updating then the Android part. Because of that
+			//it can happen that, even though one ensured in there Android-App that both markers are visible,
+			//ARToolkit might not return a transformation matrix for both markers. In that case this RuntimeException is thrown.
+			Log.e(TAG,"Currently there are no two markers visible at the same time");
+			return null;
+		}
+	}
+
+	/**
+	 * Calculated the distance between two markers
+	 * @param referenceMarker Reference base. Marker from which the distance is calculated
+	 * @param markerId2 Marker to which the distance is calculated
+	 * @return distance
+	 */
+	public float distance(int referenceMarker, int markerId2){
+
+		float[] referenceMatrix = calculateReferenceMatrix(referenceMarker,markerId2);
+
+		if(referenceMatrix != null) {
+			float distanceX = referenceMatrix[12];
+			float distanceY = referenceMatrix[13];
+			float distanceZ = referenceMatrix[14];
+
+			Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
+			float length = Matrix.length(distanceX, distanceY, distanceZ);
+			Log.d(TAG, "Absolute distance: " + length);
+
+			return length;
+		}
+		return 0;
+	}
+
+	/**
+	 * Calculates the position depending on the referenceMarker
+	 * @param referenceMarkerId Reference marker id
+	 * @param markerIdToGetThePositionFor Id of the marker for which the position is calculated
+	 * @return Position vector with length 4 x,y,z,1
+	 */
+	public float[] retrievePosition(int referenceMarkerId, int markerIdToGetThePositionFor) {
+		float[] initialVector = {1f,1f,1f,1f};
+		float[] positionVector = new float[4];
+
+		float[] transformationMatrix = calculateReferenceMatrix(referenceMarkerId,markerIdToGetThePositionFor);
+		if(transformationMatrix != null){
+			Matrix.multiplyMV(positionVector, 0, transformationMatrix, 0, initialVector, 0);
+			return positionVector;
+		}
+		return null;
 	}
 
 }
