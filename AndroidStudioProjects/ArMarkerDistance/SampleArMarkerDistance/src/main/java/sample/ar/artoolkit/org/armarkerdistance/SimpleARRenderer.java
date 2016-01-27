@@ -91,13 +91,18 @@ public class SimpleARRenderer extends org.artoolkit.ar.base.rendering.ARRenderer
             }
 
             float distance = arToolKit.distance(markerId1, markerId2);
+
+            Log.i(TAG,"Distance: " + distance);
+
             float[] positionMarker2 = arToolKit.retrievePosition(markerId1, markerId2);
 
-            //Draw line from referenceMarker to another marker
-            //In relation to the second marker the referenceMarker is on position 0/0/0
-            float[] basePosition = {0f, 0f, 0f};
-            line = new Line(basePosition, positionMarker2, 3);
-            line.draw(gl);
+            if(positionMarker2 != null) {
+                //Draw line from referenceMarker to another marker
+                //In relation to the second marker the referenceMarker is on position 0/0/0
+                float[] basePosition = {0f, 0f, 0f};
+                line = new Line(basePosition, positionMarker2, 3);
+                line.draw(gl);
+            }
         }
 
 

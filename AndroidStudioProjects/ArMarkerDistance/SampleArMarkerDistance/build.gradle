@@ -23,6 +23,5 @@ model {
 }
 dependencies {
     compile project(':aRBaseLib')
-    compile project(':GLText')
 }
 
