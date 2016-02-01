@@ -48,9 +48,9 @@ xcuserdata/
 *.iml
 .gradle
 /local.properties
-**/.idea/workspace.xml
-**/.idea/libraries
-/captures
+/**/.idea
+/**/build
+/**/captures
 
 #### Other VCS
 .svn/
