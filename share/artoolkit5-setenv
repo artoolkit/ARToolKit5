@@ -3,6 +3,9 @@
 ARTOOLKIT5_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 echo "ARTOOLKIT5_ROOT=${ARTOOLKIT5_ROOT}; export ARTOOLKIT5_ROOT" >> ~/.profile
+if [ -f ~/.bash_profile ] ; then
+    echo "ARTOOLKIT5_ROOT=${ARTOOLKIT5_ROOT}; export ARTOOLKIT5_ROOT" >> ~/.bash_profile
+fi
 echo "setenv ARTOOLKIT5_ROOT ${ARTOOLKIT5_ROOT}" >> ~/.cshrc
 if [ "`uname`" = "Darwin" ]
 then

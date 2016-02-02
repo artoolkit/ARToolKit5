@@ -1,5 +1,8 @@
 #! /bin/sh
 sed -i.bak '/ARTOOLKIT5_ROOT=/d' ~/.profile
+if [ -f ~/.bash_profile ] ; then
+    sed -i.bak '/ARTOOLKIT5_ROOT=/d' ~/.bash_profile
+fi
 sed -i.bak '/setenv ARTOOLKIT5_ROOT/d' ~/.cshrc
 if [ "`uname`" = "Darwin" ]
 then
