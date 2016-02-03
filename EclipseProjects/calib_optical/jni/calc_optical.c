@@ -42,6 +42,14 @@
 #include <stdlib.h> // malloc()
 #include <AR/ar.h> // paramDispExt()
 
+#ifdef ARDOUBLE_IS_FLOAT
+#  define FABS fabsf
+#  define SQRT sqrtf
+#else
+#  define FABS fabs
+#  define SQRT sqrt
+#endif
+
 /*!
 @defined DTOR
  @abstract Convert degrees to radians.
@@ -107,7 +115,7 @@
  @abstract   (description)
  @discussion (description)
  */
-#define LENGTH(v) (sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]))
+#define LENGTH(v) (SQRT(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]))
 
 /*!
 @defined DOT
@@ -145,17 +153,11 @@
  */
 #define COPY(dest, v) {dest[0] = v[0]; dest[1] = v[1]; dest[2] = v[2];}
 
-#ifdef ARDOUBLE_IS_FLOAT
-#  define FABS fabsf
-#else
-#  define FABS fabs
-#endif
-
 ARdouble MathNormalise(ARdouble v[3])
 {
     ARdouble l;
     
-    l = (ARdouble)LENGTH(v);
+    l = LENGTH(v);
 	if (l) {
 		v[0] /= l;
 		v[1] /= l;
@@ -197,9 +199,9 @@ ARdouble MathNormalise(ARdouble v[3])
 int LineLineIntersect( const ARdouble p1[3], const ARdouble p2[3], const ARdouble p3[3], const ARdouble p4[3],
 					   ARdouble pa[3], ARdouble pb[3], ARdouble *mua, ARdouble *mub)
 {
-	double p13[3], p43[3], p21[3];
-	double d1343, d4321, d1321, d4343, d2121;
-	double numer, denom;
+	ARdouble p13[3], p43[3], p21[3];
+	ARdouble d1343, d4321, d1321, d4343, d2121;
+	ARdouble numer, denom;
 	
 	SUB(p43, p4, p3);
 	if (LENGTH(p43) < EPSILON) return(-1); // Points defining the line are too close together.
