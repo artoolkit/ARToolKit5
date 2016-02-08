@@ -94,6 +94,7 @@ if [ "$1" != "clean" ] ; then
 JDK_PROJS=" \
     ARSimple \
     ARSimpleInteraction \
+    ARMarkerDistance \
     ARMulti \
 "
 for i in $JDK_PROJS
