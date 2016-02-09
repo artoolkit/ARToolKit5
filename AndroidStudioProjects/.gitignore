@@ -9,7 +9,8 @@
 /*/.idea/vcs.xml
 /.idea/libraries
 /*/.idea/libraries
-/**/build
 /**/jniLibs
 /**/libs
 /**/obj
+/**/build
+/**/.idea
