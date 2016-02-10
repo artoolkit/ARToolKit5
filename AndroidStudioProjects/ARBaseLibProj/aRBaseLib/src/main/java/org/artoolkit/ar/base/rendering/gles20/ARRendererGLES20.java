@@ -47,48 +47,47 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Base renderer which should be subclassed in the main application and provided 
+ * Base renderer which should be subclassed in the main application and provided
  * to the ARActivity using its {@link ARActivity#supplyRenderer() supplyRenderer} method.
- * 
+ * <p/>
  * Subclasses should override {@link #configureARScene() configureARScene}, which will be called by
- * the Activity when AR initialisation is complete. The Renderer can use this method 
+ * the Activity when AR initialisation is complete. The Renderer can use this method
  * to add markers to the scene, and perform other scene initialisation.
- * 
+ * <p/>
  * The {@link #draw(GL10) render} method should also be overridden to perform actual rendering. This is
  * in preference to directly overriding {@link #onDrawFrame(GL10) onDrawFrame}, because ARRenderer will check
  * that the ARToolKit is running before calling render.
- *
  */
 public abstract class ARRendererGLES20 extends ARRenderer {
 
     private BaseShaderProgram baseShaderProgram;
 
     /**
-     * Allows subclasses to load markers and prepare the scene. This is called after 
+     * Allows subclasses to load markers and prepare the scene. This is called after
      * initialisation is complete.
      */
-	public boolean configureARScene() {
-		return true;
-	}
-	
-    public void onSurfaceCreated(GL10 unused, EGLConfig config) {        
-    	
-    	// Transparent background
-    	GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.f);
-        this.baseShaderProgram = new BaseShaderProgram(new BaseVertexShader(),new BaseFragmentShader());
+    public boolean configureARScene() {
+        return true;
+    }
+
+    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+
+        // Transparent background
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.f);
+        this.baseShaderProgram = new BaseShaderProgram(new BaseVertexShader(), new BaseFragmentShader());
         GLES20.glUseProgram(baseShaderProgram.getShaderProgramHandle());
     }
 
     public void onSurfaceChanged(GL10 unused, int w, int h) {
-    	GLES20.glViewport(0, 0, w, h);
+        GLES20.glViewport(0, 0, w, h);
     }
 
     public void onDrawFrame(GL10 unused) {
-    	if (ARToolKit.getInstance().isRunning()) {    		
-    		draw();
-    	}    	
+        if (ARToolKit.getInstance().isRunning()) {
+            draw();
+        }
     }
-    
+
     /**
      * Should be overridden in subclasses and used to perform rendering.
      */
@@ -96,7 +95,7 @@ public abstract class ARRendererGLES20 extends ARRenderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         baseShaderProgram.setProjectionMatrix(ARToolKit.getInstance().getProjectionMatrix());
-        float[] camPosition = {1f,1f,1f};
+        float[] camPosition = {1f, 1f, 1f};
         baseShaderProgram.render(camPosition);
 
     }

@@ -37,58 +37,57 @@
 
 package org.artoolkit.ar.base.rendering;
 
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.egl.EGLConfig;
-
-import org.artoolkit.ar.base.ARToolKit;
-
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
 
+import org.artoolkit.ar.base.ARToolKit;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
 /**
- * Base renderer which should be subclassed in the main application and provided 
+ * Base renderer which should be subclassed in the main application and provided
  * to the ARActivity using its {@link supplyRenderer} method.
- * 
- * Subclasses should override {@link configureARScene}, which will be called by 
- * the Activity when AR initialisation is complete. The Renderer can use this method 
+ * <p/>
+ * Subclasses should override {@link configureARScene}, which will be called by
+ * the Activity when AR initialisation is complete. The Renderer can use this method
  * to add markers to the scene, and perform other scene initialisation.
- * 
- * The {@link draw} method should also be override to perfom actual rendering. This is 
- * in preference to directly overriding {@link onDrawFrame}, because ARRenderer will check 
+ * <p/>
+ * The {@link draw} method should also be override to perfom actual rendering. This is
+ * in preference to directly overriding {@link onDrawFrame}, because ARRenderer will check
  * that the ARToolKit is running before calling draw.
- *
  */
 public class ARRenderer implements GLSurfaceView.Renderer {
-	
+
     /**
-     * Allows subclasses to load markers and prepare the scene. This is called after 
+     * Allows subclasses to load markers and prepare the scene. This is called after
      * initialisation is complete.
      */
-	public boolean configureARScene() {
-		return true;
-	}
-	
-    public void onSurfaceCreated(GL10 unused, EGLConfig config) {        
-    	
-    	// Transparent background
-    	GLES10.glClearColor(0.0f, 0.0f, 0.0f, 0.f);
+    public boolean configureARScene() {
+        return true;
+    }
+
+    public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+
+        // Transparent background
+        GLES10.glClearColor(0.0f, 0.0f, 0.0f, 0.f);
     }
 
     public void onSurfaceChanged(GL10 unused, int w, int h) {
-    	GLES10.glViewport(0, 0, w, h);
+        GLES10.glViewport(0, 0, w, h);
     }
 
     public void onDrawFrame(GL10 gl) {
-    	if (ARToolKit.getInstance().isRunning()) {    		
-    		draw(gl);
-    	}    	
+        if (ARToolKit.getInstance().isRunning()) {
+            draw(gl);
+        }
     }
-    
+
     /**
      * Should be overridden in subclasses and used to perform rendering.
      */
     public void draw(GL10 gl) {
-    	GLES10.glClear(GLES10.GL_COLOR_BUFFER_BIT | GLES10.GL_DEPTH_BUFFER_BIT);
+        GLES10.glClear(GLES10.GL_COLOR_BUFFER_BIT | GLES10.GL_DEPTH_BUFFER_BIT);
     }
-    
+
 }

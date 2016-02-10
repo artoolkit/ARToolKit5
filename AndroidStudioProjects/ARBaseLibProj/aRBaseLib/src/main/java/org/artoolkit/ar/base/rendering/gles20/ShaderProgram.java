@@ -67,22 +67,22 @@ public abstract class ShaderProgram {
     protected float[] projectionMatrix;
     protected float[] modelViewMatrix;
 
+    public ShaderProgram(OpenGLShader vertexShader, OpenGLShader fragmentShader) {
+        shaderProgramHandle = createProgram(vertexShader.configureShader(), fragmentShader.configureShader());
+    }
+
     public abstract int getProjectionMatrixHandle();
+
     public abstract int getModelViewMatrixHandle();
 
     protected abstract void bindAttributes();
 
-    public ShaderProgram(OpenGLShader vertexShader, OpenGLShader fragmentShader){
-        shaderProgramHandle = createProgram(vertexShader.configureShader(),fragmentShader.configureShader());
-    }
-
-    private int createProgram(int vertexShaderHandle, int fragmentShaderHandle){
+    private int createProgram(int vertexShaderHandle, int fragmentShaderHandle) {
         // Create a program object and store the handle to it.
         int programHandle = GLES20.glCreateProgram();
         String programErrorLog = "";
 
-        if (programHandle != 0)
-        {
+        if (programHandle != 0) {
             // Bind the vertex shader to the program.
             GLES20.glAttachShader(programHandle, vertexShaderHandle);
 
@@ -97,16 +97,14 @@ public abstract class ShaderProgram {
             GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
 
             // If the link failed, delete the program.
-            if (linkStatus[0] == 0)
-            {
+            if (linkStatus[0] == 0) {
                 programErrorLog = GLES20.glGetProgramInfoLog(programHandle);
                 GLES20.glDeleteProgram(programHandle);
                 programHandle = 0;
             }
         }
 
-        if (programHandle == 0)
-        {
+        if (programHandle == 0) {
             throw new RuntimeException("Error creating program.\\n " + programErrorLog);
         }
         return programHandle;
@@ -119,24 +117,27 @@ public abstract class ShaderProgram {
     /**
      * Full loaded render function. You should at least override this one.
      * You need to set the projection and/or modelview matrix befor calling a render method.
+     *
      * @param vertexBuffer position vertex information
-     * @param colorBuffer color information
-     * @param indexBuffer index
+     * @param colorBuffer  color information
+     * @param indexBuffer  index
      */
-    public void render(FloatBuffer vertexBuffer, FloatBuffer colorBuffer, ByteBuffer indexBuffer){
+    public void render(FloatBuffer vertexBuffer, FloatBuffer colorBuffer, ByteBuffer indexBuffer) {
         throw new RuntimeException("Please override at least this method.");
     }
-    public void render(FloatBuffer vertexBuffer, ByteBuffer indexBuffer){
-        render(vertexBuffer,null,indexBuffer);
+
+    public void render(FloatBuffer vertexBuffer, ByteBuffer indexBuffer) {
+        render(vertexBuffer, null, indexBuffer);
     }
 
     /**
      * Only render a simple position. In this case the implementation if forwarded to the
      * {@link #render(FloatBuffer, FloatBuffer, ByteBuffer)} but you can override this one directly
      * as shown in {@link BaseShaderProgram}
+     *
      * @param position The position to be rendered
      */
-    public void render(float[] position){
+    public void render(float[] position) {
         render(RenderUtils.buildFloatBuffer(position), null);
     }
 
@@ -167,12 +168,12 @@ public abstract class ShaderProgram {
 
 		   from the Renderer implementation class in the render method*/
 
-        if(projectionMatrix != null)
+        if (projectionMatrix != null)
             GLES20.glUniformMatrix4fv(this.getProjectionMatrixHandle(), 1, false, projectionMatrix, 0);
         else
             throw new RuntimeException("You need to set the projection matrix.");
 
-        if(modelViewMatrix != null)
+        if (modelViewMatrix != null)
             GLES20.glUniformMatrix4fv(this.getModelViewMatrixHandle(), 1, false, modelViewMatrix, 0);
     }
 }

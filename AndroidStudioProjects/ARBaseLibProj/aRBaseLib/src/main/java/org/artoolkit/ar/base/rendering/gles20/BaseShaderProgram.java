@@ -41,10 +41,10 @@ import android.opengl.GLES20;
 /**
  * Created by Thorsten Bux on 21.01.2016.
  */
-public class BaseShaderProgram extends ShaderProgram{
+public class BaseShaderProgram extends ShaderProgram {
 
-    public BaseShaderProgram(OpenGLShader vertexShader, OpenGLShader fragmentShader){
-        super(vertexShader,fragmentShader);
+    public BaseShaderProgram(OpenGLShader vertexShader, OpenGLShader fragmentShader) {
+        super(vertexShader, fragmentShader);
         bindAttributes();
     }
 
@@ -67,12 +67,12 @@ public class BaseShaderProgram extends ShaderProgram{
         return GLES20.glGetAttribLocation(shaderProgramHandle, OpenGLShader.positionVectorString);
     }
 
-    public void render(float[] position){
+    public void render(float[] position) {
         setupShaderUsage();
 
         //camPosition.length * 4 bytes per float
         GLES20.glVertexAttribPointer(this.getPositionHandle(), position.length, GLES20.GL_FLOAT, false,
-                position.length*4, 0);
+                position.length * 4, 0);
         GLES20.glEnableVertexAttribArray(this.getPositionHandle());
     }
 

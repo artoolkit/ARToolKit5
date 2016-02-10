@@ -46,10 +46,10 @@ public class BaseVertexShader implements OpenGLShader {
     private String vertexShaderSource =
             "uniform mat4 u_MVPMatrix;        \n"     // A constant representing the combined model/view/projection matrix.
 
-                    + "uniform mat4 " + OpenGLShader.projectionMatrixString + "; \n"		// projection matrix
-                    + "uniform mat4 "+ OpenGLShader.modelViewMatrixString + "; \n"		// modelView matrix
+                    + "uniform mat4 " + OpenGLShader.projectionMatrixString + "; \n"        // projection matrix
+                    + "uniform mat4 " + OpenGLShader.modelViewMatrixString + "; \n"        // modelView matrix
 
-                    + "attribute vec4 " + OpenGLShader.positionVectorString +"; \n"     // Per-vertex position information we will pass in.
+                    + "attribute vec4 " + OpenGLShader.positionVectorString + "; \n"     // Per-vertex position information we will pass in.
 
                     + "void main()                    \n"     // The entry point for our vertex shader.
                     + "{                              \n"
@@ -64,8 +64,7 @@ public class BaseVertexShader implements OpenGLShader {
         int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
         String vertexShaderErrorLog = "";
 
-        if (vertexShaderHandle != 0)
-        {
+        if (vertexShaderHandle != 0) {
             // Pass in the shader source.
             GLES20.glShaderSource(vertexShaderHandle, vertexShaderSource);
 
@@ -77,8 +76,7 @@ public class BaseVertexShader implements OpenGLShader {
             GLES20.glGetShaderiv(vertexShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
 
             // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0)
-            {
+            if (compileStatus[0] == 0) {
                 vertexShaderErrorLog = GLES20.glGetShaderInfoLog(vertexShaderHandle);
                 GLES20.glDeleteShader(vertexShaderHandle);
                 vertexShaderHandle = 0;
@@ -92,7 +90,7 @@ public class BaseVertexShader implements OpenGLShader {
         return vertexShaderHandle;
     }
 
-    public void setShaderSource(String vertexShaderSource){
+    public void setShaderSource(String vertexShaderSource) {
         this.vertexShaderSource = vertexShaderSource;
     }
 }

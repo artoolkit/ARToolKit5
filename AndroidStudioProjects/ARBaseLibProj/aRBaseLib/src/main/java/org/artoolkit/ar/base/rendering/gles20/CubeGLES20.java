@@ -41,11 +41,11 @@ import org.artoolkit.ar.base.rendering.Cube;
 /**
  * Created by Thorsten Bux on 21.01.2016.
  */
-public class CubeGLES20 extends Cube implements ARDrawableOpenGLES20{
+public class CubeGLES20 extends Cube implements ARDrawableOpenGLES20 {
 
     private ShaderProgram shaderProgram;
 
-    public CubeGLES20(ShaderProgram shaderProgram){
+    public CubeGLES20(ShaderProgram shaderProgram) {
         super();
         this.shaderProgram = shaderProgram;
     }
@@ -60,8 +60,9 @@ public class CubeGLES20 extends Cube implements ARDrawableOpenGLES20{
 
     /**
      * Used to render objects when working with OpenGL ES 2.x
+     *
      * @param projectionMatrix The projection matrix obtained from the ARToolkit
-     * @param modelViewMatrix	The marker transformation matrix obtained from ARToolkit
+     * @param modelViewMatrix  The marker transformation matrix obtained from ARToolkit
      */
     public void draw(float[] projectionMatrix, float[] modelViewMatrix) {
 

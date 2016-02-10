@@ -41,19 +41,19 @@ import org.artoolkit.ar.base.rendering.Line;
 /**
  * Created by Thorsten Bux on 15.01.2016.
  */
-public class LineGLES20 extends Line implements ARDrawableOpenGLES20{
+public class LineGLES20 extends Line implements ARDrawableOpenGLES20 {
 
     private ShaderProgram shaderProgram;
 
     /**
      * @param width Width of the vector
      */
-    public LineGLES20(float width){
+    public LineGLES20(float width) {
         shaderProgram = null;
         this.setWidth(width);
     }
 
-    public LineGLES20(float width, ShaderProgram shaderProgram){
+    public LineGLES20(float width, ShaderProgram shaderProgram) {
         this(width);
         this.shaderProgram = shaderProgram;
     }
@@ -65,7 +65,7 @@ public class LineGLES20 extends Line implements ARDrawableOpenGLES20{
         shaderProgram.setModelViewMatrix(modelViewMatrix);
 
         this.setArrays();
-        shaderProgram.render(this.getMVertexBuffer(), this.getmColorBuffer(),null);
+        shaderProgram.render(this.getMVertexBuffer(), this.getmColorBuffer(), null);
 
     }
 
