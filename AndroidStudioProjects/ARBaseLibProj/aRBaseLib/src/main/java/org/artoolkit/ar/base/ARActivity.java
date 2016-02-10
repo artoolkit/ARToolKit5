@@ -37,35 +37,37 @@
 
 package org.artoolkit.ar.base;
 
-import org.artoolkit.ar.base.NativeInterface;
-
-import org.artoolkit.ar.base.R;
-import org.artoolkit.ar.base.camera.CameraEventListener;
-import org.artoolkit.ar.base.camera.CameraPreferencesActivity;
-import org.artoolkit.ar.base.camera.CaptureCameraPreview;
-import org.artoolkit.ar.base.rendering.ARRenderer;
-
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ConfigurationInfo;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
-//import android.os.AsyncTask;
-//import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import org.artoolkit.ar.base.camera.CameraEventListener;
+import org.artoolkit.ar.base.camera.CameraPreferencesActivity;
+import org.artoolkit.ar.base.camera.CaptureCameraPreview;
+import org.artoolkit.ar.base.rendering.ARRenderer;
+import org.artoolkit.ar.base.rendering.gles20.ARRendererGLES20;
+
+//import android.os.AsyncTask;
+//import android.os.AsyncTask.Status;
 
 /**
  * An activity which can be subclassed to create an AR application. ARActivity handles almost all of 
@@ -73,10 +75,10 @@ import android.widget.Toast;
  * 
  * ARActivity automatically creates a camera preview surface and an OpenGL surface view, and 
  * arranges these correctly in the user interface.The subclass simply needs to provide a FrameLayout 
- * object which will be populated with these UI components, using {@link supplyFrameLayout}.
+ * object which will be populated with these UI components, using {@link #supplyFrameLayout() supplyFrameLayout}.
  * 
  * To create a custom AR experience, the subclass should also provide a custom renderer using 
- * {@link supplyRenderer}. This allows the subclass to handle OpenGL drawing calls on its own.
+ * {@link #supplyRenderer() Renderer}. This allows the subclass to handle OpenGL drawing calls on its own.
  * 
  */
 
@@ -98,12 +100,12 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 	private GLSurfaceView glView;	
 	
 	/**
-	 *  Renderer to use. This is provided by the subclass using {@link supplyRenderer()}.
+	 *  Renderer to use. This is provided by the subclass using {@link #supplyRenderer() Renderer()}.
 	 */
 	protected ARRenderer renderer;	
 	
 	/**
-	 * Layout that will be filled with the camera preview and GL views. This is provided by the subclass using {@link supplyFrameLayout()}.
+	 * Layout that will be filled with the camera preview and GL views. This is provided by the subclass using {@link #supplyFrameLayout() supplyFrameLayout()}.
 	 */
 	protected FrameLayout mainLayout; 
 
@@ -163,7 +165,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
     		return;
         }
-    	
+
     	mainLayout = supplyFrameLayout();
     	if (mainLayout == null) {
     		Log.e(TAG, "Error: supplyFrameLayout did not return a layout.");
@@ -184,22 +186,53 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     public void onResume() {
     	//Log.i(TAG, "onResume()");
     	super.onResume();
-    	
+
     	// Create the camera preview
     	preview = new CaptureCameraPreview(this, this);
-    	
-    	Log.i(TAG, "CaptureCameraPreview created"); 
-    	
+
+    	Log.i(TAG, "CaptureCameraPreview created");
+
     	// Create the GL view
-    	glView = new GLSurfaceView(this);    		
+    	glView = new GLSurfaceView(this);
+
+		// Check if the system supports OpenGL ES 2.0.
+		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+		final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+
+		if (supportsEs2)
+		{
+			Log.i(TAG, "OpenGL ES 2.x is supported");
+
+			if(renderer instanceof ARRendererGLES20)
+			{
+				// Request an OpenGL ES 2.0 compatible context.
+				glView.setEGLContextClientVersion(2);
+			}
+			else {
+				Log.w(TAG, "OpenGL ES 2.x is supported but only a OpenGL 1.x renderer is available." +
+						" \n Use ARRendererGLES20 for ES 2.x support. \n Continuing with OpenGL 1.x.");
+				glView.setEGLContextClientVersion(1);
+			}
+		}
+		else
+		{
+			Log.i(TAG, "Only OpenGL ES 1.x is supported");
+			if(renderer instanceof ARRendererGLES20)
+				throw new RuntimeException("Only OpenGL 1.x available but a OpenGL 2.x renderer was provided.");
+			// This is where you could create an OpenGL ES 1.x compatible
+			// renderer if you wanted to support both ES 1 and ES 2.
+			glView.setEGLContextClientVersion(1);
+		}
+
 		glView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 		glView.getHolder().setFormat(PixelFormat.TRANSLUCENT); // Needs to be a translucent surface so the camera preview shows through.
-		glView.setRenderer(renderer);		
+		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); // Only render when we have a frame (must call requestRender()).
 		glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
-		
+
 		Log.i(TAG, "GLSurfaceView created");
-		
+
 		// Add the views to the interface
         mainLayout.addView(preview, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         mainLayout.addView(glView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));

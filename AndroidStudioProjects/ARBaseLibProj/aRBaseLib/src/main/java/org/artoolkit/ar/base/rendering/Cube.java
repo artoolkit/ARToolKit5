@@ -48,11 +48,23 @@ import android.opengl.GLES10;
  * Simple class to render a coloured cube.
  */
 public class Cube {
-    
+
+	public FloatBuffer getmVertexBuffer() {
+		return mVertexBuffer;
+	}
+
+	public FloatBuffer getmColorBuffer() {
+		return mColorBuffer;
+	}
+
+	public ByteBuffer getmIndexBuffer() {
+		return mIndexBuffer;
+	}
+
 	private FloatBuffer	mVertexBuffer;
     private FloatBuffer	mColorBuffer;
     private ByteBuffer	mIndexBuffer;
-    
+
     public Cube() {
     	this(1.0f);
     }
@@ -64,7 +76,7 @@ public class Cube {
 	public Cube(float size, float x, float y, float z) {
 		setArrays(size, x, y, z);
 	}
-	
+
 	private void setArrays(float size, float x, float y, float z) {
 
 		float hs = size / 2.0f;
@@ -109,20 +121,20 @@ public class Cube {
     }
     
     public void draw(GL10 unused) {
-    	
-        
+
+
     	GLES10.glColorPointer(4, GLES10.GL_FLOAT, 0, mColorBuffer);
     	GLES10.glVertexPointer(3, GLES10.GL_FLOAT, 0, mVertexBuffer);
-    	
-    	GLES10.glEnableClientState(GLES10.GL_COLOR_ARRAY); 
+
+    	GLES10.glEnableClientState(GLES10.GL_COLOR_ARRAY);
     	GLES10.glEnableClientState(GLES10.GL_VERTEX_ARRAY);
-    	
+
     	GLES10.glDrawElements(GLES10.GL_TRIANGLES, 36, GLES10.GL_UNSIGNED_BYTE, mIndexBuffer);
-        
-    	GLES10.glDisableClientState(GLES10.GL_COLOR_ARRAY); 
+
+    	GLES10.glDisableClientState(GLES10.GL_COLOR_ARRAY);
     	GLES10.glDisableClientState(GLES10.GL_VERTEX_ARRAY);
-        
+
     }
-    
+
 
 }
