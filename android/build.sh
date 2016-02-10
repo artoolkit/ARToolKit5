@@ -96,6 +96,7 @@ JDK_PROJS=" \
     ARSimpleInteraction \
     ARMarkerDistance \
     ARSimpleOpenGLES20 \
+    ARDistanceOpenGLES20 \
     ARMulti \
 "
 for i in $JDK_PROJS
