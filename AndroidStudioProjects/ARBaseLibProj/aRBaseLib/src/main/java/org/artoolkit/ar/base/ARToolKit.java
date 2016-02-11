@@ -50,360 +50,375 @@ import android.util.Log;
  */
 public class ARToolKit {
 
-	/**
-	 * Android logging tag for this class.
-	 */
-	private static final String TAG = "ARToolKit";
+    /**
+     * Android logging tag for this class.
+     */
+    private static final String TAG = "ARToolKit";
+    /**
+     * Set to true only once the native library has been loaded.
+     */
+    private static boolean loadedNative = false;
+    private static boolean initedNative = false;
+    /**
+     * Single instance of the ARToolKit class.
+     */
+    private static ARToolKit instance = null;
 
-	private int frameWidth;
-	private int frameHeight;
-	private int cameraIndex;
-	private boolean cameraIsFrontFacing;
+    static {
+        loadedNative = NativeInterface.loadNativeLibrary();
+        if (!loadedNative) Log.e(TAG, "Loading native library failed!");
+        else Log.i(TAG, "Loaded native library.");
+    }
 
-	/**
-	 * Array of RGB color values containing the debug video image data.
-	 */
-	private byte[] debugImageData;
+    private int frameWidth;
+    private int frameHeight;
+    private int cameraIndex;
+    private boolean cameraIsFrontFacing;
+    /**
+     * Array of RGB color values containing the debug video image data.
+     */
+    private byte[] debugImageData;
+    /**
+     * Array of int color values containing the debug video image data.
+     */
+    private int[] debugImageColors;
+    private Bitmap debugBitmap = null;
 
-	/**
-	 * Array of int color values containing the debug video image data.
-	 */
-	private int[] debugImageColors;
-	private Bitmap debugBitmap = null;
+    /**
+     * Private constructor as required by the singleton pattern.
+     */
+    private ARToolKit() {
+        Log.i(TAG, "ARToolKit constructor");
+    }
 
-	/**
-	 * Set to true only once the native library has been loaded.
-	 */
-	private static boolean loadedNative = false;
-	private static boolean initedNative = false;
+    /**
+     * Implementation of the singleton pattern to provide a sole instance of the ARToolKit class.
+     *
+     * @return The single instance of ARToolKit.
+     */
+    public static ARToolKit getInstance() {
+        if (instance == null) instance = new ARToolKit();
+        return instance;
+    }
 
-	static {
-		loadedNative = NativeInterface.loadNativeLibrary();
-		if (!loadedNative) Log.e(TAG, "Loading native library failed!");
-		else Log.i(TAG, "Loaded native library.");
-	}
+    /**
+     * Initialises the native code library if it is available.
+     *
+     * @param resourcesDirectoryPath The full path (in the filesystem) to the directory to be used by the
+     *                               native routines as the base for relative references.
+     *                               e.g. Activity.getContext().getCacheDir().getAbsolutePath()
+     *                               or Activity.getContext().getFilesDir().getAbsolutePath()
+     * @return true if the library was found and successfully initialised.
+     */
+    public boolean initialiseNative(String resourcesDirectoryPath) {
+        if (!loadedNative) return false;
+        if (!NativeInterface.arwInitialiseAR()) {
+            Log.e(TAG, "Error initialising native library!");
+            return false;
+        }
+        Log.i(TAG, "ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
+        if (!NativeInterface.arwChangeToResourcesDir(resourcesDirectoryPath)) {
+            Log.i(TAG, "Error while attempting to change working directory to resources directory.");
+        }
+        initedNative = true;
+        return true;
+    }
 
-	/**
-	 * Single instance of the ARToolKit class.
-	 */
-	private static ARToolKit instance = null;
+    /**
+     * Returns whether the native library was found and successfully initialised.
+     * Native functions will not be called unless this is true.
+     *
+     * @return true if native functions are available.
+     */
+    public boolean nativeInitialised() {
+        return initedNative;
+    }
 
-	/**
-	 * Implementation of the singleton pattern to provide a sole instance of the ARToolKit class.
-	 * @return The single instance of ARToolKit.
-	 */
-	public static ARToolKit getInstance() {
-		if (instance == null) instance = new ARToolKit();
-		return instance;
-	}
+    /**
+     * Initialises the ARToolKit using the specified video size.
+     *
+     * @param videoWidth     The width of the video image in pixels.
+     * @param videoHeight    The height of the video image in pixels.
+     * @param cameraParaPath The full path (in the filesystem) to a camera parameter file,
+     *                       or the path expressed relative to the resourcesDirectoryPath set in initialiseNative().
+     * @return true if initialisation was successful.
+     */
+    public boolean initialiseAR(int videoWidth, int videoHeight, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
 
-	/**
-	 * Private constructor as required by the singleton pattern.
-	 */
-	private ARToolKit() {
-		Log.i(TAG, "ARToolKit constructor");
-	}
+        if (!initedNative) {
+            Log.e(TAG, "Cannot initialise camera because native interface not inited.");
+            return false;
+        }
 
-	/**
-	 * Initialises the native code library if it is available.
-	 * @return true if the library was found and successfully initialised.
-	 * @param resourcesDirectoryPath The full path (in the filesystem) to the directory to be used by the
-	 *            native routines as the base for relative references.
-	 *            e.g. Activity.getContext().getCacheDir().getAbsolutePath()
-	 *            or Activity.getContext().getFilesDir().getAbsolutePath()
-	 */
-	public boolean initialiseNative(String resourcesDirectoryPath) {
-		if (!loadedNative) return false;
-		if (!NativeInterface.arwInitialiseAR()) {
-			Log.e(TAG, "Error initialising native library!");
-			return false;
-		}
-		Log.i(TAG, "ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
-		if (!NativeInterface.arwChangeToResourcesDir(resourcesDirectoryPath)) {
-			Log.i(TAG, "Error while attempting to change working directory to resources directory.");
-		}
-		initedNative = true;
-		return true;
-	}
+        this.frameWidth = videoWidth;
+        this.frameHeight = videoHeight;
+        this.cameraIndex = cameraIndex;
+        this.cameraIsFrontFacing = cameraIsFrontFacing;
 
-	/**
-	 * Returns whether the native library was found and successfully initialised. 
-	 * Native functions will not be called unless this is true.
-	 * @return true if native functions are available.
-	 */
-	public boolean nativeInitialised() {
-		return initedNative;
-	}
+        if (!NativeInterface.arwStartRunning("-format=NV21", cameraParaPath, 10.0f, 10000.0f)) {
+            Log.e(TAG, "Error starting video");
+            return false;
+        }
 
-	/**
-	 * Initialises the ARToolKit using the specified video size.
-	 * @param videoWidth The width of the video image in pixels.
-	 * @param videoHeight The height of the video image in pixels.
-	 * @param cameraParaPath The full path (in the filesystem) to a camera parameter file,
-	 * 			  or the path expressed relative to the resourcesDirectoryPath set in initialiseNative().
-	 * @return true if initialisation was successful. 
-	 */
-	public boolean initialiseAR(int videoWidth, int videoHeight, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
+        debugImageData = new byte[frameWidth * frameHeight * 4];
+        debugImageColors = new int[frameWidth * frameHeight];
+        debugBitmap = Bitmap.createBitmap(frameWidth, frameHeight, Bitmap.Config.ARGB_8888);
 
-		if (!initedNative) {
-			Log.e(TAG, "Cannot initialise camera because native interface not inited.");
-			return false;
-		}
+        return true;
+    }
 
-		this.frameWidth = videoWidth;
-		this.frameHeight = videoHeight;
-		this.cameraIndex = cameraIndex;
-		this.cameraIsFrontFacing = cameraIsFrontFacing;
+    /**
+     * Gets an updated debug image buffer from the native library and uses it to
+     * update the local color array. This is then applied to the debug Bitmap, which
+     * can be displayed in the user interface.
+     *
+     * @return The debug image Bitmap.
+     */
+    public Bitmap updateDebugBitmap() {
 
-		if (!NativeInterface.arwStartRunning("-format=NV21", cameraParaPath, 10.0f, 10000.0f)) {
-			Log.e(TAG, "Error starting video");
-			return false;
-		}
+        if (!initedNative) return null;
 
-		debugImageData = new byte[frameWidth * frameHeight * 4];
-		debugImageColors = new int[frameWidth * frameHeight];
-		debugBitmap = Bitmap.createBitmap(frameWidth, frameHeight, Bitmap.Config.ARGB_8888);
+        if (!NativeInterface.arwUpdateDebugTexture(debugImageData, false)) {
+            return null;
+        }
 
-		return true;
-	}
+        int w = debugBitmap.getWidth();
+        int h = debugBitmap.getHeight();
 
-	/**
-	 * Gets an updated debug image buffer from the native library and uses it to 
-	 * update the local color array. This is then applied to the debug Bitmap, which
-	 * can be displayed in the user interface.
-	 * @return The debug image Bitmap.
-	 */
-	public Bitmap updateDebugBitmap() {
+        int idx1, idx2;
 
-		if (!initedNative) return null;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                idx1 = (y * w + x) * 4;
+                idx2 = (y * w + x);
+                debugImageColors[idx2] = Color.argb(255 /*debugImageData[idx1+3] */, debugImageData[idx1], debugImageData[idx1 + 1], debugImageData[idx1 + 2]);
+                //debugImageColors[idx2] = Color.argb(255, 255, 0, 0);
+            }
+        }
 
-		if (!NativeInterface.arwUpdateDebugTexture(debugImageData, false)) {
-			return null;
-		}
+        debugBitmap.setPixels(debugImageColors, 0, w, 0, 0, w, h);
 
-		int w = debugBitmap.getWidth();
-		int h = debugBitmap.getHeight();
+        return debugBitmap;
 
-		int idx1, idx2;
+    }
 
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				idx1 = (y * w + x) * 4;
-				idx2 = (y * w + x);
-				debugImageColors[idx2] = Color.argb(255 /*debugImageData[idx1+3] */, debugImageData[idx1], debugImageData[idx1 + 1], debugImageData[idx1 + 2]);
-				//debugImageColors[idx2] = Color.argb(255, 255, 0, 0);
-			}
-		}
+    /**
+     * Returns the Bitmap containing the ARToolKit debug video image.
+     *
+     * @return The debug video Bitmap.
+     */
+    public Bitmap getDebugBitmap() {
+        return debugBitmap;
+    }
 
-		debugBitmap.setPixels(debugImageColors, 0, w, 0, 0, w, h);
+    /**
+     * Returns whether the ARToolKit debug video image is enabled.
+     *
+     * @return Whether the ARToolKit debug video image is enabled.
+     */
+    public boolean getDebugMode() {
+        if (!initedNative) return false;
+        return NativeInterface.arwGetVideoDebugMode();
+    }
 
-		return debugBitmap;
+    /**
+     * Enables or disables the debug video image in ARToolKit.
+     *
+     * @param debug Whether or not to enable the debug video image.
+     */
+    public void setDebugMode(boolean debug) {
+        if (!initedNative) return;
+        NativeInterface.arwSetVideoDebugMode(debug);
+    }
 
-	}
+    /**
+     * Returns the threshold used to binarize the video image for marker
+     * detection.
+     *
+     * @return The current threshold value in the range 0 to 255, or -1 if the
+     * threshold could not be retrieved.
+     */
+    public int getThreshold() {
+        if (!initedNative) return -1;
+        return NativeInterface.arwGetVideoThreshold();
+    }
 
-	/**
-	 * Returns the Bitmap containing the ARToolKit debug video image.
-	 * @return The debug video Bitmap.
-	 */
-	public Bitmap getDebugBitmap() {
-		return debugBitmap;
-	}
+    /**
+     * Sets the threshold used to binarize the video image for marker detection.
+     *
+     * @param threshold The new threshold value in the range 0 to 255.
+     */
+    public void setThreshold(int threshold) {
+        if (!initedNative) return;
+        NativeInterface.arwSetVideoThreshold(threshold);
+    }
 
-	/**
-	 * Enables or disables the debug video image in ARToolKit.
-	 * @param debug Whether or not to enable the debug video image.
-	 */
-	public void setDebugMode(boolean debug) {
-		if (!initedNative) return;
-		NativeInterface.arwSetVideoDebugMode(debug);
-	}
+    /**
+     * Returns the projection matrix calculated from camera parameters.
+     *
+     * @return Projection matrix as an array of floats in OpenGL style.
+     */
+    public float[] getProjectionMatrix() {
+        if (!initedNative) return null;
+        return NativeInterface.arwGetProjectionMatrix();
+    }
 
-	/**
-	 * Returns whether the ARToolKit debug video image is enabled.
-	 * @return Whether the ARToolKit debug video image is enabled.
-	 */
-	public boolean getDebugMode() {
-		if (!initedNative) return false;
-		return NativeInterface.arwGetVideoDebugMode();
-	}
+    /**
+     * Adds a new single marker to the set of currently active markers.
+     *
+     * @param patt  The path to the pattern file to load.
+     * @param width The physical width of the marker being tracked, in millimeters.
+     * @return The unique identifier (UID) of the new marker, or -1 on error.
+     */
+    public int addMarker(String cfg) {
+        if (!initedNative) return -1;
+        return NativeInterface.arwAddMarker(cfg);
+    }
 
-	/**
-	 * Sets the threshold used to binarize the video image for marker detection.
-	 * @param threshold The new threshold value in the range 0 to 255.
-	 */
-	public void setThreshold(int threshold) {
-		if (!initedNative) return;
-		NativeInterface.arwSetVideoThreshold(threshold);
-	}
+    /**
+     * Returns whether the marker with the specified ID is currently visible.
+     *
+     * @param markerUID The unique identifier (UID) of the marker to query.
+     * @return true if the marker is visible and tracked in the current video frame.
+     */
+    public boolean queryMarkerVisible(int markerUID) {
+        if (!initedNative) return false;
+        return NativeInterface.arwQueryMarkerVisibility(markerUID);
+    }
 
-	/**
-	 * Returns the threshold used to binarize the video image for marker
-	 * detection.
-	 * @return The current threshold value in the range 0 to 255, or -1 if the
-	 *         threshold could not be retrieved.
-	 */
-	public int getThreshold() {
-		if (!initedNative) return -1;
-		return NativeInterface.arwGetVideoThreshold();
-	}
+    /**
+     * Returns the transformation matrix for the specifed marker.
+     *
+     * @param markerUID The unique identifier (UID) of the marker to query.
+     * @return Transformation matrix as an array of floats in OpenGL style.
+     */
+    public float[] queryMarkerTransformation(int markerUID) {
+        if (!initedNative) return null;
+        return NativeInterface.arwQueryMarkerTransformation(markerUID);
+    }
 
-	/**
-	 * Returns the projection matrix calculated from camera parameters.
-	 * @return Projection matrix as an array of floats in OpenGL style.
-	 */
-	public float[] getProjectionMatrix() {
-		if (!initedNative) return null;
-		return NativeInterface.arwGetProjectionMatrix();
-	}
+    /**
+     * Returns true when video and marker detection are running.
+     *
+     * @return true when video and marker detection are running, otherwise false
+     */
+    public boolean isRunning() {
+        if (!initedNative) return false;
+        return NativeInterface.arwIsRunning();
+    }
 
-	/**
-	 * Adds a new single marker to the set of currently active markers.
-	 * @param patt The path to the pattern file to load.
-	 * @param width The physical width of the marker being tracked, in millimeters.
-	 * @return The unique identifier (UID) of the new marker, or -1 on error.
-	 */
-	public int addMarker(String cfg) {
-		if (!initedNative) return -1;
-		return NativeInterface.arwAddMarker(cfg);
-	}
+    /**
+     * Takes an incoming frame from the Android camera and passes it to native
+     * code for conversion and marker detection.
+     *
+     * @param frame New video frame to process.
+     * @return true if successful, otherwise false.
+     */
+    public boolean convertAndDetect(byte[] frame) {
 
-	/**
-	 * Returns whether the marker with the specified ID is currently visible.
-	 * @param markerUID The unique identifier (UID) of the marker to query.
-	 * @return true if the marker is visible and tracked in the current video frame.
-	 */
-	public boolean queryMarkerVisible(int markerUID) {
-		if (!initedNative) return false;
-		return NativeInterface.arwQueryMarkerVisibility(markerUID);
-	}
+        if (!initedNative) return false;
+        if (frame == null) return false;
+        if (!NativeInterface.arwAcceptVideoImage(frame, frameWidth, frameHeight, cameraIndex, cameraIsFrontFacing))
+            return false;
+        if (!NativeInterface.arwCapture()) return false;
+        return NativeInterface.arwUpdateAR();
+    }
 
-	/**
-	 * Returns the transformation matrix for the specifed marker.
-	 * @param markerUID The unique identifier (UID) of the marker to query.
-	 * @return Transformation matrix as an array of floats in OpenGL style.
-	 */
-	public float[] queryMarkerTransformation(int markerUID) {
-		if (!initedNative) return null;
-		return NativeInterface.arwQueryMarkerTransformation(markerUID);
-	}
+    /**
+     * Instructs the native code to free resources.
+     */
+    public void cleanup() {
 
-	/**
-	 * Returns true when video and marker detection are running.
-	 * @return true when video and marker detection are running, otherwise false
-	 */
-	public boolean isRunning() {
-		if (!initedNative) return false;
-		return NativeInterface.arwIsRunning();
-	}
+        if (!initedNative) return;
 
-	/**
-	 * Takes an incoming frame from the Android camera and passes it to native
-	 * code for conversion and marker detection.
-	 * @param frame New video frame to process.
-	 * @return true if successful, otherwise false.
-	 */
-	public boolean convertAndDetect(byte[] frame) {
+        NativeInterface.arwStopRunning();
+        NativeInterface.arwShutdownAR();
 
-		if (!initedNative) return false;
-		if (frame == null) return false;
-		if (!NativeInterface.arwAcceptVideoImage(frame, frameWidth, frameHeight, cameraIndex, cameraIsFrontFacing)) return false;
-		if (!NativeInterface.arwCapture()) return false;
-		return NativeInterface.arwUpdateAR();
-	}
+        debugBitmap.recycle();
+        debugBitmap = null;
 
-	/**
-	 * Instructs the native code to free resources.
-	 */
-	public void cleanup() {
+        initedNative = false;
+    }
 
-		if (!initedNative) return;
+    public float getBorderSize() {
+        return NativeInterface.arwGetBorderSize();
+    }
 
-		NativeInterface.arwStopRunning();
-		NativeInterface.arwShutdownAR();
+    public void setBorderSize(float size) {
+        NativeInterface.arwSetBorderSize(size);
+    }
 
-		debugBitmap.recycle();
-		debugBitmap = null;
+    /**
+     * Calculates the reference matrix for the given markers. First marker is the base.
+     *
+     * @param idMarkerBase Reference base
+     * @param idMarker2    Marker that will be depending on that base
+     * @return Matrix that contains the transformation from @idMarkerBase to @idMarker2
+     */
+    public float[] calculateReferenceMatrix(int idMarkerBase, int idMarker2) {
+        float[] referenceMarkerTranslationMatrix = this.queryMarkerTransformation(idMarkerBase);
+        float[] secondMarkerTranslationMatrix = this.queryMarkerTransformation(idMarker2);
 
-		initedNative = false;
-	}
+        if (referenceMarkerTranslationMatrix != null && secondMarkerTranslationMatrix != null) {
+            float[] invertedMatrixOfReferenceMarker = new float[16];
 
-	public void setBorderSize(float size){
-		NativeInterface.arwSetBorderSize(size);
-	}
+            Matrix.invertM(invertedMatrixOfReferenceMarker, 0, referenceMarkerTranslationMatrix, 0);
 
-	public float getBorderSize(){
-		return NativeInterface.arwGetBorderSize();
-	}
+            float[] transformationFromMarker1ToMarker2 = new float[16];
+            Matrix.multiplyMM(transformationFromMarker1ToMarker2, 0, invertedMatrixOfReferenceMarker, 0, secondMarkerTranslationMatrix, 0);
 
-	/**
-	 * Calculates the reference matrix for the given markers. First marker is the base.
-	 * @param idMarkerBase Reference base
-	 * @param idMarker2 Marker that will be depending on that base
-	 * @return Matrix that contains the transformation from @idMarkerBase to @idMarker2
-	 */
-	public float[] calculateReferenceMatrix(int idMarkerBase, int idMarker2){
-		float [] referenceMarkerTranslationMatrix = this.queryMarkerTransformation(idMarkerBase);
-		float [] secondMarkerTranslationMatrix = this.queryMarkerTransformation(idMarker2);
+            return transformationFromMarker1ToMarker2;
+        } else {
+            //It seems like ARToolkit might be faster with updating then the Android part. Because of that
+            //it can happen that, even though one ensured in there Android-App that both markers are visible,
+            //ARToolkit might not return a transformation matrix for both markers. In that case this RuntimeException is thrown.
+            Log.e(TAG, "Currently there are no two markers visible at the same time");
+            return null;
+        }
+    }
 
-		if(referenceMarkerTranslationMatrix != null && secondMarkerTranslationMatrix != null) {
-			float[] invertedMatrixOfReferenceMarker = new float[16];
+    /**
+     * Calculated the distance between two markers
+     *
+     * @param referenceMarker Reference base. Marker from which the distance is calculated
+     * @param markerId2       Marker to which the distance is calculated
+     * @return distance
+     */
+    public float distance(int referenceMarker, int markerId2) {
 
-			Matrix.invertM(invertedMatrixOfReferenceMarker, 0, referenceMarkerTranslationMatrix, 0);
+        float[] referenceMatrix = calculateReferenceMatrix(referenceMarker, markerId2);
 
-			float[] transformationFromMarker1ToMarker2 = new float[16];
-			Matrix.multiplyMM(transformationFromMarker1ToMarker2, 0, invertedMatrixOfReferenceMarker, 0, secondMarkerTranslationMatrix, 0);
+        if (referenceMatrix != null) {
+            float distanceX = referenceMatrix[12];
+            float distanceY = referenceMatrix[13];
+            float distanceZ = referenceMatrix[14];
 
-			return transformationFromMarker1ToMarker2;
-		}
-		else{
-			//It seems like ARToolkit might be faster with updating then the Android part. Because of that
-			//it can happen that, even though one ensured in there Android-App that both markers are visible,
-			//ARToolkit might not return a transformation matrix for both markers. In that case this RuntimeException is thrown.
-			Log.e(TAG,"Currently there are no two markers visible at the same time");
-			return null;
-		}
-	}
+            Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
+            float length = Matrix.length(distanceX, distanceY, distanceZ);
+            Log.d(TAG, "Absolute distance: " + length);
 
-	/**
-	 * Calculated the distance between two markers
-	 * @param referenceMarker Reference base. Marker from which the distance is calculated
-	 * @param markerId2 Marker to which the distance is calculated
-	 * @return distance
-	 */
-	public float distance(int referenceMarker, int markerId2){
+            return length;
+        }
+        return 0;
+    }
 
-		float[] referenceMatrix = calculateReferenceMatrix(referenceMarker,markerId2);
+    /**
+     * Calculates the position depending on the referenceMarker
+     *
+     * @param referenceMarkerId           Reference marker id
+     * @param markerIdToGetThePositionFor Id of the marker for which the position is calculated
+     * @return Position vector with length 4 x,y,z,1
+     */
+    public float[] retrievePosition(int referenceMarkerId, int markerIdToGetThePositionFor) {
+        float[] initialVector = {1f, 1f, 1f, 1f};
+        float[] positionVector = new float[4];
 
-		if(referenceMatrix != null) {
-			float distanceX = referenceMatrix[12];
-			float distanceY = referenceMatrix[13];
-			float distanceZ = referenceMatrix[14];
-
-			Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
-			float length = Matrix.length(distanceX, distanceY, distanceZ);
-			Log.d(TAG, "Absolute distance: " + length);
-
-			return length;
-		}
-		return 0;
-	}
-
-	/**
-	 * Calculates the position depending on the referenceMarker
-	 * @param referenceMarkerId Reference marker id
-	 * @param markerIdToGetThePositionFor Id of the marker for which the position is calculated
-	 * @return Position vector with length 4 x,y,z,1
-	 */
-	public float[] retrievePosition(int referenceMarkerId, int markerIdToGetThePositionFor) {
-		float[] initialVector = {1f,1f,1f,1f};
-		float[] positionVector = new float[4];
-
-		float[] transformationMatrix = calculateReferenceMatrix(referenceMarkerId,markerIdToGetThePositionFor);
-		if(transformationMatrix != null){
-			Matrix.multiplyMV(positionVector, 0, transformationMatrix, 0, initialVector, 0);
-			return positionVector;
-		}
-		return null;
-	}
+        float[] transformationMatrix = calculateReferenceMatrix(referenceMarkerId, markerIdToGetThePositionFor);
+        if (transformationMatrix != null) {
+            Matrix.multiplyMV(positionVector, 0, transformationMatrix, 0, initialVector, 0);
+            return positionVector;
+        }
+        return null;
+    }
 
 }

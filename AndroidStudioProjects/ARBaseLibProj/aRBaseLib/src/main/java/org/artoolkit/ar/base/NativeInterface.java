@@ -46,40 +46,67 @@ import android.util.Log;
  */
 public class NativeInterface {
 
-	/**
-	 * Android logging tag for this class.
-	 */
-	private static final String TAG = "NativeInterface";
+    public static final int ARW_MARKER_OPTION_FILTERED = 1,
+            ARW_MARKER_OPTION_FILTER_SAMPLE_RATE = 2,
+            ARW_MARKER_OPTION_FILTER_CUTOFF_FREQ = 3,
+            ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION = 4,
+            ARW_MARKER_OPTION_SQUARE_CONFIDENCE = 5,
+            ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF = 6;
+    public static final int AR_LABELING_WHITE_REGION = 0,
+            AR_LABELING_BLACK_REGION = 1;
+    public static final int AR_TEMPLATE_MATCHING_COLOR = 0,
+            AR_TEMPLATE_MATCHING_MONO = 1,
+            AR_MATRIX_CODE_DETECTION = 2,
+            AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX = 3,
+            AR_TEMPLATE_MATCHING_MONO_AND_MATRIX = 4;
+    public static final int AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
+            AR_MATRIX_CODE_3x3_PARITY65 = 0x103,                                        // Matrix code in range 0-31.
+            AR_MATRIX_CODE_3x3_HAMMING63 = 0x203,                                       // Matrix code in range 0-7.
+            AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
+            AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x304,                                      // Matrix code in range 0-511.
+            AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x404,                                      // Matrix code in range 0-31.
+            AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x405,                                     // Matrix code in range 0-4095.
+            AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x505,                                      // Matrix code in range 0-127.
+            AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
+            AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
+            AR_MATRIX_CODE_GLOBAL_ID = 0xb0e;
+    public static final int AR_IMAGE_PROC_FRAME_IMAGE = 0,
+            AR_IMAGE_PROC_FIELD_IMAGE = 1;
+    /**
+     * Android logging tag for this class.
+     */
+    private static final String TAG = "NativeInterface";
+    /**
+     * The name of the native ARToolKit library.
+     */
+    private static final String LIBRARY_NAME = "ARWrapper";
 
-	/**
-	 * The name of the native ARToolKit library.
-	 */
-	private static final String LIBRARY_NAME = "ARWrapper";
-
-	/**
-	 * Attempts to load the native library so that native functions can be called.
-	 * @return true if the library was successfully loaded, otherwise false.
-	 */
+    /**
+     * Attempts to load the native library so that native functions can be called.
+     *
+     * @return true if the library was successfully loaded, otherwise false.
+     */
     public static boolean loadNativeLibrary() {
 
-    	try {
+        try {
 
-    		Log.i(TAG, "Attempting to load library: " + LIBRARY_NAME);
+            Log.i(TAG, "Attempting to load library: " + LIBRARY_NAME);
 
-    		System.loadLibrary("c++_shared");
-       		System.loadLibrary(LIBRARY_NAME);
+            System.loadLibrary("c++_shared");
+            System.loadLibrary(LIBRARY_NAME);
 
-    	} catch (Exception e) {
-    		Log.e(TAG, "Exception loading native library: " + e.toString());
-    		return false;
-    	}
+        } catch (Exception e) {
+            Log.e(TAG, "Exception loading native library: " + e.toString());
+            return false;
+        }
 
-    	return true;
+        return true;
     }
 
     /**
      * Gets the version of the underlying ARToolKit library.
-     * @return 				ARToolKit version
+     *
+     * @return ARToolKit version
      */
     public static native String arwGetARToolKitVersion();
 
@@ -87,40 +114,44 @@ public class NativeInterface {
      * Initialises the basic ARToolKit functions. After this function has
      * been successfully called, markers can be added and removed, but marker
      * detection is not yet running.
-     * @return 				true on success, false if an error occurred
+     *
+     * @return true on success, false if an error occurred
      */
     public static native boolean arwInitialiseAR();
 
-	/**
-	 * Changes the working directory to the resources directory used by ARToolKit.
+    /**
+     * Changes the working directory to the resources directory used by ARToolKit.
      * Normally, this would be called immediately after arwInitialiseAR()
-	 * @return			true if successful, false if an error occurred
-	 * @see				arwInitialiseAR()
-	 */
+     *
+     * @return true if successful, false if an error occurred
+     * @see                arwInitialiseAR()
+     */
     public static native boolean arwChangeToResourcesDir(String resourcesDirectoryPath);
 
     /**
      * Initialises video capture. The native library will start to expect video
      * frames.
-     * @param vconf			The video configuration string. Can be left empty.
-     * @param cparaName		The camera parameter file to load.
-     * @param nearPlane		The value to use for the near OpenGL clipping plane.
-     * @param farPlane		The value to use for the far OpenGL clipping plane.
-     * @return				true on success, false if an error occurred.
+     *
+     * @param vconf     The video configuration string. Can be left empty.
+     * @param cparaName The camera parameter file to load.
+     * @param nearPlane The value to use for the near OpenGL clipping plane.
+     * @param farPlane  The value to use for the far OpenGL clipping plane.
+     * @return true on success, false if an error occurred.
      */
     public static native boolean arwStartRunning(String vconf, String cparaName, float nearPlane, float farPlane);
 
     /**
      * Initialises stereo video capture. The native library will start to expect video
      * frames.
-     * @param vconfL		The video configuration string for the left camera. Can be left empty.
-     * @param cparaNameL	The camera parameter file to load for the left camera.
-     * @param vconfR		The video configuration string for the right camera. Can be left empty.
-     * @param cparaNameR	The camera parameter file to load for the right camera.
-     * @param transL2RName	The stereo calibration file to load.
-     * @param nearPlane		The value to use for the near OpenGL clipping plane.
-     * @param farPlane		The value to use for the far OpenGL clipping plane.
-     * @return				true on success, false if an error occurred
+     *
+     * @param vconfL       The video configuration string for the left camera. Can be left empty.
+     * @param cparaNameL   The camera parameter file to load for the left camera.
+     * @param vconfR       The video configuration string for the right camera. Can be left empty.
+     * @param cparaNameR   The camera parameter file to load for the right camera.
+     * @param transL2RName The stereo calibration file to load.
+     * @param nearPlane    The value to use for the near OpenGL clipping plane.
+     * @param farPlane     The value to use for the far OpenGL clipping plane.
+     * @return true on success, false if an error occurred
      */
     public static native boolean arwStartRunningStereo(String vconfL, String cparaNameL, String vconfR, String cparaNameR, String transL2RName, float nearPlane, float farPlane);
 
@@ -128,40 +159,45 @@ public class NativeInterface {
      * Queries whether marker detection is up and running. This will be true
      * after a call to arwStartRunning, and frames are being sent through. At
      * this point, marker visibility and transformations can be queried.
-     * @return				true if marker detection is running, false if not
+     *
+     * @return true if marker detection is running, false if not
      */
     public static native boolean arwIsRunning();
 
     /**
      * Stops marker detection and closes the video source.
-     * @return				true on success, false if an error occurred
+     *
+     * @return true on success, false if an error occurred
      */
     public static native boolean arwStopRunning();
 
     /**
      * Shuts down the basic ARToolKit functions.
-     * @return				true on success, false if an error occurred
+     *
+     * @return true on success, false if an error occurred
      */
     public static native boolean arwShutdownAR();
 
     /**
      * Retrieves the ARToolKit projection matrix.
-     * @return				A float array containing the OpenGL compatible projection matrix, or null if an error occurred.
+     *
+     * @return A float array containing the OpenGL compatible projection matrix, or null if an error occurred.
      */
     public static native float[] arwGetProjectionMatrix();
 
     /**
      * Retrieves the ARToolKit projection matrix for the right camera of a stereo camera pair.
-     * @return				A float array containing the OpenGL compatible projection matrix, or null if an error occurred.
+     *
+     * @return A float array containing the OpenGL compatible projection matrix, or null if an error occurred.
      */
     public static native boolean arwGetProjectionMatrixStereo(float[] projL, float[] projR);
 
-	/**
-	 * Returns the parameters of the video source frame.
-	 *
-	 * Usage example:
-	 * int[] width = new int[1];
-	 * int[] height = new int[1];
+    /**
+     * Returns the parameters of the video source frame.
+     * <p/>
+     * Usage example:
+     * int[] width = new int[1];
+     * int[] height = new int[1];
      * int[] pixelSize = new int[1];
      * String[] pixelFormatString = new String[1];
      * boolean ok = NativeInterface.arwGetVideoParams(width, height, pixelSize, pixelFormatString);
@@ -170,25 +206,25 @@ public class NativeInterface {
      * @height An int array, the first element of which will be filled with the height (in pixels) of the video frame, or null if this information is not required.
      * @pixelSize An int array, the first element of which will be filled with the numbers of bytes per pixel of the source frame, or null if this information is not required.
      * @pixelFormatString A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
-	 * @return			True if the values were returned OK, false if there is currently no video source or an error int[] .
-	 * @see				arwGetVideoParamsStereo
-	 */
+     * @return True if the values were returned OK, false if there is currently no video source or an error int[] .
+     * @see                arwGetVideoParamsStereo
+     */
     public static native boolean arwGetVideoParams(int[] width, int[] height, int[] pixelSize, String[] pixelFormatStringBuffer);
 
-	/**
-	 * Returns the parameters of the video source frames.
-	 *
-	 * Usage example:
-	 * int[] widthL = new int[1];
-	 * int[] heightL = new int[1];
+    /**
+     * Returns the parameters of the video source frames.
+     * <p/>
+     * Usage example:
+     * int[] widthL = new int[1];
+     * int[] heightL = new int[1];
      * int[] pixelSizeL = new int[1];
      * String[] pixelFormatStringL = new String[1];
-	 * int[] widthR = new int[1];
-	 * int[] heightR = new int[1];
+     * int[] widthR = new int[1];
+     * int[] heightR = new int[1];
      * int[] pixelSizeR = new int[1];
      * String[] pixelFormatStringR = new String[1];
      * boolean ok = NativeInterface.arwGetVideoParams(widthL, heightL, pixelSizeL, pixelFormatStringL, widthR, heightR, pixelSizeR, pixelFormatStringR);
-	 *
+     *
      * @widthL An int array, the first element of which will be filled with the width (in pixels) of the video frame, or null if this information is not required.
      * @widthR An int array, the first element of which will be filled with the width (in pixels) of the video frame, or null if this information is not required.
      * @heightL An int array, the first element of which will be filled with the height (in pixels) of the video frame, or null if this information is not required.
@@ -197,179 +233,162 @@ public class NativeInterface {
      * @pixelSizeR An int array, the first element of which will be filled with the numbers of bytes per pixel of the source frame, or null if this information is not required.
      * @pixelFormatStringL A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
      * @pixelFormatStringR A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
-	 * @return			True if the values were returned OK, false if there is currently no stereo video source or an error occurred.
-	 * @see				arwGetVideoParams
-	 */
-	public static native boolean arwGetVideoParamsStereo(int[] widthL, int[] heightL, int[] pixelSizeL, String[] pixelFormatStringL, int[] widthR, int[] heightR, int[] pixelSizeR, String[] pixelFormatString);
+     * @return True if the values were returned OK, false if there is currently no stereo video source or an error occurred.
+     * @see                arwGetVideoParams
+     */
+    public static native boolean arwGetVideoParamsStereo(int[] widthL, int[] heightL, int[] pixelSizeL, String[] pixelFormatStringL, int[] widthR, int[] heightR, int[] pixelSizeR, String[] pixelFormatString);
 
-	/**
-	 * Checks if a new video frame is available.
-	 * @return				true if a new frame is available.
-	 */
+    /**
+     * Checks if a new video frame is available.
+     *
+     * @return true if a new frame is available.
+     */
     public static native boolean arwCapture();
 
-	/**
-	 * Performs an update, runs marker detection if in the running state.
-	 * @return				true if no error occurred, otherwise false
-	 */
+    /**
+     * Performs an update, runs marker detection if in the running state.
+     *
+     * @return true if no error occurred, otherwise false
+     */
     public static native boolean arwUpdateAR();
 
     /**
-	 * Adds a marker to be detected.
-	 * @param cfg			Marker configuration string
-	 * @return				A unique identifier (UID) of the new marker, or -1 if the marker was not added due to an error.
-	 */
+     * Adds a marker to be detected.
+     *
+     * @param cfg Marker configuration string
+     * @return A unique identifier (UID) of the new marker, or -1 if the marker was not added due to an error.
+     */
     public static native int arwAddMarker(String cfg);
 
-	/**
-	 * Removes the specified marker.
-	 * @param markerUID		The unique identifier (UID) of the marker to remove
-	 * @return				true if the marker was removed, otherwise false
-	 */
+    /**
+     * Removes the specified marker.
+     *
+     * @param markerUID The unique identifier (UID) of the marker to remove
+     * @return true if the marker was removed, otherwise false
+     */
     public static native boolean arwRemoveMarker(int markerUID);
 
-	/**
-	 * Removes all loaded markers.
-	 * @return				The number of markers removed
-	 */
+    /**
+     * Removes all loaded markers.
+     *
+     * @return The number of markers removed
+     */
     public static native int arwRemoveAllMarkers();
 
-	/**
-	 * Queries whether the specified marker is currently visible.
-	 * @param markerUID		The unique identifier (UID) of the marker to check
-	 * @return				true if the marker is currently visible, otherwise false
-	 */
+    /**
+     * Queries whether the specified marker is currently visible.
+     *
+     * @param markerUID The unique identifier (UID) of the marker to check
+     * @return true if the marker is currently visible, otherwise false
+     */
     public static native boolean arwQueryMarkerVisibility(int markerUID);
 
-	/**
-	 * Retrieves the transformation matrix for the specified marker
-	 * @param markerUID		The unique identifier (UID) of the marker to check
-	 * @return				A float array containing the OpenGL compatible transformation matrix, or null if the marker isn't visible or an error occurred.
-	 */
+    /**
+     * Retrieves the transformation matrix for the specified marker
+     *
+     * @param markerUID The unique identifier (UID) of the marker to check
+     * @return A float array containing the OpenGL compatible transformation matrix, or null if the marker isn't visible or an error occurred.
+     */
     public static native float[] arwQueryMarkerTransformation(int markerUID);
 
-	/**
-	 * Retrieves the transformation matrix for the specified marker
-	 * @param markerUID		The unique identifier (UID) of the marker to check
-	 * @param matrixL		A float array containing the OpenGL compatible transformation matrix for the left camera.
-	 * @param matrixR		A float array containing the OpenGL compatible transformation matrix for the right camera.
-	 * @return				true if the marker is currently visible, otherwise false.
-	 */
+    /**
+     * Retrieves the transformation matrix for the specified marker
+     *
+     * @param markerUID The unique identifier (UID) of the marker to check
+     * @param matrixL   A float array containing the OpenGL compatible transformation matrix for the left camera.
+     * @param matrixR   A float array containing the OpenGL compatible transformation matrix for the right camera.
+     * @return true if the marker is currently visible, otherwise false.
+     */
     public static native boolean arwQueryMarkerTransformationStereo(int markerUID, float[] matrixL, float[] matrixR);
 
-    public static final int ARW_MARKER_OPTION_FILTERED = 1,
-    						ARW_MARKER_OPTION_FILTER_SAMPLE_RATE = 2,
-    						ARW_MARKER_OPTION_FILTER_CUTOFF_FREQ = 3,
-    						ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION = 4,
-    						ARW_MARKER_OPTION_SQUARE_CONFIDENCE = 5,
-    						ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF = 6;
     public static native void arwSetMarkerOptionBool(int markerUID, int option, boolean value);
+
     public static native void arwSetMarkerOptionInt(int markerUID, int option, int value);
+
     public static native void arwSetMarkerOptionFloat(int markerUID, int option, float value);
+
     public static native boolean arwGetMarkerOptionBool(int markerUID, int option);
+
     public static native int arwGetMarkerOptionInt(int markerUID, int option);
+
     public static native float arwGetMarkerOptionFloat(int markerUID, int option);
 
-	/**
-	 * Sets whether to enable or disable debug mode.
-	 * @param debug			true to enable, false to disable
-	 */
+    /**
+     * Sets whether to enable or disable debug mode.
+     *
+     * @param debug true to enable, false to disable
+     */
     public static native void arwSetVideoDebugMode(boolean debug);
 
-	/**
-	 * Returns whether debug mode is enabled.
-	 * @return				true if enabled, otherwise false
-	 */
+    /**
+     * Returns whether debug mode is enabled.
+     *
+     * @return true if enabled, otherwise false
+     */
     public static native boolean arwGetVideoDebugMode();
 
-	/**
-	 * Sets the threshold value used during video image binarization.
-	 * @param threshold		The new threshold value
-	 */
+    /**
+     * Sets the threshold value used during video image binarization.
+     *
+     * @param threshold The new threshold value
+     */
     public static native void arwSetVideoThreshold(int threshold);
 
-	/**
-	 * Returns the current threshold value used during video image binarization.
-	 * @return				The current threshold value
-	 */
+    /**
+     * Returns the current threshold value used during video image binarization.
+     *
+     * @return The current threshold value
+     */
     public static native int arwGetVideoThreshold();
 
-	/**
-	 * Passes a video frame to the native library for processing.
-	 * @param image			Buffer containing the video frame
-	 * @param width			Width of the video frame in pixels
-	 * @param height		Height of the video frame in pixels
-	 * @param cameraIndex	Zero-based index of the camera in use. If only one camera is present, will be 0.
-	 * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
-	 * @return				true if no error occurred, otherwise false
-	 */
+    /**
+     * Passes a video frame to the native library for processing.
+     *
+     * @param image               Buffer containing the video frame
+     * @param width               Width of the video frame in pixels
+     * @param height              Height of the video frame in pixels
+     * @param cameraIndex         Zero-based index of the camera in use. If only one camera is present, will be 0.
+     * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
+     * @return true if no error occurred, otherwise false
+     */
     public static native boolean arwAcceptVideoImage(byte[] image, int width, int height, int cameraIndex, boolean cameraIsFrontFacing);
 
-	/**
-	 * Passes a video frame for the right camera of a stereo camera pair to the native library for processing.
-	 * @param imageL		Buffer containing the video frame
-	 * @param widthL		Width of the video frame in pixels
-	 * @param heightL		Height of the video frame in pixels
-	 * @param cameraIndexL	Zero-based index of the camera in use. If only one camera is present, will be 0.
-	 * @param cameraIsFrontFacingL false if camera is rear-facing (the default) or true if camera is facing toward the user.
-	 * @param imageR		Buffer containing the video frame
-	 * @param widthR		Width of the video frame in pixels
-	 * @param heightR		Height of the video frame in pixels
-	 * @param cameraIndexR	Zero-based index of the camera in use. If only one camera is present, will be 0.
-	 * @param cameraIsFrontFacingR false if camera is rear-facing (the default) or true if camera is facing toward the user.
-	 * @return				true if no error occurred, otherwise false
-	 */
+    /**
+     * Passes a video frame for the right camera of a stereo camera pair to the native library for processing.
+     *
+     * @param imageL               Buffer containing the video frame
+     * @param widthL               Width of the video frame in pixels
+     * @param heightL              Height of the video frame in pixels
+     * @param cameraIndexL         Zero-based index of the camera in use. If only one camera is present, will be 0.
+     * @param cameraIsFrontFacingL false if camera is rear-facing (the default) or true if camera is facing toward the user.
+     * @param imageR               Buffer containing the video frame
+     * @param widthR               Width of the video frame in pixels
+     * @param heightR              Height of the video frame in pixels
+     * @param cameraIndexR         Zero-based index of the camera in use. If only one camera is present, will be 0.
+     * @param cameraIsFrontFacingR false if camera is rear-facing (the default) or true if camera is facing toward the user.
+     * @return true if no error occurred, otherwise false
+     */
     public static native boolean arwAcceptVideoImageStereo(byte[] imageL, int widthL, int heightL, int cameraIndexL, boolean cameraIsFrontFacingL, byte[] imageR, int widthR, int heightR, int cameraIndexR, boolean cameraIsFrontFacingR);
-
 
     public static native boolean arwUpdateDebugTexture(byte[] image, boolean flipY);
 
+    public static native void arwSetLabelingMode(int mode);
 
-	public static final int AR_LABELING_WHITE_REGION = 0,
-    						AR_LABELING_BLACK_REGION = 1;
+    public static native int arwGetLabelingMode();
 
-	public static native void arwSetLabelingMode(int mode);
+    public static native void arwSetPatternDetectionMode(int mode);
 
-	public static native int arwGetLabelingMode();
+    public static native int arwGetPatternDetectionMode();
 
+    public static native void arwSetBorderSize(float size);
 
-	public static final int AR_TEMPLATE_MATCHING_COLOR               = 0,
-    						AR_TEMPLATE_MATCHING_MONO                = 1,
-    						AR_MATRIX_CODE_DETECTION                 = 2,
-    						AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX    = 3,
-    						AR_TEMPLATE_MATCHING_MONO_AND_MATRIX     = 4;
+    public static native float arwGetBorderSize();
 
-	public static native void arwSetPatternDetectionMode(int mode);
+    public static native void arwSetMatrixCodeType(int type);
 
-	public static native int arwGetPatternDetectionMode();
+    public static native int arwGetMatrixCodeType();
 
-
-	public static native void arwSetBorderSize(float size);
-
-	public static native float arwGetBorderSize();
-
-
-	public static final int AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
-    						AR_MATRIX_CODE_3x3_PARITY65 = 0x103,                                        // Matrix code in range 0-31.
-    						AR_MATRIX_CODE_3x3_HAMMING63 = 0x203,                                       // Matrix code in range 0-7.
-    						AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
-    						AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x304,                                      // Matrix code in range 0-511.
-    						AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x404,                                      // Matrix code in range 0-31.
-    						AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x405,                                     // Matrix code in range 0-4095.
-    						AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x505,                                      // Matrix code in range 0-127.
-    						AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
-    						AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
-    						AR_MATRIX_CODE_GLOBAL_ID = 0xb0e;
-
-	public static native void arwSetMatrixCodeType(int type);
-
-	public static native int arwGetMatrixCodeType();
-
-
-	public static final int AR_IMAGE_PROC_FRAME_IMAGE = 0,
-    						AR_IMAGE_PROC_FIELD_IMAGE = 1;
-
-	public static native void arwSetImageProcMode(int mode);
+    public static native void arwSetImageProcMode(int mode);
 
     public static native int arwGetImageProcMode();
 
