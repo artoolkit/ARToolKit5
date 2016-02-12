@@ -286,6 +286,7 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION_NATIVE(nativeStop(JNIEnv* env, jobject ob
         LOGI("Stopping NFT2 tracking thread.");
 #endif
         trackingInitQuit(&trackingThreadHandle);
+        detectedPage = -2;
     }
     j = 0;
     for (i = 0; i < surfaceSetCount; i++) {
@@ -504,6 +505,7 @@ static void *loadNFTDataAsync(THREAD_HANDLE_T *threadHandle)
 		if (trackingThreadHandle) {
 			LOGE("NFT2 tracking thread is running. Stopping it first.\n");
 			trackingInitQuit(&trackingThreadHandle);
+			detectedPage = -2;
 		}
 		j = 0;
 		for (i = 0; i < surfaceSetCount; i++) {
