@@ -1,4 +1,6 @@
-Simple distance measuring project that draws a line between two markers using OpenGLES 2.0
+Simple distance measuring project that draws a line between two markers using OpenGLES 2.0.
+Demonstrates how the correlation between two markers works.
+Demonstrates how one can measure the distance between two markers.
 
 Preparation:
 
