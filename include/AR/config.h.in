@@ -230,6 +230,10 @@ enum {
 /*    AR_INPUT_GSTREAMER: use of GStreamer library            */
 /*                                                            */
 /*------------------------------------------------------------*/
+#ifdef EMSCRIPTEN
+#  define __linux
+#endif
+
 #ifdef __linux
 
 #define AR_CALLBACK
@@ -519,6 +523,15 @@ enum {
 #endif
 
 /*------------------------------------------------------------*/
+/*  Emscripten input                                          */
+/*------------------------------------------------------------*/
+
+#ifdef EMSCRIPTEN
+#define AR_DEFAULT_INPUT_EMSCRIPTEN
+#define AR_INPUT_EMSCRIPTEN_PIXEL_FORMAT   AR_PIXEL_FORMAT_RGBA
+#endif
+
+/*------------------------------------------------------------*/
 /*  Multi-platform inputs                                     */
 /*------------------------------------------------------------*/
 
@@ -572,6 +585,8 @@ enum {
 #  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_WINDOWS_MEDIA_FOUNDATION_PIXEL_FORMAT
 #elif defined(AR_DEFAULT_INPUT_WINDOWS_MEDIA_CAPTURE)
 #  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_WINDOWS_MEDIA_CAPTURE_PIXEL_FORMAT
+#elif defined(AR_DEFAULT_INPUT_EMSCRIPTEN)
+#  define AR_DEFAULT_PIXEL_FORMAT   AR_INPUT_EMSCRIPTEN_PIXEL_FORMAT
 #else
 #  error
 #endif

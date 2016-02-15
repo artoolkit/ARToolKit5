@@ -40,6 +40,7 @@
 // ============================================================================
 //	Private includes.
 // ============================================================================
+
 #include <AR/gsub_lite.h>
 
 #include <stdio.h>		// fprintf(), stderr
@@ -58,6 +59,7 @@
 #  include <OpenGL/glu.h>
 #  include <OpenGL/glext.h>
 #endif
+
 
 // ============================================================================
 //	Private types and defines.
@@ -187,7 +189,7 @@ typedef struct _ARGL_CONTEXT_SETTINGS ARGL_CONTEXT_SETTINGS;
 //	Private functions.
 // ============================================================================
 
-#if !ARGL_DISABLE_DISP_IMAGE
+#if !ARGL_DISABLE_DISP_IMAGE && !EMSCRIPTEN
 // Sets texture, t2, v2, textureGeometryHasBeenSetup.
 static char arglSetupTextureGeometry(ARGL_CONTEXT_SETTINGS_REF contextSettings)
 {
@@ -494,7 +496,7 @@ void arglCameraViewRH(const ARdouble para[3][4], ARdouble m_modelview[16], const
 	}
 }
 
-#if !ARGL_DISABLE_DISP_IMAGE
+#if !ARGL_DISABLE_DISP_IMAGE && !EMSCRIPTEN
 
 ARGL_CONTEXT_SETTINGS_REF arglSetupForCurrentContext(ARParam *cparam, AR_PIXEL_FORMAT pixelFormat)
 {

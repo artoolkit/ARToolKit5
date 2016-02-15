@@ -528,7 +528,7 @@ double arUtilTimer(void)
 #else
     struct timeval     time;
 
-#  if defined(__linux) || defined(__APPLE__)
+#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
     gettimeofday( &time, NULL );
 #  else
     gettimeofday( &time );
@@ -553,7 +553,7 @@ void arUtilTimerReset(void)
 #else
     struct timeval     time;
 
-#  if defined(__linux) || defined(__APPLE__)
+#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
     gettimeofday( &time, NULL );
 #  else
     gettimeofday( &time );

@@ -65,7 +65,11 @@
 #include <stdint.h>
 #include <string.h>
 #ifndef _WIN32 // errno is defined in stdlib.h on Windows.
-#  include <sys/errno.h>
+#  ifdef EMSCRIPTEN // errno is not in sys/
+#    include <errno.h>
+#  else
+#    include <sys/errno.h>
+#  endif
 #endif
 #include <AR/config.h>
 #include <AR/arConfig.h>
@@ -120,7 +124,6 @@ extern int arLogLevel;
 void arLog(const int logLevel, const char *format, ...);
 
 typedef void (AR_CALLBACK *AR_LOG_LOGGER_CALLBACK)(const char *logMessage);
-
 
 /*!
     @function
