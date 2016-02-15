@@ -1,0 +1,150 @@
+/*
+ *  MarkerDistanceShaderProgram.java
+ *  ARToolKit5
+ *
+ *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
+ *  LLC ("Daqri") in consideration of your agreement to the following
+ *  terms, and your use, installation, modification or redistribution of
+ *  this Daqri software constitutes acceptance of these terms.  If you do
+ *  not agree with these terms, please do not use, install, modify or
+ *  redistribute this Daqri software.
+ *
+ *  In consideration of your agreement to abide by the following terms, and
+ *  subject to these terms, Daqri grants you a personal, non-exclusive
+ *  license, under Daqri's copyrights in this original Daqri software (the
+ *  "Daqri Software"), to use, reproduce, modify and redistribute the Daqri
+ *  Software, with or without modifications, in source and/or binary forms;
+ *  provided that if you redistribute the Daqri Software in its entirety and
+ *  without modifications, you must retain this notice and the following
+ *  text and disclaimers in all such redistributions of the Daqri Software.
+ *  Neither the name, trademarks, service marks or logos of Daqri LLC may
+ *  be used to endorse or promote products derived from the Daqri Software
+ *  without specific prior written permission from Daqri.  Except as
+ *  expressly stated in this notice, no other rights or licenses, express or
+ *  implied, are granted by Daqri herein, including but not limited to any
+ *  patent rights that may be infringed by your derivative works or by other
+ *  works in which the Daqri Software may be incorporated.
+ *
+ *  The Daqri Software is provided by Daqri on an "AS IS" basis.  DAQRI
+ *  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
+ *  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE, REGARDING THE DAQRI SOFTWARE OR ITS USE AND
+ *  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ *
+ *  IN NO EVENT SHALL DAQRI BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
+ *  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
+ *  MODIFICATION AND/OR DISTRIBUTION OF THE DAQRI SOFTWARE, HOWEVER CAUSED
+ *  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+ *  STRICT LIABILITY OR OTHERWISE, EVEN IF DAQRI HAS BEEN ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2011-2015 ARToolworks, Inc.
+ *
+ *  Author(s): Philip Lamb
+ *
+ */
+
+package org.artoolkit.ar.samples.ardistanceopengles20.shader;
+
+import android.opengl.GLES20;
+import android.util.Log;
+
+import org.artoolkit.ar.base.rendering.gles20.BaseShaderProgram;
+import org.artoolkit.ar.base.rendering.gles20.OpenGLShader;
+
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+
+/**
+ * Created by Thorsten Bux on 25.01.2016.
+ * <p/>
+ * The shader program is responsible for compiling and configuring the fragment and vertex shader.
+ * Also it makes the attributes from the shaders available to the java app.
+ * <p/>
+ * Finally it renders the given geometry.
+ */
+public class MarkerDistanceShaderProgram extends BaseShaderProgram {
+
+    private static final String TAG = "MarkerDistanceShader";
+    private int lineWidth;
+
+    public MarkerDistanceShaderProgram(OpenGLShader vertexShader, OpenGLShader fragmentShader, int lineWidth) {
+        super(vertexShader, fragmentShader);
+        this.lineWidth = lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    @Override
+    public int getProjectionMatrixHandle() {
+        return super.getProjectionMatrixHandle();
+    }
+
+    @Override
+    public int getModelViewMatrixHandle() {
+        return super.getModelViewMatrixHandle();
+    }
+
+    @Override
+    protected void bindAttributes() {
+        super.bindAttributes();
+    }
+
+    public int getColorHandle() {
+        return GLES20.glGetUniformLocation(shaderProgramHandle, MarkerDistanceFragmentShader.colorVectorString);
+    }
+
+    /**
+     * There are several render methods available from the base class. In this case we override the {@link #render(FloatBuffer, FloatBuffer, ByteBuffer)} one.
+     * Although we never use the index ByteBuffer.
+     * We pass in the vertex and color information from the {@link org.artoolkit.ar.base.rendering.gles20.LineGLES20} object.
+     *
+     * @param vertexBuffer Contains the position information as two vertexes. Start and end of the line to draw
+     * @param colorBuffer  Contains the color of the line
+     * @param unused
+     */
+    @Override
+    public void render(FloatBuffer vertexBuffer, FloatBuffer colorBuffer, ByteBuffer unused) {
+        setupShaderUsage();
+
+        /**
+         * We use the OpenGL methods to set the vertex information in the following order.
+         * 1. The handle generated by the {@link MarkerDistanceShaderProgram}
+         * 2. Size of the position information. As we operate in 3D space this is 3 (x,y,z) (but for OpenGL and matrix operations it could also be 4, as you need a 4 size vector for 4x4 matrix operations).
+         * 3. Kind of the vector position data (Float, Double)
+         * 4. Is the vector normalized?
+         * 5. The distance in Bytes between each vertex information including the vertex itself. First
+         *      thing to remember here is that we are very close to C programming. That is why everything
+         *      is handled in bytes and why we try and optimize things. The other thing is that you might want
+         *      to use your vertexBuffer as container for position and color information (eg: [pos(x,y,z),color(r,g,b),pos(x,y,z),...])
+         *      That is why you need to specify the distance between each vertex. In this case the vertexBuffer only holds the position information
+         *      So the distance in byte is position size (3 as described in point 2.) multiplied with bytes per float (4)
+         * 6. The vertex information itself.
+         */
+        //camPosition.length * 4 bytes per float
+        GLES20.glVertexAttribPointer(this.getPositionHandle(), positionDataSize, GLES20.GL_FLOAT, false,
+                positionStrideBytes, vertexBuffer);
+        GLES20.glEnableVertexAttribArray(this.getPositionHandle());
+
+
+        /** Pass the color information to OpenGL
+         * 1. The handle generated by the {@link MarkerDistanceShaderProgram}
+         * 2. Pass in 1 as count of color vertexes (my line has only one color)
+         * 3. The color information itself.
+         */
+        GLES20.glUniform4fv(this.getColorHandle(), 1, colorBuffer);
+        GLES20.glLineWidth(this.lineWidth);
+
+        //Finally draw the given vertex with the color as a line. The used information from the vertex
+        // buffer starts at the beginning of the buffer (0) (Remember that the vertex could hold other information as well).
+        // The position information contain (2) vertexes that need to be used. (Start and end of the line)
+        GLES20.glDrawArrays(GLES20.GL_LINES, 0, 2);
+
+        Log.e(TAG, "Shader Info: " + GLES20.glGetShaderInfoLog(getShaderProgramHandle()));
+    }
+}
