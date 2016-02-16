@@ -245,6 +245,9 @@ int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
     if( refDataSet->pageNum > 0 ) {
         kpmHandle->resultNum = refDataSet->pageNum;
         arMalloc( kpmHandle->result, KpmResult, refDataSet->pageNum );
+		for (int i = 0; i < refDataSet->pageNum;i++){
+			kpmHandle->result[i].skipF = 0;
+		}        
     }
 
     // Create feature vectors.
