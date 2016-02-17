@@ -28,7 +28,7 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2015-2016 Daqri, LLC.
  *  Copyright 2002-2015 ARToolworks, Inc.
  *
  *  Author(s): Hirokazu Kato, Philip Lamb
@@ -37,9 +37,9 @@
 /*!
 	@header config.h
 	@abstract ARToolKit core configuration.
-	@version 5.3
+	@version 5.3.2
 	@discussion
-	@copyright 2015 Daqri, LLC.
+	@copyright 2015-2016 Daqri, LLC.
  */
 
 
@@ -64,7 +64,7 @@
 
 // The TINY version number defines bug-fixes to existing
 // functionality. Range: [0-99].
-#define AR_HEADER_VERSION_TINY		1
+#define AR_HEADER_VERSION_TINY		2
 
 // The BUILD version number will always be zero in releases,
 // but may be non-zero in internal builds or in version-control
@@ -73,7 +73,7 @@
 
 // The string representation below must match the major, minor
 // and tiny release numbers.
-#define AR_HEADER_VERSION_STRING	"5.3.1"
+#define AR_HEADER_VERSION_STRING	"5.3.2"
 
 // The macros below are convenience macros to enable use
 // of certain ARToolKit header functionality by the release

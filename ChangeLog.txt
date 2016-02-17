@@ -2,8 +2,41 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.3.1 (this release) (2015-10-05).
+Changes in version 5.3.2 (this release) (2016-xx-xx).
 -----------------------------------------------------
+New features:
+- Android: Android Studio is fully supported. Projects are in AndroidStudioProjects, and a comprehensive migration guide is included. This will be the last release supporting Eclipse.
+- Linux: Video4Linux v2 devices are now supported directly (previous support was via GStreamer) with new module VideoLinuxV4L2. Thanks to Andy Tai.
+
+Enhancements:
+- iOS: Added camera configs for iPhone 6, 6s, 6s Plus, and iPad mini 4.
+- Logging improvements in ARWrapper.
+- Linux: configuration now allows choice of c++ compiler between g++/libstdc++, or Clang/libc++. Support obsolete support for Intel's cc.
+- Android: native arUtil.c function that pulls Android Dev ID from Android static class running on JavaVM.
+- Android: Some new examples: ARMarkerDistance showing how to calculate the distance between two markers, ARSimpleOpenGLES20 showing use of OpenGL ES 2.0 in Java code, and ARDistanceOpenGLES20 showing combining these capabilities.
+- Improved interface to genMarkerSet, the utility for generating a multi-marker from a JPEG image of the set.
+
+Bug fixes:
+- Multi-NFT mode (currently implemented only in libARWrapper) which has been unavailable since ARToolKit v5.3, has been re-enabled thanks to work by GitHub users atoyk, VladVuk, deight, and stained.
+- Fixed an issue with incorrect initialisation in kpmMatching.
+- Windows: Replaced strdup with _strdup to fix heap-corruption issue with the former.
+- Windows: Elide runtime dependency on debug VC runtimes in release builds.
+- Android: Fix issue with Camera-preview based samples where orientation was incorrect.
+- Android: Deleted unnecessary shared libraries (*.so) and deleted their respective System.loadLibrary Java calls.
+- Android: Fix for https://github.com/artoolkit/artoolkit5/issues/25 where NFT tracking wouldn't reinitialise after a stop.
+- Linux: Now builds against system OpenCV for g++/libstdc++ builds, and bundled OpenCV for Clang/libc++ builds.
+- In ARWrapper, removed a stray reference to a member variable that isn't defined.
+- Fix case where pattern file name in multi-marker config that began with numeric characters was being treated as a barcode marker ID.
+- Fixed inverted coordinate system in genMarkerSet.
+- When creating environment config on Linux/OS X, bash ignores .profile when .bash_profile is present, so need to write to it if it exists.
+
+Other changes:
+- Updated Windows Visual Studio 2010 project files.
+- Dropped support for Android versions prior to Android 4.0.3 (ICS_MR1). Targets are now minimum API level 15.
+
+
+Changes in version 5.3.1 (2015-10-05).
+--------------------------------------
 New features:
 - This release introduces a new WinRT component to assist rendering of video backgrounds, libARgsubD3D, and set of native XAML application examples. The examples demonstrate basic square tracking, multimarker tracking, NFT tracking, rendering of UI controls into the AR scene. With these examples, ARToolKit becomes the first full-featured SDK for developing augmented reality apps on Microsoft's newest platform, and we hope that Windows developers are able to create some great apps with the support we've provided. Many thanks to Rene Schulte for his work on these examples, and DAQRI for sponsoring the development work.
 - A C++/CX-based WinRT Component is provided. Component binaries and metadata can be found in the appropriate "bin" subdirectory.

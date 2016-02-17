@@ -17,9 +17,9 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.1.
+This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.2.
 
-ARToolKit version 5.3.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Google's Play Store or any other commercial marketplace, you must use your own package name, and not the org.artoolkit package name.
 
@@ -28,7 +28,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-10-05
+    2016-xx-xx
 
 
 Requirements.
@@ -76,7 +76,7 @@ Usage (Windows):
 
 Release notes.
 --------------
-This release contains ARToolKit v5.3.1 for Android.
+This release contains ARToolKit v5.3.2 for Android.
 
 This will be the last release to support Android OS versions 2.2 through 3.x. Devices running Android OS represent less than 5% of the total active base of Android devices. Future ARToolKit releases will support Android OS version 4.0 ("Ice Cream Sandwich") and later.
 

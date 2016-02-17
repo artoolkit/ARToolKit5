@@ -18,16 +18,16 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries and utilities for Windows Phone 8.1 and Windows Store 8.1, version 5.3.1.
+This archive contains the ARToolKit libraries and utilities for Windows Phone 8.1 and Windows Store 8.1, version 5.3.2.
 
-ARToolKit version 5.3.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Microsoft's Windows Store or any other commercial marketplace, you must use your own package name, and not the org.artoolkit package name.
 
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-09-30
+    2016-xx-xx
 
 
 Requirements.
@@ -78,7 +78,7 @@ checkResolution.exe Data\camera_para.dat (change camera_para.dat to the correct 
 
 Release notes.
 --------------
-This release contains ARToolKit Professional v5.3.1 for Windows Phone 8.1 and Windows Store 8.1.
+This release contains ARToolKit Professional v5.3.2 for Windows Phone 8.1 and Windows Store 8.1.
 
 - This release introduces a new WinRT component to assist rendering of video backgrounds, libARgsubD3D, and set of native XAML application examples. The examples demonstrate basic square tracking, multimarker tracking, NFT tracking, rendering of UI controls into the AR scene. With these examples, ARToolKit becomes the first full-featured SDK for developing augmented reality apps on Microsoft's newest platform, and we hope that Windows developers are able to create some great apps with the support we've provided. Many thanks to Rene Schulte for his work on these examples, and DAQRI for sponsoring the development work.
 - A C++/CX-based WinRT Component is provided. Component binaries and metadata can be found in the appropriate "bin" subdirectory.

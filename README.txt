@@ -17,16 +17,16 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries, utilities and examples, version 5.3.1.
+This archive contains the ARToolKit libraries, utilities and examples, version 5.3.2.
 
-ARToolKit version 5.3.1 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Android platforms.
 
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2015-10-05
+    2016-xx-xx
 
 
 Installing
@@ -154,7 +154,7 @@ Opening the project files
 Release notes.
 --------------
 
-This release contains ARToolKit v5.3.1.
+This release contains ARToolKit v5.3.2.
 
 The major change in ARToolKit v5.3 was a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
