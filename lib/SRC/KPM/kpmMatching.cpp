@@ -279,7 +279,8 @@ int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
                 std::vector<unsigned char> descriptors;
             
                 for (int i = 0; i < featureVector.num; i++) {
-                    if (kpmHandle->refDataSet.refPoint[i].refImageNo == kpmHandle->refDataSet.pageInfo[k].imageInfo[m].imageNo) {
+                    if (kpmHandle->refDataSet.refPoint[i].refImageNo == kpmHandle->refDataSet.pageInfo[k].imageInfo[m].imageNo
+                    && kpmHandle->refDataSet.refPoint[i].pageNo == kpmHandle->refDataSet.pageInfo[k].pageNo) {
                         points.push_back(vision::FeaturePoint(kpmHandle->refDataSet.refPoint[i].coord2D.x,
                                                           kpmHandle->refDataSet.refPoint[i].coord2D.y,
                                                           kpmHandle->refDataSet.refPoint[i].featureVec.angle,
@@ -292,7 +293,7 @@ int kpmSetRefDataSet( KpmHandle *kpmHandle, KpmRefDataSet *refDataSet )
                     }
                 }
                 ARLOGi("points-%d\n", points.size());
-                kpmHandle->freakMatcher->addFreakFeaturesAndDescriptors(points,descriptors,points_3d,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].width,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].height,db_id++);
+               kpmHandle->pageIDs[db_id] = kpmHandle->refDataSet.pageInfo[k].pageNo; kpmHandle->freakMatcher->addFreakFeaturesAndDescriptors(points,descriptors,points_3d,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].width,kpmHandle->refDataSet.pageInfo[k].imageInfo[m].height,db_id++);
             }
         }
     }
@@ -665,6 +666,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             if( ret == 0 ) {
                 kpmHandle->result[pageLoop].camPoseF = 0;
                 kpmHandle->result[pageLoop].inlierNum = (int)matches.size();
+                kpmHandle->result[pageLoop].pageNo = kpmHandle->pageIDs[matched_image_id];
                 ARLOGi("Page[%d]  pre:%3d, aft:%3d, error = %f\n", pageLoop, (int)matches.size(), (int)matches.size(), kpmHandle->result[pageLoop].error);
             }
         }
