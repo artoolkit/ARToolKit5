@@ -7102,7 +7102,7 @@
 		78BB3DD408E482DA00D7CA2D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = 78BB3DD508E482DA00D7CA2D /* Build configuration list for PBXProject "ARToolKit5iOS" */;
 			compatibilityVersion = "Xcode 3.2";

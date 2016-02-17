@@ -1129,8 +1129,7 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                     }
                 }
             }
-        }
-        else if (iOSDevice == CameraVideoiOSDeviceiPhone6) {
+        } else if (iOSDevice == CameraVideoiOSDeviceiPhone6) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
@@ -1138,11 +1137,13 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                 if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
                     cparambytes = camera_para_iPhone_6_front_1280x720;
                     cparamname = "camera_para_iPhone_6_front_1280x720.dat";
-                } else
-                {
+                } else {
                     cparambytes = camera_para_iPhone_6_rear_1280x720;
                     cparamname = "camera_para_iPhone_6_rear_1280x720_0_3m.dat";
                 }
+            } else {
+                cparambytes = NULL;
+                cparamname = NULL;
             }
         }
         else if (iOSDevice == CameraVideoiOSDeviceiPhone6SPlus) {
@@ -1153,14 +1154,15 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                 if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
                     cparambytes = camera_para_iPhone_6s_Plus_front_1280x720;
                     cparamname = "camera_para_iPhone_6s_Plus_front_1280x720.dat";
-                } else
-                {
+                } else {
                     cparambytes = camera_para_iPhone_6s_Plus_rear_1280x720;
                     cparamname = "camera_para_iPhone_6s_Plus_rear_1280x720.dat";
                 }
+            } else {
+                cparambytes = NULL;
+                cparamname = NULL;
             }
-        }
-        else if (iOSDevice == CameraVideoiOSDeviceiPhone6S) {
+        } else if (iOSDevice == CameraVideoiOSDeviceiPhone6S) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
@@ -1168,14 +1170,15 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                 if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
                     cparambytes = camera_para_iPhone_6s_front_1280x720;
                     cparamname = "camera_para_iPhone_6s_front_1280x720.dat";
-                } else
-                {
+                } else {
                     cparambytes = camera_para_iPhone_6s_rear_1280x720;
                     cparamname = "camera_para_iPhone_6s_rear_1280x720.dat";
                 }
+            } else {
+                cparambytes = NULL;
+                cparamname = NULL;
             }
-        }
-        else if (iOSDevice == CameraVideoiOSDeviceiPadMini4) {
+        } else if (iOSDevice == CameraVideoiOSDeviceiPadMini4) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
@@ -1183,14 +1186,15 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                 if (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront) {
                     cparambytes = camera_para_iPad_mini_4_front_1280x720;
                     cparamname = "camera_para_iPad_mini_4_front_1280x720.dat";
-                } else
-                {
+                } else {
                     cparambytes = camera_para_iPad_mini_4_rear_1280x720;
                     cparamname = "camera_para_iPad_mini_4_rear_1280x720.dat";
                 }
+            } else {
+                cparambytes = NULL;
+                cparamname = NULL;
             }
-        }
-        else if (iOSDevice == CameraVideoiOSDeviceiPadAir2) {
+        } else if (iOSDevice == CameraVideoiOSDeviceiPadAir2) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1920x1080 ||
