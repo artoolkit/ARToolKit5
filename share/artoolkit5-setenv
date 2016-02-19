@@ -11,3 +11,5 @@ if [ "`uname`" = "Darwin" ]
 then
 	defaults write ~/.MacOSX/environment ARTOOLKIT5_ROOT -string "${ARTOOLKIT5_ROOT}"; plutil -convert xml1 ~/.MacOSX/environment.plist
 fi
+
+echo "*** Successfully set ARTOOLKIT5_ROOT to ${ARTOOLKIT5_ROOT} ***"
