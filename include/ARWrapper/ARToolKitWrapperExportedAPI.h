@@ -474,7 +474,10 @@ extern "C" {
         ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION = 4,  ///< bool, true to use continuous pose estimate.
         ARW_MARKER_OPTION_SQUARE_CONFIDENCE = 5,                ///< float, confidence value of most recent marker match
         ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF = 6,         ///< float, minimum allowable confidence value used in marker matching.
-        ARW_MARKER_OPTION_NFT_SCALE = 7                         ///< float, scale factor applied to NFT marker size.
+        ARW_MARKER_OPTION_NFT_SCALE = 7,                        ///< float, scale factor applied to NFT marker size.
+        ARW_MARKER_OPTION_MULTI_MIN_SUBMARKERS = 8,             ///< int, minimum number of submarkers for tracking to be valid.
+        ARW_MARKER_OPTION_MULTI_MIN_CONF_MATRIX = 9,            ///< float, minimum confidence value for submarker matrix tracking to be valid.
+        ARW_MARKER_OPTION_MULTI_MIN_CONF_PATTERN = 10,          ///< float, minimum confidence value for submarker pattern tracking to be valid.
     };
     
 	/**

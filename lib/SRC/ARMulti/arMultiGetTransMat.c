@@ -137,7 +137,7 @@ static ARdouble  arGetTransMatMultiSquare2(AR3DHandle *handle, ARMarkerInfo *mar
         }
         vnum++;
     }
-    if( vnum == 0 ) { 
+    if( vnum == 0 || vnum < config->min_submarker) { 
         config->prevF = 0;
         return -1;
     }
