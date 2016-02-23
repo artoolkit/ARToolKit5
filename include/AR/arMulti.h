@@ -88,6 +88,7 @@ typedef struct {
     int                     patt_type;
     ARdouble                cfPattCutoff;
     ARdouble                cfMatrixCutoff;
+    int                     min_submarker;
 } ARMultiMarkerInfoT;
 
 ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *pattHandle );

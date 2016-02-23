@@ -96,7 +96,7 @@ bool ARMarkerMulti::load(const char *multiConfig, ARPattHandle *arPattHandle)
         patterns[i]->m_matrix[14] = config->marker[i].trans[2][3];
         patterns[i]->m_matrix[15] = _1_0;
 	}
-	
+	config->min_submarker = 0;
     m_loaded = true;
 	return true;
 }

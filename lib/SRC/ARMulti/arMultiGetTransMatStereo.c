@@ -189,7 +189,7 @@ static ARdouble  arGetTransMatMultiSquareStereo2(AR3DStereoHandle *handle,
         vnumR++;
     }
 //ARLOG("vnumL=%d, vnumR=%d\n", vnumL, vnumR);
-    if( vnumL == 0 && vnumR == 0 ) { 
+    if( (vnumL == 0 && vnumR == 0) || (vnumL < config->min_submarker && vnumR < config->min_submarker) ) {
         config->prevF = 0;
 //ARLOG("**** NG.\n");
         return -1;

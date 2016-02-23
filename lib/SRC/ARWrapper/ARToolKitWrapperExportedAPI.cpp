@@ -727,6 +727,9 @@ EXPORT_API int arwGetMarkerOptionInt(int markerUID, int option)
     }
     
     switch (option) {
+        case ARW_MARKER_OPTION_MULTI_MIN_SUBMARKERS:
+            if (marker->type == ARMarker::MULTI) return ((ARMarkerMulti *)marker)->config->min_submarker;
+            break;
         default:
             gARTK->logv(AR_LOG_LEVEL_ERROR, "arwGetMarkerOptionInt(): Unrecognised option %d.", option);
             break;
@@ -745,6 +748,9 @@ EXPORT_API void arwSetMarkerOptionInt(int markerUID, int option, int value)
     }
 
     switch (option) {
+        case ARW_MARKER_OPTION_MULTI_MIN_SUBMARKERS:
+            if (marker->type == ARMarker::MULTI) ((ARMarkerMulti *)marker)->config->min_submarker = value;
+            break;
         default:
             gARTK->logv(AR_LOG_LEVEL_ERROR, "arwSetMarkerOptionInt(): Unrecognised option %d.", option);
             break;
@@ -784,6 +790,14 @@ EXPORT_API float arwGetMarkerOptionFloat(int markerUID, int option)
             return (NAN);
 #endif
             break;
+        case ARW_MARKER_OPTION_MULTI_MIN_CONF_MATRIX:
+            if (marker->type == ARMarker::MULTI) return (float)((ARMarkerMulti *)marker)->config->cfMatrixCutoff;
+            else return (NAN);
+            break;
+        case ARW_MARKER_OPTION_MULTI_MIN_CONF_PATTERN:
+            if (marker->type == ARMarker::MULTI) return (float)((ARMarkerMulti *)marker)->config->cfPattCutoff;
+            else return (NAN);
+            break;
         default:
             gARTK->logv(AR_LOG_LEVEL_ERROR, "arwGetMarkerOptionFloat(): Unrecognised option %d.", option);
             break;
@@ -815,6 +829,12 @@ EXPORT_API void arwSetMarkerOptionFloat(int markerUID, int option, float value)
 #if HAVE_NFT
             if (marker->type == ARMarker::NFT) ((ARMarkerNFT *)marker)->setNFTScale(value);
 #endif
+            break;
+        case ARW_MARKER_OPTION_MULTI_MIN_CONF_MATRIX:
+            if (marker->type == ARMarker::MULTI) ((ARMarkerMulti *)marker)->config->cfMatrixCutoff = value;
+            break;
+        case ARW_MARKER_OPTION_MULTI_MIN_CONF_PATTERN:
+            if (marker->type == ARMarker::MULTI) ((ARMarkerMulti *)marker)->config->cfPattCutoff = value;
             break;
         default:
             gARTK->logv(AR_LOG_LEVEL_ERROR, "arwSetMarkerOptionFloat(): Unrecognised option %d.", option);
