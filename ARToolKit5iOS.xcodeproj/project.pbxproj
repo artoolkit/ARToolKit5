@@ -3127,8 +3127,6 @@
 		4AF9705A1B5F5708001BFEB5 /* SVD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SVD; sourceTree = "<group>"; };
 		4AF9705C1B5F5708001BFEB5 /* visual_database_facade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = visual_database_facade.cpp; sourceTree = "<group>"; };
 		4AF9705D1B5F5708001BFEB5 /* visual_database_facade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visual_database_facade.h; sourceTree = "<group>"; };
-		4AF9705E1B5F5708001BFEB5 /* visual_database_opencvfacade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = visual_database_opencvfacade.cpp; sourceTree = "<group>"; };
-		4AF9705F1B5F5708001BFEB5 /* visual_database_opencvfacade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visual_database_opencvfacade.h; sourceTree = "<group>"; };
 		4AF970611B5F5708001BFEB5 /* date_time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = date_time.cpp; sourceTree = "<group>"; };
 		4AF970621B5F5708001BFEB5 /* date_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = date_time.h; sourceTree = "<group>"; };
 		4AF970631B5F5708001BFEB5 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
@@ -6073,8 +6071,6 @@
 			children = (
 				4AF9705C1B5F5708001BFEB5 /* visual_database_facade.cpp */,
 				4AF9705D1B5F5708001BFEB5 /* visual_database_facade.h */,
-				4AF9705E1B5F5708001BFEB5 /* visual_database_opencvfacade.cpp */,
-				4AF9705F1B5F5708001BFEB5 /* visual_database_opencvfacade.h */,
 			);
 			path = facade;
 			sourceTree = "<group>";
