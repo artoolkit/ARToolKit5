@@ -112,7 +112,7 @@ namespace vision {
         T one_over_scale2;
         T min_cost;
         int num_hypotheses, num_hypotheses_remaining, min_index;
-        int cur_chunk_size, next_chunk, this_chunk_end;
+        int cur_chunk_size, this_chunk_end;
         int trial;
         int seed;
         int sample_size = 4;
@@ -133,7 +133,6 @@ namespace vision {
         
         one_over_scale2 = 1/sqr(scale);
         chunk_size = min2(chunk_size, num_points);
-        next_chunk = 0;
         
         // Fill two arrays from [0,num_points)
         SequentialVector(hyp_perm, num_points, 0);
