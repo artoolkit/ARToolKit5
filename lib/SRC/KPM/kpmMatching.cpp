@@ -387,9 +387,9 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     int               xsize2, ysize2;
     int               procMode;
     ARUint8          *inImageBW;
-    FeatureVector     featureVector;
     int               i, j;
 #if !BINARY_FEATURE
+    FeatureVector     featureVector;
     int              *inlierIndex;
     CorspMap          preRANSAC;
     int               inlierNum;
@@ -419,7 +419,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
 #if BINARY_FEATURE
     //kpmHandle->freakMatcherOpencv->query(inImageBW, xsize ,ysize);
     kpmHandle->freakMatcher->query(inImageBW, xsize ,ysize);
-    kpmHandle->inDataSet.num = featureVector.num = (int)kpmHandle->freakMatcher->getQueryFeaturePoints().size();
+    kpmHandle->inDataSet.num = (int)kpmHandle->freakMatcher->getQueryFeaturePoints().size();
 #else
     surfSubExtractFeaturePoint( kpmHandle->surfHandle, inImageBW, kpmHandle->skipRegion.region, kpmHandle->skipRegion.regionNum );
     kpmHandle->skipRegion.regionNum = 0;
@@ -438,7 +438,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         arMalloc( kpmHandle->aftRANSAC.match, KpmMatchData,   kpmHandle->inDataSet.num );
 #endif
 #if BINARY_FEATURE
-        arMalloc( featureVector.sf,           FreakFeature,   kpmHandle->inDataSet.num );
 #else
         arMalloc( featureVector.sf,           SurfFeature,    kpmHandle->inDataSet.num );
         arMalloc( preRANSAC.mp,               MatchPoint,     kpmHandle->inDataSet.num );
@@ -457,9 +456,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
 
 #if BINARY_FEATURE
                 float  x = points[i].x, y = points[i].y;
-                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
-                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
-                }
 #else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
@@ -482,9 +478,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
 #if BINARY_FEATURE
                 float  x = points[i].x, y = points[i].y;
-                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
-                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
-                }
 #else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
@@ -507,9 +500,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
 #if BINARY_FEATURE
                 float  x = points[i].x, y = points[i].y;
-                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
-                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
-                }
 #else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
@@ -532,9 +522,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
 #if BINARY_FEATURE
                 float  x = points[i].x, y = points[i].y;
-                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
-                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
-                }
 #else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
@@ -557,9 +544,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {
 #if BINARY_FEATURE
                 float  x = points[i].x, y = points[i].y;
-                for( j = 0; j < FREAK_SUB_DIMENSION; j++ ) {
-                    featureVector.sf[i].v[j] = descriptors[i*FREAK_SUB_DIMENSION+j];
-                }
 #else
                 float  x, y, *desc;
                 surfSubGetFeaturePosition( kpmHandle->surfHandle, i, &x, &y );
@@ -671,8 +655,8 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
             }
         }
 #endif
-        free(featureVector.sf);
 #if !BINARY_FEATURE
+        free(featureVector.sf);
         free(preRANSAC.mp);
         free(inlierIndex);
 #endif
