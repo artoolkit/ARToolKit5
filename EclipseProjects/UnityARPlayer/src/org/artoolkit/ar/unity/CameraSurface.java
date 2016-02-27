@@ -145,6 +145,9 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
             Camera.Parameters parameters = camera.getParameters();
             parameters.setPreviewSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
             parameters.setPreviewFrameRate(30);
+            if (parameters.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            	parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
             camera.setParameters(parameters);        
             
             parameters = camera.getParameters();
