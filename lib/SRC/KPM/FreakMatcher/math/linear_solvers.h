@@ -254,8 +254,6 @@ namespace vision {
             return false;
         }
         
-        Swap9(Q+63, Q+63);
-        Swap9(A+63, A+63);
         ScaleVector9(Q+63, Q+63, 1.f/std::sqrt(ss));
         
         return true;
