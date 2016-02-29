@@ -46,11 +46,16 @@ xcuserdata/
 
 # Android Studio
 *.iml
-.gradle
-/local.properties
+/**/.gradle
+/**/local.properties
 /**/.idea
 /**/build
 /**/captures
+/**/jniLibs
+/**/libs
+/**/obj
+/**/build
+/**/.DS_Store
 
 #### Other VCS
 .svn/

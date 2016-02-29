@@ -157,16 +157,17 @@ public abstract class ShaderProgram {
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(shaderProgramHandle);
 
-		/* Replaces the functions
+        /* Replaces the functions
 
-				Apply the ARToolKit projection matrix
-				GLES10.glMatrixMode(GL10.GL_PROJECTION);
-				GLES10.glLoadMatrixf(ARToolKit.getInstance().getProjectionMatrix(), 0);
+                Apply the ARToolKit projection matrix
+                GLES10.glMatrixMode(GL10.GL_PROJECTION);
+                GLES10.glLoadMatrixf(ARToolKit.getInstance().getProjectionMatrix(), 0);
 
-				gl.glMatrixMode(GL10.GL_MODELVIEW);
-				gl.glLoadMatrixf(ARToolKit.getInstance().queryMarkerTransformation(markerID), 0);
+                gl.glMatrixMode(GL10.GL_MODELVIEW);
+                gl.glLoadMatrixf(ARToolKit.getInstance().queryMarkerTransformation(markerID), 0);
 
-		   from the Renderer implementation class in the render method*/
+           from the Renderer implementation class in the render method
+           */
 
         if (projectionMatrix != null)
             GLES20.glUniformMatrix4fv(this.getProjectionMatrixHandle(), 1, false, projectionMatrix, 0);

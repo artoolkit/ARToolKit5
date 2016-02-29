@@ -56,9 +56,11 @@ public class Cube {
     public Cube() {
         this(1.0f);
     }
+
     public Cube(float size) {
         this(size, 0.0f, 0.0f, 0.0f);
     }
+
     public Cube(float size, float x, float y, float z) {
         setArrays(size, x, y, z);
     }

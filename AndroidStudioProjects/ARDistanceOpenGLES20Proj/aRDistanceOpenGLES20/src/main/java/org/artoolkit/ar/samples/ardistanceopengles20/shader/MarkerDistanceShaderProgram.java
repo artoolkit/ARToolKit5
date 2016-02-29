@@ -61,9 +61,10 @@ import java.nio.FloatBuffer;
 /**
  * Created by Thorsten Bux on 25.01.2016.
  * <p/>
- * The shader program is responsible for compiling and configuring the fragment and vertex shader.
- * Also it makes the attributes from the shaders available to the java app.
- * <p/>
+ * The shader program links together the vertex shader and the fragment shader and compiles them.
+ * It also is responsible for binding the attributes. Attributes can be used to pass in values to the
+ * shader during runtime.
+ *
  * Finally it renders the given geometry.
  */
 public class MarkerDistanceShaderProgram extends BaseShaderProgram {

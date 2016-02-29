@@ -13,11 +13,11 @@
 #                  at time of writing, equals 5.0.
 # A blank line
 
-patt.hiro
+hiro.patt
 SINGLE
 80.0
 
-patt.kanji
+kanji.patt
 SINGLE
 80.0
 FILTER 15.0

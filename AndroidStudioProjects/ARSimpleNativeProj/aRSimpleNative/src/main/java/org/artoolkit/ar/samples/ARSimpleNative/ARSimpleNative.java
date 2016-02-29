@@ -49,15 +49,15 @@
 
 package org.artoolkit.ar.samples.ARSimpleNative;
 
-import org.artoolkit.ar.base.ARActivity;
-import org.artoolkit.ar.base.rendering.ARRenderer;
-import org.artoolkit.ar.samples.ARSimpleNative.R;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
+import org.artoolkit.ar.base.ARActivity;
+import org.artoolkit.ar.base.rendering.ARRenderer;
+
 public class ARSimpleNative extends ARActivity {
 
-	private SimpleNativeRenderer simpleNativeRenderer = new SimpleNativeRenderer();
+    private SimpleNativeRenderer simpleNativeRenderer = new SimpleNativeRenderer();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,19 +67,19 @@ public class ARSimpleNative extends ARActivity {
     }
 
     public void onStop() {
-    	SimpleNativeRenderer.demoShutdown();
+        SimpleNativeRenderer.demoShutdown();
 
-    	super.onStop();
+        super.onStop();
     }
 
     @Override
     protected ARRenderer supplyRenderer() {
-    	return simpleNativeRenderer;
+        return simpleNativeRenderer;
     }
 
     @Override
     protected FrameLayout supplyFrameLayout() {
-    	return (FrameLayout)this.findViewById(R.id.mainLayout);
+        return (FrameLayout) this.findViewById(R.id.mainLayout);
 
     }
 }

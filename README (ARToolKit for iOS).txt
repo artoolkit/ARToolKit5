@@ -1,4 +1,4 @@
-Read me for ARToolKit for iOS.
+IRead me for ARToolKit for iOS.
 ==============================
 
 

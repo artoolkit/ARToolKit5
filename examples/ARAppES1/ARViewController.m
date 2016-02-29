@@ -365,7 +365,7 @@ static void startCallback(void *userData)
     
     // Load marker(s).
     // Loading only 1 pattern in this example.
-     char *patt_name  = "Data2/patt.hiro";
+     char *patt_name  = "Data2/hiro.patt";
     if ((gPatt_id = arPattLoad(gARPattHandle, patt_name)) < 0) {
         NSLog(@"Error loading pattern file %s.\n", patt_name);
         [self stop];

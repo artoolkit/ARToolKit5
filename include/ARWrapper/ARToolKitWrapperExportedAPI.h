@@ -378,7 +378,7 @@ extern "C" {
     /**
 	 * Adds a marker as specified in the given configuration string. The format of the string can be 
 	 * one of:
-     * - Single marker:		"single;pattern_file;pattern_width", e.g. "single;data/patt.hiro;80"
+     * - Single marker:		"single;pattern_file;pattern_width", e.g. "single;data/hiro.patt;80"
      * - Multi marker:		"multi;config_file", e.g. "multi;data/multi/marker.dat"
      * - NFT marker:        "nft;nft_dataset_pathname", e.g. "nft;gibraltar"
 	 * @param cfg		The configuration string

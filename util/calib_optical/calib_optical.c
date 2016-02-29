@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     char   *cpara = NULL;
     int     i;
     int     gotTwoPartOption;
-	char    patt_name[]  = "Data/patt.calib";
+	char    patt_name[]  = "Data/calib.patt";
 	
     //
 	// Process command-line options.

@@ -68,7 +68,7 @@
 
 #define             CPARA_NAME       "Data/camera_para.dat"
 #define             VPARA_NAME       "Data/cameraSetting-%08x%08x.dat"
-#define             PATT_NAME        "Data/patt.hiro"
+#define             PATT_NAME        "Data/hiro.patt"
 
 ARHandle           *arHandle;
 AR3DHandle         *ar3DHandle;
