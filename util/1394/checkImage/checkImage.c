@@ -53,7 +53,7 @@
 #include <AR/video.h>
 
 #define             CPARA_NAME       "Data/camera_para.dat"
-#define             PATT_NAME        "Data/patt.hiro"
+#define             PATT_NAME        "Data/hiro.patt"
 
 ARParam             cparam;
 ARHandle           *arHandle;

@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  *  MainPage.xaml.cs
  *  ARToolKit5
  *
@@ -172,7 +172,7 @@ namespace uiControlsWinRT
         private async Task SetupMarker()
         {
             // Load marker           
-            var markerData = await PathIO.ReadTextAsync("ms-appx:///data/patt.hiro"); // single_buffer;80;buffer=234 221 237...
+            var markerData = await PathIO.ReadTextAsync("ms-appx:///data/hiro.patt”); // single_buffer;80;buffer=234 221 237...
             var cfg = string.Format("single_buffer;{0};buffer={1}", 80, markerData);
             _markerId = _arWrapper.arwAddMarker(cfg);
             if (_markerId < 0)

@@ -236,7 +236,7 @@ std::vector<ARMarker *> ARMarker::newFromConfigDataFile(const char *markersConfi
 }
 
 
-// single;data/patt.hiro;80
+// single;data/hiro.patt;80
 // single_buffer;80;buffer=234 221 237...
 // single_barcode;0;80
 // multi;data/multi/marker.dat

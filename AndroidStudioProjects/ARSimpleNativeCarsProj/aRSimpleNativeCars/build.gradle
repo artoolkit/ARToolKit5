@@ -2,20 +2,23 @@ apply plugin: 'com.android.model.application'
 
 model {
     android {
-        compileSdkVersion = 22
+        compileSdkVersion = 23
         buildToolsVersion = "23.0.2"
 
         defaultConfig.with {
             applicationId = "org.artoolkit.ar.samples.ARSimpleNativeCars"
             minSdkVersion.apiLevel = 15
             targetSdkVersion.apiLevel = 22
-            versionCode = 1     //Integer type incremented by 1 for every release, major or minor, to Google store
-            versionName = "1.0" //Real fully qualified major and minor release description
+            versionCode = 1
+            //Integer type incremented by 1 for every release, major or minor, to Google store
+            versionName = "1.0.2" //Real fully qualified major and minor release description
 
-            buildConfigFields.with { //Defines fields in the generated Java BuildConfig class, in this case, for
+            buildConfigFields.with {
+                //Defines fields in the generated Java BuildConfig class, in this case, for
                 create() {           //default config, that can be accessed by Java code
                     type = "int"     //e.g. "if (1 == BuildConfig.VALUE) { /*do something*/}".
-                    name = "VALUE"   //See: [app or lib]/build/generated/source/buildConfig/[package path]/
+                    name = "VALUE"
+                    //See: [app or lib]/build/generated/source/buildConfig/[package path]/
                     value = "1"      //     BuildConfig.java
                 }
             }
@@ -50,8 +53,8 @@ model {
     }
 
     android.compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 

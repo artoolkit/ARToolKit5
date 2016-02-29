@@ -43,9 +43,9 @@ bin/genMarkerSet
 
 bin/Data/calibStereoMarkerConfig.dat
 bin/Data/camera_para.dat
-bin/Data/patt.calib
-bin/Data/patt.hiro
-bin/Data/patt.kanji
+bin/Data/calib.patt
+bin/Data/hiro.patt
+bin/Data/kanji.patt
 
 bin/libopencv_calib3d.2.4.6.dylib
 bin/libopencv_core.2.4.6.dylib
@@ -131,8 +131,8 @@ bin/Data/multi-barcode-8x6.dat
 bin/Data/objects.dat
 bin/Data/markers.dat
 bin/Data/object_data_vrml
-bin/Data/patt.sample1
-bin/Data/patt.sample2
+bin/Data/sample1.patt
+bin/Data/sample2.patt
 bin/Data/sample.mov
 bin/Data2/
 bin/DataNFT/

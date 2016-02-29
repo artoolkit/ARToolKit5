@@ -49,74 +49,74 @@
 
 package org.artoolkit.ar.samples.ARSimpleInteraction;
 
-import org.artoolkit.ar.base.ARActivity;
-import org.artoolkit.ar.base.rendering.ARRenderer;
-import org.artoolkit.ar.samples.ARSimpleInteraction.R;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.os.Vibrator;
+
+import org.artoolkit.ar.base.ARActivity;
+import org.artoolkit.ar.base.rendering.ARRenderer;
 
 /**
  * Another simple example that includes a small amount of user interaction.
  */
 public class ARSimpleInteraction extends ARActivity {
 
-	/**
-	 * A custom renderer is used to produce a new visual experience.
-	 */
-	private SimpleInteractiveRenderer simpleRenderer = new SimpleInteractiveRenderer();
-	
-	/**
-	 * The FrameLayout where the AR view is displayed.
-	 */
-	private FrameLayout mainLayout;
-	
+    /**
+     * A custom renderer is used to produce a new visual experience.
+     */
+    private SimpleInteractiveRenderer simpleRenderer = new SimpleInteractiveRenderer();
+
+    /**
+     * The FrameLayout where the AR view is displayed.
+     */
+    private FrameLayout mainLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      
-        setContentView(R.layout.main);              
- 
-		mainLayout = (FrameLayout)this.findViewById(R.id.mainLayout);
-        
+
+        setContentView(R.layout.main);
+
+        mainLayout = (FrameLayout) this.findViewById(R.id.mainLayout);
+
         // When the screen is tapped, inform the renderer and vibrate the phone
         mainLayout.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		
-        		simpleRenderer.click();
-        		
-        		Vibrator vib = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-        		vib.vibrate(100);
-        		
-        	}
-        	
+            public void onClick(View v) {
+
+                simpleRenderer.click();
+
+                Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                vib.vibrate(100);
+
+            }
+
         });
-        
-        
+
+
     }
-    
+
     /**
      * By overriding {@link supplyRenderer}, the custom renderer will be used rather than
      * the default renderer which does nothing.
+     *
      * @return The custom renderer to use.
      */
     @Override
     protected ARRenderer supplyRenderer() {
-    	return simpleRenderer;
+        return simpleRenderer;
     }
-    
+
     /**
-     * By overriding {@link supplyFrameLayout}, the layout within this Activity's UI will be 
+     * By overriding {@link supplyFrameLayout}, the layout within this Activity's UI will be
      * used.
      */
     @Override
     protected FrameLayout supplyFrameLayout() {
-    	return mainLayout;
-    	
+        return mainLayout;
+
     }
-    
 
 
 }

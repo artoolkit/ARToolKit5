@@ -266,8 +266,13 @@ public class ARToolKit {
     /**
      * Adds a new single marker to the set of currently active markers.
      *
-     * @param patt  The path to the pattern file to load.
-     * @param width The physical width of the marker being tracked, in millimeters.
+     * @param cfg The config string for the used marker. Possible configurations look like this:
+     *            `single;data/hiro.patt;80`
+     *            `single_buffer;80;buffer=234 221 237...`
+     *            `single_barcode;0;80`
+     *            `multi;data/multi/marker.dat`
+     *            `nft;data/nft/pinball`
+     *            (see the Wrapper project for more details: lib/SRC/ARWrapper/ARMarker.cpp/ARMarker::newWithConfig)
      * @return The unique identifier (UID) of the new marker, or -1 on error.
      */
     public int addMarker(String cfg) {

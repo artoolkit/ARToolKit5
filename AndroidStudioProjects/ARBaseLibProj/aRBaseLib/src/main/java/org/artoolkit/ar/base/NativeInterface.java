@@ -124,7 +124,7 @@ public class NativeInterface {
      * Normally, this would be called immediately after arwInitialiseAR()
      *
      * @return true if successful, false if an error occurred
-     * @see                arwInitialiseAR()
+     * @see arwInitialiseAR()
      */
     public static native boolean arwChangeToResourcesDir(String resourcesDirectoryPath);
 
@@ -202,12 +202,12 @@ public class NativeInterface {
      * String[] pixelFormatString = new String[1];
      * boolean ok = NativeInterface.arwGetVideoParams(width, height, pixelSize, pixelFormatString);
      *
+     * @return True if the values were returned OK, false if there is currently no video source or an error int[] .
      * @width An int array, the first element of which will be filled with the width (in pixels) of the video frame, or null if this information is not required.
      * @height An int array, the first element of which will be filled with the height (in pixels) of the video frame, or null if this information is not required.
      * @pixelSize An int array, the first element of which will be filled with the numbers of bytes per pixel of the source frame, or null if this information is not required.
      * @pixelFormatString A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
-     * @return True if the values were returned OK, false if there is currently no video source or an error int[] .
-     * @see                arwGetVideoParamsStereo
+     * @see arwGetVideoParamsStereo
      */
     public static native boolean arwGetVideoParams(int[] width, int[] height, int[] pixelSize, String[] pixelFormatStringBuffer);
 
@@ -225,6 +225,7 @@ public class NativeInterface {
      * String[] pixelFormatStringR = new String[1];
      * boolean ok = NativeInterface.arwGetVideoParams(widthL, heightL, pixelSizeL, pixelFormatStringL, widthR, heightR, pixelSizeR, pixelFormatStringR);
      *
+     * @return True if the values were returned OK, false if there is currently no stereo video source or an error occurred.
      * @widthL An int array, the first element of which will be filled with the width (in pixels) of the video frame, or null if this information is not required.
      * @widthR An int array, the first element of which will be filled with the width (in pixels) of the video frame, or null if this information is not required.
      * @heightL An int array, the first element of which will be filled with the height (in pixels) of the video frame, or null if this information is not required.
@@ -233,8 +234,7 @@ public class NativeInterface {
      * @pixelSizeR An int array, the first element of which will be filled with the numbers of bytes per pixel of the source frame, or null if this information is not required.
      * @pixelFormatStringL A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
      * @pixelFormatStringR A String array, the first element of which will be filled with the symbolic name of the pixel format of the video frame, or null if this information is not required. The name will be of the form "AR_PIXEL_FORMAT_xxx".
-     * @return True if the values were returned OK, false if there is currently no stereo video source or an error occurred.
-     * @see                arwGetVideoParams
+     * @see arwGetVideoParams
      */
     public static native boolean arwGetVideoParamsStereo(int[] widthL, int[] heightL, int[] pixelSizeL, String[] pixelFormatStringL, int[] widthR, int[] heightR, int[] pixelSizeR, String[] pixelFormatString);
 

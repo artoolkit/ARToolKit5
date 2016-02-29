@@ -49,25 +49,29 @@
 
 package org.artoolkit.utils.AssetUnpacker;
 
-import java.util.List;
-//import java.util.Set;
-
 import android.app.Activity;
 import android.os.Bundle;
-//import android.os.Environment;
 import android.widget.TextView;
-import org.artoolkit.ar.base.assets.*;
-import org.artoolkit.utils.AssetUnpacker.R;
+
+import org.artoolkit.ar.base.assets.AssetFileTransfer;
+import org.artoolkit.ar.base.assets.AssetHelper;
+
+import java.util.List;
+
+//import java.util.Set;
+//import android.os.Environment;
 
 public class AssetUnpackerActivity extends Activity {
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-    	super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-        TextView tv = (TextView)this.findViewById(R.id.infoText);
+        TextView tv = (TextView) this.findViewById(R.id.infoText);
 
         AssetHelper assetHelper = new AssetHelper(getAssets());
         List<AssetFileTransfer> transfers = assetHelper.copyAssetFolder("Data", this.getCacheDir().getAbsolutePath());
@@ -77,25 +81,25 @@ public class AssetUnpackerActivity extends Activity {
 
         for (AssetFileTransfer aft : transfers) {
 
-        	sb.append("Asset Path: " + aft.assetFile.getPath() + "\n");
-        	sb.append("Asset available: " + aft.assetAvailable + " \n");
+            sb.append("Asset Path: " + aft.assetFile.getPath() + "\n");
+            sb.append("Asset available: " + aft.assetAvailable + " \n");
 
-        	if (!aft.assetAvailable) continue;
+            if (!aft.assetAvailable) continue;
 
-        	sb.append("SD Path: " + aft.targetFile.getPath() + "\n");
-        	sb.append("File already exists: " + aft.targetFileAlreadyExists + "\n");
+            sb.append("SD Path: " + aft.targetFile.getPath() + "\n");
+            sb.append("File already exists: " + aft.targetFileAlreadyExists + "\n");
 
-        	if (aft.targetFileAlreadyExists) {
-        		//sb.append("Existing file hash: " + aft.targetFileHash + "\n");
-        		//sb.append("New file hash: " + aft.tempFileHash + "\n");
-        		sb.append("Existing file CRC: " + aft.targetFileCRC + "\n");
-        		sb.append("New file CRC: " + aft.tempFileCRC + "\n");
-        		sb.append("Files match: " + aft.filesMatch + "\n");
-        	}
+            if (aft.targetFileAlreadyExists) {
+                //sb.append("Existing file hash: " + aft.targetFileHash + "\n");
+                //sb.append("New file hash: " + aft.tempFileHash + "\n");
+                sb.append("Existing file CRC: " + aft.targetFileCRC + "\n");
+                sb.append("New file CRC: " + aft.tempFileCRC + "\n");
+                sb.append("Files match: " + aft.filesMatch + "\n");
+            }
 
-        	sb.append("Asset copied: " + aft.assetCopied + "\n");
+            sb.append("Asset copied: " + aft.assetCopied + "\n");
 
-        	sb.append("\n");
+            sb.append("\n");
 
         }
 

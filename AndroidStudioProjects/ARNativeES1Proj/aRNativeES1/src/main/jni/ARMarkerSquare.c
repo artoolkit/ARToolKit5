@@ -57,7 +57,7 @@ const ARPose ARPoseUnity = {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0
 static char *get_buff(char *buf, int n, FILE *fp, int skipblanks)
 {
     char *ret;
-	size_t l;
+    size_t l;
     
     do {
         ret = fgets(buf, n, fp);
