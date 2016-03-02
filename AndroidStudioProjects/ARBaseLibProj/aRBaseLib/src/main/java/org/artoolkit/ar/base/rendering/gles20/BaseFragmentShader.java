@@ -39,13 +39,15 @@ package org.artoolkit.ar.base.rendering.gles20;
 import android.opengl.GLES20;
 
 /**
- * Created by Thorsten Bux on 21.01.2016.
+ * Here you define your fragment shader and what it does with the given color.
+ * <p/>
+ * This class also provides the implementation of the {@link #configureShader()} method. So all you need to do is
+ * call this one from your fragment shader implementation.
  */
 public class BaseFragmentShader implements OpenGLShader {
     String fragmentShader =
             "precision lowp float;       \n"     // Set the default precision to medium. We don't need as high of a
                     // precision in the fragment shader.
-                    // triangle per fragment.
                     + "void main()                    \n"     // The entry point for our fragment shader.
                     + "{                              \n"
                     + "}                              \n";

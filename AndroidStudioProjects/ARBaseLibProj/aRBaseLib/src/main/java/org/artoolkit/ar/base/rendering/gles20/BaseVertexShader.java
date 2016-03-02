@@ -40,6 +40,12 @@ import android.opengl.GLES20;
 
 /**
  * Created by Thorsten Bux on 21.01.2016.
+ * Here you define your vertex shader and what it does with the geometry position.
+ * This vertex shader class calculates the MVP matrix and applies it to the passed
+ * in geometry position vectors.
+ * <p/>
+ * This class also provides the implementation of the {@link #configureShader()} method. So all you need to do is
+ * call this one from your fragment shader implementation.
  */
 public class BaseVertexShader implements OpenGLShader {
 
@@ -53,9 +59,9 @@ public class BaseVertexShader implements OpenGLShader {
 
                     + "void main()                    \n"     // The entry point for our vertex shader.
                     + "{                              \n"
-                    + "	  vec4 p = " + OpenGLShader.modelViewMatrixString + " * " + OpenGLShader.positionVectorString + "; \n "     // transform vertex position with modelview matrix
+                    + "   vec4 p = " + OpenGLShader.modelViewMatrixString + " * " + OpenGLShader.positionVectorString + "; \n "     // transform vertex position with modelview matrix
                     + "   gl_Position = " + OpenGLShader.projectionMatrixString + " \n"     // gl_Position is a special variable used to store the final position.
-                    + "               * p;   			\n"     // Multiply the vertex by the matrix to get the final point in
+                    + "               * p;   \n"     // Multiply the vertex by the matrix to get the final point in
                     + "}                              \n";    // normalized screen coordinates.
 
     @Override

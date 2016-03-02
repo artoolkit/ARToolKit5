@@ -46,7 +46,7 @@ public class LineGLES20 extends Line implements ARDrawableOpenGLES20 {
     private ShaderProgram shaderProgram;
 
     /**
-     * @param width Width of the vector
+     * @param width Width of the line
      */
     public LineGLES20(float width) {
         shaderProgram = null;
@@ -59,6 +59,12 @@ public class LineGLES20 extends Line implements ARDrawableOpenGLES20 {
     }
 
     @Override
+    /**
+     * Used to render objects when working with OpenGL ES 2.x
+     *
+     * @param projectionMatrix The projection matrix obtained from the ARToolkit
+     * @param modelViewMatrix  The marker transformation matrix obtained from ARToolkit
+     */
     public void draw(float[] projectionMatrix, float[] modelViewMatrix) {
 
         shaderProgram.setProjectionMatrix(projectionMatrix);
@@ -70,6 +76,9 @@ public class LineGLES20 extends Line implements ARDrawableOpenGLES20 {
     }
 
     @Override
+    /**
+     * Sets the shader program used by this geometry.
+     */
     public void setShaderProgram(ShaderProgram program) {
         this.shaderProgram = program;
     }

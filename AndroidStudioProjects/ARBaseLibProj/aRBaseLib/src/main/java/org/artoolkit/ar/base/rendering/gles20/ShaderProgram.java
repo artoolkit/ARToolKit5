@@ -45,6 +45,21 @@ import java.nio.FloatBuffer;
 
 /**
  * Created by Thorsten Bux on 21.01.2016.
+ * <p/>
+ * The shader program links together the vertex shader and the fragment shader and compiles them.
+ * It also is responsible for binding the attributes. Attributes can be used to pass in values to the
+ * shader during runtime.
+ * <p/>
+ * It is important to call {@link #setupShaderUsage()} as first method inside your
+ * implementation of the {@link #render(float[])} render()} method.
+ * <p/>
+ * This abstract class provides the basic implementation for binding shaders see {@link #createProgram(int, int)}
+ * you can just call this method and do not need to worry about binding shaders.
+ * <p/>
+ * This class also provides stubs of methodes you might want to override when you create your own Shader Program.
+ * You can see an example Shader Program in {@link BaseShaderProgram}
+ * <p/>
+ * Finally it renders the given geometry.
  */
 public abstract class ShaderProgram {
 
@@ -151,7 +166,8 @@ public abstract class ShaderProgram {
 
     /**
      * Sets some basic settings for shader usage.
-     * Needs to be called as first method from your implementation inside the {@link #render(FloatBuffer, FloatBuffer, ByteBuffer) renderer()} method.
+     * Needs to be called as first method from your implementation inside the
+     * {@link #render(FloatBuffer, FloatBuffer, ByteBuffer) renderer()} method.
      */
     protected void setupShaderUsage() {
         // Tell OpenGL to use this program when rendering.
