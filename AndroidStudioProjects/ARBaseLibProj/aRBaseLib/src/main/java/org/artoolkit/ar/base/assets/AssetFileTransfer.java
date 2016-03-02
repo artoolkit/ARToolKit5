@@ -101,7 +101,7 @@ public class AssetFileTransfer {
         targetFile = new File(targetDirPath, assetFilePath);
         targetFileAlreadyExists = targetFile.exists();
 
-        Log.i(TAG, "[" + assetFilePath + "] -> [" + targetFile.getPath() + "]");
+        Log.i(TAG, "copyAssetToTargetDir(): [" + assetFilePath + "] -> [" + targetFile.getPath() + "]");
 
         if (targetFileAlreadyExists) {
 
@@ -163,7 +163,7 @@ public class AssetFileTransfer {
 
         } else {
 
-            Log.i(TAG, "Target file does not exist. Creating directory structure.");
+            Log.i(TAG, "copyAssetToTargetDir(): Target file does not exist. Creating directory structure.");
 
             // Ensure parent directories exist so we can create the file
             targetDirectory = targetFile.getParentFile();
@@ -186,13 +186,7 @@ public class AssetFileTransfer {
             } catch (IOException ioe) {
                 throw new AssetFileTransferException("Error copying asset to target file: " + targetFile.getPath(), ioe);
             }
-
             assetCopied = true;
-
         }
-
-
     }
-
-
 }

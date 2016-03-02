@@ -90,13 +90,13 @@ public class NativeInterface {
 
         try {
 
-            Log.i(TAG, "Attempting to load library: " + LIBRARY_NAME);
+            Log.i(TAG, "loadNativeLibrary(): Attempting to load library: " + LIBRARY_NAME);
 
             System.loadLibrary("c++_shared");
             System.loadLibrary(LIBRARY_NAME);
 
         } catch (Exception e) {
-            Log.e(TAG, "Exception loading native library: " + e.toString());
+            Log.e(TAG, "loadNativeLibrary(): Exception loading native library: " + e.toString());
             return false;
         }
 

@@ -129,28 +129,28 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
     public void surfaceCreated(SurfaceHolder holder) {
 
         int cameraIndex = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraIndex", "0"));
-        Log.i(TAG, "Opening camera " + (cameraIndex + 1));
+        Log.i(TAG, "surfaceCreated(): Opening camera " + (cameraIndex + 1));
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
                 camera = Camera.open(cameraIndex);
             else camera = Camera.open();
 
         } catch (RuntimeException exception) {
-            Log.e(TAG, "Cannot open camera. It may be in use by another process.");
+            Log.e(TAG, "surfaceCreated(): Cannot open camera. It may be in use by another process.");
             return;
         }
 
-        Log.i(TAG, "Camera open");
+        Log.i(TAG, "surfaceCreated(): Camera open");
 
         try {
 
             camera.setPreviewDisplay(holder);
 
         } catch (IOException exception) {
-            Log.e(TAG, "IOException setting display holder");
+            Log.e(TAG, "surfaceCreated(): IOException setting display holder");
             camera.release();
             camera = null;
-            Log.i(TAG, "Released camera");
+            Log.i(TAG, "surfaceCreated(): Released camera");
             return;
         }
 
@@ -182,11 +182,11 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
         if (camera == null) {
             // Camera wasn't opened successfully?
-            Log.e(TAG, "No camera in surfaceChanged");
+            Log.e(TAG, "surfaceChanged(): No camera in surfaceChanged");
             return;
         }
 
-        Log.i(TAG, "Surfaced changed, setting up camera and starting preview");
+        Log.i(TAG, "surfaceChanged(): Surfaced changed, setting up camera and starting preview");
 
         String camResolution = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraResolution", getResources().getString(R.string.pref_defaultValue_cameraResolution));
         String[] dims = camResolution.split("x", 2);
@@ -213,7 +213,7 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
         }
 
         int bufSize = captureWidth * captureHeight * pixelinfo.bitsPerPixel / 8; // For the default NV21 format, bitsPerPixel = 12.
-        Log.i(TAG, "Camera buffers will be " + captureWidth + "x" + captureHeight + "@" + pixelinfo.bitsPerPixel + "bpp, " + bufSize + "bytes.");
+        Log.i(TAG, "surfaceChanged(): Camera buffers will be " + captureWidth + "x" + captureHeight + "@" + pixelinfo.bitsPerPixel + "bpp, " + bufSize + "bytes.");
         cameraWrapper = new CameraWrapper(camera);
         cameraWrapper.configureCallback(this, true, 10, bufSize); // For the default NV21 format, bitsPerPixel = 12.
 
@@ -233,7 +233,7 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
 
         if (fpsCounter.frame()) {
-            Log.i(TAG, "Camera capture FPS: " + fpsCounter.getFPS());
+            Log.i(TAG, "onPreviewFrame(): Camera capture FPS: " + fpsCounter.getFPS());
         }
 
 
