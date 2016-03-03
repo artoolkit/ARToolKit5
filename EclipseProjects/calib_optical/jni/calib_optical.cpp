@@ -112,7 +112,7 @@ static struct timeval gStartTime;
 
 // Preferences.
 static const char *cparaName = "Data/camera_para.dat";				///< Camera parameters file
-static const char patt_name[]  = "Data/patt.calib";
+static const char patt_name[]  = "Data/calib.patt";
 
 // Image acquisition.
 static AR2VideoParamT *gVid = NULL;

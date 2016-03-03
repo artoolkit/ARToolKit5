@@ -67,7 +67,7 @@ extern "C" {
 static int markerID = -1;
 
 JNIEXPORT void JNICALL JNIFUNCTION_DEMO(demoInitialise(JNIEnv* env, jobject object)) {
-	markerID = arwAddMarker("single;Data/patt.hiro;80");
+	markerID = arwAddMarker("single;Data/hiro.patt;80");
 }
 
 JNIEXPORT void JNICALL JNIFUNCTION_DEMO(demoShutdown(JNIEnv* env, jobject object)) {

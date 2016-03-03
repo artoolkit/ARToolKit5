@@ -111,8 +111,8 @@
     <Content Include="..\..\ARApp\Data2\camera_para.dat">
       <Link>data\camera_para.dat</Link>
     </Content>
-    <Content Include="..\..\ARApp\Data2\patt.hiro">
-      <Link>data\patt.hiro</Link>
+    <Content Include="..\..\ARApp\Data2\hiro.patt">
+      <Link>data\hiro.patt</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>

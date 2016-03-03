@@ -29,6 +29,12 @@ local.properties
 EclipseProjects/**/.settings/
 .metadata/
 
+# Android Studio
+#local.properties
+*.iml
+AndroidStudioProjects/**/.gradle/
+AndroidStudioProjects/**/.idea/
+
 # MonoDevelop/Xamarin Studio
 *.userprefs
 # Visual Studio
@@ -43,19 +49,6 @@ xcuserdata/
 *.pbxuser
 *.xccheckout
 *.xcscmblueprint
-
-# Android Studio
-*.iml
-/**/.gradle
-/**/local.properties
-/**/.idea
-/**/build
-/**/captures
-/**/jniLibs
-/**/libs
-/**/obj
-/**/build
-/**/.DS_Store
 
 #### Other VCS
 .svn/
@@ -106,7 +99,7 @@ bin/simpleVRML
 bin/stereo
 bin/nftSimple
 bin/nftBook
-lib/ARWrapper.so
+lib/libARWrapper.so
 
 bin/multiCube.app/
 bin/multiTest.app/
@@ -198,6 +191,12 @@ EclipseProjects/**/libs/x86/
 EclipseProjects/**/libs/arm64-v8a/
 EclipseProjects/**/libs/x86_64/
 EclipseProjects/**/libs/mips64/
+AndroidStudioProjects/**/build
+AndroidStudioProjects/**/captures
+AndroidStudioProjects/**/jniLibs
+AndroidStudioProjects/**/libs
+AndroidStudioProjects/**/obj
+AndroidStudioProjects/**/build
 
 # Visual Studio build files.
 VisualStudio/vs100/Debug/

@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL JNIFUNCTION_DEMO(demoInitialise(JNIEnv* env, jobject obje
 	const char *model0file = "Data/models/Porsche_911_GT3.obj";
 	const char *model1file = "Data/models/Ferrari_Modena_Spider.obj";
 
-	models[0].patternID = arwAddMarker("single;Data/patt.hiro;80");
+	models[0].patternID = arwAddMarker("single;Data/hiro.patt;80");
 	arwSetMarkerOptionBool(models[0].patternID, ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION, false);
 	arwSetMarkerOptionBool(models[0].patternID, ARW_MARKER_OPTION_FILTERED, true);
 
@@ -97,7 +97,7 @@ JNIEXPORT void JNICALL JNIFUNCTION_DEMO(demoInitialise(JNIEnv* env, jobject obje
 	glmCreateArrays(models[0].obj, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE);
 	models[0].visible = false;
 	
-	models[1].patternID = arwAddMarker("single;Data/patt.kanji;80");
+	models[1].patternID = arwAddMarker("single;Data/kanji.patt;80");
 	arwSetMarkerOptionBool(models[1].patternID, ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION, false);
 	arwSetMarkerOptionBool(models[1].patternID, ARW_MARKER_OPTION_FILTERED, true);
 

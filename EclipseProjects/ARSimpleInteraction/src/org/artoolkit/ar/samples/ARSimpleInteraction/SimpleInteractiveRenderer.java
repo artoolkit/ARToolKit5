@@ -74,7 +74,7 @@ public class SimpleInteractiveRenderer extends ARRenderer {
     @Override
     public boolean configureARScene() {
 
-		markerID = ARToolKit.getInstance().addMarker("single;Data/patt.hiro;80");    	    	
+		markerID = ARToolKit.getInstance().addMarker("single;Data/hiro.patt;80");    	    	
 		if (markerID < 0) return false;
 		
 		return true;
