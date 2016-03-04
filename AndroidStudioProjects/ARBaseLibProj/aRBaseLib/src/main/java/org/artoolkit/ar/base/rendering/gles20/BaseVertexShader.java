@@ -50,19 +50,19 @@ import android.opengl.GLES20;
 public class BaseVertexShader implements OpenGLShader {
 
     private String vertexShaderSource =
-            "uniform mat4 u_MVPMatrix;        \n"     // A constant representing the combined model/view/projection matrix.
+            "uniform mat4 u_MVPMatrix; \n"     // A constant representing the combined model/view/projection matrix.
 
                     + "uniform mat4 " + OpenGLShader.projectionMatrixString + "; \n"        // projection matrix
                     + "uniform mat4 " + OpenGLShader.modelViewMatrixString + "; \n"        // modelView matrix
 
                     + "attribute vec4 " + OpenGLShader.positionVectorString + "; \n"     // Per-vertex position information we will pass in.
 
-                    + "void main()                    \n"     // The entry point for our vertex shader.
-                    + "{                              \n"
+                    + "void main() \n"     // The entry point for our vertex shader.
+                    + "{ \n"
                     + "   vec4 p = " + OpenGLShader.modelViewMatrixString + " * " + OpenGLShader.positionVectorString + "; \n "     // transform vertex position with modelview matrix
                     + "   gl_Position = " + OpenGLShader.projectionMatrixString + " \n"     // gl_Position is a special variable used to store the final position.
-                    + "               * p;   \n"     // Multiply the vertex by the matrix to get the final point in
-                    + "}                              \n";    // normalized screen coordinates.
+                    + "                     * p; \n"     // Multiply the vertex by the matrix to get the final point in
+                    + "} \n";    // normalized screen coordinates.
 
     @Override
     public int configureShader() {

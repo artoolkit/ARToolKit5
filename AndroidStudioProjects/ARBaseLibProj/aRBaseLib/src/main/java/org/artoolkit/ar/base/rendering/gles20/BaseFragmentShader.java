@@ -46,11 +46,11 @@ import android.opengl.GLES20;
  */
 public class BaseFragmentShader implements OpenGLShader {
     String fragmentShader =
-            "precision lowp float;       \n"     // Set the default precision to medium. We don't need as high of a
+            "precision lowp float; \n"     // Set the default precision to medium. We don't need as high of a
                     // precision in the fragment shader.
-                    + "void main()                    \n"     // The entry point for our fragment shader.
-                    + "{                              \n"
-                    + "}                              \n";
+                    + "void main() \n"     // The entry point for our fragment shader.
+                    + "{ \n"
+                    + "} \n";
 
     public int configureShader() {
 
