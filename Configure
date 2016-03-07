@@ -1,4 +1,5 @@
 #!/bin/sh
+# tputcolors
 
 #
 #  Configure
@@ -112,15 +113,15 @@ MACHINE=`uname -m`
 if [ "$E" = "Linux" ]
 then
     SYSTEM="linux-$MACHINE"
-    echo "Do you want to use the Clang compiler? (This uses the openCV libraries provided by ARToolKit, but you need to have clang and libc++-dev installed. Otherwise g++ is used for compilation and you need to install openCV on your own, with sudo apt-get install libopencv-dev for example.) (y or n)"
+    echo "Do you want to use the GNU compiler? \n$(tput setaf 7)- We recomment to use GNU but make sure that you have openCV installed on your system (apt-get install libopencv-dev). \n- If you select no, we use clang to compile. For clang, OpenCV is provided by ARToolKit but you need to have libc++-dev installed and you need to have OpenSceneGraph libraries installed which are compiled with clang in order to make the examples compile. $(tput sgr0)"
     echo -n "Enter : "
     read ANS
     if [ "$ANS" = "y" ]
     then
-        CLANGCC="y"
+        CLANGCC="n"
     elif [ "$ANS" = "n" ]
     then
-        CLANGCC="n"
+        CLANGCC="y"
     else
         echo "Please enter y or n."
         exit 0
