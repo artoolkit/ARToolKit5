@@ -285,7 +285,7 @@ public class CameraPreferencesActivity extends PreferenceActivity implements
             }
 
         } catch (RuntimeException e) {
-            Log.e(TAG, "Camera failed to open: " + e.getLocalizedMessage());
+            Log.e(TAG, "buildResolutionListForCameraIndex(): Camera failed to open: " + e.getLocalizedMessage());
         }
     }
 

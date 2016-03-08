@@ -130,7 +130,7 @@ public class AssetHelper {
                 while ((line = inBuf.readLine()) != null) {
                     File cachedFile = new File(line);
                     if (!cachedFile.exists()) {
-                        Log.i(TAG, "Cache for folder '" + assetBasePath + "' incomplete. Re-caching.");
+                        Log.i(TAG, "cacheAssetFolder(): Cache for folder '" + assetBasePath + "' incomplete. Re-caching.");
                         reCache = true;
                         break;
                     }
@@ -138,7 +138,7 @@ public class AssetHelper {
             }
         } catch (FileNotFoundException fnfe) {
             // If cache index does not exist, recreate whole cache.
-            Log.i(TAG, "Cache index not found for folder '" + assetBasePath + "'. Re-caching.");
+            Log.i(TAG, "cacheAssetFolder(): Cache index not found for folder '" + assetBasePath + "'. Re-caching.");
             reCache = true;
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -183,7 +183,7 @@ public class AssetHelper {
                 }
             }
         } else {
-            Log.i(TAG, "Using cached folder '" + assetBasePath + "'.");
+            Log.i(TAG, "cacheAssetFolder(): Using cached folder '" + assetBasePath + "'.");
         }
 
     }
@@ -205,7 +205,7 @@ public class AssetHelper {
             // structure.
             if (filenames.length == 0) { // A file.
                 files.add(path);
-                Log.i(TAG, "Found asset '" + path + "'");
+                Log.i(TAG, "getAssetFilenames(): Found asset '" + path + "'");
             } else { // A directory.
                 for (String f : filenames) {
                     // Create a full path by concatenating path and the filename

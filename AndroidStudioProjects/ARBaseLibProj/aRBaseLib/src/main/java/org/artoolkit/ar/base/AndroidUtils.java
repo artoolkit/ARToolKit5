@@ -195,7 +195,7 @@ public class AndroidUtils {
                 break;
         }
 
-        Log.i(TAG, "Display is " + displayWidth + "x" + displayHeight
+        Log.i(TAG, "reportDisplayInformation(): Display is " + displayWidth + "x" + displayHeight
                 + ", Density: " + density);
 
     }

@@ -58,6 +58,7 @@ public class CubeGLES20 extends Cube implements ARDrawableOpenGLES20 {
         super(size, x, y, z);
     }
 
+    @Override
     /**
      * Used to render objects when working with OpenGL ES 2.x
      *
@@ -73,6 +74,10 @@ public class CubeGLES20 extends Cube implements ARDrawableOpenGLES20 {
 
     }
 
+    @Override
+    /**
+     * Sets the shader program used by this geometry.
+     */
     public void setShaderProgram(ShaderProgram shaderProgram) {
         this.shaderProgram = shaderProgram;
     }

@@ -71,23 +71,23 @@ class CameraWrapper {
 
         try {
             cameraClass = Class.forName(CAMERA_CLASS_NAME);
-            Log.i(TAG, "Found class " + CAMERA_CLASS_NAME);
+            Log.i(TAG, "CameraWrapper(): Found class " + CAMERA_CLASS_NAME);
 
             setPreviewCallbackMethod = cameraClass.getDeclaredMethod("setPreviewCallback", new Class[]{Camera.PreviewCallback.class});
-            Log.i(TAG, "Found method setPreviewCallback");
+            Log.i(TAG, "CameraWrapper(): Found method setPreviewCallback");
 
             setPreviewCallbackWithBufferMethod = cameraClass.getDeclaredMethod("setPreviewCallbackWithBuffer", new Class[]{Camera.PreviewCallback.class});
-            Log.i(TAG, "Found method setPreviewCallbackWithBuffer");
+            Log.i(TAG, "CameraWrapper(): Found method setPreviewCallbackWithBuffer");
 
             addCallbackBufferMethod = cameraClass.getDeclaredMethod("addCallbackBuffer", new Class[]{byte[].class});
-            Log.i(TAG, "Found method addCallbackBuffer");
+            Log.i(TAG, "CameraWrapper(): Found method addCallbackBuffer");
 
         } catch (NoSuchMethodException nsme) {
-            Log.w(TAG, "Could not find method: " + nsme.getMessage());
+            Log.w(TAG, "CameraWrapper(): Could not find method: " + nsme.getMessage());
 
 
         } catch (ClassNotFoundException cnfe) {
-            Log.w(TAG, "Could not find class " + CAMERA_CLASS_NAME);
+            Log.w(TAG, "CameraWrapper(): Could not find class " + CAMERA_CLASS_NAME);
         }
 
     }
@@ -117,9 +117,9 @@ class CameraWrapper {
         if (success) {
 
             if (usingBuffers) {
-                Log.i(TAG, "Configured camera callback using " + numBuffersIfAvailable + " buffers of " + bufferSize + " bytes");
+                Log.i(TAG, "configureCallback(): Configured camera callback using " + numBuffersIfAvailable + " buffers of " + bufferSize + " bytes");
             } else {
-                Log.i(TAG, "Configured camera callback without buffers");
+                Log.i(TAG, "configureCallback(): Configured camera callback without buffers");
             }
 
         }

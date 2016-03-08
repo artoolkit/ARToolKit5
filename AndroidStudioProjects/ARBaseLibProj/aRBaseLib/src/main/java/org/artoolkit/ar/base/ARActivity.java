@@ -145,7 +145,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
         super.onStart();
 
-        Log.i(TAG, "Activity starting.");
+        Log.i(TAG, "onStart(): Activity starting.");
 
         if (ARToolKit.getInstance().initialiseNative(this.getCacheDir().getAbsolutePath()) == false) { // Use cache directory for Data files.
 
@@ -166,13 +166,13 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
         mainLayout = supplyFrameLayout();
         if (mainLayout == null) {
-            Log.e(TAG, "Error: supplyFrameLayout did not return a layout.");
+            Log.e(TAG, "onStart(): Error: supplyFrameLayout did not return a layout.");
             return;
         }
 
         renderer = supplyRenderer();
         if (renderer == null) {
-            Log.e(TAG, "Error: supplyRenderer did not return a renderer.");
+            Log.e(TAG, "onStart(): Error: supplyRenderer did not return a renderer.");
             // No renderer supplied, use default, which does nothing
             renderer = new ARRenderer();
         }
@@ -188,7 +188,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         // Create the camera preview
         preview = new CaptureCameraPreview(this, this);
 
-        Log.i(TAG, "CaptureCameraPreview created");
+        Log.i(TAG, "onResume(): CaptureCameraPreview created");
 
         // Create the GL view
         glView = new GLSurfaceView(this);
@@ -199,18 +199,18 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 
         if (supportsEs2) {
-            Log.i(TAG, "OpenGL ES 2.x is supported");
+            Log.i(TAG, "onResume(): OpenGL ES 2.x is supported");
 
             if (renderer instanceof ARRendererGLES20) {
                 // Request an OpenGL ES 2.0 compatible context.
                 glView.setEGLContextClientVersion(2);
             } else {
-                Log.w(TAG, "OpenGL ES 2.x is supported but only a OpenGL 1.x renderer is available." +
+                Log.w(TAG, "onResume(): OpenGL ES 2.x is supported but only a OpenGL 1.x renderer is available." +
                         " \n Use ARRendererGLES20 for ES 2.x support. \n Continuing with OpenGL 1.x.");
                 glView.setEGLContextClientVersion(1);
             }
         } else {
-            Log.i(TAG, "Only OpenGL ES 1.x is supported");
+            Log.i(TAG, "onResume(): Only OpenGL ES 1.x is supported");
             if (renderer instanceof ARRendererGLES20)
                 throw new RuntimeException("Only OpenGL 1.x available but a OpenGL 2.x renderer was provided.");
             // This is where you could create an OpenGL ES 1.x compatible
@@ -224,13 +224,13 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); // Only render when we have a frame (must call requestRender()).
         glView.setZOrderMediaOverlay(true); // Request that GL view's SurfaceView be on top of other SurfaceViews (including CameraPreview's SurfaceView).
 
-        Log.i(TAG, "GLSurfaceView created");
+        Log.i(TAG, "onResume(): GLSurfaceView created");
 
         // Add the views to the interface
         mainLayout.addView(preview, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         mainLayout.addView(glView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-        Log.i(TAG, "Views added to main layout.");
+        Log.i(TAG, "onResume(): Views added to main layout.");
 
         if (glView != null) glView.onResume();
     }
@@ -252,7 +252,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
     @Override
     public void onStop() {
-        Log.i(TAG, "Activity stopping.");
+        Log.i(TAG, "onStop(): Activity stopping.");
 
         super.onStop();
     }
@@ -296,10 +296,10 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing) {
 
         if (ARToolKit.getInstance().initialiseAR(width, height, "Data/camera_para.dat", cameraIndex, cameraIsFrontFacing)) { // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
-            Log.i(TAG, "Camera initialised");
+            Log.i(TAG, "getGLView(): Camera initialised");
         } else {
             // Error
-            Log.e(TAG, "Error initialising camera. Cannot continue.");
+            Log.e(TAG, "getGLView(): Error initialising camera. Cannot continue.");
             finish();
         }
 
@@ -383,10 +383,10 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         if (firstUpdate) {
             // ARToolKit has been initialised. The renderer can now add markers, etc...
             if (renderer.configureARScene()) {
-                Log.i(TAG, "Scene configured successfully");
+                Log.i(TAG, "cameraPreviewFrame(): Scene configured successfully");
             } else {
                 // Error
-                Log.e(TAG, "Error configuring scene. Cannot continue.");
+                Log.e(TAG, "cameraPreviewFrame(): Error configuring scene. Cannot continue.");
                 finish();
             }
             firstUpdate = false;

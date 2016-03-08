@@ -88,7 +88,7 @@ public class ARToolKit {
      * Private constructor as required by the singleton pattern.
      */
     private ARToolKit() {
-        Log.i(TAG, "ARToolKit constructor");
+        Log.i(TAG, "ARToolKit(): ARToolKit constructor");
     }
 
     /**
@@ -113,12 +113,12 @@ public class ARToolKit {
     public boolean initialiseNative(String resourcesDirectoryPath) {
         if (!loadedNative) return false;
         if (!NativeInterface.arwInitialiseAR()) {
-            Log.e(TAG, "Error initialising native library!");
+            Log.e(TAG, "initialiseNative(): Error initialising native library!");
             return false;
         }
-        Log.i(TAG, "ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
+        Log.i(TAG, "initialiseNative(): ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
         if (!NativeInterface.arwChangeToResourcesDir(resourcesDirectoryPath)) {
-            Log.i(TAG, "Error while attempting to change working directory to resources directory.");
+            Log.i(TAG, "initialiseNative(): Error while attempting to change working directory to resources directory.");
         }
         initedNative = true;
         return true;
@@ -146,7 +146,7 @@ public class ARToolKit {
     public boolean initialiseAR(int videoWidth, int videoHeight, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
 
         if (!initedNative) {
-            Log.e(TAG, "Cannot initialise camera because native interface not inited.");
+            Log.e(TAG, "initialiseAR(): Cannot initialise camera because native interface not inited.");
             return false;
         }
 
@@ -156,7 +156,7 @@ public class ARToolKit {
         this.cameraIsFrontFacing = cameraIsFrontFacing;
 
         if (!NativeInterface.arwStartRunning("-format=NV21", cameraParaPath, 10.0f, 10000.0f)) {
-            Log.e(TAG, "Error starting video");
+            Log.e(TAG, "initialiseAR(): Error starting video");
             return false;
         }
 
@@ -377,7 +377,7 @@ public class ARToolKit {
             //It seems like ARToolkit might be faster with updating then the Android part. Because of that
             //it can happen that, even though one ensured in there Android-App that both markers are visible,
             //ARToolkit might not return a transformation matrix for both markers. In that case this RuntimeException is thrown.
-            Log.e(TAG, "Currently there are no two markers visible at the same time");
+            Log.e(TAG, "calculateReferenceMatrix(): Currently there are no two markers visible at the same time");
             return null;
         }
     }
@@ -398,9 +398,9 @@ public class ARToolKit {
             float distanceY = referenceMatrix[13];
             float distanceZ = referenceMatrix[14];
 
-            Log.d(TAG, "Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
+            Log.d(TAG, "distance(): Marker distance: x: " + distanceX + " y: " + distanceY + " z: " + distanceZ);
             float length = Matrix.length(distanceX, distanceY, distanceZ);
-            Log.d(TAG, "Absolute distance: " + length);
+            Log.d(TAG, "distance(): Absolute distance: " + length);
 
             return length;
         }
