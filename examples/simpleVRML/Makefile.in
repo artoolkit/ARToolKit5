@@ -66,7 +66,7 @@ CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
 LDFLAGS = $(AR_LDFLAGS) $(VRML_LDFLAGS) @LDFLAG@
 LIBS = -lARvrml -lARgsub_lite -lARvideo -lAR -lARICP -lAR \
-    -lopenvrml -lopenvrml-gl -lstdc++ -ljpeg -lpng -lz -lm \
+    -lopenvrml -lopenvrml-gl @STDCXXLIB@ -ljpeg -lpng -lz -lm \
     @LIBS@
 AR=@AR@
 ARFLAGS=@ARFLAGS@

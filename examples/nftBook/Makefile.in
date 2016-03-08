@@ -53,7 +53,7 @@ AR_CPPFLAGS = -I$(AR_HOME)/include/@SYSTEM@ -I$(AR_HOME)/include
 AR_LDFLAGS = -L$(AR_HOME)/lib/@SYSTEM@ -L$(AR_HOME)/lib
 
 OSG_LIBPATH = /usr/lib
-OSG_LIBS = -losg -lOpenThreads -losgDB -losgFX -losgGA -losgViewer -losgUtil -lstdc++
+OSG_LIBS = -losg -lOpenThreads -losgDB -losgFX -losgGA -losgViewer -losgUtil @STDCXXLIB@
 ifeq "$(UNAME)" "Darwin"
     OSG_LIBPATH = /Library/Frameworks
     OSG_LIBS = -framework osg -framework OpenThreads -framework osgDB -framework osgFX -framework osgGA -framework osgViewer -framework osgUtil -lstdc++
