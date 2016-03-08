@@ -43,8 +43,8 @@
 #include <AR2/coord.h>
 #include <AR2/searchPoint.h>
 
-void ar2GetSearchPoint( ARParamLT *cparamLT,
-                        float  trans1[3][4], float  trans2[3][4], float  trans3[3][4],
+void ar2GetSearchPoint( const ARParamLT *cparamLT,
+                        const float  trans1[3][4], const float  trans2[3][4], const float  trans3[3][4],
                         AR2FeatureCoordT *feature,
                         int search[3][2] )
 {

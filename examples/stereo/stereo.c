@@ -384,7 +384,7 @@ int main(int argc, char** argv)
         ARLOGe("Error: arParamLoadExt.\n");
         exit(-1);
     }
-    arUtilMatInv(transL2R, transR2L);
+    arUtilMatInv((const ARdouble (*)[4])transL2R, transR2L);
     arParamDispExt(transL2R);
     gAR3DStereoHandle = ar3DStereoCreateHandle(&(gCparamLTL->param), &(gCparamLTR->param), AR_TRANS_MAT_IDENTITY, transL2R);
     if (!gAR3DStereoHandle) {

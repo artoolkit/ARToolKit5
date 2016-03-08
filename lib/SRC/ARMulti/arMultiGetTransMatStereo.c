@@ -260,7 +260,7 @@ static ARdouble  arGetTransMatMultiSquareStereo2(AR3DStereoHandle *handle,
     }
 
     if( config->prevF == 0 ) {
-        arUtilMatMul( trans1, config->marker[max].itrans, trans2 );
+        arUtilMatMul( (const ARdouble (*)[4])trans1, (const ARdouble (*)[4])config->marker[max].itrans, trans2 );
         if( robustFlag ) {
             err = arGetTransMatStereo( handle, trans2, (ARdouble (*)[2])pos2dL, (ARdouble (*)[3])pos3dL, vnumL*4,
                                                        (ARdouble (*)[2])pos2dR, (ARdouble (*)[3])pos3dR, vnumR*4, config->trans );
@@ -291,7 +291,7 @@ static ARdouble  arGetTransMatMultiSquareStereo2(AR3DStereoHandle *handle,
         }
     }
     else {
-        arUtilMatMul( trans1, config->marker[max].itrans, trans2 );
+        arUtilMatMul( (const ARdouble (*)[4])trans1, (const ARdouble (*)[4])config->marker[max].itrans, trans2 );
         if( robustFlag ) {
             err2 = arGetTransMatStereo( handle, trans2, (ARdouble (*)[2])pos2dL, (ARdouble (*)[3])pos3dL, vnumL*4,
                                                         (ARdouble (*)[2])pos2dR, (ARdouble (*)[3])pos3dR, vnumR*4, trans1 );

@@ -107,11 +107,11 @@ int ar2FreeTemplate2( AR2Template2T *templ2 )
 #endif
 
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-int ar2SetTemplateSub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *imageSet,
+int ar2SetTemplateSub( const ARParamLT *cparamLT, const float  trans[3][4], AR2ImageSetT *imageSet,
                        AR2FeaturePointsT *featurePoints, int num, int blurLevel,
                        AR2TemplateT *templ )
 #else
-int ar2SetTemplateSub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *imageSet,
+int ar2SetTemplateSub( const ARParamLT *cparamLT, const float  trans[3][4], AR2ImageSetT *imageSet,
                        AR2FeaturePointsT *featurePoints, int num,
                        AR2TemplateT *templ )
 #endif
@@ -137,7 +137,7 @@ int ar2SetTemplateSub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *im
         
         mx = featurePoints->coord[num].mx;
         my = featurePoints->coord[num].my;
-        if( ar2MarkerCoord2ScreenCoord( NULL, wtrans, mx, my, &mx, &my ) < 0 ) return -1;
+        if( ar2MarkerCoord2ScreenCoord( NULL, (const float (*)[4])wtrans, mx, my, &mx, &my ) < 0 ) return -1;
         if( arParamIdeal2ObservLTf( &cparamLT->paramLTf, mx, my, &sx, &sy ) < 0 ) return -1;
         ix = (int)(sx + 0.5F);
         iy = (int)(sy + 0.5F);
@@ -155,7 +155,7 @@ int ar2SetTemplateSub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *im
                     continue;
                 }
 
-                ret = ar2GetImageValue( NULL, wtrans, imageSet->scale[featurePoints->scale],
+                ret = ar2GetImageValue( NULL, (const float (*)[4])wtrans, imageSet->scale[featurePoints->scale],
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
                                        sx, sy, blurLevel, &pixel );
 #else
@@ -217,7 +217,7 @@ int ar2SetTemplateSub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *im
 }
 
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-int ar2SetTemplate2Sub( ARParamLT *cparamLT, float  trans[3][4], AR2ImageSetT *imageSet,
+int ar2SetTemplate2Sub( const ARParamLT *cparamLT, const float  trans[3][4], AR2ImageSetT *imageSet,
                         AR2FeaturePointsT *featurePoints, int num, int blurLevel,
                         AR2Template2T *templ2 )
 {

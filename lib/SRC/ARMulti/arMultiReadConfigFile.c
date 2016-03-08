@@ -166,7 +166,7 @@ ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *p
             }
             j++;
         } while (j < 3);
-        arUtilMatInv( marker[i].trans, marker[i].itrans );
+        arUtilMatInv( (const ARdouble (*)[4])marker[i].trans, marker[i].itrans );
 
         wpos3d[0][0] =  -marker[i].width/2.0;
         wpos3d[0][1] =   marker[i].width/2.0;
