@@ -113,15 +113,16 @@ MACHINE=`uname -m`
 if [ "$E" = "Linux" ]
 then
     SYSTEM="linux-$MACHINE"
-    echo "Do you want to use the GNU compiler? \n$(tput setaf 7)- We recomment to use GNU but make sure that you have openCV installed on your system (apt-get install libopencv-dev). \n- If you select no, we use clang to compile. For clang, OpenCV is provided by ARToolKit but you need to have libc++-dev installed and you need to have OpenSceneGraph libraries installed which are compiled with clang in order to make the examples compile. $(tput sgr0)"
+    echo "\nThis script configures ARToolKit libraries, utilities and examples. For details on dependencies and further information please visit http://artoolkit.org/documentation/doku.php?id=8_Advanced_Topics:build_artoolkit \n\n"
+    echo "Standard compiler is gcc and g++ with libstdc++. Do you want to use the Clang compiler with libc++ instead? (y or n)"
     echo -n "Enter : "
     read ANS
     if [ "$ANS" = "y" ]
     then
-        CLANGCC="n"
+        CLANGCC="y"
     elif [ "$ANS" = "n" ]
     then
-        CLANGCC="y"
+        CLANGCC="n"
     else
         echo "Please enter y or n."
         exit 0
