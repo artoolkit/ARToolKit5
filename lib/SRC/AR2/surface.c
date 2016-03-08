@@ -183,7 +183,7 @@ AR2SurfaceSetT *ar2ReadSurfaceSet( const char *filename, const char *ext, ARPatt
                 }
             }
         }
-        arUtilMatInvf( surfaceSet->surface[i].trans, surfaceSet->surface[i].itrans );
+        arUtilMatInvf( (const float (*)[4])surfaceSet->surface[i].trans, surfaceSet->surface[i].itrans );
 
         ar2UtilReplaceExt( name, 256, "jpg");
         arMalloc( surfaceSet->surface[i].jpegName, char, 256);

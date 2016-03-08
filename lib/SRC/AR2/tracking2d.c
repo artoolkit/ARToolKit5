@@ -111,7 +111,7 @@ static int ar2Tracking2dSub ( AR2HandleT *handle, AR2SurfaceSetT *surfaceSet, AR
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
     if( handle->blurMethod == AR2_CONSTANT_BLUR ) {
         if( ar2SetTemplateSub( handle->cparamLT,
-                               handle->wtrans1[snum],
+                               (const float (*)[4])handle->wtrans1[snum],
                                surfaceSet->surface[snum].imageSet,
                              &(surfaceSet->surface[snum].featureSet->list[level]),
                                fnum,
@@ -126,7 +126,7 @@ static int ar2Tracking2dSub ( AR2HandleT *handle, AR2SurfaceSetT *surfaceSet, AR
     }
     else {
         if( ar2SetTemplate2Sub( handle->cparamLT,
-                                handle->wtrans1[snum],
+                                (const float (*)[4])handle->wtrans1[snum],
                                 surfaceSet->surface[snum].imageSet,
                               &(surfaceSet->surface[snum].featureSet->list[level]),
                                 fnum,
@@ -141,7 +141,7 @@ static int ar2Tracking2dSub ( AR2HandleT *handle, AR2SurfaceSetT *surfaceSet, AR
     }
 #else
     if( ar2SetTemplateSub( handle->cparamLT,
-                           handle->wtrans1[snum],
+                           (const float (*)[4])handle->wtrans1[snum],
                            surfaceSet->surface[snum].imageSet,
                          &(surfaceSet->surface[snum].featureSet->list[level]),
                            fnum,
@@ -157,22 +157,22 @@ static int ar2Tracking2dSub ( AR2HandleT *handle, AR2SurfaceSetT *surfaceSet, AR
     // Get the screen coordinates for up to three previous positions of this feature into search[][].
     if( surfaceSet->contNum == 1 ) {
         ar2GetSearchPoint( handle->cparamLT,
-                           handle->wtrans1[snum], NULL, NULL,
+                           (const float (*)[4])handle->wtrans1[snum], NULL, NULL,
                          &(surfaceSet->surface[snum].featureSet->list[level].coord[fnum]),
                            search );
     }
     else if( surfaceSet->contNum == 2 ) {
         ar2GetSearchPoint( handle->cparamLT,
-                           handle->wtrans1[snum],
-                           handle->wtrans2[snum], NULL,
+                           (const float (*)[4])handle->wtrans1[snum],
+                           (const float (*)[4])handle->wtrans2[snum], NULL,
                          &(surfaceSet->surface[snum].featureSet->list[level].coord[fnum]),
                            search );
     }
     else {
         ar2GetSearchPoint( handle->cparamLT,
-                           handle->wtrans1[snum],
-                           handle->wtrans2[snum],
-                           handle->wtrans3[snum],
+                           (const float (*)[4])handle->wtrans1[snum],
+                           (const float (*)[4])handle->wtrans2[snum],
+                           (const float (*)[4])handle->wtrans3[snum],
                          &(surfaceSet->surface[snum].featureSet->list[level].coord[fnum]),
                            search );
     }
