@@ -450,7 +450,7 @@ static void Display(void)
 	
 			// Calculate the camera position for the object and draw it.
 			// Replace VIEW_SCALEFACTOR with 1.0 to make one drawing unit equal to 1.0 ARToolKit units (usually millimeters).
-			arglCameraViewRH(gObjectData[i].trans, m, VIEW_SCALEFACTOR);
+			arglCameraViewRH((const ARdouble (*)[4])gObjectData[i].trans, m, VIEW_SCALEFACTOR);
 			glLoadMatrixd(m);
 
 			// All lighting and geometry to be drawn relative to the marker goes here.

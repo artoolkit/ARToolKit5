@@ -626,7 +626,7 @@ static void mainLoop(void)
 				}
 	
 				// We have a new pose, so set that.
-				arglCameraViewRH(markersSquare[i].trans, markersSquare[i].pose.T, 1.0f /*VIEW_SCALEFACTOR*/);
+				arglCameraViewRH((const ARdouble (*)[4])markersSquare[i].trans, markersSquare[i].pose.T, 1.0f /*VIEW_SCALEFACTOR*/);
 				// Tell any dependent objects about the update.
 				VirtualEnvironmentHandleARMarkerWasUpdated(i, markersSquare[i].pose);
 			

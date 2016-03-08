@@ -483,7 +483,7 @@ static void mainLoop(void)
         
         // Outline pattern space in blue.
         glColor3f(0.0f, 0.0f, 1.0f);
-        getPatternVerticesFromMarkerVertices(target->vertex, patternVertex);
+        getPatternVerticesFromMarkerVertices((const ARdouble (*)[2])target->vertex, patternVertex);
         argDrawLineByIdealPos(patternVertex[0][0], patternVertex[0][1], patternVertex[1][0], patternVertex[1][1]);
         argDrawLineByIdealPos(patternVertex[1][0], patternVertex[1][1], patternVertex[2][0], patternVertex[2][1]);
         argDrawLineByIdealPos(patternVertex[2][0], patternVertex[2][1], patternVertex[3][0], patternVertex[3][1]);

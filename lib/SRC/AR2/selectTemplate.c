@@ -47,7 +47,7 @@ static float  ar2GetTriangleArea( float  p1[2], float  p2[2], float  p3[2] );
 static float  ar2GetRegionArea( float  pos[4][2], int q1, int r1, int r2 );
 
 
-int ar2GetResolution( ARParamLT *cparamLT, float  trans[3][4], float  pos[2], float  dpi[2] )
+int ar2GetResolution( const ARParamLT *cparamLT, const float  trans[3][4], const float  pos[2], float  dpi[2] )
 {
     if( cparamLT != NULL ) {
         return ar2GetResolution2( &(cparamLT->param), trans, pos, dpi );
@@ -57,7 +57,7 @@ int ar2GetResolution( ARParamLT *cparamLT, float  trans[3][4], float  pos[2], fl
     }
 }
 
-int ar2GetResolution2( ARParam *cparam, float  trans[3][4], float  pos[2], float  dpi[2] )
+int ar2GetResolution2( const ARParam *cparam, const float  trans[3][4], const float  pos[2], float  dpi[2] )
 {
     float   mat[3][4];
     float   mx, my, hx, hy, h;

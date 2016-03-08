@@ -915,9 +915,9 @@ static void mainLoop(void)
 				}
                 
 				// We have a new pose, so set that.
-				arglCameraViewRH(markersSquare[i].trans, markersSquare[i].pose.T, 1.0f /*VIEW_SCALEFACTOR*/);
-                arUtilMatMul(transL2R, markersSquare[i].trans, transR);
-				arglCameraViewRH(transR, poseR.T, 1.0f /*VIEW_SCALEFACTOR*/);
+				arglCameraViewRH((const ARdouble (*)[4])markersSquare[i].trans, markersSquare[i].pose.T, 1.0f /*VIEW_SCALEFACTOR*/);
+                arUtilMatMul((const ARdouble (*)[4])transL2R, (const ARdouble (*)[4])markersSquare[i].trans, transR);
+				arglCameraViewRH((const ARdouble (*)[4])transR, poseR.T, 1.0f /*VIEW_SCALEFACTOR*/);
 				// Tell any dependent objects about the update.
                 for (j = 0; j < viewCount; j++) {
                     VirtualEnvironment2HandleARMarkerWasUpdated(views[j].ve2, i, (views[j].viewEye == VIEW_RIGHTEYE ? poseR : markersSquare[i].pose));

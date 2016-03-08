@@ -47,23 +47,23 @@ extern "C" {
 #endif
 
 /*   coord.c   */
-int ar2MarkerCoord2ScreenCoord( ARParamLT *cparamLT, float  trans[3][4], float  mx, float  my, float  *sx, float  *sy );
-int ar2MarkerCoord2ScreenCoord2( ARParamLT *cparamLT, float  trans[3][4], float  mx, float  my, float  *sx, float  *sy );
+int ar2MarkerCoord2ScreenCoord( const ARParamLT *cparamLT, const float  trans[3][4], const float  mx, const float  my, float  *sx, float  *sy );
+int ar2MarkerCoord2ScreenCoord2( const ARParamLT *cparamLT, const float  trans[3][4], const float  mx, const float  my, float  *sx, float  *sy );
 
-int ar2ScreenCoord2MarkerCoord( ARParamLT *cparamLT, float  trans[3][4], float  sx, float  sy, float  *mx, float  *my );
+int ar2ScreenCoord2MarkerCoord( const ARParamLT *cparamLT, const float  trans[3][4], const float  sx, const float  sy, float  *mx, float  *my );
 
-int ar2MarkerCoord2ImageCoord( int xsize, int ysize, float dpi, float  mx, float  my, float  *ix, float  *iy );
+int ar2MarkerCoord2ImageCoord( const int xsize, const int ysize, const float dpi, const float  mx, const float  my, float  *ix, float  *iy );
 
-int ar2ImageCoord2MarkerCoord2( int xsize, int ysize, float dpi, float  ix, float  iy, float  *mx, float  *my );
+int ar2ImageCoord2MarkerCoord2( const int xsize, const int ysize, const float dpi, const float  ix, const float  iy, float  *mx, float  *my );
 
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-int ar2GetImageValue( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image,
-                      float sx, float sy, int blurLevel, ARUint8 *pBW );
-int ar2GetImageValue2( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image,
-                       float sx, float sy, int blurLevel, ARUint8 *pBW1, ARUint8 *pBW2, ARUint8 *pBW3 );
+int ar2GetImageValue( const ARParamLT *cparamLT, const float  trans[3][4], const AR2ImageT *image,
+                      const float sx, const float sy, const int blurLevel, ARUint8 *pBW );
+int ar2GetImageValue2( const ARParamLT *cparamLT, const float  trans[3][4], const AR2ImageT *image,
+                       const float sx, const float sy, const int blurLevel, ARUint8 *pBW1, ARUint8 *pBW2, ARUint8 *pBW3 );
 #else
-int ar2GetImageValue( ARParamLT *cparamLT, float trans[3][4], AR2ImageT *image,
-                      float sx, float sy, ARUint8 *pBW );
+int ar2GetImageValue( const ARParamLT *cparamLT, const float trans[3][4], const AR2ImageT *image,
+                      const float sx, const float sy, ARUint8 *pBW );
 #endif
 
 #ifdef __cplusplus

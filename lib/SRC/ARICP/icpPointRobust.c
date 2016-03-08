@@ -102,7 +102,7 @@ int icpPointRobust( ICPHandleT   *handle,
 #if ICP_DEBUG
         icpDispMat( "matXw2Xc", &(matXw2Xc[0][0]), 3, 4 );
 #endif
-        arUtilMatMul( handle->matXc2U, matXw2Xc, matXw2U );
+        arUtilMatMul( (const ARdouble (*)[4])handle->matXc2U, (const ARdouble (*)[4])matXw2Xc, matXw2U );
 
         for( j = 0; j < data->num; j++ ) {
             if( icpGetU_from_X_by_MatX2U( &U, matXw2U, &(data->worldCoord[j]) ) < 0 ) {

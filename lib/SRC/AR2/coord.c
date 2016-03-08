@@ -41,7 +41,7 @@
 #include <AR2/imageSet.h>
 #include <AR2/coord.h>
 
-int ar2MarkerCoord2ScreenCoord2( ARParamLT *cparamLT, float  trans[3][4], float  mx, float  my, float  *sx, float  *sy )
+int ar2MarkerCoord2ScreenCoord2( const ARParamLT *cparamLT, const float  trans[3][4], const float  mx, const float  my, float  *sx, float  *sy )
 {
     float   wtrans[3][4];
     float   hx, hy, h;
@@ -84,7 +84,7 @@ int ar2MarkerCoord2ScreenCoord2( ARParamLT *cparamLT, float  trans[3][4], float 
     return 0;
 }
 
-int ar2MarkerCoord2ScreenCoord( ARParamLT *cparamLT, float  trans[3][4], float  mx, float  my, float  *sx, float  *sy )
+int ar2MarkerCoord2ScreenCoord( const ARParamLT *cparamLT, const float  trans[3][4], const float  mx, const float  my, float  *sx, float  *sy )
 {
     float   wtrans[3][4];
     float   hx, hy, h;
@@ -124,7 +124,7 @@ int ar2MarkerCoord2ScreenCoord( ARParamLT *cparamLT, float  trans[3][4], float  
     return 0;
 }
 
-int ar2ScreenCoord2MarkerCoord( ARParamLT *cparamLT, float  trans[3][4], float  sx, float  sy, float  *mx, float  *my )
+int ar2ScreenCoord2MarkerCoord( const ARParamLT *cparamLT, const float  trans[3][4], const float  sx, const float  sy, float  *mx, float  *my )
 {
     float   ix, iy;
     float   wtrans[3][4];
@@ -158,7 +158,7 @@ int ar2ScreenCoord2MarkerCoord( ARParamLT *cparamLT, float  trans[3][4], float  
     return 0;
 }
 
-int ar2MarkerCoord2ImageCoord( int xsize, int ysize, float dpi, float  mx, float  my, float  *ix, float  *iy )
+int ar2MarkerCoord2ImageCoord( const int xsize, const int ysize, const float dpi, const float  mx, const float  my, float  *ix, float  *iy )
 {
     *ix = mx * dpi / 25.4f;
     *iy = ysize - my * dpi / 25.4f;
@@ -166,7 +166,7 @@ int ar2MarkerCoord2ImageCoord( int xsize, int ysize, float dpi, float  mx, float
     return 0;
 }
 
-int ar2ImageCoord2MarkerCoord2( int xsize, int ysize, float dpi, float  ix, float  iy, float  *mx, float  *my )
+int ar2ImageCoord2MarkerCoord2( const int xsize, const int ysize, const float dpi, const float  ix, const float  iy, float  *mx, float  *my )
 {
     *mx = ix * 25.4f / dpi;
     *my = (ysize - iy) * 25.4f / dpi;
@@ -175,8 +175,8 @@ int ar2ImageCoord2MarkerCoord2( int xsize, int ysize, float dpi, float  ix, floa
 }
 
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-int ar2GetImageValue( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image,
-                      float  sx, float  sy, int blurLevel, ARUint8 *pBW )
+int ar2GetImageValue( const ARParamLT *cparamLT, const float  trans[3][4], const AR2ImageT *image,
+                      const float  sx, const float  sy, const int blurLevel, ARUint8 *pBW )
 {
     float   mx, my;
     float   iix, iiy;
@@ -195,8 +195,8 @@ int ar2GetImageValue( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image,
     return 0;
 }
 
-int ar2GetImageValue2( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image,
-                       float  sx, float  sy, int blurLevel, ARUint8 *pBW1, ARUint8 *pBW2, ARUint8 *pBW3 )
+int ar2GetImageValue2( const ARParamLT *cparamLT, const float  trans[3][4], const AR2ImageT *image,
+                       const float  sx, const float  sy, const int blurLevel, ARUint8 *pBW1, ARUint8 *pBW2, ARUint8 *pBW3 )
 {
     float   mx, my;
     float   iix, iiy;
@@ -219,8 +219,8 @@ int ar2GetImageValue2( ARParamLT *cparamLT, float  trans[3][4], AR2ImageT *image
     return 0;
 }
 #else
-int ar2GetImageValue( ARParamLT *cparamLT, float trans[3][4], AR2ImageT *image,
-                      float sx, float sy, ARUint8 *pBW )
+int ar2GetImageValue( const ARParamLT *cparamLT, const float trans[3][4], const AR2ImageT *image,
+                      const float sx, const float sy, ARUint8 *pBW )
 {
     float   mx, my;
     int     ix, iy;

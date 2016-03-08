@@ -84,7 +84,7 @@ int ar2Tracking( AR2HandleT *ar2Handle, AR2SurfaceSetT *surfaceSet, ARUint8 *dat
     *err = 0.0F;
 
     for( i = 0; i < surfaceSet->num; i++ ) {
-        arUtilMatMulf( surfaceSet->trans1, surfaceSet->surface[i].trans, ar2Handle->wtrans1[i] );
+        arUtilMatMulf( (const float (*)[4])surfaceSet->trans1, (const float (*)[4])surfaceSet->surface[i].trans, ar2Handle->wtrans1[i] );
         if( surfaceSet->contNum > 1 ) arUtilMatMulf( surfaceSet->trans2, surfaceSet->surface[i].trans, ar2Handle->wtrans2[i] );
         if( surfaceSet->contNum > 2 ) arUtilMatMulf( surfaceSet->trans3, surfaceSet->surface[i].trans, ar2Handle->wtrans3[i] );
     }

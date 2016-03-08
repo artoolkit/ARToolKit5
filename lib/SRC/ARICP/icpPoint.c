@@ -78,7 +78,7 @@ int icpPoint( ICPHandleT   *handle,
 #if ICP_DEBUG
         icpDispMat( "matXw2Xc", &(matXw2Xc[0][0]), 3, 4 );
 #endif
-        arUtilMatMul( handle->matXc2U, matXw2Xc, matXw2U );
+        arUtilMatMul( (const ARdouble (*)[4])handle->matXc2U, (const ARdouble (*)[4])matXw2Xc, matXw2U );
 
         err1 = 0.0;
         for( j = 0; j < data->num; j++ ) {

@@ -76,15 +76,15 @@ int icpStereoPoint( ICPStereoHandleT   *handle,
         for( i = 0; i < 4; i++ ) matXw2Xc[j][i] = initMatXw2Xc[j][i];
     }
 
-    arUtilMatMul( handle->matXcl2Ul, handle->matC2L, matXc2Ul );
-    arUtilMatMul( handle->matXcr2Ur, handle->matC2R, matXc2Ur );
+    arUtilMatMul( (const ARdouble (*)[4])handle->matXcl2Ul, (const ARdouble (*)[4])handle->matC2L, matXc2Ul );
+    arUtilMatMul( (const ARdouble (*)[4])handle->matXcr2Ur, (const ARdouble (*)[4])handle->matC2R, matXc2Ur );
 
     for( i = 0;; i++ ) {
 #if ICP_DEBUG
         icpDispMat( "matXw2Xc", &(matXw2Xc[0][0]), 3, 4 );
 #endif
-        arUtilMatMul( matXc2Ul, matXw2Xc, matXw2Ul );
-        arUtilMatMul( matXc2Ur, matXw2Xc, matXw2Ur );
+        arUtilMatMul( (const ARdouble (*)[4])matXc2Ul, (const ARdouble (*)[4])matXw2Xc, matXw2Ul );
+        arUtilMatMul( (const ARdouble (*)[4])matXc2Ur, (const ARdouble (*)[4])matXw2Xc, matXw2Ur );
 
         err1 = 0.0;
         for( j = 0; j < data->numL; j++ ) {

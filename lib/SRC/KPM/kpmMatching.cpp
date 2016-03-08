@@ -387,7 +387,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     int               xsize2, ysize2;
     int               procMode;
     ARUint8          *inImageBW;
-    int               i, j;
+    int               i;
 #if !BINARY_FEATURE
     FeatureVector     featureVector;
     int              *inlierIndex;
@@ -397,6 +397,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     int              *annMatch2;
     int               knn;
     float             h[3][3];
+    int               j;
 #endif
     int               ret;
     
@@ -449,7 +450,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
         
 #if BINARY_FEATURE
         const std::vector<vision::FeaturePoint>& points = kpmHandle->freakMatcher->getQueryFeaturePoints();
-        const std::vector<unsigned char>& descriptors = kpmHandle->freakMatcher->getQueryDescriptors();
+        //const std::vector<unsigned char>& descriptors = kpmHandle->freakMatcher->getQueryDescriptors();
 #endif
         if( procMode == KpmProcFullSize ) {
             for( i = 0 ; i < kpmHandle->inDataSet.num; i++ ) {

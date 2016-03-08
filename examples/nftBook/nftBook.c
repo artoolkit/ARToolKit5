@@ -672,7 +672,7 @@ static void mainLoop(void)
                 }
                 
                 // We have a new pose, so set that.
-                arglCameraViewRH(markersNFT[i].trans, markersNFT[i].pose.T, VIEW_SCALEFACTOR);
+                arglCameraViewRH((const ARdouble (*)[4])markersNFT[i].trans, markersNFT[i].pose.T, VIEW_SCALEFACTOR);
                 // Tell any dependent objects about the update.
                 VirtualEnvironmentHandleARMarkerWasUpdated(i, markersNFT[i].pose);
                 

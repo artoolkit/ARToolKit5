@@ -231,7 +231,7 @@ int arParamLTFree( ARParamLT **paramLT_p )
 }
 
 /*
-int arParamIdeal2ObservLTi( ARParamLTi *paramLTi, int    ix, int    iy, int    *ox, int    *oy)
+int arParamIdeal2ObservLTi( const ARParamLTi *paramLTi, const int    ix, const int    iy, int    *ox, int    *oy)
 {
     int      px, py;
     short   *lt;
@@ -248,7 +248,7 @@ int arParamIdeal2ObservLTi( ARParamLTi *paramLTi, int    ix, int    iy, int    *
 }
 */
 
-int arParamIdeal2ObservLTf( ARParamLTf *paramLTf, float  ix, float  iy, float  *ox, float  *oy)
+int arParamIdeal2ObservLTf( const ARParamLTf *paramLTf, const float  ix, const float  iy, float  *ox, float  *oy)
 {
     int      px, py;
     float   *lt;
@@ -265,7 +265,7 @@ int arParamIdeal2ObservLTf( ARParamLTf *paramLTf, float  ix, float  iy, float  *
 }
 
 /*
-int arParamObserv2IdealLTi( ARParamLTi *paramLTi, int    ox, int    oy, int    *ix, int    *iy)
+int arParamObserv2IdealLTi( const ARParamLTi *paramLTi, const int    ox, const int    oy, int    *ix, int    *iy)
 {
     int      px, py;
     short   *lt;
@@ -282,7 +282,7 @@ int arParamObserv2IdealLTi( ARParamLTi *paramLTi, int    ox, int    oy, int    *
 }
 */
 
-int arParamObserv2IdealLTf( ARParamLTf *paramLTf, float  ox, float  oy, float  *ix, float  *iy)
+int arParamObserv2IdealLTf( const ARParamLTf *paramLTf, const float  ox, const float  oy, float  *ix, float  *iy)
 {
     int      px, py;
     float   *lt;

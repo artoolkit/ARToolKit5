@@ -56,6 +56,7 @@
 #define             PATT_NAME        "Data/hiro.patt"
 
 ARParam             cparam;
+ARParamLT          *cparamLT;
 ARHandle           *arHandle;
 ARPattHandle       *arPattHandle;
 AR3DHandle         *ar3DHandle;
@@ -304,7 +305,11 @@ static void   init(int argc, char *argv[])
     ARLOG("*** Camera Parameter ***\n");
     arParamDisp( &cparam );
 
-    if( (arHandle=arCreateHandle(&cparam)) == NULL ) {
+    if ((cparamLT = arParamLTCreate(&cparam, AR_PARAM_LT_DEFAULT_OFFSET)) == NULL) {
+        ARLOGe("Error: arParamLTCreate.\n");
+        exit(0);
+    }
+    if( (arHandle=arCreateHandle(cparamLT)) == NULL ) {
         ARLOGe("Error: arCreateHandle.\n");
         exit(0);
     }

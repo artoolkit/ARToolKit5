@@ -126,12 +126,12 @@ int icpCalibStereo( ICPCalibDataT data[], int num,
         k = 0;
         for( i = 0; i < Jrow*Jclm; i++ )  J[i] = 0.0;
         for( i = 0; i < Jrow;      i++ ) dU[i] = 0.0;
-        arUtilMatMul( matXcr2Ur, matL2R, matXcl2Ur );
+        arUtilMatMul( (const ARdouble (*)[4])matXcr2Ur, (const ARdouble (*)[4])matL2R, matXcl2Ur );
 
         *err = 0.0;
         for( j = 0; j < num; j++ ) {
-            arUtilMatMul( matXcl2Ul, (ARdouble (*)[4])&(matXw2Xcl[j*12]), matXw2Ul );
-            arUtilMatMul( matXcl2Ur, (ARdouble (*)[4])&(matXw2Xcl[j*12]), matXw2Ur );
+            arUtilMatMul( (const ARdouble (*)[4])matXcl2Ul, (const ARdouble (*)[4])&(matXw2Xcl[j*12]), matXw2Ul );
+            arUtilMatMul( (const ARdouble (*)[4])matXcl2Ur, (const ARdouble (*)[4])&(matXw2Xcl[j*12]), matXw2Ur );
 
             for( i = 0; i <  data[j].numL; i++ ) {
                 if( icpGetJ_U_S( J_UL_S, matXcl2Ul, (ARdouble (*)[4])&(matXw2Xcl[j*12]), &(data[j].worldCoordL[i]) ) < 0 ) {
