@@ -326,8 +326,6 @@ namespace vision {
      */
     inline void FindHoughMatches(matches_t& out_matches,
                                  const HoughSimilarityVoting& hough,
-                                 const std::vector<FeaturePoint>& p1,
-                                 const std::vector<FeaturePoint>& p2,
                                  const matches_t& in_matches,
                                  int binIndex,
                                  float binDelta) {
