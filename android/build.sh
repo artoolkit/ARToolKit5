@@ -90,24 +90,26 @@ $NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
 
 ARTK_LibsDir=libs
 
-if [ "$1" != "clean" ] ; then
-JDK_PROJS=" \
-    ARSimple \
-    ARSimpleInteraction \
-    ARMarkerDistance \
-    ARSimpleOpenGLES20 \
-    ARDistanceOpenGLES20 \
-    ARMulti \
-"
-for i in $JDK_PROJS
-do
-#    if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
-#        mkdir ../EclipseProjects/${i}/libs
-#    fi
-    cp -Rpvf ${ARTK_LibsDir} ../EclipseProjects/${i}/
-    FirstChar=${i:0:1}
-    LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
-    ModName=$LCFirstChar${i:1}
-    cp -Rpvf ${ARTK_LibsDir} ../AndroidStudioProjects/${i}Proj/$ModName/src/main/
-done
+if [[ $1 != "clean" ]] ; then
+    JDK_PROJS=" \
+        ARSimple \
+        ARSimpleInteraction \
+        ARMarkerDistance \
+        ARSimpleOpenGLES20 \
+        ARDistanceOpenGLES20 \
+        ARMulti \
+    "
+    for i in $JDK_PROJS
+    do
+#       if [ ! -d ../EclipseProjects/${i}/libs/ ] ; then
+#           mkdir ../EclipseProjects/${i}/libs
+#       fi
+        if [[ $i != "ARMarkerDistance" && $i != "ARSimpleOpenGLES20" && $i != "ARDistanceOpenGLES20" ]] ; then
+            cp -Rpvf ${ARTK_LibsDir} ../EclipseProjects/${i}/
+        fi
+        FirstChar=${i:0:1}
+        LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
+        ModName=$LCFirstChar${i:1}
+        cp -Rpvf ${ARTK_LibsDir} ../AndroidStudioProjects/${i}Proj/$ModName/src/main/
+    done
 fi
