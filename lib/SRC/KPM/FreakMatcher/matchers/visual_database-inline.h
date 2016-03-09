@@ -225,8 +225,6 @@ namespace vision {
             TIMED("Find Hough Matches (1)") {
                 FindHoughMatches(hough_matches,
                                  mHoughSimilarityVoting,
-                                 query_points,
-                                 ref_points,
                                  mMatcher.matches(),
                                  max_hough_index,
                                  kHoughBinDelta);
@@ -296,8 +294,6 @@ namespace vision {
             TIMED("Find Hough Matches (2)") {
                 FindHoughMatches(hough_matches,
                                  mHoughSimilarityVoting,
-                                 query_points,
-                                 ref_points,
                                  mMatcher.matches(),
                                  max_hough_index,
                                  kHoughBinDelta);
