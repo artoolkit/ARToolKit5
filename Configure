@@ -112,7 +112,8 @@ MACHINE=`uname -m`
 if [ "$E" = "Linux" ]
 then
     SYSTEM="linux-$MACHINE"
-    echo "Do you want to use the Clang compiler? (y or n)"
+    echo "\nThis script configures ARToolKit libraries, utilities and examples. For details on dependencies and further information please visit http://artoolkit.org/documentation/doku.php?id=8_Advanced_Topics:build_artoolkit \n\n"
+    echo "Standard compiler is gcc and g++ with libstdc++. Do you want to use the Clang compiler with libc++ instead? (y or n)"
     echo -n "Enter : "
     read ANS
     if [ "$ANS" = "y" ]
@@ -574,20 +575,24 @@ else
     exit 0
 fi
 
-echo "Enable the OpenSceneGraph renderer and examples? (y or n)"
-echo -n "Enter : "
-read ANS
-if [ "$ANS" = "y" ]
+if [ "$CLANGCC" = "n" ]
 then
-    ENABLE_OSG="y"
-elif [ "$ANS" = "n" ]
-then
-    ENABLE_OSG="n"
+    echo "Enable the OpenSceneGraph renderer and examples? (y or n)"
+    echo -n "Enter : "
+    read ANS
+    if [ "$ANS" = "y" ]
+    then
+        ENABLE_OSG="y"
+    elif [ "$ANS" = "n" ]
+    then
+        ENABLE_OSG="n"
+    else
+        echo "Please enter y or n."
+        exit 0
+    fi
 else
-    echo "Please enter y or n."
-    exit 0
-fi
-
+    ENABLE_OSG="n"
+fi #[ "$CLANGCC" = "n" ]
 
 #
 # Output step 1.
@@ -633,6 +638,7 @@ s/@CV_CFLAG@/$CV_CFLAG/
 s/@CV_LIBS@/$CV_LIBS/
 s/@VERSION@/$VERSION/
 s/@SYSTEM@/$SYSTEM/
+s/@STDCXXLIB@/$STDCXXLIB/
 EOF
 
 if [ "$INPUT_V4L" = "y" ]
