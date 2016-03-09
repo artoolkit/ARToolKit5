@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 #--------------------------------------------------------------------------
 #
@@ -34,7 +34,7 @@
 #  Copyright 2015 Daqri, LLC.
 #  Copyright 2011-2015 ARToolworks, Inc.
 #
-#  Authors: Julian Looser, Philip Lamb
+#  Authors: Julian Looser, Philip Lamb, with updates from John Wolf
 #
 #--------------------------------------------------------------------------
 # Use this script to build the native libraries in ARToolKit for Android if you have
@@ -52,41 +52,59 @@ echo "Working from directory \"$PWD\"."
 # Set OS-dependent variables.
 OS=`uname -s`
 ARCH=`uname -m`
-if [ "$OS" = "Linux" ]
-then
+CPUS=
+NDK_BUILD_SCRIPT_FILE_EXT=
+if [[ "$OS" = "Linux" ]]; then
+    echo Building on Linux \(${ARCH}\)
     CPUS=`/usr/bin/nproc`
-elif [ "$OS" = "Darwin" ]
-then
+elif [[ "$OS" = "Darwin" ]]; then
+    echo Building on Apple Mac OS X \(${ARCH}\)
     CPUS=`/usr/sbin/sysctl -n hw.ncpu`
-elif [ "$OS" = "CYGWIN_NT-6.1" ]
-then
-    CPUS=`/usr/bin/nproc`
-else
-    CPUS=1
+else #Checking for Windows in a non-cygwin dependent way.
+    WinsOS=
+	if [[ $OS ]]; then
+        WinsVerNum=${OS##*-}
+		if [[ $WinsVerNum = "10.0" || $WinsVerNum = "6.3" ]]; then
+			if [[ $WinsVerNum = "10.0" ]]; then
+			    WinsOS="Wins10"
+			else
+			    WinsOS="Wins8.1"
+			fi
+			echo Building on Microsoft ${WinsOS} Desktop \(${ARCH}\)
+			export HOST_OS="windows"
+			NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
+			CPUS=`/usr/bin/nproc`
+		fi
+    fi
 fi
 
-if [ "$1" == "clean" ] ; then
+if [[ ! $CPUS && $1 != "clean" ]]; then
+	echo **Development platform not supported, exiting script**
+    exit 1
+else
     CPUS=1
 fi
 
 #
 # Update <AR/config.h> if required.
 #
-if [ "$1" == "clean" ] ; then
-rm -f ../include/AR/config.h
+if [[ "$1" == "clean" ]]; then
+    rm -f ../include/AR/config.h
 else
-if [[ ../include/AR/config.h.in -nt ../include/AR/config.h ]]; then cp -v ../include/AR/config.h.in ../include/AR/config.h; fi
+    if [[ ../include/AR/config.h.in -nt ../include/AR/config.h ]]; then cp -v ../include/AR/config.h.in ../include/AR/config.h; fi
 fi
 
 #
-# Build core ARToolKit libraries.
+# Build the various ARToolKit subcomponents and add to ABI libc++_shared.so shared libraries.
+# Built elements are moved to ./libs folder
 #
-$NDK/ndk-build -j $CPUS $1
+$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
 
 #
-# Build ARWrapper and copy output libs to JDK-based targets.
+# Build the various ABI libcpufeatures.a (added to shared library) libARWrapper.so shared libraries.
+# Built elements are moved to ./libs folder
 #
-$NDK/ndk-build -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
+$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
 
 ARTK_LibsDir=libs
 

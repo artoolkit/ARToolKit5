@@ -54,20 +54,36 @@ echo "Working from directory \"$PWD\"."
 # Set OS-dependent variables.
 OS=`uname -s`
 ARCH=`uname -m`
-if [ "$OS" = "Linux" ]
-then
+CPUS=
+NDK_BUILD_SCRIPT_FILE_EXT=
+if [[ "$OS" = "Linux" ]]; then
+    echo Building on Linux \(${ARCH}\)
     CPUS=`/usr/bin/nproc`
-elif [ "$OS" = "Darwin" ]
-then
+elif [[ "$OS" = "Darwin" ]]; then
+    echo Building on Apple Mac OS X \(${ARCH}\)
     CPUS=`/usr/sbin/sysctl -n hw.ncpu`
-elif [ "$OS" = "CYGWIN_NT-6.1" ]
-then
-    CPUS=`/usr/bin/nproc`
-else
-    CPUS=1
+else #Checking for Windows in a non-cygwin dependent way.
+    WinsOS=
+	if [[ $OS ]]; then
+        WinsVerNum=${OS##*-}
+		if [[ $WinsVerNum = "10.0" || $WinsVerNum = "6.3" ]]; then
+			if [[ $WinsVerNum = "10.0" ]]; then
+			    WinsOS="Wins10"
+			else
+			    WinsOS="Wins8.1"
+			fi
+			echo Building on Microsoft ${WinsOS} Desktop \(${ARCH}\)
+			export HOST_OS="windows"
+			NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
+			CPUS=`/usr/bin/nproc`
+		fi
+    fi
 fi
 
-if [ "$1" == "clean" ] ; then
+if [[ ! $CPUS && $1 != "clean" ]]; then
+	echo **Development platform not supported, exiting script**
+    exit 1
+else
     CPUS=1
 fi
 
@@ -90,14 +106,14 @@ for i in $NATIVE_PROJS
 do
     echo from `pwd`: going to EclipseProjects/$i
     cd EclipseProjects/$i
-    $NDK/ndk-build -j $CPUS $1
+    $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
     cd ../..
     FirstChar=${i:0:1}
     LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
     ModuleName=$LCFirstChar${i:1}
     echo from `pwd`: going to AndroidStudioProjects/${i}Proj/$ModuleName
     cd AndroidStudioProjects/${i}Proj/$ModuleName/src/main
-    $NDK/ndk-build -j $CPUS $1
+    $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
 #   cp=copy: -R=recursively, -p=preserve file attributes, -v=verbose, -f=remove existing destinations
 #   cp -Rpvf ${ARTK_LibsDir} jniLibs
     cd ../../../../..
