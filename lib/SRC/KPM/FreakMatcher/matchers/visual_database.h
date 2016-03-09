@@ -174,7 +174,7 @@ namespace vision {
         
         matches_t mMatchedInliers;
         id_t mMatchedId;
-        float mMatchedGeometry[12];
+        float mMatchedGeometry[9];
         
         keyframe_ptr_t mQueryKeyframe;
     
