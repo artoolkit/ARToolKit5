@@ -240,7 +240,6 @@ namespace vision {
                                        query_points,
                                        ref_points,
                                        hough_matches,
-                                       mHomographyInlierThreshold,
                                        mRobustHomography,
                                        it->second->width(),
                                        it->second->height())) {
@@ -308,7 +307,6 @@ namespace vision {
                                        query_points,
                                        ref_points,
                                        hough_matches,
-                                       mHomographyInlierThreshold,
                                        mRobustHomography,
                                        it->second->width(),
                                        it->second->height())) {
