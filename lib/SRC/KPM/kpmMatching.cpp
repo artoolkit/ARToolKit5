@@ -164,7 +164,6 @@ int kpmLoadImageDb(KpmHandle *kpmHandle, const char *filename)
         }
     }
 
-    //kpmHandle->freakMatcherOpencv->addImage(image, width, height, 1);
     kpmHandle->freakMatcher->addImage(image, width, height, 1);
     free(image);
     
@@ -418,7 +417,6 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     }
 
 #if BINARY_FEATURE
-    //kpmHandle->freakMatcherOpencv->query(inImageBW, xsize ,ysize);
     kpmHandle->freakMatcher->query(inImageBW, xsize ,ysize);
     kpmHandle->inDataSet.num = (int)kpmHandle->freakMatcher->getQueryFeaturePoints().size();
 #else

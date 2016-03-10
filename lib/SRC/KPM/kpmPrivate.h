@@ -63,7 +63,6 @@ struct _KpmHandle {
     void                     *ann2;
 #else
     vision::VisualDatabaseFacade *freakMatcher;
-    //vision::VisualDatabaseOpencvFacade *freakMatcherOpencv;
 #endif
     
     ARParamLT                *cparamLT;
