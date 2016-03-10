@@ -382,6 +382,7 @@
 		4A6F0D1118E5060900C45B33 /* videoAspectRatio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A6F0D1018E5060900C45B33 /* videoAspectRatio.c */; };
 		4A77978E0CCEE7850021FAC9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 78BB3F5208E483CB00D7CA2D /* Data */; };
 		4A7797B70CCEE84A0021FAC9 /* multiWin.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7797810CCEE7730021FAC9 /* multiWin.c */; };
+		4A78AAD21C8E8423007085BA /* videoLuma.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A78AAD01C8E8423007085BA /* videoLuma.c */; };
 		4A7B8D150EC77EC500D1A3F5 /* arLabelingSubDBI3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8CFD0EC77EC500D1A3F5 /* arLabelingSubDBI3C565.c */; };
 		4A7B8D160EC77EC500D1A3F5 /* arLabelingSubDBI3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8CFE0EC77EC500D1A3F5 /* arLabelingSubDBI3CA4444.c */; };
 		4A7B8D170EC77EC500D1A3F5 /* arLabelingSubDBI3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8CFF0EC77EC500D1A3F5 /* arLabelingSubDBI3CA5551.c */; };
@@ -2189,6 +2190,8 @@
 		4A7797D50CCEEB5F0021FAC9 /* icp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icp.h; sourceTree = "<group>"; };
 		4A7797D60CCEEB5F0021FAC9 /* icpCalib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icpCalib.h; sourceTree = "<group>"; };
 		4A7797D70CCEEB5F0021FAC9 /* icpCore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icpCore.h; sourceTree = "<group>"; };
+		4A78AAD01C8E8423007085BA /* videoLuma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoLuma.c; sourceTree = "<group>"; };
+		4A78AAD11C8E8423007085BA /* videoLuma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoLuma.h; sourceTree = "<group>"; };
 		4A7B8CFD0EC77EC500D1A3F5 /* arLabelingSubDBI3C565.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3C565.c; sourceTree = "<group>"; };
 		4A7B8CFE0EC77EC500D1A3F5 /* arLabelingSubDBI3CA4444.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3CA4444.c; sourceTree = "<group>"; };
 		4A7B8CFF0EC77EC500D1A3F5 /* arLabelingSubDBI3CA5551.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3CA5551.c; sourceTree = "<group>"; };
@@ -5355,6 +5358,7 @@
 				4A1E9626117E42CA00A2F3C2 /* videoSaveImage.c */,
 				4A6F0D1018E5060900C45B33 /* videoAspectRatio.c */,
 				78BB3E7208E482F400D7CA2D /* Makefile.in */,
+				4A78AAD01C8E8423007085BA /* videoLuma.c */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -5460,6 +5464,7 @@
 				78BB3F1808E4837000D7CA2D /* sys */,
 				78BB3F2008E4837000D7CA2D /* video.h */,
 				78BB3F2108E4837000D7CA2D /* videoConfig.h */,
+				4A78AAD11C8E8423007085BA /* videoLuma.h */,
 				4A7F52FC0A299F5C00F474E6 /* arvrml.h */,
 				4A53DDB80F6DFA080062C983 /* arosg.h */,
 				4A37A46212E7417B006E4A0E /* arFilterTransMat.h */,
@@ -7195,6 +7200,7 @@
 				4AD1814E0C66701F000F46A0 /* ARVideoSettingsController.m in Sources */,
 				4A6F0D1118E5060900C45B33 /* videoAspectRatio.c in Sources */,
 				4A85F80C0CBC454C00CE38B6 /* videoQuickTimeMovie.c in Sources */,
+				4A78AAD21C8E8423007085BA /* videoLuma.c in Sources */,
 				4A1E9627117E42CA00A2F3C2 /* videoSaveImage.c in Sources */,
 				4A1D2D4512B8D4D600E363BE /* videoQuickTime7.m in Sources */,
 				4A1D2D4412B8D4D600E363BE /* QTKitVideo.m in Sources */,

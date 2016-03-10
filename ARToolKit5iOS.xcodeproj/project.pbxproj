@@ -375,6 +375,7 @@
 		4A741550123C1CEC00F9D05A /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F73111178414800F35FA7 /* MainWindow.xib */; };
 		4A741551123C1CEC00F9D05A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F73121178414800F35FA7 /* Icon.png */; };
 		4A741552123C1CEC00F9D05A /* Data2 in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F73A81178456800F35FA7 /* Data2 */; };
+		4A75E8E81C9233AE00DC8915 /* videoLuma.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A75E8E71C92339E00DC8915 /* videoLuma.c */; };
 		4A8393B6152163C000D8FE60 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8393B5152163C000D8FE60 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4A8393B7152165C200D8FE60 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8393B5152163C000D8FE60 /* Accelerate.framework */; };
 		4A8393B8152165C300D8FE60 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8393B5152163C000D8FE60 /* Accelerate.framework */; };
@@ -1832,6 +1833,8 @@
 		4A6CA1D512F8212A006375F6 /* arFilterTransMat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arFilterTransMat.h; sourceTree = "<group>"; };
 		4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = videoAspectRatio.c; sourceTree = "<group>"; };
 		4A752F68116238DD009877B3 /* README (ARToolKit for iOS).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README (ARToolKit for iOS).txt"; sourceTree = "<group>"; wrapsLines = 1; };
+		4A75E8E61C92338C00DC8915 /* videoLuma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoLuma.h; sourceTree = "<group>"; };
+		4A75E8E71C92339E00DC8915 /* videoLuma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoLuma.c; sourceTree = "<group>"; };
 		4A7797D50CCEEB5F0021FAC9 /* icp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icp.h; sourceTree = "<group>"; };
 		4A7797D60CCEEB5F0021FAC9 /* icpCalib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icpCalib.h; sourceTree = "<group>"; };
 		4A7797D70CCEEB5F0021FAC9 /* icpCore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icpCore.h; sourceTree = "<group>"; };
@@ -6506,6 +6509,7 @@
 				78BB3E7608E482F400D7CA2D /* video2.c */,
 				4A3151AE1234FFBE006E2B82 /* videoSaveImage.c */,
 				4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */,
+				4A75E8E71C92339E00DC8915 /* videoLuma.c */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -6574,6 +6578,7 @@
 				78BB3F1808E4837000D7CA2D /* sys */,
 				78BB3F2008E4837000D7CA2D /* video.h */,
 				78BB3F2108E4837000D7CA2D /* videoConfig.h */,
+				4A75E8E61C92338C00DC8915 /* videoLuma.h */,
 			);
 			path = AR;
 			sourceTree = "<group>";
@@ -7748,6 +7753,7 @@
 				4A941CFF1AE5DC79000FA802 /* videoiPhone.m in Sources */,
 				4A941CFC1AE5DC79000FA802 /* videoAspectRatio.c in Sources */,
 				4A941CFA1AE5DC79000FA802 /* video2.c in Sources */,
+				4A75E8E81C9233AE00DC8915 /* videoLuma.c in Sources */,
 				4A941CF91AE5DC79000FA802 /* video.c in Sources */,
 				4A941CFD1AE5DC79000FA802 /* videoDummy.c in Sources */,
 			);

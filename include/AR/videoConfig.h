@@ -35,8 +35,8 @@
  *
  */
 
-#ifndef AR_CONFIG_H
-#define AR_CONFIG_H
+#ifndef AR_VIDEO_CONFIG_H
+#define AR_VIDEO_CONFIG_H
 
 #include <AR/config.h>
 
@@ -152,4 +152,4 @@
 #ifdef AR_INPUT_QUICKTIME
 #endif
 
-#endif // !AR_CONFIG_H
+#endif // !AR_VIDEO_CONFIG_H

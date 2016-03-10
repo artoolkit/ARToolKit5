@@ -37,6 +37,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video2.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoLuma.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoSaveImage.c" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +56,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\sys\WindowsMediaCapture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\video.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\videoConfig.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\AR\videoLuma.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\CaptureFrameGrabber.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaSink.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMC\CaptureFrameGrabber\MediaStreamSink.h" />

@@ -194,6 +194,7 @@
     <ClCompile Include="..\..\lib\SRC\VideoQuickTime\videoQuickTimeMovie.c" />
     <ClCompile Include="..\..\lib\SRC\Video\videoSaveImage.c" />
     <ClCompile Include="..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoLuma.c" />
     <ClCompile Include="..\..\lib\SRC\VideoWinDF\videoWinDF.cpp" />
     <ClCompile Include="..\..\lib\SRC\VideoWinDS\videoWinDS.cpp" />
     <ClCompile Include="..\..\lib\SRC\VideoWinDSVL\videoWinDSVL.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="..\..\include\AR\sys\videoWindowsMediaFoundation.h" />
     <ClInclude Include="..\..\include\AR\video.h" />
     <ClInclude Include="..\..\include\AR\videoConfig.h" />
+    <ClInclude Include="..\..\include\AR\videoLuma.h" />
     <ClInclude Include="..\..\include\AR\sys\videoDummy.h" />
     <ClInclude Include="..\..\include\AR\sys\videoImage.h" />
     <ClInclude Include="..\..\include\AR\sys\videoQuickTime.h" />

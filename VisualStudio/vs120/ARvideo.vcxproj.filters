@@ -5,6 +5,7 @@
     <ClCompile Include="..\..\lib\SRC\Video\video2.c" />
     <ClCompile Include="..\..\lib\SRC\Video\videoSaveImage.c" />
     <ClCompile Include="..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoLuma.c" />
     <ClCompile Include="..\..\lib\SRC\VideoDummy\videoDummy.c">
       <Filter>Dummy</Filter>
     </ClCompile>
@@ -41,6 +42,7 @@
     <ClInclude Include="..\..\include\AR\param.h" />
     <ClInclude Include="..\..\include\AR\video.h" />
     <ClInclude Include="..\..\include\AR\videoConfig.h" />
+    <ClInclude Include="..\..\include\AR\videoLuma.h" />
     <ClInclude Include="..\..\include\AR\sys\videoDummy.h">
       <Filter>Dummy</Filter>
     </ClInclude>

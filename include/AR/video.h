@@ -51,6 +51,7 @@
 
 #include <AR/ar.h>
 #include <AR/videoConfig.h>
+#include <AR/videoLuma.h>
 #include <limits.h>
 
 #ifdef  __cplusplus
@@ -142,6 +143,12 @@ extern "C" {
                         for each plane. For single-plane formats, this will be NULL.
     @field bufPlaneCount For multi-planar video frames, this is the number of frame planes. For
                         single-plane formats, this will be 0.
+    @field buffLuma     A pointer to a luminance-only version of the image.
+                        For luminance-only video formats this pointer is a copy of buff.
+                        For multi-planar formats which include a luminance-only plane,
+                        this pointer is a copy of one of the bufPlanes[] pointers.
+                        In all other cases, this pointer points to a buffer containing a
+                        copy of the video frame converted to luminance only.
     @field fillFlag     Set non-zero when buff is valid.
     @field time_sec     Seconds portion of the time at which buff was filled. Epoch is OS-specific.
     @field time_usec    Microseconds portion of the time at which buff was filled. Epoch is OS-specific.
@@ -151,6 +158,7 @@ typedef struct {
     ARUint8            *buff;
     ARUint8           **bufPlanes;
     unsigned int        bufPlaneCount;
+    ARUint8            *buffLuma;
     int                 fillFlag;
     ARUint32            time_sec;
     ARUint32            time_usec;
@@ -325,6 +333,7 @@ typedef union {
 typedef struct {
     int                    deviceType;
     AR2VideoDeviceHandleT  device;
+    ARVideoLumaInfo       *lumaInfo;
 } AR2VideoParamT;
 
 AR_DLL_API int               arVideoGetDefaultDevice(void);
