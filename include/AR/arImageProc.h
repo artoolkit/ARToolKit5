@@ -28,7 +28,7 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2015-2016 Daqri, LLC.
  *  Copyright 2010-2015 ARToolworks, Inc.
  *
  *  Author(s): Philip Lamb
@@ -58,7 +58,6 @@ extern "C" {
 #endif
 
 struct _ARImageProcInfo {
-    unsigned char *__restrict image; // Buffer holds result of conversion to luminance image (8 bit grayscale).
     unsigned char *__restrict image2; // Extra buffer, allocated as required.
     int imageX; // Width of image buffer.
     int imageY; // Height of image buffer.
@@ -68,12 +67,6 @@ struct _ARImageProcInfo {
     unsigned char max; // Maximum luminance.
 #if AR_IMAGEPROC_USE_VIMAGE
     void *tempBuffer;
-#endif
-    AR_PIXEL_FORMAT pixFormat; // Expected pixel format of incoming images.
-    int alwaysCopy;
-    int imageWasAllocated;
-#ifdef HAVE_ARM_NEON
-    int fastPath;
 #endif
 };
 typedef struct _ARImageProcInfo ARImageProcInfo;
@@ -90,7 +83,6 @@ extern "C" {
 
 ARImageProcInfo *arImageProcInit(const int xsize, const int ysize, const AR_PIXEL_FORMAT pixFormat, int alwaysCopy);
 void arImageProcFinal(ARImageProcInfo *ipi);
-int arImageProcLuma(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr);
 int arImageProcLumaHist(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr);
 unsigned char *arImageProcGetHistImage(ARImageProcInfo *ipi);
 int arImageProcLumaHistAndCDF(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr);

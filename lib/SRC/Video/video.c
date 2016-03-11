@@ -161,17 +161,11 @@ AR_PIXEL_FORMAT arVideoGetPixelFormat( void )
     return ar2VideoGetPixelFormat( vid );
 }
 
-ARUint8 *arVideoGetImage( void )
+AR2VideoBufferT *arVideoGetImage( void )
 {
-    AR2VideoBufferT *buffer;
-
     if( vid == NULL ) return NULL;
 
-    buffer = ar2VideoGetImage(vid);
-	if (buffer == NULL) return (NULL);
-    if( buffer->fillFlag == 0 ) return NULL;
-
-    return buffer->buff;
+    return ar2VideoGetImage(vid);
 }
 
 int arVideoCapStart( void )

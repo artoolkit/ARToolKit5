@@ -88,7 +88,7 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
     char bufferpow2 = 0;
 
     arMalloc( vid, AR2VideoParamDummyT, 1 );
-    vid->buffer.buff = NULL;
+    vid->buffer.buff = vid->buffer.buffLuma = NULL;
     vid->buffer.bufPlanes = NULL;
     vid->buffer.bufPlaneCount = 0;
     vid->buffer.fillFlag = 0;
@@ -612,12 +612,12 @@ int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const 
             vid->buffer.bufPlanes[i] = NULL;
             free(vid->buffer.bufPlanes);
             vid->buffer.bufPlaneCount = 0;
-            vid->buffer.buff = NULL;
+            vid->buffer.buff = vid->buffer.buffLuma = NULL;
         }
     } else {
         if (vid->buffer.buff) {
             free (vid->buffer.buff);
-            vid->buffer.buff = NULL;
+            vid->buffer.buff = vid->buffer.buffLuma = NULL;
         }
     }
     
@@ -632,10 +632,15 @@ int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const 
             arMalloc(vid->buffer.bufPlanes[0], ARUint8, width*height);
             arMalloc(vid->buffer.bufPlanes[1], ARUint8, width*height/2);
             vid->buffer.bufPlaneCount = 2;
-            vid->buffer.buff = vid->buffer.bufPlanes[0];
+            vid->buffer.buff = vid->buffer.buffLuma = vid->buffer.bufPlanes[0];
         } else {
             rowBytes = width * arVideoUtilGetPixelSize(ar2VideoGetPixelFormatDummy(vid));
             arMalloc(vid->buffer.buff, ARUint8, height * rowBytes);
+            if (ar2VideoGetPixelFormatDummy(vid) == AR_PIXEL_FORMAT_MONO) {
+                vid->buffer.buffLuma = vid->buffer.buff;
+            } else {
+                vid->buffer.buffLuma = NULL;
+            }
         }
     }
     

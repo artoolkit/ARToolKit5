@@ -434,6 +434,7 @@ AR2VideoBufferT *ar2VideoGetImageiPhone( AR2VideoParamiPhoneT *vid )
     } else return (NULL);
 
     vid->buffer.fillFlag  = 1;
+    vid->buffer.buffLuma = NULL;
     
     return &(vid->buffer);
 }

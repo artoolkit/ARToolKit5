@@ -168,6 +168,7 @@ AR2VideoBufferT *ar2VideoGetImageWinDSVL(AR2VideoParamWinDSVLT *vid)
 	if (wait_result == WAIT_OBJECT_0) {
 		if (SUCCEEDED(vid->graphManager->CheckoutMemoryBuffer(&(vid->g_Handle), &(vid->vidBuff.buff), NULL, NULL, NULL, &(vid->g_Timestamp)))) {
 			vid->vidBuff.fillFlag = 1;
+			vid->vidBuff.buffLuma = NULL;
 			return (&(vid->vidBuff));
 		}
 	}

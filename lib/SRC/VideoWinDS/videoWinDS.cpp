@@ -314,6 +314,9 @@ AR2VideoParamWinDST *ar2VideoOpenWinDS( const char *config )
 	vid->grabberCallback->buffer.in.fillFlag   = 0;
     vid->grabberCallback->buffer.out.fillFlag  = 0;
     vid->grabberCallback->buffer.wait.fillFlag = 0;
+	vid->grabberCallback->buffer.in.buffLuma   = NULL;
+    vid->grabberCallback->buffer.out.buffLuma  = NULL;
+    vid->grabberCallback->buffer.wait.buffLuma = NULL;
 	vid->grabberCallback->buffer.buffMutex     = CreateMutex( NULL, FALSE, NULL );
 	vid->grabberCallback->buffer.bmpBufferSize = mt.lSampleSize;
 	vid->grabberCallback->buffer.width         = bminfo.bmiHeader.biWidth;
@@ -729,6 +732,7 @@ STDMETHODIMP ARSampleGrabberCB::SampleCB(double Time, IMediaSample *pSample)
 	}
 	ar2VideoWinDSGetTimeStamp( &(buffer.in.time_sec), &(buffer.in.time_usec) );
 	buffer.in.fillFlag = 1;
+	buffer.in.buffLuma = NULL;
 
 	WaitForSingleObject( buffer.buffMutex, INFINITE );
         tmp = buffer.wait;

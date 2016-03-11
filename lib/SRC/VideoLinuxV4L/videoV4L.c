@@ -491,6 +491,7 @@ static void ar2VideoCaptureV4L(AR2VideoParamV4LT *vid)
             
             ar2VideoGetTimeStampV4L( &(vid->buffer.in.time_sec), &(vid->buffer.in.time_usec) );
             vid->buffer.in.fillFlag = 1;
+            vid->buffer.in.buffLuma = NULL;
             memcpy(vid->buffer.in.buff, img, vid->width*vid->height*pixSize);
             
             pthread_mutex_lock(&(vid->buffer.mutex));
@@ -522,6 +523,9 @@ static void ar2VideoBufferInitV4L( AR2VideoBufferV4LT *buffer, int size )
     buffer->in.fillFlag   = 0;
     buffer->wait.fillFlag = 0;
     buffer->out.fillFlag  = 0;
+    buffer->in.buffLuma   = NULL;
+    buffer->wait.buffLuma = NULL;
+    buffer->out.buffLuma  = NULL;
     pthread_mutex_init(&(buffer->mutex), NULL);
     
     return;

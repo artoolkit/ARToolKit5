@@ -822,6 +822,7 @@ AR2VideoBufferT *ar2VideoGetImageV4L2( AR2VideoParamV4L2T *vid )
         out->time_sec = buf.timestamp.tv_sec;
         out->time_usec = buf.timestamp.tv_usec; 
         out->fillFlag = 1;
+        out->buffLuma = NULL;
     }
     
     struct v4l2_buffer buf_next;

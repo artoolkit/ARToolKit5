@@ -655,7 +655,7 @@ bail:
 int ar2VideoCloseWinMF(AR2VideoParamWinMFT *vid)
 {
     free(vid->buffer.buff);
-	vid->buffer.buff = NULL;
+	vid->buffer.buff = vid->buffer.buffLuma = NULL;
 	SafeRelease(&vid->pSourceReader);
     vid->pSource->Shutdown();
     vid->pSource->Release();
@@ -751,6 +751,7 @@ AR2VideoBufferT *ar2VideoGetImageWinMF(AR2VideoParamWinMFT *vid)
     vid->buffer.time_sec = (ARUint32)sec;
     vid->buffer.time_usec = (ARUint32)(llTimeStamp / 10ll - sec * 1000000ll);
     vid->buffer.fillFlag = 1;
+    vid->buffer.buffLuma = NULL;
     
     SafeRelease(&pSample);
     return (&vid->buffer);

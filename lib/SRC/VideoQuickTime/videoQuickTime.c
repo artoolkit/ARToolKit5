@@ -2048,6 +2048,7 @@ AR2VideoBufferT *ar2VideoGetImageQuickTime(AR2VideoParamQuickTimeT *vid)
 			vid->arVideoBuffer.buff = arVideoQuickTimeMovieGetFrame(vid->movie, &time);
             if ((vid->arVideoBuffer).buff) {
                 vid->arVideoBuffer.fillFlag = 1;
+                vid->arVideoBuffer.buffLuma = NULL;
                 vid->arVideoBuffer.time_sec = (ARUint32)time;
                 vid->arVideoBuffer.time_usec = (ARUint32)((time - (double)vid->arVideoBuffer.time_sec)*1E6);
             } else {
@@ -2089,6 +2090,7 @@ AR2VideoBufferT *ar2VideoGetImageQuickTime(AR2VideoParamQuickTimeT *vid)
 			
 			vid->status &= ~AR_VIDEO_QUICKTIME_STATUS_BIT_READY; // Clear ready bit.
             (vid->arVideoBuffer).fillFlag = 1;
+            (vid->arVideoBuffer).buffLuma = NULL;
 			return (&(vid->arVideoBuffer));
 			
 		} else {

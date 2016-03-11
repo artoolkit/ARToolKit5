@@ -1002,25 +1002,29 @@ AR2VideoBufferT *ar2VideoGetImage( AR2VideoParamT *vid )
     if (ret) {
         // Do a conversion to luma-only if the video module didn't provide one.
         if (!ret->buffLuma) {
-            if (!vid->lumaInfo) {
-                int xsize, ysize;
-                AR_PIXEL_FORMAT pixFormat;
-                if (ar2VideoGetSize(vid, &xsize, &ysize) < 0) {
-                    ARLOGe("ar2VideoGetImage: Error: unable to get size.\n");
-                    return (NULL);
-                }
-                pixFormat = ar2VideoGetPixelFormat(vid);
-                if (pixFormat == AR_PIXEL_FORMAT_INVALID) {
-                    ARLOGe("ar2VideoGetImage: Error: unable to get pixel format.\n");
-                    return (NULL);
-                }
-                vid->lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
-                if (!vid->lumaInfo) {
-                    ARLOGe("ar2VideoGetImage: Error: unable to initialise luma conversion.\n");
-                    return (NULL);
-                }
+            AR_PIXEL_FORMAT pixFormat;
+            pixFormat = ar2VideoGetPixelFormat(vid);
+            if (pixFormat == AR_PIXEL_FORMAT_INVALID) {
+                ARLOGe("ar2VideoGetImage: Error: unable to get pixel format.\n");
+                return (NULL);
             }
-            ret->buffLuma = arVideoLuma(vid->lumaInfo, ret->buff);
+            if (pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21) {
+                ret->buffLuma = ret->buff;
+            } else {
+                if (!vid->lumaInfo) {
+                    int xsize, ysize;
+                    if (ar2VideoGetSize(vid, &xsize, &ysize) < 0) {
+                        ARLOGe("ar2VideoGetImage: Error: unable to get size.\n");
+                        return (NULL);
+                    }
+                    vid->lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
+                    if (!vid->lumaInfo) {
+                        ARLOGe("ar2VideoGetImage: Error: unable to initialise luma conversion.\n");
+                        return (NULL);
+                    }
+                }
+                ret->buffLuma = arVideoLuma(vid->lumaInfo, ret->buff);
+            }
         }
     }
     return (ret);

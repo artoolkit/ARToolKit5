@@ -281,6 +281,9 @@ AR2VideoParamWinDFT *ar2VideoOpenWinDF( const char *config )
     vid->buffer.in.fillFlag   = 0;
     vid->buffer.out.fillFlag  = 0; 
     vid->buffer.wait.fillFlag = 0;
+    vid->buffer.in.buffLuma   = NULL;
+    vid->buffer.wait.buffLuma = NULL;
+    vid->buffer.out.buffLuma  = NULL;
 	vid->buffer.buffMutex = CreateMutex( NULL, FALSE, NULL );
 
     //
@@ -369,11 +372,11 @@ AR2VideoBufferT *ar2VideoGetImageWinDF( AR2VideoParamWinDFT *vid )
     AR2VideoBufferT   tmp;
 
 	WaitForSingleObject( vid->buffer.buffMutex, INFINITE );
-      tmp = vid->buffer.wait;
-      vid->buffer.wait = vid->buffer.out;
-      vid->buffer.out = tmp;
+    tmp = vid->buffer.wait;
+    vid->buffer.wait = vid->buffer.out;
+    vid->buffer.out = tmp;
 
-      vid->buffer.wait.fillFlag = 0;
+    vid->buffer.wait.fillFlag = 0;
     ReleaseMutex( vid->buffer.buffMutex );
 
     return &(vid->buffer.out);
@@ -416,11 +419,12 @@ static void ar2VideoCaptureWinDF(void *vid2)
 			*/
 			memcpy(vid->buffer.in.buff, image.pData, vid->width*vid->height*arVideoUtilGetPixelSize(vid->pixFormat));
 			vid->buffer.in.fillFlag = 1;
+			vid->buffer.in.buffLuma = NULL;
 
             WaitForSingleObject( vid->buffer.buffMutex, INFINITE );
-              tmp = vid->buffer.wait;
-              vid->buffer.wait = vid->buffer.in;
-              vid->buffer.in = tmp;
+            tmp = vid->buffer.wait;
+            vid->buffer.wait = vid->buffer.in;
+            vid->buffer.in = tmp;
             ReleaseMutex( vid->buffer.buffMutex );
         }    
         else if( vid->status == AR2VIDEO_WINDF_STATUS_IDLE ) Sleep(100);

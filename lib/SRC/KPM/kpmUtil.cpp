@@ -48,18 +48,18 @@
 #include <KPM/surfSub.h>
 #endif
 
-static ARUint8 *genBWImageFull      ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
-static ARUint8 *genBWImageHalf      ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
-static ARUint8 *genBWImageOneThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
-static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
-static ARUint8 *genBWImageQuart     ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize );
+static ARUint8 *genBWImageFull      ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize );
+static ARUint8 *genBWImageHalf      ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize );
+static ARUint8 *genBWImageOneThird  ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize );
+static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize );
+static ARUint8 *genBWImageQuart     ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize );
 
 
 #if !BINARY_FEATURE
 static int kpmUtilGetInitPoseHomography( float *sCoord, float *wCoord, int num, float initPose[3][4] );
 #endif
 
-int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int maxPointNum,
+int kpmUtilGetCorner( ARUint8 *inImage, int xsize, int ysize, int procMode, int maxPointNum,
                       CornerPoints *cornerPoints )
 {
     ARUint8        *inImageBW;
@@ -67,7 +67,7 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     int            cornerNum;
     int            i;
 
-    inImageBW = kpmUtilGenBWImage( inImage, pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 ); //Eventually returns a
+    inImageBW = kpmUtilResizeImage( inImage, xsize, ysize, procMode, &xsize2, &ysize2 ); //Eventually returns a
                                                                                                    //malloc()'ed buffer
     if( inImageBW == NULL ) return -1;
     
@@ -161,22 +161,22 @@ int kpmUtilGetCorner( ARUint8 *inImage, AR_PIXEL_FORMAT pixFormat, int xsize, in
     return 0;
 }
 
-ARUint8 *kpmUtilGenBWImage( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int procMode, int *newXsize, int *newYsize )
+ARUint8 *kpmUtilResizeImage( ARUint8 *image, int xsize, int ysize, int procMode, int *newXsize, int *newYsize )
 {
     if( procMode == KpmProcFullSize ) {
-        return genBWImageFull( image, pixFormat, xsize, ysize, newXsize, newYsize );
+        return genBWImageFull( image, xsize, ysize, newXsize, newYsize );
     }
     else if( procMode == KpmProcTwoThirdSize ) {
-        return genBWImageTwoThird( image, pixFormat, xsize, ysize, newXsize, newYsize );
+        return genBWImageTwoThird( image, xsize, ysize, newXsize, newYsize );
     }
     else if( procMode == KpmProcHalfSize ) {
-        return genBWImageHalf( image, pixFormat, xsize, ysize, newXsize, newYsize );
+        return genBWImageHalf( image, xsize, ysize, newXsize, newYsize );
     }
     else if( procMode == KpmProcOneThirdSize ) {
-        return genBWImageOneThird( image, pixFormat, xsize, ysize, newXsize, newYsize );
+        return genBWImageOneThird( image, xsize, ysize, newXsize, newYsize );
     }
     else {
-        return genBWImageQuart( image, pixFormat, xsize, ysize, newXsize, newYsize );
+        return genBWImageQuart( image, xsize, ysize, newXsize, newYsize );
     }
 }
 
@@ -463,74 +463,20 @@ int kpmUtilGetPoseHomography( KpmMatchResult *matchData, KpmRefDataSet *refDataS
 }
 #endif
 
-static ARUint8 *genBWImageFull( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
+static ARUint8 *genBWImageFull( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize )
 {
-    ARUint8  *newImage, *p;
+    ARUint8  *newImage;
     int       xsize2, ysize2;
-    int       i, j;
 
     *newXsize = xsize2 = xsize;
     *newYsize = ysize2 = ysize;
     arMalloc( newImage, ARUint8, xsize*ysize );
-    
-    if( pixFormat == AR_PIXEL_FORMAT_RGB || pixFormat == AR_PIXEL_FORMAT_BGR ) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*image + (int)*(image+1) + (int)*(image+2) ) / 3;
-                image+=3;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_RGBA || pixFormat == AR_PIXEL_FORMAT_BGRA ) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*image + (int)*(image+1) + (int)*(image+2) ) / 3;
-                image+=4;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_ABGR || pixFormat == AR_PIXEL_FORMAT_ARGB) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(image+1) + (int)*(image+2) + (int)*(image+3) ) / 3;
-                image+=4;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21 ) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = *(image++);
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_2vuy ) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = *(image+1);
-                image+=2;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_yuvs ) {
-        p = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = *image;
-                image+=2;
-            }
-        }
-    }
+    memcpy(newImage, image, xsize*ysize);
 
     return newImage;
 }
 
-static ARUint8 *genBWImageHalf( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
+static ARUint8 *genBWImageHalf( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize )
 {
     ARUint8  *newImage;
     ARUint8  *p, *p1, *p2;
@@ -541,95 +487,22 @@ static ARUint8 *genBWImageHalf( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int x
     *newYsize = ysize2 = ysize/2;
     arMalloc( newImage, ARUint8, xsize2*ysize2 );
 
-    if( pixFormat == AR_PIXEL_FORMAT_RGB || pixFormat == AR_PIXEL_FORMAT_BGR ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*3*(j*2+0);
-            p2 = image + xsize*3*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+3) + (int)*(p1+4) + (int)*(p1+5)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5) ) / 12;
-                p1+=6;
-                p2+=6;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_RGBA || pixFormat == AR_PIXEL_FORMAT_BGRA ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*2+0);
-            p2 = image + xsize*4*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+4) + (int)*(p1+5) + (int)*(p1+6)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6) ) / 12;
-                p1+=8;
-                p2+=8;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_ABGR || pixFormat == AR_PIXEL_FORMAT_ARGB) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*2+0);
-            p2 = image + xsize*4*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3)
-                         + (int)*(p1+5) + (int)*(p1+6) + (int)*(p1+7)
-                         + (int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3)
-                         + (int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7) ) / 12;
-                p1+=8;
-                p2+=8;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*(j*2+0);
-            p2 = image + xsize*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1)
-                         + (int)*(p2+0) + (int)*(p2+1) ) / 4;
-                p1+=2;
-                p2+=2;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_2vuy) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*2+0);
-            p2 = image + xsize*2*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+3)
-                         + (int)*(p2+1) + (int)*(p2+3) ) / 4;
-                p1+=4;
-                p2+=4;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_yuvs) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*2+0);
-            p2 = image + xsize*2*(j*2+1);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+2)
-                         + (int)*(p2+0) + (int)*(p2+2) ) / 4;
-                p1+=4;
-                p2+=4;
-            }
+    p  = newImage;
+    for( j = 0; j < ysize2; j++ ) {
+        p1 = image + xsize*(j*2+0);
+        p2 = image + xsize*(j*2+1);
+        for( i = 0; i < xsize2; i++ ) {
+            *(p++) = ( (int)*(p1+0) + (int)*(p1+1)
+                     + (int)*(p2+0) + (int)*(p2+1) ) / 4;
+            p1+=2;
+            p2+=2;
         }
     }
 
     return newImage;
 }
 
-static ARUint8 *genBWImageQuart( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
+static ARUint8 *genBWImageQuart( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize )
 {
     ARUint8  *newImage;
     ARUint8  *p, *p1, *p2, *p3, *p4;
@@ -640,154 +513,21 @@ static ARUint8 *genBWImageQuart( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int 
     *newYsize = ysize2 = ysize/4;
     arMalloc( newImage, ARUint8, xsize2*ysize2 );
     
-    if( pixFormat == AR_PIXEL_FORMAT_RGB || pixFormat == AR_PIXEL_FORMAT_BGR ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*3*(j*4+0);
-            p2 = image + xsize*3*(j*4+1);
-            p3 = image + xsize*3*(j*4+2);
-            p4 = image + xsize*3*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+3) + (int)*(p1+4) + (int)*(p1+5)
-                         + (int)*(p1+6) + (int)*(p1+7) + (int)*(p1+8)
-                         + (int)*(p1+9) + (int)*(p1+10) + (int)*(p1+11)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5)
-                         + (int)*(p2+6) + (int)*(p2+7) + (int)*(p2+8)
-                         + (int)*(p2+9) + (int)*(p2+10) + (int)*(p2+11)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2)
-                         + (int)*(p3+3) + (int)*(p3+4) + (int)*(p3+5)
-                         + (int)*(p3+6) + (int)*(p3+7) + (int)*(p3+8)
-                         + (int)*(p3+9) + (int)*(p3+10) + (int)*(p3+11)
-                         + (int)*(p4+0) + (int)*(p4+1) + (int)*(p4+2)
-                         + (int)*(p4+3) + (int)*(p4+4) + (int)*(p4+5)
-                         + (int)*(p4+6) + (int)*(p4+7) + (int)*(p4+8)
-                         + (int)*(p4+9) + (int)*(p4+10) + (int)*(p4+11)) / 48;
-                p1+=12;
-                p2+=12;
-                p3+=12;
-                p4+=12;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_RGBA || pixFormat == AR_PIXEL_FORMAT_BGRA ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*4+0);
-            p2 = image + xsize*4*(j*4+1);
-            p3 = image + xsize*4*(j*4+2);
-            p4 = image + xsize*4*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+4) + (int)*(p1+5) + (int)*(p1+6)
-                         + (int)*(p1+8) + (int)*(p1+9) + (int)*(p1+10)
-                         + (int)*(p1+12) + (int)*(p1+13) + (int)*(p1+14)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6)
-                         + (int)*(p2+8) + (int)*(p2+9) + (int)*(p2+10)
-                         + (int)*(p2+12) + (int)*(p2+13) + (int)*(p2+14)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2)
-                         + (int)*(p3+4) + (int)*(p3+5) + (int)*(p3+6)
-                         + (int)*(p3+8) + (int)*(p3+9) + (int)*(p3+10)
-                         + (int)*(p3+12) + (int)*(p3+13) + (int)*(p3+14)
-                         + (int)*(p4+0) + (int)*(p4+1) + (int)*(p4+2)
-                         + (int)*(p4+4) + (int)*(p4+5) + (int)*(p4+6)
-                         + (int)*(p4+8) + (int)*(p4+9) + (int)*(p4+10)
-                         + (int)*(p4+12) + (int)*(p4+13) + (int)*(p4+14)) / 48;
-                p1+=16;
-                p2+=16;
-                p3+=16;
-                p4+=16;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_ABGR || pixFormat == AR_PIXEL_FORMAT_ARGB) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*4+0);
-            p2 = image + xsize*4*(j*4+1);
-            p3 = image + xsize*4*(j*4+2);
-            p4 = image + xsize*4*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3)
-                         + (int)*(p1+5) + (int)*(p1+6) + (int)*(p1+7)
-                         + (int)*(p1+9) + (int)*(p1+10) + (int)*(p1+11)
-                         + (int)*(p1+13) + (int)*(p1+14) + (int)*(p1+15)
-                         + (int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3)
-                         + (int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7)
-                         + (int)*(p2+9) + (int)*(p2+10) + (int)*(p2+11)
-                         + (int)*(p2+13) + (int)*(p2+14) + (int)*(p2+15)
-                         + (int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3)
-                         + (int)*(p3+5) + (int)*(p3+6) + (int)*(p3+7)
-                         + (int)*(p3+9) + (int)*(p3+10) + (int)*(p3+11)
-                         + (int)*(p3+13) + (int)*(p3+14) + (int)*(p3+15)
-                         + (int)*(p4+1) + (int)*(p4+2) + (int)*(p4+3)
-                         + (int)*(p4+5) + (int)*(p4+6) + (int)*(p4+7)
-                         + (int)*(p4+9) + (int)*(p4+10) + (int)*(p4+11)
-                         + (int)*(p4+13) + (int)*(p4+14) + (int)*(p4+15)) / 48;
-                p1+=16;
-                p2+=16;
-                p3+=16;
-                p4+=16;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21 ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*(j*4+0);
-            p2 = image + xsize*(j*4+1);
-            p3 = image + xsize*(j*4+2);
-            p4 = image + xsize*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3)
-                         + (int)*(p4+0) + (int)*(p4+1) + (int)*(p4+2) + (int)*(p4+3)) / 16;
-                p1+=4;
-                p2+=4;
-                p3+=4;
-                p4+=4;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_2vuy ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*4+0);
-            p2 = image + xsize*2*(j*4+1);
-            p3 = image + xsize*2*(j*4+2);
-            p4 = image + xsize*2*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+3) + (int)*(p1+5) + (int)*(p1+7)
-                         + (int)*(p2+1) + (int)*(p2+3) + (int)*(p2+5) + (int)*(p2+7)
-                         + (int)*(p3+1) + (int)*(p3+3) + (int)*(p3+5) + (int)*(p3+7)
-                         + (int)*(p4+1) + (int)*(p4+3) + (int)*(p4+5) + (int)*(p4+7)) / 16;
-                p1+=8;
-                p2+=8;
-                p3+=8;
-                p4+=8;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_yuvs ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*4+0);
-            p2 = image + xsize*2*(j*4+1);
-            p3 = image + xsize*2*(j*4+2);
-            p4 = image + xsize*2*(j*4+3);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+2) + (int)*(p1+4) + (int)*(p1+6)
-                         + (int)*(p2+0) + (int)*(p2+2) + (int)*(p2+4) + (int)*(p2+6)
-                         + (int)*(p3+0) + (int)*(p3+2) + (int)*(p3+4) + (int)*(p3+6)
-                         + (int)*(p4+0) + (int)*(p4+2) + (int)*(p4+4) + (int)*(p4+6)) / 16;
-                p1+=8;
-                p2+=8;
-                p3+=8;
-                p4+=8;
-            }
+    p  = newImage;
+    for( j = 0; j < ysize2; j++ ) {
+        p1 = image + xsize*(j*4+0);
+        p2 = image + xsize*(j*4+1);
+        p3 = image + xsize*(j*4+2);
+        p4 = image + xsize*(j*4+3);
+        for( i = 0; i < xsize2; i++ ) {
+            *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3)
+                     + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3)
+                     + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3)
+                     + (int)*(p4+0) + (int)*(p4+1) + (int)*(p4+2) + (int)*(p4+3)) / 16;
+            p1+=4;
+            p2+=4;
+            p3+=4;
+            p4+=4;
         }
     }
 
@@ -795,7 +535,7 @@ static ARUint8 *genBWImageQuart( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int 
 }
 
 
-static ARUint8 *genBWImageOneThird( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
+static ARUint8 *genBWImageOneThird( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize )
 {
     ARUint8  *newImage;
     ARUint8  *p, *p1, *p2, *p3;
@@ -806,125 +546,25 @@ static ARUint8 *genBWImageOneThird( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, i
     *newYsize = ysize2 = ysize/3;
     arMalloc( newImage, ARUint8, xsize2*ysize2 );
 
-    if( pixFormat == AR_PIXEL_FORMAT_RGB || pixFormat == AR_PIXEL_FORMAT_BGR ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*3*(j*3+0);
-            p2 = image + xsize*3*(j*3+1);
-            p3 = image + xsize*3*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+3) + (int)*(p1+4) + (int)*(p1+5)
-                         + (int)*(p1+6) + (int)*(p1+7) + (int)*(p1+8)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5)
-                         + (int)*(p2+6) + (int)*(p2+7) + (int)*(p2+8)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2)
-                         + (int)*(p3+3) + (int)*(p3+4) + (int)*(p3+5)
-                         + (int)*(p3+6) + (int)*(p3+7) + (int)*(p3+8) ) / 27;
-                p1+=9;
-                p2+=9;
-                p3+=9;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_RGBA || pixFormat == AR_PIXEL_FORMAT_BGRA ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*3+0);
-            p2 = image + xsize*4*(j*3+1);
-            p3 = image + xsize*4*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p1+4) + (int)*(p1+5) + (int)*(p1+6)
-                         + (int)*(p1+8) + (int)*(p1+9) + (int)*(p1+10)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6)
-                         + (int)*(p2+8) + (int)*(p2+9) + (int)*(p2+10)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2)
-                         + (int)*(p3+4) + (int)*(p3+5) + (int)*(p3+6)
-                         + (int)*(p3+8) + (int)*(p3+9) + (int)*(p3+10) ) / 27;
-                p1+=12;
-                p2+=12;
-                p3+=12;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_ABGR || pixFormat == AR_PIXEL_FORMAT_ARGB) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*4*(j*3+0);
-            p2 = image + xsize*4*(j*3+1);
-            p3 = image + xsize*4*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3)
-                         + (int)*(p1+5) + (int)*(p1+6) + (int)*(p1+7)
-                         + (int)*(p1+9) + (int)*(p1+10) + (int)*(p1+11)
-                         + (int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3)
-                         + (int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7)
-                         + (int)*(p2+9) + (int)*(p2+10) + (int)*(p2+11)
-                         + (int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3)
-                         + (int)*(p3+5) + (int)*(p3+6) + (int)*(p3+7)
-                         + (int)*(p3+9) + (int)*(p3+10) + (int)*(p3+11) ) / 27;
-                p1+=12;
-                p2+=12;
-                p3+=12;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21 ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*(j*3+0);
-            p2 = image + xsize*(j*3+1);
-            p3 = image + xsize*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
-                         + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
-                         + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2) ) / 9;
-                p1+=3;
-                p2+=3;
-                p3+=3;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_2vuy ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*3+0);
-            p2 = image + xsize*2*(j*3+1);
-            p3 = image + xsize*2*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+1) + (int)*(p1+3) + (int)*(p1+5)
-                         + (int)*(p2+1) + (int)*(p2+3) + (int)*(p2+5)
-                         + (int)*(p3+1) + (int)*(p3+3) + (int)*(p3+5) ) / 9;
-                p1+=6;
-                p2+=6;
-                p3+=6;
-            }
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_yuvs ) {
-        p  = newImage;
-        for( j = 0; j < ysize2; j++ ) {
-            p1 = image + xsize*2*(j*3+0);
-            p2 = image + xsize*2*(j*3+1);
-            p3 = image + xsize*2*(j*3+2);
-            for( i = 0; i < xsize2; i++ ) {
-                *(p++) = ( (int)*(p1+0) + (int)*(p1+2) + (int)*(p1+4)
-                         + (int)*(p2+0) + (int)*(p2+2) + (int)*(p2+4)
-                         + (int)*(p3+0) + (int)*(p3+2) + (int)*(p3+4) ) / 9;
-                p1+=6;
-                p2+=6;
-                p3+=6;
-            }
+    p  = newImage;
+    for( j = 0; j < ysize2; j++ ) {
+        p1 = image + xsize*(j*3+0);
+        p2 = image + xsize*(j*3+1);
+        p3 = image + xsize*(j*3+2);
+        for( i = 0; i < xsize2; i++ ) {
+            *(p++) = ( (int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2)
+                     + (int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2)
+                     + (int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2) ) / 9;
+            p1+=3;
+            p2+=3;
+            p3+=3;
         }
     }
 
     return newImage;
 }
 
-static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, int *newXsize, int *newYsize )
+static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, int xsize, int ysize, int *newXsize, int *newYsize )
 {
     ARUint8  *newImage;
     ARUint8  *q1, *q2, *p1, *p2, *p3;
@@ -935,194 +575,30 @@ static ARUint8 *genBWImageTwoThird  ( ARUint8 *image, AR_PIXEL_FORMAT pixFormat,
     *newYsize = ysize2 = ysize/3*2;
     arMalloc( newImage, ARUint8, xsize2*ysize2 );
 
-    if( pixFormat == AR_PIXEL_FORMAT_RGB || pixFormat == AR_PIXEL_FORMAT_BGR ) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*3*(j*3+0);
-            p2 = image + xsize*3*(j*3+1);
-            p3 = image + xsize*3*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( ((int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2))
-                          + ((int)*(p1+3) + (int)*(p1+4) + (int)*(p1+5))/2
-                          + ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/2
-                          + ((int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5))/4 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/2
-                          + ((int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5))/4
-                          + ((int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2))
-                          + ((int)*(p3+3) + (int)*(p3+4) + (int)*(p3+5))/2 ) * 4/27;
-                p1+=3;
-                p2+=3;
-                p3+=3;
-                *(q1++) = ( ((int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2))/2
-                          + ((int)*(p1+3) + (int)*(p1+4) + (int)*(p1+5))
-                          + ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/4
-                          + ((int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5))/2 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/4
-                          + ((int)*(p2+3) + (int)*(p2+4) + (int)*(p2+5))/2
-                          + ((int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2))/2
-                          + ((int)*(p3+3) + (int)*(p3+4) + (int)*(p3+5))   ) * 4/27;
-
-                p1+=6;
-                p2+=6;
-                p3+=6;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
+    q1  = newImage;
+    q2  = newImage + xsize2;
+    for( j = 0; j < ysize2/2; j++ ) {
+        p1 = image + xsize*(j*3+0);
+        p2 = image + xsize*(j*3+1);
+        p3 = image + xsize*(j*3+2);
+        for( i = 0; i < xsize2/2; i++ ) {
+            *(q1++) = ( (int)*(p1+0)   + (int)*(p1+1)/2
+                      + (int)*(p2+0)/2 + (int)*(p2+1)/4 ) *4/9;
+            *(q2++) = ( (int)*(p2+0)/2 + (int)*(p2+1)/4
+                      + (int)*(p3+0)   + (int)*(p3+1)/2 ) *4/9;
+            p1++;
+            p2++;
+            p3++;
+            *(q1++) = ( (int)*(p1+0)/2 + (int)*(p1+1)
+                      + (int)*(p2+0)/4 + (int)*(p2+1)/2 ) *4/9;
+            *(q2++) = ( (int)*(p2+0)/4 + (int)*(p2+1)/2
+                      + (int)*(p3+0)/2 + (int)*(p3+1)   ) *4/9;
+            p1+=2;
+            p2+=2;
+            p3+=2;
         }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_RGBA || pixFormat == AR_PIXEL_FORMAT_BGRA ) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*4*(j*3+0);
-            p2 = image + xsize*4*(j*3+1);
-            p3 = image + xsize*4*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( ((int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2))
-                          + ((int)*(p1+4) + (int)*(p1+5) + (int)*(p1+6))/2
-                          + ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/2
-                          + ((int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6))/4 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/2
-                          + ((int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6))/4
-                          + ((int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2))
-                          + ((int)*(p3+4) + (int)*(p3+5) + (int)*(p3+6))/2 ) * 4/27;
-                p1+=4;
-                p2+=4;
-                p3+=4;
-                *(q1++) = ( ((int)*(p1+0) + (int)*(p1+1) + (int)*(p1+2))/2
-                          + ((int)*(p1+4) + (int)*(p1+4) + (int)*(p1+4))
-                          + ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/4
-                          + ((int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6))/2 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+0) + (int)*(p2+1) + (int)*(p2+2))/4
-                          + ((int)*(p2+4) + (int)*(p2+5) + (int)*(p2+6))/2
-                          + ((int)*(p3+0) + (int)*(p3+1) + (int)*(p3+2))/2
-                          + ((int)*(p3+4) + (int)*(p3+5) + (int)*(p3+6))   ) * 4/27;
-
-                p1+=8;
-                p2+=8;
-                p3+=8;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_ABGR || pixFormat == AR_PIXEL_FORMAT_ARGB) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*4*(j*3+0);
-            p2 = image + xsize*4*(j*3+1);
-            p3 = image + xsize*4*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( ((int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3))
-                          + ((int)*(p1+5) + (int)*(p1+6) + (int)*(p1+7))/2
-                          + ((int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3))/2
-                          + ((int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7))/4 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3))/2
-                          + ((int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7))/4
-                          + ((int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3))
-                          + ((int)*(p3+5) + (int)*(p3+6) + (int)*(p3+7))/2 ) * 4/27;
-                p1+=4;
-                p2+=4;
-                p3+=4;
-                *(q1++) = ( ((int)*(p1+1) + (int)*(p1+2) + (int)*(p1+3))/2
-                          + ((int)*(p1+5) + (int)*(p1+6) + (int)*(p1+7))
-                          + ((int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3))/4
-                          + ((int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7))/2 ) * 4/27;
-                *(q2++) = ( ((int)*(p2+1) + (int)*(p2+2) + (int)*(p2+3))/4
-                          + ((int)*(p2+5) + (int)*(p2+6) + (int)*(p2+7))/2
-                          + ((int)*(p3+1) + (int)*(p3+2) + (int)*(p3+3))/2
-                          + ((int)*(p3+5) + (int)*(p3+6) + (int)*(p3+7))   ) * 4/27;
-
-                p1+=8;
-                p2+=8;
-                p3+=8;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21 ) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*(j*3+0);
-            p2 = image + xsize*(j*3+1);
-            p3 = image + xsize*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( (int)*(p1+0)   + (int)*(p1+1)/2
-                          + (int)*(p2+0)/2 + (int)*(p2+1)/4 ) *4/9;
-                *(q2++) = ( (int)*(p2+0)/2 + (int)*(p2+1)/4
-                          + (int)*(p3+0)   + (int)*(p3+1)/2 ) *4/9;
-                p1++;
-                p2++;
-                p3++;
-                *(q1++) = ( (int)*(p1+0)/2 + (int)*(p1+1)
-                          + (int)*(p2+0)/4 + (int)*(p2+1)/2 ) *4/9;
-                *(q2++) = ( (int)*(p2+0)/4 + (int)*(p2+1)/2
-                          + (int)*(p3+0)/2 + (int)*(p3+1)   ) *4/9;
-                p1+=2;
-                p2+=2;
-                p3+=2;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_2vuy ) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*2*(j*3+0);
-            p2 = image + xsize*2*(j*3+1);
-            p3 = image + xsize*2*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( (int)*(p1+1)   + (int)*(p1+3)/2
-                          + (int)*(p2+1)/2 + (int)*(p2+3)/4 ) *4/9;
-                *(q2++) = ( (int)*(p2+1)/2 + (int)*(p2+3)/4
-                          + (int)*(p3+1)   + (int)*(p3+3)/2 ) *4/9;
-                p1+=2;
-                p2+=2;
-                p3+=2;
-                *(q1++) = ( (int)*(p1+1)/2 + (int)*(p1+3)
-                          + (int)*(p2+1)/4 + (int)*(p2+3)/2 ) *4/9;
-                *(q2++) = ( (int)*(p2+1)/4 + (int)*(p2+3)/2
-                          + (int)*(p3+1)/2 + (int)*(p3+3)   ) *4/9;
-                p1+=4;
-                p2+=4;
-                p3+=4;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
-        }
-    }
-    else if( pixFormat == AR_PIXEL_FORMAT_yuvs ) {
-        q1  = newImage;
-        q2  = newImage + xsize2;
-        for( j = 0; j < ysize2/2; j++ ) {
-            p1 = image + xsize*2*(j*3+0);
-            p2 = image + xsize*2*(j*3+1);
-            p3 = image + xsize*2*(j*3+2);
-            for( i = 0; i < xsize2/2; i++ ) {
-                *(q1++) = ( (int)*(p1+0)   + (int)*(p1+2)/2
-                          + (int)*(p2+0)/2 + (int)*(p2+2)/4 ) *4/9;
-                *(q2++) = ( (int)*(p2+0)/2 + (int)*(p2+2)/4
-                          + (int)*(p3+0)   + (int)*(p3+2)/2 ) *4/9;
-                p1+=2;
-                p2+=2;
-                p3+=2;
-                *(q1++) = ( (int)*(p1+0)/2 + (int)*(p1+2)
-                          + (int)*(p2+0)/4 + (int)*(p2+2)/2 ) *4/9;
-                *(q2++) = ( (int)*(p2+0)/4 + (int)*(p2+2)/2
-                          + (int)*(p3+0)/2 + (int)*(p3+2)   ) *4/9;
-                p1+=4;
-                p2+=4;
-                p3+=4;
-            }
-            q1 += xsize2;
-            q2 += xsize2;
-        }
+        q1 += xsize2;
+        q2 += xsize2;
     }
 
     return newImage;

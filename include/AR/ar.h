@@ -200,6 +200,38 @@ extern "C" {
 
 /* --------------------------------------------------*/
 
+/*!
+    @typedef
+    @asbtract Structure which carries information about a video frame retrieved by the video library.
+    @field buff         A pointer to the packed video data for this video frame. The video data pixel
+                        format is as specified by arVideoGetPixelFormat(). For multi-planar frames,
+                        this pointer is a copy of bufPlanes[0].
+    @field bufPlanes    For multi-planar video frames, this must be an array of length bufPlaneCount
+                        of (ARUint8*), into which will be copied pointers to the packed video data
+                        for each plane. For single-plane formats, this will be NULL.
+    @field bufPlaneCount For multi-planar video frames, this is the number of frame planes. For
+                        single-plane formats, this will be 0.
+    @field buffLuma     A pointer to a luminance-only version of the image.
+                        For luminance-only video formats this pointer is a copy of buff.
+                        For multi-planar formats which include a luminance-only plane,
+                        this pointer is a copy of one of the bufPlanes[] pointers.
+                        In all other cases, this pointer points to a buffer containing a
+                        copy of the video frame converted to luminance only.
+    @field fillFlag     Set non-zero when buff is valid.
+    @field time_sec     Seconds portion of the time at which buff was filled. Epoch is OS-specific.
+    @field time_usec    Microseconds portion of the time at which buff was filled. Epoch is OS-specific.
+    @seealso arVideoGetPixelFormat arVideoGetPixelFormat
+ */
+typedef struct {
+    ARUint8            *buff;
+    ARUint8           **bufPlanes;
+    unsigned int        bufPlaneCount;
+    ARUint8            *buffLuma;
+    int                 fillFlag;
+    ARUint32            time_sec;
+    ARUint32            time_usec;
+} AR2VideoBufferT;
+
 typedef enum {
     AR_LABELING_THRESH_MODE_MANUAL = 0,
     AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
@@ -999,9 +1031,9 @@ int            arGetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT *pixFormat );
 
     @param      arHandle Handle to initialised settings, including camera parameters,
         incoming video image size and pixel format, markers, detection modes and other information.
-	@param		dataPtr Pointer to the first byte of a block of memory containing pixel
-		data for an image which is to be processed for marker detection. The format of
-		pixels in this image is specified by arSetPixelFormat(). The width and height of
+	@param		frame Pointer to an AR2VideoBufferT structure which contains the pixel
+		data for the image  frame which is to be processed for marker detection. The format of
+		pixels in the frame is specified by arSetPixelFormat(). The width and height of
 		the image are specified by the xsize and ysize parameters of the camera parameters
 		held in arHandle.
     @result     0 if the function proceeded without error, or a value less than 0 in case of error.
@@ -1010,7 +1042,7 @@ int            arGetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT *pixFormat );
     @seealso arGetMarkerNum arGetMarkerNum
     @seealso arGetMarker arGetMarker
  */
-int            arDetectMarker( ARHandle *arHandle, ARUint8 *dataPtr );
+int            arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame);
 
 /*!
     @function
@@ -1043,7 +1075,7 @@ ARMarkerInfo  *arGetMarker( ARHandle *arHandle );
 
 /* ------------------------------ */
 
-int            arLabeling( ARUint8 *image, int xsize, int ysize, int pixelFormat,
+int            arLabeling( ARUint8 *imageLuma, int xsize, int ysize,
                            int debugMode, int labelingMode, int labelingThresh, int imageProcMode,
                            ARLabelInfo *labelInfo, ARUint8 *image_thresh );
 int            arDetectMarker2( int xsize, int ysize, ARLabelInfo *labelInfo, int imageProcMode,

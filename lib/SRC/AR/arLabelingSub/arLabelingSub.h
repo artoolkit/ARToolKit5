@@ -51,320 +51,52 @@
 #include <AR/ar.h>
 #include "arLabelingPrivate.h"
 
-#if defined(AR_PIXEL_FORMAT_CCC)
-#  define  AR_PIXEL_SIZE     3
-#elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_ACCC)
-#  define  AR_PIXEL_SIZE     4
-#elif defined(AR_PIXEL_FORMAT_C) || defined(AR_LABELING_ADAPTIVE)
-#  define  AR_PIXEL_SIZE     1
-#elif defined(AR_PIXEL_FORMAT_YC) || defined(AR_PIXEL_FORMAT_CY) || defined(AR_PIXEL_FORMAT_CCC_565) || defined(AR_PIXEL_FORMAT_CCCA_5551) || defined(AR_PIXEL_FORMAT_CCCA_4444)
-#  define  AR_PIXEL_SIZE     2
-#else
-#  error
-#endif
+#define AR_PIXEL_SIZE     1
 
-#ifdef AR_PIXEL_FORMAT_CCC
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBI3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBR3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWI3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWR3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBI3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBR3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWI3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWR3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_CCCA
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBI3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBR3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWI3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWR3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBI3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBR3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWI3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWR3CA( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_ACCC
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBIA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBRA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWIA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWRA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBIA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBRA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWIA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWRA3C( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_C
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
+#ifndef AR_LABELING_ADAPTIVE
+#  ifndef AR_LABELING_DEBUG_ENABLE_F
+#    ifndef AR_LABELING_WHITE_REGION_F
+#      ifndef AR_LABELING_FRAME_IMAGE_F
 int arLabelingSubDBIC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
+#      else
 int arLabelingSubDBRC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
+#      endif // !AR_LABELING_FRAME_IMAGE_F
+#    else
+#      ifndef AR_LABELING_FRAME_IMAGE_F
 int arLabelingSubDWIC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
+#      else
 int arLabelingSubDWRC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
+#      endif // !AR_LABELING_FRAME_IMAGE_F
+#    endif // !AR_LABELING_WHITE_REGION_F
+#  else
+#    ifndef AR_LABELING_WHITE_REGION_F
+#      ifndef AR_LABELING_FRAME_IMAGE_F
 int arLabelingSubEBIC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
+#      else
 int arLabelingSubEBRC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
+#      endif // !AR_LABELING_FRAME_IMAGE_F
+#    else
+#      ifndef AR_LABELING_FRAME_IMAGE_F
 int arLabelingSubEWIC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
+#      else
 int arLabelingSubEWRC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_YC
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBIYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
+#      endif // !AR_LABELING_FRAME_IMAGE_F
+#    endif // !AR_LABELING_WHITE_REGION_F
+#  endif // !AR_LABELING_DEBUG_ENABLE_F
 #else
-int arLabelingSubDBRYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWIYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWRYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBIYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBRYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWIYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWRYC( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_CY
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBICY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBRCY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWICY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWRCY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBICY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBRCY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWICY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWRCY( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_CCC_565
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBI3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBR3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWI3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWR3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBI3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBR3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWI3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWR3C565( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_CCCA_5551
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBI3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBR3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWI3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWR3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBI3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBR3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWI3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWR3CA5551( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_PIXEL_FORMAT_CCCA_4444
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDBI3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDBR3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubDWI3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubDWR3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEBI3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEBR3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#else
-#ifndef AR_LABELING_FRAME_IMAGE_F
-int arLabelingSubEWI3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#else
-int arLabelingSubEWR3CA4444( ARUint8 *image, int xsize, int ysize, int labelingThresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_FRAME_IMAGE_F
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
-#endif
-
-#ifdef AR_LABELING_ADAPTIVE
-#ifndef AR_LABELING_DEBUG_ENABLE_F
-#ifndef AR_LABELING_WHITE_REGION_F
+#  ifndef AR_LABELING_DEBUG_ENABLE_F
+#    ifndef AR_LABELING_WHITE_REGION_F
 int arLabelingSubDBZ( ARUint8 *image, const int xsize, const int ysize, ARUint8* image_thresh, ARLabelInfo *labelInfo )
-#else
+#    else
 int arLabelingSubDWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8* image_thresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_WHITE_REGION_F
-#else
-#ifndef AR_LABELING_WHITE_REGION_F
+#    endif // !AR_LABELING_WHITE_REGION_F
+#  else
+#    ifndef AR_LABELING_WHITE_REGION_F
 int arLabelingSubEBZ( ARUint8 *image, const int xsize, const int ysize, ARUint8* image_thresh, ARLabelInfo *labelInfo )
-#else
+#    else
 int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8* image_thresh, ARLabelInfo *labelInfo )
-#endif // !AR_LABELING_WHITE_REGION_F
-#endif // !AR_LABELING_DEBUG_ENABLE_F
+#    endif // !AR_LABELING_WHITE_REGION_F
+#  endif // !AR_LABELING_DEBUG_ENABLE_F
 #endif
 
 {
@@ -386,15 +118,6 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
     int       *area;
     int       *clip;
     ARdouble  *pos;
-
-#ifndef AR_LABELING_ADAPTIVE
-    int        labelingThresh2;
-#  if defined(AR_PIXEL_FORMAT_C) || defined(AR_PIXEL_FORMAT_YC) || defined(AR_PIXEL_FORMAT_CY) 
-    labelingThresh2 = labelingThresh;
-#  else
-    labelingThresh2 = labelingThresh * 3;
-#  endif
-#endif
 
 #ifdef AR_LABELING_FRAME_IMAGE_F
     lxsize = xsize;
@@ -465,44 +188,16 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
 
 #ifndef AR_LABELING_WHITE_REGION_F
 // Black region.
-#  if defined(AR_PIXEL_FORMAT_ACCC)
-            if( *(pnt+1) + *(pnt+2) + *(pnt+3) <= labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_CCC)
-            if( *(pnt+0) + *(pnt+1) + *(pnt+2) <= labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_C)
-            if( *pnt <= labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_YC)
-            if( *pnt <= labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CY)
-			if( *(pnt+1) <= labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CCC_565)
-            if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xe0) >> 3) + (((*(pnt+1)) & 0x1f) << 3) + 10 <= labelingThresh2 ) { // 10 = 4 + 2 + 4, provides midpoint of missing bits.
-#  elif defined(AR_PIXEL_FORMAT_CCCA_5551)
-            if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xc0) >> 3) + (((*(pnt+1)) & 0x3e) << 2) + 12 <= labelingThresh2 ) { // 12 = 4 + 4 + 4, provides midpoint of missing bits.
-#  elif defined(AR_PIXEL_FORMAT_CCCA_4444)
-            if( ((*(pnt+0)) & 0xf0) + (((*(pnt+0)) & 0x0f) << 4) + ((*(pnt+1)) & 0xf0) + 24 <= labelingThresh2 ) {  // 24 = 8 + 8 + 8, provides midpoint of missing bits.
-#  elif defined(AR_LABELING_ADAPTIVE)
+#  ifndef AR_LABELING_ADAPTIVE
+            if( *pnt <= labelingThresh ) {
+#  else
             if( *pnt <= *pnt_thresh ) {
 #  endif
 #else
 // White region.
-#  if defined(AR_PIXEL_FORMAT_ACCC)
-            if( *(pnt+1) + *(pnt+2) + *(pnt+3) > labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CCCA) || defined(AR_PIXEL_FORMAT_CCC)
-            if( *(pnt+0) + *(pnt+1) + *(pnt+2) > labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_C)
-            if( *pnt > labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_YC)
-			if( *pnt > labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CY)
-			if( *(pnt+1) > labelingThresh2 ) {
-#  elif defined(AR_PIXEL_FORMAT_CCC_565)
-            if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xe0) >> 3) + (((*(pnt+1)) & 0x1f) << 3) + 10 > labelingThresh2 ) { // 10 = 4 + 2 + 4, provides midpoint of missing bits.
-#  elif defined(AR_PIXEL_FORMAT_CCCA_5551)
-            if( ((*(pnt+0)) & 0xf8) + (((*(pnt+0)) & 0x07) << 5) + (((*(pnt+1)) & 0xc0) >> 3) + (((*(pnt+1)) & 0x3e) << 2) + 12 > labelingThresh2 ) { // 12 = 4 + 4 + 4, provides midpoint of missing bits.
-#  elif defined(AR_PIXEL_FORMAT_CCCA_4444)
-            if( ((*(pnt+0)) & 0xf0) + (((*(pnt+0)) & 0x0f) << 4) + ((*(pnt+1)) & 0xf0) + 24 > labelingThresh2 ) {  // 24 = 8 + 8 + 8, provides midpoint of missing bits.
-#  elif defined(AR_LABELING_ADAPTIVE)
+#  ifndef AR_LABELING_ADAPTIVE
+            if( *pnt > labelingThresh ) {
+#  else
             if( *pnt > *pnt_thresh ) {
 #  endif
 #endif // !AR_LABELING_WHITE_REGION_F

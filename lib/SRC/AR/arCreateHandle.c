@@ -218,7 +218,7 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
                 "MANUAL",
                 "AUTO_MEDIAN",
                 "AUTO_OTSU",
-                "AUTO_ADAPTIVE"
+                "AUTO_ADAPTIVE",
                 "AUTO_BRACKETING"
             };
             ARLOGe("Labeling threshold mode set to %s.\n", modeDescs[mode1]);

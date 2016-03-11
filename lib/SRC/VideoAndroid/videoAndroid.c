@@ -233,10 +233,12 @@ AR2VideoParamAndroidT *ar2VideoOpenAndroid( const char *config )
         // For non-planar formats, incoming buffers will be served directly,
         // so no allocation for buff, but do need to allocate an array for thr bufPlanes pointers.
         vid->buffer.buff = NULL;
+        vid->buffer.buffLuma = NULL;
         vid->buffer.bufPlanes = (ARUint8 **)calloc(2, sizeof(ARUint8 *));
         vid->buffer.bufPlaneCount = 2;
     } else if (vid->format == AR_PIXEL_FORMAT_RGBA) {
         vid->buffer.buff = malloc(vid->width * vid->height * 4);
+        vid->buffer.buffLuma = NULL;
         vid->buffer.bufPlanes = NULL;
         vid->buffer.bufPlaneCount = 0; // This will be checked for in ar2VideoCloseAndroid when deciding whether to free(buff).
     } else {
@@ -321,10 +323,12 @@ AR2VideoBufferT *ar2VideoGetImageAndroid( AR2VideoParamAndroidT *vid )
     if (!frame) return NULL;
     
     if (vid->format == AR_PIXEL_FORMAT_NV21 || vid->format == AR_PIXEL_FORMAT_420f) {
-        vid->buffer.bufPlanes[0] = vid->buffer.buff = (ARUint8 *)frame; // Luma plane.
+        vid->buffer.bufPlanes[0] = (ARUint8 *)(frame); // Luma plane.
         vid->buffer.bufPlanes[1] = (ARUint8 *)(frame + vid->width*vid->height); // Chroma plane.
+        vid->buffer.buff = vid->buffer.buffLuma = vid->buffer.bufPlanes[0];
     } else if (vid->format == AR_PIXEL_FORMAT_RGBA) {
         color_convert_common(frame, frame + vid->width*vid->height, vid->width, vid->height, vid->buffer.buff);
+        vid->buffer.buffLuma = NULL;
     } else {
         return NULL;
     }

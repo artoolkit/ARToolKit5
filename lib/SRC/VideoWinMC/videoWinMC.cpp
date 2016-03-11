@@ -324,6 +324,7 @@ AR2VideoBufferT *ar2VideoGetImageWinMC(AR2VideoParamWinMCT *vid)
 	if (buf) {
 		vid->buffer.buff = buf;
 		vid->buffer.fillFlag = 1;
+		vid->buffer.buffLuma = NULL;
 		ar2VideoWinMCGetTimeStamp(&(vid->buffer.time_sec), &(vid->buffer.time_usec));
 		return (&vid->buffer);
 	} else {

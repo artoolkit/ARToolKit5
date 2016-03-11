@@ -380,12 +380,13 @@ int kpmSetMatchingSkipRegion( KpmHandle *kpmHandle, SurfSubRect *skipRegion, int
 }
 #endif
 
-int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
+int kpmMatching( KpmHandle *kpmHandle, AR2VideoBufferT *inImage )
 {
     int               xsize, ysize;
     int               xsize2, ysize2;
     int               procMode;
-    ARUint8          *inImageBW;
+    ARUint8          *imageLuma;
+    int               imageLumaWasAllocated;
     int               i;
 #if !BINARY_FEATURE
     FeatureVector     featureVector;
@@ -409,15 +410,17 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     ysize           = kpmHandle->ysize;
     procMode        = kpmHandle->procMode;
     
-    if (procMode == KpmProcFullSize && (kpmHandle->pixFormat == AR_PIXEL_FORMAT_MONO || kpmHandle->pixFormat == AR_PIXEL_FORMAT_420v || kpmHandle->pixFormat == AR_PIXEL_FORMAT_420f || kpmHandle->pixFormat == AR_PIXEL_FORMAT_NV21)) {
-        inImageBW = inImage;
+    if (procMode == KpmProcFullSize) {
+        imageLuma = inImage->buffLuma;
+        imageLumaWasAllocated = 0;
     } else {
-        inImageBW = kpmUtilGenBWImage( inImage, kpmHandle->pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 );
-        if( inImageBW == NULL ) return -1;
+        imageLuma = kpmUtilResizeImage( inImage->buffLuma, xsize, ysize, procMode, &xsize2, &ysize2 );
+        if (!imageLuma) return -1;
+        imageLumaWasAllocated = 1;
     }
 
 #if BINARY_FEATURE
-    kpmHandle->freakMatcher->query(inImageBW, xsize ,ysize);
+    kpmHandle->freakMatcher->query(imageLuma, xsize ,ysize);
     kpmHandle->inDataSet.num = (int)kpmHandle->freakMatcher->getQueryFeaturePoints().size();
 #else
     surfSubExtractFeaturePoint( kpmHandle->surfHandle, inImageBW, kpmHandle->skipRegion.region, kpmHandle->skipRegion.regionNum );
@@ -672,7 +675,7 @@ int kpmMatching( KpmHandle *kpmHandle, ARUint8 *inImage )
     
     for( i = 0; i < kpmHandle->resultNum; i++ ) kpmHandle->result[i].skipF = 0;
 
-    if (inImageBW != inImage) free( inImageBW );
+    if (imageLumaWasAllocated) free(imageLuma);
     
     return 0;
 }

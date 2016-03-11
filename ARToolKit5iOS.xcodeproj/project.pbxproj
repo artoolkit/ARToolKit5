@@ -814,81 +814,17 @@
 		4AF101DC180BFC9100A922DE /* vHouse.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB26221804A330002290C5 /* vHouse.c */; };
 		4AF101DD180BFC9100A922DE /* vInnerP.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB26231804A330002290C5 /* vInnerP.c */; };
 		4AF101DE180BFC9100A922DE /* vTridiag.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB26241804A330002290C5 /* vTridiag.c */; };
-		4AF101DF180BFC9900A922DE /* arLabelingSubDBI3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B31804A330002290C5 /* arLabelingSubDBI3C.c */; };
-		4AF101E0180BFC9900A922DE /* arLabelingSubDBI3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B41804A330002290C5 /* arLabelingSubDBI3C565.c */; };
-		4AF101E1180BFC9900A922DE /* arLabelingSubDBI3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B51804A330002290C5 /* arLabelingSubDBI3CA.c */; };
-		4AF101E2180BFC9900A922DE /* arLabelingSubDBI3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B61804A330002290C5 /* arLabelingSubDBI3CA4444.c */; };
-		4AF101E3180BFC9900A922DE /* arLabelingSubDBI3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B71804A330002290C5 /* arLabelingSubDBI3CA5551.c */; };
-		4AF101E4180BFC9900A922DE /* arLabelingSubDBIA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B81804A330002290C5 /* arLabelingSubDBIA3C.c */; };
 		4AF101E5180BFC9900A922DE /* arLabelingSubDBIC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25B91804A330002290C5 /* arLabelingSubDBIC.c */; };
-		4AF101E6180BFC9900A922DE /* arLabelingSubDBICY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BA1804A330002290C5 /* arLabelingSubDBICY.c */; };
-		4AF101E7180BFC9900A922DE /* arLabelingSubDBIYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BB1804A330002290C5 /* arLabelingSubDBIYC.c */; };
-		4AF101E8180BFC9900A922DE /* arLabelingSubDBR3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BC1804A330002290C5 /* arLabelingSubDBR3C.c */; };
-		4AF101E9180BFC9900A922DE /* arLabelingSubDBR3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BD1804A330002290C5 /* arLabelingSubDBR3C565.c */; };
-		4AF101EA180BFC9900A922DE /* arLabelingSubDBR3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BE1804A330002290C5 /* arLabelingSubDBR3CA.c */; };
-		4AF101EB180BFC9900A922DE /* arLabelingSubDBR3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25BF1804A330002290C5 /* arLabelingSubDBR3CA4444.c */; };
-		4AF101EC180BFC9900A922DE /* arLabelingSubDBR3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C01804A330002290C5 /* arLabelingSubDBR3CA5551.c */; };
-		4AF101ED180BFC9900A922DE /* arLabelingSubDBRA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C11804A330002290C5 /* arLabelingSubDBRA3C.c */; };
 		4AF101EE180BFC9900A922DE /* arLabelingSubDBRC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C21804A330002290C5 /* arLabelingSubDBRC.c */; };
-		4AF101EF180BFC9900A922DE /* arLabelingSubDBRCY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C31804A330002290C5 /* arLabelingSubDBRCY.c */; };
-		4AF101F0180BFC9900A922DE /* arLabelingSubDBRYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C41804A330002290C5 /* arLabelingSubDBRYC.c */; };
 		4AF101F1180BFC9900A922DE /* arLabelingSubDBZ.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C51804A330002290C5 /* arLabelingSubDBZ.c */; };
-		4AF101F2180BFC9900A922DE /* arLabelingSubDWI3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C61804A330002290C5 /* arLabelingSubDWI3C.c */; };
-		4AF101F3180BFC9900A922DE /* arLabelingSubDWI3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C71804A330002290C5 /* arLabelingSubDWI3C565.c */; };
-		4AF101F4180BFC9900A922DE /* arLabelingSubDWI3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C81804A330002290C5 /* arLabelingSubDWI3CA.c */; };
-		4AF101F5180BFC9900A922DE /* arLabelingSubDWI3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25C91804A330002290C5 /* arLabelingSubDWI3CA4444.c */; };
-		4AF101F6180BFC9900A922DE /* arLabelingSubDWI3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CA1804A330002290C5 /* arLabelingSubDWI3CA5551.c */; };
-		4AF101F7180BFC9900A922DE /* arLabelingSubDWIA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CB1804A330002290C5 /* arLabelingSubDWIA3C.c */; };
 		4AF101F8180BFC9900A922DE /* arLabelingSubDWIC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CC1804A330002290C5 /* arLabelingSubDWIC.c */; };
-		4AF101F9180BFC9900A922DE /* arLabelingSubDWICY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CD1804A330002290C5 /* arLabelingSubDWICY.c */; };
-		4AF101FA180BFC9900A922DE /* arLabelingSubDWIYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CE1804A330002290C5 /* arLabelingSubDWIYC.c */; };
-		4AF101FB180BFC9900A922DE /* arLabelingSubDWR3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25CF1804A330002290C5 /* arLabelingSubDWR3C.c */; };
-		4AF101FC180BFC9900A922DE /* arLabelingSubDWR3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D01804A330002290C5 /* arLabelingSubDWR3C565.c */; };
-		4AF101FD180BFC9900A922DE /* arLabelingSubDWR3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D11804A330002290C5 /* arLabelingSubDWR3CA.c */; };
-		4AF101FE180BFC9900A922DE /* arLabelingSubDWR3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D21804A330002290C5 /* arLabelingSubDWR3CA4444.c */; };
-		4AF101FF180BFC9900A922DE /* arLabelingSubDWR3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D31804A330002290C5 /* arLabelingSubDWR3CA5551.c */; };
-		4AF10200180BFC9900A922DE /* arLabelingSubDWRA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D41804A330002290C5 /* arLabelingSubDWRA3C.c */; };
 		4AF10201180BFC9900A922DE /* arLabelingSubDWRC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D51804A330002290C5 /* arLabelingSubDWRC.c */; };
-		4AF10202180BFC9900A922DE /* arLabelingSubDWRCY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D61804A330002290C5 /* arLabelingSubDWRCY.c */; };
-		4AF10203180BFC9900A922DE /* arLabelingSubDWRYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D71804A330002290C5 /* arLabelingSubDWRYC.c */; };
 		4AF10204180BFC9900A922DE /* arLabelingSubDWZ.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D81804A330002290C5 /* arLabelingSubDWZ.c */; };
-		4AF10205180BFC9900A922DE /* arLabelingSubEBI3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25D91804A330002290C5 /* arLabelingSubEBI3C.c */; };
-		4AF10206180BFC9900A922DE /* arLabelingSubEBI3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DA1804A330002290C5 /* arLabelingSubEBI3C565.c */; };
-		4AF10207180BFC9900A922DE /* arLabelingSubEBI3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DB1804A330002290C5 /* arLabelingSubEBI3CA.c */; };
-		4AF10208180BFC9900A922DE /* arLabelingSubEBI3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DC1804A330002290C5 /* arLabelingSubEBI3CA4444.c */; };
-		4AF10209180BFC9900A922DE /* arLabelingSubEBI3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DD1804A330002290C5 /* arLabelingSubEBI3CA5551.c */; };
-		4AF1020A180BFC9900A922DE /* arLabelingSubEBIA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DE1804A330002290C5 /* arLabelingSubEBIA3C.c */; };
 		4AF1020B180BFC9900A922DE /* arLabelingSubEBIC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25DF1804A330002290C5 /* arLabelingSubEBIC.c */; };
-		4AF1020C180BFC9900A922DE /* arLabelingSubEBICY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E01804A330002290C5 /* arLabelingSubEBICY.c */; };
-		4AF1020D180BFC9900A922DE /* arLabelingSubEBIYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E11804A330002290C5 /* arLabelingSubEBIYC.c */; };
-		4AF1020E180BFC9900A922DE /* arLabelingSubEBR3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E21804A330002290C5 /* arLabelingSubEBR3C.c */; };
-		4AF1020F180BFC9900A922DE /* arLabelingSubEBR3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E31804A330002290C5 /* arLabelingSubEBR3C565.c */; };
-		4AF10210180BFC9900A922DE /* arLabelingSubEBR3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E41804A330002290C5 /* arLabelingSubEBR3CA.c */; };
-		4AF10211180BFC9900A922DE /* arLabelingSubEBR3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E51804A330002290C5 /* arLabelingSubEBR3CA4444.c */; };
-		4AF10212180BFC9900A922DE /* arLabelingSubEBR3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E61804A330002290C5 /* arLabelingSubEBR3CA5551.c */; };
-		4AF10213180BFC9900A922DE /* arLabelingSubEBRA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E71804A330002290C5 /* arLabelingSubEBRA3C.c */; };
 		4AF10214180BFC9900A922DE /* arLabelingSubEBRC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E81804A330002290C5 /* arLabelingSubEBRC.c */; };
-		4AF10215180BFC9900A922DE /* arLabelingSubEBRCY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25E91804A330002290C5 /* arLabelingSubEBRCY.c */; };
-		4AF10216180BFC9900A922DE /* arLabelingSubEBRYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25EA1804A330002290C5 /* arLabelingSubEBRYC.c */; };
 		4AF10217180BFC9900A922DE /* arLabelingSubEBZ.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25EB1804A330002290C5 /* arLabelingSubEBZ.c */; };
-		4AF10218180BFC9900A922DE /* arLabelingSubEWI3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25EC1804A330002290C5 /* arLabelingSubEWI3C.c */; };
-		4AF10219180BFC9900A922DE /* arLabelingSubEWI3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25ED1804A330002290C5 /* arLabelingSubEWI3C565.c */; };
-		4AF1021A180BFC9900A922DE /* arLabelingSubEWI3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25EE1804A330002290C5 /* arLabelingSubEWI3CA.c */; };
-		4AF1021B180BFC9900A922DE /* arLabelingSubEWI3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25EF1804A330002290C5 /* arLabelingSubEWI3CA4444.c */; };
-		4AF1021C180BFC9900A922DE /* arLabelingSubEWI3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F01804A330002290C5 /* arLabelingSubEWI3CA5551.c */; };
-		4AF1021D180BFC9900A922DE /* arLabelingSubEWIA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F11804A330002290C5 /* arLabelingSubEWIA3C.c */; };
 		4AF1021E180BFC9900A922DE /* arLabelingSubEWIC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F21804A330002290C5 /* arLabelingSubEWIC.c */; };
-		4AF1021F180BFC9900A922DE /* arLabelingSubEWICY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F31804A330002290C5 /* arLabelingSubEWICY.c */; };
-		4AF10220180BFC9900A922DE /* arLabelingSubEWIYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F41804A330002290C5 /* arLabelingSubEWIYC.c */; };
-		4AF10221180BFC9900A922DE /* arLabelingSubEWR3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F51804A330002290C5 /* arLabelingSubEWR3C.c */; };
-		4AF10222180BFC9900A922DE /* arLabelingSubEWR3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F61804A330002290C5 /* arLabelingSubEWR3C565.c */; };
-		4AF10223180BFC9900A922DE /* arLabelingSubEWR3CA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F71804A330002290C5 /* arLabelingSubEWR3CA.c */; };
-		4AF10224180BFC9900A922DE /* arLabelingSubEWR3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F81804A330002290C5 /* arLabelingSubEWR3CA4444.c */; };
-		4AF10225180BFC9900A922DE /* arLabelingSubEWR3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25F91804A330002290C5 /* arLabelingSubEWR3CA5551.c */; };
-		4AF10226180BFC9900A922DE /* arLabelingSubEWRA3C.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25FA1804A330002290C5 /* arLabelingSubEWRA3C.c */; };
 		4AF10227180BFC9900A922DE /* arLabelingSubEWRC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25FB1804A330002290C5 /* arLabelingSubEWRC.c */; };
-		4AF10228180BFC9900A922DE /* arLabelingSubEWRCY.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25FC1804A330002290C5 /* arLabelingSubEWRCY.c */; };
-		4AF10229180BFC9900A922DE /* arLabelingSubEWRYC.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25FD1804A330002290C5 /* arLabelingSubEWRYC.c */; };
 		4AF1022A180BFC9900A922DE /* arLabelingSubEWZ.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB25FE1804A330002290C5 /* arLabelingSubEWZ.c */; };
 		4AF6B87E13B380EA00F983E7 /* libARgsub_es.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD26CBB13B37EEB00F5E037 /* libARgsub_es.a */; };
 		4AF6B88013B380EA00F983E7 /* libARMulti.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD26CBC13B37EEB00F5E037 /* libARMulti.a */; };
@@ -2721,81 +2657,17 @@
 		4AEB25AF1804A330002290C5 /* arLabeling.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabeling.c; sourceTree = "<group>"; };
 		4AEB25B11804A330002290C5 /* arLabelingPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arLabelingPrivate.h; sourceTree = "<group>"; };
 		4AEB25B21804A330002290C5 /* arLabelingSub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arLabelingSub.h; sourceTree = "<group>"; };
-		4AEB25B31804A330002290C5 /* arLabelingSubDBI3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3C.c; sourceTree = "<group>"; };
-		4AEB25B41804A330002290C5 /* arLabelingSubDBI3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3C565.c; sourceTree = "<group>"; };
-		4AEB25B51804A330002290C5 /* arLabelingSubDBI3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3CA.c; sourceTree = "<group>"; };
-		4AEB25B61804A330002290C5 /* arLabelingSubDBI3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3CA4444.c; sourceTree = "<group>"; };
-		4AEB25B71804A330002290C5 /* arLabelingSubDBI3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBI3CA5551.c; sourceTree = "<group>"; };
-		4AEB25B81804A330002290C5 /* arLabelingSubDBIA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBIA3C.c; sourceTree = "<group>"; };
 		4AEB25B91804A330002290C5 /* arLabelingSubDBIC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBIC.c; sourceTree = "<group>"; };
-		4AEB25BA1804A330002290C5 /* arLabelingSubDBICY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBICY.c; sourceTree = "<group>"; };
-		4AEB25BB1804A330002290C5 /* arLabelingSubDBIYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBIYC.c; sourceTree = "<group>"; };
-		4AEB25BC1804A330002290C5 /* arLabelingSubDBR3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBR3C.c; sourceTree = "<group>"; };
-		4AEB25BD1804A330002290C5 /* arLabelingSubDBR3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBR3C565.c; sourceTree = "<group>"; };
-		4AEB25BE1804A330002290C5 /* arLabelingSubDBR3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBR3CA.c; sourceTree = "<group>"; };
-		4AEB25BF1804A330002290C5 /* arLabelingSubDBR3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBR3CA4444.c; sourceTree = "<group>"; };
-		4AEB25C01804A330002290C5 /* arLabelingSubDBR3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBR3CA5551.c; sourceTree = "<group>"; };
-		4AEB25C11804A330002290C5 /* arLabelingSubDBRA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBRA3C.c; sourceTree = "<group>"; };
 		4AEB25C21804A330002290C5 /* arLabelingSubDBRC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBRC.c; sourceTree = "<group>"; };
-		4AEB25C31804A330002290C5 /* arLabelingSubDBRCY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBRCY.c; sourceTree = "<group>"; };
-		4AEB25C41804A330002290C5 /* arLabelingSubDBRYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBRYC.c; sourceTree = "<group>"; };
 		4AEB25C51804A330002290C5 /* arLabelingSubDBZ.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDBZ.c; sourceTree = "<group>"; };
-		4AEB25C61804A330002290C5 /* arLabelingSubDWI3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWI3C.c; sourceTree = "<group>"; };
-		4AEB25C71804A330002290C5 /* arLabelingSubDWI3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWI3C565.c; sourceTree = "<group>"; };
-		4AEB25C81804A330002290C5 /* arLabelingSubDWI3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWI3CA.c; sourceTree = "<group>"; };
-		4AEB25C91804A330002290C5 /* arLabelingSubDWI3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWI3CA4444.c; sourceTree = "<group>"; };
-		4AEB25CA1804A330002290C5 /* arLabelingSubDWI3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWI3CA5551.c; sourceTree = "<group>"; };
-		4AEB25CB1804A330002290C5 /* arLabelingSubDWIA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWIA3C.c; sourceTree = "<group>"; };
 		4AEB25CC1804A330002290C5 /* arLabelingSubDWIC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWIC.c; sourceTree = "<group>"; };
-		4AEB25CD1804A330002290C5 /* arLabelingSubDWICY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWICY.c; sourceTree = "<group>"; };
-		4AEB25CE1804A330002290C5 /* arLabelingSubDWIYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWIYC.c; sourceTree = "<group>"; };
-		4AEB25CF1804A330002290C5 /* arLabelingSubDWR3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWR3C.c; sourceTree = "<group>"; };
-		4AEB25D01804A330002290C5 /* arLabelingSubDWR3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWR3C565.c; sourceTree = "<group>"; };
-		4AEB25D11804A330002290C5 /* arLabelingSubDWR3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWR3CA.c; sourceTree = "<group>"; };
-		4AEB25D21804A330002290C5 /* arLabelingSubDWR3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWR3CA4444.c; sourceTree = "<group>"; };
-		4AEB25D31804A330002290C5 /* arLabelingSubDWR3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWR3CA5551.c; sourceTree = "<group>"; };
-		4AEB25D41804A330002290C5 /* arLabelingSubDWRA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWRA3C.c; sourceTree = "<group>"; };
 		4AEB25D51804A330002290C5 /* arLabelingSubDWRC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWRC.c; sourceTree = "<group>"; };
-		4AEB25D61804A330002290C5 /* arLabelingSubDWRCY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWRCY.c; sourceTree = "<group>"; };
-		4AEB25D71804A330002290C5 /* arLabelingSubDWRYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWRYC.c; sourceTree = "<group>"; };
 		4AEB25D81804A330002290C5 /* arLabelingSubDWZ.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubDWZ.c; sourceTree = "<group>"; };
-		4AEB25D91804A330002290C5 /* arLabelingSubEBI3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBI3C.c; sourceTree = "<group>"; };
-		4AEB25DA1804A330002290C5 /* arLabelingSubEBI3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBI3C565.c; sourceTree = "<group>"; };
-		4AEB25DB1804A330002290C5 /* arLabelingSubEBI3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBI3CA.c; sourceTree = "<group>"; };
-		4AEB25DC1804A330002290C5 /* arLabelingSubEBI3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBI3CA4444.c; sourceTree = "<group>"; };
-		4AEB25DD1804A330002290C5 /* arLabelingSubEBI3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBI3CA5551.c; sourceTree = "<group>"; };
-		4AEB25DE1804A330002290C5 /* arLabelingSubEBIA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBIA3C.c; sourceTree = "<group>"; };
 		4AEB25DF1804A330002290C5 /* arLabelingSubEBIC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBIC.c; sourceTree = "<group>"; };
-		4AEB25E01804A330002290C5 /* arLabelingSubEBICY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBICY.c; sourceTree = "<group>"; };
-		4AEB25E11804A330002290C5 /* arLabelingSubEBIYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBIYC.c; sourceTree = "<group>"; };
-		4AEB25E21804A330002290C5 /* arLabelingSubEBR3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBR3C.c; sourceTree = "<group>"; };
-		4AEB25E31804A330002290C5 /* arLabelingSubEBR3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBR3C565.c; sourceTree = "<group>"; };
-		4AEB25E41804A330002290C5 /* arLabelingSubEBR3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBR3CA.c; sourceTree = "<group>"; };
-		4AEB25E51804A330002290C5 /* arLabelingSubEBR3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBR3CA4444.c; sourceTree = "<group>"; };
-		4AEB25E61804A330002290C5 /* arLabelingSubEBR3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBR3CA5551.c; sourceTree = "<group>"; };
-		4AEB25E71804A330002290C5 /* arLabelingSubEBRA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBRA3C.c; sourceTree = "<group>"; };
 		4AEB25E81804A330002290C5 /* arLabelingSubEBRC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBRC.c; sourceTree = "<group>"; };
-		4AEB25E91804A330002290C5 /* arLabelingSubEBRCY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBRCY.c; sourceTree = "<group>"; };
-		4AEB25EA1804A330002290C5 /* arLabelingSubEBRYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBRYC.c; sourceTree = "<group>"; };
 		4AEB25EB1804A330002290C5 /* arLabelingSubEBZ.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEBZ.c; sourceTree = "<group>"; };
-		4AEB25EC1804A330002290C5 /* arLabelingSubEWI3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWI3C.c; sourceTree = "<group>"; };
-		4AEB25ED1804A330002290C5 /* arLabelingSubEWI3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWI3C565.c; sourceTree = "<group>"; };
-		4AEB25EE1804A330002290C5 /* arLabelingSubEWI3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWI3CA.c; sourceTree = "<group>"; };
-		4AEB25EF1804A330002290C5 /* arLabelingSubEWI3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWI3CA4444.c; sourceTree = "<group>"; };
-		4AEB25F01804A330002290C5 /* arLabelingSubEWI3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWI3CA5551.c; sourceTree = "<group>"; };
-		4AEB25F11804A330002290C5 /* arLabelingSubEWIA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWIA3C.c; sourceTree = "<group>"; };
 		4AEB25F21804A330002290C5 /* arLabelingSubEWIC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWIC.c; sourceTree = "<group>"; };
-		4AEB25F31804A330002290C5 /* arLabelingSubEWICY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWICY.c; sourceTree = "<group>"; };
-		4AEB25F41804A330002290C5 /* arLabelingSubEWIYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWIYC.c; sourceTree = "<group>"; };
-		4AEB25F51804A330002290C5 /* arLabelingSubEWR3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3C.c; sourceTree = "<group>"; };
-		4AEB25F61804A330002290C5 /* arLabelingSubEWR3C565.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3C565.c; sourceTree = "<group>"; };
-		4AEB25F71804A330002290C5 /* arLabelingSubEWR3CA.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA.c; sourceTree = "<group>"; };
-		4AEB25F81804A330002290C5 /* arLabelingSubEWR3CA4444.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA4444.c; sourceTree = "<group>"; };
-		4AEB25F91804A330002290C5 /* arLabelingSubEWR3CA5551.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA5551.c; sourceTree = "<group>"; };
-		4AEB25FA1804A330002290C5 /* arLabelingSubEWRA3C.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRA3C.c; sourceTree = "<group>"; };
 		4AEB25FB1804A330002290C5 /* arLabelingSubEWRC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRC.c; sourceTree = "<group>"; };
-		4AEB25FC1804A330002290C5 /* arLabelingSubEWRCY.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRCY.c; sourceTree = "<group>"; };
-		4AEB25FD1804A330002290C5 /* arLabelingSubEWRYC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWRYC.c; sourceTree = "<group>"; };
 		4AEB25FE1804A330002290C5 /* arLabelingSubEWZ.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWZ.c; sourceTree = "<group>"; };
 		4AEB26001804A330002290C5 /* arPattAttach.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arPattAttach.c; sourceTree = "<group>"; };
 		4AEB26011804A330002290C5 /* arPattCreateHandle.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arPattCreateHandle.c; sourceTree = "<group>"; };
@@ -5461,81 +5333,17 @@
 			children = (
 				4AEB25B11804A330002290C5 /* arLabelingPrivate.h */,
 				4AEB25B21804A330002290C5 /* arLabelingSub.h */,
-				4AEB25B31804A330002290C5 /* arLabelingSubDBI3C.c */,
-				4AEB25B41804A330002290C5 /* arLabelingSubDBI3C565.c */,
-				4AEB25B51804A330002290C5 /* arLabelingSubDBI3CA.c */,
-				4AEB25B61804A330002290C5 /* arLabelingSubDBI3CA4444.c */,
-				4AEB25B71804A330002290C5 /* arLabelingSubDBI3CA5551.c */,
-				4AEB25B81804A330002290C5 /* arLabelingSubDBIA3C.c */,
 				4AEB25B91804A330002290C5 /* arLabelingSubDBIC.c */,
-				4AEB25BA1804A330002290C5 /* arLabelingSubDBICY.c */,
-				4AEB25BB1804A330002290C5 /* arLabelingSubDBIYC.c */,
-				4AEB25BC1804A330002290C5 /* arLabelingSubDBR3C.c */,
-				4AEB25BD1804A330002290C5 /* arLabelingSubDBR3C565.c */,
-				4AEB25BE1804A330002290C5 /* arLabelingSubDBR3CA.c */,
-				4AEB25BF1804A330002290C5 /* arLabelingSubDBR3CA4444.c */,
-				4AEB25C01804A330002290C5 /* arLabelingSubDBR3CA5551.c */,
-				4AEB25C11804A330002290C5 /* arLabelingSubDBRA3C.c */,
 				4AEB25C21804A330002290C5 /* arLabelingSubDBRC.c */,
-				4AEB25C31804A330002290C5 /* arLabelingSubDBRCY.c */,
-				4AEB25C41804A330002290C5 /* arLabelingSubDBRYC.c */,
 				4AEB25C51804A330002290C5 /* arLabelingSubDBZ.c */,
-				4AEB25C61804A330002290C5 /* arLabelingSubDWI3C.c */,
-				4AEB25C71804A330002290C5 /* arLabelingSubDWI3C565.c */,
-				4AEB25C81804A330002290C5 /* arLabelingSubDWI3CA.c */,
-				4AEB25C91804A330002290C5 /* arLabelingSubDWI3CA4444.c */,
-				4AEB25CA1804A330002290C5 /* arLabelingSubDWI3CA5551.c */,
-				4AEB25CB1804A330002290C5 /* arLabelingSubDWIA3C.c */,
 				4AEB25CC1804A330002290C5 /* arLabelingSubDWIC.c */,
-				4AEB25CD1804A330002290C5 /* arLabelingSubDWICY.c */,
-				4AEB25CE1804A330002290C5 /* arLabelingSubDWIYC.c */,
-				4AEB25CF1804A330002290C5 /* arLabelingSubDWR3C.c */,
-				4AEB25D01804A330002290C5 /* arLabelingSubDWR3C565.c */,
-				4AEB25D11804A330002290C5 /* arLabelingSubDWR3CA.c */,
-				4AEB25D21804A330002290C5 /* arLabelingSubDWR3CA4444.c */,
-				4AEB25D31804A330002290C5 /* arLabelingSubDWR3CA5551.c */,
-				4AEB25D41804A330002290C5 /* arLabelingSubDWRA3C.c */,
 				4AEB25D51804A330002290C5 /* arLabelingSubDWRC.c */,
-				4AEB25D61804A330002290C5 /* arLabelingSubDWRCY.c */,
-				4AEB25D71804A330002290C5 /* arLabelingSubDWRYC.c */,
 				4AEB25D81804A330002290C5 /* arLabelingSubDWZ.c */,
-				4AEB25D91804A330002290C5 /* arLabelingSubEBI3C.c */,
-				4AEB25DA1804A330002290C5 /* arLabelingSubEBI3C565.c */,
-				4AEB25DB1804A330002290C5 /* arLabelingSubEBI3CA.c */,
-				4AEB25DC1804A330002290C5 /* arLabelingSubEBI3CA4444.c */,
-				4AEB25DD1804A330002290C5 /* arLabelingSubEBI3CA5551.c */,
-				4AEB25DE1804A330002290C5 /* arLabelingSubEBIA3C.c */,
 				4AEB25DF1804A330002290C5 /* arLabelingSubEBIC.c */,
-				4AEB25E01804A330002290C5 /* arLabelingSubEBICY.c */,
-				4AEB25E11804A330002290C5 /* arLabelingSubEBIYC.c */,
-				4AEB25E21804A330002290C5 /* arLabelingSubEBR3C.c */,
-				4AEB25E31804A330002290C5 /* arLabelingSubEBR3C565.c */,
-				4AEB25E41804A330002290C5 /* arLabelingSubEBR3CA.c */,
-				4AEB25E51804A330002290C5 /* arLabelingSubEBR3CA4444.c */,
-				4AEB25E61804A330002290C5 /* arLabelingSubEBR3CA5551.c */,
-				4AEB25E71804A330002290C5 /* arLabelingSubEBRA3C.c */,
 				4AEB25E81804A330002290C5 /* arLabelingSubEBRC.c */,
-				4AEB25E91804A330002290C5 /* arLabelingSubEBRCY.c */,
-				4AEB25EA1804A330002290C5 /* arLabelingSubEBRYC.c */,
 				4AEB25EB1804A330002290C5 /* arLabelingSubEBZ.c */,
-				4AEB25EC1804A330002290C5 /* arLabelingSubEWI3C.c */,
-				4AEB25ED1804A330002290C5 /* arLabelingSubEWI3C565.c */,
-				4AEB25EE1804A330002290C5 /* arLabelingSubEWI3CA.c */,
-				4AEB25EF1804A330002290C5 /* arLabelingSubEWI3CA4444.c */,
-				4AEB25F01804A330002290C5 /* arLabelingSubEWI3CA5551.c */,
-				4AEB25F11804A330002290C5 /* arLabelingSubEWIA3C.c */,
 				4AEB25F21804A330002290C5 /* arLabelingSubEWIC.c */,
-				4AEB25F31804A330002290C5 /* arLabelingSubEWICY.c */,
-				4AEB25F41804A330002290C5 /* arLabelingSubEWIYC.c */,
-				4AEB25F51804A330002290C5 /* arLabelingSubEWR3C.c */,
-				4AEB25F61804A330002290C5 /* arLabelingSubEWR3C565.c */,
-				4AEB25F71804A330002290C5 /* arLabelingSubEWR3CA.c */,
-				4AEB25F81804A330002290C5 /* arLabelingSubEWR3CA4444.c */,
-				4AEB25F91804A330002290C5 /* arLabelingSubEWR3CA5551.c */,
-				4AEB25FA1804A330002290C5 /* arLabelingSubEWRA3C.c */,
 				4AEB25FB1804A330002290C5 /* arLabelingSubEWRC.c */,
-				4AEB25FC1804A330002290C5 /* arLabelingSubEWRCY.c */,
-				4AEB25FD1804A330002290C5 /* arLabelingSubEWRYC.c */,
 				4AEB25FE1804A330002290C5 /* arLabelingSubEWZ.c */,
 			);
 			path = arLabelingSub;
@@ -7815,125 +7623,61 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AF101DF180BFC9900A922DE /* arLabelingSubDBI3C.c in Sources */,
 				4AF101CC180BFC9100A922DE /* mMul.c in Sources */,
 				4AF101C1180BFC9100A922DE /* mAlloc.c in Sources */,
-				4AF10209180BFC9900A922DE /* arLabelingSubEBI3CA5551.c in Sources */,
-				4AF1020A180BFC9900A922DE /* arLabelingSubEBIA3C.c in Sources */,
-				4AF10203180BFC9900A922DE /* arLabelingSubDWRYC.c in Sources */,
-				4AF10229180BFC9900A922DE /* arLabelingSubEWRYC.c in Sources */,
-				4AF10205180BFC9900A922DE /* arLabelingSubEBI3C.c in Sources */,
-				4AF101E6180BFC9900A922DE /* arLabelingSubDBICY.c in Sources */,
 				4AF101AF180BFC9100A922DE /* ar3DCreateHandle.c in Sources */,
-				4AF10200180BFC9900A922DE /* arLabelingSubDWRA3C.c in Sources */,
 				4AF101B0180BFC9100A922DE /* ar3DUtil.c in Sources */,
-				4AF1021C180BFC9900A922DE /* arLabelingSubEWI3CA5551.c in Sources */,
 				4AF101BA180BFC9100A922DE /* arLabeling.c in Sources */,
 				4AF101C3180BFC9100A922DE /* mAllocInv.c in Sources */,
-				4AF1021A180BFC9900A922DE /* arLabelingSubEWI3CA.c in Sources */,
 				4AF101DB180BFC9100A922DE /* vFree.c in Sources */,
 				4AF101B3180BFC9100A922DE /* arDetectMarker2.c in Sources */,
 				4AF101BB180BFC9100A922DE /* arPattAttach.c in Sources */,
 				4AF101D1180BFC9100A922DE /* paramChangeSize.c in Sources */,
-				4AF101FC180BFC9900A922DE /* arLabelingSubDWR3C565.c in Sources */,
-				4AF101F4180BFC9900A922DE /* arLabelingSubDWI3CA.c in Sources */,
 				4AF10214180BFC9900A922DE /* arLabelingSubEBRC.c in Sources */,
-				4AF10211180BFC9900A922DE /* arLabelingSubEBR3CA4444.c in Sources */,
 				4AF101C8180BFC9100A922DE /* mDisp.c in Sources */,
 				4AF101B6180BFC9100A922DE /* arGetMarkerInfo.c in Sources */,
-				4AF101E3180BFC9900A922DE /* arLabelingSubDBI3CA5551.c in Sources */,
-				4AF101FF180BFC9900A922DE /* arLabelingSubDWR3CA5551.c in Sources */,
 				4AF101BD180BFC9100A922DE /* arPattGetID.c in Sources */,
-				4AF1021D180BFC9900A922DE /* arLabelingSubEWIA3C.c in Sources */,
 				4AF101B7180BFC9100A922DE /* arGetTransMat.c in Sources */,
 				4AF1020B180BFC9900A922DE /* arLabelingSubEBIC.c in Sources */,
-				4AF1021B180BFC9900A922DE /* arLabelingSubEWI3CA4444.c in Sources */,
-				4AF101EF180BFC9900A922DE /* arLabelingSubDBRCY.c in Sources */,
-				4AF1021F180BFC9900A922DE /* arLabelingSubEWICY.c in Sources */,
 				4AF101CB180BFC9100A922DE /* mInv.c in Sources */,
 				4AF101C9180BFC9100A922DE /* mDup.c in Sources */,
 				4AF10217180BFC9900A922DE /* arLabelingSubEBZ.c in Sources */,
 				4AF101C7180BFC9100A922DE /* mDet.c in Sources */,
-				4AF10202180BFC9900A922DE /* arLabelingSubDWRCY.c in Sources */,
-				4AF101E4180BFC9900A922DE /* arLabelingSubDBIA3C.c in Sources */,
 				4AF101C2180BFC9100A922DE /* mAllocDup.c in Sources */,
-				4AF101F6180BFC9900A922DE /* arLabelingSubDWI3CA5551.c in Sources */,
-				4AF101EB180BFC9900A922DE /* arLabelingSubDBR3CA4444.c in Sources */,
 				4AF101D4180BFC9100A922DE /* paramDisp.c in Sources */,
 				4AF101C5180BFC9100A922DE /* mAllocTrans.c in Sources */,
 				4AF101C0180BFC9100A922DE /* arUtil.c in Sources */,
 				4AF101EE180BFC9900A922DE /* arLabelingSubDBRC.c in Sources */,
-				4AF101EC180BFC9900A922DE /* arLabelingSubDBR3CA5551.c in Sources */,
 				4AF101C6180BFC9100A922DE /* mAllocUnit.c in Sources */,
-				4AF101F0180BFC9900A922DE /* arLabelingSubDBRYC.c in Sources */,
-				4AF1020C180BFC9900A922DE /* arLabelingSubEBICY.c in Sources */,
 				4AF10227180BFC9900A922DE /* arLabelingSubEWRC.c in Sources */,
-				4AF101ED180BFC9900A922DE /* arLabelingSubDBRA3C.c in Sources */,
 				4AF101D6180BFC9100A922DE /* paramFile.c in Sources */,
 				4AF101BC180BFC9100A922DE /* arPattCreateHandle.c in Sources */,
-				4AF101FB180BFC9900A922DE /* arLabelingSubDWR3C.c in Sources */,
-				4AF10228180BFC9900A922DE /* arLabelingSubEWRCY.c in Sources */,
-				4AF101EA180BFC9900A922DE /* arLabelingSubDBR3CA.c in Sources */,
 				4AF1021E180BFC9900A922DE /* arLabelingSubEWIC.c in Sources */,
-				4AF10213180BFC9900A922DE /* arLabelingSubEBRA3C.c in Sources */,
-				4AF1020D180BFC9900A922DE /* arLabelingSubEBIYC.c in Sources */,
-				4AF10218180BFC9900A922DE /* arLabelingSubEWI3C.c in Sources */,
-				4AF10224180BFC9900A922DE /* arLabelingSubEWR3CA4444.c in Sources */,
-				4AF101E9180BFC9900A922DE /* arLabelingSubDBR3C565.c in Sources */,
 				4AF101D2180BFC9100A922DE /* paramClear.c in Sources */,
 				4AF101BE180BFC9100A922DE /* arPattLoad.c in Sources */,
-				4AF10212180BFC9900A922DE /* arLabelingSubEBR3CA5551.c in Sources */,
-				4AF10207180BFC9900A922DE /* arLabelingSubEBI3CA.c in Sources */,
 				4AF101D7180BFC9100A922DE /* paramGetPerspective.c in Sources */,
 				4AF101B1180BFC9100A922DE /* arCreateHandle.c in Sources */,
-				4AF101F7180BFC9900A922DE /* arLabelingSubDWIA3C.c in Sources */,
 				4AF101B5180BFC9100A922DE /* arGetLine.c in Sources */,
-				4AF101F5180BFC9900A922DE /* arLabelingSubDWI3CA4444.c in Sources */,
 				4AF101D0180BFC9100A922DE /* mUnit.c in Sources */,
-				4AF101E1180BFC9900A922DE /* arLabelingSubDBI3CA.c in Sources */,
-				4AF101F3180BFC9900A922DE /* arLabelingSubDWI3C565.c in Sources */,
-				4AF10225180BFC9900A922DE /* arLabelingSubEWR3CA5551.c in Sources */,
 				4AF10201180BFC9900A922DE /* arLabelingSubDWRC.c in Sources */,
-				4AF101FA180BFC9900A922DE /* arLabelingSubDWIYC.c in Sources */,
 				4AF101F8180BFC9900A922DE /* arLabelingSubDWIC.c in Sources */,
-				4AF10215180BFC9900A922DE /* arLabelingSubEBRCY.c in Sources */,
 				4AF101D8180BFC9100A922DE /* paramLT.c in Sources */,
-				4AF10210180BFC9900A922DE /* arLabelingSubEBR3CA.c in Sources */,
-				4AF101FD180BFC9900A922DE /* arLabelingSubDWR3CA.c in Sources */,
 				4AF101C4180BFC9100A922DE /* mAllocMul.c in Sources */,
 				4AF101B8180BFC9100A922DE /* arGetTransMatStereo.c in Sources */,
-				4AF101F9180BFC9900A922DE /* arLabelingSubDWICY.c in Sources */,
-				4AF1020F180BFC9900A922DE /* arLabelingSubEBR3C565.c in Sources */,
-				4AF10208180BFC9900A922DE /* arLabelingSubEBI3CA4444.c in Sources */,
-				4AF10223180BFC9900A922DE /* arLabelingSubEWR3CA.c in Sources */,
 				4AF101E5180BFC9900A922DE /* arLabelingSubDBIC.c in Sources */,
 				4AF101CA180BFC9100A922DE /* mFree.c in Sources */,
-				4AF10222180BFC9900A922DE /* arLabelingSubEWR3C565.c in Sources */,
-				4AF10206180BFC9900A922DE /* arLabelingSubEBI3C565.c in Sources */,
-				4AF10219180BFC9900A922DE /* arLabelingSubEWI3C565.c in Sources */,
 				4AF101B4180BFC9100A922DE /* arFilterTransMat.c in Sources */,
-				4AF10226180BFC9900A922DE /* arLabelingSubEWRA3C.c in Sources */,
 				4AF101D9180BFC9100A922DE /* vAlloc.c in Sources */,
 				4AF101CF180BFC9100A922DE /* mTrans.c in Sources */,
 				4AF101DE180BFC9100A922DE /* vTridiag.c in Sources */,
 				4AF101D5180BFC9100A922DE /* paramDistortion.c in Sources */,
-				4AF10216180BFC9900A922DE /* arLabelingSubEBRYC.c in Sources */,
-				4AF10221180BFC9900A922DE /* arLabelingSubEWR3C.c in Sources */,
 				4AF1022A180BFC9900A922DE /* arLabelingSubEWZ.c in Sources */,
 				4AF101B2180BFC9100A922DE /* arDetectMarker.c in Sources */,
-				4AF1020E180BFC9900A922DE /* arLabelingSubEBR3C.c in Sources */,
-				4AF101F2180BFC9900A922DE /* arLabelingSubDWI3C.c in Sources */,
 				4AF101DC180BFC9100A922DE /* vHouse.c in Sources */,
-				4AF101E0180BFC9900A922DE /* arLabelingSubDBI3C565.c in Sources */,
 				4AF10204180BFC9900A922DE /* arLabelingSubDWZ.c in Sources */,
-				4AF101E7180BFC9900A922DE /* arLabelingSubDBIYC.c in Sources */,
 				4AF101B9180BFC9100A922DE /* arImageProc.c in Sources */,
 				4AF101BF180BFC9100A922DE /* arPattSave.c in Sources */,
 				4AF101CD180BFC9100A922DE /* mPCA.c in Sources */,
-				4AF10220180BFC9900A922DE /* arLabelingSubEWIYC.c in Sources */,
-				4AF101E8180BFC9900A922DE /* arLabelingSubDBR3C.c in Sources */,
-				4AF101FE180BFC9900A922DE /* arLabelingSubDWR3CA4444.c in Sources */,
-				4AF101E2180BFC9900A922DE /* arLabelingSubDBI3CA4444.c in Sources */,
 				4AF101DD180BFC9100A922DE /* vInnerP.c in Sources */,
 				4AF101D3180BFC9100A922DE /* paramDecomp.c in Sources */,
 				4AF101DA180BFC9100A922DE /* vDisp.c in Sources */,

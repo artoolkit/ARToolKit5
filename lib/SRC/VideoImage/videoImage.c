@@ -274,7 +274,7 @@ AR2VideoParamImageT *ar2VideoOpenImage( const char *config )
     int ok, err_i = 0;
 
     arMalloc( vid, AR2VideoParamImageT, 1 );
-    vid->buffer.buff = NULL;
+    vid->buffer.buff = vid->buffer.buffLuma = NULL;
     vid->buffer.bufPlanes = NULL;
     vid->buffer.bufPlaneCount = 0;
     vid->buffer.fillFlag = 0;
@@ -455,6 +455,11 @@ AR2VideoBufferT *ar2VideoGetImageImage( AR2VideoParamImageT *vid )
             ok = jpegRead(infile, vid->buffer.buff, vid->bufWidth, vid->bufHeight, vid->format);
             fclose(infile);
             vid->buffer.fillFlag  = 1;
+            if (vid->format == AR_PIXEL_FORMAT_MONO) {
+                vid->buffer.buffLuma = vid->buffer.buff;
+            } else {
+                vid->buffer.buffLuma = NULL;
+            }
             vid->buffer.time_sec  = 0;
             vid->buffer.time_usec = 0;
         }
@@ -491,7 +496,7 @@ int ar2VideoSetBufferSizeImage(AR2VideoParamImageT *vid, const int width, const 
     
     if (vid->buffer.buff) {
         free (vid->buffer.buff);
-        vid->buffer.buff = NULL;
+        vid->buffer.buff = vid->buffer.buffLuma = NULL;
     }
     
     if (width && height) {
@@ -505,6 +510,7 @@ int ar2VideoSetBufferSizeImage(AR2VideoParamImageT *vid, const int width, const 
             ARLOGe("Error: Out of memory!\n");
             return (-1);
         }
+        vid->buffer.buffLuma = NULL;
     }
     
     vid->bufWidth = width;

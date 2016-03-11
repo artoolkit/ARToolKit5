@@ -58,7 +58,7 @@ const char *arMarkerInfoCutoffPhaseDescriptions[AR_MARKER_INFO_CUTOFF_PHASE_DESC
 
 static void confidenceCutoff(ARHandle *arHandle);
 
-int arDetectMarker( ARHandle *arHandle, ARUint8 *dataPtr )
+int arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame)
 {
     ARdouble    rarea, rlen, rlenmin;
     ARdouble    diff, diffmin;
@@ -71,6 +71,8 @@ int arDetectMarker( ARHandle *arHandle, ARUint8 *dataPtr )
 cnt = 0;
 #endif
 
+    if (!arHandle || !frame) return (-1);
+    
     arHandle->marker_num = 0;
     
     if (arHandle->arLabelingThreshMode == AR_LABELING_THRESH_MODE_AUTO_BRACKETING) {
@@ -87,9 +89,9 @@ cnt = 0;
             thresholds[2] = arHandle->arLabelingThresh;
             
             for (i = 0; i < 3; i++) {
-                if (arLabeling(dataPtr, arHandle->xsize, arHandle->ysize, arHandle->arPixelFormat, arHandle->arDebug, arHandle->arLabelingMode, thresholds[i], arHandle->arImageProcMode, &(arHandle->labelInfo), NULL) < 0) return -1;
+                if (arLabeling(frame->buffLuma, arHandle->xsize, arHandle->ysize, arHandle->arDebug, arHandle->arLabelingMode, thresholds[i], arHandle->arImageProcMode, &(arHandle->labelInfo), NULL) < 0) return -1;
                 if (arDetectMarker2(arHandle->xsize, arHandle->ysize, &(arHandle->labelInfo), arHandle->arImageProcMode, AR_AREA_MAX, AR_AREA_MIN, AR_SQUARE_FIT_THRESH, arHandle->markerInfo2, &(arHandle->marker2_num)) < 0) return -1;
-                if (arGetMarkerInfo(dataPtr, arHandle->xsize, arHandle->ysize, arHandle->arPixelFormat, arHandle->markerInfo2, arHandle->marker2_num, arHandle->pattHandle, arHandle->arImageProcMode, arHandle->arPatternDetectionMode, &(arHandle->arParamLT->paramLTf), arHandle->pattRatio, arHandle->markerInfo, &(arHandle->marker_num), arHandle->matrixCodeType) < 0) return -1;
+                if (arGetMarkerInfo(frame->buff, arHandle->xsize, arHandle->ysize, arHandle->arPixelFormat, arHandle->markerInfo2, arHandle->marker2_num, arHandle->pattHandle, arHandle->arImageProcMode, arHandle->arPatternDetectionMode, &(arHandle->arParamLT->paramLTf), arHandle->pattRatio, arHandle->markerInfo, &(arHandle->marker_num), arHandle->matrixCodeType) < 0) return -1;
                 marker_nums[i] = arHandle->marker_num;
             }
 
@@ -129,11 +131,11 @@ cnt = 0;
         if (arHandle->arLabelingThreshMode == AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE) {
             
             int ret;
-            ret = arImageProcLumaHistAndBoxFilterWithBias(arHandle->arImageProcInfo, dataPtr,  AR_LABELING_THRESH_ADAPTIVE_KERNEL_SIZE_DEFAULT, AR_LABELING_THRESH_ADAPTIVE_BIAS_DEFAULT);
+            ret = arImageProcLumaHistAndBoxFilterWithBias(arHandle->arImageProcInfo, frame->buffLuma,  AR_LABELING_THRESH_ADAPTIVE_KERNEL_SIZE_DEFAULT, AR_LABELING_THRESH_ADAPTIVE_BIAS_DEFAULT);
             if (ret < 0) return (ret);
             
-            ret = arLabeling(arHandle->arImageProcInfo->image, arHandle->arImageProcInfo->imageX, arHandle->arImageProcInfo->imageY,
-                             AR_PIXEL_FORMAT_MONO, arHandle->arDebug, arHandle->arLabelingMode,
+            ret = arLabeling(frame->buffLuma, arHandle->arImageProcInfo->imageX, arHandle->arImageProcInfo->imageY,
+                             arHandle->arDebug, arHandle->arLabelingMode,
                              0, AR_IMAGE_PROC_FRAME_IMAGE,
                              &(arHandle->labelInfo), arHandle->arImageProcInfo->image2);
             if (ret < 0) return (ret);
@@ -148,8 +150,8 @@ cnt = 0;
                 } else {
                     int ret;
                     unsigned char value;
-                    if (arHandle->arLabelingThreshMode == AR_LABELING_THRESH_MODE_AUTO_MEDIAN) ret = arImageProcLumaHistAndCDFAndMedian(arHandle->arImageProcInfo, dataPtr, &value);
-                    else ret = arImageProcLumaHistAndOtsu(arHandle->arImageProcInfo, dataPtr, &value);
+                    if (arHandle->arLabelingThreshMode == AR_LABELING_THRESH_MODE_AUTO_MEDIAN) ret = arImageProcLumaHistAndCDFAndMedian(arHandle->arImageProcInfo, frame->buffLuma, &value);
+                    else ret = arImageProcLumaHistAndOtsu(arHandle->arImageProcInfo, frame->buffLuma, &value);
                     if (ret < 0) return (ret);
                     if (arHandle->arDebug == AR_DEBUG_ENABLE && arHandle->arLabelingThresh != value) ARLOGe("Auto threshold (%s) adjusted threshold to %d.\n", (arHandle->arLabelingThreshMode == AR_LABELING_THRESH_MODE_AUTO_MEDIAN ? "median" : "Otsu"), value);
                     arHandle->arLabelingThresh = value;
@@ -157,8 +159,8 @@ cnt = 0;
                 }
             }
             
-            if( arLabeling(dataPtr, arHandle->xsize, arHandle->ysize,
-                           arHandle->arPixelFormat, arHandle->arDebug, arHandle->arLabelingMode,
+            if( arLabeling(frame->buffLuma, arHandle->xsize, arHandle->ysize,
+                           arHandle->arDebug, arHandle->arLabelingMode,
                            arHandle->arLabelingThresh, arHandle->arImageProcMode,
                            &(arHandle->labelInfo), NULL) < 0 ) {
                 return -1;
@@ -175,7 +177,7 @@ cnt = 0;
             return -1;
         }
         
-        if( arGetMarkerInfo(dataPtr, arHandle->xsize, arHandle->ysize, arHandle->arPixelFormat,
+        if( arGetMarkerInfo(frame->buff, arHandle->xsize, arHandle->ysize, arHandle->arPixelFormat,
                             arHandle->markerInfo2, arHandle->marker2_num,
                             arHandle->pattHandle, arHandle->arImageProcMode,
                             arHandle->arPatternDetectionMode, &(arHandle->arParamLT->paramLTf), arHandle->pattRatio,

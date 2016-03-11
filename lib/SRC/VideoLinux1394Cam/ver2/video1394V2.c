@@ -864,11 +864,11 @@ AR2VideoBufferT *ar2VideoGetImage1394( AR2VideoParam1394T *vid )
     AR2VideoBufferT   tmp;
 
     pthread_mutex_lock(&(vid->buffer.mutex));
-      tmp = vid->buffer.wait;
-      vid->buffer.wait = vid->buffer.out;
-      vid->buffer.out = tmp;
+    tmp = vid->buffer.wait;
+    vid->buffer.wait = vid->buffer.out;
+    vid->buffer.out = tmp;
 
-      vid->buffer.wait.fillFlag = 0;
+    vid->buffer.wait.fillFlag = 0;
     pthread_mutex_unlock(&(vid->buffer.mutex));
 
     return &(vid->buffer.out);
@@ -929,6 +929,7 @@ static void ar2VideoCapture1394(AR2VideoParam1394T *vid)
             vid->buffer.in.time_sec  = frame->timestamp / 1000000;
             vid->buffer.in.time_usec = frame->timestamp % 1000000;
             vid->buffer.in.fillFlag = 1;
+            vid->buffer.in.buffLuma = NULL;
 
             ar2Video1394FormatConversion( (ARUint8 *)frame->image, vid->buffer.in.buff, vid->mode, vid->width, vid->height );
 
@@ -1015,6 +1016,9 @@ static void ar2VideoBufferInit1394( AR2VideoBuffer1394T *buffer, int size )
     buffer->in.fillFlag   = 0;
     buffer->wait.fillFlag = 0;
     buffer->out.fillFlag  = 0;
+    buffer->in.buffLuma   = NULL;
+    buffer->wait.buffLuma = NULL;
+    buffer->out.buffLuma  = NULL;
     pthread_mutex_init(&(buffer->mutex), NULL);
 
     return;

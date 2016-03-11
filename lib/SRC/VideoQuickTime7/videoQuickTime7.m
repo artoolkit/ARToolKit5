@@ -111,7 +111,7 @@ AR2VideoParamQuickTime7T *ar2VideoOpenQuickTime7( const char *config )
     arMalloc( vid, AR2VideoParamQuickTime7T, 1 );
     vid->currentFrame = NULL;
     vid->currentFrameTimestamp = 0;
-    vid->buffer.buff = NULL;
+    vid->buffer.buff = vid->buffer.buffLuma = NULL;
     vid->buffer.fillFlag = 0;
 
     a = config;
@@ -337,6 +337,7 @@ AR2VideoBufferT *ar2VideoGetImageQuickTime7( AR2VideoParamQuickTime7T *vid )
                     else vid->buffer.buff = CVPixelBufferGetBaseAddressOfPlane(frame, 0);
                     
                     vid->buffer.fillFlag  = 1;
+                    vid->buffer.buffLuma = NULL;
                     vid->buffer.time_sec  = 0;
                     vid->buffer.time_usec = 0;
                     

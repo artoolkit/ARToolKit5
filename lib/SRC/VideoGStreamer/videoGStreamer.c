@@ -329,6 +329,7 @@ ar2VideoGetImageGStreamer(AR2VideoParamGStreamerT *vid)
     
 	/* just return the bare video buffer */
     (vid->arVideoBuffer).buff = vid->videoBuffer;
+    (vid->arVideoBuffer).buffLuma = NULL;
     (vid->arVideoBuffer).fillFlag = 1;
     return (&(vid->arVideoBuffer));
 }

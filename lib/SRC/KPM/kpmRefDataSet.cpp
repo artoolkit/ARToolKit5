@@ -51,7 +51,7 @@
 
 
 
-int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, float dpi, int procMode, int compMode, int maxFeatureNum,
+int kpmGenRefDataSet ( ARUint8 *refImage, int xsize, int ysize, float dpi, int procMode, int compMode, int maxFeatureNum,
                        int pageNo, int imageNo, KpmRefDataSet **refDataSetPtr )
 {
     ARUint8         *refImageBW;
@@ -76,7 +76,7 @@ int kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, 
     refDataSet->pageInfo[0].imageNum = 1; // I.e. number of images = 1.
     arMalloc( refDataSet->pageInfo[0].imageInfo, KpmImageInfo, 1 );
     refDataSet->pageInfo[0].imageInfo[0].imageNo = imageNo;
-    refImageBW = kpmUtilGenBWImage( refImage, pixFormat, xsize, ysize, procMode, &xsize2, &ysize2 );
+    refImageBW = kpmUtilResizeImage( refImage, xsize, ysize, procMode, &xsize2, &ysize2 );
     refDataSet->pageInfo[0].imageInfo[0].width   = xsize2;
     refDataSet->pageInfo[0].imageInfo[0].height  = ysize2;
 
