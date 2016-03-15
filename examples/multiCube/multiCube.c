@@ -89,9 +89,6 @@ static int prefHeight = 480;				// Fullscreen mode height.
 static int prefDepth = 32;					// Fullscreen mode bit depth.
 static int prefRefresh = 0;					// Fullscreen mode refresh rate. Set to 0 to use default rate.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
-
 // Marker detection.
 static ARHandle		*gARHandle = NULL;
 static ARPattHandle	*gARPattHandle = NULL;
@@ -382,7 +379,7 @@ static void mainLoop(void)
 	static int ms_prev;
 	int ms;
 	float s_elapsed;
-	ARUint8 *image;
+	AR2VideoBufferT *image;
 	ARdouble err;
 
     int             j, k;
@@ -397,13 +394,14 @@ static void mainLoop(void)
 	DrawCubeUpdate(s_elapsed);
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+	if (image && image->fillFlag) {
+        arglPixelBufferDataUpload(gArglSettings, image->buff);
 		
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARHandle, gARTImage) < 0) {
+		if (arDetectMarker(gARHandle, image) < 0) {
 			exit(-1);
 		}
 
@@ -465,9 +463,7 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
-    arglPixelBufferDataUpload(gArglSettings, gARTImage);
 	arglDispImage(gArglSettings);
-	gARTImage = NULL; // Invalidate image data.
 				
 	// Projection transformation.
 	arglCameraFrustumRH(&(gCparamLT->param), VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);

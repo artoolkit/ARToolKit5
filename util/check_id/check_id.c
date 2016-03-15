@@ -98,8 +98,6 @@ static int windowHeight = 480;                  // Initial window height, also u
 static int windowDepth = 32;					// Fullscreen mode bit depth.
 static int windowRefresh = 0;					// Fullscreen mode refresh rate. Set to 0 to use default rate.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
 static int          gARTImageSavePlease = FALSE;
 
 // Marker detection.
@@ -123,6 +121,9 @@ static ARGL_CONTEXT_SETTINGS_REF gArglSettings = NULL;
 static int gShowHelp = 1;
 static int gShowMode = 1;
 static GLint gViewport[4];
+static int gDrawPatternSize = 0;
+static ARUint8 ext_patt[AR_PATT_SIZE2_MAX*AR_PATT_SIZE2_MAX*3]; // Holds unwarped pattern extracted from image.
+
 
 // ============================================================================
 //	Function prototypes.
@@ -585,12 +586,14 @@ static void Keyboard(unsigned char key, int x, int y)
 
 static void mainLoop(void)
 {
-    int i;
+    int i, j;
     static int imageNumber = 0;
 	static int ms_prev;
 	int ms;
 	float s_elapsed;
-	ARUint8 *image;
+	AR2VideoBufferT *image;
+    int pattDetectMode;
+    AR_MATRIX_CODE_TYPE matrixCodeType;
     
 	// Find out how long since mainLoop() last ran.
 	ms = glutGet(GLUT_ELAPSED_TIME);
@@ -599,13 +602,15 @@ static void mainLoop(void)
 	ms_prev = ms;
 		
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+	if (image && image->fillFlag) {
+
+        arglPixelBufferDataUpload(gArglSettings, image->buff);
         
         if (gARTImageSavePlease) {
             char imageNumberText[15];
             sprintf(imageNumberText, "image-%04d.jpg", imageNumber++);
-            if (arVideoSaveImageJPEG(gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, gARTImage, imageNumberText, 75, 0) < 0) {
+            if (arVideoSaveImageJPEG(gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, image->buff, imageNumberText, 75, 0) < 0) {
                 ARLOGe("Error saving video image.\n");
             }
             gARTImageSavePlease = FALSE;
@@ -614,7 +619,7 @@ static void mainLoop(void)
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARHandle, gARTImage) < 0) {
+		if (arDetectMarker(gARHandle, image) < 0) {
 			exit(-1);
 		}
         
@@ -624,6 +629,49 @@ static void mainLoop(void)
             else gMultiErrs[i] = arGetTransMatMultiSquare(gAR3DHandle, arGetMarker(gARHandle), arGetMarkerNum(gARHandle), gMultiConfigs[i]);
             //if (gMultiConfigs[i]->prevF != 0) ARLOGe("Found multimarker set %d, err=%0.3f\n", i, gMultiErrs[i]);
         }
+        
+        
+        // For matrix mode, draw the pattern image of the largest marker.
+        arGetPatternDetectionMode(gARHandle, &pattDetectMode);
+        arGetMatrixCodeType(gARHandle, &matrixCodeType);
+        if (pattDetectMode == AR_MATRIX_CODE_DETECTION || pattDetectMode == AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX || pattDetectMode == AR_TEMPLATE_MATCHING_MONO_AND_MATRIX ) {
+            
+            int area = 0, biggestMarker = -1;
+            
+            for (j = 0; j < gARHandle->marker_num; j++) if (gARHandle->markerInfo[j].area > area) {
+                area = gARHandle->markerInfo[j].area;
+                biggestMarker = j;
+            }
+            if (area >= AR_AREA_MIN) {
+                
+                int imageProcMode;
+                ARdouble pattRatio;
+                ARdouble vertexUpright[4][2];
+                
+                // Reorder vertices based on dir.
+                for (i = 0; i < 4; i++) {
+                    int dir = gARHandle->markerInfo[biggestMarker].dir;
+                    vertexUpright[i][0] = gARHandle->markerInfo[biggestMarker].vertex[(i + 4 - dir)%4][0];
+                    vertexUpright[i][1] = gARHandle->markerInfo[biggestMarker].vertex[(i + 4 - dir)%4][1];
+                }
+                arGetImageProcMode(gARHandle, &imageProcMode);
+                arGetPattRatio(gARHandle, &pattRatio);
+                if (matrixCodeType == AR_MATRIX_CODE_GLOBAL_ID) {
+                    gDrawPatternSize = 14;
+                    arPattGetImage2(imageProcMode, AR_MATRIX_CODE_DETECTION, gDrawPatternSize, gDrawPatternSize * AR_PATT_SAMPLE_FACTOR2,
+                                    image->buff, gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, &gCparamLT->paramLTf, vertexUpright, (ARdouble)14/(ARdouble)(14 + 2), ext_patt);
+                } else {
+                    gDrawPatternSize = matrixCodeType & AR_MATRIX_CODE_TYPE_SIZE_MASK;
+                    arPattGetImage2(imageProcMode, AR_MATRIX_CODE_DETECTION, gDrawPatternSize, gDrawPatternSize * AR_PATT_SAMPLE_FACTOR2,
+                                    image->buff, gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, &gCparamLT->paramLTf, vertexUpright, pattRatio, ext_patt);
+                }
+            } else {
+                gDrawPatternSize = 0;
+            }
+        } else {
+            gDrawPatternSize = 0;
+        }
+
         
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();
@@ -714,7 +762,6 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
-    arglPixelBufferDataUpload(gArglSettings, gARTImage);
 	arglDispImage(gArglSettings);
 
     if (gMultiConfigCount) {
@@ -793,46 +840,13 @@ static void Display(void)
     glDisableClientState(GL_VERTEX_ARRAY);
     
     // For matrix mode, draw the pattern image of the largest marker.
-    if (pattDetectMode == AR_MATRIX_CODE_DETECTION || pattDetectMode == AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX || pattDetectMode == AR_TEMPLATE_MATCHING_MONO_AND_MATRIX ) {
-        
-        int area = 0, biggestMarker = -1;
-        
-        for (j = 0; j < gARHandle->marker_num; j++) if (gARHandle->markerInfo[j].area > area) {
-            area = gARHandle->markerInfo[j].area;
-            biggestMarker = j;
-        }
-        if (area >= AR_AREA_MIN) {
-            
-            int imageProcMode;
-            ARdouble pattRatio;
-            ARUint8 ext_patt[AR_PATT_SIZE2_MAX*AR_PATT_SIZE2_MAX*3]; // Holds unwarped pattern extracted from image.
-            int size;
-            int zoom = 4;
-            ARdouble vertexUpright[4][2];
-            
-            // Reorder vertices based on dir.
-            for (i = 0; i < 4; i++) {
-                int dir = gARHandle->markerInfo[biggestMarker].dir;
-                vertexUpright[i][0] = gARHandle->markerInfo[biggestMarker].vertex[(i + 4 - dir)%4][0];
-                vertexUpright[i][1] = gARHandle->markerInfo[biggestMarker].vertex[(i + 4 - dir)%4][1];
-            }
-            arGetImageProcMode(gARHandle, &imageProcMode);
-            arGetPattRatio(gARHandle, &pattRatio);
-            if (matrixCodeType == AR_MATRIX_CODE_GLOBAL_ID) {
-                size = 14;
-                arPattGetImage2(imageProcMode, AR_MATRIX_CODE_DETECTION, size, size * AR_PATT_SAMPLE_FACTOR2,
-                                gARTImage, gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, &gCparamLT->paramLTf, vertexUpright, (ARdouble)14/(ARdouble)(14 + 2), ext_patt);
-            } else {
-                size = matrixCodeType & AR_MATRIX_CODE_TYPE_SIZE_MASK;
-                arPattGetImage2(imageProcMode, AR_MATRIX_CODE_DETECTION, size, size * AR_PATT_SAMPLE_FACTOR2,
-                                gARTImage, gARHandle->xsize, gARHandle->ysize, gARHandle->arPixelFormat, &gCparamLT->paramLTf, vertexUpright, pattRatio, ext_patt);
-            }
-            glRasterPos2f((float)(windowWidth - size*zoom) - 4.0f, (float)(size*zoom) + 4.0f);
-            glPixelZoom((float)zoom, (float)-zoom);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glDrawPixels(size, size, GL_LUMINANCE, GL_UNSIGNED_BYTE, ext_patt);
-            glPixelZoom(1.0f, 1.0f);
-        }
+    if (gDrawPatternSize) {
+        int zoom = 4;
+        glRasterPos2f((float)(windowWidth - gDrawPatternSize*zoom) - 4.0f, (float)(gDrawPatternSize*zoom) + 4.0f);
+        glPixelZoom((float)zoom, (float)-zoom);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glDrawPixels(gDrawPatternSize, gDrawPatternSize, GL_LUMINANCE, GL_UNSIGNED_BYTE, ext_patt);
+        glPixelZoom(1.0f, 1.0f);
     }
 
     

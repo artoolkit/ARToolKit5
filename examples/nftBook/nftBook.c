@@ -106,10 +106,6 @@ static int prefHeight = 480;              // Preferred initial window height.
 static int prefDepth = 32;                // Fullscreen mode bit depth. Set to 0 to use default depth.
 static int prefRefresh = 0;				  // Fullscreen mode refresh rate. Set to 0 to use default rate.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
-static long			gCallCountMarkerDetect = 0;
-
 // Markers.
 static ARMarkerNFT *markersNFT = NULL;
 static int markersNFTCount = 0;
@@ -120,6 +116,7 @@ static AR2HandleT          *ar2Handle = NULL;
 static KpmHandle           *kpmHandle = NULL;
 static int                  surfaceSetCount = 0;
 static AR2SurfaceSetT      *surfaceSet[PAGES_MAX];
+static long                 gCallCountMarkerDetect = 0;
 
 // NFT results.
 static int detectedPage = -2; // -2 Tracking not inited, -1 tracking inited OK, >= 0 tracking online on page.
@@ -419,7 +416,7 @@ static int initNFT(ARParamLT *cparamLT, AR_PIXEL_FORMAT pixFormat)
     //
     
     // KPM init.
-    kpmHandle = kpmCreateHandle(cparamLT, pixFormat);
+    kpmHandle = kpmCreateHandle(cparamLT);
     if (!kpmHandle) {
         ARLOGe("Error: kpmCreateHandle.\n");
         return (FALSE);
@@ -586,7 +583,7 @@ static void mainLoop(void)
 	static int ms_prev;
 	int ms;
 	float s_elapsed;
-	ARUint8 *image;
+	AR2VideoBufferT *image;
 
 
     int             i, j, k;
@@ -597,9 +594,11 @@ static void mainLoop(void)
 	ms_prev = ms;
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+	if (image && image->fillFlag) {
 		
+        arglPixelBufferDataUpload(gArglSettings, image->buff);
+
         // Calculate FPS every 30 frames.
         if (gCallCountMarkerDetect % 30 == 0) {
             gFPS = 30.0/arUtilTimer();
@@ -617,7 +616,7 @@ static void mainLoop(void)
             int              pageNo;
             
             if( detectedPage == -2 ) {
-                trackingInitStart( threadHandle, gARTImage );
+                trackingInitStart( threadHandle, image->buffLuma );
                 detectedPage = -1;
             }
             if( detectedPage == -1 ) {
@@ -637,7 +636,7 @@ static void mainLoop(void)
                 }
             }
             if( detectedPage >= 0 && detectedPage < surfaceSetCount) {
-                if( ar2Tracking(ar2Handle, surfaceSet[detectedPage], gARTImage, trackingTrans, &err) < 0 ) {
+                if( ar2Tracking(ar2Handle, surfaceSet[detectedPage], image->buff, trackingTrans, &err) < 0 ) {
                     ARLOGd("Tracking lost.\n");
                     detectedPage = -2;
                 } else {
@@ -747,9 +746,7 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
     
-    arglPixelBufferDataUpload(gArglSettings, gARTImage);
 	arglDispImage(gArglSettings);
-	gARTImage = NULL; // Invalidate image data.
 				
     // Set up 3D mode.
 	glMatrixMode(GL_PROJECTION);

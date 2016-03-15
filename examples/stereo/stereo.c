@@ -105,8 +105,8 @@ static int prefRefresh = 0;				  // Fullscreen mode refresh rate. Set to 0 to us
 // Image acquisition.
 static AR2VideoParamT *gVidL = NULL;
 static AR2VideoParamT *gVidR = NULL;
-static ARUint8		*gARTImageL = NULL;
-static ARUint8		*gARTImageR = NULL;
+static AR2VideoBufferT *gARTImageL = NULL;
+static AR2VideoBufferT *gARTImageR = NULL;
 
 // Markers.
 static ARMarkerSquare *markersSquare = NULL;
@@ -793,15 +793,25 @@ static void mainLoop(void)
 	ms_prev = ms;
 	
 	// Grab a video frame.
-	if ((buffL = ar2VideoGetImage(gVidL)) != NULL) {
-        gARTImageL = buffL->buff;
+    buffL = ar2VideoGetImage(gVidL);
+    buffR = ar2VideoGetImage(gVidR);
+    if (buffL && buffL->fillFlag) {
+        gARTImageL = buffL;
     }
-	if ((buffR = ar2VideoGetImage(gVidR)) != NULL) {
-        gARTImageR = buffR->buff;
+	if (buffR && buffR->fillFlag) {
+        gARTImageR = buffR;
     }
     
     if (gARTImageL && gARTImageR) {
 		
+        for (i = 0; i < viewCount; i++) {
+            if (views[i].viewEye == VIEW_RIGHTEYE) {
+                arglPixelBufferDataUpload(views[i].arglSettings, gARTImageR->buff);
+            } else {
+                arglPixelBufferDataUpload(views[i].arglSettings, gARTImageL->buff);
+            }
+        }
+
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
@@ -931,8 +941,12 @@ static void mainLoop(void)
                         VirtualEnvironment2HandleARMarkerDisappeared(views[j].ve2, i);
                     }
 				}
-			}                    
+			}
         }
+        
+        // Invalidate the pointers so that next time we try to get new frames.
+        gARTImageL = gARTImageR = NULL;
+
 		// Tell GLUT the display has changed.
 		glutPostRedisplay();
 	} else {
@@ -1160,11 +1174,11 @@ static void DisplayPerContext(const int contextIndex)
         glViewport(view->viewPort[viewPortIndexLeft], view->viewPort[viewPortIndexBottom], view->viewPort[viewPortIndexWidth], view->viewPort[viewPortIndexHeight]);
 	
         if (viewEye == VIEW_RIGHTEYE) {
-            arglPixelBufferDataUpload(view->arglSettings, gARTImageR);
+            arglPixelBufferDataUpload(view->arglSettings, gARTImageR->buff);
             arglDispImage(view->arglSettings);
             gARTImageR = NULL; // Invalidate image data.
         } else {
-            arglPixelBufferDataUpload(view->arglSettings, gARTImageL);
+            arglPixelBufferDataUpload(view->arglSettings, gARTImageL->buff);
             arglDispImage(view->arglSettings);
             gARTImageL = NULL; // Invalidate image data.
         }

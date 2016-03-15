@@ -98,9 +98,6 @@ static int windowDepth = 32;					// Fullscreen mode bit depth.
 static int windowRefresh = 0;					// Fullscreen mode refresh rate. Set to 0 to use default rate.
 static int prefMarkersHaveWhiteBorders = 0;	    // 0 = markers with black borders, 1 = markers with white borders.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
-
 // Marker detection.
 static ARHandle		*gARHandle = NULL;
 static long			gCallCountMarkerDetect = 0;
@@ -324,7 +321,7 @@ static void mainLoop(void)
 	static int ms_prev;
 	int ms;
 	float s_elapsed;
-	ARUint8 *image;
+	AR2VideoBufferT *image;
 	ARdouble err;
 
     int             i, j, k;
@@ -339,13 +336,15 @@ static void mainLoop(void)
 	arVrmlTimerUpdate();
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+	if (image && image->fillFlag) {
 		
-		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
+        arglPixelBufferDataUpload(gArglSettings, image->buff);
+
+        gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARHandle, gARTImage) < 0) {
+		if (arDetectMarker(gARHandle, image) < 0) {
 			exit(-1);
 		}
 				
@@ -426,9 +425,7 @@ static void Display(void)
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
-    arglPixelBufferDataUpload(gArglSettings, gARTImage);
 	arglDispImage(gArglSettings);
-	gARTImage = NULL; // Invalidate image data.
 				
 	// Projection transformation.
 	arglCameraFrustumRH(&(gCparamLT->param), VIEW_DISTANCE_MIN, VIEW_DISTANCE_MAX, p);

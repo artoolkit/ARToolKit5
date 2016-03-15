@@ -103,9 +103,6 @@ static int prefHeight = 0;                // Preferred initial window height.
 static int prefDepth = 0;                 // Fullscreen mode bit depth. Set to 0 to use default depth.
 static int prefRefresh = 0;				  // Fullscreen mode refresh rate. Set to 0 to use default rate.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
-
 // Markers.
 static ARMarkerSquare *markersSquare = NULL;
 static int markersSquareCount = 0;
@@ -590,7 +587,7 @@ static void mainLoop(void)
 	static int ms_prev;
 	int ms;
 	float s_elapsed;
-	ARUint8 *image;
+	AR2VideoBufferT *image;
     ARMarkerInfo* markerInfo;
     int markerNum;
 	ARdouble err;
@@ -603,13 +600,18 @@ static void mainLoop(void)
 	ms_prev = ms;
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+	if (image && image->fillFlag) {
+        
+        // Upload the image.
+        if (gVideoSeeThrough) {
+            arglPixelBufferDataUpload(gArglSettings, image->buff);
+        }
 		
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARHandle, gARTImage) < 0) {
+		if (arDetectMarker(gARHandle, image) < 0) {
 			exit(-1);
 		}
 		
@@ -760,9 +762,7 @@ static void Display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the buffers for new frame.
 	
 	if (gVideoSeeThrough) {
-        arglPixelBufferDataUpload(gArglSettings, gARTImage);
 		arglDispImage(gArglSettings);
-		gARTImage = NULL; // Invalidate image data.
 	}
 	
     // Set up 3D mode.

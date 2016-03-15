@@ -101,9 +101,6 @@ static int prefHeight = 0;                // Preferred initial window height.
 static int prefDepth = 0;                 // Fullscreen mode bit depth. Set to 0 to use default depth.
 static int prefRefresh = 0;				  // Fullscreen mode refresh rate. Set to 0 to use default rate.
 
-// Image acquisition.
-static ARUint8		*gARTImage = NULL;
-
 // Marker detection.
 static ARHandle		*gARHandle = NULL;
 static ARPattHandle	*gARPattHandle = NULL;
@@ -891,19 +888,26 @@ static void Keyboard(unsigned char key, int x, int y)
 
 static void mainLoop(void)
 {
-	ARUint8 *image;
+	AR2VideoBufferT *image;
 	ARdouble err;
 
-    int             j, k;
+    int             i, j, k;
 	
 	// Grab a video frame.
-	if ((image = arVideoGetImage()) != NULL) {
-		gARTImage = image;	// Save the fetched image.
+    image = arVideoGetImage();
+    if (image && image->fillFlag){
+        
+        // Upload the image to all view contexts.
+        if (gVideoSeeThrough) {
+            for (i = 0; i < viewContextCount; i++) {
+                arglPixelBufferDataUpload(viewContexts[i].arglSettings, image->buff);
+            }
+        }
 		
 		gCallCountMarkerDetect++; // Increment ARToolKit FPS counter.
 		
 		// Detect the markers in the video frame.
-		if (arDetectMarker(gARHandle, gARTImage) < 0) {
+		if (arDetectMarker(gARHandle, image) < 0) {
 			exit(-1);
 		}
 		
@@ -1181,7 +1185,6 @@ static void DisplayPerContext(const int contextIndex)
         glViewport(view->viewPort[viewPortIndexLeft], view->viewPort[viewPortIndexBottom], view->viewPort[viewPortIndexWidth], view->viewPort[viewPortIndexHeight]);
 	
         if (gVideoSeeThrough) {
-            arglPixelBufferDataUpload(viewContexts[contextIndex].arglSettings, gARTImage);
             arglDispImage(viewContexts[contextIndex].arglSettings); // Retain 1:1 scaling, since the texture size will automatically be scaled to the viewport.
         }
         
@@ -1260,9 +1263,6 @@ static void DisplayPerContext(const int contextIndex)
     if (stereoDisplayMode == STEREO_DISPLAY_MODE_FRAME_SEQUENTIAL) {
         stereoDisplaySequentialNext = (stereoDisplaySequentialNext == VIEW_LEFTEYE ? VIEW_RIGHTEYE : VIEW_LEFTEYE);
     }
-
-    if (gVideoSeeThrough) gARTImage = NULL; // All views done, can invalidate image data now.
-
 }
 
 //
