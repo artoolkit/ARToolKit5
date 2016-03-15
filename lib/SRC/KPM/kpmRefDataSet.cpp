@@ -284,13 +284,13 @@ int kpmGenRefDataSet ( ARUint8 *refImage, int xsize, int ysize, float dpi, int p
     return 0;
 }
 
-int kpmAddRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
+int kpmAddRefDataSet ( ARUint8 *refImage, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
                               int pageNo, int imageNo, KpmRefDataSet **refDataSetPtr )
 {
     KpmRefDataSet  *refDataSetPtr2;
     int ret;
 
-    ret =  kpmGenRefDataSet(refImage, pixFormat, xsize, ysize, dpi, procMode, compMode, maxFeatureNum, pageNo, imageNo, &refDataSetPtr2);
+    ret =  kpmGenRefDataSet(refImage, xsize, ysize, dpi, procMode, compMode, maxFeatureNum, pageNo, imageNo, &refDataSetPtr2);
     if (ret < 0) {
         ARLOGe("Error while adding reference data set: kpmGenRefDataSet() failed.\n");
         return (ret);

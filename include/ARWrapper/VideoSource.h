@@ -93,8 +93,7 @@ protected:
     GLenum glPixType;
 #endif
 
-    ARUint8 *frameBuffer;               ///< Pointer to latest frame. Set by concrete subclass to point to frame data.
-    ARUint8 *frameBuffer2;              ///< For bi-planar formats, pointer to plane 2 of latest frame. Set by concrete subclass to point to frame data.
+    AR2VideoBufferT *frameBuffer;       ///< Pointer to latest frame. Set by concrete subclass to point to frame data.
 	int frameStamp;						///< Latest framestamp. Incremented in the concrete subclass when a new frame arrives.
     
     int m_error;
@@ -190,8 +189,14 @@ public:
 	 * Returns the current frame.
 	 * @return		Pointer to the buffer containing the current video frame
 	 */
-	ARUint8* getFrame();
+	AR2VideoBufferT* getFrame();
 
+    /**
+     * Returns the current frame.
+     * @return		Pointer to the buffer containing the current video frame
+     */
+    ARUint8* getFrameBuff();
+    
 	/**
 	 * Returns the current frame stamp. If the returned value has changed since the last 
 	 * time this function was called, then the caller can assume a new frame is available.

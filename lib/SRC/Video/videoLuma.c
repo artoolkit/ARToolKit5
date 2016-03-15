@@ -34,7 +34,7 @@
  *
  */
 
-#include "videoLuma.h"
+#include <AR/videoLuma.h>
 
 #include <stdlib.h>
 #ifdef ANDROID
@@ -63,6 +63,14 @@ struct _ARVideoLumaInfo {
 #endif
     ARUint8 *__restrict buff;
 };
+
+#ifdef HAVE_ARM_NEON
+static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
+static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
+static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
+static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
+#endif
+
 
 ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat)
 {
@@ -122,13 +130,13 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
 #ifdef HAVE_ARM_NEON
     if (vli->fastPath) {
         if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
-            arImageProcBGRAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+            arVideoLumaBGRAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         } else if (pixFormat == AR_PIXEL_FORMAT_RGBA) {
-            arImageProcRGBAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+            arVideoLumaRGBAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         } else if (pixFormat == AR_PIXEL_FORMAT_ABGR) {
-            arImageProcABGRtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+            arVideoLumaABGRtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         } else /*(pixFormat == AR_PIXEL_FORMAT_ARGB)*/ {
-            arImageProcARGBtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+            arVideoLumaARGBtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         }
         return (0);
     }

@@ -54,7 +54,7 @@ class AndroidVideoSource : public VideoSource {
 private:
 
 	bool newFrameArrived;
-    ARUint8 *localFrameBuffer;
+    AR2VideoBufferT *localFrameBuffer;
     size_t frameBufferSize;
 
     static void getVideoReadyAndroidCparamCallback(const ARParam *cparam_p, void *userdata);

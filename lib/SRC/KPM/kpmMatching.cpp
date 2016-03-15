@@ -380,7 +380,7 @@ int kpmSetMatchingSkipRegion( KpmHandle *kpmHandle, SurfSubRect *skipRegion, int
 }
 #endif
 
-int kpmMatching( KpmHandle *kpmHandle, AR2VideoBufferT *inImage )
+int kpmMatching(KpmHandle *kpmHandle, ARUint8 *inImageLuma)
 {
     int               xsize, ysize;
     int               xsize2, ysize2;
@@ -401,8 +401,8 @@ int kpmMatching( KpmHandle *kpmHandle, AR2VideoBufferT *inImage )
 #endif
     int               ret;
     
-    if (!kpmHandle || !inImage) {
-        ARLOGe("kpmMatching(): NULL kpmHandle/inImage.\n");
+    if (!kpmHandle || !inImageLuma) {
+        ARLOGe("kpmMatching(): NULL kpmHandle/inImageLuma.\n");
         return -1;
     }
     
@@ -411,10 +411,10 @@ int kpmMatching( KpmHandle *kpmHandle, AR2VideoBufferT *inImage )
     procMode        = kpmHandle->procMode;
     
     if (procMode == KpmProcFullSize) {
-        imageLuma = inImage->buffLuma;
+        imageLuma = inImageLuma;
         imageLumaWasAllocated = 0;
     } else {
-        imageLuma = kpmUtilResizeImage( inImage->buffLuma, xsize, ysize, procMode, &xsize2, &ysize2 );
+        imageLuma = kpmUtilResizeImage(inImageLuma, xsize, ysize, procMode, &xsize2, &ysize2);
         if (!imageLuma) return -1;
         imageLumaWasAllocated = 1;
     }

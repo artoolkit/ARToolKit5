@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 THREAD_HANDLE_T *trackingInitInit( KpmHandle *kpmHandle );
-int trackingInitStart( THREAD_HANDLE_T *threadHandle, ARUint8 *imagePtr );
+int trackingInitStart( THREAD_HANDLE_T *threadHandle, ARUint8 *imagePtrLuma );
 int trackingInitGetResult( THREAD_HANDLE_T *threadHandle, float trans[3][4], int *page );
 int trackingInitQuit( THREAD_HANDLE_T **threadHandle_p );
 

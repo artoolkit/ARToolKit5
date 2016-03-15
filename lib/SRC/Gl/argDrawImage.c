@@ -286,6 +286,8 @@ static int argDrawImageTexMapRect( ARGViewportHandle *vp, ARUint8 *image, int xs
     ARdouble                y1, y2;
     int                   i, j;
 
+    if (!vp || !image) return (-1);
+    
     dispMethod = (vp->dispMethod == AR_GL_DISP_METHOD_TEXTURE_MAPPING_FIELD)? 0: 1;
     distMode = (vp->distortionMode == AR_GL_DISTORTION_COMPENSATE_DISABLE)? 0: 1;
     if( argGetImageScale(vp, xsize, ysize, &s1, &s2, &offx, &offy) < 0 ) return -1;
@@ -443,7 +445,7 @@ static GLuint argUpdateImageTexture( ARGViewportHandle *vp, ARUint8 *image, int 
                                      int pixFormat, int full_half, GLenum target, GLuint glid )
 {
     GLint    saveMatrixMode;
-
+    
     glBindTexture( target, glid );
 
     glGetIntegerv( GL_MATRIX_MODE, &saveMatrixMode );

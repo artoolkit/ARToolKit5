@@ -68,7 +68,6 @@ struct _KpmHandle {
     ARParamLT                *cparamLT;
     int                       poseMode;
     int                       xsize, ysize;
-    AR_PIXEL_FORMAT           pixFormat;
     KPM_PROC_MODE             procMode;
     int                       detectedMaxFeature;
 #if !BINARY_FEATURE

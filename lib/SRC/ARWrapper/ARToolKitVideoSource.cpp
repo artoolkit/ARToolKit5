@@ -250,10 +250,9 @@ bool ARToolKitVideoSource::captureFrame() {
 	if (deviceState == DEVICE_RUNNING) {
 
         AR2VideoBufferT *vbuff = ar2VideoGetImage(gVid);
-        if (vbuff && vbuff->buff) {
+        if (vbuff && vbuff->fillFlag) {
 			frameStamp++;
-            frameBuffer = vbuff->buff;
-            frameBuffer2 = (vbuff->bufPlaneCount == 2 ? vbuff->bufPlanes[1] : NULL);
+            frameBuffer = vbuff;
             return true;
 		}
 	}
@@ -281,7 +280,6 @@ bool ARToolKitVideoSource::close() {
     }
     
     frameBuffer = NULL;
-    frameBuffer2 = NULL;
 
     ARController::logv(AR_LOG_LEVEL_INFO, "Closing ARToolKit video.");
     if (ar2VideoClose(gVid) != 0)

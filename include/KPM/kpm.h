@@ -169,16 +169,15 @@ typedef struct _KpmHandle KpmHandle;
         valid for the lifetime of the KpmHandle.
         This structure also specifies the size of video frames which will be later supplied to the
         kpmMatching() function as cparamLT->param.xsize and cparamLT->param.ysize.
-    @param pixFormat Pixel format of video frames which will be later supplied to the kpmMatching() function.
     @result Pointer to a newly-allocated KpmHandle structure. This structure must be deallocated
         via a call to kpmDeleteHandle() when no longer needed.
     @seealso kpmCreateHandleHomography kpmCreateHandleHomography
     @seealso kpmDeleteHandle kpmDeleteHandle
  */
-KpmHandle  *kpmCreateHandle ( ARParamLT *cparamLT, AR_PIXEL_FORMAT pixFormat );
+KpmHandle  *kpmCreateHandle (ARParamLT *cparamLT);
 #define     kpmCreatHandle kpmCreateHandle
 
-KpmHandle  *kpmCreateHandle2( int xsize, int ysize, AR_PIXEL_FORMAT pixFormat );
+KpmHandle  *kpmCreateHandle2(int xsize, int ysize);
 #define     kpmCreatHandle2 kpmCreateHandle2
 
 /*!
@@ -190,13 +189,12 @@ KpmHandle  *kpmCreateHandle2( int xsize, int ysize, AR_PIXEL_FORMAT pixFormat );
         but the resulting pose is suitable for visual overlay purposes.
     @param xsize Width of video frames which will be later supplied to the kpmMatching() function.
     @param ysize Height of video frames which will be later supplied to the kpmMatching() function.
-    @param pixFormat Pixel format of video frames which will be later supplied to the kpmMatching() function.
     @result Pointer to a newly-allocated KpmHandle structure. This structure must be deallocated
         via a call to kpmDeleteHandle() when no longer needed.
     @seealso kpmCreateHandle kpmCreateHandle
     @seealso kpmDeleteHandle kpmDeleteHandle
  */
-KpmHandle  *kpmCreateHandleHomography( int xsize, int ysize, AR_PIXEL_FORMAT pixFormat );
+KpmHandle  *kpmCreateHandleHomography(int xsize, int ysize);
 #define     kpmCreatHandleHomography kpmCreateHandleHomography
 
 /*!
@@ -215,7 +213,6 @@ int         kpmDeleteHandle( KpmHandle **kpmHandle );
 
 int         kpmHandleGetXSize(const KpmHandle *kpmHandle);
 int         kpmHandleGetYSize(const KpmHandle *kpmHandle);
-AR_PIXEL_FORMAT kpmHandleGetPixelFormat(const KpmHandle *kpmHandle);
     
 int         kpmSetProcMode( KpmHandle *kpmHandle, KPM_PROC_MODE  procMode );
 int         kpmGetProcMode( KpmHandle *kpmHandle, KPM_PROC_MODE *procMode );
@@ -268,14 +265,14 @@ int         kpmSetRefDataSetFileOld( KpmHandle *kpmHandle, const char *filename,
     @abstract Perform key-point matching on an image.
     @discussion 
     @param kpmHandle
-    @param inImage Source image containing the pixels which will be searched for features.
+    @param inImageLuma Source image containing the pixels which will be searched for features.
         Typically, this is one frame from a video stream. The dimensions of this image must
-        match the values specified at the time of creation of the KPM handle.
+        match the values specified at the time of creation of the KPM handle. Luma only.
     @result 0 if successful, or value &lt;0 in case of error.
     @seealso kpmCreateHandle kpmCreateHandle
     @seealso kpmCreateHandleHomography kpmCreateHandleHomography
  */
-int         kpmMatching( KpmHandle *kpmHandle, AR2VideoBufferT *inImage );
+int         kpmMatching(KpmHandle *kpmHandle, ARUint8 *inImageLuma);
 
 int         kpmSetMatchingSkipPage( KpmHandle *kpmHandle, int *skipPages, int num );
 #if !BINARY_FEATURE
@@ -291,9 +288,9 @@ int         kpmGetPose( KpmHandle *kpmHandle, float  pose[3][4], int *pageNo, fl
 int         kpmGetResult( KpmHandle *kpmHandle, KpmResult **result, int *resultNum );
 
 
-int         kpmGenRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
+int         kpmGenRefDataSet ( ARUint8 *refImage, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
                                int pageNo, int imageNo, KpmRefDataSet **refDataSet );
-int         kpmAddRefDataSet ( ARUint8 *refImage, AR_PIXEL_FORMAT pixFormat, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
+int         kpmAddRefDataSet ( ARUint8 *refImage, int xsize, int ysize, float  dpi, int procMode, int compMode, int maxFeatureNum,
                                int pageNo, int imageNo, KpmRefDataSet **refDataSet );
 
 /*!

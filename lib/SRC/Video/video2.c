@@ -411,7 +411,7 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
     // only the portion following that option to them.
     const char                *configStringFollowingDevice = NULL;
     
-    arMalloc( vid, AR2VideoParamT, 1 );
+    arMallocClear( vid, AR2VideoParamT, 1 );
     config = ar2VideoGetConfig(config_in);
     vid->deviceType = ar2VideoGetDeviceWithConfig(config, &configStringFollowingDevice);
     

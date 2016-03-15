@@ -85,11 +85,9 @@ VideoSource::VideoSource() :
     glPixType(0),
 #endif
     frameBuffer(NULL),
-    frameBuffer2(NULL),
     frameStamp(0),
     m_error(ARW_ERROR_NONE)
 {
-        
 }
 
 VideoSource::~VideoSource() {
@@ -177,8 +175,13 @@ AR_PIXEL_FORMAT VideoSource::getPixelFormat() {
 	return pixelFormat;
 }
 
-ARUint8* VideoSource::getFrame() {
+AR2VideoBufferT* VideoSource::getFrame() {
 	return frameBuffer;
+}
+
+ARUint8* VideoSource::getFrameBuff() {
+    if (!frameBuffer) return NULL;
+    return frameBuffer->buff;
 }
 
 int VideoSource::getFrameStamp() {
@@ -201,7 +204,7 @@ bool VideoSource::updateTexture(Color* buffer) {
         case AR_PIXEL_FORMAT_BGRA:
         case AR_PIXEL_FORMAT_BGR:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 Color *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
                     outp->b = (float)*(inp + 0) / 255.0f;
@@ -216,7 +219,7 @@ bool VideoSource::updateTexture(Color* buffer) {
         case AR_PIXEL_FORMAT_RGBA:
         case AR_PIXEL_FORMAT_RGB:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 Color *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
                     outp->r = (float)*(inp + 0) / 255.0f;
@@ -230,7 +233,7 @@ bool VideoSource::updateTexture(Color* buffer) {
             break;
         case AR_PIXEL_FORMAT_ARGB:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 Color *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
                     outp->r = (float)*(inp + 1) / 255.0f;
@@ -244,7 +247,7 @@ bool VideoSource::updateTexture(Color* buffer) {
             break;
         case AR_PIXEL_FORMAT_ABGR:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 Color *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
                     outp->b = (float)*(inp + 1) / 255.0f;
@@ -258,7 +261,7 @@ bool VideoSource::updateTexture(Color* buffer) {
             break;
         case AR_PIXEL_FORMAT_MONO:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 Color *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
                     outp->b = outp->g = outp->r = (float)*inp / 255.0f;
@@ -732,7 +735,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
         case AR_PIXEL_FORMAT_BGRA:
         case AR_PIXEL_FORMAT_BGR:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -748,7 +751,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
         case AR_PIXEL_FORMAT_RGBA:
         case AR_PIXEL_FORMAT_RGB:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -763,7 +766,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
             break;
         case AR_PIXEL_FORMAT_ARGB:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -778,7 +781,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
             break;
         case AR_PIXEL_FORMAT_ABGR:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y*pixelSize];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -793,7 +796,7 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
             break;
         case AR_PIXEL_FORMAT_MONO:
             for (int y = 0; y < videoHeight; y++) {
-                ARUint8 *inp = &frameBuffer[videoWidth*y];
+                ARUint8 *inp = &(frameBuffer->buff[videoWidth*y*pixelSize]);
                 uint32_t *outp = &buffer[videoWidth*y];
                 for (int pixelsToGo = videoWidth; pixelsToGo > 0; pixelsToGo--) {
 #ifdef AR_LITTLE_ENDIAN
@@ -810,11 +813,11 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
         {
 #if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
             if (fastPath()) {
-                YCbCr422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer, frameBuffer2, videoWidth, videoHeight);
+                YCbCr422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer->bufPlanes[0], frameBuffer->bufPlanes[1], videoWidth, videoHeight);
             } else {
 #endif
-                ARUint8 *pY0 = frameBuffer, *pY1 = frameBuffer + videoWidth;
-                ARUint8 *pCbCr = frameBuffer2;
+                ARUint8 *pY0 = frameBuffer->bufPlanes[0], *pY1 = frameBuffer->bufPlanes[0] + videoWidth;
+                ARUint8 *pCbCr = frameBuffer->bufPlanes[1];
                 uint8_t *outp0 = (uint8_t *)buffer;
                 uint8_t *outp1 = ((uint8_t *)buffer) + videoWidth*4;
                 int wd2 = videoWidth >> 1;
@@ -876,12 +879,12 @@ bool VideoSource::updateTexture32(uint32_t *buffer) {
         {
 #if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
             if (fastPath()) {
-                YCrCb422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer, frameBuffer2, videoWidth, videoHeight);
+                YCrCb422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)buffer, frameBuffer->bufPlanes[0], frameBuffer->bufPlanes[1], videoWidth, videoHeight);
             } else {
 #endif
                 //color_convert_common((unsigned char *)frameBuffer, (unsigned char *)frameBuffer2, videoWidth, videoHeight, (unsigned char *)buffer);
-                ARUint8 *pY0 = frameBuffer, *pY1 = frameBuffer + videoWidth;
-                ARUint8 *pCrCb = frameBuffer2;
+                ARUint8 *pY0 = frameBuffer->bufPlanes[0], *pY1 = frameBuffer->bufPlanes[0] + videoWidth;
+                ARUint8 *pCrCb = frameBuffer->bufPlanes[1];
                 uint8_t *outp0 = (uint8_t *)buffer;
                 uint8_t *outp1 = ((uint8_t *)buffer) + videoWidth*4;
                 int wd2 = videoWidth >> 1;

@@ -360,7 +360,7 @@ bool ARController::videoAcceptImage(JNIEnv* env, jobject obj, const int videoSou
         }
         
         if (avs->getPixelFormat() == AR_PIXEL_FORMAT_NV21) {
-            env->GetByteArrayRegion(pinArray, 0, avs->getFrameSize(), (jbyte *)avs->getFrame());
+            env->GetByteArrayRegion(pinArray, 0, avs->getFrameSize(), (jbyte *)avs->getFrameBuff());
             avs->acceptImage(NULL);
         } else {
             if (jbyte* buff = env->GetByteArrayElements(pinArray, NULL)) {
@@ -489,7 +489,7 @@ bool ARController::update()
 	}
 
     // Get frame(s);
-    ARUint8 *image0, *image1 = NULL;
+    AR2VideoBufferT *image0, *image1 = NULL;
     int frameStamp0, frameStamp1;
     image0 = m_videoSource0->getFrame();
     if (!image0) {
@@ -600,7 +600,7 @@ bool ARController::update()
             
             if (m_kpmRequired) {
                 if (!m_kpmBusy) {
-                    trackingInitStart(trackingThreadHandle, image0);
+                    trackingInitStart(trackingThreadHandle, image0->buffLuma);
                     m_kpmBusy = true;
                 } else {
                     int ret;
@@ -634,7 +634,7 @@ bool ARController::update()
                 if ((*it)->type == ARMarker::NFT) {
                     
                     if (surfaceSet[page]->contNum > 0) {
-                        if (ar2Tracking(m_ar2Handle, surfaceSet[page], image0, trackingTrans, &err) < 0) {
+                        if (ar2Tracking(m_ar2Handle, surfaceSet[page], image0->buff, trackingTrans, &err) < 0) {
                             //logv("Tracking lost on page %d.", page);
                             success &= ((ARMarkerNFT *)(*it))->updateWithNFTResults(-1, NULL, NULL);
                         } else {
@@ -749,7 +749,7 @@ bool ARController::initNFT(void)
     //
     
     // KPM init.
-    m_kpmHandle = kpmCreateHandle(m_videoSource0->getCameraParameters(), m_videoSource0->getPixelFormat());
+    m_kpmHandle = kpmCreateHandle(m_videoSource0->getCameraParameters());
     if (!m_kpmHandle) {
         logv(AR_LOG_LEVEL_ERROR, "ARController::initNFT(): Error: kpmCreatHandle, exiting, returning false");
         return (false);

@@ -97,7 +97,7 @@ bool AndroidVideoSource::getVideoReadyAndroid(const int width, const int height,
     char *a, b[1024];
     int err_i;
     
-    if (deviceState == DEVICE_GETTING_READY) return true;
+    if (deviceState == DEVICE_GETTING_READY) return true; // This path will be exercised if another frame arrives while we're waiting for the callback.
     else if (deviceState != DEVICE_OPEN) {
         ARController::logv("AndroidVideoSource::getVideoReadyAndroid: Error: device not open.\n");
         return false;
@@ -188,18 +188,22 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
     } else {
         frameBufferSize = videoWidth * videoHeight * arUtilGetPixelSize(pixelFormat);
     }
-    localFrameBuffer = (ARUint8*)calloc(frameBufferSize, sizeof(ARUint8));
-	if (!localFrameBuffer) {
+    localFrameBuffer = (AR2VideoBufferT *)calloc(1, sizeof(AR2VideoBufferT));
+    if (!localFrameBuffer) {
+        ARController::logv("Error: Unable to allocate memory for local video frame buffer");
+        goto bail;
+    }
+    localFrameBuffer->buff = (ARUint8*)calloc(frameBufferSize, sizeof(ARUint8));
+	if (!localFrameBuffer->buff) {
         ARController::logv("Error: Unable to allocate memory for local video frame buffer");
         goto bail;
 	}
-    frameBuffer = localFrameBuffer;
     if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
-        frameBuffer2 = localFrameBuffer + videoWidth*videoHeight;
-    } else {
-        frameBuffer2 = NULL;
+        localFrameBuffer->bufPlaneCount = 2;
+        localFrameBuffer->bufPlanes[0] = localFrameBuffer->buff;
+        localFrameBuffer->bufPlanes[1] = localFrameBuffer->buff + videoWidth*videoHeight;
     }
-    
+    frameBuffer = localFrameBuffer;
 
 	ARController::logv("Android Video Source running %dx%d.", videoWidth, videoHeight);
 
@@ -207,6 +211,8 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
     return true;
     
 bail:
+    free(localFrameBuffer);
+    localFrameBuffer = NULL;
     deviceState = DEVICE_OPEN;
     return false;
 }
@@ -236,7 +242,7 @@ void AndroidVideoSource::acceptImage(ARUint8* ptr) {
         if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
             // Nothing more to do.
         } else if (ptr && pixelFormat == AR_PIXEL_FORMAT_RGBA) {
-            color_convert_common((unsigned char*)ptr, (unsigned char*)(ptr + videoWidth * videoHeight), videoWidth, videoHeight, localFrameBuffer);
+            color_convert_common((unsigned char*)ptr, (unsigned char*)(ptr + videoWidth * videoHeight), videoWidth, videoHeight, localFrameBuffer->buff);
             
         } else {
             return;
@@ -253,10 +259,10 @@ bool AndroidVideoSource::close() {
     if (cparamLT) arParamLTFree(&cparamLT);
 
 	if (localFrameBuffer) {
+        free(localFrameBuffer->buff);
 		free(localFrameBuffer);
 		localFrameBuffer = NULL;
         frameBuffer = NULL;
-        frameBuffer2 = NULL;
         frameBufferSize = 0;
 	}
     newFrameArrived = false;

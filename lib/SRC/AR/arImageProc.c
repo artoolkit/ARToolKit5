@@ -77,9 +77,9 @@ int arImageProcLumaHist(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr)
         return (-1);
     }
 #else
-    unsigned char *p;
+    unsigned char *__restrict p;
     memset(ipi->histBins, 0, sizeof(ipi->histBins));
-    for (p = dataPtr; p < dataPtr + ipi->imageX*ipi->imageY; p++) ipi->histBins[*p]++;
+    for (p = (unsigned char *__restrict)dataPtr; p < dataPtr + ipi->imageX*ipi->imageY; p++) ipi->histBins[*p]++;
 #endif // AR_IMAGEPROC_USE_VIMAGE
     
     return (0);
