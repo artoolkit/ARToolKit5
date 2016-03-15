@@ -126,7 +126,6 @@ EDEN_BOOL EdenSurfacesTextureLoad2(const int contextIndex, const int numTextures
     unsigned char *data = NULL;
     int nc, sizeX, sizeY, textureSizeX, textureSizeY;
 	GLenum format;
-    GLint error;
 
 	if (contextIndex < 0 || contextIndex >= gSurfacesContextsActiveCount) return (FALSE); // Sanity check.
 
@@ -173,11 +172,6 @@ EDEN_BOOL EdenSurfacesTextureLoad2(const int contextIndex, const int numTextures
         
 		offset = contextIndex * gTextureIndexMax + ptr;
 		glGenTextures(1, &(gTextures[offset].name));
-		if (glGetError() != GL_NO_ERROR) {
-			EDEN_LOGe("EdenSurfacesTextureLoad(): GL error while generating texture name.\n");
-			ok = FALSE;
-            continue;
-		}
 		gTextures[offset].env_mode = textureInfo[i].env_mode;
 
 		// Bind the texture object and set its initial state.
@@ -294,9 +288,6 @@ EDEN_BOOL EdenSurfacesTextureLoad2(const int contextIndex, const int numTextures
                 glTexImage2D(GL_TEXTURE_2D, 0, format, textureSizeX, textureSizeY, 0, format, GL_UNSIGNED_BYTE, NULL);
                 // Then send the NPOT-data as a subimage.
                 glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, sizeX, sizeY, format, GL_UNSIGNED_BYTE, data);
-            }
-            if ((error = glGetError()) != GL_NO_ERROR) {
-                EDEN_LOGe("EdenSurfacesTextureLoad(): OpenGL error %d.\n", (int)(error));
             }
             
             free(data);
