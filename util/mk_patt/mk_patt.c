@@ -84,7 +84,7 @@ static int                 pixelSize;
 static ARHandle           *arHandle;
 static ARParam             cparam;
 static ARParamLT          *cparamLT;
-static ARUint8            *image;
+static ARUint8            *saveImage;
 static ARMarkerInfo       *target = NULL;
 static ARGViewportHandle  *vp;
 static ARGViewportHandle  *vp1;
@@ -226,7 +226,7 @@ static void init(int argc, char *argv[])
     if( arVideoGetSize(&xsize, &ysize) < 0 ) exit(0);
     if( (pixelFormat=arVideoGetPixelFormat()) < 0 ) exit(0);
     if( (pixelSize=arVideoGetPixelSize()) < 0 ) exit(0);
-    arMalloc( image, ARUint8, xsize*ysize*pixelSize );
+    arMalloc( saveImage, ARUint8, xsize*ysize*pixelSize );
     ARLOGi("Image size (x,y) = (%d,%d)\n", xsize, ysize);
 
     arParamChangeSize( &wparam, xsize, ysize, &cparam );
@@ -334,7 +334,7 @@ static void mouseEvent(int button, int state, int x, int y)
         printf("Enter filename: ");
         if( fgets(name1, 256, stdin) == NULL ) return;
         if( sscanf(name1, "%s", name2) != 1 ) return;
-        if( arPattSave(image, cparam.xsize, cparam.ysize, pixelFormat, &(cparamLT->paramLTf),
+        if( arPattSave(saveImage, cparam.xsize, cparam.ysize, pixelFormat, &(cparamLT->paramLTf),
                        arHandle->arImageProcMode, target, pattRatio, gPattSize, name2) < 0 ) {
             ARLOGe("ERROR!!\n");
         }
@@ -435,7 +435,7 @@ static int getPatternVerticesFromMarkerVertices(const ARdouble vertex[4][2], ARd
 
 static void mainLoop(void)
 {
-    ARUint8         *dataPtr;
+    AR2VideoBufferT *buff;
     ARMarkerInfo    *markerInfo;
     int              markerNum;
     int              areamax;
@@ -443,14 +443,16 @@ static void mainLoop(void)
     ARdouble         vertex[4][2];
     ARdouble         patternVertex[4][2];
     ARUint8          pattImage[AR_PATT_SIZE1_MAX*AR_PATT_SIZE1_MAX*3]; // Buffer big enough to hold largest possible image.
+    int              mode;
 
-    if( (dataPtr = (unsigned char *)arVideoGetImage()) == NULL ) {
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
-    memcpy(image, dataPtr, cparam.xsize*cparam.ysize*pixelSize);
-
-    if( arDetectMarker( arHandle, image ) < 0 ) {
+    memcpy(saveImage, buff->buff, cparam.xsize*cparam.ysize*pixelSize);
+    
+    if (arDetectMarker(arHandle, buff) < 0) {
         cleanup();
         exit(0);
     }
@@ -464,9 +466,18 @@ static void mainLoop(void)
             target = &(markerInfo[i]);
         }
     }
-    argDrawMode2D( vp );
-    if( debugMode == AR_DEBUG_DISABLE ) argDrawImage( image );
-    else                                argDrawImage( arHandle->labelInfo.bwImage );
+    arGetDebugMode(arHandle, &mode);
+    if (mode == AR_DEBUG_ENABLE) {
+        argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vp);
+        arGetImageProcMode(arHandle, &mode);
+        if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(arHandle->labelInfo.bwImage);
+        else argDrawImageHalf(arHandle->labelInfo.bwImage);
+    } else {
+        argViewportSetPixFormat(vp, pixelFormat); // Drawing the input image.
+        argDrawMode2D(vp);
+        argDrawImage(buff->buff);
+    }
 
     if( target != NULL ) {
         glLineWidth(2.0f);
@@ -494,7 +505,7 @@ static void mainLoop(void)
             vertex[i][1] = target->vertex[(i+2)%4][1];
         }
         if( arPattGetImage2( AR_IMAGE_PROC_FRAME_IMAGE, AR_TEMPLATE_MATCHING_COLOR, gPattSize, gPattSize*AR_PATT_SAMPLE_FACTOR1,
-                            image, cparam.xsize, cparam.ysize, pixelFormat, &(cparamLT->paramLTf),
+                            buff->buff, cparam.xsize, cparam.ysize, pixelFormat, &(cparamLT->paramLTf),
                             vertex, pattRatio, (ARUint8 *)pattImage ) == 0 ) {
             argDrawMode2D(vp1);
             argDrawImage((ARUint8 *)pattImage);

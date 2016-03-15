@@ -213,24 +213,31 @@ static void   keyEvent( unsigned char key, int x, int y)
 
 static void mainLoop(void)
 {
-    ARUint8          *dataPtr;
+    AR2VideoBufferT  *buff;
     ARMarkerInfo     *markerInfo;
     int               markerNum;
     double            patt_trans[3][4];
     int               j, k;
+    int               mode;
 
-    /* grab a vide frame */
-    if( (dataPtr = arVideoGetImage()) == NULL ) {
+    /* grab a video frame */
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
 
-    argDrawMode2D(vp);
-    if( debug == 0 ) {
-        argDrawImage( dataPtr );
-    }
-    else {
-        argDrawImageHalf( arHandle->labelInfo.bwImage );
+    arGetDebugMode(gARHandle, &mode);
+    if (mode == AR_DEBUG_ENABLE) {
+        argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vp);
+        arGetImageProcMode(gARHandle, &mode);
+        if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(gARHandle->labelInfo.bwImage);
+        else argDrawImageHalf(gARHandle->labelInfo.bwImage);
+    } else {
+        argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
+        argDrawMode2D(vp);
+        argDrawImage(buff->buff);
     }
 
     if( count % 10 == 0 ) {

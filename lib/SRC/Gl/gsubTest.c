@@ -96,53 +96,53 @@ static void debugReportMode(ARGViewportHandle *vp)
 
 static void mainLoop(void)
 {
-    static ARUint8     *dataPtr = NULL;
+    static AR2VideoBufferT buff = {0};
     static int          oldImageMode = -1;
     static int          oldDispMode  = -1;
     static int          oldDistMode  = -1;
     ARdouble            patt_trans[3][4];
     int                 i, j;
 
-    if( dataPtr == NULL ) {
-        arMalloc( dataPtr, ARUint8, xsize*ysize*PIXEL_SIZE );
+    if (!buff.buff) {
+        arMalloc(buff.buff, ARUint8, xsize*ysize*PIXEL_SIZE);
     }
 
     if( oldImageMode != 0 && imageMode == 0 ) {
         for( i = 0; i < xsize*ysize; i++ ) {
-            dataPtr[i*PIXEL_SIZE+0] = 200;
-            dataPtr[i*PIXEL_SIZE+1] = 200;
-            dataPtr[i*PIXEL_SIZE+2] = 200;
+            buff.buff[i*PIXEL_SIZE+0] = 200;
+            buff.buff[i*PIXEL_SIZE+1] = 200;
+            buff.buff[i*PIXEL_SIZE+2] = 200;
         }
         for( j = 190; j < 291; j++ ) {
             for( i = 280; i < 381; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 20;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 20;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 20;
             }
         }
         i = 0;
         for( j = 0; j < ysize; j++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
         }
         i = 639;
         for( j = 0; j < ysize; j++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
         }
         j = 0;
         for( i = 0; i < xsize; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
         }
         j = 479;
         for( i = 0; i < xsize; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
         }
         oldImageMode = 0;
     }
@@ -150,16 +150,16 @@ static void mainLoop(void)
     if( oldImageMode != 1 && imageMode == 1 ) {
         for( j = 0; j < 480; j += 2 ) {
             for( i = 0; i < 640; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
             }
         }
         for( j = 1; j < 480; j += 2 ) {
             for( i = 0; i < 640; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 255;
             }
         }
         oldImageMode = 1;
@@ -167,38 +167,38 @@ static void mainLoop(void)
     if( oldImageMode != 2 && imageMode == 2 ) {
         for( i = 0; i < 640; i += 2 ) {
             for( j = 0; j < 480; j++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 255;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 0;
             }
         }
         for( i = 1; i < 640; i += 2 ) {
             for( j = 0; j < 480; j++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 0;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 255;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 0;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 255;
             }
         }
         oldImageMode = 2;
     }
     if( oldImageMode != 3 && imageMode == 3 ) {
         for( i = 0; i < xsize*ysize; i++ ) {
-            dataPtr[i*PIXEL_SIZE+0] = 200;
-            dataPtr[i*PIXEL_SIZE+1] = 200;
-            dataPtr[i*PIXEL_SIZE+2] = 200;
+            buff.buff[i*PIXEL_SIZE+0] = 200;
+            buff.buff[i*PIXEL_SIZE+1] = 200;
+            buff.buff[i*PIXEL_SIZE+2] = 200;
         }
         for( j = 190; j < 291; j++ ) {
             for( i = 280; i < 381; i++ ) {
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+0] = 20;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+1] = 20;
-                dataPtr[(j*xsize+i)*PIXEL_SIZE+2] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+0] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+1] = 20;
+                buff.buff[(j*xsize+i)*PIXEL_SIZE+2] = 20;
             }
         }
         oldImageMode = 3;
     }
 
     /* detect the markers in the video frame */
-    if( arDetectMarker(arHandle, dataPtr) < 0 ) {
+    if (arDetectMarker(arHandle, &buff) < 0) {
         cleanup();
         exit(0);
     }
@@ -233,7 +233,7 @@ static void mainLoop(void)
     }
    
     argDrawMode2D(vp);
-    argDrawImage( dataPtr );
+    argDrawImage(buff.buff);
 
     if( imageMode == 3 ) {
         glLineWidth( 1.0f );

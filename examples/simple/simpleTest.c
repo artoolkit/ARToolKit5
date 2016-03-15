@@ -180,7 +180,7 @@ static void mainLoop(void)
 {
     static int      contF2 = 0;
     static ARdouble patt_trans[3][4];
-    static ARUint8 *dataPtr = NULL;
+    static AR2VideoBufferT *buff = NULL;
     ARMarkerInfo   *markerInfo;
     int             markerNum;
     ARdouble        err;
@@ -189,28 +189,29 @@ static void mainLoop(void)
     int             j, k;
 
     /* grab a video frame */
-    if( (dataPtr = (ARUint8 *)arVideoGetImage()) == NULL ) {
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
 
-    argDrawMode2D(vp);
-    arGetDebugMode( arHandle, &debugMode );
-    if( debugMode == 0 ) {
-        argDrawImage( dataPtr );
-    }
-    else {
+    arGetDebugMode(arHandle, &debugMode);
+    if (debugMode == AR_DEBUG_ENABLE) {
+        argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vp);
         arGetImageProcMode(arHandle, &imageProcMode);
-        if( imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE ) {
-            argDrawImage( arHandle->labelInfo.bwImage );
-        }
-        else {
-            argDrawImageHalf( arHandle->labelInfo.bwImage );
-        }
+        if (imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(arHandle->labelInfo.bwImage);
+        else argDrawImageHalf(arHandle->labelInfo.bwImage);
+    } else {
+        AR_PIXEL_FORMAT pixFormat;
+        arGetPixelFormat(arHandle, &pixFormat);
+        argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
+        argDrawMode2D(vp);
+        argDrawImage(buff->buff);
     }
 
     /* detect the markers in the video frame */
-    if( arDetectMarker(arHandle, dataPtr) < 0 ) {
+    if (arDetectMarker(arHandle, buff) < 0) {
         cleanup();
         exit(0);
     }

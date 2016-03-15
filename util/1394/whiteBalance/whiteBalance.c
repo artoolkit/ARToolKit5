@@ -136,16 +136,17 @@ static void   keyEvent( unsigned char key, int x, int y)
 
 static void dispAvaragePixelValue(void)
 {
-    ARUint8         *dataPtr, *p;
+    AR2VideoBufferT *buff;
+    ARUint8         *p;
     int             i, j, k;
     int             r, g, b;
 
-    while( (dataPtr = (ARUint8 *)arVideoGetImage()) == NULL ) {
+    while (!(buff = arVideoGetImage()) || !buff->fillFlag) {
         arUtilSleep(2);
     }
     r = g = b = k = 0;
     for( j = ysize/4; j <= ysize*3/4; j++ ) {
-        p = dataPtr + xsize*j*pixSize;
+        p = buff->buff + xsize*j*pixSize;
         for( i = xsize/4; i <= xsize*3/4; i++ ) {
             if( pixFormat == AR_PIXEL_FORMAT_ABGR ) {
                 r += *(p+3);
@@ -186,17 +187,18 @@ static void dispAvaragePixelValue(void)
 /* main loop */
 static void mainLoop(void)
 {
-    ARUint8         *dataPtr;
+    AR2VideoBufferT *buff;
 
-    /* grab a vide frame */
-    if( (dataPtr = (ARUint8 *)arVideoGetImage()) == NULL ) {
+    /* grab a video frame */
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
 
     glDisable( GL_DEPTH_TEST );
     argDrawMode2D(vp);
-    argDrawImage(dataPtr);
+    argDrawImage(buff->buff);
     argSwapBuffers();
 }
 

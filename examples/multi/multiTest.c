@@ -148,7 +148,7 @@ static void   keyEvent( unsigned char key, int x, int y)
 /* main loop */
 static void mainLoop(void)
 {
-    ARUint8         *dataPtr;
+    AR2VideoBufferT *buff;
     ARMarkerInfo    *marker_info;
     int             marker_num;
     int             imageProcMode;
@@ -157,7 +157,8 @@ static void mainLoop(void)
     int             i;
 
     /* grab a video frame */
-    if( (dataPtr = (ARUint8 *)arVideoGetImage()) == NULL ) {
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
@@ -170,32 +171,32 @@ static void mainLoop(void)
     count++;
 
     /* detect the markers in the video frame */
-    if( arDetectMarker(arHandle, dataPtr) < 0 ) {
+    if (arDetectMarker(arHandle, buff) < 0) {
         cleanup();
         exit(0);
     }
     marker_num = arGetMarkerNum( arHandle );
     marker_info =  arGetMarker( arHandle );
 
-    argDrawMode2D(vp);
-    arGetDebugMode( arHandle, &debugMode );
-    if( debugMode == 0 ) {
-        argDrawImage( dataPtr );
-    }
-    else {
+    arGetDebugMode(arHandle, &debugMode);
+    if (debugMode == AR_DEBUG_ENABLE) {
+        argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vp);
         arGetImageProcMode(arHandle, &imageProcMode);
-        if( imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE ) {
-            argDrawImage( arHandle->labelInfo.bwImage );
-        }
-        else {
-            argDrawImageHalf( arHandle->labelInfo.bwImage );
-        }
+        if (imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(arHandle->labelInfo.bwImage);
+        else argDrawImageHalf(arHandle->labelInfo.bwImage);
         glColor3f( 1.0f, 0.0f, 0.0f );
         glLineWidth( 2.0f);
         for( i = 0; i < marker_num; i++ ) {
             argDrawSquareByIdealPos( marker_info[i].vertex );
         }
         glLineWidth( 1.0f );
+    } else {
+        AR_PIXEL_FORMAT pixFormat;
+        arGetPixelFormat(arHandle, &pixFormat);
+        argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
+        argDrawMode2D(vp);
+        argDrawImage(buff->buff);
     }
 
     if( robustFlag ) {

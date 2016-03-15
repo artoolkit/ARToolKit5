@@ -146,46 +146,48 @@ static void   keyEvent( unsigned char key, int x, int y)
 
 static void mainLoop(void)
 {
-    ARUint8        *dataPtr;
+    AR2VideoBufferT *buff;
     ARMarkerInfo   *markerInfo;
     int             markerNum;
     ARdouble        patt_trans[3][4];
     ARdouble        err;
-    int             imageProcMode;
     int             debugMode;
     int             j, k;
 
     /* grab a video frame */
-    if( (dataPtr = (ARUint8 *)arVideoGetImage()) == NULL ) {
+    buff = arVideoGetImage();
+    if (!buff || !buff->fillFlag) {
         arUtilSleep(2);
         return;
     }
 
     /* detect the markers in the video frame */
-    if( arDetectMarker(arHandle, dataPtr) < 0 ) {
+    if( arDetectMarker(arHandle, buff) < 0 ) {
         cleanup();
         exit(0);
     }
 
     argSetWindow(w1);
-    argDrawMode2D(vp1);
-    arGetDebugMode( arHandle, &debugMode );
-    if( debugMode == 0 ) {
-        argDrawImage( dataPtr );
-    }
-    else {
+    
+    arGetDebugMode(arHandle, &debugMode);
+    if (debugMode == AR_DEBUG_ENABLE) {
+        int imageProcMode;
+        argViewportSetPixFormat(vp1, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vp1);
         arGetImageProcMode(arHandle, &imageProcMode);
-        if( imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE ) {
-            argDrawImage( arHandle->labelInfo.bwImage );
-        }
-        else {
-            argDrawImageHalf( arHandle->labelInfo.bwImage );
-        }
+        if (imageProcMode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(arHandle->labelInfo.bwImage);
+        else argDrawImageHalf(arHandle->labelInfo.bwImage);
+    } else {
+        AR_PIXEL_FORMAT pixFormat;
+        arGetPixelFormat(arHandle, &pixFormat);
+        argViewportSetPixFormat(vp1, pixFormat); // Drawing the input image.
+        argDrawMode2D(vp1);
+        argDrawImage(buff->buff);
     }
 
     argSetWindow(w2);
     argDrawMode2D(vp2);
-    argDrawImage( dataPtr );
+    argDrawImage(buff->buff);
     argSetWindow(w1);
 
     if( count % 10 == 0 ) {

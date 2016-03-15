@@ -316,7 +316,7 @@ static void motionEvent( int x, int y )
 
 static void mouseEvent(int button, int state, int x, int y)
 {
-    ARUint8         *dataPtr;
+    AR2VideoBufferT *buff;
     unsigned char   *p, *p1;
     int             ssx, ssy, eex, eey;
     int             i, j, k;
@@ -428,8 +428,8 @@ static void mouseEvent(int button, int state, int x, int y)
 
     if( button == GLUT_LEFT_BUTTON  && state == GLUT_UP ) {
         if( status == 0 && patt.loop_num < LOOP_MAX ) {
-            while( (dataPtr=arVideoGetImage()) == NULL ) arUtilSleep(2);
-            p = dataPtr;
+            while (!(buff = arVideoGetImage()) || !buff->fillFlag) arUtilSleep(2);
+            p = buff->buff;
             patt.savedImage[patt.loop_num] = (unsigned char *)malloc( xsize*ysize*pixelSize );
             if( patt.savedImage[patt.loop_num] == NULL ) exit(0);
 
@@ -578,15 +578,15 @@ static void keyEvent(unsigned char key, int x, int y)
 
 static void dispImage(void)
 {
-    ARUint8      *dataPtr;
+    AR2VideoBufferT *buff;
     double        x, y;
     int           ssx, eex, ssy, eey;
     int           i;
 
     if( status == 0 ) {
-        while( (dataPtr=arVideoGetImage()) == NULL ) arUtilSleep(2);
+        while (!(buff = arVideoGetImage()) || !buff->fillFlag) arUtilSleep(2);
         argDrawMode2D( vp );
-        argDrawImage( dataPtr );
+        argDrawImage(buff->buff);
     }
 
     else if( status == 1 ) {

@@ -79,7 +79,7 @@ enum {
 
 static AR2ImageSetT    *imageSet = NULL;
 static AR2JpegImageT   *jpegImage = NULL;
-static ARUint8         *image = NULL;
+static AR2VideoBufferT  buff = {0};
 static int              xsize = 0, ysize = 0; // Input image size.
 static int              windowWidth = XWIN_MAX;
 static int              windowHeight = YWIN_MAX;
@@ -215,9 +215,11 @@ static int init( int argc, char *argv[] )
         pixFormat = AR_PIXEL_FORMAT_MONO;
         
 #if AR2_CAPABLE_ADAPTIVE_TEMPLATE
-        image = imageSet->scale[targetScale]->imgBWBlur[1];
+        buff.buff = imageSet->scale[targetScale]->imgBWBlur[1];
+        buff.fillFlag = 1;
 #else
-        image = imageSet->scale[targetScale]->imgBW;
+        buff.buff = imageSet->scale[targetScale]->imgBW;
+        buff.fillFlag = 1;
 #endif
         xsize = imageSet->scale[targetScale]->xsize;
         ysize = imageSet->scale[targetScale]->ysize;
@@ -239,7 +241,8 @@ static int init( int argc, char *argv[] )
         ARLOGi("   Done.\n");
         
         ARLOGi("JPEG image '%s' is %dx%d.\n", inputFilePath, jpegImage->xsize, jpegImage->ysize);
-        image = jpegImage->image;
+        buff.buff = jpegImage->image;
+        buff.fillFlag = 1;
         if (jpegImage->nc == 1) pixFormat = AR_PIXEL_FORMAT_MONO;
         else if (jpegImage->nc == 3) pixFormat = AR_PIXEL_FORMAT_RGB;
         else {
@@ -312,7 +315,7 @@ static int detect(float **markerWidths_p)
     
     if (!markerWidths_p) return 0;
     
-    arDetectMarker( gARHandle, image );
+    arDetectMarker(gARHandle, &buff);
     ARLOG("Pass 1: detected %d markers.\n", gARHandle->marker_num);
     
     if (*markerWidths_p) free(*markerWidths_p);
@@ -492,11 +495,13 @@ static void dispFunc( void )
         if (mode == AR_DEBUG_ENABLE) {
             argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
             argDrawMode2D(vp);
-            argDrawImage(gARHandle->labelInfo.bwImage);
+            arGetImageProcMode(gARHandle, &mode);
+            if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(gARHandle->labelInfo.bwImage);
+            else argDrawImageHalf(gARHandle->labelInfo.bwImage);
         } else {
             argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
             argDrawMode2D(vp);
-            argDrawImage(image);
+            argDrawImage(buff.buff);
         }
         
         // Draw detected markers.
@@ -552,11 +557,13 @@ static void dispFunc( void )
         if (mode == AR_DEBUG_ENABLE) {
             argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
             argDrawMode2D(vp);
-            argDrawImage(gARHandle->labelInfo.bwImage);
+            arGetImageProcMode(gARHandle, &mode);
+            if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(gARHandle->labelInfo.bwImage);
+            else argDrawImageHalf(gARHandle->labelInfo.bwImage);
         } else {
             argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
             argDrawMode2D(vp);
-            argDrawImage(image);
+            argDrawImage(buff.buff);
         }
 
         // Draw detected markers.
@@ -594,7 +601,7 @@ static void dispFunc( void )
         arUtilGetDirectoryNameFromPath(path, inputFilePath, sizeof(path), 1);
         pathLen = strlen(path);
         snprintf(path + pathLen, sizeof(path) - pathLen, "%s-%02d.%s", basename, co, patternExt);
-        if (arPattSave(image, xsize, ysize, pixFormat, &(cparamLT->paramLTf), AR_IMAGE_PROC_FRAME_IMAGE, &(gARHandle->markerInfo[jj]), pattRatio, gPattSize, path) < 0) {
+        if (arPattSave(buff.buff, xsize, ysize, pixFormat, &(cparamLT->paramLTf), AR_IMAGE_PROC_FRAME_IMAGE, &(gARHandle->markerInfo[jj]), pattRatio, gPattSize, path) < 0) {
             ARLOGe("Error saving pattern file '%s'.\n", path);
             ret = -1;
             goto done;

@@ -359,11 +359,11 @@ static void dispImage( void )
     dataPtrL = videoBuffL->buff;
     dataPtrR = videoBuffR->buff;
 
-    if( arDetectMarker(arHandleL, dataPtrL) < 0 ) {
+    if( arDetectMarker(arHandleL, videoBuffL) < 0 ) {
         cleanup();
         exit(0);
     }
-    if( arDetectMarker(arHandleR, dataPtrR) < 0 ) {
+    if( arDetectMarker(arHandleR, videoBuffR) < 0 ) {
         cleanup();
         exit(0);    
     }
@@ -389,9 +389,15 @@ static void dispImage( void )
     if( configR->prevF == 0 ) ARLOG("Right: NG\n");
     else                      ARLOG("Right: %f\n", errR);
 
-    argDrawMode2D( vpL );
-    if( debugMode == 0 ) argDrawImage( dataPtrL );
-    else                 argDrawImage( arHandleL->labelInfo.bwImage );
+    if (debugMode) {
+        argViewportSetPixFormat(vpL, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vpL);
+        argDrawImage(arHandleL->labelInfo.bwImage);
+    } else {
+        argViewportSetPixFormat(vpL, pixelFormatL); // Drawing the input image.
+        argDrawMode2D(vpL);
+        argDrawImage(dataPtrL);
+    }
     if( configL->prevF ) {
         for( i = 0; i < numL; i++ ) {
             for( j = 0; j < configL->marker_num; j++ ) {
@@ -403,9 +409,15 @@ static void dispImage( void )
         }
     }
 
-    argDrawMode2D( vpR );
-    if( debugMode == 0 ) argDrawImage( dataPtrR );
-    else                 argDrawImage( arHandleR->labelInfo.bwImage );
+    if (debugMode) {
+        argViewportSetPixFormat(vpR, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
+        argDrawMode2D(vpR);
+        argDrawImage(arHandleR->labelInfo.bwImage);
+    } else {
+        argViewportSetPixFormat(vpR, pixelFormatR); // Drawing the input image.
+        argDrawMode2D(vpR);
+        argDrawImage(dataPtrR);
+    }
     if( configR->prevF ) {
         for( i = 0; i < numR; i++ ) {
             for( j = 0; j < configR->marker_num; j++ ) {
