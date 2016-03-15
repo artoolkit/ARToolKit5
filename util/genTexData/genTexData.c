@@ -465,7 +465,6 @@ int main( int argc, char *argv[] )
 #else
                                   imageSet->scale[i]->imgBW,
 #endif
-                                  AR_PIXEL_FORMAT_MONO,
                                   imageSet->scale[i]->xsize,
                                   imageSet->scale[i]->ysize,
                                   imageSet->scale[i]->dpi,
