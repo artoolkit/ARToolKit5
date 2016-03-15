@@ -6912,6 +6912,32 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0720;
+				TargetAttributes = {
+					4A1302AB15BDFF14003A441C = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A1302FF15BDFF17003A441C = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A2F72D7117840A600F35FA7 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A3D4297130D1F2500E64C33 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A4BAA7C1B745B210012B77D = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A50D6FC1164E16D00ED169B = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A5BAA5B13D82BC000C8D5E7 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4AEAEBAD17A744AA00F61E33 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+				};
 			};
 			buildConfigurationList = 78BB3DD508E482DA00D7CA2D /* Build configuration list for PBXProject "ARToolKit5iOS" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -8501,6 +8527,7 @@
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -8514,6 +8541,7 @@
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -8893,6 +8921,7 @@
 		};
 		4A999E380E3FFB2300C5E093 /* Distribution */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A77EBA31162425300E4C0D2 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
@@ -8915,6 +8944,7 @@
 					lib/ios511,
 					lib,
 				);
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Distribution;
@@ -9280,6 +9310,7 @@
 		};
 		78BB3DD608E482DA00D7CA2D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A77EBA31162425300E4C0D2 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
@@ -9319,6 +9350,7 @@
 					lib/ios511,
 					lib,
 				);
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				WARNING_CFLAGS = "-Wall";
 			};
@@ -9326,6 +9358,7 @@
 		};
 		78BB3DD708E482DA00D7CA2D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A77EBA31162425300E4C0D2 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
@@ -9348,6 +9381,7 @@
 					lib/ios511,
 					lib,
 				);
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Release;

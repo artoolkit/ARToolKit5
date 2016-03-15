@@ -413,7 +413,7 @@ static void startCallback(void *userData)
 #endif
         
         // Detect the markers in the video frame.
-        if (arDetectMarker(gARHandle, buffer->buff) < 0) return;
+        if (arDetectMarker(gARHandle, buffer) < 0) return;
 #ifdef DEBUG
         NSLog(@"found %d marker(s).\n", gARHandle->marker_num);
 #endif

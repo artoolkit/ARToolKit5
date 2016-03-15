@@ -464,7 +464,7 @@ static void startCallback(void *userData)
 #endif
         
         // Detect the markers in the video frame.
-        if (arDetectMarker(gARHandle, buffer->buff) < 0) return;
+        if (arDetectMarker(gARHandle, buffer) < 0) return;
         int markerNum = arGetMarkerNum(gARHandle);
         ARMarkerInfo *markerInfo = arGetMarker(gARHandle);
 #ifdef DEBUG

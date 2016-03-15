@@ -317,7 +317,7 @@ static void startCallback(void *userData)
     //
     
     // KPM init.
-    kpmHandle = kpmCreateHandle(gCparamLT, pixFormat);
+    kpmHandle = kpmCreateHandle(gCparamLT);
     if (!kpmHandle) {
         NSLog(@"Error: kpmCreateHandle.\n");
         [self stop];
@@ -536,7 +536,7 @@ static void startCallback(void *userData)
             int              pageNo;
             
             if( detectedPage == -2 ) {
-                trackingInitStart( threadHandle, buffer->buff );
+                trackingInitStart( threadHandle, buffer->buffLuma );
                 detectedPage = -1;
             }
             if( detectedPage == -1 ) {
