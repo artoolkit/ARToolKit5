@@ -37,7 +37,7 @@ Requirements.
 
 Requirements:
  * Xcode tools v5.0.1 or later and iOS SDK v7.0 or later, running on Mac OS X 10.8 or later.
- * These devices are supported: iPhone: 3GS, 4, 4s, 5, 5c, 5s, 6, 6 Plus, 6s, 6s Plus. iPad: 2, 3, Mini, 4, Mini 2, Mini 3, Mini 4, Air, Air 2. iPod touch: 4th Generation, 5th Generation. The device must be running iOS 5.1.1 or later. The iPhone 3GS is not supported for NFT use.
+ * These devices are supported: iPhone: 4, 4s, 5, 5c, 5s, 6, 6 Plus, 6s, 6s Plus. iPad: 2, 3, Mini, 4, Mini 2, Mini 3, Mini 4, Air, Air 2. iPod touch: 5th Generation. The device must be running iOS 7.0 or later.
  * Membership of Apple's iOS Developer Program (free, but paid membership to build for the iOS App Store).
  * A valid iOS Developer Certificate issued by Apple.
  * A printer to print the pattern PDF images "Hiro pattern", "Kanji pattern", "Sample1 pattern", "Sample2 pattern", and "pinball.jpg".

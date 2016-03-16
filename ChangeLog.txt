@@ -33,6 +33,7 @@ Bug fixes:
 Other changes:
 - Updated Windows Visual Studio 2010 project files.
 - Dropped support for Android versions prior to Android 4.0.3 (ICS_MR1). Targets are now minimum API level 15.
+- Dropped support for iOS versions prior to iOS 7.0. (The only devices not capable of supporting iOS 7.0+ are the iPhone 3GS and the iPod touch 4th Generation.)
 
 
 Changes in version 5.3.1 (2015-10-05).

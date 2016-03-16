@@ -11,7 +11,7 @@ include/profile.h
 include/thread_sub.h
 include/glStateCache.h
 include/glStateCache2.h
-include/ios511/
+include/ios7/
 
 lib/libAR.a
 lib/libAR2.a
@@ -25,7 +25,7 @@ lib/libARvideo.a
 lib/libKPM.a
 lib/libEden.a
 lib/libARWrapper.a
-lib/ios511/
+lib/ios7/
 
 bin/mk_patt
 bin/genTexData
