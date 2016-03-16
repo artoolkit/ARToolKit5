@@ -622,7 +622,7 @@ static int readImageFromFile(const char *filename, ARUint8 **image_p, int *xsize
         
         *image_p = jpegImage->image;
         if (jpegImage->nc != 1 && jpegImage->nc != 3) {
-            ARLOGe("Error: 2 byte/pixel JPEG files not currently supported. Exiting.\n");
+            ARLOGe("Error: Input JPEG image is in neither RGB nor grayscale format. %d bytes/pixel %sformat is unsupported. Exiting.\n", jpegImage->nc, (jpegImage->nc == 4 ? "(possibly CMYK) " : ""));
             EXIT(E_INPUT_DATA_ERROR);
         }
         *nc_p    = jpegImage->nc;
