@@ -4303,7 +4303,7 @@
 			path = Eden;
 			sourceTree = "<group>";
 		};
-		4AC6E42613EB226C00291577 /* ios511 */ = {
+		4AC6E42613EB226C00291577 /* ios7 */ = {
 			isa = PBXGroup;
 			children = (
 				4AC6E42713EB226C00291577 /* freetype2 */,
@@ -4330,7 +4330,7 @@
 				4AC6E6B613EB226D00291577 /* osgVolume */,
 				4AC6E6C113EB226D00291577 /* osgWidget */,
 			);
-			path = ios511;
+			path = ios7;
 			sourceTree = "<group>";
 		};
 		4AC6E42713EB226C00291577 /* freetype2 */ = {
@@ -5099,7 +5099,7 @@
 			path = ARosg;
 			sourceTree = "<group>";
 		};
-		4ACEFC2E130AEC6C009D1DA0 /* ios511 */ = {
+		4ACEFC2E130AEC6C009D1DA0 /* ios7 */ = {
 			isa = PBXGroup;
 			children = (
 				4ACEFC2F130AEC6C009D1DA0 /* libfreetype.a */,
@@ -5202,7 +5202,7 @@
 				4A875C021B604BF6002A00A1 /* libosgdb_zeroconf.a */,
 				4A875C031B604BF6002A00A1 /* libosgdb_zip.a */,
 			);
-			path = ios511;
+			path = ios7;
 			sourceTree = "<group>";
 		};
 		4ACEFEE7130AF497009D1DA0 /* ARAppOSG */ = {
@@ -6261,7 +6261,7 @@
 			isa = PBXGroup;
 			children = (
 				78BB3DE008E482F400D7CA2D /* SRC */,
-				4ACEFC2E130AEC6C009D1DA0 /* ios511 */,
+				4ACEFC2E130AEC6C009D1DA0 /* ios7 */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -6353,7 +6353,7 @@
 				4A0F33950E8009F200065B70 /* glStateCache.h */,
 				4A6C5E431794F30300061A08 /* glStateCache2.h */,
 				4AC36D25113E968A00C86F19 /* Eden */,
-				4AC6E42613EB226C00291577 /* ios511 */,
+				4AC6E42613EB226C00291577 /* ios7 */,
 				4A13029A15BDF958003A441C /* AR2 */,
 				4A13029B15BDF958003A441C /* KPM */,
 				4A13029C15BDF958003A441C /* profile.h */,
@@ -8266,7 +8266,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios511\"",
+					"\"$(SRCROOT)/lib/ios7\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
@@ -8288,7 +8288,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios511\"",
+					"\"$(SRCROOT)/lib/ios7\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
@@ -8311,7 +8311,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios511\"",
+					"\"$(SRCROOT)/lib/ios7\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
@@ -8748,7 +8748,7 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 					lib/SRC/KPM/FreakMatcher,
 				);
@@ -8769,7 +8769,7 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 					lib/SRC/KPM/FreakMatcher,
 				);
@@ -8790,7 +8790,7 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 					lib/SRC/KPM/FreakMatcher,
 				);
@@ -8936,12 +8936,12 @@
 				GCC_VERSION = "";
 				HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT = NO;
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					lib/ios511,
+					lib/ios7,
 					lib,
 				);
 				PROVISIONING_PROFILE = "";
@@ -9210,7 +9210,7 @@
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
-				PRELINK_FLAGS = "-Llib/ios511 -Llib";
+				PRELINK_FLAGS = "-Llib/ios7 -Llib";
 				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SEPARATE_STRIP = YES;
@@ -9237,7 +9237,7 @@
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
-				PRELINK_FLAGS = "-Llib/ios511 -Llib";
+				PRELINK_FLAGS = "-Llib/ios7 -Llib";
 				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SEPARATE_STRIP = YES;
@@ -9264,7 +9264,7 @@
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				INSTALL_PATH = /lib;
-				PRELINK_FLAGS = "-Llib/ios511 -Llib";
+				PRELINK_FLAGS = "-Llib/ios7 -Llib";
 				PRELINK_LIBS = "-lAR -lARICP -lARMulti -lARvideo -lARgsub_es -lAR2 -lKPM -lARUtil -ljpeg";
 				PRODUCT_NAME = ARWrapper;
 				SKIP_INSTALL = YES;
@@ -9342,12 +9342,12 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT = NO;
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					lib/ios511,
+					lib/ios7,
 					lib,
 				);
 				PROVISIONING_PROFILE = "";
@@ -9373,12 +9373,12 @@
 				GCC_VERSION = "";
 				HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT = NO;
 				HEADER_SEARCH_PATHS = (
-					include/ios511,
+					include/ios7,
 					include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
-					lib/ios511,
+					lib/ios7,
 					lib,
 				);
 				PROVISIONING_PROFILE = "";
