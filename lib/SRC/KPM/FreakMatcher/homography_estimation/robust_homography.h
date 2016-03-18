@@ -101,7 +101,7 @@ namespace vision {
                                     const T* test_points,
                                     int num_test_points,
                                     std::vector<T> &hyp /* 9*max_num_hypotheses */,
-                                    std::vector<int> &tmp_i /* 2*num_points */,
+                                    std::vector<int> &tmp_i /* num_points */,
                                     std::vector< std::pair<T, int> > &hyp_costs /* max_num_hypotheses */,
                                     T scale = HOMOGRAPHY_DEFAULT_CAUCHY_SCALE,
                                     int max_num_hypotheses = HOMOGRAPHY_DEFAULT_NUM_HYPOTHESES,
