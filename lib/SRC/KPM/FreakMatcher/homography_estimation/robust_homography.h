@@ -633,7 +633,7 @@ namespace vision {
     
     template<typename T>
     bool RobustHomography<T>::find(float H[9], const T* p, const T* q, int num_points) {
-        mTmpi.resize(2*num_points);
+        mTmpi.resize(num_points);
         if(!PreemptiveRobustHomography<T>(H,
                                           p,
                                           q,
@@ -655,7 +655,7 @@ namespace vision {
     
     template<typename T>
     bool RobustHomography<T>::find(float H[9], const T* p, const T* q, int num_points, const T* test_points, int num_test_points) {
-        mTmpi.resize(2*num_points);
+        mTmpi.resize(num_points);
         return PreemptiveRobustHomography<T>(H,
                                              p,
                                              q,
