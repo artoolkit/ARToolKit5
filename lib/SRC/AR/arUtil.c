@@ -64,6 +64,9 @@
 #  include <sys/time.h>
 #  include <unistd.h> // chdir(), getcwd(), confstr()
 #  include <sys/param.h> // MAXPATHLEN
+#  ifdef __linux
+#    include <sys/utsname.h> // uname()
+#  endif
 #endif
 #ifndef _WIN32
 #  include <pthread.h>
@@ -1298,18 +1301,31 @@ int arUtilDivideExt( const char *filename, char *s1, char *s2 )
 
 char *arUtilGetMachineType(void)
 {
+    char *ret = NULL;
 #if defined(__APPLE__)
-    char   *name;
     size_t  size;
-
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    arMalloc(name, char, size);
-    sysctlbyname("hw.machine", name, &size, NULL, 0);
-
-    return name;
-#else
-    return (NULL);
+    arMalloc(ret, char, size);
+    sysctlbyname("hw.machine", ret, &size, NULL, 0);
+#elif defined(_WIN32) // Windows.
+#  if defined(_M_IX86)
+    ret = strdup("x86");
+#  elif defined(_M_X64)
+    ret = strdup("x86_64");
+#  elif defined(_M_IA64)
+    ret = strdup("ia64");
+#  elif defined(_M_ARM)
+    ret = strdup("arm");
+#  else
+    ret = strdup("unknown");
+#  endif
+#elif defined(__linux) // Linux.
+    struct utsname un;
+    if (uname(&un) < 0) {
+        ret = strdup(un.machine);
+    }
 #endif
+    return (ret);
 }
 
 void arUtilPrintTransMat(const ARdouble trans[3][4])
@@ -1329,172 +1345,172 @@ void arUtilPrintMtx16(const ARdouble mtx16[16])
 }
 
 #ifdef ANDROID
-    //Call from native code to do the following in Java source:
-    //    import android.provider.Settings.Secure;
-    //    private String android_id = Secure.getString(getContext().getContentResolver(),
-    //                                                 Secure.ANDROID_ID);
-    //        Component parts of the above call:
-    //            public static final class Settings
-    //            Settings inner class - public static final Secure
-    //            static method: String Secure.getString(ContentResolver resolver, String name);
-    //            via application/activity Context object, get reference to public abstract class ContentResolver object
-    //            Use Secure.ANDROID_ID constant label string as key into app Content to retrieve unique Android ID string
-    char* arUtilGetAndroidDevID()
+//Call from native code to do the following in Java source:
+//    import android.provider.Settings.Secure;
+//    private String android_id = Secure.getString(getContext().getContentResolver(),
+//                                                 Secure.ANDROID_ID);
+//        Component parts of the above call:
+//            public static final class Settings
+//            Settings inner class - public static final Secure
+//            static method: String Secure.getString(ContentResolver resolver, String name);
+//            via application/activity Context object, get reference to public abstract class ContentResolver object
+//            Use Secure.ANDROID_ID constant label string as key into app Content to retrieve unique Android ID string
+char* arUtilGetAndroidDevID()
+{
+    int bailAndroidStep = 0;
+    // To begin, get a reference to the env and attach to it.
+    if ('\0' != _AndroidDeviceID[0]) {
+        ARLOG("arUtilGetAndroidDevID() Success 2: %s", _AndroidDeviceID);
+        return(_AndroidDeviceID);
+    }
+
+    ARLOG("arUtilGetAndroidDevID():02");
+
+    JNIEnv* env;
+    int isAttached = 0;
+    if (((*gJavaVM)->GetEnv(gJavaVM, (void**)&env, JNI_VERSION_1_6)) < 0) {
+        // Couldn't get JNI environment, so this thread is native.
+        if (((*gJavaVM)->AttachCurrentThread(gJavaVM, &env, NULL)) < 0) {
+            ARLOGe("arUtilGetAndroidDevID(): Couldn't attach to Java VM.\n");
+            bailAndroidStep = 1;
+            goto bailAndroid;
+        }
+        isAttached = 1;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():03");
+
+    //1.1: Get the ActivityThread class by name. Then using an undocumented static method, by way of a static method id, get the
+    //     application/activity context instance to facilitate the reference to application's ContentResolver.
+    jclass activityThreadClass = (*env)->FindClass(env, "android/app/ActivityThread");
+    if (activityThreadClass == NULL) {
+        bailAndroidStep = 2;
+        goto bailAndroid;
+    }
+    jmethodID currentAppMethodID = (*env)->GetStaticMethodID(env, activityThreadClass, "currentApplication", "()Landroid/app/Application;");
+    if (currentAppMethodID == NULL) {
+        bailAndroidStep = 3;
+        goto bailAndroid;
+    }
+    jobject activityContextObj = (*env)->CallStaticObjectMethod(env, activityThreadClass, currentAppMethodID);
+    if (activityContextObj == NULL) {
+        bailAndroidStep = 4;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():04");
+
+    //1.2: Get Java Context class reference by name.
+    jclass contextClass = (*env)->FindClass(env, "android/content/Context");
+    if (contextClass == NULL) {
+        bailAndroidStep = 5;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():05");
+
+    //1.3 Using the application/activity instance context and the Context class, get the Method ID for the method getContentResolver()
+    jmethodID getContentResolverMethodID = (*env)->GetMethodID(env, contextClass, "getContentResolver", "()Landroid/content/ContentResolver;");
+    if (getContentResolverMethodID == NULL) {
+        bailAndroidStep = 6;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():06");
+
+    //1.4: Using the application/activity instance context and the getContentResolver method id, call the method and get the content resolver instance
+    jobject contentResolverObj = (*env)->CallObjectMethod(env, activityContextObj, getContentResolverMethodID);
+    if (contentResolverObj == NULL) {
+        bailAndroidStep = 7;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():07");
+
+    //2.1: Get the Secure class found in the android.provider.Settings namespace by name
+    jclass settingsSecureClass = (*env)->FindClass(env, "android/provider/Settings$Secure");
+    if (settingsSecureClass == NULL) {
+        bailAndroidStep = 8;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():08");
+
+    //2.2: Get the static Method ID for the Secure class's getString() method. The method takes a content resolver object as the 1st arg,
+    //     a Java String for the 2nd arg and returns a Java string.
+    jmethodID secureClass_getStringMethodID = (*env)->GetStaticMethodID(env, settingsSecureClass, "getString",
+                                                                        "(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;");
+    if (secureClass_getStringMethodID == NULL) {
+        bailAndroidStep = 9;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():09");
+
+    //2.3: Create a Java string representing the Secure class predefined Android_ID string Label constant
+    jstring androidDeviceID_LabelJavaStr = (jstring)(*env)->NewStringUTF(env, "android_id");
+    if (androidDeviceID_LabelJavaStr == NULL) {
+        bailAndroidStep = 10;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():10");
+
+    //2.4: Using the Secure static class reference and the Secure.getString() method id, call Secure.getString(contentResolverInstance,
+    //     the predefined Android_ID string constant.
+    jstring androidDeviceID_ValueJavaStr = (jstring)(*env)->CallStaticObjectMethod(env, settingsSecureClass, secureClass_getStringMethodID,
+                                                                                   contentResolverObj, androidDeviceID_LabelJavaStr);
+    if (androidDeviceID_ValueJavaStr == NULL) {
+        bailAndroidStep = 11;
+        goto bailAndroid;
+    }
+
+    ARLOG("arUtilGetAndroidDevID():11");
+
+    //3.1: Convert the Java string to a char* buf. Copy the C char* buf to a global char array.
+    const char* androidDeviceID_ValueC_CharStr = (*env)->GetStringUTFChars(env, androidDeviceID_ValueJavaStr, NULL);
+    if (androidDeviceID_ValueC_CharStr == NULL) {
+        bailAndroidStep = 12;
+        goto bailAndroid;
+    }
+    else {
+        ARLOG("arUtilGetAndroidDevID():12");
+        (void)strcpy(_AndroidDeviceID, androidDeviceID_ValueC_CharStr);
+        (*env)->ReleaseStringUTFChars(env, androidDeviceID_ValueJavaStr, androidDeviceID_ValueC_CharStr);
+        ARLOG("arUtilGetAndroidDevID():13 = %s", _AndroidDeviceID);
+    }
+
+    ARLOG("arUtilGetAndroidDevID():14");
+
+    //4: clean up allocated resources and return the char array if a string was retrieved. Else return char* NULL.
+    bailAndroid:
     {
-        int bailAndroidStep = 0;
-        // To begin, get a reference to the env and attach to it.
+        ARLOG("arUtilGetAndroidDevID():15");
+        if (isAttached)
+            (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
+        if (androidDeviceID_LabelJavaStr != NULL) {
+            (*env)->DeleteLocalRef(env, androidDeviceID_LabelJavaStr);
+        }
         if ('\0' != _AndroidDeviceID[0]) {
-            ARLOG("arUtilGetAndroidDevID() Success 2: %s", _AndroidDeviceID);
+            ARLOG("arUtilGetAndroidDevID() Success 1: %s", _AndroidDeviceID);
             return(_AndroidDeviceID);
         }
-
-        ARLOG("arUtilGetAndroidDevID():02");
-
-        JNIEnv* env;
-        int isAttached = 0;
-        if (((*gJavaVM)->GetEnv(gJavaVM, (void**)&env, JNI_VERSION_1_6)) < 0) {
-            // Couldn't get JNI environment, so this thread is native.
-            if (((*gJavaVM)->AttachCurrentThread(gJavaVM, &env, NULL)) < 0) {
-                ARLOGe("arUtilGetAndroidDevID(): Couldn't attach to Java VM.\n");
-                bailAndroidStep = 1;
-                goto bailAndroid;
-            }
-            isAttached = 1;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():03");
-
-        //1.1: Get the ActivityThread class by name. Then using an undocumented static method, by way of a static method id, get the
-        //     application/activity context instance to facilitate the reference to application's ContentResolver.
-        jclass activityThreadClass = (*env)->FindClass(env, "android/app/ActivityThread");
-        if (activityThreadClass == NULL) {
-            bailAndroidStep = 2;
-            goto bailAndroid;
-        }
-        jmethodID currentAppMethodID = (*env)->GetStaticMethodID(env, activityThreadClass, "currentApplication", "()Landroid/app/Application;");
-        if (currentAppMethodID == NULL) {
-            bailAndroidStep = 3;
-            goto bailAndroid;
-        }
-        jobject activityContextObj = (*env)->CallStaticObjectMethod(env, activityThreadClass, currentAppMethodID);
-        if (activityContextObj == NULL) {
-            bailAndroidStep = 4;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():04");
-
-        //1.2: Get Java Context class reference by name.
-        jclass contextClass = (*env)->FindClass(env, "android/content/Context");
-        if (contextClass == NULL) {
-            bailAndroidStep = 5;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():05");
-
-        //1.3 Using the application/activity instance context and the Context class, get the Method ID for the method getContentResolver()
-        jmethodID getContentResolverMethodID = (*env)->GetMethodID(env, contextClass, "getContentResolver", "()Landroid/content/ContentResolver;");
-        if (getContentResolverMethodID == NULL) {
-            bailAndroidStep = 6;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():06");
-
-        //1.4: Using the application/activity instance context and the getContentResolver method id, call the method and get the content resolver instance
-        jobject contentResolverObj = (*env)->CallObjectMethod(env, activityContextObj, getContentResolverMethodID);
-        if (contentResolverObj == NULL) {
-            bailAndroidStep = 7;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():07");
-
-        //2.1: Get the Secure class found in the android.provider.Settings namespace by name
-        jclass settingsSecureClass = (*env)->FindClass(env, "android/provider/Settings$Secure");
-        if (settingsSecureClass == NULL) {
-            bailAndroidStep = 8;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():08");
-
-        //2.2: Get the static Method ID for the Secure class's getString() method. The method takes a content resolver object as the 1st arg,
-        //     a Java String for the 2nd arg and returns a Java string.
-        jmethodID secureClass_getStringMethodID = (*env)->GetStaticMethodID(env, settingsSecureClass, "getString",
-                                                                            "(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;");
-        if (secureClass_getStringMethodID == NULL) {
-            bailAndroidStep = 9;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():09");
-
-        //2.3: Create a Java string representing the Secure class predefined Android_ID string Label constant
-        jstring androidDeviceID_LabelJavaStr = (jstring)(*env)->NewStringUTF(env, "android_id");
-        if (androidDeviceID_LabelJavaStr == NULL) {
-            bailAndroidStep = 10;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():10");
-
-        //2.4: Using the Secure static class reference and the Secure.getString() method id, call Secure.getString(contentResolverInstance,
-        //     the predefined Android_ID string constant.
-        jstring androidDeviceID_ValueJavaStr = (jstring)(*env)->CallStaticObjectMethod(env, settingsSecureClass, secureClass_getStringMethodID,
-                                                                                       contentResolverObj, androidDeviceID_LabelJavaStr);
-        if (androidDeviceID_ValueJavaStr == NULL) {
-            bailAndroidStep = 11;
-            goto bailAndroid;
-        }
-
-        ARLOG("arUtilGetAndroidDevID():11");
-
-        //3.1: Convert the Java string to a char* buf. Copy the C char* buf to a global char array.
-        const char* androidDeviceID_ValueC_CharStr = (*env)->GetStringUTFChars(env, androidDeviceID_ValueJavaStr, NULL);
-        if (androidDeviceID_ValueC_CharStr == NULL) {
-            bailAndroidStep = 12;
-            goto bailAndroid;
-        }
-        else {
-            ARLOG("arUtilGetAndroidDevID():12");
-            (void)strcpy(_AndroidDeviceID, androidDeviceID_ValueC_CharStr);
-            (*env)->ReleaseStringUTFChars(env, androidDeviceID_ValueJavaStr, androidDeviceID_ValueC_CharStr);
-            ARLOG("arUtilGetAndroidDevID():13 = %s", _AndroidDeviceID);
-        }
-
-        ARLOG("arUtilGetAndroidDevID():14");
-
-        //4: clean up allocated resources and return the char array if a string was retrieved. Else return char* NULL.
-        bailAndroid:
-        {
-            ARLOG("arUtilGetAndroidDevID():15");
-            if (isAttached)
-                (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
-            if (androidDeviceID_LabelJavaStr != NULL) {
-                (*env)->DeleteLocalRef(env, androidDeviceID_LabelJavaStr);
-            }
-            if ('\0' != _AndroidDeviceID[0]) {
-                ARLOG("arUtilGetAndroidDevID() Success 1: %s", _AndroidDeviceID);
-                return(_AndroidDeviceID);
-            }
-            ARLOGe("arUtilGetAndroidDevID(): bailed at step: %d", bailAndroidStep);
-            return((char*)NULL);
-        }
+        ARLOGe("arUtilGetAndroidDevID(): bailed at step: %d", bailAndroidStep);
+        return((char*)NULL);
     }
+}
 
-    /*
-     * Class:     org_artoolkit_ar_samples_ARSimple_ARSimpleApplication
-     * Method:    testArUtilGetAndroidDevID
-     * Signature: ()Ljava/lang/String;
-     */
-    JNIEXPORT jstring JNICALL Java_org_artoolkit_ar_samples_ARSimple_ARSimpleApplication_testArUtilGetAndroidDevID(JNIEnv *env,
-                                                                                                                   jobject context)
-    {
-        ARLOG("testArUtilGetAndroidDevID():01");
-        char * foo = arUtilGetAndroidDevID();
-        ARLOG("testArUtilGetAndroidDevID():02");
-        return((jstring)NULL);
-    }
+/*
+ * Class:     org_artoolkit_ar_samples_ARSimple_ARSimpleApplication
+ * Method:    testArUtilGetAndroidDevID
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_artoolkit_ar_samples_ARSimple_ARSimpleApplication_testArUtilGetAndroidDevID(JNIEnv *env,
+                                                                                                               jobject context)
+{
+    ARLOG("testArUtilGetAndroidDevID():01");
+    char * foo = arUtilGetAndroidDevID();
+    ARLOG("testArUtilGetAndroidDevID():02");
+    return((jstring)NULL);
+}
 #endif //ANDROID
