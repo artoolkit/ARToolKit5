@@ -80,11 +80,9 @@ else #Checking for Windows in a non-cygwin dependent way.
     fi
 fi
 
-if [[ ! $CPUS && $1 != "clean" ]]; then
+if [[ ! $CPUS ]]; then
 	echo **Development platform not supported, exiting script**
     exit 1
-else
-    CPUS=1
 fi
 
 ARTK_LibsDir=libs
