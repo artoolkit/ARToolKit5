@@ -62,24 +62,24 @@ elif [[ "$OS" = "Darwin" ]]; then
     CPUS=`/usr/sbin/sysctl -n hw.ncpu`
 else #Checking for Windows in a non-cygwin dependent way.
     WinsOS=
-	if [[ $OS ]]; then
+    if [[ $OS ]]; then
         WinsVerNum=${OS##*-}
-		if [[ $WinsVerNum = "10.0" || $WinsVerNum = "6.3" ]]; then
-			if [[ $WinsVerNum = "10.0" ]]; then
-			    WinsOS="Wins10"
-			else
-			    WinsOS="Wins8.1"
-			fi
-			echo Building on Microsoft ${WinsOS} Desktop \(${ARCH}\)
-			export HOST_OS="windows"
-			NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
-			CPUS=`/usr/bin/nproc`
-		fi
+        if [[ $WinsVerNum = "10.0" || $WinsVerNum = "6.3" ]]; then
+            if [[ $WinsVerNum = "10.0" ]]; then
+                WinsOS="Wins10"
+            else
+                WinsOS="Wins8.1"
+            fi
+            echo Building on Microsoft ${WinsOS} Desktop \(${ARCH}\)
+            export HOST_OS="windows"
+            NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
+            CPUS=`/usr/bin/nproc`
+        fi
     fi
 fi
 
 if [[ ! $CPUS ]]; then
-	echo **Development platform not supported, exiting script**
+    echo **Development platform not supported, exiting script**
     exit 1
 fi
 
