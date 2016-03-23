@@ -226,14 +226,14 @@ int main(int argc, char** argv)
     char   *vconfR = NULL;
     char   *cparaL = NULL;
     char   *cparaR = NULL;
-    char    cparaLDefault[] = "Data/cparaL.dat";
-    char    cparaRDefault[] = "Data/cparaR.dat";
-    char    transL2RDefault[] = "Data/transL2R.dat";
+    char    cparaLDefault[] = "../share/artoolkit-examples/Data/cparaL.dat";
+    char    cparaRDefault[] = "../share/artoolkit-examples/Data/cparaR.dat";
+    char    transL2RDefault[] = "../share/artoolkit-examples/Data/transL2R.dat";
     
     int     i, j;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "Data/markers.dat";
-	const char objectDataFilename[] = "Data/objects.dat";
+    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data/markers.dat";
+	const char objectDataFilename[] = "../share/artoolkit-examples/Data/objects.dat";
 	
     //
 	// Process command-line options.

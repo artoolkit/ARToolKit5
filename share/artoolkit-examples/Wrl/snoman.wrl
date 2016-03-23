@@ -1,0 +1,244 @@
+#VRML V2.0 utf8
+
+Background {                  #remove these lines
+ skyColor .7 .7 1             #
+ }                            # when placing this
+ Viewpoint {                  #
+  position 0 0 7            # object in a VRML world
+   }                          #
+NavigationInfo {              # or apartment.
+ type "EXAMINE"               #
+ }                            #
+ 
+WorldInfo {
+   title "Animated Snowman"
+    info [ "Copyright 1988 modeled by Kiwano [Andrew Reitemeyer] kiwano@t-online.de "
+          "This model is linkware. Non commercial users are required to link to" 
+					" http://home.t-online.de/home/kiwano4 "
+					"Commercial users must pay a small fee, details and more models from the above url"
+          "This node must remain unaltered in this code"
+          ]
+          }    
+
+
+
+ Transform {           # main grouping node
+translation 0 0 0      # controls position
+scale 1 1 1            # controls size
+rotation 0 0 0 0       # controls orientation
+  children [
+
+
+
+DEF Bottom Transform {
+translation 0 -1 0
+  scale 1.2 1 1.2
+    children [
+    DEF Ball  Shape {
+        appearance Appearance {
+          material Material {
+           diffuseColor 1 1 1
+           specularColor .9 .9 1
+           shininess 1
+           ambientIntensity .2
+          # transparency .2
+           }
+         }  
+       geometry Sphere {
+         radius 1
+         }
+       }
+       DEF  See VisibilitySensor {}
+     ]
+   }     
+DEF Middle Transform {
+ translation 0 0 0
+  scale .9 .9 .9
+    children [
+    USE Ball  
+     ]
+   }     
+DEF head Transform {
+ translation 0 .9 0
+  scale .6 .6 .6
+    children [
+    USE Ball  
+     ]
+   }  
+DEF Eye1 Transform {
+    translation .35 1.1 .4
+    children [
+    DEF Eye  Shape {
+        appearance Appearance {
+          material Material {
+           diffuseColor 0 0 0
+           specularColor 1 1 1
+           shininess 1
+           ambientIntensity 1
+           }
+         }  
+       geometry Sphere {
+         radius .1
+         }
+       }
+     ]
+   }     
+DEF Eye2 Transform {
+    translation -.35 1.1 .4
+    children [
+    USE Eye 
+     ]
+   }  
+DEF Nose  Transform {
+    translation 0 .9 .8
+    rotation 1 0 0 1.57
+    children [
+     Shape {
+        appearance Appearance {
+          material Material {
+           diffuseColor .8 .5 0
+           specularColor .9 .6 0
+           shininess .3
+           ambientIntensity .2
+           }
+         }  
+       geometry Cone {
+         bottomRadius .1
+         height .5
+         }
+       }
+     ]
+   }     
+DEF Hat Transform  {
+ translation 0 0 0
+   children [
+        
+Transform {
+    translation 0 1.3 0
+    rotation 0 1 1 -.1
+    children [
+      Shape {
+        appearance DEF Felt Appearance {
+          material Material {
+           diffuseColor 0 0 0
+           specularColor 1 1 1
+           shininess 1
+           ambientIntensity 1
+           }
+         }  
+       geometry Cylinder {
+         radius .7
+         height .05
+         }
+       }
+     ]
+   }  
+ Transform {
+    translation 0 1.6 0
+    rotation 0 1 1 -.1
+    children [
+      Shape {
+        appearance USE Felt 
+       geometry Cylinder {
+         radius .5
+         height .6
+         }
+       }
+     ]
+   }
+  ]
+ }# end Hat   
+DEF Arm1  Transform {
+    children [
+    DEF Arm  Shape {
+        appearance DEF Stick Appearance {
+          material Material {
+           diffuseColor .7 .6 .4
+           specularColor 1 1 0
+           shininess .2
+           ambientIntensity .1
+           }
+         }  
+      geometry Extrusion {
+        creaseAngle 1.4
+         crossSection [ .1 0, 
+                     .071 -.07,  0 -.1
+                      -.07 -.071,  -.1 0,
+                      -.071 .07,  0 .1         #18
+                      .07 .071,  .1 0,
+          ]
+         spine [.6 .35 0, 1.5 .2 0, 2 0 .5 ]
+         scale [ 1 1, .7 .7, .5 .5]
+         
+       }
+     }
+     ]
+   }
+
+ DEF Arm2  Transform {
+    children [
+    Shape {
+        appearance USE Stick 
+      geometry DEF Tipper Extrusion {
+        creaseAngle 1.4
+         crossSection [ .1 0, 
+                     .071 -.07,  0 -.1
+                      -.07 -.071,  -.1 0,
+                      -.071 .07,  0 .1         #18
+                      .07 .071,  .1 0,
+          ]
+         spine [-.6 .35 0, -1.5 .2 0, -2 0 .5]
+        # spine [-.6 .35 0, -1.5 .8 0, -.65 1.4 0 ]
+         scale [ 1 1, .7 .7, .5 .5]
+         
+       }
+     }
+     ]
+   }
+   
+   
+  ]
+ }  
+
+DEF Tick TimeSensor {
+   cycleInterval 15
+   loop TRUE 
+   enabled FALSE
+   }
+   
+   
+DEF Lift CoordinateInterpolator {
+     key [0, .35, .45, .5, .65, .75, 1]
+     keyValue [-.6 .35 0, -1.5 .2 0, -2 0 .5,
+     
+               -.6 .35 0, -1.5 .2 0, -2 0 .5, 
+            
+               -.6 .35 0, -1.5 .8 0, -.65 1.4 0
+               
+               -.6 .35 0, -1.5 1 0, -1.4 1.9 0
+               
+               -.6 .35 0, -1.5 .8 0, -.65 1.4 0 
+               
+                -.6 .35 0, -1.5 .2 0, -2 0 .5, 
+  
+               -.6 .35 0, -1.5 .2 0, -2 0 .5,                
+  
+               ]
+            } 
+            
+DEF Doff PositionInterpolator {
+     key [0, .45, .5, .65, 1] 
+     keyValue [ 0 0 0, 0 0 0, -.6 .5 0, 0 0 0, 0 0 0 ]
+     }
+     
+ROUTE See.isActive TO Tick.set_enabled                 
+ROUTE Tick.fraction_changed TO Lift.set_fraction
+ROUTE Lift.value_changed TO Tipper.set_spine 
+ROUTE Tick.fraction_changed TO Doff.set_fraction
+ROUTE Doff.value_changed TO Hat.set_translation  
+
+WorldInfo {
+   title "Arcadia"
+   info [ "(C)1997 modeled by Kiwano (Andrew Reitemeyer) kiwano@t-online.de"]
+          
+          }

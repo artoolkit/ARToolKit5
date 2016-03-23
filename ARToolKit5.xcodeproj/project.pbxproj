@@ -2961,6 +2961,7 @@
 		78BBCE3108E4AC6600AEE575 /* libARvideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARvideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BBCE4108E4AEFC00AEE575 /* simpleTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = simpleTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BBCE4308E4AEFC00AEE575 /* simpleTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "simpleTest-Info.plist"; sourceTree = "<group>"; };
+		F274FFB61CA22DBA00898CD3 /* artoolkit-examples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "artoolkit-examples"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3841,6 +3842,7 @@
 		4A680F910D629089000E52AC /* share */ = {
 			isa = PBXGroup;
 			children = (
+				F274FFB61CA22DBA00898CD3 /* artoolkit-examples */,
 				4A3AB70A1AEA0460007691DA /* doc */,
 				4A941D531AE5DD50000FA802 /* packaging */,
 				4A680F930D629F11000E52AC /* artoolkit5-setenv */,

@@ -2,7 +2,7 @@
  *	object_vrml.h
  *
  *  ARToolKit object parsing function 
- *  - reads in object data from object file in Data/object_data
+ *  - reads in object data from object file in ../share/artoolkit-examples/Data/object_data
  *
  *  Press '?' while running for help on available key commands.
  *

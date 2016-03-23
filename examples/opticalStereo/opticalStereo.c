@@ -231,15 +231,15 @@ int main(int argc, char** argv)
 {
 	char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "Data/camera_para.dat";
+    char    cparaDefault[] = "../share/artoolkit-examples/Data/camera_para.dat";
     char   *cpara = NULL;
     int     i, j;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "Data/markers.dat";
-	const char objectDataFilename[] = "Data/objects.dat";
+    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data/markers.dat";
+	const char objectDataFilename[] = "../share/artoolkit-examples/Data/objects.dat";
 
-	char    optical_param_left_name[] = "Data/optical_param_left.dat";
-	char    optical_param_right_name[] = "Data/optical_param_right.dat";
+	char    optical_param_left_name[] = "../share/artoolkit-examples/Data/optical_param_left.dat";
+	char    optical_param_right_name[] = "../share/artoolkit-examples/Data/optical_param_right.dat";
 	AR_OPTICAL_EYE_PARAM_t *opticalEye;
     
     //

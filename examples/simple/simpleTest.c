@@ -67,9 +67,9 @@
 #include <AR/gsub.h>
 #include <AR/video.h>
 
-#define             CPARA_NAME       "Data/camera_para.dat"
-#define             VPARA_NAME       "Data/cameraSetting-%08x%08x.dat"
-#define             PATT_NAME        "Data/hiro.patt"
+#define             CPARA_NAME       "../share/artoolkit-examples/Data/camera_para.dat"
+#define             VPARA_NAME       "../share/artoolkit-examples/Data/cameraSetting-%08x%08x.dat"
+#define             PATT_NAME        "../share/artoolkit-examples/Data/hiro.patt"
 
 ARHandle           *arHandle;
 ARPattHandle       *arPattHandle;

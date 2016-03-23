@@ -52,8 +52,8 @@
 #include <AR/gsub.h>
 #include <AR/video.h>
 
-#define             CPARA_NAME       "Data/camera_para.dat"
-#define             PATT_NAME        "Data/hiro.patt"
+#define             CPARA_NAME       "../share/artoolkit-utils/Data/camera_para.dat"
+#define             PATT_NAME        "../share/artoolkit-utils/Data/hiro.patt"
 
 ARParam             cparam;
 ARParamLT          *cparamLT;

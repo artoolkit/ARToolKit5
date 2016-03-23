@@ -253,11 +253,11 @@ int main(int argc, char** argv)
 {
 	char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "Data/camera_para.dat";
+    char    cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
     char   *cpara = NULL;
     int     i;
     int     gotTwoPartOption;
-	char    patt_name[]  = "Data/calib.patt";
+	char    patt_name[]  = "../share/artoolkit-utils/Data/calib.patt";
 	
     //
 	// Process command-line options.
