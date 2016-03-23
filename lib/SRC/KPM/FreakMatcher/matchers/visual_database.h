@@ -360,7 +360,6 @@ namespace vision {
                                    const std::vector<FeaturePoint>& p1,
                                    const std::vector<FeaturePoint>& p2,
                                    const matches_t& matches,
-                                   float threshold,
                                    RobustHomography<float>& estimator,
                                    int refWidth,
                                    int refHeight) {
