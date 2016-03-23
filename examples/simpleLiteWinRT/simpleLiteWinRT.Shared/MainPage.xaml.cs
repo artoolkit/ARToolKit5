@@ -179,7 +179,7 @@ namespace simpleLiteWinRT
         private async Task SetupMarker()
         {
             // Load marker data which is deployed with the app in its app-local storage
-            var markerData = await PathIO.ReadTextAsync("ms-appx:///data/hiro.patt“);
+            var markerData = await PathIO.ReadTextAsync("ms-appx:///data/hiro.patt");
             var cfg = string.Format("single_buffer;{0};buffer={1}", 80, markerData);
 
             // Add marker to ARToolKit and make sure it succeeded. 
