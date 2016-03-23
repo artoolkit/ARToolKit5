@@ -215,15 +215,15 @@ $(TARGET): $(OBJS) $(OBJS_OBJC)
 	$(RANLIB) $@
 
 clean:
-	-rm -f $(OBJS)
+	-rm -f $(OBJS) $(OBJS_OBJC)
 	-rm -f $(TARGET)
 
 allclean:
-	-rm -f $(OBJS)
+	-rm -f $(OBJS) $(OBJS_OBJC)
 	-rm -f $(TARGET)
 	-rm -f Makefile
 
 distclean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(OBJS_OBJC)
 	rm -f Makefile
 
