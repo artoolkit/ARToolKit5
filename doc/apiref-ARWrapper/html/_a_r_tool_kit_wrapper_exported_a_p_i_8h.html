@@ -112,7 +112,11 @@ Enumerations</h2></td></tr>
 <br/>
 &#160;&#160;<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7a15b4afd35f9ccb9fa962570f32a09b12">ARW_MARKER_OPTION_SQUARE_CONFIDENCE</a> = 5, 
 <a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7ab1f9a157f202ee0aae32c5d01cd93fbe">ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF</a> = 6, 
-<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7ae833e1496239f78a4622d1b40c4f42f7">ARW_MARKER_OPTION_NFT_SCALE</a> = 7
+<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7ae833e1496239f78a4622d1b40c4f42f7">ARW_MARKER_OPTION_NFT_SCALE</a> = 7, 
+<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7a23c0c19783d18de2bbe85be226058917">ARW_MARKER_OPTION_MULTI_MIN_SUBMARKERS</a> = 8, 
+<br/>
+&#160;&#160;<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7ab18105243d884930ac2e8ef7eac50a89">ARW_MARKER_OPTION_MULTI_MIN_CONF_MATRIX</a> = 9, 
+<a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7ab8d4d63b5feaa82b29f5e6917799675c">ARW_MARKER_OPTION_MULTI_MIN_CONF_PATTERN</a> = 10
 <br/>
  }</td></tr>
 <tr class="memdesc:adf764cbdea00d65edcd07bb9953ad2b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constants for use with marker option setters/getters.  <a href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#adf764cbdea00d65edcd07bb9953ad2b7">More...</a><br/></td></tr>
@@ -123,6 +127,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="memItemLeft" align="right" valign="top">EXPORT_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a9bd680097d7e5de7eb6eb6a6f83db7ce">arwRegisterLogCallback</a> (<a class="el" href="_platform_8h.html#a4d175bf9baf646649f851fc1508bb4ef">PFN_LOGCALLBACK</a> callback)</td></tr>
 <tr class="memdesc:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a callback function to use when a message is logged.  <a href="#a9bd680097d7e5de7eb6eb6a6f83db7ce">More...</a><br/></td></tr>
 <tr class="separator:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2100c17403a18479585b19b8bfb462b"><td class="memItemLeft" align="right" valign="top">EXPORT_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#aa2100c17403a18479585b19b8bfb462b">arwSetLogLevel</a> (const int logLevel)</td></tr>
+<tr class="separator:aa2100c17403a18479585b19b8bfb462b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a599ffcf785a4864d3610d4814c7aaa83"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8h.html#a599ffcf785a4864d3610d4814c7aaa83">arwInitialiseAR</a> ()</td></tr>
 <tr class="memdesc:a599ffcf785a4864d3610d4814c7aaa83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the ARToolKit.  <a href="#a599ffcf785a4864d3610d4814c7aaa83">More...</a><br/></td></tr>
 <tr class="separator:a599ffcf785a4864d3610d4814c7aaa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -351,6 +357,15 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="adf764cbdea00d65edcd07bb9953ad2b7ae833e1496239f78a4622d1b40c4f42f7"></a>ARW_MARKER_OPTION_NFT_SCALE</em>&nbsp;</td><td class="fielddoc">
 <p>float, scale factor applied to NFT marker size. </p>
 </td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="adf764cbdea00d65edcd07bb9953ad2b7a23c0c19783d18de2bbe85be226058917"></a>ARW_MARKER_OPTION_MULTI_MIN_SUBMARKERS</em>&nbsp;</td><td class="fielddoc">
+<p>int, minimum number of submarkers for tracking to be valid. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="adf764cbdea00d65edcd07bb9953ad2b7ab18105243d884930ac2e8ef7eac50a89"></a>ARW_MARKER_OPTION_MULTI_MIN_CONF_MATRIX</em>&nbsp;</td><td class="fielddoc">
+<p>float, minimum confidence value for submarker matrix tracking to be valid. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="adf764cbdea00d65edcd07bb9953ad2b7ab8d4d63b5feaa82b29f5e6917799675c"></a>ARW_MARKER_OPTION_MULTI_MIN_CONF_PATTERN</em>&nbsp;</td><td class="fielddoc">
+<p>float, minimum confidence value for submarker pattern tracking to be valid. </p>
+</td></tr>
 </table>
 
 </div>
@@ -373,7 +388,7 @@ Functions</h2></td></tr>
 <p>Adds a marker as specified in the given configuration string. </p>
 <p>The format of the string can be one of:</p>
 <ul>
-<li>Single marker: "single;pattern_file;pattern_width", e.g. "single;data/patt.hiro;80"</li>
+<li>Single marker: "single;pattern_file;pattern_width", e.g. "single;data/hiro.patt;80"</li>
 <li>Multi marker: "multi;config_file", e.g. "multi;data/multi/marker.dat"</li>
 <li>NFT marker: "nft;nft_dataset_pathname", e.g. "nft;gibraltar" <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1455,6 +1470,22 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa2100c17403a18479585b19b8bfb462b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">EXPORT_API void arwSetLogLevel </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>logLevel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae74fefac0d4bbe82a2d09a44f55acda4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2268,7 +2299,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 5 2015 21:08:48 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 23 2016 17:24:25 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>
