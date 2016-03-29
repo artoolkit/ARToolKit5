@@ -99,6 +99,8 @@ EclipseProjects/calib_optical/*
 EclipseProjects/nftSimple/*
 EclipseProjects/nftBook/*
 
+AndroidStudioProjects/*
+
 doc/*
 
 share/doc/*
