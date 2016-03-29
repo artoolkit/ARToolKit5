@@ -3,6 +3,6 @@
       package="org.artoolkit.ar.base"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:targetSdkVersion="18" android:minSdkVersion="9"/>
+    <uses-sdk android:targetSdkVersion="18" android:minSdkVersion="15"/>
     
 </manifest>
