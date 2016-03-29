@@ -366,35 +366,22 @@ int cparamSearchInit(const char *cacheDir, int resetCache)
     Gestalt(gestaltSystemVersionBugFix, &versBugFix);
     asprintf(os_version, "%d.%d.%d", versMaj, versMin, versBugFix);
 #  endif
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
-    os_arch = malloc(size);
-    sysctlbyname("hw.machine", os_arch, &size, NULL, 0);
+    os_arch = arUtilGetMachineType();
 #elif defined(ANDROID) // Android
     os_name = strdup("android");
     char os[PROP_VALUE_MAX];
-    __system_property_get(ANDROID_OS_BUILD_CPU_ABI, os);
-    os_arch = strdup(os);
     __system_property_get(ANDROID_OS_BUILD_VERSION_RELEASE, os);
     os_version = strdup(os);
+    __system_property_get(ANDROID_OS_BUILD_CPU_ABI, os);
+    os_arch = strdup(os);
 #elif defined(_WIN32) // Windows.
     os_name = strdup("windows");
-#  if defined(_M_IX86)
-    os_arch = strdup("x86");
-#  elif defined(_M_X64)
-    os_arch = strdup("x86_64");
-#  elif defined(_M_IA64)
-    os_arch = strdup("ia64");
-#  elif defined(_M_ARM)
-    os_arch = strdup("arm");
-#  else
-    os_arch = strdup("unknown");
-#  endif
     os_version = strdup("unknown");
+    os_arch = arUtilGetMachineType();
 #elif defined(__linux) // Linux.
     os_name = strdup("linux");
     os_version = strdup("unknown");
-    os_arch = strdup("unknown");
+    os_arch = arUtilGetMachineType();
 #else // Other.
     os_name = strdup("unknown");
     os_version = strdup("unknown");

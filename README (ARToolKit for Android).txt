@@ -28,17 +28,18 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2016-xx-xx
+    2016-03-23
 
 
 Requirements.
 -------------
 
 Requirements:
- * Android SDK Tools r12 (for Android 2.2/API 8) or later required, r24.3.3 (June 2015) or later recommended.
- * Development of native ARToolKit for Android applications or requires Android NDK Revision 10 (July 2014) or later, revision 10e (May 2015) recommended.
- * Use of the Eclipse IDE is recommended, and Eclipse project files are supplied with the ARToolKit for Android SDK.
- * An Android device, running Android 2.2 or later. Testing is not possible using the Android Virtual Device system.
+ * Android SDK Tools, r24.4.1 (October 2015) or later recommended.
+ * Development of native ARToolKit for Android applications requires Android NDK Revision 11 (December 2015).
+ * Use of the Android Studio IDE is recommended, and Android Studio project files are supplied with the ARToolKit for Android SDK.
+ * Use of the Eclipse IDE is deprecated. ARToolKit v5.3.2 will be the last release in which Eclipse project files are supplied with the ARToolKit for Android SDK.
+ * An Android device, running Android 4.0.3 (Android API level 15) or later. Testing is not possible using the Android Virtual Device system.
  * A printer to print the pattern PDF images.
 
 ARToolKit is supplied as pre-built binaries for each platform, plus full source code for the SDK libraries, utilities, and examples, and documentation. If you wish to view the source for the desktop-only utilities, you will also need to use this Android release alongside ARToolKit v5.x for Mac OS X, Windows, or Linux.
@@ -78,7 +79,7 @@ Release notes.
 --------------
 This release contains ARToolKit v5.3.2 for Android.
 
-This will be the last release to support Android OS versions 2.2 through 3.x. Devices running Android OS represent less than 5% of the total active base of Android devices. Future ARToolKit releases will support Android OS version 4.0 ("Ice Cream Sandwich") and later.
+As of ARToolKit v5.3.2, the minimum supported Android OS version is 4.0.3 (API level 15). ARToolKit v5.3.1 was the last release to support OS versions 2.2 through 4.0 (API level 8 through 14).
 
 This will also be the last release to support development using Eclipse and ADT. As Android Studio now supports NDK-based projects, ARToolKit will move to providing Android Studio projects only in the next release. We think that this change will please many more developers than it displeases.
 

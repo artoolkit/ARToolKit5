@@ -98,6 +98,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="memItemLeft" align="right" valign="top">EXPORT_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8cpp.html#a9bd680097d7e5de7eb6eb6a6f83db7ce">arwRegisterLogCallback</a> (<a class="el" href="_platform_8h.html#a4d175bf9baf646649f851fc1508bb4ef">PFN_LOGCALLBACK</a> callback)</td></tr>
 <tr class="memdesc:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a callback function to use when a message is logged.  <a href="#a9bd680097d7e5de7eb6eb6a6f83db7ce">More...</a><br/></td></tr>
 <tr class="separator:a9bd680097d7e5de7eb6eb6a6f83db7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2100c17403a18479585b19b8bfb462b"><td class="memItemLeft" align="right" valign="top">EXPORT_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8cpp.html#aa2100c17403a18479585b19b8bfb462b">arwSetLogLevel</a> (const int logLevel)</td></tr>
+<tr class="separator:aa2100c17403a18479585b19b8bfb462b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a599ffcf785a4864d3610d4814c7aaa83"><td class="memItemLeft" align="right" valign="top">EXPORT_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_a_r_tool_kit_wrapper_exported_a_p_i_8cpp.html#a599ffcf785a4864d3610d4814c7aaa83">arwInitialiseAR</a> ()</td></tr>
 <tr class="memdesc:a599ffcf785a4864d3610d4814c7aaa83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the ARToolKit.  <a href="#a599ffcf785a4864d3610d4814c7aaa83">More...</a><br/></td></tr>
 <tr class="separator:a599ffcf785a4864d3610d4814c7aaa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -391,7 +393,7 @@ Functions</h2></td></tr>
 <p>Adds a marker as specified in the given configuration string. </p>
 <p>The format of the string can be one of:</p>
 <ul>
-<li>Single marker: "single;pattern_file;pattern_width", e.g. "single;data/patt.hiro;80"</li>
+<li>Single marker: "single;pattern_file;pattern_width", e.g. "single;data/hiro.patt;80"</li>
 <li>Multi marker: "multi;config_file", e.g. "multi;data/multi/marker.dat"</li>
 <li>NFT marker: "nft;nft_dataset_pathname", e.g. "nft;gibraltar" <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1466,6 +1468,22 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa2100c17403a18479585b19b8bfb462b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">EXPORT_API void arwSetLogLevel </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>logLevel</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -3175,7 +3193,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 5 2015 21:08:48 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 23 2016 17:24:25 for ARWrapper by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

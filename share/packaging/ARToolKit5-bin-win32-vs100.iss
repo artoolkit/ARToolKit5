@@ -257,9 +257,9 @@ Source: "bin64\opencv_features2d246.dll"; Components: utils; DestDir: "{app}\bin
 
 Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\hiro.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\kanji.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\calib.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\hiro.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\kanji.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\calib.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 
 ; Utilities, source
 Source: "util\calib_camera\*"; Excludes: "Makefile.in"; Components: utils and src; DestDir: "{app}\util\calib_camera"; Flags: recursesubdirs ignoreversion
@@ -299,8 +299,8 @@ Source: "bin\nftBook.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ig
 ;Source: "bin\Data\cparaR.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\transL2R.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\optical_param.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-Source: "bin\Data\sample1.patt”; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\sample2.patt”; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\sample1.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\sample2.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\multi\*"; Components: examples; DestDir: "{app}\bin\Data\multi"; Flags: recursesubdirs ignoreversion
 Source: "bin\Data\cubeMarkerConfig.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\objects.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion

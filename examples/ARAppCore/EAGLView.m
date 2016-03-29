@@ -61,6 +61,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface EAGLView (EAGLViewPrivate)
+- (BOOL) initCommonWithRenderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained maxScale:(CGFloat)maxScale;
 - (UIImage *)snapshot;
 @end
 
@@ -107,6 +108,18 @@
 	return [CAEAGLLayer class];
 }
 
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        if (![self initCommonWithRenderingAPI:kEAGLRenderingAPIOpenGLES1 pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f]) {
+            [self release];
+            return nil;
+        }
+    }
+    
+    return self;
+}
+
 - (id) initWithFrame:(CGRect)frame
 {
     return [self initWithFrame:frame renderingAPI:kEAGLRenderingAPIOpenGLES1 pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:FALSE preserveBackbuffer:NO maxScale:0.0f];
@@ -129,101 +142,110 @@
 
 - (id) initWithFrame:(CGRect)frame renderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained maxScale:(CGFloat)maxScale
 {
-	if ((self = [super initWithFrame:frame])) {
-        
-		pixelFormat = format;
-        depthFormatEAGL = depth;
-        haveStencil = stencil;
-        if (stencil) {
-            if (depth != kEAGLDepth0) depthStencilFormat = GL_DEPTH24_STENCIL8_OES;
-            else depthStencilFormat = GL_STENCIL_INDEX8_OES; // N.B.: GL_STENCIL_INDEX8_OES == GL_STENCIL_INDEX8
-        } else {
-            switch (depth) {
-                case kEAGLDepth0:
-                    depthStencilFormat = 0;
-                    break;
-                case kEAGLDepth16:
-                    depthStencilFormat = GL_DEPTH_COMPONENT16_OES; // N.B.: GL_DEPTH_COMPONENT16_OES == GL_DEPTH_COMPONENT16
-                    break;
-                case kEAGLDepth24:
-                    depthStencilFormat = GL_DEPTH_COMPONENT24_OES;
-                    break;
-            }
-        }
-        snapshotRequested = FALSE;
-        tookSnapshotDelegate = nil;
-        surfaceSize = CGSizeZero;
-        
-        // Set scaling factor for retina displays.
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        if (scale != 1.0f) {
-            self.contentScaleFactor = (maxScale ? MAX(scale, maxScale) : scale);
-        }
-        
-		// Get the layer
-		CAEAGLLayer *eaglLayer = (CAEAGLLayer*) self.layer;
-        surfaceSize = eaglLayer.bounds.size;
-		eaglLayer.opaque = YES;
-		eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithBool:retained], kEAGLDrawablePropertyRetainedBacking,
-										format, kEAGLDrawablePropertyColorFormat,
-										nil];
-        
-		context = [[EAGLContext alloc] initWithAPI:api];
-        if (!context || ![EAGLContext setCurrentContext:context]) {
+    if ((self = [super initWithFrame:frame])) {
+        if (![self initCommonWithRenderingAPI:api pixelFormat:format depthFormat:depth withStencil:stencil preserveBackbuffer:retained maxScale:maxScale]) {
             [self release];
             return nil;
         }
-        
-		// Create default frameBuffer object. The backing will be allocated for the current layer in -resizeFromLayer
-        if (api == kEAGLRenderingAPIOpenGLES1) {
-            glGenFramebuffersOES(1, &frameBuffer);
-            glGenRenderbuffersOES(1, &colorRenderbuffer);
-            glBindFramebufferOES(GL_FRAMEBUFFER_OES, frameBuffer);
-            glBindRenderbufferOES(GL_RENDERBUFFER_OES, colorRenderbuffer);
-            glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, colorRenderbuffer);
-            attachments[0] = GL_COLOR_ATTACHMENT0_OES;
-            numAttachments = 1;
-            if (depthFormatEAGL != kEAGLDepth0 || haveStencil) {
-                glGenRenderbuffersOES(1, &depthStencilRenderBuffer);
-                glBindRenderbufferOES(GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
-                if (depthFormatEAGL != kEAGLDepth0) {
-                    glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
-                    attachments[numAttachments++] = GL_DEPTH_ATTACHMENT_OES;
-                }
-                if (haveStencil) {
-                     glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_STENCIL_ATTACHMENT_OES, GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
-                    attachments[numAttachments++] = GL_STENCIL_ATTACHMENT_OES;
-                }
+    }
+    
+    return self;
+}
+
+- (BOOL) initCommonWithRenderingAPI:(EAGLRenderingAPI)api pixelFormat:(NSString*)format depthFormat:(EAGLDepthFormat)depth withStencil:(BOOL)stencil preserveBackbuffer:(BOOL)retained maxScale:(CGFloat)maxScale
+{
+    pixelFormat = format;
+    depthFormatEAGL = depth;
+    haveStencil = stencil;
+    if (stencil) {
+        if (depth != kEAGLDepth0) depthStencilFormat = GL_DEPTH24_STENCIL8_OES;
+        else depthStencilFormat = GL_STENCIL_INDEX8_OES; // N.B.: GL_STENCIL_INDEX8_OES == GL_STENCIL_INDEX8
+    } else {
+        switch (depth) {
+            case kEAGLDepth0:
+                depthStencilFormat = 0;
+                break;
+            case kEAGLDepth16:
+                depthStencilFormat = GL_DEPTH_COMPONENT16_OES; // N.B.: GL_DEPTH_COMPONENT16_OES == GL_DEPTH_COMPONENT16
+                break;
+            case kEAGLDepth24:
+                depthStencilFormat = GL_DEPTH_COMPONENT24_OES;
+                break;
+        }
+    }
+    snapshotRequested = FALSE;
+    tookSnapshotDelegate = nil;
+    surfaceSize = CGSizeZero;
+    
+    // Set scaling factor for retina displays.
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    if (scale != 1.0f) {
+        self.contentScaleFactor = (maxScale ? MAX(scale, maxScale) : scale);
+    }
+    
+    // Get the layer
+    CAEAGLLayer *eaglLayer = (CAEAGLLayer*) self.layer;
+    surfaceSize = eaglLayer.bounds.size;
+    eaglLayer.opaque = YES;
+    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:retained], kEAGLDrawablePropertyRetainedBacking,
+                                    format, kEAGLDrawablePropertyColorFormat,
+                                    nil];
+    
+    context = [[EAGLContext alloc] initWithAPI:api];
+    if (!context || ![EAGLContext setCurrentContext:context]) {
+        [self release];
+        return FALSE;
+    }
+    
+    // Create default frameBuffer object. The backing will be allocated for the current layer in -resizeFromLayer
+    if (api == kEAGLRenderingAPIOpenGLES1) {
+        glGenFramebuffersOES(1, &frameBuffer);
+        glGenRenderbuffersOES(1, &colorRenderbuffer);
+        glBindFramebufferOES(GL_FRAMEBUFFER_OES, frameBuffer);
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, colorRenderbuffer);
+        glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, colorRenderbuffer);
+        attachments[0] = GL_COLOR_ATTACHMENT0_OES;
+        numAttachments = 1;
+        if (depthFormatEAGL != kEAGLDepth0 || haveStencil) {
+            glGenRenderbuffersOES(1, &depthStencilRenderBuffer);
+            glBindRenderbufferOES(GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
+            if (depthFormatEAGL != kEAGLDepth0) {
+                glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
+                attachments[numAttachments++] = GL_DEPTH_ATTACHMENT_OES;
             }
-        } else if (api == kEAGLRenderingAPIOpenGLES2) {
-            glGenFramebuffers(1, &frameBuffer);
-            glGenRenderbuffers(1, &colorRenderbuffer);
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
-            attachments[0] = GL_COLOR_ATTACHMENT0;
-            numAttachments = 1;
-            if (depthFormatEAGL != kEAGLDepth0 || haveStencil) {
-                glGenRenderbuffers(1, &depthStencilRenderBuffer);
-                glBindRenderbuffer(GL_RENDERBUFFER, depthStencilRenderBuffer);
-                if (depthFormatEAGL != kEAGLDepth0) {
-                    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthStencilRenderBuffer);
-                    attachments[numAttachments++] = GL_DEPTH_ATTACHMENT;
-                }
-                if (haveStencil) {
-                    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilRenderBuffer);
-                    attachments[numAttachments++] = GL_STENCIL_ATTACHMENT;
-                }
+            if (haveStencil) {
+                glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_STENCIL_ATTACHMENT_OES, GL_RENDERBUFFER_OES, depthStencilRenderBuffer);
+                attachments[numAttachments++] = GL_STENCIL_ATTACHMENT_OES;
             }
         }
-        
-		animating = FALSE;
-		animationFrameInterval = 1;
-		displayLink = nil;
+    } else if (api == kEAGLRenderingAPIOpenGLES2) {
+        glGenFramebuffers(1, &frameBuffer);
+        glGenRenderbuffers(1, &colorRenderbuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
+        attachments[0] = GL_COLOR_ATTACHMENT0;
+        numAttachments = 1;
+        if (depthFormatEAGL != kEAGLDepth0 || haveStencil) {
+            glGenRenderbuffers(1, &depthStencilRenderBuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthStencilRenderBuffer);
+            if (depthFormatEAGL != kEAGLDepth0) {
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthStencilRenderBuffer);
+                attachments[numAttachments++] = GL_DEPTH_ATTACHMENT;
+            }
+            if (haveStencil) {
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilRenderBuffer);
+                attachments[numAttachments++] = GL_STENCIL_ATTACHMENT;
+            }
+        }
     }
-
-	return self;
+    
+    animating = FALSE;
+    animationFrameInterval = 1;
+    displayLink = nil;
+    
+    return TRUE;
 }
 
 - (void) layoutSubviews

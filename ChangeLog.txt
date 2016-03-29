@@ -2,7 +2,7 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.3.2 (this release) (2016-xx-xx).
+Changes in version 5.3.2 (this release) (2016-03-23).
 -----------------------------------------------------
 New features:
 - Android: Android Studio is fully supported. Projects are in AndroidStudioProjects, and a comprehensive migration guide is included. This will be the last release supporting Eclipse.
@@ -11,10 +11,11 @@ New features:
 Enhancements:
 - iOS: Added camera configs for iPhone 6, 6s, 6s Plus, and iPad mini 4.
 - Logging improvements in ARWrapper.
-- Linux: configuration now allows choice of c++ compiler between g++/libstdc++, or Clang/libc++. Support obsolete support for Intel's cc.
+- Linux: configuration now allows choice of c++ compiler between g++/libstdc++, or Clang/libc++. Removed obsolete support for Intel's cc.
 - Android: native arUtil.c function that pulls Android Dev ID from Android static class running on JavaVM.
 - Android: Some new examples: ARMarkerDistance showing how to calculate the distance between two markers, ARSimpleOpenGLES20 showing use of OpenGL ES 2.0 in Java code, and ARDistanceOpenGLES20 showing combining these capabilities.
 - Improved interface to genMarkerSet, the utility for generating a multi-marker from a JPEG image of the set.
+- Template marker pattern files now consistently have the suffix ".patt".
 
 Bug fixes:
 - Multi-NFT mode (currently implemented only in libARWrapper) which has been unavailable since ARToolKit v5.3, has been re-enabled thanks to work by GitHub users atoyk, VladVuk, deight, and stained.
@@ -29,11 +30,19 @@ Bug fixes:
 - Fix case where pattern file name in multi-marker config that began with numeric characters was being treated as a barcode marker ID.
 - Fixed inverted coordinate system in genMarkerSet.
 - When creating environment config on Linux/OS X, bash ignores .profile when .bash_profile is present, so need to write to it if it exists.
+- Use more modern gcc endianness macro on Linux.
+- Several small correctness issues in the Freak matcher, thanks to Nyatla.
+- Linux: don't build the OSG-based apps when building with Clang.
+- iOS: ARWrapper video initialization on iOS now uses ar2VideoOpenAsync. This should fix errors when switching scenes in ARToolKit for Unity on iOS.
+- iOS: Fix iOS packaging error (missing osgdb libs).
+- iOS: Correctly handle currently unsupported iOS cparams.
+- iOS: Provide all required designated initializers in EAGLView.
 
 Other changes:
 - Updated Windows Visual Studio 2010 project files.
 - Dropped support for Android versions prior to Android 4.0.3 (ICS_MR1). Targets are now minimum API level 15.
 - Dropped support for iOS versions prior to iOS 7.0. (The only devices not capable of supporting iOS 7.0+ are the iPhone 3GS and the iPod touch 4th Generation.)
+- iOS: Marked all example apps as fullscreen-only.
 
 
 Changes in version 5.3.1 (2015-10-05).

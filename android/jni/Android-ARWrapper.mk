@@ -38,6 +38,11 @@
 
 MY_LOCAL_PATH := $(call my-dir)
 
+# Enforce minimum NDK version.
+ifneq ($(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh "r11"),true)
+    $(error NDK version r11 or greater required)
+endif
+
 #
 # Local variables: MY_CFLAGS, MY_FILES
 #

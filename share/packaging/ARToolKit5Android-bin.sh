@@ -84,4 +84,9 @@ zip -r -MM "../ARToolKit5-bin-${VERSION}-Android.zip" . \
     --exclude "EclipseProjects/*/obj/*" \
     --exclude "*/gen/*" \
     --exclude "*/objs/*" \
+    --exclude "AndroidStudioProjects/*/*.iml" \
+    --exclude "AndroidStudioProjects/.idea/*" \
+    --exclude "AndroidStudioProjects/*/.idea/*" \
+    --exclude "AndroidStudioProjects/*/build/*" \
+    --exclude "AndroidStudioProjects/*/.gradle/*" \
 

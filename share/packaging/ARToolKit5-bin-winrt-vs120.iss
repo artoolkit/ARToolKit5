@@ -1,7 +1,7 @@
 [Setup]
 AppName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1"
-AppVerName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1 v5.3.1"
-AppVersion=5.3
+AppVerName="ARToolKit for Windows Phone 8.1 and Windows Store 8.1 v5.3.2"
+AppVersion=5.3.2
 AppPublisher="Daqri, LLC."
 AppPublisherURL=http://www.artoolkit.org/
 AppSupportURL=http://www.artoolkit.org/support/
@@ -12,7 +12,7 @@ InfoBeforeFile=README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).tx
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit for Windows Phone 8.1 and Windows 8.1 v5.3.1 Setup (bin-win64-vs120)"
+OutputBaseFilename="ARToolKit for Windows Phone 8.1 and Windows 8.1 v5.3.2 Setup (bin-win64-vs120)"
 OutputDir=..
 ChangesEnvironment=yes
 
@@ -33,6 +33,18 @@ Name: docs; Description: "Documentation for ARToolKit"; Types: full custom
 
 [InstallDelete]
 ; Here we remove obsolete files from earlier versions.
+; Removed from 5.3.2
+Type: files; Name: "{app}\bin\Data\patt.hiro"
+Type: files; Name: "{app}\bin\Data\patt.kanji"
+Type: files; Name: "{app}\bin\Data\patt.sample1"
+Type: files; Name: "{app}\bin\Data\patt.sample2"
+Type: files; Name: "{app}\bin\Data\patt.calib"
+Type: files; Name: "{app}\bin\Data\multi\patt.a"
+Type: files; Name: "{app}\bin\Data\multi\patt.b"
+Type: files; Name: "{app}\bin\Data\multi\patt.c"
+Type: files; Name: "{app}\bin\Data\multi\patt.d"
+Type: files; Name: "{app}\bin\Data\multi\patt.f"
+Type: files; Name: "{app}\bin\Data\multi\patt.g"
 ; Removed from 5.3
 Type: files; Name: "{app}\include\KPM\surfSub.h"
 Type: files; Name: "{app}\lib\SRC\KPM\AnnMatch.cpp"
@@ -222,14 +234,9 @@ Source: "bin\opencv_features2d2410.dll"; Components: utils; DestDir: "{app}\bin"
 
 Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\hiro.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\kanji.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\calib.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\hiro.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\kanji.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\calib.patt”; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\hiro.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\kanji.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\calib.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 
 Source: "bin\ARvideo*.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\pthreadVC2.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -247,8 +254,8 @@ Source: "bin\vcredist_x86.exe"; Components: utils; DestDir: "{app}\bin"; Flags: 
 ;Source: "bin\Data\cparaR.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\transL2R.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
 ;Source: "bin\Data\optical_param.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-Source: "bin\Data\sample1.patt”; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\sample2.patt”; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\sample1.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "bin\Data\sample2.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\multi\*"; Components: examples; DestDir: "{app}\bin\Data\multi"; Flags: recursesubdirs ignoreversion
 Source: "bin\Data\cubeMarkerConfig.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
 Source: "bin\Data\objects.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
