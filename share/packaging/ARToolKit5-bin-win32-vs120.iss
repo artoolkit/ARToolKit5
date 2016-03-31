@@ -1,6 +1,6 @@
 [Setup]
 AppName="ARToolKit"
-AppVerName="ARToolKit v5.3.2"
+AppVerName="ARToolKit v5.3.2r1"
 AppVersion=5.3.2
 AppPublisher="Daqri LLC"
 AppPublisherURL=http://www.artoolkit.org/
@@ -12,7 +12,7 @@ InfoBeforeFile=README.txt
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
-OutputBaseFilename="ARToolKit v5.3.2 Setup (bin-win32-vs120)"
+OutputBaseFilename="ARToolKit v5.3.2r1 Setup (bin-win32-vs120)"
 OutputDir=..
 ChangesEnvironment=yes
 
@@ -119,6 +119,8 @@ Source: "bin\pthreadVC2.dll"; Components: dev; DestDir: "{app}\bin"; Flags: igno
 Source: "bin64\pthreadVC2.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "bin\DSVL.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\DSVLd.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "bin64\DSVL.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
+Source: "bin64\DSVLd.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "include\win32-i386\GL\glut.h"; Components: dev; DestDir: "{app}\include\win32-i386\GL"; Flags: ignoreversion
 Source: "include\win64-x64\GL\glut.h"; Components: dev; DestDir: "{app}\include\win64-x64\GL"; Flags: ignoreversion
 Source: "lib\win32-i386\glut32.lib"; Components: dev; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
