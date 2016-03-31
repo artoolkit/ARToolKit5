@@ -9,6 +9,8 @@ include/ARWrapper/
 include/Eden/
 include/profile.h
 include/thread_sub.h
+include/glStateCache.h
+include/glStateCache2.h
 include/macosx-universal/
 
 lib/libAR.a
