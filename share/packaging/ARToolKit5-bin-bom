@@ -80,6 +80,7 @@ lib/SRC/VideoImage/
 lib/SRC/VideoGStreamer/
 lib/SRC/VideoLinux1394Cam/
 lib/SRC/VideoLinuxV4L/
+lib/SRC/VideoLinuxV4L2/
 lib/SRC/AR2/
 lib/SRC/KPM/
 lib/SRC/Util/
