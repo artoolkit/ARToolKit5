@@ -50,23 +50,23 @@
 package org.artoolkit.ar.samples.ARNativeES1;
 
 
+import android.opengl.GLSurfaceView;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLSurfaceView;
-
 public class Renderer implements GLSurfaceView.Renderer {
- 
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {            	   
-    	ARNativeES1Activity.nativeSurfaceCreated();
+
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        ARNativeES1Activity.nativeSurfaceCreated();
     }
 
-    public void onSurfaceChanged(GL10 gl, int w, int h) {       
-    	ARNativeES1Activity.nativeSurfaceChanged(w, h);        
+    public void onSurfaceChanged(GL10 gl, int w, int h) {
+        ARNativeES1Activity.nativeSurfaceChanged(w, h);
     }
 
     public void onDrawFrame(GL10 gl) {
-    	ARNativeES1Activity.nativeDrawFrame();    	
+        ARNativeES1Activity.nativeDrawFrame();
     }
-    
+
 }
