@@ -42,40 +42,40 @@ import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
 public class ARSurfaceView extends GLSurfaceView {
-	
-	//private float mPreviousX;
-	//private float mPreviousY;
-	
-	public ARSurfaceView(Context context) {
-		super(context);
-	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent e) {
-		
-	    // MotionEvent reports input details from the touch screen
-	    // and other input controls.
+    //private float mPreviousX;
+    //private float mPreviousY;
 
-	    float x = e.getX();
-	    float y = e.getY();
-	    
-	    // int surfaceWidth = getWidth();
-	    // int surfaceHeight = getHeight();
+    public ARSurfaceView(Context context) {
+        super(context);
+    }
 
-	    switch (e.getAction()) {
-	    
-	    	case MotionEvent.ACTION_DOWN:
-	    		calib_optical_Activity.nativeHandleTouchAtLocation((int)x, (int)y);
-	    		break;
-	    		
-	        //case MotionEvent.ACTION_MOVE:
-	        //    float dx = x - mPreviousX;
-	        //    float dy = y - mPreviousY;
-	        //   break;
-	    }
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
 
-	    //mPreviousX = x;
-	    //mPreviousY = y;
-	    return true;
-	}
+        // MotionEvent reports input details from the touch screen
+        // and other input controls.
+
+        float x = e.getX();
+        float y = e.getY();
+
+        // int surfaceWidth = getWidth();
+        // int surfaceHeight = getHeight();
+
+        switch (e.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                calib_optical_Activity.nativeHandleTouchAtLocation((int) x, (int) y);
+                break;
+
+            //case MotionEvent.ACTION_MOVE:
+            //    float dx = x - mPreviousX;
+            //    float dy = y - mPreviousY;
+            //   break;
+        }
+
+        //mPreviousX = x;
+        //mPreviousY = y;
+        return true;
+    }
 }
