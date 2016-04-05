@@ -144,8 +144,8 @@ static void init(int argc, char *argv[])
     char              *vconfR = NULL;
     char              *cparaL = NULL;
     char              *cparaR = NULL;
-    char               cparaLDefault[] = "Data/cparaL.dat";
-    char               cparaRDefault[] = "Data/cparaR.dat";
+    char               cparaLDefault[] = "../share/artoolkit-utils/Data/cparaL.dat";
+    char               cparaRDefault[] = "../share/artoolkit-utils/Data/cparaR.dat";
 
     ARParam            wparam;
     ARGViewport        viewport;

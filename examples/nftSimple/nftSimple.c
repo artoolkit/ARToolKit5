@@ -148,9 +148,9 @@ static void Display(void);
 int main(int argc, char** argv)
 {
 	char glutGamemode[32];
-	const char *cparam_name = "Data2/camera_para.dat";
+	const char *cparam_name = "../share/artoolkit-examples/Data2/camera_para.dat";
 	char vconf[] = "";
-    const char markerConfigDataFilename[] = "Data2/markers.dat";
+    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data2/markers.dat";
 	
 #ifdef DEBUG
     arLogLevel = AR_LOG_LEVEL_DEBUG;

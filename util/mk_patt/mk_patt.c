@@ -143,7 +143,7 @@ static void init(int argc, char *argv[])
     ARParam      wparam;
     ARGViewport  viewport;
     char        *vconf = NULL;
-    char         cparaDefault[] = "Data/camera_para.dat";
+    char         cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
     char        *cpara = NULL;
     char         buf[MAXPATHLEN];
     int          xsize, ysize;

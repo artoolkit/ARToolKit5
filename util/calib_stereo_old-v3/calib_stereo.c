@@ -56,10 +56,10 @@
 #include <AR/video.h>
 #include <AR/gsub.h>
 
-#define          CALIB_STEREO_MARKER_CONFIG    "Data/calibStereoMarkerConfig.dat"
-#define          CPARAL_NAME                   "Data/cparaL.dat"
-#define          CPARAR_NAME                   "Data/cparaR.dat"
-#define          TRANSL2R_NAME                 "Data/transL2R.dat"
+#define          CALIB_STEREO_MARKER_CONFIG    "../share/artoolkit-utils/Data/calibStereoMarkerConfig.dat"
+#define          CPARAL_NAME                   "../share/artoolkit-utils/Data/cparaL.dat"
+#define          CPARAR_NAME                   "../share/artoolkit-utils/Data/cparaR.dat"
+#define          TRANSL2R_NAME                 "../share/artoolkit-utils/Data/transL2R.dat"
 
 #if defined(AR_DEFAULT_INPUT_SGI)
 #define          VCONFL                        "-device=0 -size=FULL"
