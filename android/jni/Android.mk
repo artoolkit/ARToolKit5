@@ -69,11 +69,6 @@ MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/AR/arLabelingSub/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-  # Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
-  MY_FILES := $(subst arImageProc.c,arImageProc.c.neon,$(MY_FILES))
-  LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
-endif
 LOCAL_SRC_FILES := $(MY_FILES)
 LOCAL_CFLAGS += $(MY_CFLAGS)
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
@@ -258,6 +253,11 @@ MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoImage/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+  # Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
+  MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
+  LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
+endif
 LOCAL_SRC_FILES := $(MY_FILES)
 LOCAL_CFLAGS += $(MY_CFLAGS)
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
