@@ -484,9 +484,9 @@ int main(int argc, char** argv)
 {
 	int i;
 	char glutGamemode[32];
-	char cparam_name[] = "Data/camera_para.dat";
+	char cparam_name[] = "../share/artoolkit-examples/Data/camera_para.dat";
 	char vconf[] = "";
-	char objectDataFilename[] = "Data/object_data_vrml";
+	char objectDataFilename[] = "../share/artoolkit-examples/Data/object_data_vrml";
 	
     //
 	// Library inits.

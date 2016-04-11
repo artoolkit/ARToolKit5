@@ -66,9 +66,9 @@
 #include <AR/gsub.h>
 #include <AR/video.h>
 
-#define             CPARA_NAME       "Data/camera_para.dat"
-#define             VPARA_NAME       "Data/cameraSetting-%08x%08x.dat"
-#define             PATT_NAME        "Data/hiro.patt"
+#define             CPARA_NAME       "../share/artoolkit-examples/Data/camera_para.dat"
+#define             VPARA_NAME       "../share/artoolkit-examples/Data/cameraSetting-%08x%08x.dat"
+#define             PATT_NAME        "../share/artoolkit-examples/Data/hiro.patt"
 
 ARHandle           *arHandle;
 AR3DHandle         *ar3DHandle;
@@ -93,7 +93,7 @@ static void         keyEvent( unsigned char key, int x, int y);
 
 int main(int argc, char *argv[])
 {
-	glutInit(&argc, argv);
+    glutInit(&argc, argv);
     init(argc, argv);
 
     argSetWindow(w1);
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     arVideoCapStart();
     arUtilTimerReset();
     argMainLoop();
-	return (0);
+    return (0);
 }
 
 static void   keyEvent( unsigned char key, int x, int y)

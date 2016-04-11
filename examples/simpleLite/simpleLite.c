@@ -525,16 +525,16 @@ static void Display(void)
 
 int main(int argc, char** argv)
 {
-	char glutGamemode[32];
-	char cparam_name[] = "Data/camera_para.dat";
-	char vconf[] = "";
-	char patt_name[]  = "Data/hiro.patt";
+    char glutGamemode[32];
+    char cparam_name[] = "../share/artoolkit-examples/Data/camera_para.dat";
+    char vconf[] = "";
+    char patt_name[]  = "../share/artoolkit-examples/Data/hiro.patt";
 	
     //
 	// Library inits.
 	//
 
-	glutInit(&argc, argv);
+    glutInit(&argc, argv);
 
 	//
 	// Video setup.

@@ -9,6 +9,8 @@ include/ARWrapper/
 include/Eden/
 include/profile.h
 include/thread_sub.h
+include/glStateCache.h
+include/glStateCache2.h
 include/macosx-universal/
 
 lib/libAR.a
@@ -41,11 +43,11 @@ bin/dispFeatureSet
 bin/checkResolution
 bin/genMarkerSet
 
-bin/Data/calibStereoMarkerConfig.dat
-bin/Data/camera_para.dat
-bin/Data/calib.patt
-bin/Data/hiro.patt
-bin/Data/kanji.patt
+share/artoolkit-utils/Data/calibStereoMarkerConfig.dat
+share/artoolkit-utils/Data/camera_para.dat
+share/artoolkit-utils/Data/calib.patt
+share/artoolkit-examples/Data/hiro.patt
+share/artoolkit-examples/Data/kanji.patt
 
 bin/libopencv_calib3d.2.4.6.dylib
 bin/libopencv_core.2.4.6.dylib
@@ -122,20 +124,19 @@ bin/stereo.app/
 bin/nftSimple.app/
 bin/nftBook.app/
 
-bin/OSG/
-bin/Wrl/
-bin/Data/cubeMarkerConfig.dat
-bin/Data/multi/
-bin/Data/multi-barcode-4x3.dat
-bin/Data/multi-barcode-8x6.dat
-bin/Data/objects.dat
-bin/Data/markers.dat
-bin/Data/object_data_vrml
-bin/Data/sample1.patt
-bin/Data/sample2.patt
-bin/Data/sample.mov
-bin/Data2/
-bin/DataNFT/
+
+share/artoolkit-examples/Data/cubeMarkerConfig.dat
+share/artoolkit-examples/Data/multi/
+share/artoolkit-examples/Data/multi-barcode-4x3.dat
+share/artoolkit-examples/Data/multi-barcode-8x6.dat
+share/artoolkit-examples/Data/objects.dat
+share/artoolkit-examples/Data/markers.dat
+share/artoolkit-examples/Data/object_data_vrml
+share/artoolkit-examples/Data/sample1.patt
+share/artoolkit-examples/Data/sample2.patt
+share/artoolkit-examples/Data/sample.mov
+share/artoolkit-examples/Data2/
+share/artoolkit-examples/DataNFT/
 
 examples/Makefile.in
 examples/multi
@@ -158,4 +159,6 @@ share/doc/
 share/packaging/ARToolKit5-bin.sh
 share/packaging/ARToolKit5-bin-bom-OSX
 share/packaging/headerDoc2HTML.config
+share/artoolkit-examples/OSG/
+share/artoolkit-examples/Wrl/
 

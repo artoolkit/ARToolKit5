@@ -132,7 +132,6 @@ Source: "include\profile.h"; Components: dev; DestDir: "{app}\include"; Flags: i
 Source: "include\thread_sub.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\glStateCache.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\glStateCache2.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
-
 Source: "lib\winrt-wp8_1-arm\AR*"; Components: dev; DestDir: "{app}\lib\winrt-wp8_1-arm"; Flags: ignoreversion
 Source: "lib\winrt-wp8_1-x86\AR*"; Components: dev; DestDir: "{app}\lib\winrt-wp8_1-x86"; Flags: ignoreversion
 Source: "lib\winrt-w8_1-arm\AR*"; Components: dev; DestDir: "{app}\lib\winrt-w8_1-arm"; Flags: ignoreversion
@@ -232,11 +231,10 @@ Source: "bin\opencv_calib3d2410.dll"; Components: utils; DestDir: "{app}\bin"; F
 Source: "bin\opencv_imgproc2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\opencv_features2d2410.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 
-Source: "bin\Data\camera_para.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-Source: "bin\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\hiro.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\kanji.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\calib.patt"; Components: utils; DestDir: "{app}\bin\Data"; Flags: ignoreversion
+Source: "share\artoolkit-utils\Data\camera_para.dat"; Components: utils; DestDir: "{app}\share\artoolkit-utils\Data"; Flags: ignoreversion comparetimestamp
+Source: "share\artoolkit-utils\Data\calibStereoMarkerConfig.dat"; Components: utils; DestDir: "{app}\share\artoolkit-utils\Data"; Flags: ignoreversion
+Source: "share\artoolkit-utils\Data\calib.patt"; Components: utils; DestDir: "{app}\share\artoolkit-utils\Data"; Flags: ignoreversion
+Source: "share\artoolkit-utils\Data\hiro.patt"; Components: utils; DestDir: "{app}\share\artoolkit-utils\Data"; Flags: ignoreversion
 
 Source: "bin\ARvideo*.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\pthreadVC2.dll"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -250,19 +248,21 @@ Source: "bin\vcredist_x86.exe"; Components: utils; DestDir: "{app}\bin"; Flags: 
 
 ; Examples
 
-;Source: "bin\Data\cparaL.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-;Source: "bin\Data\cparaR.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-;Source: "bin\Data\transL2R.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-;Source: "bin\Data\optical_param.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion comparetimestamp
-Source: "bin\Data\sample1.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\sample2.patt"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\multi\*"; Components: examples; DestDir: "{app}\bin\Data\multi"; Flags: recursesubdirs ignoreversion
-Source: "bin\Data\cubeMarkerConfig.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\objects.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-Source: "bin\Data\markers.dat"; Components: examples; DestDir: "{app}\bin\Data"; Flags: ignoreversion
-;Source: "bin\OSG\*"; Components: examples; DestDir: "{app}\bin\OSG"; Flags: recursesubdirs ignoreversion
-Source: "bin\Data2\*"; Components: examples; DestDir: "{app}\bin\Data2"; Flags: recursesubdirs ignoreversion
-Source: "bin\DataNFT\*"; Components: examples; DestDir: "{app}\bin\DataNFT"; Flags: recursesubdirs ignoreversion
+;Source: "share\artoolkit-examples\Data\cparaL.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion comparetimestamp
+;Source: "share\artoolkit-examples\Data\cparaR.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion comparetimestamp
+;Source: "share\artoolkit-examples\Data\transL2R.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion comparetimestamp
+;Source: "share\artoolkit-examples\Data\optical_param.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion comparetimestamp
+Source: "share\artoolkit-examples\Data\sample1.patt"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+Source: "share\artoolkit-examples\Data\sample2.patt"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+Source: "share\artoolkit-examples\Data\multi\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data\multi"; Flags: recursesubdirs ignoreversion
+Source: "share\artoolkit-examples\Data\cubeMarkerConfig.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+Source: "share\artoolkit-examples\Data\objects.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+Source: "share\artoolkit-examples\Data\markers.dat"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+;Source: "share\artoolkit-examples\OSG\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\OSG"; Flags: recursesubdirs ignoreversion
+Source: "share\artoolkit-examples\Data2\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data2"; Flags: recursesubdirs ignoreversion
+Source: "share\artoolkit-examples\DataNFT\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\DataNFT"; Flags: recursesubdirs ignoreversion
+Source: "share\artoolkit-examples\Data\hiro.patt"; Components: utils; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
+Source: "share\artoolkit-examples\Data\kanji.patt"; Components: utils; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
 
 ; Examples, source
 Source: "examples\CommonWinRT\*"; Components: examples and src; DestDir: "{app}\examples\CommonWinRT"; Flags: recursesubdirs ignoreversion

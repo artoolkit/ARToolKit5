@@ -67,8 +67,8 @@
 #include <AR/video.h>
 #include <AR/arMulti.h>
 
-#define                 CPARA_NAME       "Data/camera_para.dat"
-#define                 CONFIG_NAME      "Data/multi/marker.dat"
+#define                 CPARA_NAME       "../share/artoolkit-examples/Data/camera_para.dat"
+#define                 CONFIG_NAME      "../share/artoolkit-examples/Data/multi/marker.dat"
 
 ARHandle               *arHandle;
 AR3DHandle             *ar3DHandle;

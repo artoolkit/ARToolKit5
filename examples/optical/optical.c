@@ -164,14 +164,14 @@ int main(int argc, char** argv)
 {
 	char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "Data/camera_para.dat";
+    char    cparaDefault[] = "../share/artoolkit-examples/Data/camera_para.dat";
     char   *cpara = NULL;
     int     i;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "Data/markers.dat";
-	const char objectDataFilename[] = "Data/objects.dat";
+    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data/markers.dat";
+    const char objectDataFilename[] = "../share/artoolkit-examples/Data/objects.dat";
 
-	char    optical_param_name[] = "Data/optical_param.dat";
+    char    optical_param_name[] = "../share/artoolkit-examples/Data/optical_param.dat";
 	
     //
 	// Process command-line options.

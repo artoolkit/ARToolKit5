@@ -153,24 +153,24 @@ static void Display(void);
 
 int main(int argc, char** argv)
 {
-	char    glutGamemode[32] = "";
+    char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "Data2/camera_para.dat";
+    char    cparaDefault[] = "../share/artoolkit-examples/Data2/camera_para.dat";
     char   *cpara = NULL;
     int     i;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "Data2/markers.dat";
-	const char objectDataFilename[] = "Data2/objects.dat";
-	
+    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data2/markers.dat";
+    const char objectDataFilename[] = "../share/artoolkit-examples/Data2/objects.dat";
+
 #ifdef DEBUG
     arLogLevel = AR_LOG_LEVEL_DEBUG;
 #endif
     
     //
-	// Process command-line options.
-	//
+    // Process command-line options.
+    //
     
-	glutInit(&argc, argv);
+    glutInit(&argc, argv);
     
     i = 1; // argv[0] is name of app, so start at 1.
     while (i < argc) {
@@ -234,10 +234,10 @@ int main(int argc, char** argv)
 	// Video setup.
 	//
     
-	if (!setupCamera((cpara ? cpara : cparaDefault), vconf, &gCparamLT)) {
-		ARLOGe("main(): Unable to set up AR camera.\n");
-		exit(-1);
-	}
+    if (!setupCamera((cpara ? cpara : cparaDefault), vconf, &gCparamLT)) {
+        ARLOGe("main(): Unable to set up AR camera.\n");
+        exit(-1);
+    }
 
     //
     // AR init.

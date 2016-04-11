@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 {
 	char glutGamemode[32];
     char *cpara = NULL;
-	char cparaDefault[] = "Data/camera_para.dat";
+	char cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
 	char *vconf = NULL;
     int patt_names_count = 0;
     char *patt_names[CHECK_ID_MULTIMARKERS_MAX] = {NULL};
