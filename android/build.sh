@@ -89,7 +89,9 @@ fi
 if [[ "$1" == "clean" ]]; then
     rm -f ../include/AR/config.h
 else
-    if [[ ../include/AR/config.h.in -nt ../include/AR/config.h ]]; then cp -v ../include/AR/config.h.in ../include/AR/config.h; fi
+    if [[ ../include/AR/config.h.in -nt ../include/AR/config.h ]]; then
+        cp -v ../include/AR/config.h.in ../include/AR/config.h;
+    fi
 fi
 
 #
@@ -97,6 +99,11 @@ fi
 # Built elements are moved to ./libs folder
 #
 $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
+NDK_BLD_RESULT=$?
+if [[ ${NDK_BLD_RESULT} != "0" ]]; then
+  echo Exiting ndk-build script abnormally terminated.
+  exit ${NDK_BLD_RESULT}
+fi
 
 #
 # Build the various ABI libcpufeatures.a (added to shared library) libARWrapper.so shared libraries.
