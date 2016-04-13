@@ -38,17 +38,15 @@
 
 MY_LOCAL_PATH := $(call my-dir)
 
-# Enforce minimum NDK version.
-#ifneq ($(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh "r11"),true)
-    #$(error NDK version r11 or greater required)
-#	echo ERROR!
-#endif
+$(info Android-ARWrapper.mk Start $(TARGET_ARCH_ABI) build script in $$MY_LOCAL_PATH: "$(MY_LOCAL_PATH)")
 
-#NDK11_CHK:=$(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh r11)
-#$(info Android-ARWrapper.mk called assert_ndk_version.sh r11: "$(NDK11_CHK)")
-#ifeq ($(NDK11_CHK),false)
-#    $(error NDK version r11 or greater required)
-#endif
+NDK11_CHK2:=$(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh r11)
+$(info Android-ARWrapper.mk Immediately after call of assert_ndk_version.sh for r11: "$(NDK11_CHK2)")
+ifeq ($(NDK11_CHK2),false)
+    $(error NDK version r11 or greater required)
+endif
+
+$(info Android-ARWrapper.mk Continuing after assert_ndk_version.sh for r11 result check: $$NDK11_CHK2: "$(NDK11_CHK2)")
 
 #
 # Local variables: MY_CFLAGS, MY_FILES
@@ -57,10 +55,10 @@ MY_LOCAL_PATH := $(call my-dir)
 # Make sure DEBUG is defined for debug builds. (NDK already defines NDEBUG for release builds.)
 MY_CFLAGS :=
 ifeq ($(APP_OPTIM),debug)
-    $(info ARToolKit5 Android-ARWrapper MK file ($(TARGET_ARCH_ABI) DEBUG))
+    $(info Android-ARWrapper.mk Start ARWrapper build ($(TARGET_ARCH_ABI) DEBUG))
     MY_CFLAGS += -DDEBUG
 else
-    $(info ARToolKit5 Android-ARWrapper MK file ($(TARGET_ARCH_ABI)))
+    $(info Android-ARWrapper.mk Start ARWrapper build ($(TARGET_ARCH_ABI) $(APP_OPTIM)))
 endif
 
 ARTOOLKIT_ROOT := $(MY_LOCAL_PATH)/../..
