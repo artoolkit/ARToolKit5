@@ -452,7 +452,7 @@ EDEN_BOOL EdenGLFontUnloadTextureFontForContext(const int contextIndex, EDEN_GL_
     
 	if (contextIndex < 0 || contextIndex >= gContextsActiveCount) return (FALSE); // Sanity check.
 	if (!fontInfo) return (FALSE);
-    if (!fontInfo->type == EDEN_GL_FONT_TYPE_TEXTURE) return (FALSE);
+    if (!(fontInfo->type == EDEN_GL_FONT_TYPE_TEXTURE)) return (FALSE);
     
     if (!fontInfo->tsi) return (FALSE);
     
