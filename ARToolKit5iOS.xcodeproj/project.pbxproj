@@ -2004,6 +2004,12 @@
 		4A9CC64D13584804006C6724 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		4A9CC64E13584804006C6724 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		4A9CC6551358483A006C6724 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		4AA5336A1CC82A8300FF41C8 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
+		4AA5336B1CC82A8300FF41C8 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
+		4AA5336C1CC82A8300FF41C8 /* DataNFT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DataNFT; sourceTree = "<group>"; };
+		4AA5336D1CC82A8300FF41C8 /* OSG */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OSG; sourceTree = "<group>"; };
+		4AA5336E1CC82A8300FF41C8 /* Wrl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Wrl; sourceTree = "<group>"; };
+		4AA5336F1CC82A8D00FF41C8 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		4AA8B555161AD5A200B48D70 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4AA8B556161AD5A200B48D70 /* Default-LandscapeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-LandscapeLeft.png"; sourceTree = "<group>"; };
 		4AA8B557161AD5A200B48D70 /* Default-LandscapeLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-LandscapeLeft@2x.png"; sourceTree = "<group>"; };
@@ -3312,7 +3318,6 @@
 		78BB3F1908E4837000D7CA2D /* videoDummy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = videoDummy.h; sourceTree = "<group>"; };
 		78BB3F2008E4837000D7CA2D /* video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = video.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		78BB3F2108E4837000D7CA2D /* videoConfig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = videoConfig.h; sourceTree = "<group>"; };
-		78BB3F5208E483CB00D7CA2D /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4362,11 +4367,33 @@
 		4A941D471AE5DD2E000FA802 /* share */ = {
 			isa = PBXGroup;
 			children = (
+				4AA533311CC82A6B00FF41C8 /* artoolkit-examples */,
+				4AA533641CC82A6B00FF41C8 /* artoolkit-utils */,
 				4A941D441AE5DD2E000FA802 /* packaging */,
 				4A941D451AE5DD2E000FA802 /* artoolkit5-setenv */,
 				4A941D461AE5DD2E000FA802 /* artoolkit5-unsetenv */,
 			);
 			path = share;
+			sourceTree = "<group>";
+		};
+		4AA533311CC82A6B00FF41C8 /* artoolkit-examples */ = {
+			isa = PBXGroup;
+			children = (
+				4AA5336A1CC82A8300FF41C8 /* Data */,
+				4AA5336B1CC82A8300FF41C8 /* Data2 */,
+				4AA5336C1CC82A8300FF41C8 /* DataNFT */,
+				4AA5336D1CC82A8300FF41C8 /* OSG */,
+				4AA5336E1CC82A8300FF41C8 /* Wrl */,
+			);
+			path = "artoolkit-examples";
+			sourceTree = "<group>";
+		};
+		4AA533641CC82A6B00FF41C8 /* artoolkit-utils */ = {
+			isa = PBXGroup;
+			children = (
+				4AA5336F1CC82A8D00FF41C8 /* Data */,
+			);
+			path = "artoolkit-utils";
 			sourceTree = "<group>";
 		};
 		4AA8B554161AD5A200B48D70 /* ARToolKit default images */ = {
@@ -6593,7 +6620,6 @@
 		78BB3F4F08E483AD00D7CA2D /* bin */ = {
 			isa = PBXGroup;
 			children = (
-				78BB3F5208E483CB00D7CA2D /* Data */,
 			);
 			path = bin;
 			sourceTree = "<group>";
@@ -7098,7 +7124,7 @@
 		78BB3DD408E482DA00D7CA2D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 			};
 			buildConfigurationList = 78BB3DD508E482DA00D7CA2D /* Build configuration list for PBXProject "ARToolKit5iOS" */;
 			compatibilityVersion = "Xcode 3.2";
