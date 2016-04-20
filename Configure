@@ -30,7 +30,7 @@
 #  are not obligated to do so. If you do not wish to do so, delete this exception
 #  statement from your version.
 #
-#  Copyright 2015 Daqri, LLC.
+#  Copyright 2015-2016 Daqri, LLC.
 #  Copyright 2002-2015 ARToolworks, Inc.
 #
 #  Author(s): Hirokazu Kato, Philip Lamb
@@ -65,7 +65,6 @@ MDIR=".                              \
       lib/SRC/VideoQuickTime7        \
       lib/SRC/VideoGStreamer         \
       lib/SRC/ARosg                  \
-      lib/SRC/ARvrml                 \
       lib/SRC/Eden                   \
       util                           \
       util/calib_camera              \
@@ -90,7 +89,6 @@ MDIR=".                              \
       examples/simpleMovie           \
       examples/multi                 \
       examples/simpleOSG             \
-      examples/simpleVRML            \
       examples/stereo                \
       examples/multiCube             \
       examples/multiWin              \
@@ -561,20 +559,6 @@ else
     exit 0
 fi
 
-echo "Enable the VRML renderer and example? (y or n)"
-echo -n "Enter : "
-read ANS
-if [ "$ANS" = "y" ]
-then
-    ENABLE_VRML="y"
-elif [ "$ANS" = "n" ]
-then
-    ENABLE_VRML="n"
-else
-    echo "Please enter y or n."
-    exit 0
-fi
-
 if [ "$CLANGCC" = "n" ]
 then
     echo "Enable the OpenSceneGraph renderer and examples? (y or n)"
@@ -702,14 +686,6 @@ if [ "$INPUT_IMAGE" = "y" ]
 then
 cat >> $SED <<EOF
 s/#(cd VideoImage;        make -f Makefile)/(cd VideoImage;        make -f Makefile)/
-EOF
-fi
-
-if [ "$ENABLE_VRML" = "y" ]
-then
-cat >> $SED <<EOF
-s/#(cd ARvrml;            make -f Makefile)/(cd ARvrml           ; make -f Makefile)/
-s/#(cd simpleVRML; make -f Makefile)/(cd simpleVRML; make -f Makefile)/
 EOF
 fi
 

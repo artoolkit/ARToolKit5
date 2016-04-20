@@ -60,18 +60,6 @@
 			name = "Build reference documentation";
 			productName = "Build reference documentation";
 		};
-		4A7F53410A29A1D100F474E6 /* ARToolKit5 extensions */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 4A7F53440A29A1F000F474E6 /* Build configuration list for PBXAggregateTarget "ARToolKit5 extensions" */;
-			buildPhases = (
-			);
-			dependencies = (
-				4A7F55D30A29A3A000F474E6 /* PBXTargetDependency */,
-				4A5B13850B5C36E5008A315C /* PBXTargetDependency */,
-			);
-			name = "ARToolKit5 extensions";
-			productName = "ARToolKit5 extensions";
-		};
 		4A88F3D215D365AA002E595A /* ARToolKit5 NFT examples */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 4A88F3D315D365AA002E595A /* Build configuration list for PBXAggregateTarget "ARToolKit5 NFT examples" */;
@@ -188,8 +176,6 @@
 		4A1B3AD012D2BBE500E92104 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1D2D8712B8F84000E363BE /* QTKit.framework */; };
 		4A1B3AD112D2BBE500E92104 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A45133D12C25390002C7C84 /* CoreVideo.framework */; };
 		4A1B3AD212D2BBEB00E92104 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A45133D12C25390002C7C84 /* CoreVideo.framework */; };
-		4A1B3AD312D2BBFF00E92104 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1D2D8712B8F84000E363BE /* QTKit.framework */; };
-		4A1B3AD412D2BBFF00E92104 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A45133D12C25390002C7C84 /* CoreVideo.framework */; };
 		4A1B3AD512D2BC0600E92104 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1D2D8712B8F84000E363BE /* QTKit.framework */; };
 		4A1B3AD612D2BC0600E92104 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A45133D12C25390002C7C84 /* CoreVideo.framework */; };
 		4A1D2D4412B8D4D600E363BE /* QTKitVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D2D4012B8D4D600E363BE /* QTKitVideo.m */; };
@@ -331,7 +317,6 @@
 		4A3F7E601AE0BFD600252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
 		4A3F7E611AE0BFD700252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
 		4A3F7E621AE0BFD700252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
-		4A3F7E631AE0BFDD00252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
 		4A3F7E641AE0C00800252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
 		4A3F7E651AE0C00800252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
 		4A3F7E661AE0C03500252BD1 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
@@ -350,24 +335,12 @@
 		4A45132A12C25380002C7C84 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1D2D8712B8F84000E363BE /* QTKit.framework */; };
 		4A45133E12C25390002C7C84 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A45133D12C25390002C7C84 /* CoreVideo.framework */; };
 		4A4CC6AA1768421E00ACF8C3 /* paramLT.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CC6A91768421E00ACF8C3 /* paramLT.c */; };
-		4A4D2B240F9E691D00D0FDDE /* libopenvrml-gl.6.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B200F9E690600D0FDDE /* libopenvrml-gl.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B250F9E691D00D0FDDE /* libopenvrml.6.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B210F9E690600D0FDDE /* libopenvrml.6.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B3E0F9E696900D0FDDE /* libboost_thread-1_33_1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B3D0F9E695C00D0FDDE /* libboost_thread-1_33_1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B430F9E69A100D0FDDE /* libjpeg.62.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B400F9E699100D0FDDE /* libjpeg.62.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B440F9E69A100D0FDDE /* libjs.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B410F9E699100D0FDDE /* libjs.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B4D0F9E69E500D0FDDE /* libpng12.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B4C0F9E69D800D0FDDE /* libpng12.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B560F9E6A1F00D0FDDE /* libnspr4.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B520F9E6A1100D0FDDE /* libnspr4.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B570F9E6A1F00D0FDDE /* libplc4.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B530F9E6A1100D0FDDE /* libplc4.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B580F9E6A1F00D0FDDE /* libplds4.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B540F9E6A1100D0FDDE /* libplds4.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4A4D2B590F9E6A1F00D0FDDE /* libSDL-1.2.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A4D2B550F9E6A1100D0FDDE /* libSDL-1.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4A4DFBE817D59F3700273E7E /* osg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A5E15ED919B001625A8 /* osg.framework */; };
 		4A4DFBE917D59F3700273E7E /* osgDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A6015ED919B001625A8 /* osgDB.framework */; };
 		4A4DFBEA17D59F3700273E7E /* osgFX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A6115ED919B001625A8 /* osgFX.framework */; };
 		4A4DFBEB17D59F3700273E7E /* osgGA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A6215ED919B001625A8 /* osgGA.framework */; };
 		4A4DFBEC17D59F3700273E7E /* osgUtil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A6A15ED919B001625A8 /* osgUtil.framework */; };
 		4A4DFBED17D59F3700273E7E /* osgViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A203A6B15ED919B001625A8 /* osgViewer.framework */; };
-		4A5B13A10B5C3A32008A315C /* object_vrml.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5B13530B5C36AA008A315C /* object_vrml.c */; };
-		4A5B13A20B5C3A32008A315C /* simpleVRML.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A5B13560B5C36AA008A315C /* simpleVRML.c */; };
 		4A69939C12B3C6BD00AF97FC /* libARMulti.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF79D840A26A39500E900EC /* libARMulti.a */; };
 		4A6F0D1118E5060900C45B33 /* videoAspectRatio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A6F0D1018E5060900C45B33 /* videoAspectRatio.c */; };
 		4A7797B70CCEE84A0021FAC9 /* multiWin.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7797810CCEE7730021FAC9 /* multiWin.c */; };
@@ -395,8 +368,6 @@
 		4A7B8D2A0EC77EC500D1A3F5 /* arLabelingSubEWR3C565.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8D120EC77EC500D1A3F5 /* arLabelingSubEWR3C565.c */; };
 		4A7B8D2B0EC77EC500D1A3F5 /* arLabelingSubEWR3CA4444.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8D130EC77EC500D1A3F5 /* arLabelingSubEWR3CA4444.c */; };
 		4A7B8D2C0EC77EC500D1A3F5 /* arLabelingSubEWR3CA5551.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B8D140EC77EC500D1A3F5 /* arLabelingSubEWR3CA5551.c */; };
-		4A7F55F10A29A52600F474E6 /* arViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F52F30A299E7A00F474E6 /* arViewer.cpp */; };
-		4A7F55F20A29A52800F474E6 /* arViewerCapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F52F50A299E7A00F474E6 /* arViewerCapi.cpp */; };
 		4A7F76CD0C616E2E00E42DF5 /* calib_dist.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F76C20C616DC900E42DF5 /* calib_dist.c */; };
 		4A7F76CE0C616E2E00E42DF5 /* calib_inp.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F76C30C616DC900E42DF5 /* calib_inp.c */; };
 		4A7F76CF0C616E2E00E42DF5 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F76C40C616DC900E42DF5 /* main.c */; };
@@ -500,10 +471,6 @@
 		4A9BC64115A3B6B100A2EC4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F115A3B67A00A2EC4F /* Cocoa.framework */; };
 		4A9BC64215A3B6B100A2EC4F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F215A3B67A00A2EC4F /* GLUT.framework */; };
 		4A9BC64315A3B6B100A2EC4F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F315A3B67A00A2EC4F /* OpenGL.framework */; };
-		4A9BC64415A3B6B700A2EC4F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F015A3B67A00A2EC4F /* Carbon.framework */; };
-		4A9BC64515A3B6B700A2EC4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F115A3B67A00A2EC4F /* Cocoa.framework */; };
-		4A9BC64615A3B6B700A2EC4F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F215A3B67A00A2EC4F /* GLUT.framework */; };
-		4A9BC64715A3B6B700A2EC4F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F315A3B67A00A2EC4F /* OpenGL.framework */; };
 		4A9BC64915A3B6B800A2EC4F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F015A3B67A00A2EC4F /* Carbon.framework */; };
 		4A9BC64A15A3B6B800A2EC4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F115A3B67A00A2EC4F /* Cocoa.framework */; };
 		4A9BC64B15A3B6B800A2EC4F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F215A3B67A00A2EC4F /* GLUT.framework */; };
@@ -520,14 +487,12 @@
 		4AA533241CC8298100FF41C8 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533151CC828F200FF41C8 /* Data */; };
 		4AA533251CC8298200FF41C8 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533151CC828F200FF41C8 /* Data */; };
 		4AA533261CC8298200FF41C8 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533151CC828F200FF41C8 /* Data */; };
-		4AA533271CC8298800FF41C8 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533151CC828F200FF41C8 /* Data */; };
 		4AA533281CC8298B00FF41C8 /* Data2 in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533161CC828F200FF41C8 /* Data2 */; };
 		4AA533291CC8298C00FF41C8 /* Data2 in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533161CC828F200FF41C8 /* Data2 */; };
 		4AA5332A1CC8299000FF41C8 /* DataNFT in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533171CC828F200FF41C8 /* DataNFT */; };
 		4AA5332B1CC8299000FF41C8 /* DataNFT in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533171CC828F200FF41C8 /* DataNFT */; };
 		4AA5332C1CC8299800FF41C8 /* OSG in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533181CC828F200FF41C8 /* OSG */; };
 		4AA5332D1CC8299A00FF41C8 /* OSG in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533181CC828F200FF41C8 /* OSG */; };
-		4AA5332E1CC8299E00FF41C8 /* Wrl in Resources */ = {isa = PBXBuildFile; fileRef = 4AA533191CC828F200FF41C8 /* Wrl */; };
 		4AA543BE180D077700EB67D8 /* libARgsub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCC6D08E4A4D200AEE575 /* libARgsub.a */; };
 		4AA543BF180D07A100EB67D8 /* libARgsub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCC6D08E4A4D200AEE575 /* libARgsub.a */; };
 		4AA543C0180D07B900EB67D8 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9BC5F215A3B67A00A2EC4F /* GLUT.framework */; };
@@ -612,7 +577,6 @@
 		4AE25B721288619000F271D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4AE25B731288619800F271D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4AE25B741288619D00F271D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
-		4AE25B75128861A200F271D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4AE25B76128861A700F271D2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4AE9CC56178E759500D944B9 /* ARMarkerNFT.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AE9CC54178E759500D944B9 /* ARMarkerNFT.c */; };
 		4AE9CC59178E75C300D944B9 /* ARMarkerNFT.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AE9CC57178E75C300D944B9 /* ARMarkerNFT.c */; };
@@ -643,10 +607,6 @@
 		4AEC9594114FD19400E26C39 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4AEC9596114FD19400E26C39 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
 		4AEC9597114FD19400E26C39 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
-		4AEC95AC114FE28D00E26C39 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
-		4AEC95AE114FE28D00E26C39 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
-		4AEC95AF114FE28D00E26C39 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
-		4AEC95B0114FE28D00E26C39 /* libARvrml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7F534B0A29A24600F474E6 /* libARvrml.a */; };
 		4AEC95B1114FE2A800E26C39 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4AEC95B3114FE2A800E26C39 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
 		4AEC95B4114FE2A800E26C39 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
@@ -1289,41 +1249,6 @@
 			remoteGlobalIDString = 4A0A7BB61953C6E4009F61F8;
 			remoteInfo = Eden;
 		};
-		4A5B13640B5C36C2008A315C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 78BB3F8508E486DB00D7CA2D;
-			remoteInfo = libAR;
-		};
-		4A5B13660B5C36C2008A315C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A15ED2209E35F0800159C62;
-			remoteInfo = libARgsub_lite;
-		};
-		4A5B13680B5C36C2008A315C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 78BBCE2208E4AC6600AEE575;
-			remoteInfo = libARvideo;
-		};
-		4A5B137E0B5C36D4008A315C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A7F534A0A29A24600F474E6;
-			remoteInfo = ARvrml;
-		};
-		4A5B13840B5C36E5008A315C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A5B13620B5C36C2008A315C;
-			remoteInfo = "simpleLite copy";
-		};
 		4A7797840CCEE7850021FAC9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
@@ -1351,13 +1276,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4AF79D750A26A39500E900EC;
 			remoteInfo = ARMulti;
-		};
-		4A7F55D20A29A3A000F474E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A7F534A0A29A24600F474E6;
-			remoteInfo = ARvrml;
 		};
 		4A7F76D30C616E7700E42DF5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1772,13 +1690,6 @@
 			remoteGlobalIDString = 4AD5C4270A39024B003F13D4;
 			remoteInfo = "calib_stereo_old-v3";
 		};
-		4AE3D42D0A2E950C00B8391E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7866888508E48C3000DC7F78;
-			remoteInfo = Configure;
-		};
 		4AEB276A1804C44E002290C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
@@ -1950,25 +1861,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4A6B58220D4574CE00E2EDA4 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
-			files = (
-				4A4D2B430F9E69A100D0FDDE /* libjpeg.62.dylib in CopyFiles */,
-				4A4D2B440F9E69A100D0FDDE /* libjs.1.dylib in CopyFiles */,
-				4A4D2B3E0F9E696900D0FDDE /* libboost_thread-1_33_1.dylib in CopyFiles */,
-				4A4D2B240F9E691D00D0FDDE /* libopenvrml-gl.6.dylib in CopyFiles */,
-				4A4D2B250F9E691D00D0FDDE /* libopenvrml.6.dylib in CopyFiles */,
-				4A4D2B560F9E6A1F00D0FDDE /* libnspr4.1.dylib in CopyFiles */,
-				4A4D2B570F9E6A1F00D0FDDE /* libplc4.1.dylib in CopyFiles */,
-				4A4D2B580F9E6A1F00D0FDDE /* libplds4.1.dylib in CopyFiles */,
-				4A4D2B590F9E6A1F00D0FDDE /* libSDL-1.2.0.dylib in CopyFiles */,
-				4A4D2B4D0F9E69E500D0FDDE /* libpng12.0.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4A9C4E5D15E3536800BAF395 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2150,24 +2042,8 @@
 		4A45133D12C25390002C7C84 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		4A4CC699176840F000ACF8C3 /* gsubConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gsubConfig.h; sourceTree = "<group>"; };
 		4A4CC6A91768421E00ACF8C3 /* paramLT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = paramLT.c; sourceTree = "<group>"; };
-		4A4D2B200F9E690600D0FDDE /* libopenvrml-gl.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libopenvrml-gl.6.dylib"; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libopenvrml-gl.6.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B210F9E690600D0FDDE /* libopenvrml.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopenvrml.6.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libopenvrml.6.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B3D0F9E695C00D0FDDE /* libboost_thread-1_33_1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_thread-1_33_1.dylib"; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libboost_thread-1_33_1.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B400F9E699100D0FDDE /* libjpeg.62.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjpeg.62.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libjpeg.62.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B410F9E699100D0FDDE /* libjs.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjs.1.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libjs.1.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B4C0F9E69D800D0FDDE /* libpng12.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng12.0.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libpng12.0.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B520F9E6A1100D0FDDE /* libnspr4.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnspr4.1.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libnspr4.1.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B530F9E6A1100D0FDDE /* libplc4.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libplc4.1.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libplc4.1.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B540F9E6A1100D0FDDE /* libplds4.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libplds4.1.dylib; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libplds4.1.dylib"; sourceTree = SOURCE_ROOT; };
-		4A4D2B550F9E6A1100D0FDDE /* libSDL-1.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL-1.2.0.dylib"; path = "../OpenVRML/openvrml-0.16.6-bin-macosx/lib/libSDL-1.2.0.dylib"; sourceTree = SOURCE_ROOT; };
 		4A53DDB80F6DFA080062C983 /* arosg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arosg.h; sourceTree = "<group>"; };
 		4A53DDB90F6DFA730062C983 /* arosg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arosg.cpp; sourceTree = "<group>"; };
-		4A5B13520B5C36AA008A315C /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
-		4A5B13530B5C36AA008A315C /* object_vrml.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = object_vrml.c; sourceTree = "<group>"; };
-		4A5B13540B5C36AA008A315C /* object_vrml.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = object_vrml.h; sourceTree = "<group>"; };
-		4A5B13550B5C36AA008A315C /* simpleVRML-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "simpleVRML-Info.plist"; sourceTree = "<group>"; };
-		4A5B13560B5C36AA008A315C /* simpleVRML.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = simpleVRML.c; sourceTree = "<group>"; };
-		4A5B13790B5C36C2008A315C /* simpleVRML.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = simpleVRML.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A663ABB11415597004CD382 /* version.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = "<group>"; };
 		4A680F920D6290B2000E52AC /* artoolkit5-config.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "artoolkit5-config.in"; sourceTree = "<group>"; };
 		4A680F930D629F11000E52AC /* artoolkit5-setenv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "artoolkit5-setenv"; sourceTree = "<group>"; };
@@ -2211,12 +2087,6 @@
 		4A7B8D120EC77EC500D1A3F5 /* arLabelingSubEWR3C565.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3C565.c; sourceTree = "<group>"; };
 		4A7B8D130EC77EC500D1A3F5 /* arLabelingSubEWR3CA4444.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA4444.c; sourceTree = "<group>"; };
 		4A7B8D140EC77EC500D1A3F5 /* arLabelingSubEWR3CA5551.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = arLabelingSubEWR3CA5551.c; sourceTree = "<group>"; };
-		4A7F52F30A299E7A00F474E6 /* arViewer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = arViewer.cpp; sourceTree = "<group>"; };
-		4A7F52F40A299E7A00F474E6 /* arViewer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arViewer.h; sourceTree = "<group>"; };
-		4A7F52F50A299E7A00F474E6 /* arViewerCapi.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = arViewerCapi.cpp; sourceTree = "<group>"; };
-		4A7F52F70A299E7B00F474E6 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
-		4A7F52FC0A299F5C00F474E6 /* arvrml.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arvrml.h; sourceTree = "<group>"; };
-		4A7F534B0A29A24600F474E6 /* libARvrml.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARvrml.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7F76B70C616DC900E42DF5 /* checkImage.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = checkImage.c; sourceTree = "<group>"; };
 		4A7F76B80C616DC900E42DF5 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		4A7F76BA0C616DC900E42DF5 /* listCamera.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = listCamera.c; sourceTree = "<group>"; };
@@ -2719,7 +2589,6 @@
 		4AA533161CC828F200FF41C8 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
 		4AA533171CC828F200FF41C8 /* DataNFT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DataNFT; sourceTree = "<group>"; };
 		4AA533181CC828F200FF41C8 /* OSG */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OSG; sourceTree = "<group>"; };
-		4AA533191CC828F200FF41C8 /* Wrl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Wrl; sourceTree = "<group>"; };
 		4AA5331A1CC8290200FF41C8 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		4ABA945D1005CE0300F3A38E /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		4ABA945E1005CE0300F3A38E /* video1394V1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = video1394V1.c; sourceTree = "<group>"; };
@@ -3108,25 +2977,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4A5B136D0B5C36C2008A315C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A1B3AD312D2BBFF00E92104 /* QTKit.framework in Frameworks */,
-				4A1B3AD412D2BBFF00E92104 /* CoreVideo.framework in Frameworks */,
-				4AE25B75128861A200F271D2 /* Accelerate.framework in Frameworks */,
-				4AEC95AC114FE28D00E26C39 /* libAR.a in Frameworks */,
-				4AEC95AE114FE28D00E26C39 /* libARgsub_lite.a in Frameworks */,
-				4AEC95AF114FE28D00E26C39 /* libARvideo.a in Frameworks */,
-				4AEC95B0114FE28D00E26C39 /* libARvrml.a in Frameworks */,
-				4A9BC64415A3B6B700A2EC4F /* Carbon.framework in Frameworks */,
-				4A9BC64515A3B6B700A2EC4F /* Cocoa.framework in Frameworks */,
-				4A9BC64615A3B6B700A2EC4F /* GLUT.framework in Frameworks */,
-				4A9BC64715A3B6B700A2EC4F /* OpenGL.framework in Frameworks */,
-				4A3F7E631AE0BFDD00252BD1 /* libARICP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3818,18 +3668,6 @@
 			path = ARosg;
 			sourceTree = "<group>";
 		};
-		4A5B13510B5C36AA008A315C /* simpleVRML */ = {
-			isa = PBXGroup;
-			children = (
-				4A5B13560B5C36AA008A315C /* simpleVRML.c */,
-				4A5B13540B5C36AA008A315C /* object_vrml.h */,
-				4A5B13530B5C36AA008A315C /* object_vrml.c */,
-				4A5B13520B5C36AA008A315C /* Makefile.in */,
-				4A5B13550B5C36AA008A315C /* simpleVRML-Info.plist */,
-			);
-			path = simpleVRML;
-			sourceTree = "<group>";
-		};
 		4A663ABA11415597004CD382 /* Xcode */ = {
 			isa = PBXGroup;
 			children = (
@@ -3851,23 +3689,6 @@
 				4A680F920D6290B2000E52AC /* artoolkit5-config.in */,
 			);
 			path = share;
-			sourceTree = "<group>";
-		};
-		4A72A38411405467001679D8 /* OpenVRML */ = {
-			isa = PBXGroup;
-			children = (
-				4A4D2B520F9E6A1100D0FDDE /* libnspr4.1.dylib */,
-				4A4D2B530F9E6A1100D0FDDE /* libplc4.1.dylib */,
-				4A4D2B540F9E6A1100D0FDDE /* libplds4.1.dylib */,
-				4A4D2B550F9E6A1100D0FDDE /* libSDL-1.2.0.dylib */,
-				4A4D2B4C0F9E69D800D0FDDE /* libpng12.0.dylib */,
-				4A4D2B200F9E690600D0FDDE /* libopenvrml-gl.6.dylib */,
-				4A4D2B210F9E690600D0FDDE /* libopenvrml.6.dylib */,
-				4A4D2B3D0F9E695C00D0FDDE /* libboost_thread-1_33_1.dylib */,
-				4A4D2B400F9E699100D0FDDE /* libjpeg.62.dylib */,
-				4A4D2B410F9E699100D0FDDE /* libjs.1.dylib */,
-			);
-			name = OpenVRML;
 			sourceTree = "<group>";
 		};
 		4A72D6880C62E7DB002D429E /* VideoQuickTime */ = {
@@ -3892,17 +3713,6 @@
 				4A77979C0CCEE7860021FAC9 /* multiWin-Info.plist */,
 			);
 			path = multiWin;
-			sourceTree = "<group>";
-		};
-		4A7F52F20A299E7A00F474E6 /* ARvrml */ = {
-			isa = PBXGroup;
-			children = (
-				4A7F52F30A299E7A00F474E6 /* arViewer.cpp */,
-				4A7F52F40A299E7A00F474E6 /* arViewer.h */,
-				4A7F52F50A299E7A00F474E6 /* arViewerCapi.cpp */,
-				4A7F52F70A299E7B00F474E6 /* Makefile.in */,
-			);
-			path = ARvrml;
 			sourceTree = "<group>";
 		};
 		4A7F76B50C616DC900E42DF5 /* 1394 */ = {
@@ -4919,7 +4729,6 @@
 				4AA533161CC828F200FF41C8 /* Data2 */,
 				4AA533171CC828F200FF41C8 /* DataNFT */,
 				4AA533181CC828F200FF41C8 /* OSG */,
-				4AA533191CC828F200FF41C8 /* Wrl */,
 			);
 			path = "artoolkit-examples";
 			sourceTree = "<group>";
@@ -5184,7 +4993,6 @@
 				4A3F7DD61AE0BCC500252BD1 /* AR2 */,
 				4A3F7DED1AE0BCC500252BD1 /* KPM */,
 				4A3F7DF31AE0BCC500252BD1 /* Util */,
-				4A7F52F20A299E7A00F474E6 /* ARvrml */,
 				78BB3E7108E482F400D7CA2D /* Video */,
 				4A1D2D3E12B8D4D600E363BE /* VideoQuickTime7 */,
 				4A72D6880C62E7DB002D429E /* VideoQuickTime */,
@@ -5409,7 +5217,6 @@
 				4A15ECD209E35C5800159C62 /* simpleLite */,
 				4AC3821B12A7C611002F3A44 /* simpleMovie */,
 				4A0A4FD20F70D16C0072EDF7 /* simpleOSG */,
-				4A5B13510B5C36AA008A315C /* simpleVRML */,
 				78BB3F0808E4837000D7CA2D /* stereo */,
 				4A26074F0C6FAF01002D599C /* multi */,
 				4AD22FFE0D42BB2700CFF64B /* multiCube */,
@@ -5483,7 +5290,6 @@
 				78BB3F1808E4837000D7CA2D /* sys */,
 				78BB3F2008E4837000D7CA2D /* video.h */,
 				78BB3F2108E4837000D7CA2D /* videoConfig.h */,
-				4A7F52FC0A299F5C00F474E6 /* arvrml.h */,
 				4A53DDB80F6DFA080062C983 /* arosg.h */,
 				4A37A46212E7417B006E4A0E /* arFilterTransMat.h */,
 				4AC7525410F772C8004D2AD2 /* arImageProc.h */,
@@ -5526,11 +5332,9 @@
 				7868FED008E88F0E0089F090 /* stereo.app */,
 				4A15ECED09E35CE300159C62 /* simpleLite.app */,
 				4AF79D840A26A39500E900EC /* libARMulti.a */,
-				4A7F534B0A29A24600F474E6 /* libARvrml.a */,
 				4AD5C3130A38FFDA003F13D4 /* mk_patt */,
 				4AD5C4230A390214003F13D4 /* calib_camera_old-v3 */,
 				4AD5C43D0A39024B003F13D4 /* calib_stereo_old-v3 */,
-				4A5B13790B5C36C2008A315C /* simpleVRML.app */,
 				4A1EABA30BD72BD600E40F56 /* calib_optical */,
 				4AFF1AEC0BE0091300CF3E69 /* optical.app */,
 				4A7F76E50C616E7700E42DF5 /* calib_camera */,
@@ -5575,7 +5379,6 @@
 				4A9BC5F415A3B67A00A2EC4F /* QuickTime.framework */,
 				4ACA14E90F71CB4900D9695E /* libc++.1.dylib */,
 				4A203A5C15ED9166001625A8 /* OpenSceneGraph */,
-				4A72A38411405467001679D8 /* OpenVRML */,
 			);
 			name = "System Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -5857,28 +5660,6 @@
 			productReference = 4A3F7DB91AE0BC1F00252BD1 /* libARUtil.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		4A5B13620B5C36C2008A315C /* simpleVRML */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4A5B13760B5C36C2008A315C /* Build configuration list for PBXNativeTarget "simpleVRML" */;
-			buildPhases = (
-				4A5B13690B5C36C2008A315C /* Resources */,
-				4A5B136B0B5C36C2008A315C /* Sources */,
-				4A5B136D0B5C36C2008A315C /* Frameworks */,
-				4A6B58220D4574CE00E2EDA4 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4A5B13630B5C36C2008A315C /* PBXTargetDependency */,
-				4A5B13650B5C36C2008A315C /* PBXTargetDependency */,
-				4A5B13670B5C36C2008A315C /* PBXTargetDependency */,
-				4A5B137F0B5C36D4008A315C /* PBXTargetDependency */,
-			);
-			name = simpleVRML;
-			productName = simpleVRML;
-			productReference = 4A5B13790B5C36C2008A315C /* simpleVRML.app */;
-			productType = "com.apple.product-type.application";
-		};
 		4A7797820CCEE7850021FAC9 /* multiWin */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4A7797970CCEE7850021FAC9 /* Build configuration list for PBXNativeTarget "multiWin" */;
@@ -5900,22 +5681,6 @@
 			productName = multiWin;
 			productReference = 4A77979A0CCEE7850021FAC9 /* multiWin.app */;
 			productType = "com.apple.product-type.application";
-		};
-		4A7F534A0A29A24600F474E6 /* ARvrml */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4A7F535F0A29A25E00F474E6 /* Build configuration list for PBXNativeTarget "ARvrml" */;
-			buildPhases = (
-				4A7F53480A29A24600F474E6 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4AE3D42E0A2E950C00B8391E /* PBXTargetDependency */,
-			);
-			name = ARvrml;
-			productName = libARvrml;
-			productReference = 4A7F534B0A29A24600F474E6 /* libARvrml.a */;
-			productType = "com.apple.product-type.library.static";
 		};
 		4A7F76D10C616E7700E42DF5 /* calib_camera */ = {
 			isa = PBXNativeTarget;
@@ -6486,9 +6251,6 @@
 				4A88F3D215D365AA002E595A /* ARToolKit5 NFT examples */,
 				4A203BEE15EE1E85001625A8 /* nftSimple */,
 				4A88F3A715D3657A002E595A /* nftBook */,
-				4A7F53410A29A1D100F474E6 /* ARToolKit5 extensions */,
-				4A7F534A0A29A24600F474E6 /* ARvrml */,
-				4A5B13620B5C36C2008A315C /* simpleVRML */,
 				4AD5C30C0A38FFBB003F13D4 /* ARToolKit5 utilities */,
 				4AD5C3120A38FFDA003F13D4 /* mk_patt */,
 				4A7F76D10C616E7700E42DF5 /* calib_camera */,
@@ -6540,15 +6302,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AA533241CC8298100FF41C8 /* Data in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4A5B13690B5C36C2008A315C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4AA5332E1CC8299E00FF41C8 /* Wrl in Resources */,
-				4AA533271CC8298800FF41C8 /* Data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6791,29 +6544,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4A5B136B0B5C36C2008A315C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A5B13A10B5C3A32008A315C /* object_vrml.c in Sources */,
-				4A5B13A20B5C3A32008A315C /* simpleVRML.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4A77978F0CCEE7850021FAC9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4A7797B70CCEE84A0021FAC9 /* multiWin.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4A7F53480A29A24600F474E6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A7F55F10A29A52600F474E6 /* arViewer.cpp in Sources */,
-				4A7F55F20A29A52800F474E6 /* arViewerCapi.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7591,31 +7326,6 @@
 			target = 4A0A7BB61953C6E4009F61F8 /* Eden */;
 			targetProxy = 4A3F7E571AE0BF1500252BD1 /* PBXContainerItemProxy */;
 		};
-		4A5B13630B5C36C2008A315C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 78BB3F8508E486DB00D7CA2D /* AR */;
-			targetProxy = 4A5B13640B5C36C2008A315C /* PBXContainerItemProxy */;
-		};
-		4A5B13650B5C36C2008A315C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4A15ED2209E35F0800159C62 /* ARgsub_lite */;
-			targetProxy = 4A5B13660B5C36C2008A315C /* PBXContainerItemProxy */;
-		};
-		4A5B13670B5C36C2008A315C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 78BBCE2208E4AC6600AEE575 /* ARvideo */;
-			targetProxy = 4A5B13680B5C36C2008A315C /* PBXContainerItemProxy */;
-		};
-		4A5B137F0B5C36D4008A315C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4A7F534A0A29A24600F474E6 /* ARvrml */;
-			targetProxy = 4A5B137E0B5C36D4008A315C /* PBXContainerItemProxy */;
-		};
-		4A5B13850B5C36E5008A315C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4A5B13620B5C36C2008A315C /* simpleVRML */;
-			targetProxy = 4A5B13840B5C36E5008A315C /* PBXContainerItemProxy */;
-		};
 		4A7797830CCEE7850021FAC9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 78BB3F8508E486DB00D7CA2D /* AR */;
@@ -7635,11 +7345,6 @@
 			isa = PBXTargetDependency;
 			target = 4AF79D750A26A39500E900EC /* ARMulti */;
 			targetProxy = 4A77978C0CCEE7850021FAC9 /* PBXContainerItemProxy */;
-		};
-		4A7F55D30A29A3A000F474E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4A7F534A0A29A24600F474E6 /* ARvrml */;
-			targetProxy = 4A7F55D20A29A3A000F474E6 /* PBXContainerItemProxy */;
 		};
 		4A7F76D20C616E7700E42DF5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7935,11 +7640,6 @@
 			isa = PBXTargetDependency;
 			target = 4AD5C4270A39024B003F13D4 /* calib_stereo_old-v3 */;
 			targetProxy = 4AD74B6F0C82830600487F72 /* PBXContainerItemProxy */;
-		};
-		4AE3D42E0A2E950C00B8391E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7866888508E48C3000DC7F78 /* Configure */;
-			targetProxy = 4AE3D42D0A2E950C00B8391E /* PBXContainerItemProxy */;
 		};
 		4AEB276B1804C44E002290C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8592,88 +8292,6 @@
 			};
 			name = Release;
 		};
-		4A5B13770B5C36C2008A315C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
-				INFOPLIST_FILE = "examples/simpleVRML/simpleVRML-Info.plist";
-				INSTALL_PATH = /bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-					/sw/lib,
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/lib\"";
-				"OTHER_LDFLAGS[arch=i386]" = (
-					"-framework",
-					QuickTime,
-					"-lopenvrml",
-					"-lopenvrml-gl",
-					"-lboost_thread-1_33_1",
-					"-ljpeg",
-					"-lpng12",
-					"-ljs",
-					"-lnspr4",
-					"-lplc4",
-					"-lplds4",
-					"-lstdc++.6",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
-				PRODUCT_NAME = simpleVRML;
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Debug;
-		};
-		4A5B13780B5C36C2008A315C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
-				INFOPLIST_FILE = "examples/simpleVRML/simpleVRML-Info.plist";
-				INSTALL_PATH = /bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-					/sw/lib,
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/lib\"";
-				"OTHER_LDFLAGS[arch=i386]" = (
-					"-framework",
-					QuickTime,
-					"-lopenvrml",
-					"-lopenvrml-gl",
-					"-lboost_thread-1_33_1",
-					"-ljpeg",
-					"-lpng12",
-					"-ljs",
-					"-lnspr4",
-					"-lplc4",
-					"-lplds4",
-					"-lstdc++.6",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
-				PRODUCT_NAME = simpleVRML;
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Release;
-		};
 		4A7797980CCEE7850021FAC9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -8719,84 +8337,6 @@
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
 				);
-			};
-			name = Release;
-		};
-		4A7F53450A29A1F000F474E6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				PRODUCT_NAME = "ARToolKit5 extensions";
-			};
-			name = Debug;
-		};
-		4A7F53460A29A1F000F474E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				PRODUCT_NAME = "ARToolKit5 extensions";
-			};
-			name = Release;
-		};
-		4A7F53600A29A25E00F474E6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(SRCROOT)";
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
-					/sw/include/openvrml,
-					/sw/include,
-					/usr/X11R6/include,
-				);
-				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
-				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/include\"";
-				INSTALL_PATH = /lib;
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-					/sw/lib,
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/lib\"";
-				PRODUCT_NAME = ARvrml;
-				WARNING_CFLAGS = "-Wmost";
-			};
-			name = Debug;
-		};
-		4A7F53610A29A25E00F474E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = "$(SRCROOT)";
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
-					/sw/include/openvrml,
-					/sw/include,
-					/usr/X11R6/include,
-				);
-				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
-				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/include\"";
-				INSTALL_PATH = /lib;
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
-					/sw/lib,
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/lib\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/openvrml/lib\"";
-				PRODUCT_NAME = ARvrml;
-				WARNING_CFLAGS = "-Wmost";
 			};
 			name = Release;
 		};
@@ -10286,38 +9826,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4A5B13760B5C36C2008A315C /* Build configuration list for PBXNativeTarget "simpleVRML" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4A5B13770B5C36C2008A315C /* Debug */,
-				4A5B13780B5C36C2008A315C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		4A7797970CCEE7850021FAC9 /* Build configuration list for PBXNativeTarget "multiWin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4A7797980CCEE7850021FAC9 /* Debug */,
 				4A7797990CCEE7850021FAC9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4A7F53440A29A1F000F474E6 /* Build configuration list for PBXAggregateTarget "ARToolKit5 extensions" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4A7F53450A29A1F000F474E6 /* Debug */,
-				4A7F53460A29A1F000F474E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4A7F535F0A29A25E00F474E6 /* Build configuration list for PBXNativeTarget "ARvrml" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4A7F53600A29A25E00F474E6 /* Debug */,
-				4A7F53610A29A25E00F474E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1839,7 +1839,6 @@
 		4A7D027815F9F8270078AE8D /* ShadowSettings */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ShadowSettings; sourceTree = "<group>"; };
 		4A7D027915F9F8270078AE8D /* ViewDependentShadowMap */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ViewDependentShadowMap; sourceTree = "<group>"; };
 		4A7D027A15F9F83E0078AE8D /* PerlinNoise */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = PerlinNoise; sourceTree = "<group>"; };
-		4A7F52FC0A299F5C00F474E6 /* arvrml.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arvrml.h; sourceTree = "<group>"; };
 		4A7FBEDD1794A60D00F7EBEE /* gsub_es2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gsub_es2.c; sourceTree = "<group>"; };
 		4A7FBEDE1794A67500F7EBEE /* gsub_es2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gsub_es2.h; sourceTree = "<group>"; };
 		4A82D66F1991D3EF00D7139E /* EdenError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EdenError.h; sourceTree = "<group>"; };
@@ -2008,7 +2007,6 @@
 		4AA5336B1CC82A8300FF41C8 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
 		4AA5336C1CC82A8300FF41C8 /* DataNFT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DataNFT; sourceTree = "<group>"; };
 		4AA5336D1CC82A8300FF41C8 /* OSG */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OSG; sourceTree = "<group>"; };
-		4AA5336E1CC82A8300FF41C8 /* Wrl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Wrl; sourceTree = "<group>"; };
 		4AA5336F1CC82A8D00FF41C8 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		4AA8B555161AD5A200B48D70 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4AA8B556161AD5A200B48D70 /* Default-LandscapeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-LandscapeLeft.png"; sourceTree = "<group>"; };
@@ -4383,7 +4381,6 @@
 				4AA5336B1CC82A8300FF41C8 /* Data2 */,
 				4AA5336C1CC82A8300FF41C8 /* DataNFT */,
 				4AA5336D1CC82A8300FF41C8 /* OSG */,
-				4AA5336E1CC82A8300FF41C8 /* Wrl */,
 			);
 			path = "artoolkit-examples";
 			sourceTree = "<group>";
@@ -6582,7 +6579,6 @@
 			isa = PBXGroup;
 			children = (
 				4ACE00A0130B3F00009D1DA0 /* arosg.h */,
-				4A7F52FC0A299F5C00F474E6 /* arvrml.h */,
 				78BB3F1108E4837000D7CA2D /* ar.h */,
 				78BB3F1208E4837000D7CA2D /* arConfig.h */,
 				4A6CA1D512F8212A006375F6 /* arFilterTransMat.h */,
