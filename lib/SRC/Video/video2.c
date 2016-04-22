@@ -1750,6 +1750,11 @@ int ar2VideoGetCParam(AR2VideoParamT *vid, ARParam *cparam)
 int ar2VideoGetCParamAsync(AR2VideoParamT *vid, void (*callback)(const ARParam *, void *), void *userdata)
 {
     if (!vid) return -1;
+#ifdef AR_INPUT_IPHONE
+    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
+        return ar2VideoGetCParamAsynciPhone( vid->device.iPhone, callback, userdata);
+    }
+#endif
 #ifdef AR_INPUT_ANDROID
     if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
         return ar2VideoGetCParamAsyncAndroid( vid->device.android, callback, userdata);

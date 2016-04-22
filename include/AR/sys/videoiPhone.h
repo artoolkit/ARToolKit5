@@ -134,6 +134,7 @@ void (*ar2VideoGetGotImageFunctioniPhone(AR2VideoParamiPhoneT *vid))(AR2VideoBuf
 
 int                    ar2VideoGetCParamiPhone      (AR2VideoParamiPhoneT *vid, ARParam *cparam);
 AR2VideoParamiPhoneT  *ar2VideoOpenAsynciPhone      (const char *config, void (*callback)(void *), void *userdata);
+int                    ar2VideoGetCParamAsynciPhone (AR2VideoParamiPhoneT *vid, void (*callback)(const ARParam *, void *), void *userdata);
 
 // videoiPhone uses underlying native classes (CameraVideo, MovieVideo).
 // This function retrieves a pointer, allowing direct access to the underlying native

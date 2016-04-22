@@ -533,6 +533,35 @@
 		4A875C9C1B608BE2002A00A1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A875C9B1B608BE2002A00A1 /* MobileCoreServices.framework */; };
 		4A875C9D1B608C18002A00A1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A875C9B1B608BE2002A00A1 /* MobileCoreServices.framework */; };
 		4A90B8FE13B9D61F0094D561 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A90B8FD13B9D61F0094D561 /* ImageIO.framework */; };
+		4A920D561CC87E3D0065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D571CC87E650065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D581CC87E660065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D591CC87E660065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D5A1CC87E670065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D5B1CC87E670065B301 /* libARUtil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A941BD91AE5D8DC000FA802 /* libARUtil.a */; };
+		4A920D5D1CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D5E1CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D5F1CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D601CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D611CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D621CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D631CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D641CC87EBE0065B301 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D5C1CC87EBE0065B301 /* libcurl.a */; };
+		4A920D651CC87EEB0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D661CC87EEB0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D671CC87EEC0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D681CC87EEC0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D691CC87EED0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D6A1CC87EED0065B301 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A13038C15BE0874003A441C /* libz.dylib */; };
+		4A920D6C1CC87F1D0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D6D1CC87F590065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D6E1CC87F5A0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D6F1CC87F5A0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D701CC87F5B0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D711CC87F5B0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D721CC87F5B0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D731CC87F5C0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
+		4A920D7E1CC8E4180065B301 /* cpuInfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A920D741CC88AED0065B301 /* cpuInfo.c */; };
 		4A941CF01AE5DC4F000FA802 /* icpCalibStereo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB31AE5DBEC000FA802 /* icpCalibStereo.c */; };
 		4A941CF11AE5DC4F000FA802 /* icpCore.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB41AE5DBEC000FA802 /* icpCore.c */; };
 		4A941CF21AE5DC4F000FA802 /* icpHandle.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB51AE5DBEC000FA802 /* icpHandle.c */; };
@@ -708,6 +737,8 @@
 		4AC36B9D113E66E400C86F19 /* readtex.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC36B61113E653700C86F19 /* readtex.c */; };
 		4AC3715F113EBF3800C86F19 /* EdenMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3715E113EBF3800C86F19 /* EdenMath.c */; };
 		4AC5D39B17D96074000944F7 /* gsub_mtx.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C5E541794F59F00061A08 /* gsub_mtx.c */; };
+		4AC6C0461BC624DB00403BA0 /* cparamSearch.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6C0441BC624DB00403BA0 /* cparamSearch.c */; };
+		4AC6C0491BC6252400403BA0 /* nxjson.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6C0471BC6252400403BA0 /* nxjson.c */; };
 		4ACE00B1130B3F54009D1DA0 /* arosg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4ACE00B0130B3F54009D1DA0 /* arosg.cpp */; };
 		4ACEFC47130AEC7E009D1DA0 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
 		4ACEFC48130AEC9A009D1DA0 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
@@ -1947,6 +1978,19 @@
 		4A89E2B20B07E5AE005A9E7F /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
 		4A8CB4391B8EFB5100EEB539 /* iOS device camera parameters (for use with utilities) */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "iOS device camera parameters (for use with utilities)"; sourceTree = "<group>"; };
 		4A90B8FD13B9D61F0094D561 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		4A920D4D1CC87B2F0065B301 /* curl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curl.h; sourceTree = "<group>"; };
+		4A920D4E1CC87B2F0065B301 /* curlbuild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curlbuild.h; sourceTree = "<group>"; };
+		4A920D4F1CC87B2F0065B301 /* curlrules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curlrules.h; sourceTree = "<group>"; };
+		4A920D501CC87B2F0065B301 /* curlver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curlver.h; sourceTree = "<group>"; };
+		4A920D511CC87B2F0065B301 /* easy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = easy.h; sourceTree = "<group>"; };
+		4A920D521CC87B2F0065B301 /* mprintf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mprintf.h; sourceTree = "<group>"; };
+		4A920D531CC87B2F0065B301 /* multi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = multi.h; sourceTree = "<group>"; };
+		4A920D541CC87B2F0065B301 /* stdcheaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stdcheaders.h; sourceTree = "<group>"; };
+		4A920D551CC87B2F0065B301 /* typecheck-gcc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "typecheck-gcc.h"; sourceTree = "<group>"; };
+		4A920D5C1CC87EBE0065B301 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
+		4A920D6B1CC87F1D0065B301 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4A920D741CC88AED0065B301 /* cpuInfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cpuInfo.c; sourceTree = "<group>"; };
+		4A920D751CC88AED0065B301 /* cpuInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpuInfo.h; sourceTree = "<group>"; };
 		4A941B541AE5D8D9000FA802 /* libKPM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKPM.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A941BD91AE5D8DC000FA802 /* libARUtil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARUtil.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A941C5E1AE5D923000FA802 /* libARvideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARvideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2057,6 +2101,10 @@
 		4AC36D2A113E968A00C86F19 /* glm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glm.h; sourceTree = "<group>"; };
 		4AC36D2B113E968A00C86F19 /* readtex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = readtex.h; sourceTree = "<group>"; };
 		4AC3715E113EBF3800C86F19 /* EdenMath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenMath.c; sourceTree = "<group>"; };
+		4AC6C0441BC624DB00403BA0 /* cparamSearch.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = cparamSearch.c; sourceTree = "<group>"; };
+		4AC6C0451BC624DB00403BA0 /* cparamSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cparamSearch.h; sourceTree = "<group>"; };
+		4AC6C0471BC6252400403BA0 /* nxjson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nxjson.c; sourceTree = "<group>"; };
+		4AC6C0481BC6252400403BA0 /* nxjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxjson.h; sourceTree = "<group>"; };
 		4AC6E42A13EB226C00291577 /* ftconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ftconfig.h; sourceTree = "<group>"; };
 		4AC6E42B13EB226C00291577 /* ftheader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ftheader.h; sourceTree = "<group>"; };
 		4AC6E42C13EB226C00291577 /* ftmodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ftmodule.h; sourceTree = "<group>"; };
@@ -3372,6 +3420,7 @@
 				4A875C911B6051A0002A00A1 /* libosgdb_tga.a in Frameworks */,
 				4A875C691B6051A0002A00A1 /* libosgdb_hdr.a in Frameworks */,
 				4A875C791B6051A0002A00A1 /* libosgdb_pic.a in Frameworks */,
+				4A920D631CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4A1302DA15BDFF14003A441C /* libosgdb_osg.a in Frameworks */,
 				4A875C941B6051A0002A00A1 /* libosgdb_trk.a in Frameworks */,
 				4A875C8C1B6051A0002A00A1 /* libosgdb_serializers_osgtext.a in Frameworks */,
@@ -3423,6 +3472,7 @@
 				4A875C611B6051A0002A00A1 /* libosgdb_deprecated_osgviewer.a in Frameworks */,
 				4A1302EC15BDFF14003A441C /* Foundation.framework in Frameworks */,
 				4A875C751B6051A0002A00A1 /* libosgdb_osgterrain.a in Frameworks */,
+				4A920D731CC87F5C0065B301 /* Security.framework in Frameworks */,
 				4A1302ED15BDFF14003A441C /* UIKit.framework in Frameworks */,
 				4A875C7A1B6051A0002A00A1 /* libosgdb_ply.a in Frameworks */,
 				4A875C701B6051A0002A00A1 /* libosgdb_normals.a in Frameworks */,
@@ -3453,6 +3503,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A920D691CC87EED0065B301 /* libz.dylib in Frameworks */,
 				4A13031E15BDFF17003A441C /* libARgsub_es.a in Frameworks */,
 				4A13031F15BDFF17003A441C /* libARMulti.a in Frameworks */,
 				4A13032015BDFF17003A441C /* libEden.a in Frameworks */,
@@ -3474,6 +3525,8 @@
 				4A941D2C1AE5DCE7000FA802 /* libARICP.a in Frameworks */,
 				4A941D251AE5DCE1000FA802 /* libAR.a in Frameworks */,
 				4AF96F3E1B5F5385001BFEB5 /* libc++.dylib in Frameworks */,
+				4A920D721CC87F5B0065B301 /* Security.framework in Frameworks */,
+				4A920D621CC87EBE0065B301 /* libcurl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3489,8 +3542,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AF6B87E13B380EA00F983E7 /* libARgsub_es.a in Frameworks */,
+				4A920D671CC87EEC0065B301 /* libz.dylib in Frameworks */,
 				4AF6B88013B380EA00F983E7 /* libARMulti.a in Frameworks */,
+				4A920D591CC87E660065B301 /* libARUtil.a in Frameworks */,
+				4A920D6F1CC87F5A0065B301 /* Security.framework in Frameworks */,
 				4AF6B88213B380EA00F983E7 /* libEden.a in Frameworks */,
+				4A920D5F1CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4ACEFC48130AEC9A009D1DA0 /* libjpeg.a in Frameworks */,
 				4A941D361AE5DCF6000FA802 /* libARvideo.a in Frameworks */,
 				4A2F72F1117840A600F35FA7 /* QuartzCore.framework in Frameworks */,
@@ -3533,6 +3590,7 @@
 				4A875C1D1B60519E002A00A1 /* libosgdb_gz.a in Frameworks */,
 				4A875C191B60519E002A00A1 /* libosgdb_dot.a in Frameworks */,
 				4A875C121B60519E002A00A1 /* libosgdb_deprecated_osgshadow.a in Frameworks */,
+				4A920D601CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4A875C431B60519E002A00A1 /* libosgdb_serializers_osgvolume.a in Frameworks */,
 				4A875C4B1B60519F002A00A1 /* libosgdb_txp.a in Frameworks */,
 				4A875C3C1B60519E002A00A1 /* libosgdb_serializers_osgmanipulator.a in Frameworks */,
@@ -3579,6 +3637,7 @@
 				4A875C301B60519E002A00A1 /* libosgdb_pnm.a in Frameworks */,
 				4A089BD8133C93DE00974D65 /* libosgSim.a in Frameworks */,
 				4A089BD9133C93DE00974D65 /* libosgTerrain.a in Frameworks */,
+				4A920D701CC87F5B0065B301 /* Security.framework in Frameworks */,
 				4A875C2F1B60519E002A00A1 /* libosgdb_ply.a in Frameworks */,
 				4A875C371B60519E002A00A1 /* libosgdb_sdl.a in Frameworks */,
 				4A875C381B60519E002A00A1 /* libosgdb_serializers_osg.a in Frameworks */,
@@ -3610,6 +3669,7 @@
 				4A3D42B6130D1F2500E64C33 /* UIKit.framework in Frameworks */,
 				4A875C311B60519E002A00A1 /* libosgdb_pov.a in Frameworks */,
 				4A875C421B60519E002A00A1 /* libosgdb_serializers_osgviewer.a in Frameworks */,
+				4A920D5A1CC87E670065B301 /* libARUtil.a in Frameworks */,
 				4A875C181B60519E002A00A1 /* libosgdb_deprecated_osgwidget.a in Frameworks */,
 				4A3D42B7130D1F2500E64C33 /* AVFoundation.framework in Frameworks */,
 				4A875C111B60519E002A00A1 /* libosgdb_deprecated_osgparticle.a in Frameworks */,
@@ -3638,14 +3698,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A920D6C1CC87F1D0065B301 /* Security.framework in Frameworks */,
 				4A4BAAD51B745E580012B77D /* libARgsub_es2.a in Frameworks */,
 				4A4BAAAD1B745B210012B77D /* libjpeg.a in Frameworks */,
 				4A4BAAAE1B745B210012B77D /* libARvideo.a in Frameworks */,
+				4A920D6A1CC87EED0065B301 /* libz.dylib in Frameworks */,
 				4A4BAAAF1B745B210012B77D /* QuartzCore.framework in Frameworks */,
 				4A4BAAB01B745B210012B77D /* CoreGraphics.framework in Frameworks */,
+				4A920D641CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4A4BAAB21B745B210012B77D /* OpenGLES.framework in Frameworks */,
 				4A4BAAB31B745B210012B77D /* Foundation.framework in Frameworks */,
 				4A4BAAB41B745B210012B77D /* UIKit.framework in Frameworks */,
+				4A920D561CC87E3D0065B301 /* libARUtil.a in Frameworks */,
 				4A4BAAB51B745B210012B77D /* AVFoundation.framework in Frameworks */,
 				4A4BAAB61B745B210012B77D /* CoreMedia.framework in Frameworks */,
 				4A4BAAB71B745B210012B77D /* CoreVideo.framework in Frameworks */,
@@ -3661,14 +3725,18 @@
 			files = (
 				4A941D211AE5DCDF000FA802 /* libAR.a in Frameworks */,
 				4A941D281AE5DCE5000FA802 /* libARICP.a in Frameworks */,
+				4A920D581CC87E660065B301 /* libARUtil.a in Frameworks */,
 				4AF7B0EF17A123440033FB21 /* libARgsub_es2.a in Frameworks */,
 				4A8393B6152163C000D8FE60 /* Accelerate.framework in Frameworks */,
+				4A920D661CC87EEB0065B301 /* libz.dylib in Frameworks */,
 				4A941D351AE5DCF6000FA802 /* libARvideo.a in Frameworks */,
 				4ACEFC47130AEC7E009D1DA0 /* libjpeg.a in Frameworks */,
 				4A47F9D3116E63FB00FC577E /* QuartzCore.framework in Frameworks */,
 				4A47F9DC116E641C00FC577E /* CoreGraphics.framework in Frameworks */,
 				4A47F828116E638B00FC577E /* OpenGLES.framework in Frameworks */,
+				4A920D5E1CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4A47F816116E638800FC577E /* Foundation.framework in Frameworks */,
+				4A920D6E1CC87F5A0065B301 /* Security.framework in Frameworks */,
 				4A47F817116E638800FC577E /* UIKit.framework in Frameworks */,
 				4AC2E637118ED63E00CC4F55 /* AVFoundation.framework in Frameworks */,
 				4AC2E639118ED63E00CC4F55 /* CoreMedia.framework in Frameworks */,
@@ -3682,8 +3750,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A5BAA9013D82DFD00C8D5E7 /* AudioToolbox.framework in Frameworks */,
+				4A920D681CC87EEC0065B301 /* libz.dylib in Frameworks */,
 				4A5BAA7913D82BC000C8D5E7 /* libARgsub_es.a in Frameworks */,
+				4A920D5B1CC87E670065B301 /* libARUtil.a in Frameworks */,
+				4A920D711CC87F5B0065B301 /* Security.framework in Frameworks */,
 				4A5BAA7A13D82BC000C8D5E7 /* libARMulti.a in Frameworks */,
+				4A920D611CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4A5BAA7B13D82BC000C8D5E7 /* libEden.a in Frameworks */,
 				4A941D381AE5DCF7000FA802 /* libARvideo.a in Frameworks */,
 				4A5BAA7C13D82BC000C8D5E7 /* libjpeg.a in Frameworks */,
@@ -3756,14 +3828,18 @@
 			files = (
 				4A941D201AE5DCDF000FA802 /* libAR.a in Frameworks */,
 				4A941D271AE5DCE5000FA802 /* libARICP.a in Frameworks */,
+				4A920D571CC87E650065B301 /* libARUtil.a in Frameworks */,
 				4AEAEBEA17A7453300F61E33 /* libARgsub_es.a in Frameworks */,
 				4AEAEBD317A744AA00F61E33 /* Accelerate.framework in Frameworks */,
+				4A920D651CC87EEB0065B301 /* libz.dylib in Frameworks */,
 				4A941D341AE5DCF5000FA802 /* libARvideo.a in Frameworks */,
 				4AEAEBD417A744AA00F61E33 /* libjpeg.a in Frameworks */,
 				4AEAEBD517A744AA00F61E33 /* QuartzCore.framework in Frameworks */,
 				4AEAEBD617A744AA00F61E33 /* CoreGraphics.framework in Frameworks */,
 				4AEAEBD717A744AA00F61E33 /* OpenGLES.framework in Frameworks */,
+				4A920D5D1CC87EBE0065B301 /* libcurl.a in Frameworks */,
 				4AEAEBD817A744AA00F61E33 /* Foundation.framework in Frameworks */,
+				4A920D6D1CC87F590065B301 /* Security.framework in Frameworks */,
 				4AEAEBD917A744AA00F61E33 /* UIKit.framework in Frameworks */,
 				4AEAEBDA17A744AA00F61E33 /* AVFoundation.framework in Frameworks */,
 				4AEAEBDB17A744AA00F61E33 /* CoreMedia.framework in Frameworks */,
@@ -4267,6 +4343,22 @@
 			path = Xcode;
 			sourceTree = "<group>";
 		};
+		4A920D4C1CC87B2F0065B301 /* curl */ = {
+			isa = PBXGroup;
+			children = (
+				4A920D4D1CC87B2F0065B301 /* curl.h */,
+				4A920D4E1CC87B2F0065B301 /* curlbuild.h */,
+				4A920D4F1CC87B2F0065B301 /* curlrules.h */,
+				4A920D501CC87B2F0065B301 /* curlver.h */,
+				4A920D511CC87B2F0065B301 /* easy.h */,
+				4A920D521CC87B2F0065B301 /* mprintf.h */,
+				4A920D531CC87B2F0065B301 /* multi.h */,
+				4A920D541CC87B2F0065B301 /* stdcheaders.h */,
+				4A920D551CC87B2F0065B301 /* typecheck-gcc.h */,
+			);
+			path = curl;
+			sourceTree = "<group>";
+		};
 		4A941CBC1AE5DBEC000FA802 /* ARICP */ = {
 			isa = PBXGroup;
 			children = (
@@ -4300,6 +4392,8 @@
 				4A941CC21AE5DC03000FA802 /* MovieVideo.m */,
 				4A941CC31AE5DC03000FA802 /* cparams.h */,
 				4A941CC41AE5DC03000FA802 /* cparams.c */,
+				4A920D751CC88AED0065B301 /* cpuInfo.h */,
+				4A920D741CC88AED0065B301 /* cpuInfo.c */,
 			);
 			path = VideoiPhone;
 			sourceTree = "<group>";
@@ -4455,6 +4549,7 @@
 		4AC6E42613EB226C00291577 /* ios7 */ = {
 			isa = PBXGroup;
 			children = (
+				4A920D4C1CC87B2F0065B301 /* curl */,
 				4AC6E42713EB226C00291577 /* freetype2 */,
 				4AC6E45813EB226C00291577 /* ft2build.h */,
 				4AC6E45913EB226C00291577 /* jconfig.h */,
@@ -5251,6 +5346,7 @@
 		4ACEFC2E130AEC6C009D1DA0 /* ios7 */ = {
 			isa = PBXGroup;
 			children = (
+				4A920D5C1CC87EBE0065B301 /* libcurl.a */,
 				4ACEFC2F130AEC6C009D1DA0 /* libfreetype.a */,
 				4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */,
 				4ACEFC31130AEC6C009D1DA0 /* libOpenThreads.a */,
@@ -6530,6 +6626,10 @@
 				78BB3E7608E482F400D7CA2D /* video2.c */,
 				4A3151AE1234FFBE006E2B82 /* videoSaveImage.c */,
 				4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */,
+				4AC6C0451BC624DB00403BA0 /* cparamSearch.h */,
+				4AC6C0441BC624DB00403BA0 /* cparamSearch.c */,
+				4AC6C0481BC6252400403BA0 /* nxjson.h */,
+				4AC6C0471BC6252400403BA0 /* nxjson.c */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -6661,6 +6761,7 @@
 				4A1822E10DC97C2700B73A53 /* Foundation.framework */,
 				4A1822D30DC96E3B00B73A53 /* OpenGLES.framework */,
 				4A875C9B1B608BE2002A00A1 /* MobileCoreServices.framework */,
+				4A920D6B1CC87F1D0065B301 /* Security.framework */,
 				4A1822E30DC97C2700B73A53 /* QuartzCore.framework */,
 				4A1822E50DC97C2700B73A53 /* UIKit.framework */,
 				4AF96F3C1B5F5374001BFEB5 /* libc++.dylib */,
@@ -7765,11 +7866,14 @@
 				4A941D001AE5DC79000FA802 /* CameraVideo.m in Sources */,
 				4A941D011AE5DC79000FA802 /* MovieVideo.m in Sources */,
 				4A941CFB1AE5DC79000FA802 /* videoSaveImage.c in Sources */,
+				4AC6C0461BC624DB00403BA0 /* cparamSearch.c in Sources */,
 				4A941D021AE5DC79000FA802 /* cparams.c in Sources */,
+				4A920D7E1CC8E4180065B301 /* cpuInfo.c in Sources */,
 				4A941CFE1AE5DC79000FA802 /* videoImage.c in Sources */,
 				4A941CFF1AE5DC79000FA802 /* videoiPhone.m in Sources */,
 				4A941CFC1AE5DC79000FA802 /* videoAspectRatio.c in Sources */,
 				4A941CFA1AE5DC79000FA802 /* video2.c in Sources */,
+				4AC6C0491BC6252400403BA0 /* nxjson.c in Sources */,
 				4A941CF91AE5DC79000FA802 /* video.c in Sources */,
 				4A941CFD1AE5DC79000FA802 /* videoDummy.c in Sources */,
 			);
@@ -8451,6 +8555,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppNFTOSG/ARAppNFTOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFTOSG;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8470,6 +8575,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppNFTOSG/ARAppNFTOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFTOSG;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8490,6 +8596,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppNFTOSG/ARAppNFTOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFTOSG;
 				PROVISIONING_PROFILE = "";
@@ -8509,11 +8616,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "examples/ARAppNFT/ARAppNFT-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios7\"",
-				);
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8531,11 +8634,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "examples/ARAppNFT/ARAppNFT-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios7\"",
-				);
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8554,11 +8653,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "examples/ARAppNFT/ARAppNFT-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/lib\"",
-					"\"$(SRCROOT)/lib/ios7\"",
-				);
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppNFT;
 				PROVISIONING_PROFILE = "";
@@ -8632,6 +8727,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp2;
 				PROVISIONING_PROFILE = "";
@@ -8646,6 +8742,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp2;
 				PROVISIONING_PROFILE = "";
@@ -8661,6 +8758,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp2;
 				PROVISIONING_PROFILE = "";
@@ -8678,6 +8776,7 @@
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppOSG/ARAppOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppOSG;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8693,6 +8792,7 @@
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppOSG/ARAppOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppOSG;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8709,6 +8809,7 @@
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "examples/ARAppOSG/ARAppOSG-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppOSG;
 				PROVISIONING_PROFILE = "";
@@ -8725,6 +8826,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppCameraTest;
 				PROVISIONING_PROFILE = "";
@@ -8740,6 +8842,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppCameraTest;
 				PROVISIONING_PROFILE = "";
@@ -8756,6 +8859,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppCameraTest;
 				PROVISIONING_PROFILE = "";
@@ -8771,6 +8875,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8784,6 +8889,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8798,6 +8904,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARApp;
 				PROVISIONING_PROFILE = "";
@@ -8813,6 +8920,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppMovie;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8826,6 +8934,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppMovie;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8840,6 +8949,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppMovie;
 				PROVISIONING_PROFILE = "";
@@ -9359,6 +9469,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9372,6 +9483,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9386,6 +9498,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
 				PROVISIONING_PROFILE = "";
