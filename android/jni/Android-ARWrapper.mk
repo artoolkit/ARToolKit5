@@ -38,15 +38,10 @@
 
 MY_LOCAL_PATH := $(call my-dir)
 
-$(info Android-ARWrapper.mk Start $(TARGET_ARCH_ABI) build script in $$MY_LOCAL_PATH: "$(MY_LOCAL_PATH)")
-
 NDK11_CHK2:=$(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh r11)
-$(info Android-ARWrapper.mk Immediately after call of assert_ndk_version.sh for r11: "$(NDK11_CHK2)")
 ifeq ($(NDK11_CHK2),false)
     $(error NDK version r11 or greater required)
 endif
-
-$(info Android-ARWrapper.mk Continuing after assert_ndk_version.sh for r11 result check: $$NDK11_CHK2: "$(NDK11_CHK2)")
 
 #
 # Local variables: MY_CFLAGS, MY_FILES

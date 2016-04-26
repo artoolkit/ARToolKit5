@@ -40,10 +40,10 @@ MY_LOCAL_PATH := $(call my-dir)
 
 # Enforce minimum NDK version.
 NDK11_CHK:=$(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh r11)
-$(info Android.mk called assert_ndk_version.sh r11: "$(NDK11_CHK)")
 ifeq ($(NDK11_CHK),false)
     $(error NDK version r11 or greater required)
 endif
+
 #
 # Local variables: MY_CFLAGS, MY_FILES
 #
@@ -252,7 +252,7 @@ include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 CURL_DIR := $(MY_LOCAL_PATH)/curl
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Video/*.c)
-MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/cparamSearch.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/nxjson.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/sqlite3.c
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/sqlite3.c
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoDummy/*.c)
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoImage/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
