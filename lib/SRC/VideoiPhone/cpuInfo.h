@@ -1,5 +1,5 @@
 /*
- *  arvrml.h
+ *  cpuInfo.h
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -28,41 +28,16 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2002-2015 ARToolworks, Inc.
+ *  Copyright 2015-216 Daqri, LLC.
  *
- *  Author(s): Hirokazu Kato, Philip Lamb
+ *  Author(s): Philip Lamb
  *
  */
-#ifndef AR_VRML_H
-#define AR_VRML_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef __cpuInfo_h__
+#define __cpuInfo_h__
 
-#ifdef _WIN32
-#  ifdef LIBARVRML_EXPORTS
-#    define AR_DLL_API __declspec(dllexport)
-#  else
-#    ifdef _DLL
-#      define AR_DLL_API __declspec(dllimport)
-#    else
-#      define AR_DLL_API extern
-#    endif
-#  endif
-#else
-#  define AR_DLL_API
-#endif
+const char *cpuTypeName(void);
 
-AR_DLL_API int arVrmlLoadFile(const char *file);
-AR_DLL_API int arVrmlFree( int id );
-AR_DLL_API int arVrmlDraw( int id );
-AR_DLL_API int arVrmlTimerUpdate( void );
-AR_DLL_API int arVrmlSetInternalLight( int flag );
+#endif // !__cpuInfo_h__
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif

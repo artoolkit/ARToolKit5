@@ -131,7 +131,6 @@ Required external software
 	* GLUT: Package 'freeglut3'. Alternatively, GLUT can be built from source and is also included in the MESA 3D libraries:
 	* Video4Linux, lib1394dc, or GStreamer. Packages: 'libv4l2-0', 'libdc1394-22' (for lib1394 version 2.x) or 'libdc1394-13' (for lib1394 version 1.x), and 'libgstreamer0.10'.
 	* OpenSceneGraph (optional; The ARToolKit OSG renderer requires OpenSceneGraph). Package 'openscenegraph'.
-	* OpenVRML (optional; the ARToolKit VRML renderer requires OpenVRML): Binary deb packages are available from http://www.openvrml.org/.
 	
 Opening the project files
 

@@ -17,13 +17,18 @@
  * License along with NXJSON. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "nxjson.h"
+
+#if USE_CPARAM_SEARCH
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#ifndef __APPLE__
+#  include <malloc.h>
+#endif
 #include <assert.h>
 
-#include "nxjson.h"
 
 // redefine NX_JSON_CALLOC & NX_JSON_FREE to use custom allocator
 #ifndef NX_JSON_CALLOC
@@ -375,3 +380,6 @@ const nx_json* nx_json_item(const nx_json* json, int idx) {
     }
     return &dummy; // never return null
 }
+
+#endif // USE_CPARAM_SEARCH
+

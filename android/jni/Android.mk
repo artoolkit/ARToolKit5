@@ -39,7 +39,8 @@
 MY_LOCAL_PATH := $(call my-dir)
 
 # Enforce minimum NDK version.
-ifneq ($(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh "r11"),true)
+NDK11_CHK:=$(shell $(MY_LOCAL_PATH)/assert_ndk_version.sh r11)
+ifeq ($(NDK11_CHK),false)
     $(error NDK version r11 or greater required)
 endif
 
@@ -76,7 +77,6 @@ LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_STATIC_LIBRARIES := aricp
 LOCAL_MODULE := ar
 include $(BUILD_STATIC_LIBRARY)
-
 
 #--------------------------------------------------------------------------
 # libARICP
@@ -247,7 +247,7 @@ include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 CURL_DIR := $(MY_LOCAL_PATH)/curl
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Video/*.c)
-MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/cparamSearch.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/nxjson.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/sqlite3.c
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/sqlite3.c
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoDummy/*.c)
 MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoImage/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)

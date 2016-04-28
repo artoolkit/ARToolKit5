@@ -60,12 +60,17 @@ public:
 	virtual const char* getName();
 
 	virtual bool open();
-    
-    bool open2();
 
 	virtual bool captureFrame();
 
 	virtual bool close();
+
+private:
+
+    static void openCallback(void *userData);
+    bool open2();
+    static void open2CparamCallback(const ARParam *cparam_p, void *userdata);
+    bool open3(const ARParam *cparam_p);
 
 };
 

@@ -47,8 +47,13 @@
 #import <AR/sys/MovieVideo.h>
 #import "videoiPhoneCameraVideoTookPictureDelegate.h"
 #import "cparams.h"
+#include "../Video/cparamSearch.h"
+
+CPARAM_SEARCH_STATE bob;
 
 #include <string.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
 struct _AR2VideoParamiPhoneT  {
     CameraVideo       *cameraVideo;
@@ -63,6 +68,8 @@ struct _AR2VideoParamiPhoneT  {
     BOOL               itsAMovie;
     UInt64             currentFrameTimestamp;
     UInt64             hostClockFrequency;
+    void             (*cparamSearchCallback)(const ARParam *, void *);
+    void              *cparamSearchUserdata;
 };
 
 int getFrameParameters(AR2VideoParamiPhoneT *vid);
@@ -105,7 +112,8 @@ AR2VideoParamiPhoneT *ar2VideoOpeniPhone( const char *config )
 
 AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callback)(void *), void *userdata)
 {
-	int					err_i = 0;
+	int                 err_i = 0;
+    char               *cacheDir = NULL;
     AR2VideoParamiPhoneT *vid;
     const char         *a;
     char                b[1024];
@@ -253,6 +261,30 @@ AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callbac
                     mt = 0;
                 } else if (strcmp(b, "-bufferpow2") == 0) {
                     bufferpow2 = 1;
+                } else if (strncmp(a, "-cachedir=", 10) == 0) {
+                    // Attempt to read in pathname, allowing for quoting of whitespace.
+                    a += 10; // Skip "-cachedir=" characters.
+                    if (*a == '"') {
+                        a++;
+                        // Read all characters up to next '"'.
+                        i = 0;
+                        while (i < (sizeof(b) - 1) && *a != '\0') {
+                            b[i] = *a;
+                            a++;
+                            if (b[i] == '"') break;
+                            i++;
+                        }
+                        b[i] = '\0';
+                    } else {
+                        sscanf(a, "%s", b);
+                    }
+                    if (!strlen(b)) {
+                        ARLOGe("Error: Configuration option '-cachedir=' must be followed by path (optionally in double quotes).\n");
+                        err_i = 1;
+                    } else {
+                        free(cacheDir);
+                        cacheDir = strdup(b);
+                    }
                 } else if (strcmp(b, "-device=iPhone") == 0) { // Ignored.
                 } else {
                     err_i = 1;
@@ -269,6 +301,17 @@ AR2VideoParamiPhoneT *ar2VideoOpenAsynciPhone(const char *config, void (*callbac
         }
     }
 
+    // Initialisation required before cparamSearch can be used.
+    if (!cacheDir) {
+        cacheDir = arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR);
+    }
+    if (cparamSearchInit(cacheDir, false) < 0) {
+        ARLOGe("Unable to initialise cparamSearch.\n");
+        return (NULL);
+    };
+    free(cacheDir);
+    cacheDir = NULL;
+    
     arMallocClear(vid, AR2VideoParamiPhoneT, 1);
     vid->focusPointOfInterestX = vid->focusPointOfInterestY = -1.0f;
      
@@ -359,6 +402,10 @@ int getFrameParameters(AR2VideoParamiPhoneT *vid)
 
 int ar2VideoCloseiPhone( AR2VideoParamiPhoneT *vid )
 {
+    if (cparamSearchFinal() < 0) {
+        ARLOGe("Unable to finalise cparamSearch.\n");
+    }
+
     if (vid) {
         if (vid->buffer.bufPlanes) free(vid->buffer.bufPlanes);
         if (vid->itsAMovie && vid->movieVideo) {
@@ -1268,5 +1315,82 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
         return (-1);
     }
 }
+
+
+ 
+static void cparamSeachCallback(CPARAM_SEARCH_STATE state, float progress, const ARParam *cparam, void *userdata)
+{
+    int final = false;
+    AR2VideoParamiPhoneT *vid = (AR2VideoParamiPhoneT *)userdata;
+    if (!vid) return;
+    
+    switch (state) {
+        case CPARAM_SEARCH_STATE_INITIAL:
+        case CPARAM_SEARCH_STATE_IN_PROGRESS:
+            break;
+        case CPARAM_SEARCH_STATE_RESULT_NULL:
+            if (vid->cparamSearchCallback) (*vid->cparamSearchCallback)(NULL, vid->cparamSearchUserdata);
+            final = true;
+            break;
+        case CPARAM_SEARCH_STATE_OK:
+            if (vid->cparamSearchCallback) (*vid->cparamSearchCallback)(cparam, vid->cparamSearchUserdata);
+            final = true;
+            break;
+        case CPARAM_SEARCH_STATE_FAILED_NO_NETWORK:
+            ARLOGe("Error during cparamSearch. Internet connection unavailable.\n");
+            if (vid->cparamSearchCallback) (*vid->cparamSearchCallback)(NULL, vid->cparamSearchUserdata);
+            final = true;
+            break;
+        default: // Errors.
+            ARLOGe("Error %d returned from cparamSearch.\n", (int)state);
+            if (vid->cparamSearchCallback) (*vid->cparamSearchCallback)(NULL, vid->cparamSearchUserdata);
+            final = true;
+            break;
+    }
+    if (final) vid->cparamSearchCallback = vid->cparamSearchUserdata = NULL;
+}
+
+int ar2VideoGetCParamAsynciPhone(AR2VideoParamiPhoneT *vid, void (*callback)(const ARParam *, void *), void *userdata)
+{
+    if (!vid) return (-1);
+    if (!callback) {
+        ARLOGw("Warning: cparamSearch requested without callback.\n");
+    }
+
+    int camera_index = (vid->cameraVideo.captureDevicePosition == AVCaptureDevicePositionFront ? 1 : 0);
+    float focal_length = 0.0f;
+    switch (vid->focus) {
+        case AR_VIDEO_IOS_FOCUS_0_3M: focal_length = 0.3f; break;
+        case AR_VIDEO_IOS_FOCUS_1_0M: focal_length = 1.0f; break;
+        case AR_VIDEO_IOS_FOCUS_INF: focal_length = FLT_MAX; break;
+        case AR_VIDEO_IOS_FOCUS_MACRO: focal_length = 0.02f; break;
+        default: break;
+    }
+    int width = 0, height = 0;
+    if (ar2VideoGetSizeiPhone(vid, &width, &height) < 0) {
+        ARLOGe("Error: request for camera parameters, but video size is unknown.\n");
+        return (-1);
+    };
+    
+    char *device_id = NULL;
+    NSString *deviceType = [UIDevice currentDevice].model;
+    char *machine = arUtilGetMachineType();
+    asprintf(&device_id, "apple/%s/%s", [deviceType UTF8String], machine);
+    free(machine);
+    
+    vid->cparamSearchCallback = callback;
+    vid->cparamSearchUserdata = userdata;
+    
+    CPARAM_SEARCH_STATE initialState = cparamSearch(device_id, camera_index, width, height, focal_length, &cparamSeachCallback, (void *)vid);
+    free(device_id);
+    if (initialState != CPARAM_SEARCH_STATE_INITIAL) {
+        ARLOGe("Error %d returned from cparamSearch.\n", initialState);
+        vid->cparamSearchCallback = vid->cparamSearchUserdata = NULL;
+        return (-1);
+    }
+    
+    return (0);
+}
+
 
 #endif //  AR_INPUT_IPHONE

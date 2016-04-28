@@ -22,7 +22,6 @@ lib/libARMulti.a
 lib/libARosg.a
 lib/libARUtil.a
 lib/libARvideo.a
-lib/libARvrml.a
 lib/libKPM.a
 bin/ARWrapper.bundle/
 lib/libEden.a
@@ -71,7 +70,6 @@ lib/SRC/ARICP/
 lib/SRC/ARMulti/
 lib/SRC/ARWrapper/
 lib/SRC/ARosg/
-lib/SRC/ARvrml/
 lib/SRC/Gl/argBase.c
 lib/SRC/Gl/argDraw.c
 lib/SRC/Gl/argDrawImage.c
@@ -119,7 +117,6 @@ bin/opticalStereo.app/
 bin/simpleMovie.app/
 bin/simpleOSG.app/
 bin/simpleTest.app/
-bin/simpleVRML.app/
 bin/stereo.app/
 bin/nftSimple.app/
 bin/nftBook.app/
@@ -131,7 +128,6 @@ share/artoolkit-examples/Data/multi-barcode-4x3.dat
 share/artoolkit-examples/Data/multi-barcode-8x6.dat
 share/artoolkit-examples/Data/objects.dat
 share/artoolkit-examples/Data/markers.dat
-share/artoolkit-examples/Data/object_data_vrml
 share/artoolkit-examples/Data/sample1.patt
 share/artoolkit-examples/Data/sample2.patt
 share/artoolkit-examples/Data/sample.mov
@@ -148,7 +144,6 @@ examples/optical
 examples/opticalStereo
 examples/simpleMovie
 examples/simpleOSG
-examples/simpleVRML
 examples/stereo
 examples/nftSimple
 examples/nftBook
@@ -160,5 +155,4 @@ share/packaging/ARToolKit5-bin.sh
 share/packaging/ARToolKit5-bin-bom-OSX
 share/packaging/headerDoc2HTML.config
 share/artoolkit-examples/OSG/
-share/artoolkit-examples/Wrl/
 

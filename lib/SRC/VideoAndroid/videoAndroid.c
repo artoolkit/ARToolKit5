@@ -42,7 +42,7 @@
 #endif
 
 #include "android_os_build_codes.h"
-#include "cparamSearch.h"
+#include "../Video/cparamSearch.h"
 #if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
 #  include "videoAndroidNativeCapture.h"
 #  include "color_convert_common.h"
@@ -57,7 +57,6 @@ struct _AR2VideoParamAndroidT {
     int                camera_index; // 0 = first camera, 1 = second etc.
     int                camera_face; // 0 = camera is rear facing, 1 = camera is front facing.
     float              focal_length; // metres.
-    int                cparamSearchInited;
     void             (*cparamSearchCallback)(const ARParam *, void *);
     void              *cparamSearchUserdata;
 #if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA

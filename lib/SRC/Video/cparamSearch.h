@@ -40,6 +40,7 @@
 
 #include <AR/video.h>
 
+#if USE_CPARAM_SEARCH
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,7 +55,7 @@ int cparamSearchFinal();
     
 // >= 0 is normal state.
 // < 0 is error state.
-typedef enum  {
+typedef enum {
     CPARAM_SEARCH_STATE_INITIAL = 0,                          // The request has been received, but no action has been taken yet.
     CPARAM_SEARCH_STATE_IN_PROGRESS = 1,                      // The request has been received, and is being processed.
     CPARAM_SEARCH_STATE_RESULT_NULL = 2,                      // Request completed, but no cparam was available.
@@ -66,7 +67,7 @@ typedef enum  {
     CPARAM_SEARCH_STATE_FAILED_SERVICE_UNAVAILABLE = -5,      // The server reported itself temporarily unavailable. The search may be retried at a later time. Searches may be throttled.
     CPARAM_SEARCH_STATE_FAILED_SERVICE_FAILED = -6,           // The search failed due to an internal error in the server. The search may be retried at a later time. Searches may be throttled.
     CPARAM_SEARCH_STATE_FAILED_SERVICE_NOT_PERMITTED = -7,    // The search failed because access from this client is not permitted.
-    CPARAM_SEARCH_STATE_FAILED_SERVICE_INVALID_REQUEST = -8,  // The search failed because the server did not understand it. This should be considered a permanent failure.
+    CPARAM_SEARCH_STATE_FAILED_SERVICE_INVALID_REQUEST = -8   // The search failed because the server did not understand it. This should be considered a permanent failure.
 } CPARAM_SEARCH_STATE;
 
 // Type signature for a function which will be called while the fetch operation is progressing.
@@ -90,4 +91,7 @@ CPARAM_SEARCH_STATE cparamSearch(const char *device_id, int camera_index, int wi
 #ifdef __cplusplus
 }
 #endif
+
+#endif // USE_CPARAM_SEARCH
+
 #endif // !CPARAMSEARCH_H

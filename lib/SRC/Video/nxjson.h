@@ -20,6 +20,10 @@
 #ifndef NXJSON_H
 #define NXJSON_H
 
+#include <AR/video.h>
+
+#if USE_CPARAM_SEARCH
+
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -59,4 +63,7 @@ const nx_json* nx_json_item(const nx_json* json, int idx); // get array element 
 #ifdef  __cplusplus
 }
 #endif
+
+#endif // USE_CPARAM_SEARCH
+
 #endif  /* NXJSON_H */

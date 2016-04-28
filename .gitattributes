@@ -1,0 +1,2 @@
+# InnoSetup on Windows requires CRLF line endings.
+*.iss text eol=crlf

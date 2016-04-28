@@ -95,7 +95,6 @@ bin/optical
 bin/opticalStereo
 bin/simpleOSG
 bin/simpleTest
-bin/simpleVRML
 bin/stereo
 bin/nftSimple
 bin/nftBook
@@ -110,7 +109,6 @@ bin/opticalStereo.app/
 bin/simpleMovie.app/
 bin/simpleOSG.app/
 bin/simpleTest.app/
-bin/simpleVRML.app/
 bin/stereo.app/
 bin/nftSimple.app/
 bin/nftBook.app/
@@ -124,7 +122,6 @@ bin/opticalStereo.exe
 bin/simpleMovie.exe
 bin/simpleOSG.exe
 bin/simple.exe
-bin/simpleVRML.exe
 bin/stereo.exe
 bin/nftSimple.exe
 bin/nftBook.exe

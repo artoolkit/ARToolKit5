@@ -33,6 +33,14 @@ Name: docs; Description: "Documentation for ARToolKit"; Types: full custom
 
 [InstallDelete]
 ; Here we remove obsolete files from earlier versions.
+; Removed from 5.3.3
+Type: files; Name: "{app}\VisualStudio\vs120\ARvrml.vcxproj"
+Type: files; Name: "{app}\VisualStudio\vs120\simpleVRML.vcxproj"
+Type: filesandordirs; Name: "{app}\examples\simpleVRML\"
+Type: files; Name: "{app}\include\AR\arvrml.h"
+Type: filesandordirs; Name: "{app}\lib\SRC\ARvrml\"
+Type: files; Name: "{app}\share\artoolkit-examples\Data\object_data_vrml"
+Type: filesandordirs; Name: "{app}\share\artoolkit-examples\Wrl\"
 ; Removed from 5.3.2
 Type: files; Name: "{app}\bin\Data\patt.hiro"
 Type: files; Name: "{app}\bin\Data\patt.kanji"
@@ -129,8 +137,6 @@ Source: "bin\glut32.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreve
 Source: "bin64\glut64.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
 Source: "bin\ARosg*.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin64\ARosg*.dll"; Components: dev; DestDir: "{app}\bin64"; Flags: ignoreversion
-;Source: "bin\ARvrml.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
-;Source: "bin\openvrml*.dll"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
 
 ; dev, runtimes
 Source: "bin\vcredist_x86.exe"; Components: dev; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -173,7 +179,6 @@ Source: "lib\SRC\KPM\*"; Excludes: "Makefile.in"; Components: dev and src; DestD
 Source: "lib\SRC\Util\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Util"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\ARosg\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARosg"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\ARWrapper\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARWrapper"; Flags: recursesubdirs ignoreversion
-Source: "lib\SRC\ARvrml\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARvrml"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Eden\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Eden"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Gl\argBase.c"; Components: dev and src; DestDir: "{app}\lib\SRC\Gl"; Flags: ignoreversion
 Source: "lib\SRC\Gl\argDraw.c"; Components: dev and src; DestDir: "{app}\lib\SRC\Gl"; Flags: ignoreversion
@@ -263,12 +268,6 @@ Source: "lib\win32-i386\OpenThreads.lib"; Components: dev and src; DestDir: "{ap
 Source: "lib\win64-x64\OpenThreads.lib"; Components: dev and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
 Source: "lib\win32-i386\osg*.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 Source: "lib\win64-x64\osg*.lib"; Components: dev and src; DestDir: "{app}\lib\win64-x64"; Flags: ignoreversion
-; OpenVRML
-;Source: "include\win32-i386\openvrml*"; Components: dev and src; DestDir: "{app}\include\win32-i386"; Flags: ignoreversion
-;Source: "include\win32-i386\openvrml\*"; Components: dev and src; DestDir: "{app}\include\win32-i386\openvrml"; Flags: recursesubdirs ignoreversion
-;Source: "include\win32-i386\boost\*"; Components: dev and src; DestDir: "{app}\include\win32-i386\boost"; Flags: recursesubdirs ignoreversion
-;Source: "lib\win32-i386\openvrml*.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
-;Source: "lib\win32-i386\libboost_thread-vc80-mt-1_34_1.lib"; Components: dev and src; DestDir: "{app}\lib\win32-i386"; Flags: ignoreversion
 
 ; Utilities
 Source: "bin\calib_*.exe"; Components: utils; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -333,7 +332,6 @@ Source: "bin\opticalStereo.exe"; Components: examples; DestDir: "{app}\bin"; Fla
 Source: "bin\simpleMovie.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\simpleOSG.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\simple.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
-;Source: "bin\simpleVRML.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\stereo.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\nftSimple.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "bin\nftBook.exe"; Components: examples; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -351,8 +349,6 @@ Source: "share\artoolkit-examples\Data\markers.dat"; Components: examples; DestD
 Source: "share\artoolkit-examples\OSG\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\OSG"; Flags: recursesubdirs ignoreversion
 Source: "share\artoolkit-examples\Data2\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data2"; Flags: recursesubdirs ignoreversion
 Source: "share\artoolkit-examples\DataNFT\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\DataNFT"; Flags: recursesubdirs ignoreversion
-Source: "share\artoolkit-examples\Data\object_data_vrml"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
-Source: "share\artoolkit-examples\Wrl\*"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Wrl"; Flags: recursesubdirs ignoreversion
 Source: "share\artoolkit-examples\Data\sample.mov"; Components: examples; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
 Source: "share\artoolkit-examples\Data\hiro.patt"; Components: utils; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
 Source: "share\artoolkit-examples\Data\kanji.patt"; Components: utils; DestDir: "{app}\share\artoolkit-examples\Data"; Flags: ignoreversion
@@ -367,7 +363,6 @@ Source: "examples\optical\*"; Excludes: "Makefile.in,*-Info.plist"; Components: 
 Source: "examples\opticalStereo\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\opticalStereo"; Flags: recursesubdirs ignoreversion
 Source: "examples\simpleMovie\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\simpleMovie"; Flags: recursesubdirs ignoreversion
 Source: "examples\simpleOSG\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\simpleOSG"; Flags: recursesubdirs ignoreversion
-Source: "examples\simpleVRML\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\simpleVRML"; Flags: recursesubdirs ignoreversion
 Source: "examples\stereo\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\stereo"; Flags: recursesubdirs ignoreversion
 Source: "examples\nftSimple\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\nftSimple"; Flags: recursesubdirs ignoreversion
 Source: "examples\nftBook\*"; Excludes: "Makefile.in,*-Info.plist"; Components: examples and src; DestDir: "{app}\examples\nftBook"; Flags: recursesubdirs ignoreversion

@@ -37,6 +37,8 @@
 
 #include "cparamSearch.h"
 
+#if USE_CPARAM_SEARCH
+
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -48,13 +50,17 @@
 #include <math.h> // log2f(), fabsf()
 #include <unistd.h> // unlink()
 
+#ifdef __OBJC__
+#  import <UIKit/UIDevice.h>
+#endif
+
 #ifdef ANDROID
-#  include "android_os_build_codes.h"
+#  include "../VideoAndroid/android_os_build_codes.h"
 #  define LOG2F(x) (logf(x)/0.6931472f) // 0.6931472f = logf(2.0f)
 #  include "sqlite3.h"
 #  include <curl.h>
 #else
-#  defome LOG2F(x) log2f(x)
+#  define LOG2F(x) log2f(x)
 #  include <sqlite3.h>
 #  include <curl/curl.h>
 #endif
@@ -63,6 +69,9 @@
 #ifdef __APPLE__
 #  include <sys/types.h>
 #  include <sys/sysctl.h>
+#  if TARGET_OS_IPHONE
+#    include "../VideoiPhone/cpuInfo.h"
+#  endif
 #endif
 
 #include "nxjson.h"
@@ -123,6 +132,14 @@ static int internetState = -1;
 
 static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle);
 
+// Test for existence of regular file like 'test -f [dir/]file'.
+// Returns 1 if file exists, 0 if not, or -1 in case of error and the error code in 'errno'.
+static int test_f(const char *file, const char *dir);
+
+// Copy a single file (with overwriting in case of target file already existing) like 'cp -f source_file target_file'.
+// Returns 0 for success, >0 if an error occurs.
+static int cp_f(const char *source_file, const char *target_file);
+
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
@@ -179,8 +196,8 @@ static int test_f(const char *file, const char *dir)
     
     if (!stat(path, &statResult)) {
     	// Something exists at path. Check that it's a file.
-    	if (!statResult.st_mode & S_IFREG) {
-    		errno = EEXIST;
+    	if (!(statResult.st_mode & S_IFREG)) {
+    		errno = EEXIST; // Something other than a file exists.
     		ret = -1;
     	} else {
             ret = 1;
@@ -358,6 +375,7 @@ int cparamSearchInit(const char *cacheDir, int resetCache)
 #  if TARGET_OS_IPHONE
     os_name = strdup("ios");
     os_version = strdup([[[UIDevice currentDevice] systemVersion] UTF8String]);
+    os_arch = strdup(cpuTypeName());
 #  else
     os_name = strdup("osx");
     SInt32 versMaj, versMin, versBugFix;
@@ -365,8 +383,8 @@ int cparamSearchInit(const char *cacheDir, int resetCache)
     Gestalt(gestaltSystemVersionMinor, &versMin);
     Gestalt(gestaltSystemVersionBugFix, &versBugFix);
     asprintf(os_version, "%d.%d.%d", versMaj, versMin, versBugFix);
-#  endif
     os_arch = arUtilGetMachineType();
+#  endif
 #elif defined(ANDROID) // Android
     os_name = strdup("android");
     char os[PROP_VALUE_MAX];
@@ -507,10 +525,10 @@ static unsigned char *base64_decode(const char *data, size_t input_length, size_
     
     for (i = 0, j = 0; i < input_length;) {
         
-        uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
         
         uint32_t triple = (sextet_a << 3 * 6)
         + (sextet_b << 2 * 6)
@@ -540,7 +558,6 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
     
 	long http_response;
     CPARAM_SEARCH_STATE result;
-    size_t len;
     int i;
     
     ARLOGd("cparamSearch worker entered.\n");
@@ -565,7 +582,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                 ARLOGe("Out of memory!\n");
                 result = CPARAM_SEARCH_STATE_FAILED_ERROR;
             } else {
-                sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, strlen(SQL), &stmt, NULL);
+                sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, (int)strlen(SQL), &stmt, NULL);
                 free(SQL);
                 if (sqliteErr != SQLITE_OK) {
                     reportSQLite3Err(cacheDB);
@@ -805,7 +822,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                     
                                                     // Put into cache.
                                                     if (asprintf(&SQL, "INSERT OR REPLACE INTO cache (device_id,camera_index,focal_length,camera_width,camera_height,aspect_ratio,camera_para_base64,expires) VALUES (?1, %d, %f, %d, %d, ?2, ?3, %ld);", camera_index, focal_length, camera_width, camera_height, nowTime + (fallback ? CACHE_TIME_FALLBACK : CACHE_TIME)) >= 0) { // ?n will be bound to string values.
-                                                        sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, strlen(SQL), &stmt, NULL);
+                                                        sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, (int)strlen(SQL), &stmt, NULL);
                                                         free(SQL);
                                                         if (sqliteErr != SQLITE_OK) {
                                                             reportSQLite3Err(cacheDB);
@@ -919,3 +936,5 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
     
     return (NULL);
 }
+
+#endif // USE_CPARAM_SEARCH

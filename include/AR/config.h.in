@@ -439,6 +439,7 @@ enum {
 #undef  AR_DEFAULT_INPUT_IMAGE
 #define HAVE_LIBJPEG 1
 #define USE_OPENGL_ES 1
+#define USE_CPARAM_SEARCH 1
 #endif // _ANDROID
 
 // Default pixel formats.
@@ -491,6 +492,7 @@ enum {
 #else
 #  define HAVE_ARM_NEON 1
 #endif
+#define USE_CPARAM_SEARCH 1
 
 #elif TARGET_OS_MAC
 

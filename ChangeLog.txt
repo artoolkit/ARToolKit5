@@ -2,8 +2,19 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.3.2 (this release) (2016-03-23).
+Changes in version 5.3.3 (this release) (2016-xx-xx).
 -----------------------------------------------------
+Enhancements:
+- Data files which were previously stored in subdirectories of the "bin" directory are now stored in share/artoolkit-utils (for data relevant to the utilities) and share/artoolkit-examples (for data relevant to the examples).
+
+Bug fixes:
+- Fixes to build.sh and related Android MK files to work on git bash on Windows.
+
+Other changes:
+- As OpenVRML has been unmaintained for some time, support for VRML has been removed from ARToolKit.
+
+Changes in version 5.3.2 (2016-03-23).
+--------------------------------------
 New features:
 - Android: Android Studio is fully supported. Projects are in AndroidStudioProjects, and a comprehensive migration guide is included. This will be the last release supporting Eclipse.
 - Linux: Video4Linux v2 devices are now supported directly (previous support was via GStreamer) with new module VideoLinuxV4L2. Thanks to Andy Tai.
