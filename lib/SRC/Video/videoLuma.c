@@ -41,7 +41,7 @@
 #  define valloc(s) memalign(4096,s)
 #endif
 
-#ifdef HAVE_ARM_NEON
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
 #  include <arm_neon.h>
 #  ifdef ANDROID
 #    include "cpu-features.h"
@@ -58,17 +58,17 @@ struct _ARVideoLumaInfo {
     int ysize;
     int buffSize;
     AR_PIXEL_FORMAT pixFormat;
-#ifdef HAVE_ARM_NEON
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     int fastPath;
 #endif
     ARUint8 *__restrict buff;
 };
 
-#ifdef HAVE_ARM_NEON
-static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
-static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
-static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
-static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels);
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 #endif
 
 
@@ -91,7 +91,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
         return (NULL);
     }
     vli->pixFormat = pixFormat;
-#ifdef HAVE_ARM_NEON
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     vli->fastPath = (xsize * ysize % 8 == 0
                      && (pixFormat == AR_PIXEL_FORMAT_RGBA
                          || pixFormat == AR_PIXEL_FORMAT_BGRA
@@ -99,7 +99,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
                          ||pixFormat == AR_PIXEL_FORMAT_ARGB
                          )
                      );
-#  ifdef ANDROID
+#  if defined(ANDROID) && !defined(HAVE_ARM64_NEON)
     // Not all Android devices with ARMv7 are guaranteed to have NEON, so check.
     uint64_t features = android_getCpuFeatures();
     vli->fastPath = vli->fastPath && (features & ANDROID_CPU_ARM_FEATURE_ARMv7) && (features & ANDROID_CPU_ARM_FEATURE_NEON);
@@ -127,7 +127,7 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
     unsigned int p, q;
     
     AR_PIXEL_FORMAT pixFormat = vli->pixFormat;
-#ifdef HAVE_ARM_NEON
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     if (vli->fastPath) {
         if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
             arVideoLumaBGRAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
@@ -138,7 +138,7 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
         } else /*(pixFormat == AR_PIXEL_FORMAT_ARGB)*/ {
             arVideoLumaARGBtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         }
-        return (0);
+        return (vli->buff);
     }
 #endif
     if (pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_NV21) {
@@ -240,7 +240,7 @@ static void arVideoLumaBGRAtoL_ARM_neon(uint8_t * __restrict dest, uint8_t * __r
 #endif
 
 
-static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels)
+static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
     __asm__ volatile("lsr          %2, %2, #3      \n" // Divide arg 2 (numPixels) by 8.
                      "# build the three constants: \n"
@@ -268,7 +268,7 @@ static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels)
+static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
     __asm__ volatile("lsr          %2, %2, #3      \n" // Divide arg 2 (numPixels) by 8.
                      "# build the three constants: \n"
@@ -296,7 +296,7 @@ static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels)
+static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
     __asm__ volatile("lsr          %2, %2, #3      \n" // Divide arg 2 (numPixels) by 8.
                      "# build the three constants: \n"
@@ -324,7 +324,7 @@ static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels)
+static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
     __asm__ volatile("lsr          %2, %2, #3      \n" // Divide arg 2 (numPixels) by 8.
                      "# build the three constants: \n"
@@ -349,6 +349,108 @@ static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      :
                      : "r"(dest), "r"(src), "r"(numPixels)
                      : "cc", "r4", "r5", "r6"
+                     );
+}
+
+#elif defined(HAVE_ARM64_NEON)
+
+static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __asm__ volatile(// Setup factors etc.
+                     "    lsr         w4,     %w2,    #3     \n" // Save arg 2 (numPixels) divided by 8 in w4 for later use in loop count.
+                     "    movi        v0.8b,  #29            \n" // Load v0 with 8 copies of the 8 LSBs of L B factor =  0.114. 29/256 =  0.113 (29 = 0x001d).
+                     "    movi        v1.8b,  #150           \n" // Load v1 with 8 copies of the 8 LSBs of L G factor =  0.587. 150/256 =  0.586 (150 = 0x0096).
+                     "    movi        v2.8b,  #77            \n" // Load v2 with 8 copies of the 8 LSBs of L R factor =  0.299. 77/256 =  0.301 (77 = 0x004d).
+                     "0:						             \n"
+                     // Read 8 BGRA pixels.
+                     "    ld4         {v3.8b - v6.8b}, [%1],#32 \n" // Load 8 BGRA pixels, de-interleaving B into lower half of v3, G into lower half of v4, R into lower half of v5, A into lower half of v6.
+                     // Do the weight average.
+                     "    umull       v7.8h,  v0.8b,  v3.8b  \n"
+                     "    umlal       v7.8h,  v1.8b,  v4.8b  \n"
+                     "    umlal       v7.8h,  v2.8b,  v5.8b  \n"
+                     // Shift and store.
+                     "    shrn        v7.8b,  v7.8h,  #8     \n" // Divide by 256, and clamp to range [0, 255].
+                     "    st1         {v7.8b}, [%0],#8       \n"
+                     "    subs        w4,     w4,     #1     \n" // Decrement iteration count.
+                     "    b.ne        0b                     \n" // Repeat until iteration count is not zero.
+                     :
+                     : "r"(dest), "r"(src), "r"(numPixels)
+                     : "cc", "w4"
+                     );
+}
+
+static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __asm__ volatile(// Setup factors etc.
+                     "    lsr         w4,     %w2,    #3     \n" // Save arg 2 (numPixels) divided by 8 in w4 for later use in loop count.
+                     "    movi        v0.8b,  #29            \n" // Load v0 with 8 copies of the 8 LSBs of L B factor =  0.114. 29/256 =  0.113 (29 = 0x001d).
+                     "    movi        v1.8b,  #150           \n" // Load v1 with 8 copies of the 8 LSBs of L G factor =  0.587. 150/256 =  0.586 (150 = 0x0096).
+                     "    movi        v2.8b,  #77            \n" // Load v2 with 8 copies of the 8 LSBs of L R factor =  0.299. 77/256 =  0.301 (77 = 0x004d).
+                     "0:						             \n"
+                     // Read 8 BGRA pixels.
+                     "    ld4         {v3.8b - v6.8b}, [%1],#32 \n" // Load 8 RGBA pixels, de-interleaving R into lower half of v3, G into lower half of v4, B into lower half of v5, A into lower half of v6.
+                     // Do the weight average.
+                     "    umull       v7.8h,  v2.8b,  v3.8b  \n"
+                     "    umlal       v7.8h,  v1.8b,  v4.8b  \n"
+                     "    umlal       v7.8h,  v0.8b,  v5.8b  \n"
+                     // Shift and store.
+                     "    shrn        v7.8b,  v7.8h,  #8     \n" // Divide by 256, and clamp to range [0, 255].
+                     "    st1         {v7.8b}, [%0],#8       \n"
+                     "    subs        w4,     w4,     #1     \n" // Decrement iteration count.
+                     "    b.ne        0b                     \n" // Repeat until iteration count is not zero.
+                     :
+                     : "r"(dest), "r"(src), "r"(numPixels)
+                     : "cc", "w4"
+                     );
+}
+
+static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __asm__ volatile(// Setup factors etc.
+                     "    lsr         w4,     %w2,    #3     \n" // Save arg 2 (numPixels) divided by 8 in w4 for later use in loop count.
+                     "    movi        v0.8b,  #29            \n" // Load v0 with 8 copies of the 8 LSBs of L B factor =  0.114. 29/256 =  0.113 (29 = 0x001d).
+                     "    movi        v1.8b,  #150           \n" // Load v1 with 8 copies of the 8 LSBs of L G factor =  0.587. 150/256 =  0.586 (150 = 0x0096).
+                     "    movi        v2.8b,  #77            \n" // Load v2 with 8 copies of the 8 LSBs of L R factor =  0.299. 77/256 =  0.301 (77 = 0x004d).
+                     "0:						             \n"
+                     // Read 8 BGRA pixels.
+                     "    ld4         {v3.8b - v6.8b}, [%1],#32 \n" // Load 8 ABGR pixels, de-interleaving A into lower half of v3, B into lower half of v4, G into lower half of v5, R into lower half of v6.
+                     // Do the weight average.
+                     "    umull       v7.8h,  v0.8b,  v4.8b  \n"
+                     "    umlal       v7.8h,  v1.8b,  v5.8b  \n"
+                     "    umlal       v7.8h,  v2.8b,  v6.8b  \n"
+                     // Shift and store.
+                     "    shrn        v7.8b,  v7.8h,  #8     \n" // Divide by 256, and clamp to range [0, 255].
+                     "    st1         {v7.8b}, [%0],#8       \n"
+                     "    subs        w4,     w4,     #1     \n" // Decrement iteration count.
+                     "    b.ne        0b                     \n" // Repeat until iteration count is not zero.
+                     :
+                     : "r"(dest), "r"(src), "r"(numPixels)
+                     : "cc", "w4"
+                     );
+}
+
+static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __asm__ volatile(// Setup factors etc.
+                     "    lsr         w4,     %w2,    #3     \n" // Save arg 2 (numPixels) divided by 8 in w4 for later use in loop count.
+                     "    movi        v0.8b,  #29            \n" // Load v0 with 8 copies of the 8 LSBs of L B factor =  0.114. 29/256 =  0.113 (29 = 0x001d).
+                     "    movi        v1.8b,  #150           \n" // Load v1 with 8 copies of the 8 LSBs of L G factor =  0.587. 150/256 =  0.586 (150 = 0x0096).
+                     "    movi        v2.8b,  #77            \n" // Load v2 with 8 copies of the 8 LSBs of L R factor =  0.299. 77/256 =  0.301 (77 = 0x004d).
+                     "0:						             \n"
+                     // Read 8 BGRA pixels.
+                     "    ld4         {v3.8b - v6.8b}, [%1],#32 \n" // Load 8 ARGB pixels, de-interleaving A into lower half of v3, R into lower half of v4, G into lower half of v5, B into lower half of v6.
+                     // Do the weight average.
+                     "    umull       v7.8h,  v2.8b,  v4.8b  \n"
+                     "    umlal       v7.8h,  v1.8b,  v5.8b  \n"
+                     "    umlal       v7.8h,  v0.8b,  v6.8b  \n"
+                     // Shift and store.
+                     "    shrn        v7.8b,  v7.8h,  #8     \n" // Divide by 256, and clamp to range [0, 255].
+                     "    st1         {v7.8b}, [%0],#8       \n"
+                     "    subs        w4,     w4,     #1     \n" // Decrement iteration count.
+                     "    b.ne        0b                     \n" // Repeat until iteration count is not zero.
+                     :
+                     : "r"(dest), "r"(src), "r"(numPixels)
+                     : "cc", "w4"
                      );
 }
 

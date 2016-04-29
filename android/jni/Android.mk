@@ -29,7 +29,7 @@
 #  are not obligated to do so. If you do not wish to do so, delete this exception
 #  statement from your version.
 #
-#  Copyright 2015 Daqri, LLC.
+#  Copyright 2015-2016 Daqri, LLC.
 #  Copyright 2011-2015 ARToolworks, Inc.
 #
 #  Authors: Julian Looser, Philip Lamb
@@ -253,10 +253,14 @@ MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoImage/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
+# Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-  # Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
   MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
+endif
+ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
+  MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
+  LOCAL_CFLAGS += -DHAVE_ARM64_NEON=1
 endif
 LOCAL_SRC_FILES := $(MY_FILES)
 LOCAL_CFLAGS += $(MY_CFLAGS)

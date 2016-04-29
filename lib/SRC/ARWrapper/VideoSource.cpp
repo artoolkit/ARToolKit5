@@ -327,19 +327,19 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
                      "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
                      // Add luma and chroma values. First 8 pixels.
-                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqadd.s16    q7,  q5,  q8    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqadd.s16    q7,  q5,  q10   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqadd.s16    q7,  q5,  q12   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // Add luma and chroma values. Second 8 pixels.
-                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqadd.s16    q7,  q6,  q9    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqadd.s16    q7,  q6,  q11   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqadd.s16    q7,  q6,  q13   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // 16 pixels of first row done.
@@ -351,19 +351,19 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
                      "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
                      // Add luma and chroma values. First 8 pixels.
-                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqadd.s16    q7,  q5,  q8    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqadd.s16    q7,  q5,  q10   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqadd.s16    q7,  q5,  q12   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // Add luma and chroma values. Second 8 pixels.
-                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqadd.s16    q7,  q6,  q9    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqadd.s16    q7,  q6,  q11   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqadd.s16    q7,  q6,  q13   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // 16 pixels of second row done.
@@ -428,19 +428,19 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
                      "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
                      // Add luma and chroma values. First 8 pixels.
-                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqadd.s16    q7,  q5,  q8    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqadd.s16    q7,  q5,  q10   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqadd.s16    q7,  q5,  q12   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // Add luma and chroma values. Second 8 pixels.
-                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqadd.s16    q7,  q6,  q9    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqadd.s16    q7,  q6,  q11   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqadd.s16    q7,  q6,  q13   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // 16 pixels of first row done.
@@ -452,19 +452,19 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    vshll.u8    q6,  d11, #7     \n" // Multiply second 8 pixels by 128, store in q6 (d12-d13).
                      "    vshll.u8    q5,  d10, #7     \n" // Multiply first 8 pixels by 128, store in q5 (d10-d11) (overwriting).
                      // Add luma and chroma values. First 8 pixels.
-                     "    vqadd.s16    q7,  q5,  q8     \n" // Y+R
+                     "    vqadd.s16    q7,  q5,  q8    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q10    \n" // Y+G
+                     "    vqadd.s16    q7,  q5,  q10   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q5,  q12    \n" // Y+B
+                     "    vqadd.s16    q7,  q5,  q12   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // Add luma and chroma values. Second 8 pixels.
-                     "    vqadd.s16    q7,  q6,  q9     \n" // Y+R
+                     "    vqadd.s16    q7,  q6,  q9    \n" // Y+R
                      "    vqshrun.s16 d28, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q11    \n" // Y+G
+                     "    vqadd.s16    q7,  q6,  q11   \n" // Y+G
                      "    vqshrun.s16 d29, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
-                     "    vqadd.s16    q7,  q6,  q13    \n" // Y+B
+                     "    vqadd.s16    q7,  q6,  q13   \n" // Y+B
                      "    vqshrun.s16 d30, q7,  #7     \n" // Divide by 128, and clamp to range [0, 255].
                      "    vst4.8      {d28-d31}, [%0]! \n" // Interleave.
                      // 16 pixels of second row done.
@@ -476,7 +476,7 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    add         %1,  %1,  r4     \n" // Advance srcY by rowBytes to skip row we've already done.
                      "    add         %0,  %0,  r4, LSL #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
                      "    subs        r6,  r6,  #1     \n" // Decrement iteration count.
-                     "    bne         0b               \n" // Repeat unil iteration count is not zero.
+                     "    bne         0b               \n" // Repeat until iteration count is not zero.
                      "    vldmia      sp!, {d8-d15}    \n" // Restore any VFP or NEON registers that were saved.
                      :
                      : "r"(dest), "r"(srcY), "r"(srcCrCb), "r"(rowBytes), "r"(rows)
@@ -488,7 +488,7 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
 static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCbCr, int32_t rowBytes, int32_t rows)
 {
     __asm__ volatile(// Push SIMD registers that should be preserved (d8-d15).
-                     "    sub         sp,     sp,     #64     \n"
+                     "    sub         sp,     sp,     #64    \n"
                      "    stp         d8,     d9,     [sp,#0] \n"
                      "    stp         d10,    d11,    [sp,#16] \n"
                      "    stp         d12,    d13,    [sp,#32] \n"
@@ -578,7 +578,7 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      "    add         %1,     %1,     w4, UXTW   \n" // Advance srcY by rowBytes to skip row we've already done.
                      "    add         %0,     %0,     w4, UXTW #2 \n" // Advance dest by 4xrowBytes to skip row we've already done.
                      "    subs        w6,     w6,     #1     \n" // Decrement iteration count.
-                     "    b.ne        0b                     \n" // Repeat unil iteration count is not zero.
+                     "    b.ne        0b                     \n" // Repeat until iteration count is not zero.
                      // Pop saved SIMD registers.
                      "    ldp         d8,     d9,     [sp,#0]  \n"
                      "    ldp         d10,    d11,    [sp,#16] \n"
@@ -594,7 +594,7 @@ static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
 static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCrCb, int32_t rowBytes, int32_t rows)
 {
     __asm__ volatile(// Push SIMD registers that should be preserved (d8-d15).
-                     "    sub         sp,     sp,     #64     \n"
+                     "    sub         sp,     sp,     #64    \n"
                      "    stp         d8,     d9,     [sp,#0] \n"
                      "    stp         d10,    d11,    [sp,#16] \n"
                      "    stp         d12,    d13,    [sp,#32] \n"
