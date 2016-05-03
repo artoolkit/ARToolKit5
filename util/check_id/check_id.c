@@ -243,6 +243,12 @@ int main(int argc, char** argv)
             } else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "-v") == 0) {
                 ARLOG("%s version %s\n", argv[0], AR_HEADER_VERSION_STRING);
                 exit(0);
+            } else if( strncmp(argv[i], "-loglevel=", 10) == 0 ) {
+                if (strcmp(&(argv[i][10]), "DEBUG") == 0) arLogLevel = AR_LOG_LEVEL_DEBUG;
+                else if (strcmp(&(argv[i][10]), "INFO") == 0) arLogLevel = AR_LOG_LEVEL_INFO;
+                else if (strcmp(&(argv[i][10]), "WARN") == 0) arLogLevel = AR_LOG_LEVEL_WARN;
+                else if (strcmp(&(argv[i][10]), "ERROR") == 0) arLogLevel = AR_LOG_LEVEL_ERROR;
+                else usage(argv[0]);
             } else if (strncmp(argv[i], "-border=", 8) == 0) {
                 if (sscanf(&(argv[i][8]), "%f", &tempF) == 1 && tempF > 0.0f && tempF < 0.5f) pattRatio = (ARdouble)(1.0f - 2.0f*tempF);
                 else ARLOGe("Error: argument '%s' to -border= invalid.\n", argv[i]);

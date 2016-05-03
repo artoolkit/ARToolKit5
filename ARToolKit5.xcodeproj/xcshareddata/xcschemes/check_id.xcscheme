@@ -61,6 +61,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-loglevel=DEBUG"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--patternDetectionMode AR_MATRIX_CODE_DETECTION"
             isEnabled = "YES">
          </CommandLineArgument>
