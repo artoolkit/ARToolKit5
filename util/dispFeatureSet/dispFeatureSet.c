@@ -106,6 +106,12 @@ static int init( int argc, char *argv[] )
         } else if( strcmp(argv[i], "-fset3") == 0 ) {
             display_defaults = 0;
             display_fset3 = 1;
+        } else if( strncmp(argv[i], "-loglevel=", 10) == 0 ) {
+            if (strcmp(&(argv[i][10]), "DEBUG") == 0) arLogLevel = AR_LOG_LEVEL_DEBUG;
+            else if (strcmp(&(argv[i][10]), "INFO") == 0) arLogLevel = AR_LOG_LEVEL_INFO;
+            else if (strcmp(&(argv[i][10]), "WARN") == 0) arLogLevel = AR_LOG_LEVEL_WARN;
+            else if (strcmp(&(argv[i][10]), "ERROR") == 0) arLogLevel = AR_LOG_LEVEL_ERROR;
+            else usage(argv[0]);
         } else if( filename == NULL ) filename = argv[i];
         else usage(argv[0] );
     }
