@@ -269,6 +269,7 @@ enum {
 
 // Other Linux-only configuration.
 #define HAVE_LIBJPEG 1
+#define HAVE_INTEL_SIMD 1
 
 #endif // __linux
 
@@ -309,23 +310,6 @@ enum {
 #endif
 
 
-
-/*------------------------------------------------------------*/
-/*  For SGI                                                   */
-/*------------------------------------------------------------*/
-#ifdef __sgi
-#define AR_CALLBACK
-#define  AR_BIG_ENDIAN
-#undef   AR_LITTLE_ENDIAN
-#define  AR_INPUT_SGI
-#define AR_INPUT_DUMMY
-#define  AR_DEFAULT_INPUT_SGI */
-#undef  AR_DEFAULT_INPUT_DUMMY
-#endif // __sgi
-
-#ifdef AR_INPUT_SGI
-#define  AR_INPUT_SGI_PIXEL_FORMAT   AR_PIXEL_FORMAT_ABGR
-#endif
 
 /*------------------------------------------------------------*/
 /*  For Windows                                               */
@@ -398,6 +382,7 @@ enum {
 
 // Other Windows-only configuration.
 #define HAVE_LIBJPEG 1
+#define HAVE_INTEL_SIMD 1
 
 #endif // _WIN32
 
@@ -510,6 +495,7 @@ enum {
 #undef  AR_DEFAULT_INPUT_DUMMY
 #undef  AR_DEFAULT_INPUT_IMAGE
 #define HAVE_LIBJPEG 1
+#define HAVE_INTEL_SIMD 1
 
 #endif
 

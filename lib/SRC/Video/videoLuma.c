@@ -43,9 +43,14 @@
 
 #if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
 #  include <arm_neon.h>
-#  ifdef ANDROID
-#    include "cpu-features.h"
-#  endif
+#endif
+#if defined(HAVE_INTEL_SIMD)
+#  include <emmintrin.h> // SSE2.
+#  include <pmmintrin.h> // SSE3.
+#  include <tmmintrin.h> // SSSE3.
+#endif
+#if defined(ANDROID) && (defined(HAVE_ARM_NEON) || defined(HAVE_INTEL_SIMD))
+#  include "cpu-features.h"
 #endif
 
 // CCIR 601 recommended values. See http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC11 .
@@ -58,7 +63,7 @@ struct _ARVideoLumaInfo {
     int ysize;
     int buffSize;
     AR_PIXEL_FORMAT pixFormat;
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON) || defined(HAVE_INTEL_SIMD)
     int fastPath;
 #endif
     ARUint8 *__restrict buff;
@@ -69,6 +74,11 @@ static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
 static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+#elif defined(HAVE_INTEL_SIMD)
+static void arVideoLumaBGRAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaRGBAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaABGRtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
+static void arVideoLumaARGBtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 #endif
 
 
@@ -91,7 +101,9 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
         return (NULL);
     }
     vli->pixFormat = pixFormat;
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+    
+    // Accelerated RGB to luma conversion.
+#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON) || defined(HAVE_INTEL_SIMD)
     vli->fastPath = (xsize * ysize % 8 == 0
                      && (pixFormat == AR_PIXEL_FORMAT_RGBA
                          || pixFormat == AR_PIXEL_FORMAT_BGRA
@@ -99,12 +111,22 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
                          ||pixFormat == AR_PIXEL_FORMAT_ARGB
                          )
                      );
-#  if defined(ANDROID) && !defined(HAVE_ARM64_NEON)
-    // Not all Android devices with ARMv7 are guaranteed to have NEON, so check.
+    // Under Windows, Linux and OS X, we assume a minimum of Intel Core2, which satifisfies the requirement for SSE2, SSE3 and SSSE3 support.
+    // Under iOS, we assume a minimum of ARMv7a with NEON.
+#  if defined(ANDROID) && (defined(HAVE_ARM_NEON) || defined(HAVE_INTEL_SIMD))
+    // Not all Android devices with ARMv7 CPUs are guaranteed to have NEON, so check.
+    // Also, need to check Android devices with x86 and x86_64 CPUs for appropriate level of SIMD support.
     uint64_t features = android_getCpuFeatures();
-    vli->fastPath = vli->fastPath && (features & ANDROID_CPU_ARM_FEATURE_ARMv7) && (features & ANDROID_CPU_ARM_FEATURE_NEON);
+    vli->fastPath = vli->fastPath &&
+                                    (((features & ANDROID_CPU_ARM_FEATURE_ARMv7) && (features & ANDROID_CPU_ARM_FEATURE_NEON)) ||
+                                     ((features & ANDROID_CPU_FAMILY_X86 || features & ANDROID_CPU_FAMILY_X86_64) && (features & ANDROID_CPU_X86_FEATURE_SSSE3))); // Can also test for: ANDROID_CPU_X86_FEATURE_POPCNT, ANDROID_CPU_X86_FEATURE_SSE4_1, ANDROID_CPU_X86_FEATURE_SSE4_2, ANDROID_CPU_X86_FEATURE_MOVBE.
 #  endif
+    // Debug output.
+#  if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     if (vli->fastPath) ARLOGd("arVideoLuma will use ARM NEON acceleration.\n");
+#  elif defined(HAVE_INTEL_SIMD)
+    if (vli->fastPath) ARLOGd("arVideoLuma will use Intel SIMD acceleration.\n");
+#  endif
 #endif
 
     return (vli);
@@ -137,6 +159,19 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
             arVideoLumaABGRtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         } else /*(pixFormat == AR_PIXEL_FORMAT_ARGB)*/ {
             arVideoLumaARGBtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+        }
+        return (vli->buff);
+    }
+#  elif defined(HAVE_INTEL_SIMD)
+    if (vli->fastPath) {
+        if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
+            arVideoLumaBGRAtoL_Intel_simd_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+        } else if (pixFormat == AR_PIXEL_FORMAT_RGBA) {
+            arVideoLumaRGBAtoL_Intel_simd_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+        } else if (pixFormat == AR_PIXEL_FORMAT_ABGR) {
+            arVideoLumaABGRtoL_Intel_simd_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
+        } else /*(pixFormat == AR_PIXEL_FORMAT_ARGB)*/ {
+            arVideoLumaARGBtoL_Intel_simd_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
         }
         return (vli->buff);
     }
@@ -211,7 +246,6 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
 //
 // Methods from http://computer-vision-talks.com/2011/02/a-very-fast-bgra-to-grayscale-conversion-on-iphone/
 //
-#ifdef HAVE_ARM_NEON
 #if 0
 static void arVideoLumaBGRAtoL_ARM_neon(uint8_t * __restrict dest, uint8_t * __restrict src, int numPixels)
 {
@@ -239,6 +273,7 @@ static void arVideoLumaBGRAtoL_ARM_neon(uint8_t * __restrict dest, uint8_t * __r
 }
 #endif
 
+#ifdef HAVE_ARM_NEON
 
 static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
@@ -454,5 +489,155 @@ static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-#endif // HAVE_ARM_NEON
+#elif defined(HAVE_INTEL_SIMD)
+
+static void arVideoLumaBGRAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __m128i *pin = (__m128i *)src;
+    uint32_t *pout = (uint32_t *)dest;
+    int numPixelsDiv8 = numPixels >> 3;
+    __m128i RGBScale = _mm_set_epi16(0, R8_CCIR601, G8_CCIR601, B8_CCIR601, 0, R8_CCIR601, G8_CCIR601, B8_CCIR601); // RGBScale = 000000[R8_CCIR601]00[G8_CCIR601]00[B8_CCIR601]000000[R8_CCIR601]00[G8_CCIR601]00[B8_CCIR601].
+
+    do {
+        __m128i pixels0_3 = _mm_load_si128(pin++); // pixels0_3 = [A3][R3][G3][B3][A2][R2][G2][B2][A1][R1][G1][B1][A0][R0][G0][B0].
+        __m128i pixels4_7 = _mm_load_si128(pin++); // pixels4_7 = [A7][R7][G7][B7][A6][R6][G6][B6][A5][R5][G5][B5][A4][R4][G4][B4].
+        
+        __m128i pixels0_3_l = _mm_unpacklo_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_l = 00[A1]00[R1]00[G1]00[B1]00[A0]00[R0]00[G0]00[B0].
+        __m128i pixels0_3_h = _mm_unpackhi_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_h = 00[A3]00[R3]00[G3]00[B3]00[A2]00[R2]00[G2]00[B2].
+        __m128i pixels4_7_l = _mm_unpacklo_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_l = 00[A5]00[R5]00[G5]00[B5]00[A4]00[R4]00[G4]00[B4].
+        __m128i pixels4_7_h = _mm_unpackhi_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_h = 00[A7]00[R7]00[G7]00[B7]00[A6]00[R6]00[G6]00[B6].
+        
+        __m128i y0_3_l = _mm_madd_epi16(pixels0_3_l, RGBScale);
+        __m128i y0_3_h = _mm_madd_epi16(pixels0_3_h, RGBScale);
+        __m128i y4_7_l = _mm_madd_epi16(pixels4_7_l, RGBScale);
+        __m128i y4_7_h = _mm_madd_epi16(pixels4_7_h, RGBScale);
+        __m128i y0_3 = _mm_hadd_epi32(y0_3_l, y0_3_h);
+        __m128i y4_7 = _mm_hadd_epi32(y4_7_l, y4_7_h);
+        
+        y0_3 = _mm_srli_epi32(y0_3, 8);
+        y4_7 = _mm_srli_epi32(y4_7, 8);
+        y0_3 = _mm_packs_epi32(y0_3, y0_3);
+        y4_7 = _mm_packs_epi32(y4_7, y4_7);
+        y0_3 = _mm_packus_epi16(y0_3, y0_3);
+        y4_7 = _mm_packus_epi16(y4_7, y4_7);
+
+        *pout++ = _mm_cvtsi128_si32(y0_3);
+        *pout++ = _mm_cvtsi128_si32(y4_7);
+        
+        numPixelsDiv8--;
+    } while (numPixelsDiv8);
+}
+
+static void arVideoLumaRGBAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __m128i *pin = (__m128i *)src;
+    uint32_t *pout = (uint32_t *)dest;
+    int numPixelsDiv8 = numPixels >> 3;
+    __m128i RGBScale = _mm_set_epi16(0, B8_CCIR601, G8_CCIR601, R8_CCIR601, 0, B8_CCIR601, G8_CCIR601, R8_CCIR601); // RGBScale = 000000[B8_CCIR601]00[G8_CCIR601]00[R8_CCIR601]000000[B8_CCIR601]00[G8_CCIR601]00[R8_CCIR601].
+    
+    do {
+        __m128i pixels0_3 = _mm_load_si128(pin++); // pixels0_3 = [A3][B3][G3][R3][A2][B2][G2][R2][A1][B1][G1][R1][A0][B0][G0][R0].
+        __m128i pixels4_7 = _mm_load_si128(pin++); // pixels4_7 = [A7][B7][G7][R7][A6][B6][G6][R6][A5][B5][G5][R5][A4][B4][G4][R4].
+        
+        __m128i pixels0_3_l = _mm_unpacklo_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_l = 00[A1]00[B1]00[G1]00[R1]00[A0]00[B0]00[G0]00[R0].
+        __m128i pixels0_3_h = _mm_unpackhi_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_h = 00[A3]00[B3]00[G3]00[R3]00[A2]00[B2]00[G2]00[R2].
+        __m128i pixels4_7_l = _mm_unpacklo_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_l = 00[A5]00[B5]00[G5]00[R5]00[A4]00[B4]00[G4]00[R4].
+        __m128i pixels4_7_h = _mm_unpackhi_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_h = 00[A7]00[B7]00[G7]00[R7]00[A6]00[B6]00[G6]00[R6].
+        
+        __m128i y0_3_l = _mm_madd_epi16(pixels0_3_l, RGBScale);
+        __m128i y0_3_h = _mm_madd_epi16(pixels0_3_h, RGBScale);
+        __m128i y4_7_l = _mm_madd_epi16(pixels4_7_l, RGBScale);
+        __m128i y4_7_h = _mm_madd_epi16(pixels4_7_h, RGBScale);
+        __m128i y0_3 = _mm_hadd_epi32(y0_3_l, y0_3_h);
+        __m128i y4_7 = _mm_hadd_epi32(y4_7_l, y4_7_h);
+        
+        y0_3 = _mm_srli_epi32(y0_3, 8);
+        y4_7 = _mm_srli_epi32(y4_7, 8);
+        y0_3 = _mm_packs_epi32(y0_3, y0_3);
+        y4_7 = _mm_packs_epi32(y4_7, y4_7);
+        y0_3 = _mm_packus_epi16(y0_3, y0_3);
+        y4_7 = _mm_packus_epi16(y4_7, y4_7);
+        
+        *pout++ = _mm_cvtsi128_si32(y0_3);
+        *pout++ = _mm_cvtsi128_si32(y4_7);
+        
+        numPixelsDiv8--;
+    } while (numPixelsDiv8);
+}
+
+static void arVideoLumaABGRtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __m128i *pin = (__m128i *)src;
+    uint32_t *pout = (uint32_t *)dest;
+    int numPixelsDiv8 = numPixels >> 3;
+    __m128i RGBScale = _mm_set_epi16(R8_CCIR601, G8_CCIR601, B8_CCIR601, 0, R8_CCIR601, G8_CCIR601, B8_CCIR601, 0); // RGBScale = 00[R8_CCIR601]00[G8_CCIR601]00[B8_CCIR601]000000[R8_CCIR601]00[G8_CCIR601]00[B8_CCIR601]0000.
+    
+    do {
+        __m128i pixels0_3 = _mm_load_si128(pin++); // pixels0_3 = [R3][G3][B3][A3][R2][G2][B2][A2][R1][G1][B1][A1][R0][G0][B0][A0].
+        __m128i pixels4_7 = _mm_load_si128(pin++); // pixels4_7 = [R7][G7][B7][A7][R6][G6][B6][A6][R5][G5][B5][A5][R4][G4][B4][A4].
+        
+        __m128i pixels0_3_l = _mm_unpacklo_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_l = 00[R1]00[G1]00[B1]00[A1]00[R0]00[G0]00[B0]00[A0].
+        __m128i pixels0_3_h = _mm_unpackhi_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_h = 00[R3]00[G3]00[B3]00[A3]00[R2]00[G2]00[B2]00[A2].
+        __m128i pixels4_7_l = _mm_unpacklo_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_l = 00[R5]00[G5]00[B5]00[A5]00[R4]00[G4]00[B4]00[A4].
+        __m128i pixels4_7_h = _mm_unpackhi_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_h = 00[R7]00[G7]00[B7]00[A7]00[R6]00[G6]00[B6]00[A6].
+        
+        __m128i y0_3_l = _mm_madd_epi16(pixels0_3_l, RGBScale);
+        __m128i y0_3_h = _mm_madd_epi16(pixels0_3_h, RGBScale);
+        __m128i y4_7_l = _mm_madd_epi16(pixels4_7_l, RGBScale);
+        __m128i y4_7_h = _mm_madd_epi16(pixels4_7_h, RGBScale);
+        __m128i y0_3 = _mm_hadd_epi32(y0_3_l, y0_3_h);
+        __m128i y4_7 = _mm_hadd_epi32(y4_7_l, y4_7_h);
+        
+        y0_3 = _mm_srli_epi32(y0_3, 8);
+        y4_7 = _mm_srli_epi32(y4_7, 8);
+        y0_3 = _mm_packs_epi32(y0_3, y0_3);
+        y4_7 = _mm_packs_epi32(y4_7, y4_7);
+        y0_3 = _mm_packus_epi16(y0_3, y0_3);
+        y4_7 = _mm_packus_epi16(y4_7, y4_7);
+        
+        *pout++ = _mm_cvtsi128_si32(y0_3);
+        *pout++ = _mm_cvtsi128_si32(y4_7);
+        
+        numPixelsDiv8--;
+    } while (numPixelsDiv8);
+}
+
+static void arVideoLumaARGBtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
+{
+    __m128i *pin = (__m128i *)src;
+    uint32_t *pout = (uint32_t *)dest;
+    int numPixelsDiv8 = numPixels >> 3;
+    __m128i RGBScale = _mm_set_epi16(B8_CCIR601, G8_CCIR601, R8_CCIR601, 0, B8_CCIR601, G8_CCIR601, R8_CCIR601, 0); // RGBScale = 00[B8_CCIR601]00[G8_CCIR601]00[R8_CCIR601]000000[B8_CCIR601]00[G8_CCIR601]00[R8_CCIR601]0000.
+    
+    do {
+        __m128i pixels0_3 = _mm_load_si128(pin++); // pixels0_3 = [B3][G3][R3][A3][B2][G2][R2][A2][B1][G1][R1][A1][B0][G0][R0][A0].
+        __m128i pixels4_7 = _mm_load_si128(pin++); // pixels4_7 = [B7][G7][R7][A7][B6][G6][R6][A6][B5][G5][R5][A5][B4][G4][R4][A4].
+        
+        __m128i pixels0_3_l = _mm_unpacklo_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_l = 00[B1]00[G1]00[R1]00[A1]00[B0]00[G0]00[R0]00[A0].
+        __m128i pixels0_3_h = _mm_unpackhi_epi8(pixels0_3, _mm_setzero_si128()); // pixels0_3_h = 00[B3]00[G3]00[R3]00[A3]00[B2]00[G2]00[R2]00[A2].
+        __m128i pixels4_7_l = _mm_unpacklo_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_l = 00[B5]00[G5]00[R5]00[A5]00[B4]00[G4]00[R4]00[A4].
+        __m128i pixels4_7_h = _mm_unpackhi_epi8(pixels4_7, _mm_setzero_si128()); // pixels4_7_h = 00[B7]00[G7]00[R7]00[A7]00[B6]00[G6]00[R6]00[A6].
+        
+        __m128i y0_3_l = _mm_madd_epi16(pixels0_3_l, RGBScale);
+        __m128i y0_3_h = _mm_madd_epi16(pixels0_3_h, RGBScale);
+        __m128i y4_7_l = _mm_madd_epi16(pixels4_7_l, RGBScale);
+        __m128i y4_7_h = _mm_madd_epi16(pixels4_7_h, RGBScale);
+        __m128i y0_3 = _mm_hadd_epi32(y0_3_l, y0_3_h);
+        __m128i y4_7 = _mm_hadd_epi32(y4_7_l, y4_7_h);
+        
+        y0_3 = _mm_srli_epi32(y0_3, 8);
+        y4_7 = _mm_srli_epi32(y4_7, 8);
+        y0_3 = _mm_packs_epi32(y0_3, y0_3);
+        y4_7 = _mm_packs_epi32(y4_7, y4_7);
+        y0_3 = _mm_packus_epi16(y0_3, y0_3);
+        y4_7 = _mm_packus_epi16(y4_7, y4_7);
+        
+        *pout++ = _mm_cvtsi128_si32(y0_3);
+        *pout++ = _mm_cvtsi128_si32(y4_7);
+        
+        numPixelsDiv8--;
+    } while (numPixelsDiv8);
+}
+
+#endif // HAVE_ARM_NEON|HAVE_ARM64_NEON|HAVE_INTEL_SIMD
 

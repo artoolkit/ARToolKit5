@@ -333,15 +333,11 @@ then
     then
         CC="clang"
         CXX="clang++ -std=c++11 -stdlib=libc++"
-        #CFLAG="-O3 -fPIC -march=i686"
-        #CFLAG="-O3 -fPIC -march=pentium4"
         CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
         STDCXXLIB="-lc++"
     else
         CC="gcc"
         CXX="g++ -std=c++11 "
-        #CFLAG="-O"
-        #CFLAG="-O3 -march=pentium4"
         CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
         STDCXXLIB="-lstdc++"
     fi

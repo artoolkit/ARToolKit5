@@ -262,6 +262,10 @@ ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
   MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM64_NEON=1
 endif
+ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),x86 x86_64))
+  LOCAL_CFLAGS += -DHAVE_INTEL_SIMD=1
+endif
+
 LOCAL_SRC_FILES := $(MY_FILES)
 LOCAL_CFLAGS += $(MY_CFLAGS)
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
