@@ -57,7 +57,7 @@
 #ifdef ANDROID
 #  include "../VideoAndroid/android_os_build_codes.h"
 #  define LOG2F(x) (logf(x)/0.6931472f) // 0.6931472f = logf(2.0f)
-#  include "sqlite3.h"
+#  include "../VideoAndroid/sqlite3.h"
 #  include <curl.h>
 #else
 #  define LOG2F(x) log2f(x)
