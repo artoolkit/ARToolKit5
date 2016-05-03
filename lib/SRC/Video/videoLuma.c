@@ -37,8 +37,15 @@
 #include <AR/videoLuma.h>
 
 #include <stdlib.h>
-#ifdef ANDROID
-#  define valloc(s) memalign(4096,s)
+#if defined(ANDROID)
+#  define AR_PAGE_ALIGNED_ALLOC(s) memalign(4096,s)
+#  define AR_PAGE_ALIGNED_FREE(p) free(p)
+#elif defined(_WIN32)
+#  define AR_PAGE_ALIGNED_ALLOC(s) _aligned_malloc(s, 4096)
+#  define AR_PAGE_ALIGNED_FREE(p) _aligned_free(p)
+#else
+#  define AR_PAGE_ALIGNED_ALLOC(s) valloc(s)
+#  define AR_PAGE_ALIGNED_FREE(p) free(p)
 #endif
 
 #if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
@@ -94,7 +101,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
     vli->xsize = xsize;
     vli->ysize = ysize;
     vli->buffSize = xsize*ysize;
-    vli->buff = (ARUint8 *)valloc(vli->buffSize);
+	vli->buff = (ARUint8 *)AR_PAGE_ALIGNED_ALLOC(vli->buffSize);
     if (!vli->buff) {
         ARLOGe("Out of memory!!\n");
         free(vli);
@@ -123,9 +130,11 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
 #  endif
     // Debug output.
 #  if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
-    if (vli->fastPath) ARLOGd("arVideoLuma will use ARM NEON acceleration.\n");
+    if (vli->fastPath) ARLOGi("arVideoLuma will use ARM NEON acceleration.\n");
+	else ARLOGd("arVideoLuma will NOT use ARM NEON acceleration.\n");)
 #  elif defined(HAVE_INTEL_SIMD)
-    if (vli->fastPath) ARLOGd("arVideoLuma will use Intel SIMD acceleration.\n");
+    if (vli->fastPath) ARLOGi("arVideoLuma will use Intel SIMD acceleration.\n");
+	else ARLOGd("arVideoLuma will NOT use Intel SIMD acceleration.\n");
 #  endif
 #endif
 
@@ -137,7 +146,7 @@ int arVideoLumaFinal(ARVideoLumaInfo **vli_p)
     if (!vli_p) return (-1);
     if (!*vli_p) return (0);
     
-    free((*vli_p)->buff);
+	AR_PAGE_ALIGNED_FREE((*vli_p)->buff);
     free(*vli_p);
     *vli_p = NULL;
     
