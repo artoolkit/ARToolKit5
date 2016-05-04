@@ -131,7 +131,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
     // Debug output.
 #  if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
     if (vli->fastPath) ARLOGi("arVideoLuma will use ARM NEON acceleration.\n");
-	else ARLOGd("arVideoLuma will NOT use ARM NEON acceleration.\n");)
+	else ARLOGd("arVideoLuma will NOT use ARM NEON acceleration.\n");
 #  elif defined(HAVE_INTEL_SIMD)
     if (vli->fastPath) ARLOGi("arVideoLuma will use Intel SIMD acceleration.\n");
 	else ARLOGd("arVideoLuma will NOT use Intel SIMD acceleration.\n");

@@ -382,7 +382,12 @@ enum {
 
 // Other Windows-only configuration.
 #define HAVE_LIBJPEG 1
-#define HAVE_INTEL_SIMD 1
+
+#if defined(_M_IX86) || defined(_M_X64)
+#  define HAVE_INTEL_SIMD 1
+#elif defined(_M_ARM)
+#  undef HAVE_ARM_NEON // MSVC doesn't support inline assembly on ARM platform.
+#endif
 
 #endif // _WIN32
 
