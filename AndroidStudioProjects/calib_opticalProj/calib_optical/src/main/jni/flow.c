@@ -233,7 +233,7 @@ static void *flowThread(void *arg)
 					(flowStateGet() == FLOW_STATE_WELCOME ? "Welcome to ARToolKit Optical See-Through Calibrator\n(c)2014 ARToolworks, Inc.\n\n" : ""),
 					(calibrationEye == VIEW_LEFTEYE ? "left" : "right")
 					);
-			EdenMessageShow(buf);
+			EdenMessageShow((unsigned char *)buf);
 			free(buf);
 			flowSetEventMask(EVENT_TOUCH);
 			event = flowWaitForEvent();
@@ -291,7 +291,7 @@ static void *flowThread(void *arg)
 
 				flowSetEventMask(EVENT_TOUCH);
 	            flowStateSet(FLOW_STATE_DONE);
-				EdenMessageShow("Calibration canceled");
+				EdenMessageShow((const unsigned char *)"Calibration canceled");
 				flowWaitForEvent();
 				if (gStop) break;
 				EdenMessageHide();
@@ -307,7 +307,7 @@ static void *flowThread(void *arg)
 
 				flowSetEventMask(EVENT_NONE);
 				flowStateSet(FLOW_STATE_CALIBRATING);
-				EdenMessageShow("Calculating optical parameters...");
+				EdenMessageShow((const unsigned char *)"Calculating optical parameters...");
 				bool ok = (calib(&fovy, &aspect, m) != -1);
 	    		EdenMessageHide();
 
