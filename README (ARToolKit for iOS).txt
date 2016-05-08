@@ -120,10 +120,7 @@ http://www.artoolkit.org/community/forums/viewforum.php?f=22
 
 You are invited to join the forum and contribute your questions, answers and success stories.
 
-ARToolKit consists of a full ecosystem of SDKs for desktop, web, mobile and in-app plugin augmented reality. Stay up to date with information and releases from artoolkit.org by joining our announcements mailing list.
-
-http://www.artoolkit.org/community/lists/
-
+ARToolKit consists of a full ecosystem of SDKs for desktop, web, mobile and in-app plugin augmented reality. Stay up to date with information and releases from artoolkit.org by joining our announcements mailing list.(Click ‘Subscribe’ at the bottom of http://www.artoolkit.org/)
 
 Do you have a feature request, bug report, or other code you would like to contribute to ARToolKit? Access the complete source and issue tracker for ARToolKit at http://github.com/artoolkit/artoolkit5
 
