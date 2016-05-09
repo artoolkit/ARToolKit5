@@ -7885,8 +7885,8 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -7906,8 +7906,8 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -7923,7 +7923,6 @@
 		4A15ECEB09E35CE300159C62 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -7937,7 +7936,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleLite;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -7949,7 +7947,6 @@
 		4A15ECEC09E35CE300159C62 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -7963,7 +7960,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleLite;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8043,7 +8039,6 @@
 		4A1EABA10BD72BD600E40F56 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -8061,7 +8056,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_optical;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8073,7 +8067,6 @@
 		4A1EABA20BD72BD600E40F56 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -8091,7 +8084,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_optical;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8159,7 +8151,6 @@
 		4A2607660C6FAFA7002D599C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8173,7 +8164,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiTest;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8185,7 +8175,6 @@
 		4A2607670C6FAFA7002D599C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8199,7 +8188,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiTest;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8225,7 +8213,6 @@
 		4A3ABD1F12B11FAF00F25466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -8242,7 +8229,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = check_id;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8254,7 +8240,6 @@
 		4A3ABD2012B11FAF00F25466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -8271,7 +8256,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = check_id;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8319,7 +8303,6 @@
 		4A7797980CCEE7850021FAC9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8333,7 +8316,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiWin;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8345,7 +8327,6 @@
 		4A7797990CCEE7850021FAC9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8359,7 +8340,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiWin;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8371,7 +8351,6 @@
 		4A7F76E30C616E7700E42DF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks\"";
@@ -8389,7 +8368,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_camera;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8401,7 +8379,6 @@
 		4A7F76E40C616E7700E42DF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks\"";
@@ -8419,7 +8396,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_camera;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8431,7 +8407,6 @@
 		4A7F76F70C616E9B00E42DF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks\"";
@@ -8449,7 +8424,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_stereo;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8461,7 +8435,6 @@
 		4A7F76F80C616E9B00E42DF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks\"";
@@ -8479,7 +8452,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = calib_stereo;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8603,8 +8575,8 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -8624,8 +8596,8 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -8649,7 +8621,6 @@
 					"\"$(SRCROOT)/lib/SRC/KPM/FreakMatcher\"",
 					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -8674,7 +8645,6 @@
 					"\"$(SRCROOT)/lib/SRC/KPM/FreakMatcher\"",
 					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
@@ -8691,7 +8661,6 @@
 		4AC388A212A8F204002F3A44 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8705,7 +8674,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleMovie;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8717,7 +8685,6 @@
 		4AC388A312A8F204002F3A44 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8731,7 +8698,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleMovie;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8781,7 +8747,6 @@
 		4AC73046180CF5C00012E1AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8795,14 +8760,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = genTexData;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		4AC73047180CF5C00012E1AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8816,14 +8779,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = genTexData;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
 		4AC73053180CF5C30012E1AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8837,14 +8798,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = genMarkerSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		4AC73054180CF5C30012E1AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8858,14 +8817,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = genMarkerSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
 		4AC73060180CF5C50012E1AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8879,14 +8836,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = dispImageSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		4AC73061180CF5C50012E1AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8900,14 +8855,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = dispImageSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
 		4AC7306D180CF5C90012E1AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8921,14 +8874,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = dispFeatureSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		4AC7306E180CF5C90012E1AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -8942,14 +8893,12 @@
 					"$(SRCROOT)/lib",
 				);
 				PRODUCT_NAME = dispFeatureSet;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
 		4AD230160D42DF3900CFF64B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8963,7 +8912,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiCube;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -8975,7 +8923,6 @@
 		4AD230170D42DF3900CFF64B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8989,7 +8936,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = multiCube;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9017,7 +8963,6 @@
 		4AD5C3200A39002C003F13D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -9034,7 +8979,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = mk_patt;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9046,7 +8990,6 @@
 		4AD5C3210A39002C003F13D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -9063,7 +9006,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = mk_patt;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9075,7 +9017,6 @@
 		4AD5C4210A390214003F13D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -9093,7 +9034,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = "calib_camera_old-v3";
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9105,7 +9045,6 @@
 		4AD5C4220A390214003F13D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -9123,7 +9062,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = "calib_camera_old-v3";
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9135,7 +9073,6 @@
 		4AD5C43B0A39024B003F13D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -9152,7 +9089,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = "calib_stereo_old-v3";
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9164,7 +9100,6 @@
 		4AD5C43C0A39024B003F13D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
@@ -9181,7 +9116,6 @@
 					QuickTime,
 				);
 				PRODUCT_NAME = "calib_stereo_old-v3";
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9193,20 +9127,16 @@
 		4AD5C46B0A3903A8003F13D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "ARToolKit5 complete";
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		4AD5C46C0A3903A8003F13D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "ARToolKit5 complete";
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -9302,7 +9232,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
 				STRIPFLAGS = "";
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -9342,7 +9271,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
 				STRIPFLAGS = "";
-				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -9475,7 +9403,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = stereo;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9504,7 +9431,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = stereo;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9545,7 +9471,6 @@
 				HEADERMAP_INCLUDES_PROJECT_HEADERS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
@@ -9578,7 +9503,6 @@
 				HEADERMAP_INCLUDES_PROJECT_HEADERS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -9714,8 +9638,8 @@
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = (
@@ -9739,8 +9663,8 @@
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/include/macosx-universal/jpeg\"",
 				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = (
@@ -9759,7 +9683,6 @@
 		78BBCE4508E4AEFD00AEE575 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -9773,7 +9696,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleTest;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -9785,7 +9707,6 @@
 		78BBCE4608E4AEFD00AEE575 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -9799,7 +9720,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME}";
 				PRODUCT_NAME = simpleTest;
-				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
