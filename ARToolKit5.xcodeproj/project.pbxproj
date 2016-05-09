@@ -2685,8 +2685,6 @@
 		4AEB273B1804BC2E002290C5 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		4AEB273F1804BC2E002290C5 /* ARWrapper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ARWrapper-Info.plist"; sourceTree = "<group>"; };
 		4AEB27411804BC2E002290C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4AEB27481804C295002290C5 /* libopencv_core.2.4.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_core.2.4.6.dylib; sourceTree = "<group>"; };
-		4AEB27491804C295002290C5 /* libopencv_flann.2.4.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_flann.2.4.6.dylib; sourceTree = "<group>"; };
 		4AEB27521804C2DA002290C5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4AEB27761804C960002290C5 /* libjpeg_symbols_to_mark_private.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjpeg_symbols_to_mark_private.txt; sourceTree = "<group>"; };
 		4AEC877F100F5E7400F8F318 /* videoLinux1394CamV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoLinux1394CamV1.h; sourceTree = "<group>"; };
@@ -2831,6 +2829,9 @@
 		78BBCE3108E4AC6600AEE575 /* libARvideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARvideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BBCE4108E4AEFC00AEE575 /* simpleTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = simpleTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BBCE4308E4AEFC00AEE575 /* simpleTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "simpleTest-Info.plist"; sourceTree = "<group>"; };
+		A1774E5C1CD6C2E100E1A17E /* libopencv_imgcodecs.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_imgcodecs.3.1.0.dylib; sourceTree = "<group>"; };
+		A1774E5D1CD6C2E100E1A17E /* libopencv_ml.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_ml.3.1.0.dylib; sourceTree = "<group>"; };
+		A1774E5E1CD6C2E100E1A17E /* libopencv_videoio.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videoio.3.1.0.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3559,14 +3560,15 @@
 		4A3149AD13C4AD7800F96B52 /* macosx-universal */ = {
 			isa = PBXGroup;
 			children = (
+				A1774E5C1CD6C2E100E1A17E /* libopencv_imgcodecs.3.1.0.dylib */,
+				A1774E5D1CD6C2E100E1A17E /* libopencv_ml.3.1.0.dylib */,
+				A1774E5E1CD6C2E100E1A17E /* libopencv_videoio.3.1.0.dylib */,
 				4A3149BA13C4ADF100F96B52 /* libopencv_calib3d.dylib */,
 				4A88F3E215D367CA002E595A /* libopencv_flann.dylib */,
 				4A3149BB13C4AE1100F96B52 /* libopencv_core.dylib */,
 				4A3149BC13C4AE2F00F96B52 /* libopencv_highgui.dylib */,
 				4A3149BD13C4AE2F00F96B52 /* libopencv_imgproc.dylib */,
 				4A3AE51F17F126BB001D56CA /* libopencv_features2d.dylib */,
-				4AEB27481804C295002290C5 /* libopencv_core.2.4.6.dylib */,
-				4AEB27491804C295002290C5 /* libopencv_flann.2.4.6.dylib */,
 				4A1E9759117E46FD00A2F3C2 /* libjpeg.a */,
 			);
 			path = "macosx-universal";
@@ -7882,7 +7884,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
 				PRODUCT_NAME = Eden;
@@ -7900,7 +7905,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
 				PRODUCT_NAME = Eden;
@@ -8566,7 +8574,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
 				PRODUCT_NAME = AR2;
@@ -8584,7 +8595,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/lib\"";
 				PRODUCT_NAME = AR2;
@@ -8647,7 +8661,6 @@
 		4AC388A212A8F204002F3A44 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -8672,7 +8685,6 @@
 		4AC388A312A8F204002F3A44 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
@@ -9188,6 +9200,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
@@ -9210,6 +9223,7 @@
 					"$(SRCROOT)/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "";
 				"OTHER_LDFLAGS[arch=i386]" = (
 					"-framework",
 					QuickTime,
@@ -9217,7 +9231,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
-				STRIPFLAGS = "-R $(SRCROOT)/Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt";
+				STRIPFLAGS = "";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -9226,6 +9240,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
@@ -9247,6 +9262,7 @@
 					"$(SRCROOT)/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_LDFLAGS = "";
 				"OTHER_LDFLAGS[arch=i386]" = (
 					"-framework",
 					QuickTime,
@@ -9254,7 +9270,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = YES;
-				STRIPFLAGS = "-R $(SRCROOT)/Xcode/ARWrapper/libjpeg_symbols_to_mark_private.txt";
+				STRIPFLAGS = "";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -9428,7 +9444,7 @@
 			baseConfigurationReference = 4A663ABB11415597004CD382 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -9464,7 +9480,7 @@
 			baseConfigurationReference = 4A663ABB11415597004CD382 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -9621,7 +9637,10 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/lib/macosx-universal\"",
@@ -9643,7 +9662,10 @@
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/include/macosx-universal\"",
+					"\"$(SRCROOT)/include\"",
+				);
 				INSTALL_PATH = /lib;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/lib/macosx-universal\"",
