@@ -78,9 +78,9 @@ checkResolution.exe Data\camera_para.dat (change camera_para.dat to the correct 
 
 Release notes.
 --------------
-This release contains ARToolKit Professional v5.3.2 for Windows Phone 8.1 and Windows Store 8.1.
+This release contains ARToolKit Professional v5.3.3 for Windows Phone 8.1 and Windows Store 8.1.
 
-- This release introduces a new WinRT component to assist rendering of video backgrounds, libARgsubD3D, and set of native XAML application examples. The examples demonstrate basic square tracking, multimarker tracking, NFT tracking, rendering of UI controls into the AR scene. With these examples, ARToolKit becomes the first full-featured SDK for developing augmented reality apps on Microsoft's newest platform, and we hope that Windows developers are able to create some great apps with the support we've provided. Many thanks to Rene Schulte for his work on these examples, and DAQRI for sponsoring the development work.
+- ARToolKit v5.3.1 introduced a new WinRT component to assist rendering of video backgrounds, libARgsubD3D, and set of native XAML application examples. The examples demonstrate basic square tracking, multimarker tracking, NFT tracking, rendering of UI controls into the AR scene. With these examples, ARToolKit becomes the first full-featured SDK for developing augmented reality apps on Microsoft's newest platform, and we hope that Windows developers are able to create some great apps with the support we've provided. Many thanks to Rene Schulte for his work on these examples, and DAQRI for sponsoring the development work.
 - A C++/CX-based WinRT Component is provided. Component binaries and metadata can be found in the appropriate "bin" subdirectory.
 - ARWrapper is provided both as a native WinRT DLL accessible via P/Invoke and a static library available for direct linking in a XAML C++ app.
 - libARvideo on Windows Phone 8.1 and Windows Store 8.1 uses a new video module, "WinMC" (based on Windows.Media.Capture) by default. The WinMF module (based on Windows Media Foundation) is also present but provides only support for video capture from file, not from a device camera.

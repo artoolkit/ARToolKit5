@@ -6,12 +6,26 @@ Changes in version 5.3.3 (this release) (2016-xx-xx).
 -----------------------------------------------------
 Enhancements:
 - Data files which were previously stored in subdirectories of the "bin" directory are now stored in share/artoolkit-utils (for data relevant to the utilities) and share/artoolkit-examples (for data relevant to the examples).
+- The video library libARvideo now guarantees production of a luminance channel, potentially alongside any colour channel(s). This has allowed for a number of internal optimisations in libAR and libKPM. Where a video module cannot produce luma-only in an optimal way, a separate optimised routine for ARM, ARM64 and x86 SSE CPUs will produce one.
+- Added support for the '-loglevel=' command-line parameter to all command-line utilities.
+- Improved camera parameter handling in ARWrapper. In order of preference, use: parameter file bytes, parameter file name, ar2VideoGetCparam, ar2VideoGetCParamAsync, default parameters.
+- Added ar2VideoGetCParamAsync support on iOS.
 
 Bug fixes:
 - Fixes to build.sh and related Android MK files to work on git bash on Windows.
+- Android: calib_optical is now automatically built along with the other native code.
+- Android: Handle whitespace in NDK package revision detection. Thanks to raphaelbruno.
+- In libKPM, bugfix to add initializing code for bottom line. Thanks to nyatla.
+- Android: native builds should now be possible on Windows using git-bash rather than cygwin bash.
 
 Other changes:
+- arVideoGetImage now returns a pointer to an AR2VideoBufferT structure, rather than a raw pointer to a pixel buffer. Correspondingly, arDetectMarker now accepts a pointer to an AR2VideoBufferT. The 'buffLuma' field of AR2VideoBufferT now points to the luminance-only channel.
 - As OpenVRML has been unmaintained for some time, support for VRML has been removed from ARToolKit.
+- Android: The EclipseProjects directory has now been removed.
+- OS X: The bundled OpenCV has been updated to OpenCV v3.1. This is used only by calib_camera.
+- Android: Added the documentation of ARBaseLib to the AndroidStudio project.
+- Android: Updated to cURL 7.48 and OpenSSL 1.0.1s.
+
 
 Changes in version 5.3.2 (2016-03-23).
 --------------------------------------

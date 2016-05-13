@@ -17,16 +17,16 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries, utilities and examples, version 5.3.2.
+This archive contains the ARToolKit libraries, utilities and examples, version 5.3.3.
 
-ARToolKit version 5.3.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Android platforms.
 
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2016-03-23
+    2016-xx-xx
 
 
 Installing
@@ -153,7 +153,25 @@ Opening the project files
 Release notes.
 --------------
 
-This release contains ARToolKit v5.3.2.
+This release contains ARToolKit v5.3.3.
+
+
+External API changes in ARToolKit v5.3.3:
+
+arVideoGetImage now returns a pointer to an AR2VideoBufferT structure. Previously it returned a raw pointer to a pixel buffer.  The buffer is valid until the next call to arVideoGetImage, or until the video stream is stopped and/or closed with a call to arVideoCapStop or arVideoClose. This API is now consistent with the ar2VideoGetImage call.
+
+    From:  ARUint8 *arVideoGetImage(void);
+    To: AR2VideoBufferT *arVideoGetImage(void);
+
+Note that the minimum supported structure of returned video images have changed. The only guaranteed channel now is a luminance channel. For video modules that cannot provide a luma channel readily internally, accelerated ARM, ARM64 and x86 SSE routines perform an optimized conversion from 32-bit RGBA formats internally to ar2VideoGetImage.
+
+Correspondingly, the API for arDetectMarker has changed. It now accepts a pointer to an AR2VideoBufferT structure, rather than a raw pointer to a pixel buffer.
+
+    From: int arDetectMarker(ARHandle *arHandle, ARUint8 *dataPtr);
+    To: int arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame);
+
+Additionally, the API for a number of internal ARToolKit functions has changed to reflect the expectation that these functions will be supplied with a luminance-only buffer. Several functions in libKPM reflect this change.
+
 
 The major change in ARToolKit v5.3 was a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 

@@ -17,9 +17,9 @@ Next steps.
 About this archive.
 -------------------
 
-This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.2.
+This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.3.
 
-ARToolKit version 5.3.2 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.3.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 If you intend to publish your app on Google's Play Store or any other commercial marketplace, you must use your own package name, and not the org.artoolkit package name.
 
@@ -28,7 +28,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
 This archive was assembled by:
     Philip Lamb
     http://www.artoolkit.org
-    2016-03-23
+    2016-xx-xx
 
 
 Requirements.
@@ -36,9 +36,8 @@ Requirements.
 
 Requirements:
  * Android SDK Tools, r24.4.1 (October 2015) or later recommended.
- * Development of native ARToolKit for Android applications requires Android NDK Revision 11 (December 2015).
- * Use of the Android Studio IDE is recommended, and Android Studio project files are supplied with the ARToolKit for Android SDK.
- * Use of the Eclipse IDE is deprecated. ARToolKit v5.3.2 will be the last release in which Eclipse project files are supplied with the ARToolKit for Android SDK.
+ * Development of native ARToolKit for Android applications requires Android NDK Revision 11 (December 2015) or later.
+ * Android Studio IDE. Android Studio project files are supplied with the ARToolKit for Android SDK.
  * An Android device, running Android 4.0.3 (Android API level 15) or later. Testing is not possible using the Android Virtual Device system.
  * A printer to print the pattern PDF images.
 
@@ -77,11 +76,29 @@ Usage (Windows):
 
 Release notes.
 --------------
-This release contains ARToolKit v5.3.2 for Android.
+This release contains ARToolKit v5.3.3 for Android.
+
+
+External API changes in ARToolKit v5.3.3:
+
+arVideoGetImage now returns a pointer to an AR2VideoBufferT structure. Previously it returned a raw pointer to a pixel buffer.  The buffer is valid until the next call to arVideoGetImage, or until the video stream is stopped and/or closed with a call to arVideoCapStop or arVideoClose. This API is now consistent with the ar2VideoGetImage call.
+
+    From:  ARUint8 *arVideoGetImage(void);
+    To: AR2VideoBufferT *arVideoGetImage(void);
+
+Note that the minimum supported structure of returned video images have changed. The only guaranteed channel now is a luminance channel. For video modules that cannot provide a luma channel readily internally, accelerated ARM, ARM64 and x86 SSE routines perform an optimized conversion from 32-bit RGBA formats internally to ar2VideoGetImage.
+
+Correspondingly, the API for arDetectMarker has changed. It now accepts a pointer to an AR2VideoBufferT structure, rather than a raw pointer to a pixel buffer.
+
+    From: int arDetectMarker(ARHandle *arHandle, ARUint8 *dataPtr);
+    To: int arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame);
+
+Additionally, the API for a number of internal ARToolKit functions has changed to reflect the expectation that these functions will be supplied with a luminance-only buffer. Several functions in libKPM reflect this change.
+
 
 As of ARToolKit v5.3.2, the minimum supported Android OS version is 4.0.3 (API level 15). ARToolKit v5.3.1 was the last release to support OS versions 2.2 through 4.0 (API level 8 through 14).
 
-This will also be the last release to support development using Eclipse and ADT. As Android Studio now supports NDK-based projects, ARToolKit will move to providing Android Studio projects only in the next release. We think that this change will please many more developers than it displeases.
+ARToolKit v5.3.2 was also the last release to support development using Eclipse and ADT. As Android Studio now supports NDK-based projects, ARToolKit has moved to providing Android Studio projects only in ARToolKit v5.3.3. We think that this change will please many more developers than it displeases.
 
 The major change in ARToolKit v5.3 was a new version of libKPM based on the FREAK detector framework, contributed by DAQRI. See "libKPM usage" below.
 
