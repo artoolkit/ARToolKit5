@@ -123,10 +123,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\..\ARApp\Data2\camera_para.dat">
+    <Content Include="..\..\..\share\artoolkit-examples\Data2\camera_para.dat">
       <Link>data\camera_para.dat</Link>
     </Content>
-    <Content Include="..\..\..\bin\Data\cubeMarkerConfig.dat">
+    <Content Include="..\..\..\share\artoolkit-examples\Data\cubeMarkerConfig.dat">
       <Link>data\cubeMarkerConfig.dat</Link>
     </Content>
     <None Include="..\..\..\doc\patterns\Cubes\cube00-05-a4.pdf">

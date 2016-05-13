@@ -55,6 +55,7 @@
 #define             CPARA_NAME       "../share/artoolkit-utils/Data/camera_para.dat"
 #define             PATT_NAME        "../share/artoolkit-utils/Data/hiro.patt"
 
+AR_PIXEL_FORMAT     pixFormat;
 ARParam             cparam;
 ARParamLT          *cparamLT;
 ARHandle           *arHandle;
@@ -227,13 +228,13 @@ static void mainLoop(void)
         return;
     }
 
-    arGetDebugMode(gARHandle, &mode);
+    arGetDebugMode(arHandle, &mode);
     if (mode == AR_DEBUG_ENABLE) {
         argViewportSetPixFormat(vp, AR_PIXEL_FORMAT_MONO); // Drawing the debug image.
         argDrawMode2D(vp);
-        arGetImageProcMode(gARHandle, &mode);
-        if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(gARHandle->labelInfo.bwImage);
-        else argDrawImageHalf(gARHandle->labelInfo.bwImage);
+        arGetImageProcMode(arHandle, &mode);
+        if (mode == AR_IMAGE_PROC_FRAME_IMAGE) argDrawImage(arHandle->labelInfo.bwImage);
+        else argDrawImageHalf(arHandle->labelInfo.bwImage);
     } else {
         argViewportSetPixFormat(vp, pixFormat); // Drawing the input image.
         argDrawMode2D(vp);
@@ -249,7 +250,7 @@ static void mainLoop(void)
     argDrawStringsByIdealPos(fps, 10, cparam.ysize-30);
 
     /* detect the markers in the video frame */
-    if( arDetectMarker(arHandle, dataPtr) < 0 ) {
+    if( arDetectMarker(arHandle, buff) < 0 ) {
         cleanup();
         exit(0);
     }
@@ -284,7 +285,6 @@ static void   init(int argc, char *argv[])
 {
     char            vconf[512];
     int             xsize, ysize;
-    AR_PIXEL_FORMAT pixFormat;
     ARParam         wparam;
     ARGViewport     viewport;
     int             i;

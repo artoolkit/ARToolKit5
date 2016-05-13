@@ -108,12 +108,12 @@
     <Content Include="Assets\WideLogo.scale-240.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\ARApp\Data2\camera_para.dat">
+    <Content Include="..\..\..\share\artoolkit-examples\Data2\camera_para.dat">
       <Link>data\camera_para.dat</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\bin\Data\cubeMarkerConfig.dat">
+    <Content Include="..\..\..\share\artoolkit-examples\Data\cubeMarkerConfig.dat">
       <Link>data\cubeMarkerConfig.dat</Link>
     </Content>
   </ItemGroup>

@@ -99,6 +99,7 @@ NATIVE_PROJS=" \
     nftSimple \
     nftBook \
     ARMovie \
+    calib_optical \
 "
 for i in $NATIVE_PROJS
 do

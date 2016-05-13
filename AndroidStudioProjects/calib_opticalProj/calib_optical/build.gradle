@@ -9,8 +9,8 @@ model {
             applicationId = "org.artoolkit.ar.samples.CalibOptical"
             minSdkVersion.apiLevel = 15
             targetSdkVersion.apiLevel = 22
-            versionCode = 1     //Integer type incremented by 1 for every release, major or minor, to Google store
-            versionName = "1.0" //Real fully qualified major and minor release description
+            versionCode = 2     //Integer type incremented by 1 for every release, major or minor, to Google store
+            versionName = "1.1" //Real fully qualified major and minor release description
 
             buildConfigFields.with { //Defines fields in the generated Java BuildConfig class, in this case, for
                 create() {           //default config, that can be accessed by Java code
@@ -37,8 +37,17 @@ model {
     }
 
     android.sources {
+        main.jni {
+            source {
+                srcDirs = ['src/main/nop']
+            }
+        }
+        main.jniLibs {
+            source {
+                srcDirs = ['src/main/libs']
+            }
+        }
     }
-
     android.compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
