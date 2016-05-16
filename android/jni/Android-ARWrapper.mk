@@ -118,7 +118,7 @@ LOCAL_C_INCLUDES += $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_CFLAGS += -DHAVE_NFT=1 $(MY_CFLAGS)
 LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += ar2 kpm util argsub_es armulti aricp cpufeatures jpeg arvideo
+LOCAL_STATIC_LIBRARIES += ar2 kpm util argsub_es armulti aricp jpeg arvideo cpufeatures
 #LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
 LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)
 
