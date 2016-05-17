@@ -116,8 +116,20 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         // Correctly configures the activity window for running AR in a layer
         // on top of the camera preview. This includes entering 
         // fullscreen landscape mode and enabling transparency. 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		boolean needActionBar = false;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				if (!ViewConfiguration.get(this).hasPermanentMenuKey()) needActionBar = true;
+			} else {
+				needActionBar = true;
+			}
+        }
+		if (needActionBar) {
+			requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		} else {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);	
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -295,7 +307,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     @Override
     public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing) {
 
-        if (ARToolKit.getInstance().initialiseAR(width, height, "Data/camera_para.dat", cameraIndex, cameraIsFrontFacing)) { // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
+        if (ARToolKit.getInstance().initialiseAR(width, height, null, cameraIndex, cameraIsFrontFacing)) { // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
             Log.i(TAG, "getGLView(): Camera initialised");
         } else {
             // Error

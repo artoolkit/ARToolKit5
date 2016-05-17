@@ -161,7 +161,8 @@ lib/winrt-wp8_1-arm/
 lib/winrt-wp8_1-x86/
 
 # Android build products.
-android/obj/local/**/objs
+android/obj/local/**/objs/
+android/obj/local/**/objs-debug/
 android/obj/local/**/libar.a
 android/obj/local/**/libargsub_es.a
 android/obj/local/**/libargsub_es2.a

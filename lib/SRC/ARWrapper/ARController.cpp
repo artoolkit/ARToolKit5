@@ -307,10 +307,10 @@ bool ARController::startRunningStereo(const char* vconfL, const char* cparaNameL
     }
     if (!m_videoSource1->open()) {
         if (m_videoSource1->getError() == ARW_ERROR_DEVICE_UNAVAILABLE) {
-            logv("AR_LOG_LEVEL_ERROR, ARController::startRunning(): Error: video source 1 unavailable, exiting, returning false");
+            logv(AR_LOG_LEVEL_ERROR, "ARController::startRunning(): Error: video source 1 unavailable, exiting, returning false");
             setError(ARW_ERROR_DEVICE_UNAVAILABLE);
         } else {
-            logv("AR_LOG_LEVEL_ERROR, ARController::startRunning(): Error: unable to open video source 1, exiting, returning false");
+            logv(AR_LOG_LEVEL_ERROR, "ARController::startRunning(): Error: unable to open video source 1, exiting, returning false");
         }
         lockVideoSource();
         delete m_videoSource0;
@@ -510,7 +510,7 @@ bool ARController::update()
         m_videoSourceFrameStamp1 = frameStamp1;
     }
     m_videoSourceFrameStamp0 = frameStamp0;
-    //logv("ARController::update() gotFrame");
+    //logv(AR_LOG_LEVEL_DEBUG, "ARController::update() gotFrame");
     
     //
     // Detect markers.

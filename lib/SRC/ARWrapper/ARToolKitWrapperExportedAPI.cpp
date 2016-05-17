@@ -1000,13 +1000,13 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION(arwShutdownAR(JNIEnv *env, jobject obj))
 
 JNIEXPORT jboolean JNICALL JNIFUNCTION(arwStartRunning(JNIEnv *env, jobject obj, jstring vconf, jstring cparaName, float nearPlane, float farPlane)) 
 {
-	const char *vconfC = env->GetStringUTFChars(vconf, NULL);
-	const char *cparaNameC = env->GetStringUTFChars(cparaName, NULL);
+    const char *vconfC = (env->IsSameObject(vconf, NULL) ? NULL : env->GetStringUTFChars(vconf, NULL));
+	const char *cparaNameC = (env->IsSameObject(cparaName, NULL) ? NULL : env->GetStringUTFChars(cparaName, NULL));
 
 	bool running = arwStartRunning(vconfC, cparaNameC, nearPlane, farPlane);
 
-	env->ReleaseStringUTFChars(vconf, vconfC);
-	env->ReleaseStringUTFChars(cparaName, cparaNameC);
+	if (vconfC) env->ReleaseStringUTFChars(vconf, vconfC);
+	if (cparaNameC) env->ReleaseStringUTFChars(cparaName, cparaNameC);
 
 	return running;
 }

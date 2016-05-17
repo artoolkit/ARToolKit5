@@ -124,6 +124,28 @@ public class ARToolKit {
         return true;
     }
 
+	/**
+	 * Initialises the native code library if it is available.
+	 * @return true if the library was found and successfully initialised.
+	 * @param resourcesDirectoryPath The full path (in the filesystem) to the directory to be used by the
+	 *            native routines as the base for relative references.
+	 *            e.g. Activity.getContext().getCacheDir().getAbsolutePath()
+	 *            or Activity.getContext().getFilesDir().getAbsolutePath()
+	 */
+	public boolean initialiseNativeWithOptions(String resourcesDirectoryPath, int pattSize, int pattCountMax) {
+		if (!loadedNative) return false;
+		if (!NativeInterface.arwInitialiseARWithOptions(pattSize, pattCountMax)) {
+			Log.e(TAG, "Error initialising native library!");
+			return false;
+		}
+		Log.i(TAG, "ARToolKit version: " + NativeInterface.arwGetARToolKitVersion());
+		if (!NativeInterface.arwChangeToResourcesDir(resourcesDirectoryPath)) {
+			Log.i(TAG, "Error while attempting to change working directory to resources directory.");
+		}
+		initedNative = true;
+		return true;
+	}
+
     /**
      * Returns whether the native library was found and successfully initialised.
      * Native functions will not be called unless this is true.
@@ -139,8 +161,9 @@ public class ARToolKit {
      *
      * @param videoWidth     The width of the video image in pixels.
      * @param videoHeight    The height of the video image in pixels.
-     * @param cameraParaPath The full path (in the filesystem) to a camera parameter file,
-     *                       or the path expressed relative to the resourcesDirectoryPath set in initialiseNative().
+	 * @param cameraParaPath Either: null to search for camera parameters specific to the device,
+	 *            or a path (in the filesystem) to a camera parameter file. The path may be an
+	 *            absolute path, or relative to the resourcesDirectoryPath set in initialiseNative().
      * @return true if initialisation was successful.
      */
     public boolean initialiseAR(int videoWidth, int videoHeight, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
@@ -178,7 +201,7 @@ public class ARToolKit {
 
         if (!initedNative) return null;
 
-        if (!NativeInterface.arwUpdateDebugTexture(debugImageData, false)) {
+        if (!NativeInterface.arwUpdateDebugTexture32(debugImageData)) {
             return null;
         }
 

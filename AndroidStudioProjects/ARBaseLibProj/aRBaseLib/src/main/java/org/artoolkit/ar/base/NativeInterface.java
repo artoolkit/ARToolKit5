@@ -46,32 +46,6 @@ import android.util.Log;
  */
 public class NativeInterface {
 
-    public static final int ARW_MARKER_OPTION_FILTERED = 1,
-            ARW_MARKER_OPTION_FILTER_SAMPLE_RATE = 2,
-            ARW_MARKER_OPTION_FILTER_CUTOFF_FREQ = 3,
-            ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION = 4,
-            ARW_MARKER_OPTION_SQUARE_CONFIDENCE = 5,
-            ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF = 6;
-    public static final int AR_LABELING_WHITE_REGION = 0,
-            AR_LABELING_BLACK_REGION = 1;
-    public static final int AR_TEMPLATE_MATCHING_COLOR = 0,
-            AR_TEMPLATE_MATCHING_MONO = 1,
-            AR_MATRIX_CODE_DETECTION = 2,
-            AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX = 3,
-            AR_TEMPLATE_MATCHING_MONO_AND_MATRIX = 4;
-    public static final int AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
-            AR_MATRIX_CODE_3x3_PARITY65 = 0x103,                                        // Matrix code in range 0-31.
-            AR_MATRIX_CODE_3x3_HAMMING63 = 0x203,                                       // Matrix code in range 0-7.
-            AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
-            AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x304,                                      // Matrix code in range 0-511.
-            AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x404,                                      // Matrix code in range 0-31.
-            AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x405,                                     // Matrix code in range 0-4095.
-            AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x505,                                      // Matrix code in range 0-127.
-            AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
-            AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
-            AR_MATRIX_CODE_GLOBAL_ID = 0xb0e;
-    public static final int AR_IMAGE_PROC_FRAME_IMAGE = 0,
-            AR_IMAGE_PROC_FIELD_IMAGE = 1;
     /**
      * Android logging tag for this class.
      */
@@ -118,6 +92,24 @@ public class NativeInterface {
      * @return true on success, false if an error occurred
      */
     public static native boolean arwInitialiseAR();
+    
+    /**
+     * Initialises the the basic ARToolKit functions with non-default options
+     * for size and number of square markers. After this function has 
+     * been successfully called, markers can be added and removed, but marker 
+     * detection is not yet running.
+     * @param pattSize For any square template (pattern) markers, the number of rows
+     *     and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+     *     
+     *      Pass AR_PATT_SIZE1 for the same behaviour as arwInitialiseAR().
+     * @param pattCountMax For any square template (pattern) markers, the maximum number
+     *     of markers that may be loaded for a single matching pass. Must be > 0.
+     *     
+     *      Pass AR_PATT_NUM_MAX for the same behaviour as arwInitialiseAR().
+     * @return			true if successful, false if an error occurred
+     * @see				arwShutdownAR()
+     */
+    public static native boolean arwInitialiseARWithOptions(int pattSize, int pattCountMax);
 
     /**
      * Changes the working directory to the resources directory used by ARToolKit.
@@ -131,12 +123,13 @@ public class NativeInterface {
     /**
      * Initialises video capture. The native library will start to expect video
      * frames.
-     *
-     * @param vconf     The video configuration string. Can be left empty.
-     * @param cparaName The camera parameter file to load.
-     * @param nearPlane The value to use for the near OpenGL clipping plane.
-     * @param farPlane  The value to use for the far OpenGL clipping plane.
-     * @return true on success, false if an error occurred.
+     * @param vconf			The video configuration string. Can be left empty.
+     * @param cparaName	    Either: null to search for camera parameters specific to the device,
+	 *            			or a path (in the filesystem) to a camera parameter file. The path may be an
+	 *            			absolute path, or relative to the resourcesDirectoryPath set with arwChangeToResourcesDir.
+     * @param nearPlane		The value to use for the near OpenGL clipping plane.
+     * @param farPlane		The value to use for the far OpenGL clipping plane.
+     * @return				true on success, false if an error occurred.
      */
     public static native boolean arwStartRunning(String vconf, String cparaName, float nearPlane, float farPlane);
 
@@ -301,6 +294,13 @@ public class NativeInterface {
      */
     public static native boolean arwQueryMarkerTransformationStereo(int markerUID, float[] matrixL, float[] matrixR);
 
+    public static final int ARW_MARKER_OPTION_FILTERED = 1,
+    						ARW_MARKER_OPTION_FILTER_SAMPLE_RATE = 2,
+    						ARW_MARKER_OPTION_FILTER_CUTOFF_FREQ = 3,
+    						ARW_MARKER_OPTION_SQUARE_USE_CONT_POSE_ESTIMATION = 4,
+    						ARW_MARKER_OPTION_SQUARE_CONFIDENCE = 5,
+    						ARW_MARKER_OPTION_SQUARE_CONFIDENCE_CUTOFF = 6;
+
     public static native void arwSetMarkerOptionBool(int markerUID, int option, boolean value);
 
     public static native void arwSetMarkerOptionInt(int markerUID, int option, int value);
@@ -312,45 +312,58 @@ public class NativeInterface {
     public static native int arwGetMarkerOptionInt(int markerUID, int option);
 
     public static native float arwGetMarkerOptionFloat(int markerUID, int option);
-
-    /**
-     * Sets whether to enable or disable debug mode.
-     *
-     * @param debug true to enable, false to disable
-     */
+    
+	/**
+	 * Sets whether to enable or disable debug mode.
+	 * @param debug			true to enable, false to disable
+	 */
     public static native void arwSetVideoDebugMode(boolean debug);
-
-    /**
-     * Returns whether debug mode is enabled.
-     *
-     * @return true if enabled, otherwise false
-     */
+	
+	/**
+	 * Returns whether debug mode is enabled.
+	 * @return				true if enabled, otherwise false
+	 */
     public static native boolean arwGetVideoDebugMode();
-
-    /**
-     * Sets the threshold value used during video image binarization.
-     *
-     * @param threshold The new threshold value
-     */
+	
+	/**
+	 * Sets the threshold value used during video image binarization.
+	 * @param threshold		The new threshold value
+	 */
     public static native void arwSetVideoThreshold(int threshold);
+	
+	/**
+	 * Returns the current threshold value used during video image binarization.
+	 * @return				The current threshold value
+	 */
+    public static native int arwGetVideoThreshold();    
+    
+    public static final int AR_LABELING_THRESH_MODE_MANUAL = 0,
+    	    				AR_LABELING_THRESH_MODE_AUTO_MEDIAN = 1,
+    	    				AR_LABELING_THRESH_MODE_AUTO_OTSU = 2,
+    	    				AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE = 3,
+							AR_LABELING_THRESH_MODE_AUTO_BRACKETING = 4;
 
-    /**
-     * Returns the current threshold value used during video image binarization.
-     *
-     * @return The current threshold value
-     */
-    public static native int arwGetVideoThreshold();
-
-    /**
-     * Passes a video frame to the native library for processing.
-     *
-     * @param image               Buffer containing the video frame
-     * @param width               Width of the video frame in pixels
-     * @param height              Height of the video frame in pixels
-     * @param cameraIndex         Zero-based index of the camera in use. If only one camera is present, will be 0.
-     * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
-     * @return true if no error occurred, otherwise false
-     */
+	/**
+	 * Sets the threshold mode used during video image binarization.
+	 * @param threshold		The new threshold mode.
+	 */
+    public static native void arwSetVideoThresholdMode(int mode);
+	
+	/**
+	 * Returns the current threshold mode used during video image binarization.
+	 * @return				The current threshold mode.
+	 */
+    public static native int arwGetVideoThresholdMode();    
+    
+	/**
+	 * Passes a video frame to the native library for processing.
+	 * @param image			Buffer containing the video frame
+	 * @param width			Width of the video frame in pixels
+	 * @param height		Height of the video frame in pixels
+	 * @param cameraIndex	Zero-based index of the camera in use. If only one camera is present, will be 0.
+	 * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
+	 * @return				true if no error occurred, otherwise false
+	 */
     public static native boolean arwAcceptVideoImage(byte[] image, int width, int height, int cameraIndex, boolean cameraIsFrontFacing);
 
     /**
@@ -369,27 +382,57 @@ public class NativeInterface {
      * @return true if no error occurred, otherwise false
      */
     public static native boolean arwAcceptVideoImageStereo(byte[] imageL, int widthL, int heightL, int cameraIndexL, boolean cameraIsFrontFacingL, byte[] imageR, int widthR, int heightR, int cameraIndexR, boolean cameraIsFrontFacingR);
+    
+    
+    public static native boolean arwUpdateDebugTexture32(byte[] image);
+  
+  
+	public static final int AR_LABELING_WHITE_REGION = 0,
+    						AR_LABELING_BLACK_REGION = 1;
 
-    public static native boolean arwUpdateDebugTexture(byte[] image, boolean flipY);
+	public static native void arwSetLabelingMode(int mode);
+  	
+	public static native int arwGetLabelingMode();
+	
+	
+	public static final int AR_TEMPLATE_MATCHING_COLOR               = 0,
+    						AR_TEMPLATE_MATCHING_MONO                = 1,
+    						AR_MATRIX_CODE_DETECTION                 = 2,
+    						AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX    = 3,
+    						AR_TEMPLATE_MATCHING_MONO_AND_MATRIX     = 4;
 
-    public static native void arwSetLabelingMode(int mode);
+	public static native void arwSetPatternDetectionMode(int mode);
+	
+	public static native int arwGetPatternDetectionMode();
+	
+	
+	public static native void arwSetBorderSize(float size);
+	
+	public static native float arwGetBorderSize();
+	
+	
+	public static final int AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
+    						AR_MATRIX_CODE_3x3_PARITY65 = 0x103,                                        // Matrix code in range 0-31.
+    						AR_MATRIX_CODE_3x3_HAMMING63 = 0x203,                                       // Matrix code in range 0-7.
+    						AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
+    						AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x304,                                      // Matrix code in range 0-511.
+    						AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x404,                                      // Matrix code in range 0-31.
+    						AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x405,                                     // Matrix code in range 0-4095.
+    						AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x505,                                      // Matrix code in range 0-127.
+    						AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
+    						AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
+    						AR_MATRIX_CODE_GLOBAL_ID = 0xb0e;
 
-    public static native int arwGetLabelingMode();
+	public static native void arwSetMatrixCodeType(int type);
+	
+	public static native int arwGetMatrixCodeType();
+	
+	
+	public static final int AR_IMAGE_PROC_FRAME_IMAGE = 0,
+    						AR_IMAGE_PROC_FIELD_IMAGE = 1;
 
-    public static native void arwSetPatternDetectionMode(int mode);
-
-    public static native int arwGetPatternDetectionMode();
-
-    public static native void arwSetBorderSize(float size);
-
-    public static native float arwGetBorderSize();
-
-    public static native void arwSetMatrixCodeType(int type);
-
-    public static native int arwGetMatrixCodeType();
-
-    public static native void arwSetImageProcMode(int mode);
-
+	public static native void arwSetImageProcMode(int mode);
+	
     public static native int arwGetImageProcMode();
 
 }
