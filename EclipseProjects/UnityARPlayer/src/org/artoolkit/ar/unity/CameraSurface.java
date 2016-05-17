@@ -141,9 +141,19 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     	if (camera != null) {
 
     		String camResolution = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraResolution", "320x240");
-            String[] dims = camResolution.split("x", 2);
+    		String[] dims = camResolution.split("x", 2);
+    		String camFocusMode = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraFocusMode", "auto");
+    		if (camFocusMode.toLowerCase().equals("fixed")) {
+    			camFocusMode = Camera.Parameters.FOCUS_MODE_FIXED;
+    		} else {
+    			camFocusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
+    		}
+            
             Camera.Parameters parameters = camera.getParameters();
             parameters.setPreviewSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
+            if (parameters.getSupportedFocusModes().contains(camFocusMode)) {
+            	parameters.setFocusMode(camFocusMode);
+            }
             parameters.setPreviewFrameRate(30);
             camera.setParameters(parameters);        
             
