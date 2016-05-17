@@ -179,11 +179,6 @@ AR2VideoBufferT* VideoSource::getFrame() {
 	return frameBuffer;
 }
 
-ARUint8* VideoSource::getFrameBuff() {
-    if (!frameBuffer) return NULL;
-    return frameBuffer->buff;
-}
-
 int VideoSource::getFrameStamp() {
 	return frameStamp;
 }

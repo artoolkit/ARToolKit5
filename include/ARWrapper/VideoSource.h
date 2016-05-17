@@ -191,12 +191,6 @@ public:
 	 */
 	AR2VideoBufferT* getFrame();
 
-    /**
-     * Returns the current frame.
-     * @return		Pointer to the buffer containing the current video frame
-     */
-    ARUint8* getFrameBuff();
-    
 	/**
 	 * Returns the current frame stamp. If the returned value has changed since the last 
 	 * time this function was called, then the caller can assume a new frame is available.

@@ -47,8 +47,11 @@
 
 AndroidVideoSource::AndroidVideoSource() : VideoSource(),
     newFrameArrived(false),
+    incomingFrameRawBufferSize(0),
+    incomingFrameRawBuffer(NULL),
     localFrameBuffer(NULL),
-    frameBufferSize(0),
+    convertedFrameRawBufferSize(0),
+    convertedFrameRawBuffer(NULL),
     gCameraIndex(0),
     gCameraIsFrontFacing(false) {
 }
@@ -182,27 +185,40 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
         goto bail;
 	}
 
-	// Allocate local buffer for video frame after copy or conversion.
-    if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
-        frameBufferSize = videoWidth * videoHeight + 2 * videoWidth/2 * videoHeight/2;
-    } else {
-        frameBufferSize = videoWidth * videoHeight * arUtilGetPixelSize(pixelFormat);
+	// Allocate buffer for incoming video frame, assuming NV21 input.
+    incomingFrameRawBufferSize = videoWidth * videoHeight + 2 * videoWidth/2 * videoHeight/2;
+    incomingFrameRawBuffer = (unsigned char *)calloc(incomingFrameRawBufferSize, sizeof(unsigned char));
+    if (!incomingFrameRawBuffer) {
+        ARController::logv("Error: Unable to allocate memory for incoming frame raw buffer.");
+        goto bail;
     }
+    
+    // Next, an AR2VideoBufferT.
     localFrameBuffer = (AR2VideoBufferT *)calloc(1, sizeof(AR2VideoBufferT));
     if (!localFrameBuffer) {
         ARController::logv("Error: Unable to allocate memory for local video frame buffer");
         goto bail;
     }
-    localFrameBuffer->buff = (ARUint8*)calloc(frameBufferSize, sizeof(ARUint8));
-	if (!localFrameBuffer->buff) {
-        ARController::logv("Error: Unable to allocate memory for local video frame buffer");
-        goto bail;
-	}
+    
     if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
+        localFrameBuffer->buff = incomingFrameRawBuffer;
+        localFrameBuffer->buffLuma = incomingFrameRawBuffer;
         localFrameBuffer->bufPlaneCount = 2;
-        localFrameBuffer->bufPlanes[0] = localFrameBuffer->buff;
-        localFrameBuffer->bufPlanes[1] = localFrameBuffer->buff + videoWidth*videoHeight;
+        localFrameBuffer->bufPlanes = (ARUint8 **)calloc(2, sizeof(ARUint8 *));
+        localFrameBuffer->bufPlanes[0] = incomingFrameRawBuffer;
+        localFrameBuffer->bufPlanes[1] = incomingFrameRawBuffer + videoWidth*videoHeight;
+    } else {
+        convertedFrameRawBufferSize = videoWidth * videoHeight * arUtilGetPixelSize(pixelFormat);
+        convertedFrameRawBuffer = (ARUint8 *)calloc(convertedFrameRawBufferSize, sizeof(ARUint8));
+        if (!convertedFrameRawBuffer) {
+            ARController::logv("Error: Unable to allocate memory for converted video frame buffer.");
+            goto bail;
+        }
+        localFrameBuffer->buff = convertedFrameRawBuffer;
+        localFrameBuffer->buffLuma = incomingFrameRawBuffer;
+        localFrameBuffer->bufPlaneCount = 0;
     }
+    
     frameBuffer = localFrameBuffer;
 
 	ARController::logv("Android Video Source running %dx%d.", videoWidth, videoHeight);
@@ -211,14 +227,20 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p) {
     return true;
     
 bail:
-    free(localFrameBuffer);
-    localFrameBuffer = NULL;
+    free(convertedFrameRawBuffer);
+    convertedFrameRawBuffer = NULL;
+    convertedFrameRawBufferSize = 0;
+    if (localFrameBuffer) {
+        free(localFrameBuffer->bufPlanes);
+        free(localFrameBuffer);
+        localFrameBuffer = NULL;
+    }
+    free(incomingFrameRawBuffer);
+    incomingFrameRawBuffer = NULL;
+    incomingFrameRawBufferSize = 0;
+    
     deviceState = DEVICE_OPEN;
     return false;
-}
-
-size_t AndroidVideoSource::getFrameSize() {
-    return frameBufferSize;
 }
 
 bool AndroidVideoSource::captureFrame() {
@@ -235,14 +257,14 @@ bool AndroidVideoSource::captureFrame() {
     return false;
 }
 
-void AndroidVideoSource::acceptImage(ARUint8* ptr) {
+void AndroidVideoSource::acceptImage(JNIEnv* env, jbyteArray pinArray) {
 	
     //ARController::logv("AndroidVideoSource::acceptImage()");
 	if (deviceState == DEVICE_RUNNING) {
-        if (pixelFormat == AR_PIXEL_FORMAT_NV21 || pixelFormat == AR_PIXEL_FORMAT_420f) {
-            // Nothing more to do.
-        } else if (ptr && pixelFormat == AR_PIXEL_FORMAT_RGBA) {
-            color_convert_common((unsigned char*)ptr, (unsigned char*)(ptr + videoWidth * videoHeight), videoWidth, videoHeight, localFrameBuffer->buff);
+        env->GetByteArrayRegion(pinArray, 0, incomingFrameRawBufferSize, (jbyte *)&incomingFrameRawBuffer);
+        
+        if (pixelFormat == AR_PIXEL_FORMAT_RGBA) {
+            color_convert_common((unsigned char *)incomingFrameRawBuffer, (unsigned char *)(incomingFrameRawBuffer + videoWidth * videoHeight), videoWidth, videoHeight, convertedFrameRawBuffer);
             
         } else {
             return;
@@ -258,13 +280,18 @@ bool AndroidVideoSource::close() {
     
     if (cparamLT) arParamLTFree(&cparamLT);
 
-	if (localFrameBuffer) {
-        free(localFrameBuffer->buff);
-		free(localFrameBuffer);
-		localFrameBuffer = NULL;
-        frameBuffer = NULL;
-        frameBufferSize = 0;
-	}
+    free(convertedFrameRawBuffer);
+    convertedFrameRawBuffer = NULL;
+    convertedFrameRawBufferSize = 0;
+    if (localFrameBuffer) {
+        free(localFrameBuffer->bufPlanes);
+        free(localFrameBuffer);
+        localFrameBuffer = NULL;
+    }
+    free(incomingFrameRawBuffer);
+    incomingFrameRawBuffer = NULL;
+    incomingFrameRawBufferSize = 0;
+
     newFrameArrived = false;
     ar2VideoClose(gVid);
     gVid = NULL;

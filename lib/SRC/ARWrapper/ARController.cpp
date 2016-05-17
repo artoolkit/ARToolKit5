@@ -358,18 +358,9 @@ bool ARController::videoAcceptImage(JNIEnv* env, jobject obj, const int videoSou
             ret = false;
             goto done;
         }
-        
-        if (avs->getPixelFormat() == AR_PIXEL_FORMAT_NV21) {
-            env->GetByteArrayRegion(pinArray, 0, avs->getFrameSize(), (jbyte *)avs->getFrameBuff());
-            avs->acceptImage(NULL);
-        } else {
-            if (jbyte* buff = env->GetByteArrayElements(pinArray, NULL)) {
-                avs->acceptImage((unsigned char *)buff);
-                env->ReleaseByteArrayElements(pinArray, buff, JNI_ABORT); // JNI_ABORT -> don't copy back changes on the native side to the Java side.
-            }
-        }
+        avs->acceptImage(env, pinArray);
     }
-    
+
 done:
     unlockVideoSource();
     
