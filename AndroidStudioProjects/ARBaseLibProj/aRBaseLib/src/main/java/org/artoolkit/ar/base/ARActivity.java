@@ -37,6 +37,7 @@
 
 package org.artoolkit.ar.base;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -48,12 +49,14 @@ import android.content.pm.ConfigurationInfo;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -87,24 +90,42 @@ public abstract class ARActivity extends Activity implements CameraEventListener
      * Android logging tag for this class.
      */
     protected final static String TAG = "ARActivity";
+
     /**
      * Renderer to use. This is provided by the subclass using {@link #supplyRenderer() Renderer()}.
      */
     protected ARRenderer renderer;
+
     /**
      * Layout that will be filled with the camera preview and GL views. This is provided by the subclass using {@link #supplyFrameLayout() supplyFrameLayout()}.
      */
     protected FrameLayout mainLayout;
+
     /**
      * Camera preview which will provide video frames.
      */
     private CaptureCameraPreview preview;
+
     /**
      * GL surface to render the virtual objects
      */
     private GLSurfaceView glView;
+
+	/**
+     * For any square template (pattern) markers, the number of rows
+     * and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
+     */
+	protected int pattSize = 16;
+	
+	/**
+     * For any square template (pattern) markers, the maximum number
+     * of markers that may be loaded for a single matching pass. Must be > 0.
+     */
+	protected int pattCountMax = 25;
+	
     private boolean firstUpdate = false;
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +180,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
         Log.i(TAG, "onStart(): Activity starting.");
 
-        if (ARToolKit.getInstance().initialiseNative(this.getCacheDir().getAbsolutePath()) == false) { // Use cache directory for Data files.
+        if (ARToolKit.getInstance().initialiseNativeWithOptions(this.getCacheDir().getAbsolutePath(), pattSize, pattCountMax) == false) { // Use cache directory for Data files.
 
             new AlertDialog.Builder(this)
                     .setMessage("The native library is not loaded. The application cannot continue.")
