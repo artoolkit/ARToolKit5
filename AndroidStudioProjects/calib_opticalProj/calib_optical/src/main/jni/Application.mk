@@ -37,7 +37,7 @@
 #--------------------------------------------------------------------------
 
 APP_MODULES		:= calib_optical_Native
-APP_OPTIM		:= release
+#APP_OPTIM		:= release
 #APP_OPTIM		:= debug
 #APP_ABI			:= all
 APP_ABI			:= armeabi armeabi-v7a x86 mips

@@ -151,6 +151,7 @@ static int videoHeight = 0;                                         ///< Height 
 static AR_PIXEL_FORMAT gPixFormat;                                  ///< Pixel format from ARToolKit enumeration.
 static ARUint8* gVideoFrame = NULL;                                 ///< Buffer containing current video frame.
 static size_t gVideoFrameSize = 0;                                  ///< Size of buffer containing current video frame.
+static AR2VideoBufferT *gVideoBuffer = NULL;                        ///< Buffer containing current video frame.
 static bool videoFrameNeedsPixelBufferDataUpload = false;
 static int gCameraIndex = 0;
 static bool gCameraIsFrontFacing = false;
@@ -284,6 +285,11 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION_NATIVE(nativeStop(JNIEnv* env, jobject ob
         gVideoFrame = NULL;
         gVideoFrameSize = 0;
     }
+    if (gVideoBuffer) {
+    	free(gVideoBuffer->bufPlanes);
+    	free(gVideoBuffer);
+    	gVideoBuffer = NULL;
+    }
     ar2VideoClose(gVid);
     gVid = NULL;
     videoInited = false;
@@ -324,7 +330,7 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION_NATIVE(nativeVideoInit(JNIEnv* env, jobje
 	// ARUint8 *myRGBABuffer = (ARUint8 *)malloc(videoWidth * videoHeight * 4);
 	gPixFormat = AR_PIXEL_FORMAT_NV21;
 	gVideoFrameSize = (sizeof(ARUint8)*(w*h + 2*w/2*h/2));
-	gVideoFrame = (ARUint8*) (malloc(gVideoFrameSize));
+	gVideoFrame = (ARUint8 *)malloc(gVideoFrameSize);
 	if (!gVideoFrame) {
 		gVideoFrameSize = 0;
 		LOGE("Error allocating frame buffer");
@@ -332,6 +338,12 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION_NATIVE(nativeVideoInit(JNIEnv* env, jobje
 	}
 	videoWidth = w;
 	videoHeight = h;
+	gVideoBuffer = (AR2VideoBufferT *)calloc(1, sizeof(AR2VideoBufferT));
+	gVideoBuffer->bufPlanes = (ARUint8 **)calloc(2, sizeof(ARUint8 *));
+	gVideoBuffer->bufPlaneCount = 2;
+	gVideoBuffer->bufPlanes[0] = gVideoFrame;
+	gVideoBuffer->bufPlanes[1] = gVideoFrame + videoWidth*videoHeight;
+	gVideoBuffer->buff = gVideoBuffer->buffLuma = gVideoFrame;
 	gCameraIndex = cameraIndex;
 	gCameraIsFrontFacing = cameraIsFrontFacing;
 	LOGI("Video camera %d (%s), %dx%d format %s, %d-byte buffer.", gCameraIndex, (gCameraIsFrontFacing ? "front" : "rear"), w, h, arUtilGetPixelFormatName(gPixFormat), gVideoFrameSize);
@@ -458,7 +470,7 @@ JNIEXPORT void JNICALL JNIFUNCTION_NATIVE(nativeVideoFrame(JNIEnv* env, jobject 
     videoFrameNeedsPixelBufferDataUpload = true; // Note that buffer needs uploading. (Upload must be done on OpenGL context's thread.)
     
 	// Run marker detection on frame
-	arDetectMarker(arHandle, gVideoFrame);
+	arDetectMarker(arHandle, gVideoBuffer);
 	
 	// Get detected markers
 	ARMarkerInfo* markerInfo = arGetMarker(arHandle);
