@@ -67,7 +67,7 @@ release_file="$ANDROID_NDK_ROOT/RELEASE.TXT"
 #echo "3"
 # NDK version r11 and later encode NDK version in source.properties.
 if [ -s "$source_properties" ]; then
-  version=$(sed -En -e 's/^Pkg.Revision\s*=\s*([0-9a-f]+)/r\1/p' $source_properties)
+  version=$(sed -En -e 's/^Pkg.Revision[ \t]*=[ \t]*([0-9a-f]+)/r\1/p' $source_properties)
 elif [ -s "$release_file" ]; then
   version=$(grep '^r' $release_file)
 else
