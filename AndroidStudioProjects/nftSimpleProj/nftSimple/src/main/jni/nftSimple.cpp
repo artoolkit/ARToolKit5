@@ -435,7 +435,7 @@ static int initNFT(ARParamLT *cparamLT, AR_PIXEL_FORMAT pixFormat)
     //
     
     // KPM init.
-    kpmHandle = kpmCreateHandle(cparamLT, pixFormat);
+    kpmHandle = kpmCreateHandle(cparamLT);
     if (!kpmHandle) {
         LOGE("Error: kpmCreatHandle.\n");
         return (false);

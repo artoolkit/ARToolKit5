@@ -103,10 +103,6 @@ NATIVE_PROJS=" \
 "
 for i in $NATIVE_PROJS
 do
-    echo from `pwd`: going to EclipseProjects/$i
-    cd EclipseProjects/$i
-    $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
-    cd ../..
     FirstChar=${i:0:1}
     LCFirstChar=`echo $FirstChar | tr '[:upper:]' '[:lower:]'`
     ModuleName=$LCFirstChar${i:1}

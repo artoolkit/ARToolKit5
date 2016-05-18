@@ -105,7 +105,7 @@ endif
 LOCAL_C_INCLUDES += $(ARTOOLKIT_DIR)/../include/android $(ARTOOLKIT_DIR)/../include
 LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += eden argsub_es armulti arosg aricp cpufeatures arvideo util
+LOCAL_STATIC_LIBRARIES += eden argsub_es armulti arosg aricp arvideo util cpufeatures
 LOCAL_STATIC_LIBRARIES += osgdb_osg osgdb_ive osgdb_jpeg jpeg osgdb_gif gif osgdb_tiff tiff osgdb_bmp osgdb_png png osgdb_tga osgdb_freetype ft2 osgAnimation osgFX osgParticle osgPresentation osgShadow osgSim osgTerrain osgText osgVolume osgWidget osgViewer osgGA osgDB osgUtil osgdb_deprecated_osg osgdb_deprecated_osganimation osgdb_deprecated_osgfx  osgdb_deprecated_osgparticle osgdb_deprecated_osgshadow osgdb_deprecated_osgsim osgdb_deprecated_osgterrain osgdb_deprecated_osgtext osgdb_deprecated_osgviewer osgdb_deprecated_osgvolume osgdb_deprecated_osgwidget osg OpenThreads
 #LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
 LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)

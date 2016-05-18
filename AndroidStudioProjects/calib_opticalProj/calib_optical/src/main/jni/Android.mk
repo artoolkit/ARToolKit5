@@ -93,7 +93,7 @@ LOCAL_C_INCLUDES += $(CURL_DIR)/include
 LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 #LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += eden jpeg argsub_es armulti arosg aricp cpufeatures arvideo util
+LOCAL_STATIC_LIBRARIES += eden jpeg argsub_es armulti arosg aricp arvideo util cpufeatures
 LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)
 
 include $(BUILD_SHARED_LIBRARY)
