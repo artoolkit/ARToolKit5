@@ -24,13 +24,8 @@ ipch/
 *.cachefile
 
 #### IDE user-config.
-# Eclipse
-local.properties
-EclipseProjects/**/.settings/
-.metadata/
-
 # Android Studio
-#local.properties
+local.properties
 *.iml
 AndroidStudioProjects/**/.gradle/
 AndroidStudioProjects/**/.idea/
@@ -179,16 +174,6 @@ android/obj/local/**/libc++_shared.so
 android/obj/local/**/libcpufeatures.a
 android/libs/**/libARWrapper.so
 android/libs/**/libc++_shared.so
-EclipseProjects/**/bin/
-EclipseProjects/**/gen/
-EclipseProjects/**/obj/
-EclipseProjects/**/libs/armeabi/
-EclipseProjects/**/libs/armeabi-v7a/
-EclipseProjects/**/libs/mips/
-EclipseProjects/**/libs/x86/
-EclipseProjects/**/libs/arm64-v8a/
-EclipseProjects/**/libs/x86_64/
-EclipseProjects/**/libs/mips64/
 AndroidStudioProjects/**/build
 AndroidStudioProjects/**/captures
 AndroidStudioProjects/**/jniLibs
