@@ -36,8 +36,10 @@ Requirements.
 
 Requirements:
  * Android SDK Tools, r24.4.1 (October 2015) or later recommended.
- * Development of native ARToolKit for Android applications requires Android NDK Revision 11 (December 2015) or later.
+ * Development of native ARToolKit for Android applications requires Android NDK Revision 11 (December 2015) or later. See http://www.artoolkit.org/documentation/doku.php?id=4_Android:android_native for more details.
  * Android Studio IDE. Android Studio project files are supplied with the ARToolKit for Android SDK.
+ * Use of the Android Studio IDE is recommended, and Android Studio project files are supplied with the ARToolKit for Android SDK.
+ * Use of the Eclipse IDE is deprecated. ARToolKit v5.3.2 will be the last release in which Eclipse project files are supplied with the ARToolKit for Android SDK.
  * An Android device, running Android 4.0.3 (Android API level 15) or later. Testing is not possible using the Android Virtual Device system.
  * A printer to print the pattern PDF images.
 
@@ -53,11 +55,11 @@ For full instructions on using this SDK, please refer to the online user guide a
 Training new markers.
 ---------------------
 
-The utilities required to train new square and NFT markers are provide in the "bin" directory of the SDK. The utilities are command-line Windows/OS X executables which should be run from a Terminal environment.
+The utilities required to train new square and NFT markers are provide in the ‘bin’ directory of the SDK. The utilities are command-line Windows/OS X executables which should be run from a Terminal environment.
 
 Consult the ARToolKit documentation for more information:
-    http://www.artoolkit.org/documentation/Creating_and_training_new_ARToolKit_markers
-    http://www.artoolkit.org/documentation/ARToolKit_NFT
+  - Marker training: http://artoolkit.org/documentation/doku.php?id=3_Marker_Training:marker_training
+  - NFT marker: http://artoolkit.org/documentation/doku.php?id=3_Marker_Training:marker_nft_training
 
 Usage (OS X):
     ./mk_patt
@@ -108,7 +110,7 @@ ARToolKit v5.2 was the first major release under an open source license in sever
 
 For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 and later include a number of changes. Significantly, full source is now provided for the NFT libraries libAR2 and libKPM.
 
-ARToolKit 5.2 and later for Android supports fetching of camera calibration data from an ARToolworks-provided server. On request, ARToolworks provides developers access to an on-device verson of calib_camera which submits calibration data to ARToolworks' server, making it available to all users of that device. The underlying changes to support this include a native version of libARvideo for Android which provides the functions to fetch camera calibration data (note that libARvideo on Android does not handle frame retrieval from the camera; that still happens on the Java side). Existing native apps which wish to use the functionality should follow the example usage from the ARNative example, and also link against libarvideo, and its additional dependencies libcurl, libssl and libcrypto.
+ARToolKit 5.2 and later for Android supports fetching of camera calibration data from an ARToolworks-provided server. On request, ARToolworks provides developers access to an on-device version of calib_camera which submits calibration data to ARToolworks' server, making it available to all users of that device. The underlying changes to support this include a native version of libARvideo for Android which provides the functions to fetch camera calibration data (note that libARvideo on Android does not handle frame retrieval from the camera; that still happens on the Java side). Existing native apps which wish to use the functionality should follow the example usage from the ARNative example, and also link against libarvideo, and its additional dependencies libcurl, libssl and libcrypto.
 
 Please see http://www.artoolkit.org/documentation/Using_automatic_online_camera_calibration_retrieval for details on this feature and the code changes required.
 
@@ -116,9 +118,9 @@ Please see http://www.artoolkit.org/documentation/Using_automatic_online_camera_
 libKPM usage.
 -------------
 
-libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simply app builds and app distribution on all supported platforms.
+libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simplify app builds and app distribution on all supported platforms.
 
-Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via http://www.artoolkit.org/contact if you are an existing user of ARToolKit Professional with questions.
+Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via info@artoolkit.org if you are an existing user of ARToolKit Professional with questions.
 
 
 Next steps.
@@ -130,7 +132,7 @@ http://www.artoolkit.org/community/forums/viewforum.php?f=26
 
 You are invited to join the forum and contribute your questions, answers and success stories.
 
-ARToolKit consists of a full ecosystem of SDKs for desktop, web, mobile and in-app plugin augmented reality. Stay up to date with information and releases from artoolkit.org by joining our announcements mailing list.(Click ‘Subscribe’ at the bottom of http://www.artoolkit.org/)
+ARToolKit consists of a full ecosystem of SDKs for desktop, web, mobile and in-app plugin augmented reality. Stay up to date with information and releases from artoolkit.org by joining our announcements mailing list. (Click ‘Subscribe’ at the bottom of http://www.artoolkit.org/)
 
 
 Do you have a feature request, bug report, or other code you would like to contribute to ARToolKit? Access the complete source and issue tracker for ARToolKit at http://github.com/artoolkit/artoolkit5
