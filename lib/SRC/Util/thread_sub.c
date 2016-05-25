@@ -194,7 +194,7 @@ int threadFree( THREAD_HANDLE_T **flag )
 {
     pthread_mutex_destroy(&((*flag)->mut));
     pthread_cond_destroy(&((*flag)->cond1));
-    pthread_cond_destroy(&((*flag)->cond1));
+    pthread_cond_destroy(&((*flag)->cond2));
     free( *flag );
     *flag = NULL;
     return 0;
