@@ -2548,7 +2548,7 @@
 		4AD6D90D17B1F9270062F7B2 /* opticalStereo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = opticalStereo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE25B021288612000F271D2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4AE6FE7F0BC24FFC0084390C /* ChangeLog.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ChangeLog.txt; sourceTree = "<group>"; wrapsLines = 1; };
-		4AE6FE800BC24FFC0084390C /* README.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; usesTabs = 0; wrapsLines = 1; };
+		4AE6FE800BC24FFC0084390C /* README.md */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; usesTabs = 0; wrapsLines = 1; };
 		4AE9CC54178E759500D944B9 /* ARMarkerNFT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMarkerNFT.c; sourceTree = "<group>"; };
 		4AE9CC55178E759500D944B9 /* ARMarkerNFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMarkerNFT.h; sourceTree = "<group>"; };
 		4AE9CC57178E75C300D944B9 /* ARMarkerNFT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMarkerNFT.c; sourceTree = "<group>"; };
@@ -4831,7 +4831,7 @@
 		78BB3DD208E482DA00D7CA2D = {
 			isa = PBXGroup;
 			children = (
-				4AE6FE800BC24FFC0084390C /* README.txt */,
+				4AE6FE800BC24FFC0084390C /* README.md */,
 				4AE6FE7F0BC24FFC0084390C /* ChangeLog.txt */,
 				4AFBF6D61B5DC800005F0B53 /* LICENSE.txt */,
 				78BB3F4F08E483AD00D7CA2D /* bin */,

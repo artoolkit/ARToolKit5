@@ -8,7 +8,7 @@ AppSupportURL=http://www.artoolkit.org/documentation
 AppUpdatesURL=http://www.artoolkit.org/download
 DefaultDirName={pf}\ARToolKit5
 DefaultGroupName=ARToolKit
-InfoBeforeFile=README.txt
+InfoBeforeFile=README.md
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
@@ -95,7 +95,7 @@ Type: filesandordirs; Name: "{app}\include\opencv2"
 
 [Files]
 ; dev = required to build apps against SDK.
-Source: "README.txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion isreadme
+Source: "README.md"; Components: dev; DestDir: "{app}"; Flags: ignoreversion isreadme
 Source: "LICENSE.txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion
 Source: "ChangeLog.txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion
 Source: "include\AR\*"; Components: dev; DestDir: "{app}\include\AR"; Flags: recursesubdirs ignoreversion

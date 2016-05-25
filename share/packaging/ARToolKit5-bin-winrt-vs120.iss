@@ -8,7 +8,7 @@ AppSupportURL=http://www.artoolkit.org/support/
 AppUpdatesURL=http://www.artoolkit.org/download/
 DefaultDirName={pf}\ARToolKit5-WinRT
 DefaultGroupName=ARToolKit
-InfoBeforeFile=README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).txt
+InfoBeforeFile=README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).md
 Compression=lzma
 SolidCompression=yes
 SourceDir=..\..
@@ -119,7 +119,7 @@ Type: files; Name: "{app}\lib\winrt-wp8_1-x86\ARToolKitComponentd.winmd"
 
 [Files]
 ; dev = required to build apps against SDK.
-Source: "README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion isreadme
+Source: "README (ARToolKit for Windows Phone 8.1 and Windows Store 8.1).md"; Components: dev; DestDir: "{app}"; Flags: ignoreversion isreadme
 Source: "LICENSE.txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion
 Source: "ChangeLog.txt"; Components: dev; DestDir: "{app}"; Flags: ignoreversion
 

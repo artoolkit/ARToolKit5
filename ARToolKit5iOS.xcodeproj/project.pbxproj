@@ -1799,7 +1799,7 @@
 		4A6C5E541794F59F00061A08 /* gsub_mtx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gsub_mtx.c; sourceTree = "<group>"; };
 		4A6CA1D512F8212A006375F6 /* arFilterTransMat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arFilterTransMat.h; sourceTree = "<group>"; };
 		4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = videoAspectRatio.c; sourceTree = "<group>"; };
-		4A752F68116238DD009877B3 /* README (ARToolKit for iOS).txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README (ARToolKit for iOS).txt"; sourceTree = "<group>"; wrapsLines = 1; };
+		4A752F68116238DD009877B3 /* README (ARToolKit for iOS).md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "README (ARToolKit for iOS).md"; sourceTree = "<group>"; wrapsLines = 1; };
 		4A75E8E61C92338C00DC8915 /* videoLuma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoLuma.h; sourceTree = "<group>"; };
 		4A75E8E71C92339E00DC8915 /* videoLuma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoLuma.c; sourceTree = "<group>"; };
 		4A7797D50CCEEB5F0021FAC9 /* icp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icp.h; sourceTree = "<group>"; };
@@ -6362,7 +6362,7 @@
 		78BB3DD208E482DA00D7CA2D = {
 			isa = PBXGroup;
 			children = (
-				4A752F68116238DD009877B3 /* README (ARToolKit for iOS).txt */,
+				4A752F68116238DD009877B3 /* README (ARToolKit for iOS).md */,
 				4AE6FE7F0BC24FFC0084390C /* ChangeLog.txt */,
 				4AF9714D1B5F58A6001BFEB5 /* LICENSE.txt */,
 				78BB3F4F08E483AD00D7CA2D /* bin */,
