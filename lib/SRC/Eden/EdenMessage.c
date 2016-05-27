@@ -483,8 +483,16 @@ done:
 
 void EdenMessageSetViewSize(const float width, const float height)
 {
-    gScreenWidth = width;
-    gScreenHeight = height;
+    EDEN_BOOL changed = FALSE;
+    if (gScreenWidth != width) {
+        gScreenWidth = width;
+        changed = TRUE;
+    }
+    if (gScreenHeight != height) {
+        gScreenHeight = height;
+        changed = TRUE;
+    }
+    if (changed) boxSetText(gBoxSettings, NULL);
 }
 
 void EdenMessageSetBoxParams(const float width, const float padding)
