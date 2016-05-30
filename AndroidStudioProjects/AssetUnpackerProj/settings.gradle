@@ -1,1 +1,4 @@
-include ':assetUnpacker', ':aRBaseLib'
+include ':assetUnpacker'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')

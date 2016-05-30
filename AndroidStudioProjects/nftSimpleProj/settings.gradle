@@ -1,1 +1,4 @@
-include ':nftSimple', ':aRBaseLib'
+include ':nftSimple'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')
