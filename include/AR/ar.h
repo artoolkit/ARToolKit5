@@ -156,7 +156,7 @@ void arLogSetLogger(AR_LOG_LOGGER_CALLBACK callback, int callBackOnlyIfOnSameThr
 #define ARLOGi(...) arLog(AR_LOG_LEVEL_INFO, __VA_ARGS__)
 #define ARLOGw(...) arLog(AR_LOG_LEVEL_WARN, __VA_ARGS__)
 #define ARLOGe(...) arLog(AR_LOG_LEVEL_ERROR, __VA_ARGS__)
-#define ARLOGperror(s) arLog(AR_LOG_LEVEL_ERROR, (s ? "%s: %s\n" : "%s%s\n"), (s ? s : ""), strerror(errno))
+#define ARLOGperror(s) arLog(AR_LOG_LEVEL_ERROR, ((s != NULL) ? "%s: %s\n" : "%s%s\n"), ((s != NULL) ? s : ""), strerror(errno))
 
 
 #define arMalloc(V,T,S)  \
