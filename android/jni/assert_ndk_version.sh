@@ -13,12 +13,10 @@
 # See https://gist.github.com/2878774 for asserting SDK version.
 #
 # Copyright 2012, Lookout, Inc. <jtjerno@mylookout.com>
-# Licensed under the BSD license. See the LICENSE file for information.
+# Licensed under the BSD license. See the zLICENSE file for information.
 #
 # Includes contributions from alexs.mac@gmail.com (Alex Stewart)
 # and Philip Lamb.
-
-#echo "Begin"
 
 # Extracts 'r5c' into '5 c', also handles newer versions of the form
 # 'r9d (64-bit)' and versions >= 10.
@@ -39,14 +37,12 @@ fi
 # Assert that the expected version is at least 4.
 declare -a expected_version
 expected_version=( $(get_major_minor "$1") )
-#echo "1"
 if [[ ${expected_version[0]} -le 4 ]]; then
   echo "Cannot test for versions less than r5: r4 doesn't have a version file." >&2
   echo false
   exit 1
 fi
 
-#echo "2"
 if [[ ! -d "$ANDROID_NDK_ROOT" ]]; then
   if [[ -d "$ANDROID_NDK" ]]; then
      ANDROID_NDK_ROOT=$ANDROID_NDK
@@ -64,7 +60,6 @@ fi
 source_properties="$ANDROID_NDK_ROOT/source.properties"
 release_file="$ANDROID_NDK_ROOT/RELEASE.TXT"
 
-#echo "3"
 # NDK version r11 and later encode NDK version in source.properties.
 if [ -s "$source_properties" ]; then
   version=$(sed -En -e 's/^Pkg.Revision[ \t]*=[ \t]*([0-9a-f]+)/r\1/p' $source_properties)
@@ -78,7 +73,6 @@ else
   exit 0
 fi
 
-#echo "4"
 # Make sure the data is at least kinda sane.
 declare -a actual_version
 actual_version=( $(get_major_minor "$version") )
@@ -88,7 +82,6 @@ if [ -z "$version" ] || [ -z "${actual_version[0]}" ]; then
   exit 1
 fi
 
-#echo "5"
 if [[ ${actual_version[0]} -lt ${expected_version[0]} ]]; then
   echo "false"
 elif [[ ${actual_version[0]} -eq ${expected_version[0]} ]]; then
@@ -101,4 +94,3 @@ elif [[ ${actual_version[0]} -eq ${expected_version[0]} ]]; then
 else
   echo "true"
 fi
-#echo "End"
