@@ -95,8 +95,7 @@ else
 fi
 
 #
-# Build the various ARToolKit subcomponents and add to ABI libc++_shared.so shared libraries.
-# Built elements are moved to ./libs folder
+# Build the ARToolKit libraries.
 #
 $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
 NDK_BLD_RESULT=$?
@@ -106,11 +105,18 @@ if [[ ${NDK_BLD_RESULT} != "0" ]]; then
 fi
 
 #
-# Build the various ABI libcpufeatures.a (added to shared library) libARWrapper.so shared libraries.
-# Built elements are moved to ./libs folder
+# Build ARWrapper
 #
 $NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
+NDK_BLD_RESULT=$?
+if [[ ${NDK_BLD_RESULT} != "0" ]]; then
+  echo Exiting ndk-build script abnormally terminated.
+  exit ${NDK_BLD_RESULT}
+fi
 
+#
+# Copy ARWrapper and dependencies to ./libs folder of ARBaseLib-based examples.
+#
 ARTK_LibsDir=libs
 
 if [[ $1 != "clean" ]] ; then
