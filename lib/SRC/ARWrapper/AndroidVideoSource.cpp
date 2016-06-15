@@ -271,7 +271,8 @@ void AndroidVideoSource::acceptImage(JNIEnv* env, jbyteArray pinArray) {
 	
     //ARController::logv("AndroidVideoSource::acceptImage()");
 	if (deviceState == DEVICE_RUNNING) {
-        env->GetByteArrayRegion(pinArray, 0, incomingFrameRawBufferSize, (jbyte *)&incomingFrameRawBuffer);
+        
+        env->GetByteArrayRegion(pinArray, 0, incomingFrameRawBufferSize, (jbyte *)incomingFrameRawBuffer);
         
         if (pixelFormat == AR_PIXEL_FORMAT_RGBA) {
             color_convert_common((unsigned char *)incomingFrameRawBuffer, (unsigned char *)(incomingFrameRawBuffer + videoWidth * videoHeight), videoWidth, videoHeight, convertedFrameRawBuffer);
