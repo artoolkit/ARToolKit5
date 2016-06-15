@@ -276,9 +276,6 @@ void AndroidVideoSource::acceptImage(JNIEnv* env, jbyteArray pinArray) {
         
         if (pixelFormat == AR_PIXEL_FORMAT_RGBA) {
             color_convert_common((unsigned char *)incomingFrameRawBuffer, (unsigned char *)(incomingFrameRawBuffer + videoWidth * videoHeight), videoWidth, videoHeight, convertedFrameRawBuffer);
-            
-        } else {
-            return;
         }
 		frameStamp++;
 		newFrameArrived = true;
