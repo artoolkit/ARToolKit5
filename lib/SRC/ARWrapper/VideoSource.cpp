@@ -105,6 +105,7 @@ VideoSource::~VideoSource() {
 	if (cameraParamBuffer) {
 		free(cameraParamBuffer);
 		cameraParamBuffer = NULL;
+        cameraParamBufferLen = 0;
 	}
 
 }
@@ -127,25 +128,39 @@ int VideoSource::getError()
 
 void VideoSource::configure(const char* vconf, const char* cparaName, const char* cparaBuff, size_t cparaBuffLen) {
     ARController::logv(AR_LOG_LEVEL_DEBUG, "VideoSource::configure(): called");
+    
+    free(videoConfiguration);
+    videoConfiguration = NULL;
 	if (vconf) {
 		size_t len = strlen(vconf);
-		videoConfiguration = (char*)malloc(sizeof(char) * len + 1);
-		strcpy(videoConfiguration, vconf);
+        if (len) {
+            videoConfiguration = (char*)malloc(sizeof(char) * len + 1);
+            strcpy(videoConfiguration, vconf);
+        }
         ARController::logv(AR_LOG_LEVEL_INFO, "Setting video configuration '%s'.", videoConfiguration);
 	}
 
-	if (cparaName) {
+    free(cameraParam);
+    cameraParam = NULL;
+    if (cparaName) {
 		size_t len = strlen(cparaName);
-		cameraParam = (char*)malloc(sizeof(char) * len + 1);
-		strcpy(cameraParam, cparaName);
-        ARController::logv(AR_LOG_LEVEL_INFO, "Settting camera parameters file '%s'.", cameraParam);
+        if (len) {
+            cameraParam = (char*)malloc(sizeof(char) * len + 1);
+            strcpy(cameraParam, cparaName);
+        }
+        ARController::logv(AR_LOG_LEVEL_INFO, "Setting camera parameters file '%s'.", cameraParam);
 	}
 
+    free(cameraParamBuffer);
+    cameraParamBuffer = NULL;
+    cameraParamBufferLen = 0;
 	if (cparaBuff) {
-		cameraParamBufferLen = cparaBuffLen;
-		cameraParamBuffer = (char*)malloc(sizeof(char) * cameraParamBufferLen);
-		memcpy(cameraParamBuffer, cparaBuff, cameraParamBufferLen);
-        ARController::logv(AR_LOG_LEVEL_INFO, "Settting camera parameters buffer: %ld bytes.", cameraParamBufferLen);
+        if (cparaBuffLen) {
+            cameraParamBufferLen = cparaBuffLen;
+            cameraParamBuffer = (char*)malloc(sizeof(char) * cameraParamBufferLen);
+            memcpy(cameraParamBuffer, cparaBuff, cameraParamBufferLen);
+        }
+        ARController::logv(AR_LOG_LEVEL_INFO, "Setting camera parameters buffer: %ld bytes.", cameraParamBufferLen);
 	}
     ARController::logv(AR_LOG_LEVEL_DEBUG, "VideoSource::configure(): exiting");
 }

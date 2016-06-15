@@ -372,7 +372,7 @@ int    arParamLoadFromBuffer( const void *buffer, size_t bufsize, ARParam *param
 	ARParamd	param_wasRead;
 	double		temp;
     
-    if( !buffer || !param) return -1;
+    if( !buffer || !param || !bufsize) return -1;
     
 	// Try to determine distortion function version number.
 	// Infer distortion function version number from buffer length.

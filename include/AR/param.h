@@ -185,6 +185,8 @@ int    arParamClear( ARParam *param, int xsize, int ysize, int dist_function_ver
 
 int    arParamDistFactorClear( ARdouble dist_factor[AR_DIST_FACTOR_NUM_MAX], int xsize, int ysize, int dist_function_version );
 
+int    arParamClearWithFOVy(ARParam *param, int xsize, int ysize, ARdouble FOVy);
+
 int    arParamChangeSize( ARParam *source, int xsize, int ysize, ARParam *newparam );
 
 int    arParamDecomp( const ARParam *source, ARParam *icpara, ARdouble trans[3][4] );

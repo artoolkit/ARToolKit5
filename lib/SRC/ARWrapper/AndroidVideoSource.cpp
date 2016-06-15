@@ -180,8 +180,8 @@ bool AndroidVideoSource::getVideoReadyAndroid2(const ARParam *cparam_p)
     if (cparam_p) {
         cparam = *cparam_p;
     } else {
-        arParamClear(&cparam, videoWidth, videoHeight, AR_DIST_FUNCTION_VERSION_DEFAULT);
-        ARController::logv(AR_LOG_LEVEL_WARN, "Using default camera parameters for %dx%d image size.", videoWidth, videoHeight);
+        arParamClearWithFOVy(&cparam, videoWidth, videoHeight, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARController::logv(AR_LOG_LEVEL_WARN, "Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", videoWidth, videoHeight);
     }
 
 	if (cparam.xsize != videoWidth || cparam.ysize != videoHeight) {

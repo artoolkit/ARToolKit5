@@ -73,7 +73,6 @@ int arParamClear( ARParam *param, int xsize, int ysize, int dist_function_versio
     return arParamDistFactorClear( param->dist_factor, xsize, ysize, param->dist_function_version );
 }
 
-
 int arParamDistFactorClear( ARdouble dist_factor[AR_DIST_FACTOR_NUM_MAX], int xsize, int ysize, int dist_function_version )
 {
     if (!dist_factor) return (-1);
@@ -84,7 +83,7 @@ int arParamDistFactorClear( ARdouble dist_factor[AR_DIST_FACTOR_NUM_MAX], int xs
 		dist_factor[2] = 0.0;           /*  p1  */
 		dist_factor[3] = 0.0;           /*  p2  */
 		dist_factor[4] = 1.0;           /*  fx  */
-		dist_factor[5] = 1.0;           /*  fx  */
+		dist_factor[5] = 1.0;           /*  fy  */
 		dist_factor[6] = xsize / 2.0;   /*  x0  */
 		dist_factor[7] = ysize / 2.0;   /*  y0  */
 		dist_factor[8] = 1.0;           /*  Size adjust */
@@ -114,3 +113,44 @@ int arParamDistFactorClear( ARdouble dist_factor[AR_DIST_FACTOR_NUM_MAX], int xs
 		return -1;
 	}
 }
+
+int arParamClearWithFOVy(ARParam *param, int xsize, int ysize, ARdouble FOVy)
+{
+    if (!param) return (-1);
+    
+    param->xsize = xsize;
+    param->ysize = ysize;
+    param->dist_function_version = 4;
+    
+#ifdef ARDOUBLE_IS_FLOAT
+    ARdouble f = ysize/2.0f / tanf(FOVy / 2.0f);
+#else
+    ARdouble f = ysize/2.0 / tan(FOVy / 2.0);
+#endif
+    
+    param->mat[0][0] =   f;
+    param->mat[0][1] =   0.0;
+    param->mat[0][2] = xsize/2.0;
+    param->mat[0][3] =   0.0;
+    param->mat[1][0] =   0.0;
+    param->mat[1][1] =   f;
+    param->mat[1][2] = ysize/2.0;
+    param->mat[1][3] =   0.0;
+    param->mat[2][0] =   0.0;
+    param->mat[2][1] =   0.0;
+    param->mat[2][2] =   1.0;
+    param->mat[2][3] =   0.0;
+    
+    param->dist_factor[0] = 0.0;           /*  k1  */
+    param->dist_factor[1] = 0.0;           /*  k2  */
+    param->dist_factor[2] = 0.0;           /*  p1  */
+    param->dist_factor[3] = 0.0;           /*  p2  */
+    param->dist_factor[4] = f;             /*  fx  */
+    param->dist_factor[5] = f;             /*  fy  */
+    param->dist_factor[6] = xsize / 2.0;   /*  x0  */
+    param->dist_factor[7] = ysize / 2.0;   /*  y0  */
+    param->dist_factor[8] = 1.0;           /*  Size adjust */
+    
+    return 0;
+}
+
