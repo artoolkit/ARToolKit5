@@ -51,13 +51,14 @@
 #  include <sys/param.h> // MAXPATHLEN
 #  include <unistd.h> // getcwd
 #endif
-#ifndef __APPLE__
-#  include <GL/gl.h>
-#else
+#ifdef __APPLE__
 #  include <OpenGL/gl.h>
+#  include "opencv2/calib3d/calib3d_c.h"
+#elif defined(__linux) || defined(_WIN32)
+#  include <GL/gl.h>
+#  include "opencv2/calib3d/calib3d.hpp"
 #endif
 #include <opencv/cv.h>
-#include "opencv2/calib3d/calib3d_c.h"
 #include <AR/ar.h>
 #include <AR/gsub.h>
 #include <AR/video.h>
