@@ -1,1 +1,4 @@
-include ':aRNativeES1', ':aRBaseLib'
+include ':aRNativeES1'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')

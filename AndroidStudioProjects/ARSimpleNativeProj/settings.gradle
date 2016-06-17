@@ -1,1 +1,4 @@
-include ':aRSimpleNative', ':aRBaseLib'
+include ':aRSimpleNative'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')

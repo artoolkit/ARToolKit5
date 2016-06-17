@@ -1,1 +1,4 @@
-include ':ArMarkerDistance', ':aRBaseLib'
+include ':ArMarkerDistance'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')

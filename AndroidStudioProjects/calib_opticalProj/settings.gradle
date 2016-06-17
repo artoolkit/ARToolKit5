@@ -1,1 +1,4 @@
-include ':calib_optical', ':aRBaseLib'
+include ':calib_optical'
+include 'aRBaseLib'
+
+project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')
