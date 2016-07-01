@@ -32,7 +32,7 @@
         android:label="@string/app_name">
 
         <activity
-            android:name="org.artoolkit.ar.samples.ARSimpleInteraction.ARSimpleInteraction"
+            android:name="org.artoolkit.ar.samples.ARSimpleInteraction.ARSimpleInteractionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name">
 

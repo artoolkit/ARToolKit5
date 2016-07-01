@@ -1,4 +1,4 @@
-include ':aRMulti’
+include ':aRMulti'
 include 'aRBaseLib'
 
 project(':aRBaseLib').projectDir = new File('../ARBaseLibProj/aRBaseLib')

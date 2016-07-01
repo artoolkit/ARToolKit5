@@ -49,11 +49,12 @@
 
 //
 // This class provides a subclass of Application to enable app-wide behavior.
-// 
+//
 
 package org.artoolkit.ar.samples.ARSimple;
 
 import android.app.Application;
+import android.content.Context;
 
 import org.artoolkit.ar.base.assets.AssetHelper;
 
@@ -67,10 +68,17 @@ public class ARSimpleApplication extends Application {
         return sInstance;
     }
 
+    private static Context mContext;
+
+    public Context getContext() {
+        return mContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        mContext = getContext();
         ((ARSimpleApplication) sInstance).initializeInstance();
     }
 

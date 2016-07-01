@@ -46,12 +46,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,9 +71,6 @@ import org.artoolkit.ar.base.camera.CaptureCameraPreview;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 import org.artoolkit.ar.base.rendering.gles20.ARRendererGLES20;
 
-//import android.os.AsyncTask;
-//import android.os.AsyncTask.Status;
-
 /**
  * An activity which can be subclassed to create an AR application. ARActivity handles almost all of
  * the required operations to create a simple augmented reality application.
@@ -84,12 +83,12 @@ import org.artoolkit.ar.base.rendering.gles20.ARRendererGLES20;
  * {@link #supplyRenderer() Renderer}. This allows the subclass to handle OpenGL drawing calls on its own.
  */
 
-public abstract class ARActivity extends Activity implements CameraEventListener {
+public abstract class ARActivity extends /*AppCompat*/Activity implements CameraEventListener {
 
     /**
      * Android logging tag for this class.
      */
-    protected final static String TAG = "ARActivity";
+    protected final static String TAG = "ARBaseLib::ARActivity";
 
     /**
      * Renderer to use. This is provided by the subclass using {@link #supplyRenderer() Renderer()}.
@@ -104,7 +103,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     /**
      * Camera preview which will provide video frames.
      */
-    private CaptureCameraPreview preview;
+    private CaptureCameraPreview preview = null;
 
     /**
      * GL surface to render the virtual objects
@@ -116,27 +115,37 @@ public abstract class ARActivity extends Activity implements CameraEventListener
      * and columns in the template. May not be less than 16 or more than AR_PATT_SIZE1_MAX.
      */
 	protected int pattSize = 16;
-	
+
 	/**
      * For any square template (pattern) markers, the maximum number
      * of markers that may be loaded for a single matching pass. Must be > 0.
      */
 	protected int pattCountMax = 25;
-	
+
     private boolean firstUpdate = false;
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    @Override
+    //@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(
+            new Thread.UncaughtExceptionHandler()
+                {
+                    @Override
+                    public void uncaughtException (Thread thread, Throwable e)
+                    {
+                        handleUncaughtException(thread, e);
+                    }
+                });
 
         // This needs to be done just only the very first time the application is run,
         // or whenever a new preference is added (e.g. after an application upgrade).
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         // Correctly configures the activity window for running AR in a layer
-        // on top of the camera preview. This includes entering 
-        // fullscreen landscape mode and enabling transparency. 
+        // on top of the camera preview. This includes entering
+        // fullscreen landscape mode and enabling transparency.
 		boolean needActionBar = false;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -148,7 +157,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 		if (needActionBar) {
 			requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		} else {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);	
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
@@ -157,6 +166,8 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
         AndroidUtils.reportDisplayInformation(this);
     }
+
+    private Activity mActivity = null;
 
     /**
      * Allows subclasses to supply a custom {@link Renderer}.
@@ -175,12 +186,14 @@ public abstract class ARActivity extends Activity implements CameraEventListener
 
     @Override
     protected void onStart() {
-
         super.onStart();
 
-        Log.i(TAG, "onStart(): Activity starting.");
-
-        if (ARToolKit.getInstance().initialiseNativeWithOptions(this.getCacheDir().getAbsolutePath(), pattSize, pattCountMax) == false) { // Use cache directory for Data files.
+        Log.i(TAG, "onStart(): called");
+        mActivity = this;
+        if (false == ARToolKit.getInstance().initialiseNativeWithOptions(this.getCacheDir().getAbsolutePath(),
+                                                                         pattSize,
+                                                                         pattCountMax)) {
+            // Use cache directory for Data files.
 
             new AlertDialog.Builder(this)
                     .setMessage("The native library is not loaded. The application cannot continue.")
@@ -209,25 +222,27 @@ public abstract class ARActivity extends Activity implements CameraEventListener
             // No renderer supplied, use default, which does nothing
             renderer = new ARRenderer();
         }
-
     }
 
     @SuppressWarnings("deprecation") // FILL_PARENT still required for API level 7 (Android 2.1)
     @Override
     public void onResume() {
-        //Log.i(TAG, "onResume()");
+        Log.i(TAG, "onResume(): called");
         super.onResume();
 
         // Create the camera preview
-        preview = new CaptureCameraPreview(this, this);
+        preview = new CaptureCameraPreview(mActivity, this);
+        Log.i(TAG, "onResume(): CaptureCameraPreview constructed");
 
-        Log.i(TAG, "onResume(): CaptureCameraPreview created");
+        if (preview.gettingCameraAccessPermissionsFromUser())
+            //No need to go further, must ask user to allow access to the camera first.
+            return;
 
         // Create the GL view
         glView = new GLSurfaceView(this);
 
         // Check if the system supports OpenGL ES 2.0.
-        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        final ActivityManager activityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 
@@ -264,13 +279,12 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         mainLayout.addView(glView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
         Log.i(TAG, "onResume(): Views added to main layout.");
-
         if (glView != null) glView.onResume();
     }
 
     @Override
     protected void onPause() {
-        //Log.i(TAG, "onPause()");
+        Log.i(TAG, "onPause(): called");
         super.onPause();
 
         if (glView != null) glView.onPause();
@@ -286,7 +300,7 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     @Override
     public void onStop() {
         Log.i(TAG, "onStop(): Activity stopping.");
-
+        mActivity = null;
         super.onStop();
     }
 
@@ -328,91 +342,21 @@ public abstract class ARActivity extends Activity implements CameraEventListener
     @Override
     public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing) {
 
-        if (ARToolKit.getInstance().initialiseAR(width, height, null, cameraIndex, cameraIsFrontFacing)) { // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
-            Log.i(TAG, "getGLView(): Camera initialised");
+        if (ARToolKit.getInstance().initialiseAR(width, height, null, cameraIndex, cameraIsFrontFacing)) {
+            // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
+            Log.i(TAG, "cameraPreviewStarted(): Camera initialised");
         } else {
             // Error
-            Log.e(TAG, "getGLView(): Error initialising camera. Cannot continue.");
+            Log.e(TAG, "cameraPreviewStarted(): Error initialising camera. Cannot continue.");
             finish();
         }
 
         Toast.makeText(this, "Camera settings: " + width + "x" + height + "@" + rate + "fps", Toast.LENGTH_SHORT).show();
-
         firstUpdate = true;
     }
 
-    //
-    // At present, the underlying ARWrapper is not thread-safe,
-    // so this multi-threaded version is set aside in favour of a single-threaded version
-    //
-    /*
-    private class ConvertAndDetectTask extends AsyncTask<byte[], Void, Boolean> {
-
-    	@Override
-		protected Boolean doInBackground(byte[]... frame) {			
-			return (ARToolKit.getInstance().convertAndDetect(frame[0]));			
-		}
-    	
-    	@Override
-    	protected void onPostExecute(Boolean result) {
-    		
-			if (firstUpdate) {
-				
-				firstUpdate = false;
-				
-				// ARToolKit has been initialised. The renderer can now add markers, etc...
-				if (renderer.configureARScene()) {
-					Log.i(TAG, "Scene configured successfully");
-				} else { 
-					// Error
-					Log.e(TAG, "Error configuring scene. Cannot continue.");
-					finish();
-				}
-			}
-			
-			
-			// Update the renderer as the frame has changed
-			if (glView != null) glView.requestRender();
-			
-			onFrameProcessed();
-			
-		}
-		
-    }
-    
-    ConvertAndDetectTask task;
-    
-	@Override
-	public void cameraPreviewFrame(byte[] frame) {
-	
-		if (task == null || task.getStatus() == Status.FINISHED) {		
-			task = new ConvertAndDetectTask();
-			task.execute(frame);
-		}
-	}
-    
-    boolean cleanupFlag = false;
-    
-    public void onFrameProcessed() {
-    	if (cleanupFlag) {
-    		ARToolKit.getInstance().cleanup();
-    		cleanupFlag = false;
-    	}
-    }
-    
-	@Override
-	public void cameraPreviewStopped() {
-		if (task != null && task.getStatus() != Status.FINISHED) {
-			cleanupFlag = true;	
-		} else {
-			ARToolKit.getInstance().cleanup();
-		}
-	}	
-	*/
-
     @Override
     public void cameraPreviewFrame(byte[] frame) {
-
         if (firstUpdate) {
             // ARToolKit has been initialised. The renderer can now add markers, etc...
             if (renderer.configureARScene()) {
@@ -428,11 +372,10 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         if (ARToolKit.getInstance().convertAndDetect(frame)) {
 
             // Update the renderer as the frame has changed
-            if (glView != null) glView.requestRender();
-
+            if (glView != null)
+                glView.requestRender();
             onFrameProcessed();
         }
-
     }
 
     public void onFrameProcessed() {
@@ -459,8 +402,39 @@ public abstract class ARActivity extends Activity implements CameraEventListener
         AlertDialog alert = dialogBuilder.create();
         alert.setTitle("ARToolKit");
         alert.show();
-
-
     }
 
-}
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionsResult(): called");
+        if (requestCode == CaptureCameraPreview.REQUEST_CAMERA_PERMISSION_RESULT) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(),
+                    "Application will not run with camera access denied",
+                    Toast.LENGTH_LONG).show();
+            }
+            else if (1 <= permissions.length) {
+                Toast.makeText(getApplicationContext(),
+                    String.format("Camera access permission \"%s\" allowed", permissions[0]),
+                    Toast.LENGTH_SHORT).show();
+            }
+            CaptureCameraPreview previewHook = getCameraPreview();
+            if (null != previewHook) {
+                Log.i(TAG, "onRequestPermissionsResult(): reset ask for cam access perm");
+                previewHook.resetGettingCameraAccessPermissionsFromUserState();
+            }
+        }
+        else
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void handleUncaughtException(Thread thread, Throwable e)
+    {
+        Log.e(TAG, "handleUncaughtException(): exception type, " + e.toString());
+        Log.e(TAG, "handleUncaughtException(): thread, \"" + thread.getName() + "\" exception, \"" + e.getMessage() + "\"");
+        e.printStackTrace();
+        return;
+    }
+} // end: public abstract class ARActivity extends /*AppCompat*/Activity implements CameraEventListener

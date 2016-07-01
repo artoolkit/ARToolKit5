@@ -1,5 +1,5 @@
 /*
- *  ARSimpleInteraction.java
+ *  ARSimple.java
  *  ARToolKit5
  *
  *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
@@ -47,76 +47,37 @@
  *
  */
 
-package org.artoolkit.ar.samples.ARSimpleInteraction;
+package org.artoolkit.ar.samples.ARSimple;
 
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
 /**
- * Another simple example that includes a small amount of user interaction.
+ * A very simple example of extending ARActivity to create a new AR application.
  */
-public class ARSimpleInteraction extends ARActivity {
-
-    /**
-     * A custom renderer is used to produce a new visual experience.
-     */
-    private SimpleInteractiveRenderer simpleRenderer = new SimpleInteractiveRenderer();
-
-    /**
-     * The FrameLayout where the AR view is displayed.
-     */
-    private FrameLayout mainLayout;
+public class ARSimpleActivity extends ARActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        super.onCreate(savedInstanceState); //Calls ARActivity's ctor, abstract class of ARBaseLib
         setContentView(R.layout.main);
-
-        mainLayout = (FrameLayout) this.findViewById(R.id.mainLayout);
-
-        // When the screen is tapped, inform the renderer and vibrate the phone
-        mainLayout.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-
-                simpleRenderer.click();
-
-                Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                vib.vibrate(100);
-
-            }
-
-        });
-
-
     }
 
     /**
-     * By overriding {@link supplyRenderer}, the custom renderer will be used rather than
-     * the default renderer which does nothing.
-     *
-     * @return The custom renderer to use.
+     * Provide our own SimpleRenderer.
      */
     @Override
     protected ARRenderer supplyRenderer() {
-        return simpleRenderer;
+        return new SimpleRenderer();
     }
 
     /**
-     * By overriding {@link supplyFrameLayout}, the layout within this Activity's UI will be
-     * used.
+     * Use the FrameLayout in this Activity's UI.
      */
     @Override
     protected FrameLayout supplyFrameLayout() {
-        return mainLayout;
-
+        return (FrameLayout) this.findViewById(R.id.mainLayout);
     }
-
-
 }

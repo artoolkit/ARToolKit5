@@ -49,15 +49,20 @@
 
 package org.artoolkit.ar.samples.ARNativeOSG;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -66,15 +71,63 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     private static final String TAG = "CameraSurface";
     private Camera camera;
 
+    private boolean mustAskPermissionFirst = false;
+    public boolean gettingCameraAccessPermissionsFromUser()
+    {
+        return mustAskPermissionFirst;
+    }
+
+    public void resetGettingCameraAccessPermissionsFromUserState()
+    {
+        mustAskPermissionFirst = false;
+    }
+
     @SuppressWarnings("deprecation")
     public CameraSurface(Context context) {
-
         super(context);
+
+        Log.i(TAG, "CameraSurface(): ctor called");
+        Activity activityRef = (Activity)context;
+
+        try
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(
+                    activityRef,
+                    Manifest.permission.CAMERA))
+                {
+                    mustAskPermissionFirst = true;
+                    if (activityRef.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                    {
+                        // Will drop in here if user denied permissions access camera before.
+                        // Or no uses-permission CAMERA element is in the
+                        // manifest file. Must explain to the end user why the app wants
+                        // permissions to the camera devices.
+                        Toast.makeText(activityRef.getApplicationContext(),
+                            "App requires access to camera to be granted",
+                            Toast.LENGTH_SHORT).show();
+                    }
+                    // Request permission from the user to access the camera.
+                    Log.i(TAG, "CameraSurface(): must ask user for camera access permission");
+                    activityRef.requestPermissions(new String[]
+                            {
+                                Manifest.permission.CAMERA
+                            },
+                        ARNativeOSGActivity.REQUEST_CAMERA_PERMISSION_RESULT);
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "CameraSurface(): exception caught, " + ex.getMessage());
+            return;
+        }
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // Deprecated in API level 11. Still required for API levels <= 10.
-
     }
 
     // SurfaceHolder.Callback methods
@@ -171,5 +224,4 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
 
         cam.addCallbackBuffer(data);
     }
-
 }

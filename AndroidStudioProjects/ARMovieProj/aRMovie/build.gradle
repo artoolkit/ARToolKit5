@@ -8,7 +8,7 @@ model {
         defaultConfig.with {
             applicationId = "org.artoolkit.ar.samples.ARMovie"
             minSdkVersion.apiLevel = 15
-            targetSdkVersion.apiLevel = 22
+            targetSdkVersion.apiLevel = 23
             versionCode = 1     //Integer type incremented by 1 for every release, major or minor, to Google store
             versionName = "1.0" //Real fully qualified major and minor release description
 

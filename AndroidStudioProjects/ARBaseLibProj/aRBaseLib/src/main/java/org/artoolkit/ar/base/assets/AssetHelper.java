@@ -67,9 +67,7 @@ public class AssetHelper {
     private AssetManager manager;
 
     public AssetHelper(AssetManager am) {
-
         manager = am;
-
     }
 
 

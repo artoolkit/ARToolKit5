@@ -8,7 +8,7 @@ model {
         defaultConfig.with {
             applicationId = "org.ar.artoolkit.org.ARMarkerdistance"
             minSdkVersion.apiLevel = 15
-            targetSdkVersion.apiLevel = 22
+            targetSdkVersion.apiLevel = 23
             versionCode = 104
             versionName = "1.0.4"
         }
@@ -35,6 +35,7 @@ model {
         }
     }
 }
+
 dependencies {
     compile project(':aRBaseLib')
 }

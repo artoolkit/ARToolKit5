@@ -37,26 +37,27 @@
 
 package org.artoolkit.ar.base.camera;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
+import android.widget.Toast;
 
+import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.FPSCounter;
 import org.artoolkit.ar.base.R;
-
 import java.io.IOException;
-
-//import java.util.List;
-
-//import java.util.List;
 
 @SuppressLint("ViewConstructor")
 public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
@@ -97,8 +98,17 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
      */
     private CameraEventListener listener;
 
-	private Activity mActivity;
-    
+    private boolean mustAskPermissionFirst = false;
+    public boolean gettingCameraAccessPermissionsFromUser()
+    {
+        return mustAskPermissionFirst;
+    }
+
+    public void resetGettingCameraAccessPermissionsFromUserState()
+    {
+        mustAskPermissionFirst = false;
+    }
+
     /**
      * Constructor takes a {@link CameraEventListener} which will be called on
      * to handle camera related events.
@@ -108,7 +118,43 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
     @SuppressWarnings("deprecation")
     public CaptureCameraPreview(Activity activity, CameraEventListener cel) {
         super(activity);
-        mActivity = activity;
+
+        Log.i(TAG, "CaptureCameraPreview(): ctor called");
+        try
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(
+                                                                           activity,
+                                                                           Manifest.permission.CAMERA))
+                {
+                    mustAskPermissionFirst = true;
+                    if (activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                    {
+                        // Will drop in here if user denied permissions access camera before.
+                        // Or no uses-permission CAMERA element is in the
+                        // manifest file. Must explain to the end user why the app wants
+                        // permissions to the camera devices.
+                        Toast.makeText(activity.getApplicationContext(),
+                                       "App requires access to camera to be granted",
+                                       Toast.LENGTH_SHORT).show();
+                    }
+                    // Request permission from the user to access the camera.
+                    Log.i(TAG, "CaptureCameraPreview(): must ask user for camera access permission");
+                    activity.requestPermissions(new String[]
+                                                    {
+                                                        Manifest.permission.CAMERA
+                                                    },
+                                                REQUEST_CAMERA_PERMISSION_RESULT);
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "CaptureCameraPreview(): exception caught, " + ex.getMessage());
+            return;
+        }
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
@@ -116,13 +162,91 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
         setCameraEventListener(cel);
     }
-    
-    public void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera) {
-        android.hardware.Camera.CameraInfo info =
-                new android.hardware.Camera.CameraInfo();
+
+    /**
+     * Sets the {@link CameraEventListener} which will be called on to handle camera
+     * related events.
+     *
+     * @param cel CameraEventListener to use. Can be null.
+     */
+    public void setCameraEventListener(CameraEventListener cel) {
+        listener = cel;
+    }
+    public static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
+
+    @SuppressLint("NewApi")
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolderInstance) {
+        int cameraIndex = Integer.parseInt(PreferenceManager.
+                                      getDefaultSharedPreferences(getContext()).
+                                          getString("pref_cameraIndex", "0"));
+        Log.i(TAG, "surfaceCreated(): called, will attempt to open camera \"" + cameraIndex +
+                       "\", set orientation, set preview surface");
+        openCamera(surfaceHolderInstance, cameraIndex);
+    } // end: public void surfaceCreated(SurfaceHolder holder)
+
+    private void openCamera(SurfaceHolder surfaceHolderInstance, int cameraIndex) {
+        Log.i(TAG, "openCamera(): called");
+        try
+        {
+            camera = Camera.open(cameraIndex);
+        }
+        catch (RuntimeException ex) {
+            Log.e(TAG, "openCamera(): RuntimeException caught, " + ex.getMessage() + ", abnormal exit");
+            return;
+        }
+        //catch (CameraAccessException ex) {
+        //      Log.e(TAG, "openCamera(): CameraAccessException caught, " + ex.getMessage() + ", abnormal exit");
+        //      return;
+        //  }
+        catch (Exception ex) {
+            Log.e(TAG, "openCamera()): exception caught, " + ex.getMessage() + ", abnormal exit");
+            return;
+        }
+
+        if (!SetOrientationAndPreview(surfaceHolderInstance, cameraIndex)) {
+            Log.e(TAG, "openCamera(): call to SetOrientationAndPreview() failed, openCamera() failed");
+        }
+        else
+            Log.i(TAG, "openCamera(): succeeded");
+    }
+
+    private boolean SetOrientationAndPreview(SurfaceHolder surfaceHolderInstance, int cameraIndex)
+    {
+        Log.i(TAG, "SetOrientationAndPreview(): called");
+        boolean success = true;
+        try {
+            setCameraDisplayOrientation(cameraIndex, camera);
+            camera.setPreviewDisplay(surfaceHolderInstance);
+        }
+        catch (IOException ex) {
+            Log.e(TAG, "SetOrientationAndPreview(): IOException caught, " + ex.toString());
+            success = false;
+        }
+        catch (Exception ex) {
+            Log.e(TAG, "SetOrientationAndPreview(): Exception caught, " + ex.toString());
+            success = false;
+        }
+        if (!success)
+        {
+            if (null != camera)
+            {
+                camera.release();
+                camera = null;
+            }
+            Log.e(TAG, "SetOrientationAndPreview(): released camera due to caught exception");
+        }
+        return success;
+    }
+
+    private void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera) {
+        android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
-        int rotation = mActivity.getWindowManager().getDefaultDisplay()
-                .getRotation();
+
+        WindowManager wMgr = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+
+        int rotation = wMgr.getDefaultDisplay().getRotation();
+
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0: degrees = 0; break;
@@ -141,56 +265,12 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
         camera.setDisplayOrientation(result);
     }
 
-    /**
-     * Sets the {@link CameraEventListener} which will be called on to handle camera
-     * related events.
-     *
-     * @param cel CameraEventListener to use. Can be null.
-     */
-    public void setCameraEventListener(CameraEventListener cel) {
-        listener = cel;
-    }
-
-
-    @SuppressLint("NewApi")
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-        int cameraIndex = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraIndex", "0"));
-        Log.i(TAG, "surfaceCreated(): Opening camera " + (cameraIndex + 1));
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
-                camera = Camera.open(cameraIndex);
-            else camera = Camera.open();
-
-        } catch (RuntimeException exception) {
-            Log.e(TAG, "surfaceCreated(): Cannot open camera. It may be in use by another process.");
-            return;
-        }
-
-        Log.i(TAG, "surfaceCreated(): Camera open");
-
-        try {
-
-        	setCameraDisplayOrientation(cameraIndex, camera);
-            camera.setPreviewDisplay(holder);
-
-        } catch (IOException exception) {
-            Log.e(TAG, "surfaceCreated(): IOException setting display holder");
-            camera.release();
-            camera = null;
-            Log.i(TAG, "surfaceCreated(): Released camera");
-            return;
-        }
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(SurfaceHolder surfaceHolderInstance) {
         // Surface will be destroyed when we return, so stop the preview.
         // Because the CameraDevice object is not a shared resource, it's very
         // important to release it when the activity is paused.
-
+        Log.i(TAG, "surfaceDestroyed(): called");
         if (camera != null) {
 
             camera.setPreviewCallback(null);
@@ -201,14 +281,12 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
         }
 
         if (listener != null) listener.cameraPreviewStopped();
-
     }
-
 
     @SuppressWarnings("deprecation") // setPreviewFrameRate, getPreviewFrameRate
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-
+        Log.i(TAG, "surfaceChanged(): called");
         if (camera == null) {
             // Camera wasn't opened successfully?
             Log.e(TAG, "surfaceChanged(): No camera in surfaceChanged");
@@ -216,8 +294,10 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
         }
 
         Log.i(TAG, "surfaceChanged(): Surfaced changed, setting up camera and starting preview");
-
-        String camResolution = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraResolution", getResources().getString(R.string.pref_defaultValue_cameraResolution));
+        String camResolution = PreferenceManager.getDefaultSharedPreferences(
+                                                     getContext()).getString("pref_cameraResolution",
+                                                                             getResources().getString(
+                                                                                                R.string.pref_defaultValue_cameraResolution));
         String[] dims = camResolution.split("x", 2);
         Camera.Parameters parameters = camera.getParameters();
         parameters.setPreviewSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
@@ -250,7 +330,6 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
         if (listener != null)
             listener.cameraPreviewStarted(captureWidth, captureHeight, captureRate, cameraIndex, cameraIsFrontFacing);
-
     }
 
     @Override
@@ -260,12 +339,8 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
 
         cameraWrapper.frameReceived(data);
 
-
         if (fpsCounter.frame()) {
             Log.i(TAG, "onPreviewFrame(): Camera capture FPS: " + fpsCounter.getFPS());
         }
-
-
     }
-
 }

@@ -49,6 +49,7 @@
 
 package org.artoolkit.ar.samples.ARNative;
 
+import org.artoolkit.ar.base.camera.CaptureCameraPreview;
 import org.artoolkit.ar.samples.ARNative.R;
 import org.artoolkit.ar.base.camera.CameraPreferencesActivity;
 
@@ -56,13 +57,16 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +76,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 public class ARNativeActivity extends Activity {
 
@@ -81,6 +86,8 @@ public class ARNativeActivity extends Activity {
     static {
     	System.loadLibrary("ARNative");
     }
+
+    public static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
 
 	// Lifecycle functions.
     public static native boolean nativeCreate(Context ctx);
@@ -108,6 +115,16 @@ public class ARNativeActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(
+            new Thread.UncaughtExceptionHandler()
+            {
+                @Override
+                public void uncaughtException (Thread thread, Throwable e)
+                {
+                    handleUncaughtException(thread, e);
+                }
+            });
 
 		boolean needActionBar = false;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -163,6 +180,10 @@ public class ARNativeActivity extends Activity {
 
 		// Create the camera view.
 		camSurface = new CameraSurface(this);
+
+        if (camSurface.gettingCameraAccessPermissionsFromUser())
+            //No need to go further, must ask user to allow access to the camera first.
+            return;
 
 		// Create/recreate the GL view.
 	    gl2View = new GL2SurfaceView(this, true, false, 16, 0);
@@ -246,4 +267,34 @@ public class ARNativeActivity extends Activity {
 		}
 	}
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionsResult(): called");
+        if (requestCode == CaptureCameraPreview.REQUEST_CAMERA_PERMISSION_RESULT) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(),
+                    "Application will not run with camera access denied",
+                    Toast.LENGTH_LONG).show();
+            }
+            else if (1 <= permissions.length) {
+                Toast.makeText(getApplicationContext(),
+                    String.format("Camera access permission \"%s\" allowed", permissions[0]),
+                    Toast.LENGTH_SHORT).show();
+            }
+            Log.i(TAG, "onRequestPermissionsResult(): reset ask for cam access perm");
+            camSurface.resetGettingCameraAccessPermissionsFromUserState();
+        }
+        else
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void handleUncaughtException(Thread thread, Throwable e)
+    {
+        Log.e(TAG, "handleUncaughtException(): exception type, " + e.toString());
+        Log.e(TAG, "handleUncaughtException(): thread, \"" + thread.getName() + "\" exception, \"" + e.getMessage() + "\"");
+        e.printStackTrace();
+        return;
+    }
 }

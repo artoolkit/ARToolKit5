@@ -222,7 +222,6 @@ public class ARToolKit {
         debugBitmap.setPixels(debugImageColors, 0, w, 0, 0, w, h);
 
         return debugBitmap;
-
     }
 
     /**
@@ -362,8 +361,10 @@ public class ARToolKit {
         NativeInterface.arwStopRunning();
         NativeInterface.arwShutdownAR();
 
-        debugBitmap.recycle();
-        debugBitmap = null;
+        if (null != debugBitmap) {
+            debugBitmap.recycle();
+            debugBitmap = null;
+        }
 
         initedNative = false;
     }
@@ -448,5 +449,4 @@ public class ARToolKit {
         }
         return null;
     }
-
 }

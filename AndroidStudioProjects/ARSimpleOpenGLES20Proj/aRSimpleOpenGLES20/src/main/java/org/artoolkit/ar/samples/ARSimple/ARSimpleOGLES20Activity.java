@@ -1,5 +1,5 @@
 /*
- *  ARSimpleApplication.java
+ *  ARSimple.java
  *  ARToolKit5
  *
  *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
@@ -43,48 +43,46 @@
  *  Copyright 2015 Daqri, LLC.
  *  Copyright 2011-2015 ARToolworks, Inc.
  *
- *  Author(s): Philip Lamb
+ *  Author(s): Julian Looser, Philip Lamb
  *
  */
 
-//
-// This class provides a subclass of Application to enable app-wide behavior.
-// 
-
 package org.artoolkit.ar.samples.ARSimple;
 
-import android.app.Application;
+import android.os.Bundle;
+import android.widget.FrameLayout;
 
-import org.artoolkit.ar.base.assets.AssetHelper;
+import org.artoolkit.ar.base.ARActivity;
+import org.artoolkit.ar.base.rendering.ARRenderer;
 
 /**
- * Android Framework application class. This is the main entry point into our Android application.
+ * This is the activity that gets called from the Android Framework, extended by the
+ * ARToolKit Framework to add AR capability.
+ * A very simple example of extending ARActivity to create a new AR application.
  */
-public class ARSimpleApplication extends Application {
-
-    private static Application sInstance;
-
-    // Anywhere in the application where an instance is required, this method
-    // can be used to retrieve it.
-    public static Application getInstance() {
-        return sInstance;
-    }
+public class ARSimpleOGLES20Activity extends ARActivity {
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        sInstance = this;
-        ((ARSimpleApplication) sInstance).initializeInstance();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
     }
 
-    // Here we do one-off initialisation which should apply to all activities
-    // in the application.
-    protected void initializeInstance() {
+    /**
+     *
+     * Tell the ARToolKit which renderer to use. In this case we provide a subclass of
+     * {@link org.artoolkit.ar.base.rendering.gles20.ARRendererGLES20} renderer.
+     */
+    @Override
+    protected ARRenderer supplyRenderer() {
+        return new SimpleGLES20Renderer();
+    }
 
-        // Unpack assets to cache directory so native library can read them.
-        // N.B.: If contents of assets folder changes, be sure to increment the
-        // versionCode integer in the modules build.gradle file.
-        AssetHelper assetHelper = new AssetHelper(getAssets());
-        assetHelper.cacheAssetFolder(getInstance(), "Data");
+    /**
+     * Use the FrameLayout in this Activity's UI.
+     */
+    @Override
+    protected FrameLayout supplyFrameLayout() {
+        return (FrameLayout) this.findViewById(R.id.mainLayout);
     }
 }

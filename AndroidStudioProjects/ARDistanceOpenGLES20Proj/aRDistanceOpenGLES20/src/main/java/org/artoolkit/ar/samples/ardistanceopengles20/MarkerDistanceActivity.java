@@ -65,7 +65,6 @@ public class MarkerDistanceActivity extends ARActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_marker_distance);
     }
 

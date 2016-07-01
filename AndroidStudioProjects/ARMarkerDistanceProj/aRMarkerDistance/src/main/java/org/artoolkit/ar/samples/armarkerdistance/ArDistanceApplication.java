@@ -40,7 +40,7 @@ import android.app.Application;
 
 import org.artoolkit.ar.base.assets.AssetHelper;
 
-public class ArDistance extends Application {
+public class ArDistanceApplication extends Application {
 
     private static Application arDistance;
 

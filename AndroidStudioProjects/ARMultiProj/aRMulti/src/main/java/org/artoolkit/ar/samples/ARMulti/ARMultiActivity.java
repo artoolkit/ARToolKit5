@@ -81,5 +81,4 @@ public class ARMultiActivity extends ARActivity {
     protected FrameLayout supplyFrameLayout() {
         return (FrameLayout) this.findViewById(R.id.mainLayout);
     }
-
 }

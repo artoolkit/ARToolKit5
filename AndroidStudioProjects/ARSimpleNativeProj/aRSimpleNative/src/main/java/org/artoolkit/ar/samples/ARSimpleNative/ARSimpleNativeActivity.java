@@ -1,5 +1,5 @@
 /*
- *  ARSimple.java
+ *  ARSimpleNative.java
  *  ARToolKit5
  *
  *  Disclaimer: IMPORTANT:  This Daqri software is supplied to you by Daqri
@@ -47,7 +47,7 @@
  *
  */
 
-package org.artoolkit.ar.samples.ARSimple;
+package org.artoolkit.ar.samples.ARSimpleNative;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -55,10 +55,9 @@ import android.widget.FrameLayout;
 import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.rendering.ARRenderer;
 
-/**
- * A very simple example of extending ARActivity to create a new AR application.
- */
-public class ARSimple extends ARActivity {
+public class ARSimpleNativeActivity extends ARActivity {
+
+    private SimpleNativeRenderer simpleNativeRenderer = new SimpleNativeRenderer();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,19 +65,20 @@ public class ARSimple extends ARActivity {
         setContentView(R.layout.main);
     }
 
-    /**
-     * Provide our own SimpleRenderer.
-     */
-    @Override
-    protected ARRenderer supplyRenderer() {
-        return new SimpleRenderer();
+    public void onStop() {
+        SimpleNativeRenderer.demoShutdown();
+
+        super.onStop();
     }
 
-    /**
-     * Use the FrameLayout in this Activity's UI.
-     */
+    @Override
+    protected ARRenderer supplyRenderer() {
+        return simpleNativeRenderer;
+    }
+
     @Override
     protected FrameLayout supplyFrameLayout() {
         return (FrameLayout) this.findViewById(R.id.mainLayout);
+
     }
 }

@@ -8,7 +8,7 @@ model {
         defaultConfig.with {
             applicationId = "org.artoolkit.ar.samples.ARNativeOSG"
             minSdkVersion.apiLevel = 15
-            targetSdkVersion.apiLevel = 22
+            targetSdkVersion.apiLevel = 23
             versionCode = 1     //Integer type incremented by 1 for every release, major or minor, to Google store
             versionName = "1.0" //Real fully qualified major and minor release description
 
@@ -58,7 +58,7 @@ model {
 }
 
 dependencies {
-    //compile 'com.android.support:support-v4:23.0.1'
-    //compile 'com.android.support:appcompat-v7:23.0.1' //Only required when the target device API level is greater than
+    //compile 'com.android.support:support-v4:23.0.1'   //Only required when the target device API level is greater than
+    //compile 'com.android.support:appcompat-v7:23.0.1' //the compile and target of the app being deployed to the device
     compile project(':aRBaseLib')
-}                                                       //the compile and target of the app being deployed to the device
+}

@@ -55,7 +55,6 @@ public class ArDistanceActivity extends ARActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         textHello = (TextView) this.findViewById(R.id.textView);
         renderer = new SimpleARRenderer(this);
 

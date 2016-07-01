@@ -51,38 +51,92 @@ package org.artoolkit.ar.samples.ARNative;
 
 import java.io.IOException;
 import org.artoolkit.ar.samples.ARNative.R;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
 	private static final String TAG = "CameraSurface";
 	private Camera camera;
-	
+
+    private boolean mustAskPermissionFirst = false;
+    public boolean gettingCameraAccessPermissionsFromUser()
+    {
+        return mustAskPermissionFirst;
+    }
+
+    public void resetGettingCameraAccessPermissionsFromUserState()
+    {
+        mustAskPermissionFirst = false;
+    }
+
     @SuppressWarnings("deprecation")
 	public CameraSurface(Context context) {
-        
     	super(context);
-        
-    	SurfaceHolder holder = getHolder();     
+
+        Log.i(TAG, "CameraSurface(): ctor called");
+        Activity activityRef = (Activity)context;
+
+        try
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(
+                    activityRef,
+                    Manifest.permission.CAMERA))
+                {
+                    mustAskPermissionFirst = true;
+                    if (activityRef.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                    {
+                        // Will drop in here if user denied permissions access camera before.
+                        // Or no uses-permission CAMERA element is in the
+                        // manifest file. Must explain to the end user why the app wants
+                        // permissions to the camera devices.
+                        Toast.makeText(activityRef.getApplicationContext(),
+                            "App requires access to camera to be granted",
+                            Toast.LENGTH_SHORT).show();
+                    }
+                    // Request permission from the user to access the camera.
+                    Log.i(TAG, "CameraSurface(): must ask user for camera access permission");
+                    activityRef.requestPermissions(new String[]
+                            {
+                                Manifest.permission.CAMERA
+                            },
+                        ARNativeActivity.REQUEST_CAMERA_PERMISSION_RESULT);
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "CameraSurface(): exception caught, " + ex.getMessage());
+            return;
+        }
+
+    	SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // Deprecated in API level 11. Still required for API levels <= 10.
-        
     }
- 
+
     // SurfaceHolder.Callback methods
 
     @SuppressLint("NewApi")
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        
+
 		Log.i(TAG, "Opening camera.");
     	try {
     		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -96,15 +150,15 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     	}
     	if (camera != null) {
     		try {
-        	
+
     			camera.setPreviewDisplay(holder);
     			//camera.setPreviewCallback(this);
     			camera.setPreviewCallbackWithBuffer(this); // API level 8 (Android 2.2)
-       	
+
     		} catch (IOException exception) {
         		Log.e(TAG, "Cannot set camera preview display.");
         		camera.release();
-        		camera = null;  
+        		camera = null;
     		}
     	}
     }
@@ -112,7 +166,7 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-    	if (camera != null) {  	
+    	if (camera != null) {
     		Log.i(TAG, "Closing camera.");
     		camera.stopPreview();
     		camera.setPreviewCallback(null);
@@ -121,12 +175,11 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     	}
     }
 
- 
     @SuppressLint("NewApi") // CameraInfo
 	@SuppressWarnings("deprecation") // setPreviewFrameRate
 	@Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-    	
+
     	if (camera != null) {
 
     		String camResolution = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("pref_cameraResolution", getResources().getString(R.string.pref_defaultValue_cameraResolution));
@@ -134,8 +187,8 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
             Camera.Parameters parameters = camera.getParameters();
             parameters.setPreviewSize(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
             parameters.setPreviewFrameRate(30);
-            camera.setParameters(parameters);        
-            
+            camera.setParameters(parameters);
+
             parameters = camera.getParameters();
     		int capWidth = parameters.getPreviewSize().width;
     		int capHeight = parameters.getPreviewSize().height;
@@ -152,9 +205,9 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     		}
 
     		int bufSize = capWidth * capHeight * pixelinfo.bitsPerPixel / 8; // For the default NV21 format, bitsPerPixel = 12.
-            
+
             for (int i = 0; i < 5; i++) camera.addCallbackBuffer(new byte[bufSize]);
-            
+
             camera.startPreview();
 
             ARNativeActivity.nativeVideoInit(capWidth, capHeight, cameraIndex, frontFacing);
@@ -163,13 +216,12 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
     }
 
     // Camera.PreviewCallback methods.
-    
+
 	@Override
 	public void onPreviewFrame(byte[] data, Camera cam) {
-		
+
 		ARNativeActivity.nativeVideoFrame(data);
-		
+
 		cam.addCallbackBuffer(data);
 	}
- 
 }

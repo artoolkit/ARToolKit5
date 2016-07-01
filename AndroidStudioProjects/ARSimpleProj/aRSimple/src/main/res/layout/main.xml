@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/topLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal">
+              android:id="@+id/topLayout"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="horizontal"
+              android:weightSum="1"
+              android:baselineAligned="false">
 
     <FrameLayout
         android:id="@+id/mainLayout"
-        android:layout_width="640px"
-        android:layout_height="480px"
-        android:orientation="vertical" />
+        android:layout_width="0dp"
+        android:layout_height="320dp"
+        android:orientation="vertical"
+        android:layout_weight="0.65"/>
 
 </LinearLayout>

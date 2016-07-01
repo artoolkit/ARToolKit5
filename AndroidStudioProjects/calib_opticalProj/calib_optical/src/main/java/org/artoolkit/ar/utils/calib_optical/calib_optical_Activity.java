@@ -42,6 +42,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -49,7 +50,9 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,10 +63,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import org.artoolkit.ar.base.camera.CaptureCameraPreview;
 
 import jp.epson.moverio.bt200.DisplayControl;
 
-//import org.artoolkit.ar.base.camera.CameraPreferencesActivity;
 // For Epson Moverio BT-200. BT200Ctrl.jar must be in libs/ folder.
 
 public class calib_optical_Activity extends Activity {
@@ -75,6 +80,8 @@ public class calib_optical_Activity extends Activity {
         System.loadLibrary("c++_shared");
         System.loadLibrary("calib_optical_Native");
     }
+
+    public static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
 
     // Lifecycle functions.
     public static native boolean nativeCreate(Context ctx);
@@ -121,7 +128,6 @@ public class calib_optical_Activity extends Activity {
     // For Epson Moverio BT-200.
     private DisplayControl mDisplayControl = null;
 
-
     /**
      * Called when the activity is first created.
      */
@@ -129,6 +135,16 @@ public class calib_optical_Activity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(
+                   new Thread.UncaughtExceptionHandler()
+                   {
+                       @Override
+                       public void uncaughtException (Thread thread, Throwable e)
+                       {
+                           handleUncaughtException(thread, e);
+                       }
+                   });
 
         forceLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_forceLandscape", false);
 
@@ -224,6 +240,11 @@ public class calib_optical_Activity extends Activity {
 
         // Create the camera view.
         camSurface = new CameraSurface(this);
+        Log.i(TAG, "onResume(): CameraSurface constructed");
+
+        if (camSurface.gettingCameraAccessPermissionsFromUser())
+            //No need to go further, must ask user to allow access to the camera first.
+            return;
 
         // Create/recreate the GL view.
         glView = new ARSurfaceView(this);
@@ -325,9 +346,34 @@ public class calib_optical_Activity extends Activity {
         }
     }
 
-//	public void finishFromNative()
-//	{
-//		finish();
-//	}
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        Log.i(TAG, "onRequestPermissionsResult(): called");
+        if (requestCode == CaptureCameraPreview.REQUEST_CAMERA_PERMISSION_RESULT) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(),
+                    "Application will not run with camera access denied",
+                    Toast.LENGTH_LONG).show();
+            }
+            else if (1 <= permissions.length) {
+                Toast.makeText(getApplicationContext(),
+                    String.format("Camera access permission \"%s\" allowed", permissions[0]),
+                    Toast.LENGTH_SHORT).show();
+            }
+            Log.i(TAG, "onRequestPermissionsResult(): reset ask for cam access perm");
+            camSurface.resetGettingCameraAccessPermissionsFromUserState();
+        }
+        else
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
-}
+    private void handleUncaughtException(Thread thread, Throwable e)
+    {
+        Log.e(TAG, "handleUncaughtException(): exception type, " + e.toString());
+        Log.e(TAG, "handleUncaughtException(): thread, \"" + thread.getName() + "\" exception, \"" + e.getMessage() + "\"");
+        e.printStackTrace();
+        return;
+    }
+} // end: public class calib_optical_Activity extends Activity
