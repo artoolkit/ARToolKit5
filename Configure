@@ -342,14 +342,31 @@ then
         STDCXXLIB="-lstdc++"
     fi
 
-    if [ "$MACHINE" = "x86_64" ]
-    then
-        CFLAG="$CFLAG -I/usr/include/x86_64-linux-gnu"
-        LDFLAG="-L/usr/lib/x86_64-linux-gnu -L/usr/lib64"
-    else
-        CFLAG="$CFLAG -I/usr/include/i386-linux-gnu"
-        LDFLAG="-L/usr/lib/i386-linux-gnu -L/usr/lib"
-    fi
+    case "$MACHINE" in
+        armv7l)
+            # NOTE: raspberry pi 3 workarounds
+            if [ "$CLANGCC" = "y" ]; then
+                # NOTE: libc++ doesn't seem to work yet on Raspberry Pi
+                CXX="clang++ -std=c++11"
+                STDCXXLIB="-lstdc++"
+                CFLAG="-O3 -fPIC -march=native -DHAVE_NFT=1"
+            else
+                # NOTE: Some versions of gcc are buggy in their hardware detection code,
+                #       so just hardcode the architecture here.
+                #       See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70132
+                CFLAG="-O3 -fPIC -mcpu=cortex-a53 -mfpu=neon-vfpv4 -DHAVE_NFT=1"
+            fi
+            LDFLAG="-L/usr/lib"
+            ;;
+        x86_64)
+            CFLAG="-O3 -fPIC -march=core2 -DHAVE_NFT=1"
+            LDFLAG="-L/usr/lib/x86_64-linux-gnu -L/usr/lib64"
+            ;;
+        *)
+            CFLAG="$CFLAG -I/usr/include/i386-linux-gnu"
+            LDFLAG="-L/usr/lib/i386-linux-gnu -L/usr/lib"
+            ;;
+    esac
     
     AR="ar"
     ARFLAGS="rs"
@@ -826,6 +843,14 @@ then
 echo "You have to choose default input device!!"
 exit 0
 fi
+
+case "$MACHINE" in
+arm*)
+cat >> $SED <<EOF
+s/#define HAVE_INTEL_SIMD.*/#undef HAVE_INTEL_SIMD/
+EOF
+;;
+esac
 
 echo "  create include/AR/config.h"
 sed -f $SED <include/AR/config.h.in > include/AR/config.h
