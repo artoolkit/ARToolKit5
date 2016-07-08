@@ -49,10 +49,10 @@ HEADDERS =
 all: $(BIN_DIR)/whiteBalance
 
 $(BIN_DIR)/whiteBalance: whiteBalance.o $(OBJS)
-	cc -o $(BIN_DIR)/whiteBalance whiteBalance.o $(OBJS) $(LDFLAG) $(LIBS)
+	$(CC) -o $(BIN_DIR)/whiteBalance whiteBalance.o $(OBJS) $(LDFLAG) $(LIBS)
 
 whiteBalance.o: whiteBalance.c $(HEADDERS)
-	cc -c $(CFLAG) whiteBalance.c
+	$(CC) -c $(CFLAG) whiteBalance.c
 
 clean:
 	rm -f *.o

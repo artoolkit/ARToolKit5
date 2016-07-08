@@ -49,16 +49,16 @@ HEADERS = calc_optical.h getInput.h
 all: $(BIN_DIR)/calib_optical
 
 $(BIN_DIR)/calib_optical: $(OBJS)
-	cc -o $(BIN_DIR)/calib_optical $(OBJS) $(LDFLAG) $(LIBS)
+	$(CC) -o $(BIN_DIR)/calib_optical $(OBJS) $(LDFLAG) $(LIBS)
 
 calib_optical.o: calib_optical.c $(HEADERS)
-	cc -c $(CFLAG) calib_optical.c
+	$(CC) -c $(CFLAG) calib_optical.c
 
 calc_optical.o: calc_optical.c $(HEADERS)
-	cc -c $(CFLAG) calc_optical.c
+	$(CC) -c $(CFLAG) calc_optical.c
 
 getInput.o: getInput.c $(HEADERS)
-	cc -c $(CFLAG) getInput.c
+	$(CC) -c $(CFLAG) getInput.c
 
 clean:
 	rm -f *.o

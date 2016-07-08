@@ -61,10 +61,10 @@ HEADERS =
 all: $(BIN_DIR)/multiCube
 
 $(BIN_DIR)/multiCube: multiCube.o $(OBJS)
-	cc -o $(BIN_DIR)/multiCube multiCube.o $(OBJS) $(LDFLAG) $(LIBS)
+	$(CC) -o $(BIN_DIR)/multiCube multiCube.o $(OBJS) $(LDFLAG) $(LIBS)
 
 multiCube.o: multiCube.c $(HEADERS)
-	cc -c $(CFLAG) multiCube.c
+	$(CC) -c $(CFLAG) multiCube.c
 
 clean:
 	rm -f *.o
