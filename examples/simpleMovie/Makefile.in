@@ -61,10 +61,10 @@ HEADERS =
 all: $(BIN_DIR)/simpleMovie
 
 $(BIN_DIR)/simpleMovie: simpleMovie.o $(OBJS)
-	cc -o $(BIN_DIR)/simpleMovie simpleMovie.o $(OBJS) $(LDFLAG) $(LIBS)
+	$(CC) -o $(BIN_DIR)/simpleMovie simpleMovie.o $(OBJS) $(LDFLAG) $(LIBS)
 
 simpleMovie.o: simpleMovie.c $(HEADERS)
-	cc -c $(CFLAG) simpleMovie.c
+	$(CC) -c $(CFLAG) simpleMovie.c
 
 clean:
 	rm -f *.o

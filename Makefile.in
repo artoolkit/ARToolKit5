@@ -1,5 +1,6 @@
 all:
 	(cd lib/SRC;    make -f Makefile)
+	mkdir -p bin
 	(cd util;       make -f Makefile)
 	(cd examples;   make -f Makefile)
 

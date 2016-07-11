@@ -50,6 +50,7 @@ INC_DIR= ../../include
 LIB_DIR= ../../lib
 BIN_DIR= ../../bin
 
+CC=@CC@
 LDFLAG=@LDFLAG@ -L$(LIB_DIR)/@SYSTEM@ -L$(LIB_DIR)
 LIBS= -lARgsub -lARvideo -lARMulti -lAR -lARICP -lAR @LIBS@
 CFLAG= @CFLAG@ -I$(INC_DIR)
@@ -60,10 +61,10 @@ HEADDERS =
 all: $(BIN_DIR)/multiTest
 
 $(BIN_DIR)/multiTest: multiTest.o $(OBJS)
-	cc -o $(BIN_DIR)/multiTest multiTest.o $(OBJS) $(LDFLAG) $(LIBS)
+	$(CC) -o $(BIN_DIR)/multiTest multiTest.o $(OBJS) $(LDFLAG) $(LIBS)
 
 multiTest.o: multiTest.c $(HEADDERS)
-	cc -c $(CFLAG) multiTest.c
+	$(CC) -c $(CFLAG) multiTest.c
 
 clean:
 	rm -f *.o
