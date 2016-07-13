@@ -61,6 +61,7 @@ NSString *const CameraVideoiOSDeviceiPhone6S = @"iPhone 6s";
 NSString *const CameraVideoiOSDeviceiPhone6Plus = @"iPhone 6 Plus";
 NSString *const CameraVideoiOSDeviceiPodTouch4 = @"iPod Touch (4th Generation)";
 NSString *const CameraVideoiOSDeviceiPodTouch5 = @"iPod Touch (5th Generation)";
+NSString *const CameraVideoiOSDeviceiPodTouch6 = @"iPod Touch (6th Generation)";
 NSString *const CameraVideoiOSDeviceiPad2 = @"iPad 2";
 NSString *const CameraVideoiOSDeviceiPad3 = @"iPad (3rd generation)";
 NSString *const CameraVideoiOSDeviceiPad4 = @"iPad (4th generation)";
@@ -177,6 +178,7 @@ typedef struct {
         else if ([machine hasPrefix:@"iPhone"]) iOSDevice = CameraVideoiOSDeviceiPhoneX;
         else if ([machine hasPrefix:@"iPod4,"]) iOSDevice = CameraVideoiOSDeviceiPodTouch4; // 1=.
         else if ([machine hasPrefix:@"iPod5,"]) iOSDevice = CameraVideoiOSDeviceiPodTouch5; // 1=.
+        else if ([machine hasPrefix:@"iPod7,"]) iOSDevice = CameraVideoiOSDeviceiPodTouch6; // 1=.
         else if ([machine hasPrefix:@"iPod"]) iOSDevice = CameraVideoiOSDeviceiPodX;
         else if ([machine hasPrefix:@"AppleTV"]) iOSDevice = CameraVideoiOSDeviceAppleTVX;
         else iOSDevice = nil;

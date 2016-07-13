@@ -620,6 +620,7 @@ int ar2VideoGetParamiiPhone( AR2VideoParamiPhoneT *vid, int paramName, int *valu
                 else if (iOSDevice == CameraVideoiOSDeviceiPhone6SPlus) *value = AR_VIDEO_IOS_DEVICE_IPHONE6SPLUS;
                 else if (iOSDevice == CameraVideoiOSDeviceiPodTouch4) *value = AR_VIDEO_IOS_DEVICE_IPODTOUCH4;
                 else if (iOSDevice == CameraVideoiOSDeviceiPodTouch5) *value = AR_VIDEO_IOS_DEVICE_IPODTOUCH5;
+                else if (iOSDevice == CameraVideoiOSDeviceiPodTouch6) *value = AR_VIDEO_IOS_DEVICE_IPODTOUCH6;
                 else if (iOSDevice == CameraVideoiOSDeviceiPad2)      *value = AR_VIDEO_IOS_DEVICE_IPAD2;
                 else if (iOSDevice == CameraVideoiOSDeviceiPad3)      *value = AR_VIDEO_IOS_DEVICE_IPAD3;
                 else if (iOSDevice == CameraVideoiOSDeviceiPad4)      *value = AR_VIDEO_IOS_DEVICE_IPAD4;
@@ -925,6 +926,7 @@ int ar2VideoGetCParamiPhone(AR2VideoParamiPhoneT *vid, ARParam *cparam)
                    iOSDevice == CameraVideoiOSDeviceiPadAir ||
                    iOSDevice == CameraVideoiOSDeviceiPhone5 ||
                    iOSDevice == CameraVideoiOSDeviceiPodTouch5 ||
+                   iOSDevice == CameraVideoiOSDeviceiPodTouch6 ||
                    iOSDevice == CameraVideoiOSDeviceiPhone5c) {
             if (vid->cameraVideo.captureSessionPreset == AVCaptureSessionPresetHigh ||
                 vid->cameraVideo.captureSessionPreset == AVCaptureSessionPreset1280x720 ||
