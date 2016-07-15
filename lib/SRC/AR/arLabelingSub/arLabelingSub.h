@@ -332,7 +332,7 @@ int arLabelingSubEWZ( ARUint8 *image, const int xsize, const int ysize, ARUint8*
     for(i = 1; i <= wk_max; i++, wk++) {
         *wk = (*wk==i)? j++: work[(*wk)-1];
     }
-    *label_num = *label_num = j - 1;
+    *label_num = j - 1;
     if( *label_num == 0 ) {
         return 0;
     }

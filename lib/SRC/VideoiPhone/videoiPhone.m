@@ -49,8 +49,6 @@
 #import "cparams.h"
 #include "../Video/cparamSearch.h"
 
-CPARAM_SEARCH_STATE bob;
-
 #include <string.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
