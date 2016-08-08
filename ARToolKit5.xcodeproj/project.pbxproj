@@ -463,6 +463,7 @@
 		4AA543C4180D07F500EB67D8 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1E9759117E46FD00A2F3C2 /* libjpeg.a */; };
 		4AA543C5180D080000EB67D8 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1E9759117E46FD00A2F3C2 /* libjpeg.a */; };
 		4AA543CB180D085000EB67D8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
+		4AC2C4F61D5818B00041B63F /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
 		4AC3889C12A8F204002F3A44 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4AC3889E12A8F204002F3A44 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
 		4AC3889F12A8F204002F3A44 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
@@ -3021,6 +3022,7 @@
 				4A3B396E18C3DCC2005EAEF3 /* Foundation.framework in Frameworks */,
 				4AA543BF180D07A100EB67D8 /* libARgsub.a in Frameworks */,
 				4AA543CB180D085000EB67D8 /* Accelerate.framework in Frameworks */,
+				4AC2C4F61D5818B00041B63F /* libARvideo.a in Frameworks */,
 				4AC7304F180CF5C30012E1AA /* CoreFoundation.framework in Frameworks */,
 				4AA543C4180D07F500EB67D8 /* libjpeg.a in Frameworks */,
 				4AC73050180CF5C30012E1AA /* libAR.a in Frameworks */,

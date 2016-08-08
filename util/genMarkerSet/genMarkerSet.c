@@ -60,6 +60,7 @@
 #include <AR2/marker.h>
 #include <AR2/util.h>
 #include <AR2/imageFormat.h>
+#include <AR/videoLuma.h>
 
 #define		XWIN_MAX	1000
 #define		YWIN_MAX	800
@@ -273,7 +274,22 @@ static int init( int argc, char *argv[] )
             }
             dpi   = jpegImage->dpi;
         }
-        
+
+        // Create luma-only buffer.
+        if (pixFormat == AR_PIXEL_FORMAT_MONO) {
+            buff.buffLuma = buff.buff;
+        } else {
+            ARVideoLumaInfo *lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
+            if (!lumaInfo) {
+                ARLOGe("Error: unable to initialise luma conversion.\n");
+                ar2FreeJpegImage(&jpegImage);
+                free(ext);
+                EXIT(E_INPUT_DATA_ERROR);
+            }
+            buff.buffLuma = arVideoLuma(lumaInfo, buff.buff);
+            arVideoLumaFinal(&lumaInfo);
+        }
+
     } else {
         ARLOGe("Error: file '%s' has extension '%s', which is not supported for reading. Exiting.\n", inputFilePath, ext);
         free(ext);
