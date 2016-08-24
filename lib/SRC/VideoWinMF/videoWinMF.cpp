@@ -731,8 +731,10 @@ AR2VideoBufferT *ar2VideoGetImageWinMF(AR2VideoParamWinMFT *vid)
     if (lStride != vid->rowBytes) {
         ARLOGw("Warning: Incoming frame rowBytes (%ld) differs from expected (%d).\n", lStride, vid->rowBytes);
     } else {
-		// when stride < 0, then the first scanline is the bottom line
-		if(lStride > 0)	{
+		// the image buffer data is flipped when stride < 0,
+		// which means the first pbScanline0 is actually the top line, but in memory
+		// the first pbScanline0 points to the last line
+		if (lStride > 0) {
 			if (!vid->flipV) {
 				memcpy(vid->buffer.buff, pbScanline0, vid->bufSize);
 			}
@@ -745,18 +747,18 @@ AR2VideoBufferT *ar2VideoGetImageWinMF(AR2VideoParamWinMFT *vid)
 					p1 -= vid->rowBytes;
 				}
 			}
-		} 
+		}
 		else {
-			if(vid->flipV) {
+			if (vid->flipV) {
 				memcpy(vid->buffer.buff, pbScanline0 + vid->rowBytes * (vid->height - 1), vid->bufSize);
-			} 
+			}
 			else {
 				BYTE *p0 = pbScanline0 + (vid->height - 1) * vid->rowBytes;
-				BYTE *p1 = vid->buffer.buff;
-				for(int i=0; i<vid->height; i++) {
+				BYTE *p1 = vid->buffer.buff - (vid->height - 1) * vid->rowBytes;
+				for (int i = 0; i<vid->height; i++) {
 					memcpy(p1, p0, -vid->rowBytes);
 					p0 -= vid->rowBytes;
-					p1 -= vid->rowBytes;
+					p1 += vid->rowBytes;
 				}
 			}
 		}
