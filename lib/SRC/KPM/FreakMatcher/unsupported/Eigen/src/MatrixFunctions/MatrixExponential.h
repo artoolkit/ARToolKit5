@@ -25,7 +25,8 @@
 #ifndef EIGEN_MATRIX_EXPONENTIAL
 #define EIGEN_MATRIX_EXPONENTIAL
 
-#ifdef _MSC_VER
+// Needed when compiling for android api < android-18 using gcc (seems is not required when compiling for android with clang from android-15).
+#if (defined(_MSC_VER) || (defined(ANDROID) && !defined(__clang__) && (__ANDROID_API__ < 18)))
   template <typename Scalar> Scalar log2(Scalar v) { using std::log; return log(v)/log(Scalar(2)); }
 #endif
 
