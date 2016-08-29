@@ -58,7 +58,13 @@ ARdouble arGetTransMatSquare( AR3DHandle *handle, ARMarkerInfo *marker_info, ARd
     ARdouble         err;
     int            dir;
 
-    dir = marker_info->dir;
+    if(marker_info->idMatrix < 0)
+        dir = marker_info->dirPatt;
+    else if (marker_info->idPatt < 0)
+        dir = marker_info->dirMatrix;
+    else
+        dir = marker_info->dir;
+    
     screenCoord[0].x = marker_info->vertex[(4-dir)%4][0];
     screenCoord[0].y = marker_info->vertex[(4-dir)%4][1];
     screenCoord[1].x = marker_info->vertex[(5-dir)%4][0];
@@ -99,8 +105,14 @@ ARdouble arGetTransMatSquareCont( AR3DHandle *handle, ARMarkerInfo *marker_info,
     ICPDataT       data;
     ARdouble         err;
     int            dir;
-
-    dir = marker_info->dir;
+    
+    if(marker_info->idMatrix < 0)
+        dir = marker_info->dirPatt;
+    else if (marker_info->idPatt < 0)
+        dir = marker_info->dirMatrix;
+    else
+        dir = marker_info->dir;
+        
     screenCoord[0].x = marker_info->vertex[(4-dir)%4][0];
     screenCoord[0].y = marker_info->vertex[(4-dir)%4][1];
     screenCoord[1].x = marker_info->vertex[(5-dir)%4][0];
