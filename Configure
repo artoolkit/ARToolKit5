@@ -375,8 +375,8 @@ then
 
     if [ "$INPUT_GSTREAMER" = "y" ]
     then
-        GST_CFLAGS=`pkg-config --cflags gstreamer-0.10`
-		GST_LIBS=`pkg-config --libs gstreamer-0.10`
+        GST_CFLAGS=`pkg-config --cflags gstreamer-1.0`
+		GST_LIBS=`pkg-config --libs gstreamer-1.0`
         CFLAG="$CFLAG $GST_CFLAGS"
         LIBS="$LIBS $GST_LIBS"
     fi
