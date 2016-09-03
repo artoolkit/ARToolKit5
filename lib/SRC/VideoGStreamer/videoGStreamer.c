@@ -49,8 +49,11 @@
 /* using memcpy */
 #include <string.h>
 
-
+#ifdef USE_GSTREAMER_1
 #define GSTREAMER_TEST_LAUNCH_CFG "videotestsrc ! video/x-raw, format=RGB,width=640,height=480,framerate=30/1 ! identity name=artoolkit sync=true ! fakesink"
+#else
+#define GSTREAMER_TEST_LAUNCH_CFG "videotestsrc ! video/x-raw-rgb,bpp=24 ! identity name=artoolkit sync=true ! fakesink"
+#endif
 
 struct _AR2VideoParamGStreamerT {
 	
@@ -71,9 +74,12 @@ struct _AR2VideoParamGStreamerT {
 };
 
 
+#ifdef USE_GSTREAMER_1
 static gboolean cb_have_data(GstPad *pad, GstPadProbeInfo *info, gpointer u_data) {
-
 	GstBuffer *buffer = GST_PAD_PROBE_INFO_BUFFER (info);
+#else
+static gboolean cb_have_data (GstPad *pad, GstBuffer *buffer, gpointer u_data) {
+#endif
 	const GstCaps *caps;
 	GstStructure *str;
 	
@@ -90,7 +96,7 @@ static gboolean cb_have_data(GstPad *pad, GstPadProbeInfo *info, gpointer u_data
 		g_print("libARvideo error! Buffer not allocated\n");
 	}
 
-// 	GstMapInfo *info;
+#ifdef USE_GSTREAMER_1
 	if (gst_buffer_map(buffer, info, GST_MAP_READ))
 	{
 		memcpy(vid->videoBuffer, (void *)info->data, info->size);
@@ -98,7 +104,10 @@ static gboolean cb_have_data(GstPad *pad, GstPadProbeInfo *info, gpointer u_data
 	} else {
 		g_print("libARvideo error! Buffer not readable\n");
 	}
-
+#else
+	if (vid->videoBuffer)
+		memcpy(vid->videoBuffer, buffer->data, buffer->size);
+#endif
 	return TRUE;
 }
 
@@ -118,7 +127,11 @@ static void video_caps_notify(GObject* obj, GParamSpec* pspec, gpointer data) {
 	
 	AR2VideoParamGStreamerT *vid = (AR2VideoParamGStreamerT*)data;
 
+#ifdef USE_GSTREAMER_1
 	caps = gst_pad_get_current_caps((GstPad*)obj);
+#else
+	caps = gst_pad_get_negotiated_caps((GstPad*)obj);
+#endif
 
 	if (caps) {
 
@@ -172,7 +185,7 @@ AR2VideoParamGStreamerT* ar2VideoOpenGStreamer( const char *config_in ) {
     g_print ("libARvideo: %s\n", gst_version_string());
 
     vid->pipeline = gst_parse_launch (config, &error);
-//     return NULL;
+
     if (!vid->pipeline) {
         g_print ("Parse error: %s\n", error->message);
         //COVHI10365
@@ -190,14 +203,21 @@ AR2VideoParamGStreamerT* ar2VideoOpenGStreamer( const char *config_in ) {
     };
 
     /* get the pad from the probe (the source pad seems to be more flexible) */
+#ifdef USE_GSTREAMER_1
     pad = gst_element_get_static_pad (vid->probe, "src");
+#else
+    pad = gst_element_get_pad (vid->probe, "src");
+#endif
 
     /* get the peerpad aka sink */
     peerpad = gst_pad_get_peer(pad);
 
     /* install the probe callback for capturing */
-//     gst_pad_add_buffer_probe (pad, G_CALLBACK (cb_have_data), vid);
+#ifdef USE_GSTREAMER_1
     gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_BUFFER, cb_have_data, vid, NULL);
+#else
+    gst_pad_add_buffer_probe (pad, G_CALLBACK (cb_have_data), vid);
+#endif
 
     g_signal_connect(pad, "notify::caps", G_CALLBACK(video_caps_notify), vid);
 
