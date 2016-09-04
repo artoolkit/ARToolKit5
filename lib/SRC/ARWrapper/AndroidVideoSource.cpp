@@ -248,6 +248,7 @@ bail:
     free(incomingFrameRawBuffer);
     incomingFrameRawBuffer = NULL;
     incomingFrameRawBufferSize = 0;
+    frameBuffer = NULL;
     
     deviceState = DEVICE_OPEN;
     return false;
@@ -303,6 +304,7 @@ bool AndroidVideoSource::close() {
     newFrameArrived = false;
     ar2VideoClose(gVid);
     gVid = NULL;
+    frameBuffer = NULL;
 
 	deviceState = DEVICE_CLOSED;
 	ARController::logv(AR_LOG_LEVEL_INFO, "Android Video Source closed.");
