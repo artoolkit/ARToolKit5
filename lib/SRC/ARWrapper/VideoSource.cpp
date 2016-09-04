@@ -983,9 +983,9 @@ void VideoSource::updateTextureGL(int textureID) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D, 0, glPixIntFormat, videoWidth, videoHeight, 0, glPixFormat, glPixType, frameBuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, glPixIntFormat, videoWidth, videoHeight, 0, glPixFormat, glPixType, frameBuffer->buff);
 #else
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoWidth, videoHeight, glPixFormat, glPixType, frameBuffer);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, videoWidth, videoHeight, glPixFormat, glPixType, frameBuffer->buff);
 #endif
 		//glBindTexture(GL_TEXTURE_2D, val);
 
