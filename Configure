@@ -310,6 +310,19 @@ then
     fi
     if [ "$INPUT_GSTREAMER" = "y" ]
     then
+        echo "Experimental: Do you want to use gstreamer-1.0 instead of gstreamer-0.10? (y or n)"
+        echo -n "Enter : "
+        read ANS
+        if [ "$ANS" = "y" ]
+        then
+            USE_GSTREAMER_1="y"
+        elif [ "$ANS" = "n" ]
+        then
+            USE_GSTREAMER_1="n"
+        else
+            echo "Please enter y or n."
+            exit 0
+        fi
         if [ "$DEFAULT_CAP_DEVICE" = "" ]
         then
             echo "Do you want to use it as the default input device? (y or n)"
@@ -375,8 +388,14 @@ then
 
     if [ "$INPUT_GSTREAMER" = "y" ]
     then
-        GST_CFLAGS=`pkg-config --cflags gstreamer-0.10`
-		GST_LIBS=`pkg-config --libs gstreamer-0.10`
+        if [ "$USE_GSTREAMER_1" = "y" ]
+        then
+            GST_CFLAGS="-DUSE_GSTREAMER_1 `pkg-config --cflags gstreamer-1.0`"
+            GST_LIBS="-DUSE_GSTREAMER_1 `pkg-config --libs gstreamer-1.0`"
+        else
+            GST_CFLAGS=`pkg-config --cflags gstreamer-0.10`
+            GST_LIBS=`pkg-config --libs gstreamer-0.10`
+        fi
         CFLAG="$CFLAG $GST_CFLAGS"
         LIBS="$LIBS $GST_LIBS"
     fi

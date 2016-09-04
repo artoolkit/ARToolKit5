@@ -527,10 +527,17 @@ int main(int argc, char** argv)
 {
     char glutGamemode[32];
     char cparam_name[] = "../share/artoolkit-examples/Data/camera_para.dat";
-    char vconf[] = "";
+    char vconf[512];
     char patt_name[]  = "../share/artoolkit-examples/Data/hiro.patt";
-	
-    //
+    int  i;
+
+    if( argc == 1 ) vconf[0] = '\0';
+    else {
+        strcpy( vconf, argv[1] );
+        for( i = 2; i < argc; i++ ) {strcat(vconf, " "); strcat(vconf,argv[i]);}
+    }
+    
+	//
 	// Library inits.
 	//
 
