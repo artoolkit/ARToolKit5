@@ -58,7 +58,7 @@
 #  include <GL/gl.h>
 #  include "opencv2/calib3d/calib3d.hpp"
 #endif
-#include <opencv/cv.h>
+#include <opencv/cv.hpp>
 #include <AR/ar.h>
 #include <AR/gsub.h>
 #include <AR/video.h>
