@@ -34,7 +34,7 @@
  *  Author(s): Julian Looser, Philip Lamb
  *
  */
-package org.artoolkit.ar.samples.ARSimple.shader;
+package org.artoolkit.ar.samples.ARSimpleOpenGLES20.shader;
 
 import android.opengl.GLES20;
 

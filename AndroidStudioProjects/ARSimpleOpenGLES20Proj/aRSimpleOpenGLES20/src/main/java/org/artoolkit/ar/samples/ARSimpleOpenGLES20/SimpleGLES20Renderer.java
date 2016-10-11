@@ -47,7 +47,7 @@
  *
  */
 
-package org.artoolkit.ar.samples.ARSimple;
+package org.artoolkit.ar.samples.ARSimpleOpenGLES20;
 
 import android.opengl.GLES20;
 
@@ -55,9 +55,9 @@ import org.artoolkit.ar.base.ARToolKit;
 import org.artoolkit.ar.base.rendering.gles20.ARRendererGLES20;
 import org.artoolkit.ar.base.rendering.gles20.CubeGLES20;
 import org.artoolkit.ar.base.rendering.gles20.ShaderProgram;
-import org.artoolkit.ar.samples.ARSimple.shader.SimpleFragmentShader;
-import org.artoolkit.ar.samples.ARSimple.shader.SimpleShaderProgram;
-import org.artoolkit.ar.samples.ARSimple.shader.SimpleVertexShader;
+import org.artoolkit.ar.samples.ARSimpleOpenGLES20.shader.SimpleFragmentShader;
+import org.artoolkit.ar.samples.ARSimpleOpenGLES20.shader.SimpleShaderProgram;
+import org.artoolkit.ar.samples.ARSimpleOpenGLES20.shader.SimpleVertexShader;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
