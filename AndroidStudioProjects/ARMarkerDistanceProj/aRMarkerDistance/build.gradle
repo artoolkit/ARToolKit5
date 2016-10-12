@@ -1,38 +1,28 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
-model {
-    android {
-        compileSdkVersion = 23
-        buildToolsVersion = "23.0.3"
 
-        defaultConfig.with {
-            applicationId = "org.ar.artoolkit.org.ARMarkerdistance"
-            minSdkVersion.apiLevel = 15
-            targetSdkVersion.apiLevel = 23
-            versionCode = 104
-            versionName = "1.0.4"
-        }
+android {
+    compileSdkVersion = 24
+    buildToolsVersion = "24.0.3"
 
+    defaultConfig {
+        applicationId = "org.ar.artoolkit.org.ARMarkerdistance"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode = 104
+        versionName = "1.0.4"
     }
-    android.buildTypes {
+
+    buildTypes {
         release {
             minifyEnabled false
-            proguardFiles.add(file("proguard-rules.pro"))
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    android.sources {
-        main {
-            jni {
-                source {
-                    srcDir "src/main/nop"
-                }
-            }
-            jniLibs {
-                source {
-                    srcDir "src/main/libs"
-                }
-            }
-        }
+
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir 'src/main/libs'
     }
 }
 

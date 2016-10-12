@@ -53,8 +53,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import org.artoolkit.ar.base.ARActivity;
 import org.artoolkit.ar.base.FPSCounter;
 import org.artoolkit.ar.base.R;
 import java.io.IOException;
