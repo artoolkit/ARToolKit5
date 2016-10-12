@@ -20,10 +20,6 @@ apply plugin: 'com.android.library'
     }
 
 dependencies {
-    compile 'com.android.support:support-v4:24.2.1'   // Only required when the target device API level is greater than
+    // compile 'com.android.support:support-v4:24.2.1'// Only required when the target device API level is greater than
     compile 'com.android.support:appcompat-v7:24.2.1' // the compile and target of the app being deployed to the device
 }
-
-
-
-
