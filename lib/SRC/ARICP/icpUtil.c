@@ -209,7 +209,7 @@ int icpGetInitXw2Xc_from_PlanarData( ARdouble       matXc2U[3][4],
         v[1][2] = -v[1][2];
         t[0] = -t[0];
         t[1] = -t[1];
-        t[1] = -t[2];
+        t[2] = -t[2];
     }
 
     check_rotation( v );
