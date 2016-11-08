@@ -1,5 +1,5 @@
 /*
- *  ARRenderer.java
+ *  Line.java
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -31,7 +31,7 @@
  *  Copyright 2015 Daqri, LLC.
  *  Copyright 2011-2015 ARToolworks, Inc.
  *
- *  Author(s): Julian Looser, Philip Lamb
+ *  Author(s): Thorsten Bux, Philip Lamb
  *
  */
 
@@ -80,7 +80,7 @@ public class Line {
         float[] vertices = new float[vertexLength * 2];
 
         for (int i = 0; i < vertexLength; i++) {
-            vertices[i] = start[0];
+            vertices[i] = start[i];
             vertices[i + vertexLength] = end[i];
         }
 
@@ -119,8 +119,9 @@ public class Line {
             this.start[0] = start[0];
             this.start[1] = start[1];
             this.start[2] = start[2];
-        } else
+        } else {
             this.start = start;
+        }
     }
 
     public float[] getEnd() {
@@ -132,8 +133,9 @@ public class Line {
             this.end[0] = end[0];
             this.end[1] = end[1];
             this.end[2] = end[2];
-        } else
+        } else {
             this.end = end;
+        }
     }
 
 
