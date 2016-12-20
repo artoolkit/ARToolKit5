@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion = 24
-    buildToolsVersion = "24.0.3"
+    compileSdkVersion = 25 // The version of the Android API, i.e. SDK, the app is compiled against
+    buildToolsVersion = "25.0.2" // The downloaded version of the Build Tools used to build Android application code
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 15 // Signals the Google Play Store as to what device, running this minimum indicated or greater version, an app can be installed on
+        targetSdkVersion 24 // Indicates the version of the latest API feature set that can be used and that you have tested your app on (presumably up to and including)
         versionCode = 2     // Integer type incremented by 1 for every release, major or minor, to the Google store
         versionName = "2.0" // The real fully qualified major and minor release description
 
@@ -21,5 +21,5 @@ android {
 
 dependencies {
     // compile 'com.android.support:support-v4:24.2.1'// Only required when the target device API level is greater than
-    compile 'com.android.support:appcompat-v7:24.2.1' // the compile and target of the app being deployed to the device
+    compile 'com.android.support:appcompat-v7:25.1.0' // the compile and target of the app being deployed to the device
 }
