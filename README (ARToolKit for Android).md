@@ -1,7 +1,7 @@
-#Read me for ARToolKit for Android
+# Read me for ARToolKit for Android
 
 
-##Contents
+## Contents
 
 - About this archive  
 - Requirements  
@@ -12,7 +12,7 @@
 - Next steps
 
 
-##About this archive
+## About this archive
 
 This archive contains the ARToolKit libraries, utilities and examples for Android, version 5.3.3.
 
@@ -28,7 +28,7 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
     2016-xx-xx
 
 
-##Requirements
+## Requirements
 
 Requirements:  
 - Android SDK Tools, r24.4.1 (October 2015) or later recommended.  
@@ -42,12 +42,12 @@ Requirements:
 ARToolKit is supplied as pre-built binaries for each platform, plus full source code for the SDK libraries, utilities, and examples, and documentation. If you wish to view the source for the desktop-only utilities, you will also need to use this Android release alongside ARToolKit v5.x for Mac OS X, Windows, or Linux.
 
 
-##Getting started
+## Getting started
 
 For full instructions on using this SDK, please refer to the online user guide at http://www.artoolkit.org/documentation/#Android.
 
 
-##Training new markers
+## Training new markers
 
 The utilities required to train new square and NFT markers are provide in the ‘bin’ directory of the SDK. The utilities are command-line Windows/OS X executables which should be run from a Terminal environment.
 
@@ -70,7 +70,7 @@ Usage (Windows):
 - checkResolution.exe Data/camera_para.dat (change camera_para.dat to the correct camera calibration file for your device, camera and resolution).
 
 
-##Release notes
+## Release notes
 
 This release contains ARToolKit v5.3.3 for Android.
 
@@ -112,14 +112,14 @@ ARToolKit 5.2 and later for Android supports fetching of camera calibration data
 Please see [http://www.artoolkit.org/documentation/Using_automatic_online_camera_calibration_retrieval](http://www.artoolkit.org/documentation/Using_automatic_online_camera_calibration_retrieval) for details on this feature and the code changes required.
 
 
-##libKPM usage
+## libKPM usage
 
 libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simplify app builds and app distribution on all supported platforms.
 
 Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via info@artoolkit.org if you are an existing user of ARToolKit Professional with questions.
 
 
-##Next steps
+## Next steps
 
 We have made a forum for discussion of ARToolKit for Android development available on our community website.
 
