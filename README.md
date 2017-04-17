@@ -1,6 +1,6 @@
-#Read me for ARToolKit
+# Read me for ARToolKit
 
-##Contents
+## Contents
 
 - About this archive  
 - Installing  
@@ -11,7 +11,7 @@
 - Next steps  
 
 
-#About this archive
+# About this archive
 
 This archive contains the ARToolKit libraries, utilities and examples, version 5.3.3.
 
@@ -25,18 +25,18 @@ ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Androi
     2016-xx-xx  
 
 
-##Installing
+## Installing
 
 ARToolKit is supplied as pre-built binaries for each platform, plus full source code for the SDK libraries, utilities, and examples, and documentation.
 
-###Windows
+### Windows
 
 Run the ARToolKit installer executable and follow the prompts.
 By default, ARToolKit will be installed into a folder inside your Program Files folder. Start menu items are created to allow you to quickly open the folder containing the installed software, to open a command-line prompt with the path set to this folder, and to read documentation and access this support site. The installer also automatically creates the ARTOOLKIT5_ROOT environment variable to point to your chosen install location.
 
 If you are upgrading to a newer version, it is generally safe to install over the old version. Before upgrading, save any modifications you have made to any ARToolKit source or example code, and then run the installer. The installer will add or update new files, and remove unneeded old files.
 	
-###Mac OS X
+### Mac OS X
 
 The SDK is supplied as an archive file (.tar.gz or .zip file) which need only be unpacked to a location of your choice, e.g. ~/SDKs/. Drop the archive into your chosen location and double-click it in the Finder to unpack it.
 	
@@ -47,7 +47,7 @@ cd ~/SDKs/ARToolKit5/
 ./share/artoolkit5-setenv
 ```
 
-###Linux
+### Linux
 
 The SDK is supplied as an archive file (.tar.gz) which need only be unpacked to a location of your choice, e.g. ~/SDKs/. Move the archive into your chosen location and use the following command in your terminal to unpack it:
 	

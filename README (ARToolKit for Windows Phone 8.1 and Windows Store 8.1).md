@@ -1,6 +1,6 @@
-#Read me for ARToolKit for Windows Phone 8.1 and Windows Store 8.1
+# Read me for ARToolKit for Windows Phone 8.1 and Windows Store 8.1
 
-##Contents
+## Contents
 
 - About this archive
 - Requirements
@@ -12,7 +12,7 @@
 - Next steps
 
 
-##About this archive
+## About this archive
 
 This archive contains the ARToolKit libraries and utilities for Windows Phone 8.1 and Windows Store 8.1, version 5.3.2.
 
@@ -26,7 +26,7 @@ If you intend to publish your app on Microsoft's Windows Store or any other comm
     2016-03-23  
 
 
-##Requirements
+## Requirements
 
 **Requirements**  
 - Microsoft Visual Studio 2013 Update 3 or later, running on Windows 8.1 or later.  
@@ -37,12 +37,12 @@ If you intend to publish your app on Microsoft's Windows Store or any other comm
 ARToolKit is supplied as pre-built binaries for each platform, plus full source code for the SDK libraries and utilities, and documentation. If you wish to view the source for the desktop-only utilities, you will also need to use this Windows Phone 8.1 and Windows Store 8.1 release alongside ARToolKit v5.x for Mac OS X, Windows, or Linux.
 
 
-##Installing
+## Installing
  
 The SDK is supplied as an runnable installer. Double-click the installer to begin installation, and then follow the prompts. After installation, items installed will be available under the Applications list.
 
 
-##Getting started
+## Getting started
 
 Locate and run the Visual Studio 2013 Solution file, found in the folder "vs120-winrt" folder inside the "Visual Studio" folder at the root of the SDK.
 

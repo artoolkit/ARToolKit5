@@ -1,4 +1,4 @@
-####otool -L libopencv_calib3d.3.1.0.dylib    
+#### otool -L libopencv_calib3d.3.1.0.dylib    
 libopencv_calib3d.3.1.0.dylib:  
 before  
 > libopencv_calib3d.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)    
@@ -26,7 +26,7 @@ after
 /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)  
 
-####otool -L libopencv_core.3.1.0.dylib
+#### otool -L libopencv_core.3.1.0.dylib
 libopencv_core.3.1.0.dylib:  
 before
 > libopencv_core.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -38,7 +38,7 @@ after
 	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
 
-####otool -L libopencv_features2d.3.1.0.dylib  
+#### otool -L libopencv_features2d.3.1.0.dylib  
 libopencv_features2d.3.1.0.dylib:  
 before
 > libopencv_features2d.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -64,7 +64,7 @@ after
 	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
 	
-####otool -L libopencv_flann.3.1.0.dylib  
+#### otool -L libopencv_flann.3.1.0.dylib  
 libopencv_flann.3.1.0.dylib:  
 before  
 > libopencv_flann.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -78,7 +78,7 @@ after
 	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
 
-####otool -L libopencv_ml.3.1.0.dylib
+#### otool -L libopencv_ml.3.1.0.dylib
 libopencv_ml.3.1.0.dylib:  
 before  
 > libopencv_ml.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -92,7 +92,7 @@ after
 /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
 
-####otool -L libopencv_highgui.3.1.0.dylib  
+#### otool -L libopencv_highgui.3.1.0.dylib  
 libopencv_highgui.3.1.0.dylib: 
 before   
 >libopencv_highgui.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -122,7 +122,7 @@ after
 /System/Library/Frameworks/AppKit.framework/Versions/C/AppKit (compatibility version 45.0.0, current version 1404.46.0)  
 /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 1258.1.0)
 
-####otool -L libopencv_videoio.3.1.0.dylib 
+#### otool -L libopencv_videoio.3.1.0.dylib 
 libopencv_videoio.3.1.0.dylib:  
 before  
 >libopencv_videoio.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -154,7 +154,7 @@ after
 /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 1258.1.0)  
 /System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo (compatibility version 1.2.0, current version 1.5.0)
 
-####otool -L libopencv_imgcodecs.3.1.dylib
+#### otool -L libopencv_imgcodecs.3.1.dylib
 libopencv_imgcodecs.3.1.dylib:  
 before  
 >libopencv_imgcodecs.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
@@ -170,7 +170,7 @@ after
 /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)  
 /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
 
-####otool -L libopencv_imgproc.3.1.0.dylib  
+#### otool -L libopencv_imgproc.3.1.0.dylib  
 libopencv_imgproc.3.1.0.dylib:  
 before  
 > libopencv_imgproc.3.1.dylib (compatibility version 3.1.0, current version 3.1.0)  
