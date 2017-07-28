@@ -79,14 +79,11 @@ int arMatrixSelfInv(ARMat *m)
 static ARdouble *minv( ARdouble *ap, int dimen, int rowa )
 {
         ARdouble *wap, *wcp, *wbp;/* work pointer                 */
-        int i,j,n,ip,nwork;
+        int i, j, n, ip, nwork;
         int nos[500];
-        ARdouble epsl;
-        ARdouble p,pbuf,work;
+        ARdouble p, pbuf, work;
 
-        if( dimen > 500 ) return NULL;
-
-        epsl = EPS;         /* Threshold value      */
+        if ( dimen > 500 ) return NULL;
 
         switch (dimen) {
                 case (0): return(NULL);                 /* check size */
@@ -94,51 +91,51 @@ static ARdouble *minv( ARdouble *ap, int dimen, int rowa )
                           return(ap);                   /* 1 dimension */
         }
 
-        for(n = 0; n < dimen ; n++)
-                nos[n] = n;
+        for (n = 0; n < dimen ; n++)
+            nos[n] = n;
 
-        for(n = 0; n < dimen ; n++) {
-                wcp = ap + n * rowa;
-
-                for(i = n, wap = wcp, p = ZERO; i < dimen ; i++, wap += rowa)
-                        if( p < ( pbuf = FABS(*wap)) ) {
-                                p = pbuf;
-                                ip = i;
-                        }
-                if (p <= epsl)
-                        return(NULL);
-
-                nwork = nos[ip];
-                nos[ip] = nos[n];
-                nos[n] = nwork;
-
-                for(j = 0, wap = ap + ip * rowa, wbp = wcp; j < dimen ; j++) {
-                        work = *wap;
-                        *wap++ = *wbp;
-                        *wbp++ = work;
+        for (n = 0; n < dimen ; n++) {
+            wcp = ap + n * rowa;
+            for (i = n, wap = wcp, p = ZERO, ip = -1; i < dimen; i++, wap += rowa) {
+                if ( p < ( pbuf = FABS(*wap)) ) {
+                    p = pbuf;
+                    ip = i;
                 }
+            }
+            if (p <= EPS || -1 == ip) /* EPS == Threshold value */
+                return(NULL);
 
-                for(j = 1, wap = wcp, work = *wcp; j < dimen ; j++, wap++)
-                        *wap = *(wap + 1) / work;
-                *wap = ONE / work;
+            nwork = nos[ip];
+            nos[ip] = nos[n];
+            nos[n] = nwork;
 
-                for(i = 0; i < dimen ; i++) {
-                        if(i != n) {
-                                wap = ap + i * rowa;
-                                for(j = 1, wbp = wcp, work = *wap;
-                                                j < dimen ; j++, wap++, wbp++)
-                                        *wap = *(wap + 1) - work * (*wbp);
-                                *wap = -work * (*wbp);
-                        }
+            for (j = 0, wap = ap + ip * rowa, wbp = wcp; j < dimen ; j++) {
+                work = *wap;
+                *wap++ = *wbp;
+                *wbp++ = work;
+            }
+
+            for (j = 1, wap = wcp, work = *wcp; j < dimen; j++, wap++) {
+                *wap = *(wap + 1) / work;
+            }
+            *wap = ONE / work;
+
+            for (i = 0; i < dimen ; i++) {
+                if (i != n) {
+                        wap = ap + i * rowa;
+                    for(j = 1, wbp = wcp, work = *wap; j < dimen; j++, wap++, wbp++) {
+                                *wap = *(wap + 1) - work * (*wbp);
+                    }
+                    *wap = -work * (*wbp);
                 }
-        }
+            }
+        } //end: for (n = 0; n < dimen ; n++)
 
         for(n = 0; n < dimen ; n++) {
                 for(j = n; j < dimen ; j++)
                         if( nos[j] == n) break;
                 nos[j] = nos[n];
-                for(i = 0, wap = ap + j, wbp = ap + n; i < dimen ;
-                                        i++, wap += rowa, wbp += rowa) {
+                for (i = 0, wap = ap + j, wbp = ap + n; i < dimen; i++, wap += rowa, wbp += rowa) {
                         work = *wap;
                         *wap = *wbp;
                         *wbp = work;
@@ -159,52 +156,52 @@ int arMatrixSelfInvf(ARMatf *m)
 
 static float *minvf( float *ap, int dimen, int rowa )
 {
-    float *wap, *wcp, *wbp;/* work pointer                 */
-    int i,j,n,ip,nwork;
+    const float EPSL = 1.0e-10f;
+    float *wap, *wcp, *wbp;/* work pointer */
+    int i, j, n, ip, nwork;
     int nos[500];
-    float epsl;
     float p,pbuf,work;
     
-    if( dimen > 500 ) return NULL;
-    
-    epsl = 1.0e-10f;         /* Threshold value      */
-    
+    if ( dimen > 500 ) return NULL;
+
     switch (dimen) {
-        case (0): return(NULL);                 /* check size */
+        case (0): return(NULL);           /* check size */
         case (1): *ap = 1.0f / (*ap);
             return(ap);                   /* 1 dimension */
     }
     
-    for(n = 0; n < dimen ; n++)
+    for (n = 0; n < dimen; n++) {
         nos[n] = n;
+    }
     
-    for(n = 0; n < dimen ; n++) {
+    for (n = 0; n < dimen; n++) {
         wcp = ap + n * rowa;
         
-        for(i = n, wap = wcp, p = 0.0; i < dimen ; i++, wap += rowa)
+        for (i = n, wap = wcp, p = 0.0, ip = -1; i < dimen; i++, wap += rowa)
             if( p < ( pbuf = fabsf(*wap)) ) {
                 p = pbuf;
                 ip = i;
             }
-        if (p <= epsl)
+        if (p <= EPSL || -1 == ip) /* EPSL Threshold value */
             return(NULL);
         
         nwork = nos[ip];
         nos[ip] = nos[n];
         nos[n] = nwork;
         
-        for(j = 0, wap = ap + ip * rowa, wbp = wcp; j < dimen ; j++) {
+        for (j = 0, wap = ap + ip * rowa, wbp = wcp; j < dimen; j++) {
             work = *wap;
             *wap++ = *wbp;
             *wbp++ = work;
         }
         
-        for(j = 1, wap = wcp, work = *wcp; j < dimen ; j++, wap++)
+        for (j = 1, wap = wcp, work = *wcp; j < dimen ; j++, wap++) {
             *wap = *(wap + 1) / work;
+        }
         *wap = 1.0f / work;
         
-        for(i = 0; i < dimen ; i++) {
-            if(i != n) {
+        for (i = 0; i < dimen; i++) {
+            if (i != n) {
                 wap = ap + i * rowa;
                 for(j = 1, wbp = wcp, work = *wap;
                     j < dimen ; j++, wap++, wbp++)
@@ -212,7 +209,7 @@ static float *minvf( float *ap, int dimen, int rowa )
                 *wap = -work * (*wbp);
             }
         }
-    }
+    } //end: for (n = 0; n < dimen; n++)
     
     for(n = 0; n < dimen ; n++) {
         for(j = n; j < dimen ; j++)

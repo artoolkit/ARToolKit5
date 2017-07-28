@@ -34,7 +34,7 @@
  *  Author(s): Hirokazu Kato, Atsishi Nakazawa, Philip Lamb
  *
  */
-/*******************************************************
+/*
  *
  * Author: Hirokazu Kato, Atsishi Nakazawa
  *
@@ -44,7 +44,7 @@
  * Revision: 4.3
  * Date: 2002/01/01
  *
- *******************************************************/
+ */
 
 #ifndef AR_VIDEO_H
 #define AR_VIDEO_H
@@ -127,6 +127,7 @@ extern "C" {
 
 #define  AR_VIDEO_GET_VERSION                     INT_MAX
 
+// For arVideoParamGet(AR_VIDEO_FOCUS_MODE, ...)
 #define  AR_VIDEO_FOCUS_MODE_FIXED                    0
 #define  AR_VIDEO_FOCUS_MODE_AUTO                     1
 #define  AR_VIDEO_FOCUS_MODE_POINT_OF_INTEREST        2
@@ -301,7 +302,7 @@ typedef union {
 typedef struct {
     int                    deviceType;
     AR2VideoDeviceHandleT  device;
-    ARVideoLumaInfo       *lumaInfo;
+    ARVideoLumaInfo *lumaInfo;
 } AR2VideoParamT;
 
 AR_DLL_API int               arVideoGetDefaultDevice(void);
@@ -314,20 +315,97 @@ AR_DLL_API int               arVideoGetId           (ARUint32 *id0, ARUint32 *id
 AR_DLL_API int               arVideoGetSize         (int *x, int *y);
 AR_DLL_API int               arVideoGetPixelSize    (void);
 AR_DLL_API AR_PIXEL_FORMAT   arVideoGetPixelFormat  (void);
+
+/*!
+    @brief Get a frame image from the video module.
+    @return NULL if no image was available, or a pointer to an AR2VideoBufferT holding the image.
+        The returned pointer remains valid until either the next call to arVideoGetImage, or a
+        call to arVideoCapStop.
+ */
 AR_DLL_API AR2VideoBufferT  *arVideoGetImage        (void);
+
+/*!
+    @brief Start video capture.
+    @detail Each call to arVideoCapStart must be balanced with a call to arVideoCapStop.
+    @see arVideoCapStop
+ */
 AR_DLL_API int               arVideoCapStart        (void);
+
+/*!
+    @brief Start video capture with asynchronous notification of new frame arrival.
+    @param callback A function to call when a new frame arrives. This function may be
+        called anytime until the function arVideoCapStop has been called successfully.
+        The callback may occur on a different thread to the calling thread and it is
+        up to the user to synchronise the callback with any procedures that must run
+        on the main thread, a rendering thread, or other arbitrary thread.
+    @param userdata Optional user data pointer which will be passed to the callback as a parameter. May be NULL.
+ */
 AR_DLL_API int               arVideoCapStartAsync   (AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata);
+
+
+/*!
+    @brief Stop video capture.
+    @detail Each call to arVideoCapStop must match a call to arVideoCapStart.
+    @see arVideoCapStart
+ */
 AR_DLL_API int               arVideoCapStop         (void);
+
+/*!
+    @brief Get value of an integer parameter from active video module.
+    @param paramName Name of parameter to get, as defined in <AR6/ARVideo/video.h>
+    @param value Pointer to integer, which will be filled with the value of the parameter.
+    @return -1 in case of error, 0 in case of no error.
+ */
 AR_DLL_API int               arVideoGetParami       (int paramName, int *value);
+
+/*!
+    @brief Set value of an integer parameter in active video module.
+    @param paramName Name of parameter to set, as defined in <AR6/ARVideo/video.h>
+    @param value Integer value to set the parameter to.
+    @return -1 in case of error, 0 in case of no error.
+ */
 AR_DLL_API int               arVideoSetParami       (int paramName, int  value);
+
+/*!
+    @brief Get value of a double-precision floating-point parameter from active video module.
+    @param paramName Name of parameter to get, as defined in <AR6/ARVideo/video.h>
+    @param value Pointer to double, which will be filled with the value of the parameter.
+    @return -1 in case of error, 0 in case of no error.
+ */
 AR_DLL_API int               arVideoGetParamd       (int paramName, double *value);
+
+/*!
+    @brief Set value of a double-precision floating-point parameter in active video module.
+    @param paramName Name of parameter to set, as defined in <AR6/ARVideo/video.h>
+    @param value Double value to set the parameter to.
+    @return -1 in case of error, 0 in case of no error.
+ */
 AR_DLL_API int               arVideoSetParamd       (int paramName, double  value);
-AR_DLL_API int               arVideoGetParams       (const int paramName, char *value);
+
+/*!
+    @brief Get value of a string parameter from active video module.
+    @param paramName Name of parameter to get, as defined in <AR6/ARVideo/video.h>
+    @param value Pointer to pointer, which will be filled with a pointer to a C-string
+        (nul-terminated, UTF-8) containing the value of the parameter. The string returned is
+        allocated internally, and it is the responsibility of the caller to call free() on the
+        returned value.
+    @return -1 in case of error, 0 in case of no error.
+ */
+AR_DLL_API int               arVideoGetParams       (const int paramName, char **value);
+
+/*!
+    @brief Get value of a string parameter in active video module.
+    @param paramName Name of parameter to set, as defined in <AR6/ARVideo/video.h>
+    @param value Pointer to C-string (nul-terminated, UTF-8) containing the value to set the parameter to.
+    @return -1 in case of error, 0 in case of no error.
+ */
 AR_DLL_API int               arVideoSetParams       (const int paramName, const char  *value);
+
 AR_DLL_API int               arVideoSaveParam       (char *filename);
 AR_DLL_API int               arVideoLoadParam       (char *filename);
 AR_DLL_API int               arVideoSetBufferSize   (const int width, const int height);
 AR_DLL_API int               arVideoGetBufferSize   (int *width, int *height);
+    
 AR_DLL_API int               arVideoGetCParam       (ARParam *cparam);
 AR_DLL_API int               arVideoGetCParamAsync  (void (*callback)(const ARParam *, void *), void *userdata);
     
@@ -338,25 +416,25 @@ AR_DLL_API int               arVideoSaveImageJPEG(int w, int h, AR_PIXEL_FORMAT 
 #endif // !AR_ENABLE_MINIMIZE_MEMORY_FOOTPRINT
 
 typedef enum {
-    AR_VIDEO_ASPECT_RATIO_1_1,       // 1.0:
-    AR_VIDEO_ASPECT_RATIO_11_9,      // 1.222: 176x144 (QCIF), 352x288 (CIF)
-    AR_VIDEO_ASPECT_RATIO_5_4,       // 1.25:  1280x1024 (SXGA), 2560x2048
-    AR_VIDEO_ASPECT_RATIO_4_3,       // 1.333: 320x240 (QVGA), 480x360, 640x480 (VGA), 768x576 (576p), 800x600 (SVGA), 960x720, 1024x768 (XGA), 1152x864, 1280x960, 1400x1050, 1600x1200, 2048x1536
-    AR_VIDEO_ASPECT_RATIO_3_2,       // 1.5:   240x160, 480x320, 960x640, 720x480 (480p), 1152x768, 1280x854, 1440x960
-    AR_VIDEO_ASPECT_RATIO_14_9,      // 1.556:
-    AR_VIDEO_ASPECT_RATIO_8_5,       // 1.6:   320x200, 1280x800, 1440x900, 1680x1050, 1920x1200, 2560x1600
+    AR_VIDEO_ASPECT_RATIO_1_1,       ///< 1.0:   "Square".
+    AR_VIDEO_ASPECT_RATIO_11_9,      ///< 1.222: Equivalent to well-known sizes 176x144 (QCIF), 352x288 (CIF).
+    AR_VIDEO_ASPECT_RATIO_5_4,       ///< 1.25:  Equivalent to well-known sizes 1280x1024 (SXGA), 2560x2048.
+    AR_VIDEO_ASPECT_RATIO_4_3,       ///< 1.333: Equivalent to well-known sizes 320x240 (QVGA), 480x360, 640x480 (VGA), 768x576 (576p), 800x600 (SVGA), 960x720, 1024x768 (XGA), 1152x864, 1280x960, 1400x1050, 1600x1200, 2048x1536.
+    AR_VIDEO_ASPECT_RATIO_3_2,       ///< 1.5:   Equivalent to well-known sizes 240x160, 480x320, 960x640, 720x480 (480p), 1152x768, 1280x854, 1440x960.
+    AR_VIDEO_ASPECT_RATIO_14_9,      ///< 1.556:
+    AR_VIDEO_ASPECT_RATIO_8_5,       ///< 1.6:   Equivalent to well-known sizes 320x200, 1280x800, 1440x900, 1680x1050, 1920x1200, 2560x1600.
 
-    AR_VIDEO_ASPECT_RATIO_5_3,       // 1.667: 800x480, 1280x768, 1600x960
-    AR_VIDEO_ASPECT_RATIO_16_9,      // 1.778: 1280x720 (720p), 1920x1080 (1080p)
-    AR_VIDEO_ASPECT_RATIO_9_5,       // 1.8:   864x480
-    AR_VIDEO_ASPECT_RATIO_17_9,      // 1.889: 2040x1080
-    AR_VIDEO_ASPECT_RATIO_UNIQUE
+    AR_VIDEO_ASPECT_RATIO_5_3,       ///< 1.667: Equivalent to well-known sizes 800x480, 1280x768, 1600x960.
+    AR_VIDEO_ASPECT_RATIO_16_9,      ///< 1.778: "Widescreen". Equivalent to well-known sizes 1280x720 (720p), 1920x1080 (1080p).
+    AR_VIDEO_ASPECT_RATIO_9_5,       ///< 1.8:   Equivalent to well-known sizes 864x480.
+    AR_VIDEO_ASPECT_RATIO_17_9,      ///< 1.889: Equivalent to well-known sizes 2040x1080.
+    AR_VIDEO_ASPECT_RATIO_21_9,      ///< 2.333: "Ultrawide". Equivalent to well-known sizes 2560x1080, 1280x512.
+    AR_VIDEO_ASPECT_RATIO_UNIQUE     ///< Value not easily representable as a ratio of integers.
 } AR_VIDEO_ASPECT_RATIO;
 
 /*!
-    @function
-    @abstract Determine the approximate aspect ratio for a given image resolution.
-    @discussion
+    @brief Determine the approximate aspect ratio for a given image resolution.
+    @details
         A convenience method which makes it easy to determine the approximate aspect ratio
         of an image with the given resolution (expressed in pixel width and height).
         Returns a symbolic constant for the aspect ratio, which makes it easy to determine
@@ -368,9 +446,8 @@ typedef enum {
 AR_VIDEO_ASPECT_RATIO arVideoUtilFindAspectRatio(int w, int h);
 
 /*!
-    @function
-    @abstract Determine the approximate aspect ratio for a given image resolution.
-    @discussion
+    @brief Determine the approximate aspect ratio for a given image resolution.
+    @details
         A convenience method which makes it easy to determine the approximate aspect ratio
         of an image with the given resolution (expressed in pixel width and height).
         Returns a string for the aspect ratio. Assumes square pixels.
@@ -381,9 +458,8 @@ AR_VIDEO_ASPECT_RATIO arVideoUtilFindAspectRatio(int w, int h);
 char *arVideoUtilFindAspectRatioName(int w, int h);
 
 /*!
-    @function   arVideoGetVersion
-    @abstract   Get the version of ARToolKit with which the arVideo library was built.
-    @discussion
+    @brief   Get the version of ARToolKit with which the arVideo library was built.
+    @details
         It is highly recommended that
         any calling program that depends on features in a certain
         ARToolKit version, check at runtime that it is linked to a version
@@ -408,7 +484,7 @@ char *arVideoUtilFindAspectRatioName(int w, int h);
  
         If the returned value is equal to -1, it can be assumed that the actual
         version is in the range 0x04000000 to 0x04040100.
-    @availability Available in ARToolKit v4.4.2 and later. The underlying
+    @since Available in ARToolKit v4.4.2 and later. The underlying
         functionality can also be used when compiling against earlier versions of
         ARToolKit (v4.0 to 4.4.1) with a slightly different syntax: replace
         "arVideoGetVersion()" in your code with "arVideoGetParami(AR_VIDEO_GET_VERSION, NULL)".

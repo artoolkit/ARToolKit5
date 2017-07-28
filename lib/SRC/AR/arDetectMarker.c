@@ -217,6 +217,7 @@ cnt = 0;
         }
         if (cid >= 0) {
             if (arHandle->arPatternDetectionMode == AR_TEMPLATE_MATCHING_COLOR || arHandle->arPatternDetectionMode == AR_TEMPLATE_MATCHING_MONO || arHandle->arPatternDetectionMode == AR_MATRIX_CODE_DETECTION) {
+                // Either template or matrix, but not both.
                 if (arHandle->markerInfo[cid].cf < arHandle->history[i].marker.cf) {
                     arHandle->markerInfo[cid].cf = arHandle->history[i].marker.cf;
                     arHandle->markerInfo[cid].id = arHandle->history[i].marker.id;
@@ -248,6 +249,7 @@ cnt = 0;
                     }
                 }
             } else if (arHandle->arPatternDetectionMode == AR_TEMPLATE_MATCHING_COLOR_AND_MATRIX || arHandle->arPatternDetectionMode == AR_TEMPLATE_MATCHING_MONO_AND_MATRIX) {
+                // Both template and matrix.
                 if (arHandle->markerInfo[cid].cfPatt < arHandle->history[i].marker.cfPatt || arHandle->markerInfo[cid].cfMatrix < arHandle->history[i].marker.cfMatrix) {
                     arHandle->markerInfo[cid].cfPatt = arHandle->history[i].marker.cfPatt;
                     arHandle->markerInfo[cid].idPatt = arHandle->history[i].marker.idPatt;

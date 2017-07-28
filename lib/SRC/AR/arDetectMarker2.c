@@ -143,14 +143,16 @@ int arGetContour( AR_LABELING_LABEL_TYPE *limage, int xsize, int ysize, int *lab
     int        dmax, d, v1 = 0 /*COVHI10455*/;
     int        i, j;
 
+    sx = -1;
     j = clip[2];
     p1 = &(limage[j*xsize + clip[0]]);
-    for( i = clip[0]; i <= clip[1]; i++, p1++ ) {
-        if( *p1 > 0 && label_ref[(*p1)-1] == label ) {
-            sx = i; sy = j; break;
+    for ( i = clip[0]; i <= clip[1]; i++, p1++ ) {
+        if ( *p1 > 0 && label_ref[(*p1)-1] == label ) {
+            sx = i; sy = j;
+            break;
         }
     }
-    if( i > clip[1] ) {
+    if ( i > clip[1] || -1 == sx ) {
         ARLOGe("??? 1\n"); return -1;
     }
 
@@ -214,7 +216,7 @@ static int check_square( int area, ARMarkerInfo2 *marker_info2, ARdouble factor 
 {
     int             sx, sy;
     int             dmax, d, v1;
-    int             vertex[10], vnum;
+    int             vertex[10];
     int             wv1[10], wvnum1, wv2[10], wvnum2, v2;
     ARdouble          thresh;
     int             i;
@@ -233,7 +235,6 @@ static int check_square( int area, ARMarkerInfo2 *marker_info2, ARdouble factor 
     }
 
     thresh = (area/0.75) * 0.01 * factor;
-    vnum = 1;
     vertex[0] = 0;
     wvnum1 = 0;
     wvnum2 = 0;

@@ -28,7 +28,7 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2015-2016 Daqri, LLC.
  *  Copyright 2002-2015 ARToolworks, Inc.
  *
  *  Author(s): Hirokazu Kato, Philip Lamb
@@ -46,15 +46,15 @@
  *******************************************************/
 
 /*!
-	@header ar
-	@abstract ARToolKit core routines.
-	@discussion
+	@file ar.h
+	@brief ARToolKit core routines.
+	@details
         This header declares essential types and API for the entire
         ARToolKit SDK.
 
-        For compile-time per-machine configuration, see &lt;AR/config.h&gt;.<br>
+        For compile-time per-machine configuration, see &lt;AR/config.h&gt;.
         For compile-time ARToolKit configuration, see &lt;AR/arConfig.h&gt;.
-	@copyright 2015 Daqri, LLC.
+	@copyright 2015-2016 Daqri, LLC.
  */
 
 #ifndef AR_H
@@ -201,173 +201,107 @@ extern "C" {
 /* --------------------------------------------------*/
 
 /*!
-    @typedef
-    @asbtract Structure which carries information about a video frame retrieved by the video library.
-    @field buff         A pointer to the packed video data for this video frame. The video data pixel
-                        format is as specified by arVideoGetPixelFormat(). For multi-planar frames,
-                        this pointer is a copy of bufPlanes[0].
-    @field bufPlanes    For multi-planar video frames, this must be an array of length bufPlaneCount
-                        of (ARUint8*), into which will be copied pointers to the packed video data
-                        for each plane. For single-plane formats, this will be NULL.
-    @field bufPlaneCount For multi-planar video frames, this is the number of frame planes. For
-                        single-plane formats, this will be 0.
-    @field buffLuma     A pointer to a luminance-only version of the image.
-                        For luminance-only video formats this pointer is a copy of buff.
-                        For multi-planar formats which include a luminance-only plane,
-                        this pointer is a copy of one of the bufPlanes[] pointers.
-                        In all other cases, this pointer points to a buffer containing a
-                        copy of the video frame converted to luminance only.
-    @field fillFlag     Set non-zero when buff is valid.
-    @field time_sec     Seconds portion of the time at which buff was filled. Epoch is OS-specific.
-    @field time_usec    Microseconds portion of the time at which buff was filled. Epoch is OS-specific.
-    @seealso arVideoGetPixelFormat arVideoGetPixelFormat
+    @brief A structure which carries information about a video frame retrieved by the video library.
+    @see arVideoGetPixelFormat arVideoGetPixelFormat
  */
 typedef struct {
-    ARUint8            *buff;
-    ARUint8           **bufPlanes;
-    unsigned int        bufPlaneCount;
-    ARUint8            *buffLuma;
-    int                 fillFlag;
-    ARUint32            time_sec;
-    ARUint32            time_usec;
+    ARUint8            *buff;           ///< A pointer to the packed video data for this video frame. The video data pixel format is as specified by arVideoGetPixelFormat(). For multi-planar frames, this pointer is a copy of bufPlanes[0].
+    ARUint8           **bufPlanes;      ///< For multi-planar video frames, this must be an array of length bufPlaneCount of (ARUint8*), into which will be copied pointers to the packed video data for each plane. For single-plane formats, this will be NULL.
+    unsigned int        bufPlaneCount;  ///< For multi-planar video frames, this is the number of frame planes. For single-plane formats, this will be 0.
+    ARUint8            *buffLuma;       ///< A pointer to a luminance-only version of the image. For luminance-only video formats this pointer is a copy of buff. For multi-planar formats which include a luminance-only plane, this pointer is a copy of one of the bufPlanes[] pointers. In all other cases, this pointer points to a buffer containing a copy of the video frame converted to luminance only.
+    int                 fillFlag;       ///< Set non-zero when buff is valid.
+    ARUint32            time_sec;       ///< Seconds portion of the time at which buff was filled. Epoch is OS-specific.
+    ARUint32            time_usec;      ///< Microseconds portion of the time at which buff was filled. Epoch is OS-specific.
 } AR2VideoBufferT;
 
+/*!
+    @brief Values controlling the labeling thresholding mode.
+ */
 typedef enum {
-    AR_LABELING_THRESH_MODE_MANUAL = 0,
-    AR_LABELING_THRESH_MODE_AUTO_MEDIAN,
-    AR_LABELING_THRESH_MODE_AUTO_OTSU,
-    AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
-    AR_LABELING_THRESH_MODE_AUTO_BRACKETING
+    AR_LABELING_THRESH_MODE_MANUAL = 0,     ///< Manual threshold selection via arSetLabelingThresh.
+    AR_LABELING_THRESH_MODE_AUTO_MEDIAN,    ///< Automatic threshold selection via full-image histogram median.
+    AR_LABELING_THRESH_MODE_AUTO_OTSU,      ///< Automatic threshold selection via Otsu's method for foreground/background selection.
+    AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,  ///< Adaptive thresholding.
+    AR_LABELING_THRESH_MODE_AUTO_BRACKETING ///< Automatic threshold selection via heuristic-based exposure bracketing.
 } AR_LABELING_THRESH_MODE;
 
 /*!
-    @typedef ARMarkerInfo2
-    @abstract   (description)
-    @discussion (description)
-    @field      area (description)
-	@field      pos (description)
-	@field      coord_num (description)
-	@field      x_coord (description)
-	@field      y_coord (description)
-	@field      vertex (description)
-*/
+    @brief Captures detail of a trapezoidal region which is a candidate for marker detection.
+ */
 typedef struct {
-    int             area;
-    ARdouble        pos[2];
-    int             coord_num;
-    int             x_coord[AR_CHAIN_MAX];
-    int             y_coord[AR_CHAIN_MAX];
-    int             vertex[5];
+    int             area;                   ///< Area in pixels.
+    ARdouble        pos[2];                 ///< Center.
+    int             coord_num;              ///< Number of coordinates in x_coord, y_coord.
+    int             x_coord[AR_CHAIN_MAX];  ///< X values of coordinates.
+    int             y_coord[AR_CHAIN_MAX];  ///< Y values of coordinates.
+    int             vertex[5];              ///< Vertices.
 } ARMarkerInfo2;
 
 /*!
-    @typedef
-    @abstract Result codes returned by arDetectMarker to report state of individual detected trapezoidal regions.
-    @discussion
-        When detecting markers, all trapezoidal regions in the incoming image are considered for
-        marker matching. Various heuristics are used to reject regions judged to be non-markers.
-        The code will, as far as possible, report rejection by placing one of these constants
-        into the ARMarkerInfo.cutoffPhase field of regions rejected during the arDetectMarker() call.
-        Note that the ARMarkerInfo.id of such rejected regions will be -1.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_NONE                Marker OK.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_PATTERN_EXTRACTION  Failure during pattern extraction.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_MATCH_GENERIC       Generic error during matching phase.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONTRAST      Insufficient contrast during matching.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_NOT_FOUND Barcode matching could not find correct barcode locator pattern.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_EDC_FAIL  Barcode matching error detection/correction found unrecoverable error.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONFIDENCE    Matching confidence cutoff value not reached.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR          Maximum allowable pose error exceeded.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR_MULTI    Multi-marker pose error value exceeded.
-    @constant AR_MARKER_INFO_CUTOFF_PHASE_HEURISTIC_TROUBLESOME_MATRIX_CODES Heuristic-based rejection of troublesome matrix code which is often generated in error.
+    @brief Result codes returned by arDetectMarker to report state of individual detected trapezoidal regions.
+
+    When detecting markers, all trapezoidal regions in the incoming image are considered for
+    marker matching. Various heuristics are used to reject regions judged to be non-markers.
+    The code will, as far as possible, report rejection by placing one of these constants
+    into the ARMarkerInfo.cutoffPhase field of regions rejected during the arDetectMarker() call.
+    Note that the ARMarkerInfo.id of such rejected regions will be -1.
  */
 typedef enum {
-    AR_MARKER_INFO_CUTOFF_PHASE_NONE,
-    AR_MARKER_INFO_CUTOFF_PHASE_PATTERN_EXTRACTION,
-    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_GENERIC,
-    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONTRAST,
-    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_NOT_FOUND,
-    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_EDC_FAIL,
-    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONFIDENCE,
-    AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR,
-    AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR_MULTI,
-    AR_MARKER_INFO_CUTOFF_PHASE_HEURISTIC_TROUBLESOME_MATRIX_CODES
+    AR_MARKER_INFO_CUTOFF_PHASE_NONE,                   ///< Marker OK.
+    AR_MARKER_INFO_CUTOFF_PHASE_PATTERN_EXTRACTION,     ///< Failure during pattern extraction.
+    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_GENERIC,          ///< Generic error during matching phase.
+    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONTRAST,         ///< Insufficient contrast during matching.
+    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_NOT_FOUND,///< Barcode matching could not find correct barcode locator pattern.
+    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_BARCODE_EDC_FAIL, ///< Barcode matching error detection/correction found unrecoverable error.
+    AR_MARKER_INFO_CUTOFF_PHASE_MATCH_CONFIDENCE,       ///< Matching confidence cutoff value not reached.
+    AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR,             ///< Maximum allowable pose error exceeded.
+    AR_MARKER_INFO_CUTOFF_PHASE_POSE_ERROR_MULTI,       ///< Multi-marker pose error value exceeded.
+    AR_MARKER_INFO_CUTOFF_PHASE_HEURISTIC_TROUBLESOME_MATRIX_CODES ///< Heuristic-based rejection of troublesome matrix code which is often generated in error.
 } AR_MARKER_INFO_CUTOFF_PHASE;
 
 #define AR_MARKER_INFO_CUTOFF_PHASE_DESCRIPTION_COUNT 10
 extern const char *arMarkerInfoCutoffPhaseDescriptions[AR_MARKER_INFO_CUTOFF_PHASE_DESCRIPTION_COUNT];
 
 /*!
-    @typedef ARMarkerInfo
-    @abstract   Describes a detected trapezoidal area (a candidate for a marker match).
-    @discussion
+    @brief   Describes a detected trapezoidal area (a candidate for a marker match).
+    @details
         After marker detection, a number of trapezoidal areas in the camera image will have been identified. An
         ARMarkerInfo struct is returned for each area so matched. Trapezoidal areas which have been matched
         with marker images (in pattern mode) or barcodes (in matrix mode) will have valid values assigned to the
         appropriate id field.
-    @field      area Area in pixels of the largest connected region, comprising the marker border and regions connected to it. Note that this is
-        not the same as the actual onscreen area inside the marker border.
-	@field      id If pattern detection mode is either pattern mode OR matrix but not both, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
-	@field      idPatt If pattern detection mode includes a pattern mode, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
-    @field      idMatrix If pattern detection mode includes a matrix mode, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
-	@field      dir If pattern detection mode is either pattern mode OR matrix but not both, and id != -1, will be marker direction (range 0 to 3, inclusive).
-	@field      dirPatt If pattern detection mode includes a pattern mode, and id != -1, will be marker direction (range 0 to 3, inclusive).
-	@field      dirMatrix If pattern detection mode includes a matrix mode, and id != -1, will be marker direction (range 0 to 3, inclusive).
-	@field      cf If pattern detection mode is either pattern mode OR matrix but not both, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
-	@field      cfPatt If pattern detection mode includes a pattern mode, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
-	@field      cfMatrix If pattern detection mode includes a matrix mode, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
-	@field      pos 2D position (in camera image coordinates, origin at top-left) of the centre of the marker.
-	@field      line Line equations for the 4 sides of the marker.
-	@field      vertex 2D positions (in camera image coordinates, origin at top-left) of the corners of the marker. vertex[(4 - dir)%4][] is the top-left corner of the marker. Other vertices proceed clockwise from this. These are idealised coordinates (i.e. the onscreen position aligns correctly with the undistorted camera image.)
-	@field      markerInfo2Ptr (description)
-    @field      cutoffPhase If a trapezoidal region is detected, but is eliminated from the candidates for tracking,
-        this field is filled out with the tracking phase at which the marker was cut off. An English-language
-        description of the phase can be obtained by indexing into the C-string array arMarkerInfoCutoffPhaseDescriptions[].
-    @field      globalID If arPattDetectionMode is a matrix mode, matrixCodeType is AR_MATRIX_CODE_GLOBAL_ID, and idMatrix >= 0, will contain the globalID.
-*/
+ */
 typedef struct {
-    int             area;
-    int             id;
-    int             idPatt;
-    int             idMatrix;
-    int             dir;
-    int             dirPatt;
-    int             dirMatrix;
-    ARdouble        cf;
-    ARdouble        cfPatt;
-    ARdouble        cfMatrix;
-    ARdouble        pos[2];
-    ARdouble        line[4][3];
-    ARdouble        vertex[4][2];
-    ARMarkerInfo2  *markerInfo2Ptr;
-    AR_MARKER_INFO_CUTOFF_PHASE cutoffPhase;
-    int             errorCorrected;
-    uint64_t        globalID;
+    int             area;                   ///< Area in pixels of the largest connected region, comprising the marker border and regions connected to it. Note that this is not the same as the actual onscreen area inside the marker border.
+    int             id;                     ///< If pattern detection mode is either pattern mode OR matrix but not both, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
+    int             idPatt;                 ///< If pattern detection mode includes a pattern mode, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
+    int             idMatrix;               ///< If pattern detection mode includes a matrix mode, will be marker ID (>= 0) if marker is valid, or -1 if invalid.
+    int             dir;                    ///< If pattern detection mode is either pattern mode OR matrix but not both, and id != -1, will be marker direction (range 0 to 3, inclusive).
+    int             dirPatt;                ///< If pattern detection mode includes a pattern mode, and id != -1, will be marker direction (range 0 to 3, inclusive).
+    int             dirMatrix;              ///< If pattern detection mode includes a matrix mode, and id != -1, will be marker direction (range 0 to 3, inclusive).
+    ARdouble        cf;                     ///< If pattern detection mode is either pattern mode OR matrix but not both, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
+    ARdouble        cfPatt;                 ///< If pattern detection mode includes a pattern mode, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
+    ARdouble        cfMatrix;               ///< If pattern detection mode includes a matrix mode, will be marker matching confidence (range 0.0 to 1.0 inclusive) if marker is valid, or -1.0 if marker is invalid.
+    ARdouble        pos[2];                 ///< 2D position (in camera image coordinates, origin at top-left) of the centre of the marker.
+    ARdouble        line[4][3];             ///< Line equations for the 4 sides of the marker.
+    ARdouble        vertex[4][2];           ///< 2D positions (in camera image coordinates, origin at top-left) of the corners of the marker. vertex[(4 - dir)%4][] is the top-left corner of the marker. Other vertices proceed clockwise from this. These are idealised coordinates (i.e. the onscreen position aligns correctly with the undistorted camera image.)
+    ARMarkerInfo2  *markerInfo2Ptr;         ///< Pointer to source region info for this marker.
+    AR_MARKER_INFO_CUTOFF_PHASE cutoffPhase;///< If a trapezoidal region is detected, but is eliminated from the candidates for tracking, this field is filled out with the tracking phase at which the marker was cut off. An English-language description of the phase can be obtained by indexing into the C-string array arMarkerInfoCutoffPhaseDescriptions[].
+    int             errorCorrected;         ///< For marker types including error detection and correction, the numbers of errors detected and corrected.
+    uint64_t        globalID;               ///< If arPattDetectionMode is a matrix mode, matrixCodeType is AR_MATRIX_CODE_GLOBAL_ID, and idMatrix >= 0, will contain the globalID.
 } ARMarkerInfo;
 
 /*!
-	@typedef ARTrackingHistory
-	@abstract   (description)
-	@discussion (description)
-	@field      marker (description)
-	@field      count (description)
+	@brief   (description)
+	@details (description)
  */
 typedef struct {
-    ARMarkerInfo    marker;
-    int             count;
+    ARMarkerInfo    marker;         ///< 
+    int             count;          ///< 
 } ARTrackingHistory;
 
 /*!
-	@typedef ARLabelInfo
-	@abstract   (description)
-	@discussion (description)
-	@field      labelImage (description)
-	@field      bwImage (description)
-	@field      label_num (description)
-	@field      area (description)
-	@field      clip (description)
-	@field      pos (description)
-	@field      work (description)
-	@field      work2 (description)
+	@brief   (description)
+	@details (description)
  */
 typedef struct {
     AR_LABELING_LABEL_TYPE *labelImage;
@@ -379,52 +313,40 @@ typedef struct {
     int             clip[AR_LABELING_WORK_SIZE][4];
     ARdouble        pos[AR_LABELING_WORK_SIZE][2];
     int             work[AR_LABELING_WORK_SIZE];
-    int             work2[AR_LABELING_WORK_SIZE*7]; // area, pos[2], clip[4].
+    int             work2[AR_LABELING_WORK_SIZE*7]; ///< area, pos[2], clip[4].
 } ARLabelInfo;
 
 /* --------------------------------------------------*/
 
 /*!
-    @typedef ARPattHandle
-    @abstract   A structure which holds descriptions of trained patterns for template matching.
-    @discussion Template (picture)-based pattern matching requires details of the pattern
+    @brief   A structure which holds descriptions of trained patterns for template matching.
+    @details Template (picture)-based pattern matching requires details of the pattern
         to be supplied to the matching functions. This structure holds such details. It is
         generally setup by loading pattern files from disk.
-    @field      patt_num Number of valid patterns in the structure.
-	@field      pattf Flag: 0 = no pattern loaded at this position. 1 = pattern loaded and activated. 2 = pattern loaded but deactivated.
-	@field      patt Array of 4 different orientations of each pattern's colour values, in 1-byte per component BGR order.
-	@field      pattpow Root-mean-square of the pattern intensities.
-	@field      pattBW Array of 4 different orientations of each pattern's 1-byte luminosity values.
-	@field      pattpowBW  Root-mean-square of the pattern intensities.
 */
 typedef struct {
-    int             patt_num;
-    int             patt_num_max;
-    int            *pattf;
-    int           **patt;
-    ARdouble       *pattpow;
-    int           **pattBW;
-    ARdouble       *pattpowBW;
-    //ARdouble        pattRatio;
-    int             pattSize;
+    int             patt_num;       ///< Number of valid patterns in the structure.
+    int             patt_num_max;   ///< Maximum number of patterns that may be loaded in this structure.
+    int            *pattf;          ///< 0 = no pattern loaded at this position. 1 = pattern loaded and activated. 2 = pattern loaded but deactivated.
+    int           **patt;           ///< Array of 4 different orientations of each pattern's colour values, in 1-byte per component BGR order.
+    ARdouble       *pattpow;        ///< Root-mean-square of the pattern intensities.
+    int           **pattBW;         ///< Array of 4 different orientations of each pattern's 1-byte luminosity values.
+    ARdouble       *pattpowBW;      ///< Root-mean-square of the pattern intensities.
+    //ARdouble        pattRatio;      ///< 
+    int             pattSize;       ///< Number of rows/columns in the pattern.
 } ARPattHandle;
 
 /*!
-    @typedef ARPattRectInfo
-    @abstract Defines a pattern rectangle as a sub-portion of a marker image.
-    @discussion A complete marker image has coordinates {0.0f, 0.0f, 1.0f, 1.0f}.
+    @brief Defines a pattern rectangle as a sub-portion of a marker image.
+    @details A complete marker image has coordinates {0.0f, 0.0f, 1.0f, 1.0f}.
         A standard ARToolKit marker with a pattern ratio of 0.5 has coordinates
         {0.25f, 0.25f, 0.75f, 0.75f}.
-    @field      topLeftX Horizontal coordinate of the top left corner of the pattern space, in range 0.0f-1.0f.
-    @field      topLeftY Vertical coordinate of the top left corner of the pattern space, in range 0.0f-1.0f.
-    @field      bottomRightX Horizontal coordinate of the bottom right corner of the pattern space, in range 0.0f-1.0f.
-    @field      bottomRightY Vertical coordinate of the bottom right corner of the pattern space, in range 0.0f-1.0f.
  */
 typedef struct {
-    float   topLeftX;
-    float   topLeftY;
-    float   bottomRightX;
-    float   bottomRightY;
+    float   topLeftX;       ///< Horizontal coordinate of the top left corner of the pattern space, in range 0.0f-1.0f.
+    float   topLeftY;       ///< Vertical coordinate of the top left corner of the pattern space, in range 0.0f-1.0f.
+    float   bottomRightX;   ///< Horizontal coordinate of the bottom right corner of the pattern space, in range 0.0f-1.0f.
+    float   bottomRightY;   ///< Vertical coordinate of the bottom right corner of the pattern space, in range 0.0f-1.0f.
 } ARPattRectInfo;
 
 /* --------------------------------------------------*/
@@ -440,55 +362,41 @@ typedef struct {
 extern "C" {
 #endif
 
-#define AR_MATRIX_CODE_TYPE_SIZE_MASK 0x000000ff
-#define AR_MATRIX_CODE_TYPE_ECC_NONE 0x00000000
-#define AR_MATRIX_CODE_TYPE_ECC_PARITY 0x00000100 // Single-bit parity.
-#define AR_MATRIX_CODE_TYPE_ECC_HAMMING 0x00000200 // Hamming code with Hamming distance of 3.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___3 0x00000300 // BCH code with Hamming distance of 3.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___5 0x00000400 // BCH code with Hamming distance of 5.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___7 0x00000500 // BCH code with Hamming distance of 7.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___9 0x00000600 // BCH code with Hamming distance of 9.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___11 0x00000700 // BCH code with Hamming distance of 11.
-#define AR_MATRIX_CODE_TYPE_ECC_BCH___19 0x00000b00 // BCH code with Hamming distance of 19.
+#define AR_MATRIX_CODE_TYPE_SIZE_MASK 0x000000ff  ///< Mask value, bitwise-OR with matrix code type to find matrix code size.
+#define AR_MATRIX_CODE_TYPE_ECC_NONE 0x00000000   ///< No error detection or correction.
+#define AR_MATRIX_CODE_TYPE_ECC_PARITY 0x00000100 ///< Single-bit parity.
+#define AR_MATRIX_CODE_TYPE_ECC_HAMMING 0x00000200 ///< Hamming code with Hamming distance of 3.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___3 0x00000300 ///< BCH code with Hamming distance of 3.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___5 0x00000400 ///< BCH code with Hamming distance of 5.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___7 0x00000500 ///< BCH code with Hamming distance of 7.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___9 0x00000600 ///< BCH code with Hamming distance of 9.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___11 0x00000700 ///< BCH code with Hamming distance of 11.
+#define AR_MATRIX_CODE_TYPE_ECC_BCH___19 0x00000b00 ///< BCH code with Hamming distance of 19.
 
+/*!
+    @brief Values specifying the type of matrix code in use.
+ */
 typedef enum {
-    AR_MATRIX_CODE_3x3 = 0x03,                                                  // Matrix code in range 0-63.
-    AR_MATRIX_CODE_3x3_PARITY65 = 0x03 | AR_MATRIX_CODE_TYPE_ECC_PARITY,        // Matrix code in range 0-31.
-    AR_MATRIX_CODE_3x3_HAMMING63 = 0x03 | AR_MATRIX_CODE_TYPE_ECC_HAMMING,      // Matrix code in range 0-7.
-    AR_MATRIX_CODE_4x4 = 0x04,                                                  // Matrix code in range 0-8191.
-    AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x04 | AR_MATRIX_CODE_TYPE_ECC_BCH___3,     // Matrix code in range 0-511.
-    AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x04 | AR_MATRIX_CODE_TYPE_ECC_BCH___5,     // Matrix code in range 0-31.
-    AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x05 | AR_MATRIX_CODE_TYPE_ECC_BCH___5,    // Matrix code in range 0-4095.
-    AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x05 | AR_MATRIX_CODE_TYPE_ECC_BCH___7,     // Matrix code in range 0-127.
-    AR_MATRIX_CODE_5x5 = 0x05,                                                  // Matrix code in range 0-4194303.
-    AR_MATRIX_CODE_6x6 = 0x06,                                                  // Matrix code in range 0-8589934591.
+    AR_MATRIX_CODE_3x3 = 0x03,                                                  ///< Matrix code in range 0-63.
+    AR_MATRIX_CODE_3x3_PARITY65 = 0x03 | AR_MATRIX_CODE_TYPE_ECC_PARITY,        ///< Matrix code in range 0-31.
+    AR_MATRIX_CODE_3x3_HAMMING63 = 0x03 | AR_MATRIX_CODE_TYPE_ECC_HAMMING,      ///< Matrix code in range 0-7.
+    AR_MATRIX_CODE_4x4 = 0x04,                                                  ///< Matrix code in range 0-8191.
+    AR_MATRIX_CODE_4x4_BCH_13_9_3 = 0x04 | AR_MATRIX_CODE_TYPE_ECC_BCH___3,     ///< Matrix code in range 0-511.
+    AR_MATRIX_CODE_4x4_BCH_13_5_5 = 0x04 | AR_MATRIX_CODE_TYPE_ECC_BCH___5,     ///< Matrix code in range 0-31.
+    AR_MATRIX_CODE_5x5_BCH_22_12_5 = 0x05 | AR_MATRIX_CODE_TYPE_ECC_BCH___5,    ///< Matrix code in range 0-4095.
+    AR_MATRIX_CODE_5x5_BCH_22_7_7 = 0x05 | AR_MATRIX_CODE_TYPE_ECC_BCH___7,     ///< Matrix code in range 0-127.
+    AR_MATRIX_CODE_5x5 = 0x05,                                                  ///< Matrix code in range 0-4194303.
+    AR_MATRIX_CODE_6x6 = 0x06,                                                  ///< Matrix code in range 0-8589934591.
     AR_MATRIX_CODE_GLOBAL_ID = 0x0e | AR_MATRIX_CODE_TYPE_ECC_BCH___19
 } AR_MATRIX_CODE_TYPE;
 
 /*!
-    @typedef ARHandle
-    @abstract   (description)
-    @discussion (description)
-	@field		arDebug (description)
-	@field		arPixelFormat (description)
-	@field		arPixelSize (description)
-	@field		arLabelingMode (description)
-	@field		arLabelingThresh (description)
-	@field		arImageProcMode
-		To query this value, call arGetImageProcMode(). To set this value, call arSetImageProcMode().
-	@field		arPatternDetectionMode (description)
-	@field		arMarkerExtractionMode (description)
-	@field		arParamLT (description)
-	@field		marker_num (description)
-	@field		markerInfo (description)
-	@field		marker2_num (description)
-	@field		markerInfo2 (description)
-	@field		history_num (description)
-	@field		history (description)
-	@field		labelInfo (description)
-	@field		pattHandle (description)
-    @field      pattRatio A value between 0.0 and 1.0, representing the proportion of the marker width which constitutes the pattern. In earlier versions, this value was fixed at 0.5.
-    @field      matrixCodeType When matrix code pattern detection mode is active, indicates the type of matrix code to detect.
+    @brief   Structure holding state of an instance of the square marker tracker.
+    @details
+        This is the master object holding the current state of an intance of the square
+        marker tracker, including tracker configuration, working variables, and results.
+    @see        arCreateHandle
+    @see        arDeteleHandle
  */
 typedef struct {
     int                arDebug;
@@ -496,7 +404,7 @@ typedef struct {
     int                arPixelSize;
     int                arLabelingMode;
     int                arLabelingThresh;
-    int                arImageProcMode;
+    int                arImageProcMode;                     ///< To query this value, call arGetImageProcMode(). To set this value, call arSetImageProcMode().
     int                arPatternDetectionMode;
     int                arMarkerExtractionMode;
     ARParamLT         *arParamLT;
@@ -516,18 +424,16 @@ typedef struct {
     int                arLabelingThreshAutoBracketOver;
     int                arLabelingThreshAutoBracketUnder;
     ARImageProcInfo   *arImageProcInfo;
-    ARdouble           pattRatio;
-    AR_MATRIX_CODE_TYPE matrixCodeType;
+    ARdouble           pattRatio;                           ///< A value between 0.0 and 1.0, representing the proportion of the marker width which constitutes the pattern. In earlier versions, this value was fixed at 0.5.
+    AR_MATRIX_CODE_TYPE matrixCodeType;                     ///< When matrix code pattern detection mode is active, indicates the type of matrix code to detect.
 } ARHandle;
 
 
 /* --------------------------------------------------*/
 
 /*!
-    @typedef
-    @abstract   (description)
-    @discussion (description)
-    @field      icpHandle (description)
+    @brief   Structure holding state of an instance of the monocular pose estimator.
+    @details (description)
 */
 typedef struct {
     ICPHandleT          *icpHandle;
@@ -536,10 +442,8 @@ typedef struct {
 #define   AR_TRANS_MAT_IDENTITY            ICP_TRANS_MAT_IDENTITY
 
 /*!
-    @typedef
-    @abstract   (description)
-    @discussion (description)
-    @field      icpStereoHandle (description)
+    @brief   Structure holding state of an instance of the stereo pose estimator.
+    @details (description)
 */
 typedef struct {
     ICPStereoHandleT    *icpStereoHandle;
@@ -556,17 +460,15 @@ typedef struct {
 	@functiongroup "Square detection".
  */
 /*!
-    @function
-    @abstract   Create a handle to hold settings for an ARToolKit tracker instance.
-    @discussion
+    @brief   Create a handle to hold settings for an ARToolKit tracker instance.
+    @details
         ARHandle is the primary structure holding the settings for a single ARToolKit
         square marker tracking instance. Settings include expected video stream image
         size and pixel format, tracking modes, loaded markers and more.
 
         Expected video stream image size is taken directly from the supplied ARParamLT
-        structure's xsize and ysize fields. Video stream image pixel format defaults to
-        AR_DEFAULT_PIXEL_FORMAT, which is platform and video-module dependent. Usually
-        a call to arSetPixelFormat() is advisable to set the correct format.
+        structure's xsize and ysize fields. Video stream image pixel format must be set
+        by a subsequent call to arSetPixelFormat() to set the correct format.
 
         After creation of the ARHandle, tracking settings should be set via appropriate
         calls to other arSet*() functions.
@@ -583,26 +485,24 @@ typedef struct {
         valid until the ARHandle is disposed of by calling arDeleteHandle.
     @result     An ARHandle which should be passed to other functions which
 		deal with the operations of the ARToolKit tracker.
-    @seealso arSetPixelFormat arSetPixelFormat
-    @seealso arDeleteHandle arDeleteHandle
+    @see arSetPixelFormat
+    @see arDeleteHandle
 */
-ARHandle      *arCreateHandle( ARParamLT *paramLT );
+ARHandle *arCreateHandle( ARParamLT *paramLT );
 
 /*!
-    @function
-    @abstract   Delete a handle which holds settings for an ARToolKit tracker instance.
-	@discussion The calibrated camera parameters pointed to by the handle are
+    @brief   Delete a handle which holds settings for an ARToolKit tracker instance.
+	@details The calibrated camera parameters pointed to by the handle are
 		NOT deleted by this operation.
     @param      handle The handle to delete, as created by arCreateHandle();
     @result     0 if no error occured.
-    @seealso arCreateHandle arCreateHandle
+    @see arCreateHandle
 */
-int            arDeleteHandle( ARHandle *handle );
+int arDeleteHandle( ARHandle *handle );
 
 /*!
-    @function
-    @abstract   Enable or disable ARToolKit's debug mode.
-    @discussion In debug mode, ARToolKit offers additional error reporting. Use
+    @brief   Enable or disable ARToolKit's debug mode.
+    @details In debug mode, ARToolKit offers additional error reporting. Use
         this function to enable or disable debug mode at runtime.
 
         Additionally, in debug mode, ARToolKit creates a mono (8-bit grayscale)
@@ -616,25 +516,25 @@ int            arDeleteHandle( ARHandle *handle );
 		AR_DEBUG_ENABLE
 		The default mode is AR_DEBUG_DISABLE.
     @result     0 if no error occured.
+    @see        arGetDebugMode
 */
-int            arSetDebugMode( ARHandle *handle, int mode );
+int arSetDebugMode( ARHandle *handle, int mode );
 
 /*!
-    @function
-    @abstract   Find out whether ARToolKit's debug mode is enabled.
-    @discussion See arSetDebugMode() for more info.
+    @brief   Find out whether ARToolKit's debug mode is enabled.
+    @details See arSetDebugMode() for more info.
     @param      handle An ARHandle referring to the current AR tracker
 		to be queried for its mode.
 	@param		mode Pointer into which will be placed the
 		value representing the mode.
     @result     0 if no error occured.
+    @see        arSetDebugMode
 */
-int            arGetDebugMode( ARHandle *handle, int *mode );
+int arGetDebugMode( ARHandle *handle, int *mode );
 
 /*!
-	@function
-	@abstract   Select between detection of black markers and white markers.
-	@discussion
+	@brief   Select between detection of black markers and white markers.
+	@details
         ARToolKit's labelling algorithm can work with both black-bordered
         markers on a white background (AR_LABELING_BLACK_REGION) or
         white-bordered markers on a black background (AR_LABELING_WHITE_REGION).
@@ -650,24 +550,22 @@ int            arGetDebugMode( ARHandle *handle, int *mode );
 		The default mode is AR_LABELING_BLACK_REGION.
     @result     0 if no error occured.
  */
-int            arSetLabelingMode( ARHandle *handle, int mode );
+int arSetLabelingMode( ARHandle *handle, int mode );
 
 /*!
-    @function
-    @abstract   Enquire whether detection is looking for black markers or white markers.
-    @discussion See discussion for arSetLabelingMode.
+    @brief   Enquire whether detection is looking for black markers or white markers.
+    @details See discussion for arSetLabelingMode.
     @param      handle An ARHandle referring to the current AR tracker
 		to be queried for its labeling mode.
 	@param		mode Pointer into which will be placed the
 		value representing the mode.
     @result     0 if no error occured.
 */
-int            arGetLabelingMode( ARHandle *handle, int *mode );
+int arGetLabelingMode( ARHandle *handle, int *mode );
 
 /*!
-    @function
-    @abstract   Set the labeling threshhold.
-    @discussion
+    @brief   Set the labeling threshhold.
+    @details
         This function forces sets the threshold value.
         The default value is AR_DEFAULT_LABELING_THRESH which is 100,
         unless edited in arConfig.h.
@@ -692,12 +590,11 @@ int            arGetLabelingMode( ARHandle *handle, int *mode );
 	@param      thresh An integer in the range [0,255] (inclusive).
     @result     0 if no error occured.
 */
-int            arSetLabelingThresh( ARHandle *handle, int thresh );
+int arSetLabelingThresh( ARHandle *handle, int thresh );
 
 /*!
-    @function
-    @abstract   Get the current labeling threshold.
-    @discussion
+    @brief   Get the current labeling threshold.
+    @details
         This function queries the current labeling threshold. For,
         AR_LABELING_THRESH_MODE_AUTO_MEDIAN, AR_LABELING_THRESH_MODE_AUTO_OTSU,
         and AR_LABELING_THRESH_MODE_AUTO_BRACKETING
@@ -713,14 +610,12 @@ int            arSetLabelingThresh( ARHandle *handle, int thresh );
 		value of the labeling threshhold.
 		An integer in the range [0,255] (inclusive)
     @result     0 if no error occured.
-    @seealso arSetLabelingThresh arSetLabelingThresh
+    @see arSetLabelingThresh
 */
-int            arGetLabelingThresh( ARHandle *handle, int *thresh );
+int arGetLabelingThresh( ARHandle *handle, int *thresh );
 
 /*!
-    @function
-    @abstract   Set the labeling threshold mode (auto/manual).
-    @discussion
+    @brief   Set the labeling threshold mode (auto/manual).
     @param      handle An ARHandle referring to the current AR tracker
         to be queried for its labeling threshold mode.
     @param		mode An integer specifying the mode. One of:
@@ -730,14 +625,12 @@ int            arGetLabelingThresh( ARHandle *handle, int *thresh );
         AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
         AR_LABELING_THRESH_MODE_AUTO_BRACKETING
     @result     0 if no error occured.
-    @seealso arSetLabelingThresh arSetLabelingThresh
+    @see arSetLabelingThresh
  */
 int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode);
 
 /*!
-    @function
-    @abstract   Get the labeling threshold mode (auto/manual).
-    @discussion
+    @brief   Get the labeling threshold mode (auto/manual).
     @param      handle An ARHandle referring to the current AR tracker
         to be queried for its labeling threshold value.
     @param		mode_p Pointer into which will be placed the
@@ -748,14 +641,13 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
         AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE,
         AR_LABELING_THRESH_MODE_AUTO_BRACKETING
     @result     0 if no error occured.
-    @seealso arSetLabelingThresh arSetLabelingThresh
+    @see arSetLabelingThresh
  */
 int arGetLabelingThreshMode(const ARHandle *handle, AR_LABELING_THRESH_MODE *mode_p);
 
 /*!
-    @function
-    @abstract   Set the number of frames between auto-threshold calculations.
-    @discussion
+    @brief   Set the number of frames between auto-threshold calculations.
+    @details
         This is the number of frames BETWEEN calculations, meaning that the
         calculation occurs every (interval + 1) frames.
     @param      handle An ARHandle referring to the current AR tracker
@@ -765,14 +657,13 @@ int arGetLabelingThreshMode(const ARHandle *handle, AR_LABELING_THRESH_MODE *mod
         An integer in the range [0,INT_MAX] (inclusive). Default
         value is AR_LABELING_THRESH_AUTO_INTERVAL_DEFAULT.
     @result     0 if no error occured.
-    @seealso arGetLabelingThreshModeAutoInterval arGetLabelingThreshModeAutoInterval
+    @see arGetLabelingThreshModeAutoInterval
  */
 int arSetLabelingThreshModeAutoInterval(ARHandle *handle, const int interval);
 
 /*!
-    @function
-    @abstract   Get the number of frames between auto-threshold calculations.
-    @discussion
+    @brief   Get the number of frames between auto-threshold calculations.
+    @details
         This is the number of frames BETWEEN calculations, meaning that the
         calculation occurs every (interval + 1) frames.
     @param      handle An ARHandle referring to the current AR tracker
@@ -781,14 +672,13 @@ int arSetLabelingThreshModeAutoInterval(ARHandle *handle, const int interval);
         value of the labeling threshhold auto interval.
         An integer in the range [0,INT_MAX] (inclusive)
     @result     0 if no error occured.
-    @seealso arSetLabelingThreshModeAutoInterval arSetLabelingThreshModeAutoInterval
+    @see arSetLabelingThreshModeAutoInterval
  */
 int arGetLabelingThreshModeAutoInterval(const ARHandle *handle, int *interval_p);
 
 /*!
-    @function
-    @abstract   Set the image processing mode.
-    @discussion
+    @brief   Set the image processing mode.
+    @details
         When ARthe image processing mode is AR_IMAGE_PROC_FRAME_IMAGE,
         ARToolKit processes all pixels in each incoming image
         to locate markers. When the mode is AR_IMAGE_PROC_FIELD_IMAGE,
@@ -809,11 +699,10 @@ int arGetLabelingThreshModeAutoInterval(const ARHandle *handle, int *interval_p)
 		The default mode is AR_IMAGE_PROC_FRAME_IMAGE.
     @result     0 if no error occured.
 */
-int            arSetImageProcMode( ARHandle *handle, int mode );
+int arSetImageProcMode( ARHandle *handle, int mode );
 /*!
-    @function
-    @abstract   Get the image processing mode.
-    @discussion
+    @brief   Get the image processing mode.
+    @details
 		See arSetImageProcMode() for a complete description.
     @param      handle An ARHandle referring to the current AR tracker
 		to be queried for its mode.
@@ -821,12 +710,11 @@ int            arSetImageProcMode( ARHandle *handle, int mode );
 		value representing the current image processing mode.
     @result     0 if no error occured.
 */
-int            arGetImageProcMode( ARHandle *handle, int *mode );
+int arGetImageProcMode( ARHandle *handle, int *mode );
 
 /*!
-    @function
-    @abstract   Set the pattern detection mode
-    @discussion
+    @brief   Set the pattern detection mode
+    @details
         The pattern detection determines the method by which ARToolKit
         matches detected squares in the video image to marker templates
         and/or IDs. ARToolKit v4.x can match against pictorial "template" markers,
@@ -847,12 +735,11 @@ int            arGetImageProcMode( ARHandle *handle, int *mode );
 		The default mode is AR_TEMPLATE_MATCHING_COLOR.
     @result     0 if no error occured.
 */
-int            arSetPatternDetectionMode( ARHandle *handle, int mode );
+int arSetPatternDetectionMode( ARHandle *handle, int mode );
 
 /*!
-    @function
-    @abstract   Get the pattern detection mode
-    @discussion
+    @brief   Get the pattern detection mode
+    @details
         See arSetPatternDetectionMode() for a complete description.
     @param      handle An ARHandle referring to the current AR tracker
 		to be queried for its mode.
@@ -860,12 +747,11 @@ int            arSetPatternDetectionMode( ARHandle *handle, int mode );
 		value representing the mode.
     @result     0 if no error occured.
 */
-int            arGetPatternDetectionMode( ARHandle *handle, int *mode );
+int arGetPatternDetectionMode( ARHandle *handle, int *mode );
 
 /*!
-    @function
-    @abstract   Set the size and ECC algorithm to be used for matrix code (2D barcode) marker detection.
-    @discussion
+    @brief   Set the size and ECC algorithm to be used for matrix code (2D barcode) marker detection.
+    @details
         When matrix-code (2D barcode) marker detection is enabled (see arSetPatternDetectionMode)
         then the size of the barcode pattern and the type of error checking and correction (ECC)
         with which the markers were produced can be set via this function.
@@ -880,29 +766,29 @@ int            arGetPatternDetectionMode( ARHandle *handle, int *mode );
         AR_MATRIX_CODE_4x4
         AR_MATRIX_CODE_4x4_BCH_13_9_3
         AR_MATRIX_CODE_4x4_BCH_13_5_5
+        AR_MATRIX_CODE_5x5_BCH_22_12_5
+        AR_MATRIX_CODE_5x5_BCH_22_7_7
         The default mode is AR_MATRIX_CODE_3x3.
-    @seealso arSetPatternDetectionMode arSetPatternDetectionMode
-    @seealso arGetMatrixCodeType arGetMatrixCodeType
+    @see arSetPatternDetectionMode
+    @see arGetMatrixCodeType
     @result     0 if no error occured.
 */
-int            arSetMatrixCodeType(ARHandle *handle, const AR_MATRIX_CODE_TYPE type);
+int arSetMatrixCodeType(ARHandle *handle, const AR_MATRIX_CODE_TYPE type);
 
 /*!
-    @function
-    @abstract   Get the size and ECC algorithm being used for matrix code (2D barcode) marker detection.
-    @discussion See the description for arSetMatrixCodeType().
+    @brief   Get the size and ECC algorithm being used for matrix code (2D barcode) marker detection.
+    @details See the description for arSetMatrixCodeType().
     @param      handle An ARHandle referring to the current AR tracker to be queried for its mode.
     @param		type_p Pointer into which will be placed the value representing the mode.
-    @seealso    arGetPatternDetectionMode arGetPatternDetectionMode
-    @seealso    arSetMatrixCodeType arSetMatrixCodeType
+    @see    arGetPatternDetectionMode
+    @see    arSetMatrixCodeType
     @result     0 if no error occured.
 */
-int            arGetMatrixCodeType(ARHandle *handle, AR_MATRIX_CODE_TYPE *type_p);
+int arGetMatrixCodeType(ARHandle *handle, AR_MATRIX_CODE_TYPE *type_p);
 
 /*!
-    @function
-    @abstract   Set the marker extraction mode
-    @discussion (description)
+    @brief   Set the marker extraction mode
+    @details (description)
 	@param      handle An ARHandle referring to the current AR tracker to have its mode set.
 	@param      mode
 		Options for this field are:
@@ -912,22 +798,20 @@ int            arGetMatrixCodeType(ARHandle *handle, AR_MATRIX_CODE_TYPE *type_p
 		The default mode is AR_USE_TRACKING_HISTORY_V2.
     @result     0 if no error occured.
  */
-int            arSetMarkerExtractionMode( ARHandle *handle, int mode );
+int arSetMarkerExtractionMode( ARHandle *handle, int mode );
 
 /*!
-    @function
-    @abstract   Get the marker extraction mode
-    @discussion (description)
+    @brief   Get the marker extraction mode
+    @details (description)
     @param      handle An ARHandle referring to the current AR tracker to be queried for its mode.
 	@param		mode Pointer into which will be placed the value representing the mode.
     @result     0 if no error occured.
  */
-int            arGetMarkerExtractionMode( ARHandle *handle, int *mode );
+int arGetMarkerExtractionMode( ARHandle *handle, int *mode );
 
 /*!
-     @function
-     @abstract   Set the border size.
-     @discussion N.B. Deprecated in favour of arSetPattRatio(), but retained for
+     @brief   Set the border size.
+     @details N.B. Deprecated in favour of arSetPattRatio(), but retained for
         backwards compatibility.
      @param      handle An ARHandle referring to the current AR tracker
         to have its border size set.
@@ -936,12 +820,11 @@ int            arGetMarkerExtractionMode( ARHandle *handle, int *mode );
         must be 0.25.
      @result     0 if no error occured.
  */
-int            arSetBorderSize( ARHandle *handle, const ARdouble borderSize );
+int arSetBorderSize( ARHandle *handle, const ARdouble borderSize );
 
 /*!
-    @function
-    @abstract   Get the border size.
-    @discussion N.B. Deprecated in favour of arGetPattRatio(), but retained for
+    @brief   Get the border size.
+    @details N.B. Deprecated in favour of arGetPattRatio(), but retained for
         backwards compatibility.
     @param      handle An ARHandle referring to the current AR tracker
         to be queried for its border size.
@@ -950,12 +833,11 @@ int            arSetBorderSize( ARHandle *handle, const ARdouble borderSize );
         ARHandle structures is AR_BORDER_SIZE_DEFAULT.
     @result     0 if no error occured.
  */
-int            arGetBorderSize( ARHandle *handle, ARdouble *borderSize );
+int arGetBorderSize( ARHandle *handle, ARdouble *borderSize );
 
 /*!
-    @function
-    @abstract   Set the width/height of the marker pattern space, as a proportion of marker width/height.
-    @discussion N.B. Supercedes arSetBorderSize().
+    @brief   Set the width/height of the marker pattern space, as a proportion of marker width/height.
+    @details N.B. Supercedes arSetBorderSize().
     @param      handle An ARHandle referring to the current AR tracker to be modified.
     @param		pattRatio The the width/height of the marker pattern space, as a proportion of marker
         width/height. To set the default, pass AR_PATT_RATIO.
@@ -963,44 +845,39 @@ int            arGetBorderSize( ARHandle *handle, ARdouble *borderSize );
         must be 0.5.
     @result     0 if no error occured.
  */
-int            arSetPattRatio( ARHandle *handle, const ARdouble pattRatio );
+int arSetPattRatio( ARHandle *handle, const ARdouble pattRatio );
 
 /*!
-    @function
-    @abstract   Get the width/height of the marker pattern space, as a proportion of marker width/height.
-    @discussion N.B. Supercedes arGetBorderSize().
+    @brief   Get the width/height of the marker pattern space, as a proportion of marker width/height.
+    @details N.B. Supercedes arGetBorderSize().
     @param      handle An ARHandle referring to the current AR tracker to be queried.
     @param		pattRatio Pointer into which will be placed the
         value representing the width/height of the marker pattern space, as a proportion of marker
         width/height. The default border size for newly-created ARHandle structures is AR_PATT_RATIO.
     @result     0 if no error occured.
  */
-int            arGetPattRatio( ARHandle *handle, ARdouble *pattRatio );
+int arGetPattRatio( ARHandle *handle, ARdouble *pattRatio );
 
 /*!
-    @function
-    @abstract   Set the expected pixel format for video frames being passed to arDetectMarker
-    @discussion
-        This function should be used at least once after creation of an ARHandle, to set the pixel
-        format with which images will be passed to arDetectMarker(). If not called, the default value
-        AR_DEFAULT_PIXEL_FORMAT will be used. Note that AR_DEFAULT_PIXEL_FORMAT varies depending on
-        platform and video module. If the pixel format of incoming video images changes, this value
-        must also be changed.
+    @brief   Set the expected pixel format for video frames being passed to arDetectMarker
+    @details
+        This function must be used at least once after creation of an ARHandle, to set the pixel
+        format with which images will be passed to arDetectMarker(). If the pixel format of
+        incoming video images changes, this function must be called again to update the value.
     @param      handle Handle to settings structure in which to set the pixel format.
     @param      pixFormat Value representing the format of pixels to be
 		processed by the ARToolKit detection routines. See AR_PIXEL_FORMAT
 		reference for more information.
     @result     0 if no error occured.
-    @seealso arGetPixelFormat arGetPixelFormat
-    @seealso arCreateHandle arCreateHandle
-    @seealso arDetectMarker arDetectMarker
+    @see arGetPixelFormat
+    @see arCreateHandle
+    @see arDetectMarker
  */
-int            arSetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT pixFormat );
+int arSetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT pixFormat );
 
 /*!
-    @function
-    @abstract   Get the expected pixel format for video frames being passed to arDetectMarker
-    @discussion
+    @brief   Get the expected pixel format for video frames being passed to arDetectMarker
+    @details
         See discussion for arSetPixelFormat().
     @param      handle Handle to AR settings structure from which to retrieve the pixel format.
 	@param		pixFormat Pointer into which will be placed the
@@ -1008,17 +885,16 @@ int            arSetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT pixFormat );
 		processed by the ARToolKit detection routines. See AR_PIXEL_FORMAT
 		reference for more information.
     @result     0 if no error occured.
-    @seealso arSetPixelFormat arSetPixelFormat
-    @seealso arCreateHandle arCreateHandle
-    @seealso arDetectMarker arDetectMarker
+    @see arSetPixelFormat
+    @see arCreateHandle
+    @see arDetectMarker
  */
-int            arGetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT *pixFormat );
+int arGetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT *pixFormat );
 
 
 /*!
-    @function
-    @abstract   Detect markers in a video frame.
-    @discussion
+    @brief   Detect markers in a video frame.
+    @details
 		This is the core ARToolKit marker detection function. It calls through to a set of
 		internal functions to perform the key marker detection steps of binarization and
 		labelling, contour extraction, and template matching and/or matrix code extraction.
@@ -1038,38 +914,33 @@ int            arGetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT *pixFormat );
 		held in arHandle.
     @result     0 if the function proceeded without error, or a value less than 0 in case of error.
 		A result of 0 does not however, imply any markers were detected.
-    @seealso arCreateHandle arCreateHandle
-    @seealso arGetMarkerNum arGetMarkerNum
-    @seealso arGetMarker arGetMarker
+    @see arCreateHandle
+    @see arGetMarkerNum
+    @see arGetMarker
  */
-int            arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame);
+int arDetectMarker(ARHandle *arHandle, AR2VideoBufferT *frame);
 
 /*!
-    @function
-    @abstract   Get the number of markers detected in a video frame.
-    @discussion
-
+    @brief   Get the number of markers detected in a video frame.
     @result     The number of detected markers in the most recent image passed to arDetectMarker.
         Note that this is actually a count, not an index. A better name for this function would be
         arGetDetectedMarkerCount, but the current name lives on for historical reasons.
     @param      arHandle Handle upon which arDetectMarker has been called.
-    @seealso arGetMarker arGetMarker
-    @seealso ARMarkerInfo ARMarkerInfo
-    @seealso arDetectMarker arDetectMarker
+    @see arGetMarker
+    @see ARMarkerInfo
+    @see arDetectMarker
  */
-int            arGetMarkerNum( ARHandle *arHandle );
+int arGetMarkerNum( ARHandle *arHandle );
 
 /*!
-    @function
-    @abstract   Get information on the markers detected in a video frame.
-    @discussion
+    @brief   Get information on the markers detected in a video frame.
     @result     An array (of length arGetMarkerNum(arHandle)) of ARMarkerInfo structs.
         A better name for this function would be arGetDetectedMarkerInfo, but the current name lives
         on for historical reasons.
     @param      arHandle Handle upon which arDetectMarker has been called.
-    @seealso arGetMarkerNum arGetMarkerNum
-    @seealso ARMarkerInfo ARMarkerInfo
-    @seealso arDetectMarker arDetectMarker
+    @see arGetMarkerNum
+    @see ARMarkerInfo
+    @see arDetectMarker
  */
 ARMarkerInfo  *arGetMarker( ARHandle *arHandle );
 
@@ -1082,9 +953,8 @@ int            arDetectMarker2( int xsize, int ysize, ARLabelInfo *labelInfo, in
                                 int areaMax, int areaMin, ARdouble squareFitThresh,
                                 ARMarkerInfo2 *markerInfo2, int *marker2_num );
 /*!
-    @function
-    @abstract   Examine a set of detected squares for match with known markers.
-    @discussion
+    @brief   Examine a set of detected squares for match with known markers.
+    @details
         Performs the intermediate marker-detection stage of taking detected squares in a processed image, and
         matching the interior of these squares against known marker templates, or extracting matrix codes from
         the interior of the square.
@@ -1103,7 +973,7 @@ int            arDetectMarker2( int xsize, int ysize, ARLabelInfo *labelInfo, in
     @param      marker_num Output: Size of markerInfo array.
     @param      matrixCodeType When matrix code pattern detection mode is active, indicates the type of matrix code to detect.
     @result     0 in case of no error, or -1 otherwise.
-    @seealso    arParamLTCreate arParamLTCreate
+    @see    arParamLTCreate
  */
 int            arGetMarkerInfo( ARUint8 *image, int xsize, int ysize, int pixelFormat,
                                 ARMarkerInfo2 *markerInfo2, int marker2_num,
@@ -1127,25 +997,23 @@ int            arGetLine( int x_coord[], int y_coord[], int coord_num, int verte
 	@functiongroup "Pattern identification".
  */
 /*!
-    @function
-    @abstract   Allocate a pattern handle.
-    @discussion Allocates an empty pattern handle, into which patterns can
+    @brief   Allocate a pattern handle.
+    @details Allocates an empty pattern handle, into which patterns can
 		be loaded by calling arPattLoad().
 		When the pattern handle is no longer needed, it should be
 		freed by calling arPattDeleteHandle().
 
         Note that a pattern handle is NOT required when using only matrix-
         code (2D barcode) markers.
-    @seealso    arPattLoad arPattLoad
-    @seealso    arPattDeleteHandle arPattDeleteHandle
+    @see    arPattLoad
+    @see    arPattDeleteHandle
     @result     The created pattern handle, or NULL in case of error.
 */
-ARPattHandle  *arPattCreateHandle(void);
+ARPattHandle *arPattCreateHandle(void);
 
 /*!
-    @function
-    @abstract   Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
-    @discussion Allocates an empty pattern handle, into which patterns can
+    @brief   Allocate a pattern handle and set pattern template size and maximum number of patterns loadable.
+    @details Allocates an empty pattern handle, into which patterns can
 		be loaded by calling arPattLoad().
 		When the pattern handle is no longer needed, it should be
 		freed by calling arPattDeleteHandle().
@@ -1160,17 +1028,16 @@ ARPattHandle  *arPattCreateHandle(void);
         markers that may be loaded for a single matching pass. Must be > 0.
 
         Pass AR_PATT_NUM_MAX for the same behaviour as arPattCreateHandle().
-    @seealso    arPattLoad arPattLoad
-    @seealso    arPattDeleteHandle arPattDeleteHandle
+    @see    arPattLoad
+    @see    arPattDeleteHandle
     @result     The created pattern handle, or NULL in case of error.
 */
 
 ARPattHandle *arPattCreateHandle2(const int pattSize, const int patternCountMax);
 
 /*!
-    @function
-    @abstract   Free all loaded patterns and pattern handle.
-    @discussion Frees a pattern handle, freeing (unloading)
+    @brief   Free all loaded patterns and pattern handle.
+    @details Frees a pattern handle, freeing (unloading)
 		any patterns loaded into the handle in the process.
     @param      pattHandle The handle to free.
     @result     0 on success, or -1 if trying to free a NULL handle.
@@ -1178,9 +1045,8 @@ ARPattHandle *arPattCreateHandle2(const int pattSize, const int patternCountMax)
 int arPattDeleteHandle(ARPattHandle *pattHandle);
 
 /*!
-    @function
-    @abstract   Load a pattern file into a pattern handle.
-    @discussion
+    @brief   Load a pattern file into a pattern handle.
+    @details
         This function loads a pattern template from a file on disk, and attaches
         it to the given ARPattHandle so making it available for future pattern-matching.
         Additional patterns can be loaded by calling again with the same
@@ -1196,23 +1062,22 @@ int arPattDeleteHandle(ARPattHandle *pattHandle);
 		is typically generated by the make_patt program. The pathname is
 		relative to the current working directory, which is operating system-
 		specific.
-    @seealso arPattCreateHandle arPattCreateHandle
-    @seealso arPattActivate arPattActivate
-    @seealso arPattDeactivate arPattDeactivate
-    @seealso arPattFree arPattFree
+    @see arPattCreateHandle
+    @see arPattActivate
+    @see arPattDeactivate
+    @see arPattFree
     @result     Returns the index number of the loaded pattern, in the range
 		[0, AR_PATT_NUM_MAX - 1], or -1 if the pattern could not be loaded
 		because the maximum number of patterns (AR_PATT_NUM_MAX) has already been
 		loaded already into this handle.
 */
-int            arPattLoad( ARPattHandle *pattHandle, const char *filename );
+int arPattLoad( ARPattHandle *pattHandle, const char *filename );
 
-int            arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer);
+int arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer);
 
 /*!
-    @function
-    @abstract   Save a pattern to a pattern file.
-    @discussion This function is used by the make_patt utility. See the
+    @brief   Save a pattern to a pattern file.
+    @details This function is used by the make_patt utility. See the
 		sourcecode to mk_patt for usage.
     @param      image (description)
 	@param      xsize (description)
@@ -1226,27 +1091,25 @@ int            arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer
 	@param      filename (description)
     @result     (description)
  */
-int            arPattSave( ARUint8 *image, int xsize, int ysize, int pixelFormat, ARParamLTf *paramLTf,
-                           int imageProcMode, ARMarkerInfo *marker_info, ARdouble pattRatio, int pattSize, const char *filename );
+int arPattSave( ARUint8 *image, int xsize, int ysize, int pixelFormat, ARParamLTf *paramLTf,
+                int imageProcMode, ARMarkerInfo *marker_info, ARdouble pattRatio, int pattSize, const char *filename );
 
 /*!
-    @function
-    @abstract   Frees (unloads) a pattern file from memory.
-    @discussion Unloads a pattern from a pattern handle, freeing that
+    @brief   Frees (unloads) a pattern file from memory.
+    @details Unloads a pattern from a pattern handle, freeing that
 		slot for another pattern to be loaded, if necessary.
     @param      pattHandle The pattern handle to unload from.
 	@param		patno The index into the pattern handle's array of
 		patterns to the pattern to be unloaded.
     @result     0 if the pattern was successfully unloaded, or -1
 		if there was no pattern loaded.
-    @seealso    arPattLoad arPattLoad
+    @see    arPattLoad
  */
-int            arPattFree( ARPattHandle *pattHandle, int patno );
+int arPattFree( ARPattHandle *pattHandle, int patno );
 
 /*!
-    @function
-    @abstract   Activate a previously deactivated pattern.
-    @discussion When a pattern is activated, is becomes available
+    @brief   Activate a previously deactivated pattern.
+    @details When a pattern is activated, is becomes available
 		for recognition in a scene. This is the default state
 		for a loaded pattern.
     @param      pattHandle The handle holding the loaded pattern
@@ -1255,14 +1118,13 @@ int            arPattFree( ARPattHandle *pattHandle, int patno );
 		patterns to the pattern to be reactivated.
 	@result     0 on success, or -1 if the pattern was already
 		activated or no pattern was loaded.
-    @seealso    arPattDeactivate arPattDeactivate
+    @see    arPattDeactivate
 */
-int            arPattActivate( ARPattHandle *pattHandle, int patno );
+int arPattActivate( ARPattHandle *pattHandle, int patno );
 
 /*!
-    @function
-	@abstract   Deactivate a previously activated pattern.
-	@discussion When a pattern is activated, is becomes unavailable
+	@brief   Deactivate a previously activated pattern.
+	@details When a pattern is activated, is becomes unavailable
 		for recognition in a scene. Deactivating unused patterns
 		can speed up recognition time and accuracy when there are
 		multiple patterns in a scene, and it is also useful for
@@ -1273,38 +1135,36 @@ int            arPattActivate( ARPattHandle *pattHandle, int patno );
 		patterns to the pattern to be deactivated.
     @result     0 on success, or -1 if the pattern was already
 		deactivated or no pattern was loaded.
-    @seealso    arPattActivate arPattActivate
+    @see    arPattActivate
 */
-int            arPattDeactivate(ARPattHandle *pattHandle, int patno);
+int arPattDeactivate(ARPattHandle *pattHandle, int patno);
 
 /*!
-    @function
-    @abstract	Associate a set of patterns with an ARHandle.
-    @discussion Associating a set of patterns with an ARHandle makes
+    @brief	Associate a set of patterns with an ARHandle.
+    @details Associating a set of patterns with an ARHandle makes
 		the patterns the set which will be searched when marker
 		identification is performed on an image associated with the
 		same ARHandle.
     @param      arHandle (description)
 	@param      pattHandle (description)
-    @seealso    arPattDetach arPattDetach
+    @see    arPattDetach
     @result     Returns 0 in the case of success, or -1 if the specified
         ARHandle already has an ARPattHandle attached, or if arHandle is NULL.
 */
-int            arPattAttach(ARHandle *arHandle, ARPattHandle *pattHandle);
+int arPattAttach(ARHandle *arHandle, ARPattHandle *pattHandle);
 
 /*!
-    @function
-    @abstract   Reset an ARHandle to no pattern association.
-    @discussion See arPattAttach() for more information.
+    @brief   Reset an ARHandle to no pattern association.
+    @details See arPattAttach() for more information.
     @param      arHandle (description)
-    @seealso    arPattAttach arPattAttach
+    @see    arPattAttach
     @result     Returns 0 in the case of success, or -1 if the specified
         ARHandle has no ARPattHandle attached, or if arHandle is NULL.
 */
-int            arPattDetach(ARHandle *arHandle);
+int arPattDetach(ARHandle *arHandle);
 
-//int            arPattGetPattRatio( ARPattHandle *pattHandle, float *ratio );
-//int            arPattSetPattRatio( ARPattHandle *pattHandle, float  ratio );
+//int arPattGetPattRatio( ARPattHandle *pattHandle, float *ratio );
+//int arPattSetPattRatio( ARPattHandle *pattHandle, float  ratio );
 
 /* ------------------------------ */
 
@@ -1319,9 +1179,7 @@ int            arPattGetImage( int imageProcMode, int pattDetectMode, int patt_s
                               ARUint8 *ext_patt );
 
 /*!
-    @function
-    @abstract   Match the interior of a detected square against known patterns.
-    @discussion
+    @brief   Match the interior of a detected square against known patterns.
     @param      pattHandle Handle contained details of known patterns, i.e. loaded templates, or valid barcode IDs.
     @param      imageProcMode See discussion of arSetImageProcMode().
     @param      pattDetectMode See discussion of arSetPatternDetectionMode().
@@ -1340,7 +1198,7 @@ int            arPattGetImage( int imageProcMode, int pattDetectMode, int patt_s
     @param      cfMatrix Where the pattern matching mode includes matrix (barcode) matching, and a valid matrix is matched, the confidence factor of the match (range [0.0 - 1.0]).
     @param      matrixCodeType When matrix code pattern detection mode is active, indicates the type of matrix code to detect.
     @result     0 if the function was able to correctly match, or -1 in case of error or no match.
-    @seealso    arParamLTCreate arParamLTCreate
+    @see    arParamLTCreate
  */
 int            arPattGetID2( ARPattHandle *pattHandle, int imageProcMode, int pattDetectMode,
                              ARUint8 *image, int xsize, int ysize, AR_PIXEL_FORMAT pixelFormat, ARParamLTf *arParamLTf, ARdouble vertex[4][2], ARdouble pattRatio,
@@ -1349,9 +1207,7 @@ int            arPattGetID2( ARPattHandle *pattHandle, int imageProcMode, int pa
 #endif // !AR_DISABLE_NON_CORE_FNS
 
 /*!
-    @function
-    @abstract   Match the interior of a detected square against known patterns with variable border width.
-    @discussion
+    @brief   Match the interior of a detected square against known patterns with variable border width.
     @param      pattHandle Handle contained details of known patterns, i.e. loaded templates, or valid barcode IDs.
     @param      imageProcMode See discussion of arSetImageProcMode().
     @param      pattDetectMode See discussion of arSetPatternDetectionMode().
@@ -1372,7 +1228,7 @@ int            arPattGetID2( ARPattHandle *pattHandle, int imageProcMode, int pa
     @param      errorCorrected Pointer to an integer which will be filled out with the number of errors detected and corrected during marker identification, or NULL if this information is not required.
     @param      codeGlobalID_p Pointer to uint64_t which will be filled out with the global ID, or NULL if this value is not required.
     @result     0 if the function was able to correctly match, or -1 in case of error or no match.
-    @seealso    arParamLTCreate arParamLTCreate
+    @see    arParamLTCreate
  */
 int arPattGetIDGlobal( ARPattHandle *pattHandle, int imageProcMode, int pattDetectMode,
               ARUint8 *image, int xsize, int ysize, AR_PIXEL_FORMAT pixelFormat, ARParamLTf *arParamLTf, ARdouble vertex[4][2], ARdouble pattRatio,
@@ -1380,9 +1236,7 @@ int arPattGetIDGlobal( ARPattHandle *pattHandle, int imageProcMode, int pattDete
               const AR_MATRIX_CODE_TYPE matrixCodeType, int *errorCorrected, uint64_t *codeGlobalID_p );
 
 /*!
-    @function
-    @abstract   Extract the image (i.e. locate and unwarp) of the pattern-space portion of a detected square.
-    @discussion
+    @brief   Extract the image (i.e. locate and unwarp) of the pattern-space portion of a detected square.
     @param      imageProcMode See discussion of arSetImageProcMode().
     @param      pattDetectMode See discussion of arSetPatternDetectionMode().
     @param      patt_size The number of horizontal and vertical units to subdivide the pattern-space into.
@@ -1396,16 +1250,15 @@ int arPattGetIDGlobal( ARPattHandle *pattHandle, int imageProcMode, int pattDete
     @param      pattRatio A value between 0.0 and 1.0, representing the proportion of the marker width which constitutes the pattern. In earlier versions, this value was fixed at 0.5.
     @param      ext_patt Pointer to an array of appropriate size (i.e. patt_size*patt_size*3), which will be filled with the extracted image. Where a colour image is available, it will be supplied in BGR byte order.
     @result     0 if the function was able to correctly get the image, or -1 in case of error or no match.
-    @seealso    arParamLTCreate arParamLTCreate
+    @see    arParamLTCreate
  */
 int            arPattGetImage2( int imageProcMode, int pattDetectMode, int patt_size, int sample_size,
                                 ARUint8 *image, int xsize, int ysize, AR_PIXEL_FORMAT pixelFormat, ARParamLTf *arParamLTf,
                                 ARdouble vertex[4][2], ARdouble pattRatio, ARUint8 *ext_patt );
 
 /*!
-    @function
-    @abstract   Extract the image (i.e. locate and unwarp) of an arbitrary portion of a detected square.
-    @discussion Use this function to obtain an image of the marker pattern space for display to the user.
+    @brief   Extract the image (i.e. locate and unwarp) of an arbitrary portion of a detected square.
+    @details Use this function to obtain an image of the marker pattern space for display to the user.
     @param      arHandle The ARHandle structure associated with the current tracking data.
     @param      markerNo The marker number (in range 0 to arHandle->marker_num - 1, inclusive) from which to extract the pattern.
     @param      image The source video image.
@@ -1415,7 +1268,7 @@ int            arPattGetImage2( int imageProcMode, int pattDetectMode, int patt_
     @param      overSampleScale Number of samples to acquire per destination pixel, e.g. 2.
     @param      outImage Pointer to a buffer, at least xsize*ysize*arUtilGetPixelSize(arHandle->arPixelFormat) bytes in size, which will be filled out with the marker image.
     @result     0 if the function was able to correctly get the image, or -1 in case of error or no match.
-    @seealso    ARPattRectInfo ARPattRectInfo
+    @see    ARPattRectInfo
  */
 int            arPattGetImage3( ARHandle *arHandle, int markerNo, ARUint8 *image, ARPattRectInfo *rect, int xsize, int ysize,
                                 int overSampleScale, ARUint8 *outImage );
@@ -1432,58 +1285,53 @@ int            arPattGetImage3( ARHandle *arHandle, int markerNo, ARUint8 *image
  */
 
 /*!
-    @function
-    @abstract   Create handle used for 3D calculation from calibrated camera parameters.
-    @discussion
+    @brief   Create handle used for 3D calculation from calibrated camera parameters.
+    @details
         An AR3DHandle holds data structures used in calculating the 3D pose of a
         marker from the 2D location of its corners (i.e. pose estimation).
     @param      arParam (description)
     @result     The handle. When no more ar3D*() functions need be called, the handle should be deleted
         by calling ar3DDeleteHandle().
-    @seealso    ar3DCreateHandle2 ar3DCreateHandle2
-    @seealso    ar3DDeleteHandle ar3DDeleteHandle
+    @see    ar3DCreateHandle2
+    @see    ar3DDeleteHandle
 */
-AR3DHandle    *ar3DCreateHandle(ARParam *arParam);
+AR3DHandle    *ar3DCreateHandle(const ARParam *arParam);
 
 /*!
-    @function
-    @abstract   Create handle used for 3D calculation from an intrinsic parameters matrix.
-    @discussion
+    @brief   Create handle used for 3D calculation from an intrinsic parameters matrix.
+    @details
         An AR3DHandle holds data structures used in calculating the 3D pose of a
         marker from the 2D location of its corners (i.e. pose estimation).
     @param      cpara (description)
     @result     The handle. When no more ar3D*() functions need be called, the handle should be deleted
         by calling ar3DDeleteHandle().
-    @seealso    ar3DCreateHandle ar3DCreateHandle
-    @seealso    ar3DDeleteHandle ar3DDeleteHandle
+    @see    ar3DCreateHandle
+    @see    ar3DDeleteHandle
 */
-AR3DHandle    *ar3DCreateHandle2(ARdouble cpara[3][4]);
+AR3DHandle    *ar3DCreateHandle2(const ARdouble cpara[3][4]);
 
 /*!
-    @function
-    @abstract   Delete handle used for 3D calculation.
-    @discussion When no more ar3D*() functions need be called, the handle should be deleted
+    @brief   Delete handle used for 3D calculation.
+    @details When no more ar3D*() functions need be called, the handle should be deleted
         by calling ar3DDeleteHandle().
     @param      handle A pointer to the 3D handle. On success, the contents of this location will be set to NULL.
     @result     0 if the handle was successfully deleted, -1 otherwise.
-    @seealso    ar3DDeleteHandle ar3DDeleteHandle
+    @see    ar3DDeleteHandle
 */
 int            ar3DDeleteHandle( AR3DHandle **handle );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      cpara (description)
     @result     (description)
 */
-int            ar3DChangeCpara( AR3DHandle *handle, ARdouble cpara[3][4] );
+int            ar3DChangeCpara( AR3DHandle *handle, const ARdouble cpara[3][4] );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      maxLoopCount (description)
     @result     (description)
@@ -1491,9 +1339,8 @@ int            ar3DChangeCpara( AR3DHandle *handle, ARdouble cpara[3][4] );
 int            ar3DChangeMaxLoopCount( AR3DHandle *handle, int maxLoopCount );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      loopBreakThresh (description)
     @result     (description)
@@ -1501,9 +1348,8 @@ int            ar3DChangeMaxLoopCount( AR3DHandle *handle, int maxLoopCount );
 int            ar3DChangeLoopBreakThresh( AR3DHandle *handle, ARdouble loopBreakThresh );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      loopBreakThreshRatio (description)
     @result     (description)
@@ -1511,9 +1357,8 @@ int            ar3DChangeLoopBreakThresh( AR3DHandle *handle, ARdouble loopBreak
 int            ar3DChangeLoopBreakThreshRatio( AR3DHandle *handle, ARdouble loopBreakThreshRatio );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      marker_info (description)
     @param      width (description)
@@ -1524,9 +1369,8 @@ ARdouble         arGetTransMatSquare( AR3DHandle *handle, ARMarkerInfo *marker_i
                                     ARdouble width, ARdouble conv[3][4] );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      marker_info (description)
     @param      initConv (description)
@@ -1539,10 +1383,8 @@ ARdouble         arGetTransMatSquareCont( AR3DHandle *handle, ARMarkerInfo *mark
                                         ARdouble width, ARdouble conv[3][4] );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
-    @param      handle (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      initConv (description)
     @param      pos2d (description)
@@ -1556,9 +1398,8 @@ ARdouble         arGetTransMat( AR3DHandle *handle, ARdouble initConv[3][4],
                               ARdouble conv[3][4] );
 
 /*!
-    @function
-    @abstract   (description)
-    @discussion (description)
+    @brief   (description)
+    @details (description)
     @param      handle (description)
     @param      initConv (description)
     @param      pos2d (description)
@@ -1582,8 +1423,8 @@ ARdouble         arGetTransMatRobust( AR3DHandle *handle, ARdouble initConv[3][4
 	@functiongroup "3D calculation by Stereo".
  */
 
-AR3DStereoHandle    *ar3DStereoCreateHandle(ARParam *arParamL, ARParam *arParamR, ARdouble transL[3][4], ARdouble transR[3][4]);
-AR3DStereoHandle    *ar3DStereoCreateHandle2(ARdouble cparaL[3][4], ARdouble cparaR[3][4], ARdouble transL[3][4], ARdouble transR[3][4]);
+AR3DStereoHandle    *ar3DStereoCreateHandle(const ARParam *arParamL, const ARParam *arParamR, const ARdouble transL[3][4], const ARdouble transR[3][4]);
+AR3DStereoHandle    *ar3DStereoCreateHandle2(const ARdouble cparaL[3][4], const ARdouble cparaR[3][4], const ARdouble transL[3][4], const ARdouble transR[3][4]);
 int                  ar3DStereoDeleteHandle( AR3DStereoHandle **handle );
 int                  ar3DStereoChangeMaxLoopCount( AR3DStereoHandle *handle, int maxLoopCount );
 int                  ar3DStereoChangeLoopBreakThresh( AR3DStereoHandle *handle, ARdouble loopBreakThresh );
@@ -1628,9 +1469,8 @@ int                  arGetStereoMatching( AR3DStereoHandle *handle,
  */
 
 /*!
-    @function
-    @abstract   Get the ARToolKit version information in numberic and string format.
-    @discussion
+    @brief   Get the ARToolKit version information in numberic and string format.
+    @details
 		As of version 2.72, ARToolKit now allows querying of the version number
 		of the toolkit available at runtime. It is highly recommended that
 		any calling program that depends on features in a certain
@@ -1722,9 +1562,8 @@ int            arUtilSortLabel( int mask[], int m, int n,
                                 int label[] );
 
 /*!
-    @function
-    @abstract   Get the size in bytes of a single pixel for a given pixel format.
-    @discussion
+    @brief   Get the size in bytes of a single pixel for a given pixel format.
+    @details
         Different pixel formats have different sizes in bytes, and therefore
         different storage requirements per row of pixels. Use this function
         to calculate the number of bytes required to store a single pixel
@@ -1735,9 +1574,8 @@ int            arUtilSortLabel( int mask[], int m, int n,
 int            arUtilGetPixelSize( const AR_PIXEL_FORMAT arPixelFormat );
 
 /*!
-    @function
-    @abstract   Get a string holding a descriptive name for a given pixel format enumeration.
-    @discussion
+    @brief   Get a string holding a descriptive name for a given pixel format enumeration.
+    @details
         On occasions it can be useful to display to the user the format of the pixels
         which ARToolKit is processing. This funtion converts a pixel-format number
         into a human-readable string description.
@@ -1751,9 +1589,8 @@ const char *arUtilGetPixelFormatName(const AR_PIXEL_FORMAT arPixelFormat);
 char          *arUtilGetMachineType(void);
 
 /*
-    @function
-    @abstract Get the filename portion of a full pathname.
-    @discussion
+    @brief Get the filename portion of a full pathname.
+    @details
         Given a full or partial pathname passed in string path,
         returns a pointer to the first char of the filename
         portion of path.
@@ -1762,9 +1599,8 @@ const char *arUtilGetFileNameFromPath(const char *path);
 
 
 /*!
-    @function
-    @abstract Get file base name from a path.
-    @discussion
+    @brief Get file base name from a path.
+    @details
         Given a full or partial pathname passed in string path,
         returns a string with the base name portion of path,
         i.e. the text between the rightmost path separator and the
@@ -1779,9 +1615,8 @@ const char *arUtilGetFileNameFromPath(const char *path);
 char *arUtilGetFileBasenameFromPath(const char *path, const int convertToLowercase);
 
 /*!
-    @function
-    @abstract Get file extension from a path.
-    @discussion
+    @brief Get file extension from a path.
+    @details
         Given a full or partial pathname passed in string path,
         returns a string with the extension portion of path,
         i.e. the text after the rightmost '.' character, if any.
@@ -1795,9 +1630,8 @@ char *arUtilGetFileBasenameFromPath(const char *path, const int convertToLowerca
 char *arUtilGetFileExtensionFromPath(const char *path, const int convertToLowercase);
 
     /*
-     @function
-     @abstract Get the directory portion of a full pathname.
-     @discussion
+     @brief Get the directory portion of a full pathname.
+     @details
         Given a full or partial pathname passed in string path,
         returns a string with the directory name portion of path.
         The string is placed into the buffer of size n pointed to by dir.
@@ -1808,9 +1642,8 @@ char *arUtilGetFileExtensionFromPath(const char *path, const int convertToLowerc
 char *arUtilGetDirectoryNameFromPath(char *dir, const char *path, const size_t n, const int addSeparator);
 
 /*!
-    @function
-    @abstract Get a path as a file URI.
-    @discussion
+    @brief Get a path as a file URI.
+    @details
         Given a full or partial pathname passed in string path,
         returns a string with the file URI for that path.
 
@@ -1829,40 +1662,70 @@ char *arUtilGetDirectoryNameFromPath(char *dir, const char *path, const size_t n
 char *arUtilGetFileURI(const char *path);
 
 /*!
-    @typedef
-    @abstract Options for controlling the behavior of arUtilGetResourcesDirectoryPath and arUtilChangeToResourcesDirectory.
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST          Use a platform-dependent recommended-best option.
+    @brief Options for controlling the behavior of arUtilGetResourcesDirectoryPath and arUtilChangeToResourcesDirectory.
+	@see arUtilGetResourcesDirectoryPath
+	@see arUtilChangeToResourcesDirectory
+ */
+typedef enum {
+    /*!
+        Use a platform-dependent recommended-best option.
         Note the this behavior is subject to change in future versions of ARToolKit.
         At present, on Mac OS X and iOS, this will change to the Apple-provided resources directory inside the application bundle.
         At present, on other platforms, this will change to the same directory as the executable.
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_CWD Use the current working directory. For arUtilChangeToResourcesDirectory, this will leave the current working directory unchanged.
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_SUPPLIED_PATH Change to the working directory specified.
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_EXECUTABLE_DIR Change to the same directory as the executable.
-		On OS X and iOS, this corresponds to the directory of the binary executable inside the app bundle, not ythe directory containing the app bundle.
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_USER_ROOT Change to the root of the implementation-dependent user-writable root.
-        On OS X and Linux, this is equivalent to the "~" user home. On Android, this is the root of the "external" storage (e.g. an SD card).
-        On Windows, this is the user home directory, typically "C:\Documents and Settings\USERNAME".
-    @constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR Change to a writable cache directory, i.e. a directory which is not normally shown to the user, in which files which may be subject to deletion by the system or the user.
-        On Android, change to the applications's (internal) cache directory, and a valid instance of Android/Context must be passed in the instanceofAndroidContext parameter.
-	@constant AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_DATA_DIR Change to a writable data directory, i.e. a directory which is not normally shown to the user, but in which files are retained permanently.
-	@seealso arUtilGetResourcesDirectoryPath arUtilGetResourcesDirectoryPath
-	@seealso arUtilChangeToResourcesDirectory arUtilChangeToResourcesDirectory
- */
-typedef enum {
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST = 0,
+    /*!
+        Use the current working directory. For arUtilChangeToResourcesDirectory, this will leave the current working directory unchanged.
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_CWD,
+    /*!
+        Change to the working directory specified.
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_SUPPLIED_PATH,
+    /*!
+        Change to the same directory as the executable.
+        On OS X and iOS, this corresponds to the directory of the binary executable inside the app bundle, not the directory containing the app bundle.
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_EXECUTABLE_DIR,
+    /*!
+        Change to the resources directory.
+        On macOS and iOS, this is the Resources directory inside the application bundle.
+        On Linux, this is a directory formed by taking the path to the directory containing
+        the executable, appending "/../share" to it, and then pointing to a subdirectory under
+        this path with the same name as the executable. Note that the existence of this path
+        is not guaranteed. E.g. for an executable at path '/usr/bin/myapp' the returned path
+        will be '/usr/bin/../share/myapp'.
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_BUNDLE_RESOURCES_DIR,
+    /*!
+        Change to the root of the implementation-dependent user-writable root.
+        On iOS and sandboxed macOS, this is equivalent to the root of the application sandbox.
+        On Linux and non-sandboxed macOS, this is equivalent to the "~" user home.
+        On Android, this is the root of the "external" storage (e.g. an SD card).
+        On Windows, this is the user home directory, typically "C:\Documents and Settings\USERNAME" or "C:\Users\USERNAME".
+        On Windows UWP
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_USER_ROOT,
+    /*!
+        Change to a writable cache directory, i.e. a directory which is not normally shown to the user, in which files which may be subject to deletion by the system or the user.
+        On Android, this is the applications's (internal) cache directory, and a valid instance of Android/Context must be passed in the instanceofAndroidContext parameter.
+     */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR,
-	AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_DATA_DIR
+    /*!
+        Change to a writable data directory, i.e. a directory which is not normally shown to the user, but in which files are retained permanently.
+        On Android, this is the applications's (internal) files directory, and a valid instance of Android/Context must be passed in the instanceofAndroidContext parameter.
+     */
+	AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_DATA_DIR,
+    /*!
+     Change to a writable temporary directory, i.e. a directory which is not normally shown to the user, and from which files may be deleted at the end of program execution.
+     On Android, this is the applications's (internal) cache directory, and a valid instance of Android/Context must be passed in the instanceofAndroidContext parameter.
+     */
+    AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_TMP_DIR
 } AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR;
 
 /*!
-    @function
-    @abstract   Get the path to the resources directory using the specified behavior.
-    @discussion
+    @brief   Get the path to the resources directory using the specified behavior.
+    @details
     	ARToolKit uses relative paths to locate several types of resources, including
     	camera parameter files, pattern files, multimarker files and others.
     	This function provides the convenience of finding an appropriate value for your
@@ -1881,11 +1744,31 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
 char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior);
 #endif
 
+/*!
+    @brief   Get the path to the resources directory using the specified behavior, creating the path if it doesn't already exist.
+    @details
+    	ARToolKit uses relative paths to locate several types of resources, including
+    	camera parameter files, pattern files, multimarker files and others.
+    	This function provides the convenience of finding an appropriate value for your
+        application.
+
+        On Android only, the function has an optional parameter 'instanceOfAndroidContext'.
+        If behavior is AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR, this
+        parameter must be an instance of a class derived from android/content/Context.
+        In all other cases, pass NULL for this parameter.
+    @param behavior See AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR type for allowed values.
+    @result NULL in the case of error, or the path otherwise. Must be free()d by the caller.
+ */
+#ifdef ANDROID
+char *arUtilGetAndCreateResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior, jobject instanceOfAndroidContext);
+#else
+char *arUtilGetAndCreateResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior);
+#endif
+
 #ifndef _WINRT
 /*!
-    @function
-    @abstract   Change to the resources directory using the specified behavior.
-    @discussion
+    @brief   Change to the resources directory using the specified behavior.
+    @details
     	ARToolKit uses relative paths to locate several types of resources, including
     	camera parameter files, pattern files, multimarker files and others.
     	This function provides the convenience of setting the current process
@@ -1901,7 +1784,7 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
         other cases, if this parameter is non-NULL, it will be taken as a subdirectory
         of the desired path and to which the working directory should be changed.
     @result -1 in the case of error, or 0 otherwise.
-	@availability Not available on Windows Runtime (WinRT).
+	@since Not available on Windows Runtime (WinRT).
  */
 #ifdef ANDROID
 int arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior, const char *path, jobject instanceOfAndroidContext);
@@ -1911,15 +1794,13 @@ int arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavi
 #endif // !_WINRT
 
 /*!
-    @function
-    @abstract   Prints a transformation matrix via ARLOG(...).
+    @brief   Prints a transformation matrix via ARLOG(...).
     @param trans The transformation matrix to print.
  */
 void arUtilPrintTransMat(const ARdouble trans[3][4]);
 
 /*!
-    @function
-    @abstract   Prints a 4x4 row-major matrix via ARLOG(...).
+    @brief   Prints a 4x4 row-major matrix via ARLOG(...).
     @param mtx16 The matrix to print.
  */
 void arUtilPrintMtx16(const ARdouble mtx16[16]);

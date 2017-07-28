@@ -42,7 +42,7 @@
 #include <AR/icp.h>
 
 
-ICPHandleT  *icpCreateHandle( ARdouble matXc2U[3][4] )
+ICPHandleT  *icpCreateHandle( const ARdouble matXc2U[3][4] )
 {
     ICPHandleT *handle;
     int         i, j;
@@ -74,7 +74,7 @@ int icpDeleteHandle( ICPHandleT **handle )
     return 0;
 }
 
-int icpSetMatXc2U( ICPHandleT *handle, ARdouble matXc2U[3][4] )
+int icpSetMatXc2U( ICPHandleT *handle, const ARdouble matXc2U[3][4] )
 {
     int     i, j;
 

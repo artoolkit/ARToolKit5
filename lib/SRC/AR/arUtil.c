@@ -64,21 +64,19 @@
 #  include <sys/time.h>
 #  include <unistd.h> // chdir(), getcwd(), confstr()
 #  include <sys/param.h> // MAXPATHLEN
+#  include <pthread.h> // pthread_self(), pthread_equal()
+#  ifdef __APPLE__
+#    include <CoreFoundation/CoreFoundation.h>
+#    include <mach-o/dyld.h> // _NSGetExecutablePath()
+#    ifdef __OBJC__
+#      import <Foundation/Foundation.h> // NSURL. N.B.: Including Foundation requires that this file be compiled as Objective-C.
+#    else
+#      warning arUtil.c not compiled as Objective C. Behaviour of function arUtilGetResourcesDirectoryPath will be different.
+#    endif
+#    include <sys/sysctl.h> // sysctlbyname()
+#  endif
 #  ifdef __linux
 #    include <sys/utsname.h> // uname()
-#  endif
-#endif
-#ifndef _WIN32
-#  include <pthread.h>
-#endif
-#ifdef __APPLE__
-#  include <CoreFoundation/CoreFoundation.h>
-#  include <mach-o/dyld.h> // _NSGetExecutablePath()
-#  include <sys/sysctl.h> // sysctlbyname()
-#  ifdef __OBJC__
-#    import <Foundation/Foundation.h> // NSURL. N.B.: Including Foundation requires that this file be compiled as Objective-C.
-#  else
-#    warning arUtil.c not compiled as Objective C. Behaviour of function arUtilGetResourcesDirectoryPath will be different.
 #  endif
 #endif
 
@@ -783,7 +781,6 @@ char *arUtilGetFileURI(const char *path)
     // Ensure we have an absolute path.
     if (isAbsolute) {
         abspath = (char *)path;
-        abspathlen = pathlen;
     } else {
 #ifdef _WINRT
 		ARLOGe("Error: relative paths not supported by Windows Runtime.\n");
@@ -806,7 +803,6 @@ char *arUtilGetFileURI(const char *path)
         }
         if (abspathlen + pathlen >= MAXPATHLEN) goto bail;
         strncpy(abspath + abspathlen, path, MAXPATHLEN - abspathlen - 1); abspath[MAXPATHLEN - 1] = '\0';
-        abspathlen += pathlen;
 #endif
     }
 
@@ -886,14 +882,40 @@ bail:
 }
 
 #ifdef ANDROID
+static char *getFilePath(JNIEnv *env, jobject objectFile)
+{
+    // Call method on File object to retrieve String object.
+    jclass classFile = (*env)->GetObjectClass(env, objectFile);
+    if (!classFile) goto bail;
+    jmethodID methodIDgetAbsolutePath = (*env)->GetMethodID(env, classFile, "getAbsolutePath", "()Ljava/lang/String;");
+    if (!methodIDgetAbsolutePath) goto bail;
+    jstring stringPath = (*env)->CallObjectMethod(env, objectFile, methodIDgetAbsolutePath);
+    jthrowable exception = (*env)->ExceptionOccurred(env);
+    if (exception) {
+        (*env)->ExceptionDescribe(env);
+        (*env)->ExceptionClear(env);
+    }
+    // Extract a C string from the String object.
+    const char *wpath2 = (*env)->GetStringUTFChars(env, stringPath, NULL);
+    if (!wpath2) goto bail;
+    char *wpath1 = strdup(wpath2);
+    (*env)->ReleaseStringUTFChars(env, stringPath, wpath2);
+    return wpath1;
+bail:
+    ARLOGe("Error: JNI call failure.\n");
+    return (NULL);
+}
+#endif
+
+#ifdef ANDROID
 char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior, jobject instanceOfAndroidContext)
 #else
 char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior)
 #endif
 {
 #ifndef _WINRT
-    char *wpath1;
-    char *wpath2;
+    char *wpath1 = NULL;
+    char *wpath2 = NULL;
 #  ifdef _WIN32
 	DWORD len;
 #  endif
@@ -901,11 +923,11 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behaviorW;
 
     if (behavior == AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST) {
-#if defined(__APPLE__)
+#if defined(__APPLE__) || (defined(__linux) && !defined(ANDROID))
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_BUNDLE_RESOURCES_DIR;
 #elif defined(ANDROID)
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR;
-#elif defined(_WIN32) || defined(__linux)
+#elif defined(_WIN32)
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_EXECUTABLE_DIR;
 #else
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_CWD;
@@ -916,8 +938,11 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
 
 	switch (behaviorW) {
 
-
+        //
+        // EXECUTABLE_DIR
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_EXECUTABLE_DIR:
+        {
 #if (defined(_WIN32) && !defined(_WINRT)) || defined(__APPLE__) || defined(__linux)
             arMallocClear(wpath1, char, MAXPATHLEN);
 #  if defined(_WIN32)
@@ -933,8 +958,7 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
                 return (NULL);
             }
 #  elif defined(__linux)
-            ssize_t len;
-            len = readlink("/proc/self/exe", wpath1, MAXPATHLEN - 1); // -1 as it is not NULL terminated.
+            ssize_t len = readlink("/proc/self/exe", wpath1, MAXPATHLEN - 1); // -1 as it is not NULL terminated.
             if (len == -1) {
                 ARLOGperror(NULL);
                 free (wpath1);
@@ -954,8 +978,11 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             return (NULL); // Unsupported OS.
 #endif
             break;
+        }
 
-
+        //
+        // BUNDLE_RESOURCES_DIR
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_BUNDLE_RESOURCES_DIR:
 #if defined(__APPLE__)
         {
@@ -975,12 +1002,40 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             }
             return (wpath1);
         }
+#elif defined(__linux)
+        {
+            // Form a relative URL to exe, consisting of a subdirectory of ../share named after the executable.
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            ssize_t len = readlink("/proc/self/exe", wpath1, MAXPATHLEN - 1); // -1 as it is not NULL terminated.
+            if (len == -1) {
+                ARLOGperror(NULL);
+                free (wpath1);
+                return (NULL);
+            }
+            wpath1[len] = '\0'; // NULL terminate.
+            arMallocClear(wpath2, char, MAXPATHLEN);
+            if (!arUtilGetDirectoryNameFromPath(wpath2, wpath1, MAXPATHLEN, 0)) {
+                free (wpath1);
+                free (wpath2);
+                return (NULL);
+            }
+            len = strlen(wpath2);
+            if (snprintf(&wpath2[len], MAXPATHLEN - len, "/../share/%s", arUtilGetFileNameFromPath(wpath1)) >= MAXPATHLEN - len) {
+                free (wpath1);
+                free (wpath2);
+                return (NULL);
+            }
+            free(wpath1);
+            return (wpath2);
+        }
 #else
             return (NULL); // Unsupported OS.
 #endif
             break;
 
-
+        //
+        // CWD
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_CWD:
 #ifndef _WINRT
 
@@ -995,7 +1050,9 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
 #endif
 			break;
 
-
+        //
+        // USER_ROOT
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_USER_ROOT:
 #if defined(_WIN32) && !defined(_WINRT)
             arMallocClear(wpath1, char, MAXPATHLEN);
@@ -1032,34 +1089,14 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
                 (*env)->ExceptionDescribe(env);
                 (*env)->ExceptionClear(env);
             }
-
-            // Call method on File object to retrieve String object.
-            jclass classFile = (*env)->GetObjectClass(env, objectFile);
-            if (!classFile) goto bailAndroid;
-            jmethodID methodIDgetAbsolutePath = (*env)->GetMethodID(env, classFile, "getAbsolutePath", "()Ljava/lang/String;");
-            if (!methodIDgetAbsolutePath) goto bailAndroid;
-            jstring stringPath = (*env)->CallObjectMethod(env, objectFile, methodIDgetAbsolutePath);
-            exception = (*env)->ExceptionOccurred(env);
-            if (exception) {
-                (*env)->ExceptionDescribe(env);
-                (*env)->ExceptionClear(env);
-            }
-            // Extract a C string from the String object and copy it.
-            const char *wpath3 = (*env)->GetStringUTFChars(env, stringPath, NULL);
-            wpath1 = strdup(wpath3);
-            (*env)->ReleaseStringUTFChars(env, stringPath, wpath3);
-
-            goto retAndroid;
-
+            wpath1 = getFilePath(env, objectFile);
         bailAndroid:
-            ARLOGe("Error: JNI call failure.\n");
-            wpath1 = NULL;
-        retAndroid:
             if (isAttached) (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
             return (wpath1);
         }
-#elif defined(__APPLE__) && defined(__OBJC__) // iOS/OS X.
+#elif defined(__APPLE__) // iOS/OS X.
         {
+#  ifdef __OBJC__
             NSString *nssHomeDir = NSHomeDirectory(); // CoreFoundation equivalent is CFCopyHomeDirectoryURL(), iOS 6.0+ only.
             if (!nssHomeDir) {
                 return (NULL);
@@ -1067,6 +1104,13 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             wpath1 = strdup([nssHomeDir UTF8String]);
             return wpath1;
         }
+#  else
+            size_t len = confstr(_CS_DARWIN_USER_DIR, NULL, 0);
+            if (!len) return (NULL);
+            wpath1 = (char *)malloc(len);
+            len = confstr(_CS_DARWIN_USER_CACHE_DIR, wpath1, len);
+            if (!len) return (NULL);
+#  endif
 #elif defined(__linux)
             if (!((wpath1 = getenv("HOME")))) {
                 return (NULL);
@@ -1077,16 +1121,31 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
 #endif
             break;
 
-
+        //
+        // APP_CACHE_DIR
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR:
-#if defined(_WIN32)
-            return (NULL);
+#ifdef _WINRT
+            auto folder = Windows::Storage::ApplicationData::Current->LocalCacheFolder;
+            wpath1 = strdup(folder->Path->Data().c_str());
+            return (wpath1);
+#elif defined(_WIN32)
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, wpath1))) {
+                free (wpath1);
+                return (NULL);
+            }
+            return (wpath1);
 #elif defined(__APPLE__) // iOS/OS X.
         {
 #  ifdef __OBJC__
             NSURL *cacheDir = [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] objectAtIndex:0];
             if (!cacheDir) {
                 return (NULL);
+            }
+            NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+            if (bundleID) {
+                cacheDir = [cacheDir URLByAppendingPathComponent:bundleID];
             }
             wpath1 = strdup([[cacheDir path] UTF8String]);
 #  else
@@ -1126,11 +1185,9 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             if (!classContext) goto bailAndroid1;
             if (!(*env)->IsInstanceOf(env, instanceOfAndroidContext, classContext)) {
                 ARLOGe("Error: supplied object is not an instance of android/content/Context.\n");
-                wpath1 = NULL; // Bad parameter.
-                goto retAndroid1;
+                goto bailAndroid1;
             }
             jmethodID methodGetDir = (*env)->GetMethodID(env, classOfSuppliedObject, "getCacheDir", "()Ljava/io/File;"); // public abstract File getCacheDir();
-            //jmethodID methodGetDir = (*env)->GetMethodID(env, classOfSuppliedObject, "getFilesDir", "(Ljava/lang/String;)Ljava/io/File;"); // public abstract File getFilesDir(String type);
             if (!methodGetDir) goto bailAndroid1;
             jobject objectFile = (*env)->CallObjectMethod(env, instanceOfAndroidContext, methodGetDir);
             exception = (*env)->ExceptionOccurred(env);
@@ -1138,53 +1195,248 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
                 (*env)->ExceptionDescribe(env);
                 (*env)->ExceptionClear(env);
             }
-
-            // Call method on File object to retrieve String object.
-            jclass classFile = (*env)->GetObjectClass(env, objectFile);
-            if (!classFile) goto bailAndroid1;
-            jmethodID methodIDgetAbsolutePath = (*env)->GetMethodID(env, classFile, "getAbsolutePath", "()Ljava/lang/String;");
-            if (!methodIDgetAbsolutePath) goto bailAndroid1;
-            jstring stringPath = (*env)->CallObjectMethod(env, objectFile, methodIDgetAbsolutePath);
-            exception = (*env)->ExceptionOccurred(env);
-            if (exception) {
-                (*env)->ExceptionDescribe(env);
-                (*env)->ExceptionClear(env);
-            }
-            // Extract a C string from the String object, and chdir() to it.
-            const char *wpath3 = (*env)->GetStringUTFChars(env, stringPath, NULL);
-            wpath1 = strdup(wpath3);
-            (*env)->ReleaseStringUTFChars(env, stringPath, wpath3);
-
-            goto retAndroid1;
-
+            wpath1 = getFilePath(env, objectFile);
         bailAndroid1:
-            ARLOGe("Error: JNI call failure.\n");
-            wpath1 = NULL;
-        retAndroid1:
             if (isAttached) (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
             return (wpath1);
+        }
+#elif defined(__linux) // Linux
+        {
+            // To get a useable process name, first get command line, then take last element of first portion
+            // and append it to ~/.cache.
+            FILE *fp = fopen("/proc/self/cmdline", "rb");
+            if (!fp) {
+                ARLOGperror("Unable to determine process name");
+                return (NULL);
+            }
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            wpath2 = NULL;
+            ssize_t len = 0;
+            while (fread(&wpath1[len], 1, 1, fp) == 1) {
+                if (wpath1[len] == '\0') break; // Read only until first nul.
+                len++;
+            }
+            if (ferror(fp)) {
+                ARLOGperror(NULL);
+            }
+            fclose(fp);
+            char *home = getenv("HOME");
+            char *basedir;
+            if (asprintf(&basedir, "%s%s", (home ? home : "/var/cache"), (home ? "/.cache" : "")) == -1) {
+                ARLOGperror(NULL);
+                wpath2 = NULL;
+            } else {
+                const char *wpath1_file = arUtilGetFileNameFromPath(wpath1);
+                if (wpath1_file) {
+                    if (asprintf(&wpath2, "%s/%s", basedir, wpath1_file) == -1) {
+                        ARLOGperror(NULL);
+                        wpath2 = NULL;
+                    };
+                } else {
+                    wpath2 = strdup(basedir);
+                }
+                free(basedir);
+            }
+            free(wpath1);
+            return(wpath2);
         }
 #else
             return (NULL); // Unsupported OS.
 #endif
             break;
 
-		case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_DATA_DIR:
+        //
+        // APP_DATA_DIR
+        //
+        case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_DATA_DIR:
 #ifdef _WINRT
-			//auto folder = Windows::Storage::ApplicationData::Current->LocalFolder;
-			//wpath1 = strdup(folder->Path->Data().c_str());
-			//return (wpath1);
-			return (NULL); // Unsupported OS.
+			auto folder = Windows::Storage::ApplicationData::Current->RoamingFolder;
+			wpath1 = strdup(folder->Path->Data().c_str());
+			return (wpath1);
+#elif defined(_WIN32)
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, wpath1))) {
+                free (wpath1);
+                return (NULL);
+            }
+            return (wpath1);
+#elif defined(__APPLE__) && defined(__OBJC__)
+        {
+            NSURL *appSupportDir = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] objectAtIndex:0];
+            if (!appSupportDir) {
+                return (NULL);
+            }
+            NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+            if (bundleID) {
+                appSupportDir = [appSupportDir URLByAppendingPathComponent:bundleID];
+            }
+            wpath1 = strdup([[appSupportDir path] UTF8String]);
+            return (wpath1);
+        }
+#elif defined(ANDROID)
+        {
+            // Make JNI calls to get the Context's files directory.
+            
+            // To begin, get a reference to the env and attach to it.
+            JNIEnv *env;
+            int isAttached = 0;
+            int ret = 0;
+            jthrowable exception;
+            if (((*gJavaVM)->GetEnv(gJavaVM, (void**)&env, JNI_VERSION_1_6)) < 0) {
+                // Couldn't get JNI environment, so this thread is native.
+                if (((*gJavaVM)->AttachCurrentThread(gJavaVM, &env, NULL)) < 0) {
+                    ARLOGe("Error: Couldn't attach to Java VM.\n");
+                    return (NULL);
+                }
+                isAttached = 1;
+            }
+            
+            // Get File object for the Context's files directory. This only works
+            // if a subclass of Context is supplied.
+            // e.g. JNIEXPORT void JNICALL Java_com_test_TestActivity_test(JNIEnv * env, jobject obj)
+            // so make sure before call.
+            jclass classOfSuppliedObject = (*env)->GetObjectClass(env, instanceOfAndroidContext);
+            if (!classOfSuppliedObject) goto bailAndroid1;
+            jclass classContext = (*env)->FindClass(env, "android/content/Context");
+            if (!classContext) goto bailAndroid1;
+            if (!(*env)->IsInstanceOf(env, instanceOfAndroidContext, classContext)) {
+                ARLOGe("Error: supplied object is not an instance of android/content/Context.\n");
+                goto bailAndroid2;
+            }
+            jmethodID methodGetDir = (*env)->GetMethodID(env, classOfSuppliedObject, "getFilesDir", "()Ljava/io/File;"); // public abstract File getFilesDir();
+            //jmethodID methodGetDir = (*env)->GetMethodID(env, classOfSuppliedObject, "getDir", "(Ljava/lang/String;)Ljava/io/File;"); // public abstract File getDir(String type);
+            if (!methodGetDir) goto bailAndroid1;
+            jobject objectFile = (*env)->CallObjectMethod(env, instanceOfAndroidContext, methodGetDir);
+            exception = (*env)->ExceptionOccurred(env);
+            if (exception) {
+                (*env)->ExceptionDescribe(env);
+                (*env)->ExceptionClear(env);
+            }
+            wpath1 = getFilePath(env, objectFile);
+        bailAndroid2:
+            if (isAttached) (*gJavaVM)->DetachCurrentThread(gJavaVM); // Clean up.
+            return (wpath1);
+        }
+#elif defined(__linux) // Linux
+        {
+            // To get a useable process name, first get command line, then take last element of first portion
+            // and append it to ~/.config.
+            FILE *fp = fopen("/proc/self/cmdline", "rb");
+            if (!fp) {
+                ARLOGperror("Unable to determine process name");
+                return (NULL);
+            }
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            wpath2 = NULL;
+            ssize_t len = 0;
+            while (fread(&wpath1[len], 1, 1, fp) == 1) {
+                if (wpath1[len] == '\0') break; // Read only until first nul.
+                len++;
+            }
+            if (ferror(fp)) {
+                ARLOGperror(NULL);
+            }
+            fclose(fp);
+            char *home = getenv("HOME");
+            char *basedir;
+            if (asprintf(&basedir, "%s%s", (home ? home : "/var/lib"), (home ? "/.config" : "")) == -1) {
+                ARLOGperror(NULL);
+                wpath2 = NULL;
+            } else {
+                const char *wpath1_file = arUtilGetFileNameFromPath(wpath1);
+                if (wpath1_file) {
+                    if (asprintf(&wpath2, "%s/%s", basedir, wpath1_file) == -1) {
+                        ARLOGperror(NULL);
+                        wpath2 = NULL;
+                    };
+                } else {
+                    wpath2 = strdup(basedir);
+                }
+                free(basedir);
+            }
+            free(wpath1);
+            return(wpath2);
+        }
 #else
 			return (NULL); // Unsupported OS.
 #endif
 			break;
 
+        //
+        // TMP_DIR
+        //
+        case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_TMP_DIR:
+#ifdef _WINRT
+            auto folder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+            wpath1 = strdup(folder->Path->Data().c_str());
+            return (wpath1);
+#elif defined(_WIN32)
+            arMallocClear(wpath1, char, MAXPATHLEN);
+            DWORD len = GetTempPath(MAXPATHLEN, wpath1));
+            if (len == 0) {
+                free (wpath1);
+                return (NULL);
+            } else {
+                wpath1[len - 1] = '\0'; // Strip trailing slash.
+                return (wpath1);
+            }
+#elif defined(__APPLE__) && defined(__OBJC__) // iOS/macOS.
+        {
+            NSString *nssTempDir = NSTemporaryDirectory(); // CoreFoundation equivalent is CFCopyHomeDirectoryURL() + "/tmp", iOS 6.0+ only.
+            if (!nssTempDir) {
+                return (NULL);
+            }
+            wpath1 = strdup([nssTempDir UTF8String]);
+            return wpath1;
+        }
+#elif defined(ANDROID)
+            return (arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR, instanceOfAndroidContext));
+#elif defined(__linux) || defined(__APPLE__) // Linux or non-ObjC iOS/macOS.
+            if (!((wpath1 = getenv("TMPDIR")))) {
+                return (strdup("/tmp"));
+            }
+            return (strdup(wpath1));
+#else
+            return (NULL); // Unsupported OS.
+#endif
+            break;
+
+        //
+        // SUPPLIED_PATH
+        //
         case AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_SUPPLIED_PATH:
         default:
             return (NULL); // Undefined behaviour.
             break;
     }
+}
+
+#ifdef ANDROID
+char *arUtilGetAndCreateResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior, jobject instanceOfAndroidContext)
+#else
+char *arUtilGetAndCreateResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavior)
+#endif
+{
+    char *wpath;
+#ifdef ANDROID
+    wpath = arUtilGetResourcesDirectoryPath(behavior, instanceOfAndroidContext);
+#else
+    wpath = arUtilGetResourcesDirectoryPath(behavior);
+#endif
+    if (!wpath) return NULL;
+    int err = test_d(wpath);
+    if (err < 0) {
+        ARLOGperror("Error looking for resources directory path");
+        free(wpath);
+        return NULL;
+    } else if (err == 0) {
+        if (mkdir_p(wpath) < 0) {
+            ARLOGperror("Error creating resources directory path");
+            free(wpath);
+            return NULL;
+        }
+    }
+    return (wpath);
 }
 
 #ifndef _WINRT
@@ -1198,11 +1450,11 @@ int arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behavi
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behaviorW;
 
     if (behavior == AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST) {
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__linux)
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_BUNDLE_RESOURCES_DIR;
 #elif defined(ANDROID)
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR;
-#elif defined(_WIN32) || defined(__linux)
+#elif defined(_WIN32)
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_EXECUTABLE_DIR;
 #else
         behaviorW = AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_CWD;

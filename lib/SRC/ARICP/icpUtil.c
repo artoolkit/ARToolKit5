@@ -256,7 +256,7 @@ static int check_rotation( ARdouble rot[2][3] )
     ARdouble  p4, q4, r4;
     ARdouble  w;
     ARdouble  e1, e2, e3, e4;
-    int     f;
+    int       rotFlag;
 
     v1[0] = rot[0][0];
     v1[1] = rot[0][1];
@@ -278,18 +278,18 @@ static int check_rotation( ARdouble rot[2][3] )
     ca = (SQRT(cb+_1_0) + SQRT(_1_0-cb)) * _0_5;
 
     if( v3[1]*v1[0] - v1[1]*v3[0] != 0.0 ) {
-        f = 0;
+        rotFlag = 0;
     }
     else {
         if( v3[2]*v1[0] - v1[2]*v3[0] != _0_0 ) {
             w = v1[1]; v1[1] = v1[2]; v1[2] = w;
             w = v3[1]; v3[1] = v3[2]; v3[2] = w;
-            f = 1;
+            rotFlag = 1;
         }
         else {
             w = v1[0]; v1[0] = v1[2]; v1[2] = w;
             w = v3[0]; v3[0] = v3[2]; v3[2] = w;
-            f = 2;
+            rotFlag = 2;
         }
     }
     if( v3[1]*v1[0] - v1[1]*v3[0] == _0_0 ) return -1;
@@ -310,34 +310,31 @@ static int check_rotation( ARdouble rot[2][3] )
     r2 = (-b - SQRT(d))/a;
     p2 = k1*r2 + k2;
     q2 = k3*r2 + k4;
-    if( f == 1 ) {
+    if ( rotFlag == 1 ) {
         w = q1; q1 = r1; r1 = w;
         w = q2; q2 = r2; r2 = w;
         w = v1[1]; v1[1] = v1[2]; v1[2] = w;
         w = v3[1]; v3[1] = v3[2]; v3[2] = w;
-        f = 0;
-    }
-    if( f == 2 ) {
+    } else if ( rotFlag == 2 ) {
         w = p1; p1 = r1; r1 = w;
         w = p2; p2 = r2; r2 = w;
         w = v1[0]; v1[0] = v1[2]; v1[2] = w;
         w = v3[0]; v3[0] = v3[2]; v3[2] = w;
-        f = 0;
     }
 
     if( v3[1]*v2[0] - v2[1]*v3[0] != 0.0 ) {
-        f = 0;
+        rotFlag = 0;
     }
     else {
         if( v3[2]*v2[0] - v2[2]*v3[0] != 0.0 ) {
             w = v2[1]; v2[1] = v2[2]; v2[2] = w;
             w = v3[1]; v3[1] = v3[2]; v3[2] = w;
-            f = 1;
+            rotFlag = 1;
         }
         else {
             w = v2[0]; v2[0] = v2[2]; v2[2] = w;
             w = v3[0]; v3[0] = v3[2]; v3[2] = w;
-            f = 2;
+            rotFlag = 2;
         }
     }
     if( v3[1]*v2[0] - v2[1]*v3[0] == _0_0 ) return -1;
@@ -358,19 +355,16 @@ static int check_rotation( ARdouble rot[2][3] )
     r4 = (-b - SQRT(d))/a;
     p4 = k1*r4 + k2;
     q4 = k3*r4 + k4;
-    if( f == 1 ) {
+    if ( rotFlag == 1 ) {
         w = q3; q3 = r3; r3 = w;
         w = q4; q4 = r4; r4 = w;
         w = v2[1]; v2[1] = v2[2]; v2[2] = w;
         w = v3[1]; v3[1] = v3[2]; v3[2] = w;
-        f = 0;
-    }
-    if( f == 2 ) {
+    } else if ( rotFlag == 2 ) {
         w = p3; p3 = r3; r3 = w;
         w = p4; p4 = r4; r4 = w;
         w = v2[0]; v2[0] = v2[2]; v2[2] = w;
         w = v3[0]; v3[0] = v3[2]; v3[2] = w;
-        f = 0;
     }
 
     e1 = p1*p3+q1*q3+r1*r3; if( e1 < 0 ) e1 = -e1;

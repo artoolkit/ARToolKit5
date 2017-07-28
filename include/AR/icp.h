@@ -100,9 +100,9 @@ int icpGetInitXw2Xc_from_PlanarData( ARdouble matXc2U[3][4], ICP2DCoordT screenC
 
 
 /*------------ icpPoint.c --------------*/
-ICPHandleT        *icpCreateHandle                 ( ARdouble matXc2U[3][4] );
+ICPHandleT        *icpCreateHandle                 ( const ARdouble matXc2U[3][4] );
 int                icpDeleteHandle                 ( ICPHandleT **handle );
-int                icpSetMatXc2U                   ( ICPHandleT *handle, ARdouble matXc2U[3][4] );
+int                icpSetMatXc2U                   ( ICPHandleT *handle, const ARdouble matXc2U[3][4] );
 int                icpGetMatXc2U                   ( ICPHandleT *handle, ARdouble matXc2U[3][4] );
 int                icpSetMaxLoop                   ( ICPHandleT *handle, int  maxLoop );
 int                icpGetMaxLoop                   ( ICPHandleT *handle, int *maxLoop );
@@ -119,7 +119,7 @@ int                icpPointRobust                  ( ICPHandleT *handle, ICPData
 
 
 /*------------ icpPointStereo.c --------------*/
-ICPStereoHandleT  *icpStereoCreateHandle                 ( ARdouble matXcl2Ul[3][4], ARdouble matXcr2Ur[3][4], ARdouble matC2L[3][4], ARdouble matC2R[3][4] );
+ICPStereoHandleT  *icpStereoCreateHandle                 ( const ARdouble matXcl2Ul[3][4], const ARdouble matXcr2Ur[3][4], const ARdouble matC2L[3][4], const ARdouble matC2R[3][4] );
 int                icpStereoDeleteHandle                 ( ICPStereoHandleT **handle );
 int                icpStereoSetMatXcl2Ul                 ( ICPStereoHandleT *handle, ARdouble matXcl2Ul[3][4] );
 int                icpStereoSetMatXcr2Ur                 ( ICPStereoHandleT *handle, ARdouble matXcr2Ur[3][4] );

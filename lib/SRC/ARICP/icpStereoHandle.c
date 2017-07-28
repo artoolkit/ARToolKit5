@@ -42,7 +42,7 @@
 #include <AR/icp.h>
 
 
-ICPStereoHandleT *icpStereoCreateHandle( ARdouble matXcl2Ul[3][4], ARdouble matXcr2Ur[3][4], ARdouble matC2L[3][4], ARdouble matC2R[3][4] )
+ICPStereoHandleT *icpStereoCreateHandle( const ARdouble matXcl2Ul[3][4], const ARdouble matXcr2Ur[3][4], const ARdouble matC2L[3][4], const ARdouble matC2R[3][4] )
 {
     ICPStereoHandleT *handle;
     int               i, j;

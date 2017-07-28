@@ -48,12 +48,12 @@
 #include <AR/ar.h>
 #include <AR/icp.h>
 
-AR3DHandle *ar3DCreateHandle(ARParam *arParam)
+AR3DHandle *ar3DCreateHandle(const ARParam *arParam)
 {
     return ar3DCreateHandle2( arParam->mat );
 }
 
-AR3DHandle *ar3DCreateHandle2(ARdouble cpara[3][4])
+AR3DHandle *ar3DCreateHandle2(const ARdouble cpara[3][4])
 {
     AR3DHandle   *handle;
 
@@ -79,7 +79,7 @@ int ar3DDeleteHandle( AR3DHandle **handle )
     return 0;
 }
 
-int ar3DChangeCpara( AR3DHandle *handle, ARdouble cpara[3][4] )
+int ar3DChangeCpara( AR3DHandle *handle, const ARdouble cpara[3][4] )
 {
     return icpSetMatXc2U( handle->icpHandle, cpara );
 }
@@ -103,14 +103,14 @@ int ar3DChangeLoopBreakThreshRatio( AR3DHandle *handle, ARdouble loopBreakThresh
 
 
 
-AR3DStereoHandle *ar3DStereoCreateHandle(ARParam *arParamL, ARParam *arParamR,
-                                         ARdouble transL[3][4], ARdouble transR[3][4])
+AR3DStereoHandle *ar3DStereoCreateHandle(const ARParam *arParamL, const ARParam *arParamR,
+                                         const ARdouble transL[3][4], const ARdouble transR[3][4])
 {
     return ar3DStereoCreateHandle2( arParamL->mat, arParamR->mat, transL, transR );
 }
 
-AR3DStereoHandle *ar3DStereoCreateHandle2(ARdouble cparaL[3][4], ARdouble cparaR[3][4],
-                                          ARdouble transL[3][4], ARdouble transR[3][4])
+AR3DStereoHandle *ar3DStereoCreateHandle2(const ARdouble cparaL[3][4], const ARdouble cparaR[3][4],
+                                          const ARdouble transL[3][4], const ARdouble transR[3][4])
 {
     AR3DStereoHandle   *handle;
 

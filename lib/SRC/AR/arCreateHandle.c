@@ -83,8 +83,6 @@ ARHandle *arCreateHandle( ARParamLT *paramLT )
     
     handle->pattHandle = NULL;
     
-    arSetPixelFormat(handle, AR_DEFAULT_PIXEL_FORMAT);
-
     arSetDebugMode(handle, AR_DEFAULT_DEBUG_MODE);
     
     handle->arLabelingThreshMode = -1;
@@ -201,7 +199,7 @@ int arSetLabelingThreshMode(ARHandle *handle, const AR_LABELING_THRESH_MODE mode
 #if !AR_DISABLE_THRESH_MODE_AUTO_ADAPTIVE
             case AR_LABELING_THRESH_MODE_AUTO_ADAPTIVE:
 #endif
-                handle->arImageProcInfo = arImageProcInit(handle->xsize, handle->ysize, handle->arPixelFormat, 0);
+                handle->arImageProcInfo = arImageProcInit(handle->xsize, handle->ysize);
                 break;
             case AR_LABELING_THRESH_MODE_AUTO_BRACKETING:
                 handle->arLabelingThreshAutoBracketOver = handle->arLabelingThreshAutoBracketUnder = 1;
@@ -412,10 +410,7 @@ int arSetPixelFormat( ARHandle *handle, AR_PIXEL_FORMAT pixFormat )
     handle->arPixelSize   = arUtilGetPixelSize(handle->arPixelFormat);
     
     // Update handle settings that depend on pixel format.
-    if (handle->arImageProcInfo) {
-        arImageProcFinal(handle->arImageProcInfo);
-        handle->arImageProcInfo = arImageProcInit(handle->xsize, handle->ysize, handle->arPixelFormat, 0);
-    }
+    // None.
     
     // If template matching, automatically switch to these most suitable colour template matching mode.
     if (monoFormat) {

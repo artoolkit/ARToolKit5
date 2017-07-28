@@ -1694,37 +1694,42 @@ static void get_cpara( ARdouble world[4][2], ARdouble vertex[4][2],
 
 static int pattern_match( ARPattHandle *pattHandle, int mode, ARUint8 *data, int size, int *code, int *dir, ARdouble *cf )
 {
-    int   *input;
+    int   *input = NULL;
     int    sum, ave;
     int    res1, res2;
     int    i, j, k, l;
     ARdouble datapow;
     ARdouble sum2, max;
 
-    if( pattHandle == NULL ) {
+    if ( pattHandle == NULL || 0 >= size ) {
         *code = 0;
         *dir  = 0;
         *cf   = -_1_0;
         return -1;
     }
 
-    if( mode == AR_TEMPLATE_MATCHING_COLOR ) {
+    if ( mode == AR_TEMPLATE_MATCHING_COLOR ) {
+        const int SIZE_SQD_X3 = size*size*3;
+        
+        arMalloc( input, int, SIZE_SQD_X3 );
+        if ( NULL == input ) {
+            return -1;
+        }
 
-        arMalloc( input, int, size*size*3 );
         sum = ave = 0;
-        for(i=0;i<size*size*3;i++) {
+        for (i=0; i < SIZE_SQD_X3; i++) {
             ave += (255-data[i]);
         }
-        ave /= (size*size*3);
+        ave /= (SIZE_SQD_X3);
 
-        for(i=0;i<size*size*3;i++) {
+        for (i=0; i < SIZE_SQD_X3; i++) {
             input[i] = (255-data[i]) - ave;
             sum += input[i]*input[i];
         }
 
         datapow = SQRT( (ARdouble)sum );
         //if( datapow == 0.0 ) {
-        if( datapow/(size*SQRT_3_0) < AR_PATT_CONTRAST_THRESH1 ) {
+        if ( datapow/(size*SQRT_3_0) < AR_PATT_CONTRAST_THRESH1 ) {
             *code = 0;
             *dir  = 0;
             *cf   = -_1_0;
@@ -1735,13 +1740,14 @@ static int pattern_match( ARPattHandle *pattHandle, int mode, ARUint8 *data, int
         res1 = res2 = -1;
         k = -1; // Best match in search space.
         max = _0_0;
-        for( l = 0; l < pattHandle->patt_num; l++ ) { // Consider the whole search space.
+        for ( l = 0; l < pattHandle->patt_num; l++ ) { // Consider the whole search space.
             k++;
             while( pattHandle->pattf[k] == 0 ) k++; // No pattern at this slot.
             if( pattHandle->pattf[k] == 2 ) continue; // Pattern at this slot is deactivated.
             for( j = 0; j < 4; j++ ) { // The 4 rotated variants of the pattern.
                 sum = 0;
-                for(i=0;i<size*size*3;i++) sum += input[i]*pattHandle->patt[k*4 + j][i]; // Correlation operation.
+                for(i=0; i < SIZE_SQD_X3; i++)
+                    sum += input[i] * pattHandle->patt[k * 4 + j][i]; // Correlation operation.
                 sum2 = sum / pattHandle->pattpow[k*4 + j] / datapow;
                 if( sum2 > max ) { max = sum2; res1 = j; res2 = k; }
             }
@@ -1753,23 +1759,28 @@ static int pattern_match( ARPattHandle *pattHandle, int mode, ARUint8 *data, int
         free( input );
         return 0;
     }
-    else if( mode == AR_TEMPLATE_MATCHING_MONO ) {
+    else if ( mode == AR_TEMPLATE_MATCHING_MONO ) {
+        const int SIZE_SQD = size*size;
 
-        arMalloc( input, int, size*size );
+        arMalloc( input, int, SIZE_SQD );
+        if ( NULL == input ) {
+            return -1;
+        }
+        
         sum = ave = 0;
-        for(i=0;i<size*size;i++) {
+        for ( i=0; i < SIZE_SQD; i++ ) {
             ave += (255-data[i]);
         }
-        ave /= (size*size);
+        ave /= (SIZE_SQD);
 
-        for(i=0;i<size*size;i++) {
+        for ( i=0; i < SIZE_SQD; i++ ) {
             input[i] = (255-data[i]) - ave;
-            sum += input[i]*input[i];
+            sum += input[i] * input[i];
         }
 
         datapow = SQRT( (ARdouble)sum );
         //if( datapow == 0.0 ) {
-        if( datapow/size < AR_PATT_CONTRAST_THRESH1 ) {
+        if ( datapow/size < AR_PATT_CONTRAST_THRESH1 ) {
             *code = 0;
             *dir  = 0;
             *cf   = -_1_0;
@@ -1780,15 +1791,16 @@ static int pattern_match( ARPattHandle *pattHandle, int mode, ARUint8 *data, int
         res1 = res2 = -1;
         k = -1;
         max = _0_0;
-        for( l = 0; l < pattHandle->patt_num; l++ ) {
+        for ( l = 0; l < pattHandle->patt_num; l++ ) {
             k++;
-            while( pattHandle->pattf[k] == 0 ) k++;
-            if( pattHandle->pattf[k] == 2 ) continue;
-            for( j = 0; j < 4; j++ ) {
+            while ( pattHandle->pattf[k] == 0 ) k++;
+            if ( pattHandle->pattf[k] == 2 ) continue;
+            for ( j = 0; j < 4; j++ ) {
                 sum = 0;
-                for(i=0;i<size*size;i++) sum += input[i]*pattHandle->pattBW[k*4 + j][i];
-                sum2 = sum / pattHandle->pattpowBW[k*4 + j] / datapow;
-                if( sum2 > max ) { max = sum2; res1 = j; res2 = k; }
+                for ( i=0; i < SIZE_SQD; i++ )
+                    sum += input[i] * (pattHandle->pattBW[k * 4 + j][i]);
+                sum2 = sum / pattHandle->pattpowBW[k * 4 + j] / datapow;
+                if ( sum2 > max ) { max = sum2; res1 = j; res2 = k; }
             }
         }
         *dir  = res1;
@@ -1809,32 +1821,46 @@ static int decode_bch(const AR_MATRIX_CODE_TYPE matrixCodeType, const uint64_t i
     uint8_t *recd;
     uint64_t out_bit;
     int t, n, length, k;
-    uint8_t recd15[15];
+    uint8_t recd64[64];
     const int *alpha_to, *index_of;
     const int bch_15_alpha_to[15] = {1, 2, 4, 8, 3, 6, 12, 11, 5, 10, 7, 14, 15, 13, 9};
     const int bch_15_index_of[16] = {-1, 0, 1, 4, 2, 8, 5, 10, 3, 14, 9, 7, 6, 13, 11, 12};
+    const int bch_31_alpha_to[31] = {1, 2, 4, 8, 16, 5, 10, 20, 13, 26, 17, 7, 14, 28, 29, 31, 27, 19, 3, 6, 12, 24, 21, 15, 30, 25, 23, 11, 22, 9, 18};
+    const int bch_31_index_of[32] = {-1, 0, 1, 18, 2, 5, 19, 11, 3, 29, 6, 27, 20, 8, 12, 23, 4, 10, 30, 17, 7, 22, 28, 26, 21, 25, 9, 16, 13, 14, 24, 15};
     const int bch_127_alpha_to[127] = {1, 2, 4, 8, 16, 32, 64, 3, 6, 12, 24, 48, 96, 67, 5, 10, 20, 40, 80, 35, 70, 15, 30, 60, 120, 115, 101, 73, 17, 34, 68, 11, 22, 44, 88, 51, 102, 79, 29, 58, 116, 107, 85, 41, 82, 39, 78, 31, 62, 124, 123, 117, 105, 81, 33, 66, 7, 14, 28, 56, 112, 99, 69, 9, 18, 36, 72, 19, 38, 76, 27, 54, 108, 91, 53, 106, 87, 45, 90, 55, 110, 95, 61, 122, 119, 109, 89, 49, 98, 71, 13, 26, 52, 104, 83, 37, 74, 23, 46, 92, 59, 118, 111, 93, 57, 114, 103, 77, 25, 50, 100, 75, 21, 42, 84, 43, 86, 47, 94, 63, 126, 127, 125, 121, 113, 97, 65};
     const int bch_127_index_of[128] = {-1, 0, 1, 7, 2, 14, 8, 56, 3, 63, 15, 31, 9, 90, 57, 21, 4, 28, 64, 67, 16, 112, 32, 97, 10, 108, 91, 70, 58, 38, 22, 47, 5, 54, 29, 19, 65, 95, 68, 45, 17, 43, 113, 115, 33, 77, 98, 117, 11, 87, 109, 35, 92, 74, 71, 79, 59, 104, 39, 100, 23, 82, 48, 119, 6, 126, 55, 13, 30, 62, 20, 89, 66, 27, 96, 111, 69, 107, 46, 37, 18, 53, 44, 94, 114, 42, 116, 76, 34, 86, 78, 73, 99, 103, 118, 81, 12, 125, 88, 61, 110, 26, 36, 106, 93, 52, 75, 41, 72, 85, 80, 102, 60, 124, 105, 25, 40, 51, 101, 84, 24, 123, 83, 50, 49, 122, 120, 121};
     int i, j, u, q, t2, count = 0, syn_error = 0;
 	int elp[20][18], d[20], l[20], u_lu[20], s[19], loc[127], reg[10]; // int elp[t2 + 2, t2], d[t2 + 2], l[t2 + 2], u_lu[t2 + 2], s[t2 + 1], loc[n], reg[t + 1].
     
-    if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3 || matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5) {
-        if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3) {
-            t = 1; k = 9;
-        } else {
-            t = 2; k = 5;
+    if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3 || matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5 || matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_12_5 || matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_7_7) {
+        if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3 || matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5) {
+            if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3) {
+                t = 1; k = 9;
+            } else { // matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5
+                t = 2; k = 5;
+            }
+            n = 15;
+            length = 13;
+            alpha_to = bch_15_alpha_to;
+            index_of = bch_15_index_of;
+        } else { // matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_12_5 || matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_7_7
+            if (matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_12_5) {
+                t = 2; k = 12;
+            } else { // matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_7_7
+                t = 3; k = 7;
+            }
+            n = 31;
+            length = 22;
+            alpha_to = bch_31_alpha_to;
+            index_of = bch_31_index_of;
         }
-        n = 15;
-        length = 13;
-        alpha_to = bch_15_alpha_to;
-        index_of = bch_15_index_of;
-        // Unpack input into recd15[]. recd15[0] is least significant bit.
+        // Unpack input into recd64[]. recd64[0] is least significant bit.
         in_bitwise = in;
         for (i = 0; i < length; i++) {
-            recd15[i] = (uint8_t)(in_bitwise & 1);
+            recd64[i] = (uint8_t)(in_bitwise & 1);
             in_bitwise = in_bitwise >> 1;
         }
-        recd = recd15;
+        recd = recd64;
     } else if (matrixCodeType == AR_MATRIX_CODE_GLOBAL_ID) {
         t = 9; k = 64;
         n = 127;
@@ -2235,7 +2261,8 @@ static int get_matrix_code( ARUint8 *data, int size, int *code_out_p, int *dir, 
             *cf = -_1_0;
             return (-4); // EDC fail.
         }
-    } else if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3 || matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5) {
+    } else if (matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_9_3 || matrixCodeType == AR_MATRIX_CODE_4x4_BCH_13_5_5
+               || matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_12_5 || matrixCodeType == AR_MATRIX_CODE_5x5_BCH_22_7_7) {
         ret = decode_bch(matrixCodeType, codeRaw, NULL, &code);
         if (ret < 0) {
             *code_out_p = -1;

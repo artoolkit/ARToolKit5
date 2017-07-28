@@ -41,7 +41,7 @@
 #  include <Accelerate/Accelerate.h>
 #endif
 
-ARImageProcInfo *arImageProcInit(const int xsize, const int ysize, const AR_PIXEL_FORMAT pixFormat, int alwaysCopy)
+ARImageProcInfo *arImageProcInit(const int xsize, const int ysize)
 {
     ARImageProcInfo *ipi = (ARImageProcInfo *)malloc(sizeof(ARImageProcInfo));
     if (ipi) {
@@ -85,14 +85,6 @@ int arImageProcLumaHist(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr)
     return (0);
 }
 
-// Returns a pointer to a buffer containing a 256x256 8-bit grayscale texture.
-// The texture can be uploaded to an OpenGL texture with the calls:
-//     buf = arImageProcGetHistImage(ipi);
-//     if (buf) {
-//         glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 256, 256, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, buf);
-//         free(buf);
-//     }
-// After uploading, the texture can be drawn as with any other OpenGL texture.
 unsigned char *arImageProcGetHistImage(ARImageProcInfo *ipi)
 {
     int i, j, y;
@@ -157,8 +149,6 @@ int arImageProcLumaHistAndCDFAndMedian(ARImageProcInfo *ipi, const ARUint8 *__re
     return (arImageProcLumaHistAndCDFAndPercentile(ipi, dataPtr, 0.5f, value_p));
 }
 
-// Implementation of Otsu's Method of binarization threshold determination.
-// See http://en.wikipedia.org/wiki/Otsu's_method fore more information.
 int arImageProcLumaHistAndOtsu(ARImageProcInfo *ipi, const ARUint8 *__restrict dataPtr, unsigned char *value_p)
 {
     int ret;

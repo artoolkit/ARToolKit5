@@ -36,9 +36,9 @@
  */
 
 /*!
-    @header arFilterTransMat
-    @abstract   Provides filtering of transformation matrices (pose estimates).
-    @discussion
+    @file arFilterTransMat.h
+    @brief   Provides filtering of transformation matrices (pose estimates).
+    @details
         High frequency noise ("jitter") can be an undesirable property in
         optical tracking systems like ARToolKit. These functions implement a
         first-order low-pass filter for both the position and orientation
@@ -66,24 +66,23 @@ typedef struct _ARFilterTransMatInfo ARFilterTransMatInfo;
 
 /*!
     @defined 
-    @abstract   Default sample rate (in Hertz).
-    @discussion This value provides a default value for the
+    @brief   Default sample rate (in Hertz).
+    @details This value provides a default value for the
         sampleRate parameter in arFilterTransMatInit().
 */
 #define AR_FILTER_TRANS_MAT_SAMPLE_RATE_DEFAULT 30.0
     
 /*!
     @defined 
-    @abstract   Default cutoff frequency (in Hertz).
-    @discussion This value provides a default value for the
+    @brief   Default cutoff frequency (in Hertz).
+    @details This value provides a default value for the
         cutoffFreq parameter in arFilterTransMatInit().
  */
 #define AR_FILTER_TRANS_MAT_CUTOFF_FREQ_DEFAULT 15.0
 
 /*!
-    @function
-    @abstract   Initialise a filter for a single transformation matrix (pose estimate).
-    @discussion
+    @brief   Initialise a filter for a single transformation matrix (pose estimate).
+    @details
         In order to filter a pose estimate, this function should be called to setup
         filter data structures.
  
@@ -110,9 +109,8 @@ typedef struct _ARFilterTransMatInfo ARFilterTransMatInfo;
 ARFilterTransMatInfo *arFilterTransMatInit(const ARdouble sampleRate, const ARdouble cutoffFreq);
 
 /*!
-    @function
-    @abstract   Set the filter parameters.
-    @discussion
+    @brief   Set the filter parameters.
+    @details
         This convenience function allows adjustment of the initial filter parameters.
     @param      ftmi Filter settings of which the parameters should be set.
     @param      sampleRate This value partially determines the filter properties.
@@ -133,9 +131,8 @@ ARFilterTransMatInfo *arFilterTransMatInit(const ARdouble sampleRate, const ARdo
 int arFilterTransMatSetParams(ARFilterTransMatInfo *ftmi, const ARdouble sampleRate, const ARdouble cutoffFreq);
 
 /*!
-    @function
-    @abstract   Filters the supplied pose estimate transformation matrix in-place.
-    @discussion
+    @brief   Filters the supplied pose estimate transformation matrix in-place.
+    @details
         This performs the filter function for a single transformation matrix.
     @param      ftmi Filter settings to be used with this transformation matrix.
     @param      m Transformation matrix representing the current pose estimate.
@@ -154,9 +151,8 @@ int arFilterTransMatSetParams(ARFilterTransMatInfo *ftmi, const ARdouble sampleR
 int arFilterTransMat(ARFilterTransMatInfo *ftmi, ARdouble m[3][4], const int reset);
 
 /*!
-    @function
-    @abstract   Finalise a filter.
-    @discussion
+    @brief   Finalise a filter.
+    @details
         When all filter use has completed, this function should be called to dispose
         of the filter structure.
     @param      ftmi Filter settings to dispose of.
