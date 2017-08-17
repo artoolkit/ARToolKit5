@@ -100,7 +100,7 @@ Required external software
 * A supported compiler or IDE is required to use ARToolKit:
   
 ### Windows:
-Microsoft Visual Studio 2013 and Microsoft Visual Studio 2010 SP1 are supported. The free Microsoft Visual Studio Express Edition will also work.
+Microsoft Visual Studio 2013 is supported. The free Microsoft Visual Studio Express Edition will also work.
 
 ### Mac OS X:
 Xcode tools v5.1 under Mac OS X 10.9 or later is required. Xcode 6 under Mac OS X 10.10 is recommended. Xcode may be obtained free from Apple at [http://developer.apple.com/xcode/](http://developer.apple.com/xcode/).
