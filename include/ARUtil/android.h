@@ -1,5 +1,5 @@
 /*
- *  android_os_build_codes.h
+ *  android.h
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -28,18 +28,26 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2013-2015 ARToolworks, Inc.
+ *  Copyright 2015-2016 Daqri, LLC.
  *
  *  Author(s): Philip Lamb
  *
  */
 
+#ifndef __ARUtil_android_h__
+#define __ARUtil_android_h__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef ANDROID
+
 #include <sys/system_properties.h>
 
 //
-// Public codes are defined in http://developer.android.com/reference/java/lang/System.html#getProperty(java.lang.String).
-// Codes below are defined in https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Build.java.
+// Public codes are defined in http://developer.android.com/reference/java/lang/System.html#getProperty(java.lang.String) .
+// Codes below are defined in https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Build.java .
 // Items with * are intended for display to the end user.
 //
 
@@ -66,3 +74,12 @@
 #define ANDROID_OS_BUILD_TAGS                "ro.build.tags"                     // Comma-separated tags describing the build, like "unsigned,debug".
 
 #define ANDROID_OS_BUILD_FINGERPRINT         "ro.build.fingerprint"              // A string that uniquely identifies this build. 'BRAND/PRODUCT/DEVICE:RELEASE/ID/VERSION.INCREMENTAL:TYPE/TAGS'.
+
+int android_system_property_get(const char* name, char* value);
+
+#endif // ANDROID
+
+#ifdef __cplusplus
+}
+#endif
+#endif // !__ARUtil_android_h__

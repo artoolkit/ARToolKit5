@@ -1,6 +1,8 @@
 /*
- *  trackingSub.h
+ *  time.h
  *  ARToolKit5
+ *
+ *  Time-related functions.
  *
  *  This file is part of ARToolKit.
  *
@@ -28,36 +30,57 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2010-2015 ARToolworks, Inc.
+ *  Copyright 2015-2016 Daqri, LLC.
+ *  Copyright 2007-2015 ARToolworks, Inc.
  *
  *  Author(s): Hirokazu Kato, Philip Lamb
  *
  */
 
-#ifndef TRACKING_SUB_H
-#define TRACKING_SUB_H
+#ifndef __ARUtil_time_h__
+#define __ARUtil_time_h__
 
-#include <ARWrapper/Platform.h>
-
-#if HAVE_NFT
-
-#include <ARUtil/thread_sub.h> 
-#include <KPM/kpm.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-THREAD_HANDLE_T *trackingInitInit( KpmHandle *kpmHandle );
-int trackingInitStart( THREAD_HANDLE_T *threadHandle, ARUint8 *imagePtrLuma );
-int trackingInitGetResult( THREAD_HANDLE_T *threadHandle, float trans[3][4], int *page );
-int trackingInitQuit( THREAD_HANDLE_T **threadHandle_p );
+/*!
+    @brief Get the time in seconds since midnight (00:00:00), January 1, 1970, coordinated universal time (UTC).
+    @param sec Pointer to an unsigned 64-bit interger which will be filled with the seconds portion of the time, or NULL if this value is not required.
+    @param sec Pointer to an unsigned 32-bit interger which will be filled with the microseconds portion the time or NULL if this value is not required.
+        N.B.: The resolution of the returned time is system-specific, and is not guaranteed to have microsecond-resolution.
+ */
+void           arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec);
+
+/*!
+    @brief Read the timer.
+    @return Elapsed seconds since last invocation of arUtilTimerReset().
+    @see arUtilTimerReset
+ */
+double         arUtilTimer(void);
+
+/*!
+    @brief Reset the timer.
+    @see arUtilTimer
+ */
+void           arUtilTimerReset(void);
+
+#ifndef _WINRT
+/*!
+    @brief   Relinquish CPU to the system for specified number of milliseconds.
+    @details
+        This function calls the native system-provided sleep routine to relinquish
+        CPU control to the system for the specified time.
+    @param      msec Sleep time in milliseconds (thousandths of a second).
+    @since Not available on Windows Runtime (WinRT).
+ */
+void           arUtilSleep( int msec );
+#endif // !_WINRT
+
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif // HAVE_NFT
-
-#endif // !TRACKING_SUB_H
+#endif // !__ARUtil_time_h__

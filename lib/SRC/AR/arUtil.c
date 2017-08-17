@@ -48,10 +48,8 @@
 #define _GNU_SOURCE   // asprintf()/vasprintf() on Linux.
 #include <AR/ar.h>
 #include <math.h>
-#include <stdarg.h>
 #include <ctype.h>    // tolower()
 #ifdef _WIN32
-#  include <sys/timeb.h>
 #  include <direct.h> // chdir(), getcwd()
 #  ifdef _WINRT
 #  else
@@ -60,8 +58,6 @@
 #  endif
 #  define MAXPATHLEN MAX_PATH
 #else
-#  include <time.h>
-#  include <sys/time.h>
 #  include <unistd.h> // chdir(), getcwd(), confstr()
 #  include <sys/param.h> // MAXPATHLEN
 #  include <pthread.h> // pthread_self(), pthread_equal()
@@ -73,28 +69,9 @@
 #    else
 #      warning arUtil.c not compiled as Objective C. Behaviour of function arUtilGetResourcesDirectoryPath will be different.
 #    endif
-#    include <sys/sysctl.h> // sysctlbyname()
-#  endif
-#  ifdef __linux
-#    include <sys/utsname.h> // uname()
 #  endif
 #endif
-
-//
-// Global required for logging functions.
-//
-int arLogLevel = AR_LOG_LEVEL_DEFAULT;
-static AR_LOG_LOGGER_CALLBACK arLogLoggerCallback = NULL;
-static int arLogLoggerCallBackOnlyIfOnSameThread = 0;
-#ifndef _WIN32
-static pthread_t arLogLoggerThread;
-#else
-static DWORD arLogLoggerThreadID;
-#endif
-#define AR_LOG_WRONG_THREAD_BUFFER_SIZE 4096
-static char *arLogWrongThreadBuffer = NULL;
-static int arLogWrongThreadBufferSize = 0;
-static int arLogWrongThreadBufferCount = 0;
+#include <ARUtil/file_utils.h>
 
 // These are the load/unload handlers for the case when libAR is
 // loaded as a native library by a Java virtual machine (e.g. when
@@ -141,108 +118,9 @@ ARUint32 arGetVersion(char **versionStringRef)
 			0x00010000u * ((unsigned int)AR_HEADER_VERSION_MINOR % 10u) +
 			0x00001000u * ((unsigned int)AR_HEADER_VERSION_TINY / 10u) +
 			0x00000100u * ((unsigned int)AR_HEADER_VERSION_TINY % 10u) +
-			0x00000010u * ((unsigned int)AR_HEADER_VERSION_BUILD / 10u) +
-			0x00000001u * ((unsigned int)AR_HEADER_VERSION_BUILD % 10u)
+			0x00000010u * ((unsigned int)AR_HEADER_VERSION_DEV / 10u) +
+			0x00000001u * ((unsigned int)AR_HEADER_VERSION_DEV % 10u)
 			);
-}
-
-void arLogSetLogger(AR_LOG_LOGGER_CALLBACK callback, int callBackOnlyIfOnSameThread)
-{
-    arLogLoggerCallback = callback;
-    arLogLoggerCallBackOnlyIfOnSameThread = callBackOnlyIfOnSameThread;
-    if (callback && callBackOnlyIfOnSameThread) {
-#ifndef _WIN32
-        arLogLoggerThread = pthread_self();
-#else
-        arLogLoggerThreadID = GetCurrentThreadId();
-#endif
-		if (!arLogWrongThreadBuffer) {
-			arLogWrongThreadBufferSize = AR_LOG_WRONG_THREAD_BUFFER_SIZE;
-			arMalloc(arLogWrongThreadBuffer, char, arLogWrongThreadBufferSize);
-		}
-    } else {
-		if (arLogWrongThreadBuffer) {
-			free(arLogWrongThreadBuffer);
-			arLogWrongThreadBuffer = NULL;
-			arLogWrongThreadBufferSize = 0;
-		}
-	}
-}
-
-void arLog(const int logLevel, const char *format, ...)
-{
-    char *buf = NULL;
-    int len;
-    va_list ap;
-
-    if (logLevel < arLogLevel) return;
-    if (!format || !format[0]) return;
-
-    // Unpack msg formatting.
-    va_start(ap, format);
-#ifdef _WIN32
-    len = _vscprintf(format, ap);
-    if (len >= 0) {
-        buf = (char *)malloc((len + 1) * sizeof(char)); // +1 for nul-term.
-        vsnprintf(buf, len, format, ap);
-        buf[len] = '\0'; // nul-terminate.
-    }
-#else
-    len = vasprintf(&buf, format, ap);
-#endif
-    va_end(ap);
-
-    if (len >= 0) {
-        if (arLogLoggerCallback) {
-
-			if (!arLogLoggerCallBackOnlyIfOnSameThread) {
-				(*arLogLoggerCallback)(buf);
-			} else {
-#ifndef _WIN32
-				if (!pthread_equal(pthread_self(), arLogLoggerThread))
-#else
-				if (GetCurrentThreadId() != arLogLoggerThreadID)
-#endif
-				{
-					// On non-log thread, put it into buffer if we can.
-					if (arLogWrongThreadBufferCount < arLogWrongThreadBufferSize) {
-						if (len < (arLogWrongThreadBufferSize - (arLogWrongThreadBufferCount + 3))) { // +3 to reserve space for "...".
-							strcpy(&arLogWrongThreadBuffer[arLogWrongThreadBufferCount], buf);
-							arLogWrongThreadBufferCount += len;
-						} else {
-							strcpy(&arLogWrongThreadBuffer[arLogWrongThreadBufferCount], "...");
-							arLogWrongThreadBufferCount = arLogWrongThreadBufferSize; // Mark buffer as full.
-						}
-					}
-				} else {
-					// On log thread, print buffer if anything was in it, then the current message.
-					if (arLogWrongThreadBufferCount > 0) {
-						(*arLogLoggerCallback)(arLogWrongThreadBuffer);
-						arLogWrongThreadBufferCount = 0;
-					}
-					(*arLogLoggerCallback)(buf);
-				}
-			}
-
-        } else {
-#if defined(__ANDROID__)
-            int logLevelA;
-            switch (logLevel) {
-                case AR_LOG_LEVEL_REL_INFO:         logLevelA = ANDROID_LOG_ERROR; break;
-                case AR_LOG_LEVEL_ERROR:            logLevelA = ANDROID_LOG_ERROR; break;
-                case AR_LOG_LEVEL_WARN:             logLevelA = ANDROID_LOG_WARN;  break;
-                case AR_LOG_LEVEL_INFO:             logLevelA = ANDROID_LOG_INFO;  break;
-                case AR_LOG_LEVEL_DEBUG: default:   logLevelA = ANDROID_LOG_DEBUG; break;
-            }
-            __android_log_write(logLevelA, "libar", buf);
-//#elif defined(_WINRT)
-//            OutputDebugStringA(buf);
-#else
-            fprintf(stderr, "%s", buf);
-#endif
-        }
-        free(buf);
-    }
 }
 
 int arUtilGetSquareCenter( ARdouble vertex[4][2], ARdouble *x, ARdouble *y )
@@ -511,75 +389,6 @@ int arUtilQuatNorm(ARdouble q[4])
 
     return (0);
 }
-
-static long ss = 0;
-static int sms = 0;
-
-double arUtilTimer(void)
-{
-    double             tt;
-    long               s1;
-    int                s2;
-#ifdef _WIN32
-    struct _timeb sys_time;
-
-    _ftime(&sys_time);
-    s1 = (long)sys_time.time  - ss;
-    s2 = sys_time.millitm - sms;
-#else
-    struct timeval     time;
-
-#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
-    gettimeofday( &time, NULL );
-#  else
-    gettimeofday( &time );
-#  endif
-    s1 = time.tv_sec - ss;
-    s2 = time.tv_usec/1000 - sms;
-#endif
-
-    tt = (double)s1 + (double)s2 / 1000.0;
-
-    return( tt );
-}
-
-void arUtilTimerReset(void)
-{
-#ifdef _WIN32
-    struct _timeb sys_time;
-
-    _ftime(&sys_time);
-    ss  = (long)sys_time.time;
-    sms = sys_time.millitm;
-#else
-    struct timeval     time;
-
-#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
-    gettimeofday( &time, NULL );
-#  else
-    gettimeofday( &time );
-#  endif
-    ss  = time.tv_sec;
-    sms = time.tv_usec / 1000;
-#endif
-}
-
-#ifndef _WINRT
-void arUtilSleep( int msec )
-{
-#ifndef _WIN32
-    struct timespec  req;
-
-    req.tv_sec = 0;
-    req.tv_nsec = msec * 1000 * 1000;
-    nanosleep( &req, NULL );
-#else
-	Sleep( msec );
-#endif
-
-    return;
-}
-#endif
 
 // N.B. This function is duplicated in libARvideo, so that libARvideo doesn't need to
 // link to libAR. Therefore, if changes are made here they should be duplicated there.
@@ -1549,35 +1358,6 @@ int arUtilDivideExt( const char *filename, char *s1, char *s2 )
     }
 
     return 0;
-}
-
-char *arUtilGetMachineType(void)
-{
-    char *ret = NULL;
-#if defined(__APPLE__)
-    size_t  size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    arMalloc(ret, char, size);
-    sysctlbyname("hw.machine", ret, &size, NULL, 0);
-#elif defined(_WIN32) // Windows.
-#  if defined(_M_IX86)
-    ret = strdup("x86");
-#  elif defined(_M_X64)
-    ret = strdup("x86_64");
-#  elif defined(_M_IA64)
-    ret = strdup("ia64");
-#  elif defined(_M_ARM)
-    ret = strdup("arm");
-#  else
-    ret = strdup("unknown");
-#  endif
-#elif defined(__linux) // Linux.
-    struct utsname un;
-    if (uname(&un) < 0) {
-        ret = strdup(un.machine);
-    }
-#endif
-    return (ret);
 }
 
 void arUtilPrintTransMat(const ARdouble trans[3][4])

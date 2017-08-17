@@ -49,7 +49,7 @@
 #ifndef TRACKING_SUB_H
 #define TRACKING_SUB_H
 
-#include <thread_sub.h> 
+#include <ARUtil/thread_sub.h> 
 #include <KPM/kpm.h>
 
 #ifdef __cplusplus

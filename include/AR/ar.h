@@ -64,99 +64,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#ifndef _WIN32 // errno is defined in stdlib.h on Windows.
-#  ifdef EMSCRIPTEN // errno is not in sys/
-#    include <errno.h>
-#  else
-#    include <sys/errno.h>
-#  endif
-#endif
 #include <AR/config.h>
 #include <AR/arConfig.h>
 #ifdef __ANDROID__
 #  include <jni.h>
-#  include <android/log.h>
 #endif
+#include <ARUtil/log.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-//
-// Logging.
-//
-
-#ifdef __ANDROID__
-#  define ARLOG(...)  __android_log_print(ANDROID_LOG_INFO, "libar", __VA_ARGS__)
-#else
-#  define ARLOG(...)  printf(__VA_ARGS__)
-#endif
-
-/*!
-    @var
-    @abstract   Sets the severity level. Log messages below the set severity level are not logged.
-	@discussion
-        All calls to ARToolKit's logging facility include a "log level" parameter, which specifies
-        the severity of the log message. (The severities are defined in %lt;ar/config.h&gt;.)
-        Setting this global allows for filtering of log messages. All log messages lower than
-        the set level will not be logged by arLog().
-    @seealso arLog arLog
-*/
-extern int arLogLevel;
-
-/*!
-    @function
-    @abstract   Write a string to the current logging facility.
-	@discussion
-        The default logging facility varies by platform, but on Unix-like platforms is typically
-        the standard error file descriptor. However, logging may be redirected to some other
-        facility by arLogSetLogger.
-
-        Newlines are not automatically appended to log output.
-    @param      logLevel The severity of the log message. Defined in %lt;ar/config.h&gt;.
-        Log output is written to the logging facility provided the logLevel meets or
-        exceeds the minimum level specified in global arLogLevel.
-    @param      format Log format string, in the form of printf().
-    @seealso arLogLevel arLogLevel
-    @seealso arLogSetLogger arLogSetLogger
-*/
-
-void arLog(const int logLevel, const char *format, ...);
-
-typedef void (AR_CALLBACK *AR_LOG_LOGGER_CALLBACK)(const char *logMessage);
-
-/*!
-    @function
-    @abstract   Divert logging to a callback, or revert to default logging.
-	@discussion
-        The default logging facility varies by platform, but on Unix-like platforms is typically
-        the standard error file descriptor. However, logging may be redirected to some other
-        facility by this function.
-    @param      callback The function which will be called with the log output, or NULL to
-        cancel redirection.
-    @param      callBackOnlyIfOnSameThread If non-zero, then the callback will only be called
-        if the call to arLog is made on the same thread as the thread which called this function,
-        and if the arLog call is made on a different thread, log output will be buffered until
-        the next call to arLog on the original thread.
-
-        The purpose of this is to prevent logging from secondary threads in cases where the
-        callback model of the target platform precludes this.
-    @seealso arLog arLog
-*/
-void arLogSetLogger(AR_LOG_LOGGER_CALLBACK callback, int callBackOnlyIfOnSameThread);
-
-// FN(x) allows for a function-like macro x which expands to a single statement.
-#define FN(x) do {x} while (0)
-
-#ifdef DEBUG
-#  define ARLOGd(...) arLog(AR_LOG_LEVEL_DEBUG, __VA_ARGS__)
-#else
-#  define ARLOGd(...)
-#endif
-#define ARLOGi(...) arLog(AR_LOG_LEVEL_INFO, __VA_ARGS__)
-#define ARLOGw(...) arLog(AR_LOG_LEVEL_WARN, __VA_ARGS__)
-#define ARLOGe(...) arLog(AR_LOG_LEVEL_ERROR, __VA_ARGS__)
-#define ARLOGperror(s) arLog(AR_LOG_LEVEL_ERROR, ((s != NULL) ? "%s: %s\n" : "%s%s\n"), ((s != NULL) ? s : ""), strerror(errno))
 
 
 #define arMalloc(V,T,S)  \
@@ -1533,22 +1450,6 @@ int            arUtilMat2QuatPos( const ARdouble m[3][4], ARdouble q[4], ARdoubl
 int            arUtilQuatPos2Mat( const ARdouble q[4], const ARdouble p[3], ARdouble m[3][4] );
 int            arUtilQuatNorm(ARdouble q[4]);
 
-double         arUtilTimer(void);
-void           arUtilTimerReset(void);
-
-#ifndef _WINRT
-/*!
-    @function
-    @abstract   Relinquish CPU to the system for specified number of milliseconds.
-    @discussion
-        This function calls the native system-provided sleep routine to relinquish
-        CPU control to the system for the specified time.
-    @param      msec Sleep time in milliseconds (thousandths of a second).
-    @availability Not available on Windows Runtime (WinRT).
- */
-void           arUtilSleep( int msec );
-#endif // !_WINRT
-
 int            arUtilReplaceExt( char *filename, int n, char *ext );
 int            arUtilRemoveExt ( char *filename );
 int            arUtilDivideExt ( const char *filename, char *s1, char *s2 );
@@ -1585,8 +1486,6 @@ int            arUtilGetPixelSize( const AR_PIXEL_FORMAT arPixelFormat );
         AR_PIXEL_FORMAT, e.g. "AR_PIXEL_FORMAT_RGB".
 */
 const char *arUtilGetPixelFormatName(const AR_PIXEL_FORMAT arPixelFormat);
-
-char          *arUtilGetMachineType(void);
 
 /*
     @brief Get the filename portion of a full pathname.

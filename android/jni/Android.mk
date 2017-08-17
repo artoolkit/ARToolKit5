@@ -226,18 +226,18 @@ LOCAL_MODULE := ar2
 include $(BUILD_STATIC_LIBRARY)
 
 #--------------------------------------------------------------------------
-# libUtil
+# libARUtil
 #--------------------------------------------------------------------------
 include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
-MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Util/*.c)
+MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/ARUtil/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
 LOCAL_SRC_FILES := $(MY_FILES)
 LOCAL_CFLAGS += $(MY_CFLAGS)
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
-LOCAL_MODULE := util
+LOCAL_MODULE := arutil
 include $(BUILD_STATIC_LIBRARY)
 
 #--------------------------------------------------------------------------

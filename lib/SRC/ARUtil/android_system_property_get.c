@@ -1,5 +1,5 @@
 /*
- *  thread_sub_winrt.cpp
+ *  android_system_property_get.c
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -28,47 +28,50 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2014-2015 ARToolworks, Inc.
+ *  Copyright 2015-2016 Daqri, LLC.
  *
  *  Author(s): Philip Lamb
  *
  */
 
-//
-// File notes:
-// Since we use WinRT types in this file, it must be compiled with /ZW compiler option (Visual
-// Studio setting "Consume Windows Runtime extension:Yes").
-// This will generate linker warning 4264, which can be safely ignored, as we are not exposing any WinRT API
-// in the public interface. To do this, add /ignore:4264 to the linker "Additional options" setting.
-// See http://msdn.microsoft.com/en-us/library/windows/apps/hh771041.aspx for more info.
-//
+#include <ARUtil/android.h>
 
-#include "thread_sub_winrt.h"
-#include <AR/ar.h>
+#ifdef ANDROID
 
-#ifdef _WINRT
+#if (__ANDROID_API__ >= 21)
 
-using namespace Platform;
-using namespace Windows::Foundation;
-using namespace Windows::System::Threading;
+#include <stddef.h>
+#include <dlfcn.h>
+#include <android/log.h>
 
-int arCreateDetachedThreadWinRT(void *(*start_routine)(THREAD_HANDLE_T*), THREAD_HANDLE_T*flag)
+// Android 'L' makes __system_property_get a non-global symbol.
+// Here we provide a stub which loads the symbol from libc via dlsym.
+typedef int (*PFN_SYSTEM_PROP_GET)(const char *, char *);
+int android_system_property_get(const char* name, char* value)
 {
-        auto workItemHandler = ref new WorkItemHandler([=](IAsyncAction^)
-        {
-            // Run the user callback.
-            try
-            {
-                start_routine(flag);
-            }
-            catch (...) { }
-            
-        }, CallbackContext::Any);
-
-        ThreadPool::RunAsync(workItemHandler, WorkItemPriority::Normal, WorkItemOptions::TimeSliced);
-
-		return 0;
+    static PFN_SYSTEM_PROP_GET __real_system_property_get = NULL;
+    if (!__real_system_property_get) {
+        // libc.so should already be open, get a handle to it.
+        void *handle = dlopen("libc.so", RTLD_NOLOAD);
+        if (!handle) {
+            __android_log_print(ANDROID_LOG_ERROR, "ARUtil", "Cannot dlopen libc.so: %s.\n", dlerror());
+        } else {
+            __real_system_property_get = (PFN_SYSTEM_PROP_GET)dlsym(handle, "__system_property_get");
+        }
+        if (!__real_system_property_get) {
+            __android_log_print(ANDROID_LOG_ERROR, "ARUtil", "Cannot resolve __system_property_get(): %s.\n", dlerror());
+        }
+    }
+    return (*__real_system_property_get)(name, value);
 }
 
-#endif // !_WINRT
+#else
+
+int android_system_property_get(const char* name, char* value)
+{
+    return __system_property_get(name, value);
+}
+
+#endif // __ANDROID_API__ >= 21
+
+#endif // ANDROID

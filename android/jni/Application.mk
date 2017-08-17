@@ -37,7 +37,7 @@
 #--------------------------------------------------------------------------
 # Build with $NDK/ndk-build NDK_APPLICATION_MK=Application.mk
 #--------------------------------------------------------------------------
-APP_MODULES		:= ar aricp argsub_es argsub_es2 armulti eden kpm ar2 util arosg arvideo
+APP_MODULES		:= ar aricp argsub_es argsub_es2 armulti eden kpm ar2 arutil arosg arvideo
 #APP_OPTIM		:= release
 #APP_OPTIM		:= debug
 #APP_ABI			:= all

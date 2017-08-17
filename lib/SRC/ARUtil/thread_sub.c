@@ -4,6 +4,8 @@
  *
  *  Implements a basic client-worker threading system.
  *
+ *  This file is part of ARToolKit.
+ *
  *  ARToolKit is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -41,13 +43,12 @@
     kato@is.naist.jp   Apr.24 2007
  */
 
-#include <AR/ar.h>
 #ifndef _WIN32
 #  include <unistd.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <thread_sub.h>
+#include <ARUtil/thread_sub.h>
 //#define ARUTIL_DISABLE_PTHREADS // Uncomment to disable pthreads support.
 
 #if !defined(_WINRT) && !defined(ARUTIL_DISABLE_PTHREADS)

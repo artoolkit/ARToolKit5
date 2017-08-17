@@ -1,5 +1,5 @@
 /*
- *  thread_sub_winrt.h
+ *  thread_sub_winrt.cpp
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.
@@ -35,49 +35,39 @@
  *
  */
 
-#ifndef THREAD_SUB_WINRT_H
-#define THREAD_SUB_WINRT_H
+//
+// File notes:
+// Since we use WinRT types in this file, it must be compiled with /ZW compiler option (Visual
+// Studio setting "Consume Windows Runtime extension:Yes").
+// This will generate linker warning 4264, which can be safely ignored, as we are not exposing any WinRT API
+// in the public interface. To do this, add /ignore:4264 to the linker "Additional options" setting.
+// See http://msdn.microsoft.com/en-us/library/windows/apps/hh771041.aspx for more info.
+//
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "thread_sub.h"
-
-#ifdef _WIN32
-
-// Include Windows API.
-#ifndef WIN32_LEAN_AND_MEAN
-#  define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
-#endif
-#include <sdkddkver.h> // Minimum supported version. See http://msdn.microsoft.com/en-us/library/windows/desktop/aa383745.aspx
-#include <windows.h>
-
-// Define _WINRT for support Windows Runtime platforms.
-#if defined(WINAPI_FAMILY)
-#  if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-#    if (_WIN32_WINNT >= 0x0603) // (_WIN32_WINNT_WINBLUE)
-#      define _WINRT
-#    else
-#      error ARToolKit for Windows Phone requires Windows Phone 8.1 or later. Please compile with Visual Studio 2013 or later with Windows Phone 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).
-#    endif
-#  elif (WINAPI_FAMILY == WINAPI_FAMILY_PC_APP)
-#    if (_WIN32_WINNT >= 0x0603) // (_WIN32_WINNT_WINBLUE)
-#      define _WINRT
-#    else
-#      error ARToolKit for Windows Store requires Windows 8.1 or later. Please compile with Visual Studio 2013 or later with Windows 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).
-#    endif
-#  endif
-#endif
+#include "thread_sub_winrt.h"
 
 #ifdef _WINRT
-    
-int arCreateDetachedThreadWinRT(void *(*start_routine)(THREAD_HANDLE_T*), THREAD_HANDLE_T*flag);
 
-#endif // _WIN32
-#endif // _WINRT
+using namespace Platform;
+using namespace Windows::Foundation;
+using namespace Windows::System::Threading;
 
-#ifdef __cplusplus
+int arCreateDetachedThreadWinRT(void *(*start_routine)(THREAD_HANDLE_T*), THREAD_HANDLE_T*flag)
+{
+        auto workItemHandler = ref new WorkItemHandler([=](IAsyncAction^)
+        {
+            // Run the user callback.
+            try
+            {
+                start_routine(flag);
+            }
+            catch (...) { }
+            
+        }, CallbackContext::Any);
+
+        ThreadPool::RunAsync(workItemHandler, WorkItemPriority::Normal, WorkItemOptions::TimeSliced);
+
+		return 0;
 }
-#endif
-#endif // !THREAD_SUB_WINRT_H
+
+#endif // !_WINRT

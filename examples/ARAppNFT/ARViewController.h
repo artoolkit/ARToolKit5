@@ -65,7 +65,7 @@
 #import <AR/sys/CameraVideo.h>
 
 #import <pthread.h>
-#import <thread_sub.h> 
+#import <ARUtil/thread_sub.h> 
 #import <AR2/tracking.h>
 #import <KPM/kpm.h>
 

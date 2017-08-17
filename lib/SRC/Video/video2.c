@@ -1246,8 +1246,8 @@ int ar2VideoGetParami( AR2VideoParamT *vid, int paramName, int *value )
                 0x00010000 * ((unsigned int)AR_HEADER_VERSION_MINOR % 10) +
                 0x00001000 * ((unsigned int)AR_HEADER_VERSION_TINY / 10) +
                 0x00000100 * ((unsigned int)AR_HEADER_VERSION_TINY % 10) +
-                0x00000010 * ((unsigned int)AR_HEADER_VERSION_BUILD / 10) +
-                0x00000001 * ((unsigned int)AR_HEADER_VERSION_BUILD % 10)
+                0x00000010 * ((unsigned int)AR_HEADER_VERSION_DEV / 10) +
+                0x00000001 * ((unsigned int)AR_HEADER_VERSION_DEV % 10)
                 );
 #endif
     }

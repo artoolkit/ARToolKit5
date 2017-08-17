@@ -226,8 +226,8 @@ extern "C" {
                 0x00010000u * ((unsigned int)AR_HEADER_VERSION_MINOR % 10u) +
                 0x00001000u * ((unsigned int)AR_HEADER_VERSION_TINY / 10u) +
                 0x00000100u * ((unsigned int)AR_HEADER_VERSION_TINY % 10u) +
-                0x00000010u * ((unsigned int)AR_HEADER_VERSION_BUILD / 10u) +
-                0x00000001u * ((unsigned int)AR_HEADER_VERSION_BUILD % 10u)
+                0x00000010u * ((unsigned int)AR_HEADER_VERSION_DEV / 10u) +
+                0x00000001u * ((unsigned int)AR_HEADER_VERSION_DEV % 10u)
                 );        
     }
     

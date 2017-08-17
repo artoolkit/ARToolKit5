@@ -54,7 +54,7 @@
 #include <AR/video.h>
 #include <AR/gsub_es.h>
 #include <AR/arFilterTransMat.h>
-#include <thread_sub.h>
+#include <ARUtil/thread_sub.h>
 
 #include <Eden/EdenSurfaces.h>
 #include <Eden/EdenGLFont.h>

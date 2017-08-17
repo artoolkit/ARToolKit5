@@ -48,6 +48,7 @@
 #import "videoiPhoneCameraVideoTookPictureDelegate.h"
 #import "cparams.h"
 #include "../Video/cparamSearch.h"
+#include <ARUtil/system.h>
 
 #include <string.h>
 #include <sys/types.h>
@@ -1374,7 +1375,11 @@ int ar2VideoGetCParamAsynciPhone(AR2VideoParamiPhoneT *vid, void (*callback)(con
     
     char *device_id = NULL;
     NSString *deviceType = [UIDevice currentDevice].model;
-    char *machine = arUtilGetMachineType();
+    char *machine = NULL;
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    arMalloc(machine, char, size);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
     asprintf(&device_id, "apple/%s/%s", [deviceType UTF8String], machine);
     free(machine);
     

@@ -7,8 +7,7 @@ include/AR2/
 include/KPM/
 include/ARWrapper/
 include/Eden/
-include/profile.h
-include/thread_sub.h
+include/ARUtil/
 include/glStateCache.h
 include/glStateCache2.h
 include/ios7/
@@ -74,7 +73,7 @@ lib/SRC/VideoImage/
 lib/SRC/VideoiPhone/
 lib/SRC/AR2/
 lib/SRC/KPM/
-lib/SRC/Util/
+lib/SRC/ARUtil/
 lib/SRC/Eden/
 
 examples/ARAppCore/

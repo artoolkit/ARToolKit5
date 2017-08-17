@@ -1633,8 +1633,6 @@
 		4A13029415BDF8F2003A441C /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ARAppNFT/MainWindow.xib; sourceTree = "<group>"; };
 		4A13029515BDF8F2003A441C /* ARAppNFT_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARAppNFT_Prefix.pch; path = ARAppNFT/ARAppNFT_Prefix.pch; sourceTree = "<group>"; };
 		4A13029615BDF8F2003A441C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ARAppNFT/main.m; sourceTree = "<group>"; };
-		4A13029C15BDF958003A441C /* profile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = profile.h; sourceTree = "<group>"; };
-		4A13029D15BDF958003A441C /* thread_sub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thread_sub.h; sourceTree = "<group>"; };
 		4A13029E15BDF958003A441C /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		4A13029F15BDF958003A441C /* coord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = coord.h; sourceTree = "<group>"; };
 		4A1302A015BDF958003A441C /* featureSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = featureSet.h; sourceTree = "<group>"; };
@@ -1917,6 +1915,27 @@
 		4A89E2B20B07E5AE005A9E7F /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
 		4A8CB4391B8EFB5100EEB539 /* iOS device camera parameters (for use with utilities) */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "iOS device camera parameters (for use with utilities)"; sourceTree = "<group>"; };
 		4A90B8FD13B9D61F0094D561 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		4A91CE8D1F443A11007DD981 /* profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = profile.h; sourceTree = "<group>"; };
+		4A91CE8E1F443A11007DD981 /* thread_sub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread_sub.h; sourceTree = "<group>"; };
+		4A91CEA01F445FB4007DD981 /* android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = android.h; sourceTree = "<group>"; };
+		4A91CEA11F445FB4007DD981 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		4A91CEA21F445FB4007DD981 /* file_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file_utils.h; sourceTree = "<group>"; };
+		4A91CEA31F445FB4007DD981 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		4A91CEA41F445FB4007DD981 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = system.h; sourceTree = "<group>"; };
+		4A91CEA51F445FB4007DD981 /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time.h; sourceTree = "<group>"; };
+		4A91CEA61F445FB4007DD981 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		4A91CEA71F445FB4007DD981 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		4A91CEA81F445FFD007DD981 /* android_system_property_get.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = android_system_property_get.c; sourceTree = "<group>"; };
+		4A91CEA91F445FFD007DD981 /* file_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = file_utils.c; sourceTree = "<group>"; };
+		4A91CEAA1F445FFD007DD981 /* ftw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftw.h; sourceTree = "<group>"; };
+		4A91CEAB1F445FFD007DD981 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		4A91CEAC1F445FFD007DD981 /* nftw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nftw.c; sourceTree = "<group>"; };
+		4A91CEAD1F445FFD007DD981 /* system.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = system.c; sourceTree = "<group>"; };
+		4A91CEAE1F445FFD007DD981 /* thread_sub_winrt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_sub_winrt.cpp; sourceTree = "<group>"; };
+		4A91CEAF1F445FFD007DD981 /* thread_sub_winrt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread_sub_winrt.h; sourceTree = "<group>"; };
+		4A91CEB01F445FFD007DD981 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time.c; sourceTree = "<group>"; };
+		4A91CEB11F445FFD007DD981 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		4A91CEB21F445FFD007DD981 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
 		4A920D4D1CC87B2F0065B301 /* curl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curl.h; sourceTree = "<group>"; };
 		4A920D4E1CC87B2F0065B301 /* curlbuild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curlbuild.h; sourceTree = "<group>"; };
 		4A920D4F1CC87B2F0065B301 /* curlrules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = curlrules.h; sourceTree = "<group>"; };
@@ -4218,6 +4237,23 @@
 			path = Xcode;
 			sourceTree = "<group>";
 		};
+		4A91CE8C1F443A11007DD981 /* ARUtil */ = {
+			isa = PBXGroup;
+			children = (
+				4A91CEA01F445FB4007DD981 /* android.h */,
+				4A91CEA11F445FB4007DD981 /* crypt.h */,
+				4A91CEA21F445FB4007DD981 /* file_utils.h */,
+				4A91CEA31F445FB4007DD981 /* ioapi.h */,
+				4A91CE8D1F443A11007DD981 /* profile.h */,
+				4A91CEA41F445FB4007DD981 /* system.h */,
+				4A91CE8E1F443A11007DD981 /* thread_sub.h */,
+				4A91CEA51F445FB4007DD981 /* time.h */,
+				4A91CEA61F445FB4007DD981 /* unzip.h */,
+				4A91CEA71F445FB4007DD981 /* zip.h */,
+			);
+			path = ARUtil;
+			sourceTree = "<group>";
+		};
 		4A920D4C1CC87B2F0065B301 /* curl */ = {
 			isa = PBXGroup;
 			children = (
@@ -4312,13 +4348,24 @@
 			path = KPM;
 			sourceTree = "<group>";
 		};
-		4A941CEF1AE5DC25000FA802 /* Util */ = {
+		4A941CEF1AE5DC25000FA802 /* ARUtil */ = {
 			isa = PBXGroup;
 			children = (
+				4A91CEA81F445FFD007DD981 /* android_system_property_get.c */,
+				4A91CEA91F445FFD007DD981 /* file_utils.c */,
+				4A91CEAA1F445FFD007DD981 /* ftw.h */,
+				4A91CEAB1F445FFD007DD981 /* ioapi.c */,
+				4A91CEAC1F445FFD007DD981 /* nftw.c */,
 				4A941CED1AE5DC25000FA802 /* profile.c */,
+				4A91CEAD1F445FFD007DD981 /* system.c */,
 				4A941CEE1AE5DC25000FA802 /* thread_sub.c */,
+				4A91CEAE1F445FFD007DD981 /* thread_sub_winrt.cpp */,
+				4A91CEAF1F445FFD007DD981 /* thread_sub_winrt.h */,
+				4A91CEB01F445FFD007DD981 /* time.c */,
+				4A91CEB11F445FFD007DD981 /* unzip.c */,
+				4A91CEB21F445FFD007DD981 /* zip.c */,
 			);
-			path = Util;
+			path = ARUtil;
 			sourceTree = "<group>";
 		};
 		4A941D441AE5DD2E000FA802 /* packaging */ = {
@@ -6402,7 +6449,7 @@
 				4AEB26DF1804A813002290C5 /* ARWrapper */,
 				4A941CD61AE5DC0F000FA802 /* AR2 */,
 				4A941CEC1AE5DC18000FA802 /* KPM */,
-				4A941CEF1AE5DC25000FA802 /* Util */,
+				4A941CEF1AE5DC25000FA802 /* ARUtil */,
 			);
 			path = SRC;
 			sourceTree = "<group>";
@@ -6477,11 +6524,10 @@
 				4A0F33950E8009F200065B70 /* glStateCache.h */,
 				4A6C5E431794F30300061A08 /* glStateCache2.h */,
 				4AC36D25113E968A00C86F19 /* Eden */,
+				4A91CE8C1F443A11007DD981 /* ARUtil */,
 				4AC6E42613EB226C00291577 /* ios7 */,
 				4A13029A15BDF958003A441C /* AR2 */,
 				4A13029B15BDF958003A441C /* KPM */,
-				4A13029C15BDF958003A441C /* profile.h */,
-				4A13029D15BDF958003A441C /* thread_sub.h */,
 				4AEB26ED1804A82E002290C5 /* ARWrapper */,
 			);
 			path = include;

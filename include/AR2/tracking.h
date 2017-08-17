@@ -47,7 +47,7 @@
 
 #ifndef AR2_TRACKING_H
 #define AR2_TRACKING_H
-#include <thread_sub.h>
+#include <ARUtil/thread_sub.h>
 #include <AR/ar.h>
 #include <AR/icp.h>
 #include <AR2/config.h>

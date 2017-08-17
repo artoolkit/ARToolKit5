@@ -1,5 +1,5 @@
 /*
- *  profile.h
+ *  thread_sub.h
  *  ARToolKit5
  *
  *  Implements a basic client-worker threading system.
@@ -43,8 +43,8 @@
     kato@is.naist.jp   Apr.24 2007
  */
 
-#ifndef THREAD_SUB_H
-#define THREAD_SUB_H
+#ifndef __ARUtil_thread_sub_h__
+#define __ARUtil_thread_sub_h__
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,4 +113,4 @@ int threadGetCPU(void); // Returns the number of online CPUs in the system.
 #ifdef __cplusplus
 }
 #endif
-#endif
+#endif // !__ARUtil_thread_sub_h__

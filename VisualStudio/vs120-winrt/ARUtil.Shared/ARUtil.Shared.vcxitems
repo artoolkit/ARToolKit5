@@ -14,9 +14,17 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Util\profile.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Util\thread_sub.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Util\thread_sub_winrt.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\file_utils.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\ioapi.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\log.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\nftw.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\profile.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\system.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\thread_sub.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\thread_sub_winrt.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\time.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\unzip.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\zip.c" />
       <CompileAsWinRT>true</CompileAsWinRT>
     </ClCompile>
   </ItemGroup>
@@ -24,8 +32,17 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\profile.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\thread_sub.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Util\thread_sub_winrt.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\crypt.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\file_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\ioapi.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\log.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\profile.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\system.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\thread_sub.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\time.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\unzip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\zip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\ftw.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\thread_sub_winrt.h" />
   </ItemGroup>
 </Project>

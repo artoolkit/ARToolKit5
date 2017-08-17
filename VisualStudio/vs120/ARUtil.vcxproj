@@ -270,12 +270,29 @@
     <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\lib\SRC\Util\profile.c" />
-    <ClCompile Include="..\..\lib\SRC\Util\thread_sub.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\file_utils.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\ioapi.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\log.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\nftw.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\profile.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\system.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\thread_sub.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\time.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\unzip.c" />
+    <ClCompile Include="..\..\lib\SRC\ARUtil\zip.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\profile.h" />
-    <ClInclude Include="..\..\include\thread_sub.h" />
+    <ClInclude Include="..\..\include\ARUtil\crypt.h" />
+    <ClInclude Include="..\..\include\ARUtil\file_utils.h" />
+    <ClInclude Include="..\..\include\ARUtil\ioapi.h" />
+    <ClInclude Include="..\..\include\ARUtil\log.h" />
+    <ClInclude Include="..\..\include\ARUtil\profile.h" />
+    <ClInclude Include="..\..\include\ARUtil\system.h" />
+    <ClInclude Include="..\..\include\ARUtil\thread_sub.h" />
+    <ClInclude Include="..\..\include\ARUtil\time.h" />
+    <ClInclude Include="..\..\include\ARUtil\unzip.h" />
+    <ClInclude Include="..\..\include\ARUtil\zip.h" />
+    <ClInclude Include="..\..\lib\SRC\ARUtil\ftw.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

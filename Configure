@@ -50,7 +50,7 @@ MDIR=".                              \
       lib/SRC/AR2                    \
       lib/SRC/ARWrapper              \
       lib/SRC/KPM                    \
-      lib/SRC/Util                   \
+      lib/SRC/ARUtil                 \
       lib/SRC/ARMulti                \
       lib/SRC/Gl                     \
       lib/SRC/Video                  \

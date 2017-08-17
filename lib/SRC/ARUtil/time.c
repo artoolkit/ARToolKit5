@@ -1,6 +1,10 @@
 /*
- *  profile.c
+ *  time.c
  *  ARToolKit5
+ *
+ *  Time-related functions.
+ *
+ *  This file is part of ARToolKit.
  *
  *  ARToolKit is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -26,101 +30,108 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2006-2015 ARToolworks, Inc.
+ *  Copyright 2015-2016 Daqri, LLC.
+ *  Copyright 2007-2015 ARToolworks, Inc.
  *
- *  Author(s): Hirokazu Kato
+ *  Author(s): Hirokazu Kato, Philip Lamb
  *
  */
 
-#ifdef __ANDROID__
-#  include <jni.h>
-#  include <android/log.h>
-#endif
-#include <stdio.h>
+#include <ARUtil/time.h>
 #ifdef _WIN32
 #  include <sys/timeb.h>
 #else
+#  include <time.h>
 #  include <sys/time.h>
 #endif
-#include <profile.h>
 
-#ifdef __ANDROID__
-#  define LOG(...)  __android_log_print(ANDROID_LOG_INFO, "libutil", __VA_ARGS__)
-#  define LOGe(...) __android_log_print(ANDROID_LOG_ERROR, "libutil", __VA_ARGS__)
-#else
-#  define LOG(...)  printf(__VA_ARGS__)
-#  define LOGe(...) fprintf(stderr, __VA_ARGS__)
-#endif
-
-long profTable[MAX_PROF_NUM];
-int  profCount[MAX_PROF_NUM];
-
-static long s;
-static int us, num = -1;
-
-void profileClear(void)
+void         arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec)
 {
-	num = -1;
-}
-
-void profileSet(int n)
-{
-    int i;
 #ifdef _WIN32
     struct _timeb sys_time;
-
+    
     _ftime(&sys_time);
-    if(num != -1) {
-		profTable[num] += ((long)sys_time.time - s) * 1000000L + sys_time.millitm * 1000L - us;
-        profCount[num]++;
-    }
+    if (sec) *sec = (uint64_t)sys_time.times;
+    if (usec) *usec = (uint32_t)sys_time.millitm * 1000u;
 #else
     struct timeval     time;
-
-#  if defined(__linux) || defined(__APPLE__)
+    
+#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
     gettimeofday( &time, NULL );
 #  else
     gettimeofday( &time );
 #  endif
-    if(num != -1) {
-        profTable[num] += (time.tv_sec  - s) * 1000000L + time.tv_usec - us; // Add elapsed microseconds to previously set profile,
-        profCount[num]++; // and count one more measurement.
-    }
+    if (sec) *sec = (uint64_t)time.tv_sec;
+    if (usec) *usec = (uint32_t)time.tv_usec;
 #endif
-    else {
-        for(i = 0; i < MAX_PROF_NUM; i++) {
-            profTable[i] = 0;
-            profCount[i] = 0;
-        }
-    }
-
-#ifdef _WIN32
-    s = (long)sys_time.time;
-    us = sys_time.millitm * 1000L;
-#else
-    s = time.tv_sec;
-    us = time.tv_usec;
-#endif
-    num = n;
 }
 
-void profilePrint(void)
+static long ss = 0;
+static int sms = 0;
+
+double arUtilTimer(void)
 {
-    int i;
-    double sum = 0;
+    double             tt;
+    long               s1;
+    int                s2;
+#ifdef _WIN32
+    struct _timeb sys_time;
 
-    LOG("\n=== PROFILE RESULT ===\n");
-    for(i = 0; i < MAX_PROF_NUM; i++) {
-        sum += profTable[i];
-    }
+    _ftime(&sys_time);
+    s1 = (long)sys_time.time  - ss;
+    s2 = sys_time.millitm - sms;
+#else
+    struct timeval     time;
 
-    for(i = 0; i < MAX_PROF_NUM; i++) {
-        if(profTable[i] == 0) {
-            continue;
-        }
-        LOG("REGION %2d : %6.3lf%% (%lf sec)\n", i,
-                profTable[i] / sum * 100.0, profTable[i] / profCount[i] / 1000000.0);
-    }
+#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
+    gettimeofday( &time, NULL );
+#  else
+    gettimeofday( &time );
+#  endif
+    s1 = time.tv_sec - ss;
+    s2 = time.tv_usec/1000 - sms;
+#endif
+
+    tt = (double)s1 + (double)s2 / 1000.0;
+
+    return( tt );
 }
+
+void arUtilTimerReset(void)
+{
+#ifdef _WIN32
+    struct _timeb sys_time;
+
+    _ftime(&sys_time);
+    ss  = (long)sys_time.time;
+    sms = sys_time.millitm;
+#else
+    struct timeval     time;
+
+#  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
+    gettimeofday( &time, NULL );
+#  else
+    gettimeofday( &time );
+#  endif
+    ss  = time.tv_sec;
+    sms = time.tv_usec / 1000;
+#endif
+}
+
+#ifndef _WINRT
+void arUtilSleep( int msec )
+{
+#ifndef _WIN32
+    struct timespec  req;
+
+    req.tv_sec = 0;
+    req.tv_nsec = msec * 1000000;
+    nanosleep( &req, NULL );
+#else
+	Sleep( msec );
+#endif
+
+    return;
+}
+#endif
 

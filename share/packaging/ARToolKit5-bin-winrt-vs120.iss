@@ -128,8 +128,7 @@ Source: "include\AR2\*"; Components: dev; DestDir: "{app}\include\AR2"; Flags: r
 Source: "include\KPM\*"; Components: dev; DestDir: "{app}\include\KPM"; Flags: recursesubdirs ignoreversion
 Source: "include\ARWrapper\*"; Components: dev; DestDir: "{app}\include\ARWrapper"; Flags: recursesubdirs ignoreversion
 Source: "include\Eden\*"; Components: dev; DestDir: "{app}\include\Eden"; Flags: recursesubdirs ignoreversion
-Source: "include\profile.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
-Source: "include\thread_sub.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
+Source: "include\ARUtil\*"; Components: dev; DestDir: "{app}\include\ARUtil"; Flags: recursesubdirs ignoreversion
 Source: "include\glStateCache.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "include\glStateCache2.h"; Components: dev; DestDir: "{app}\include"; Flags: ignoreversion
 Source: "lib\winrt-wp8_1-arm\AR*"; Components: dev; DestDir: "{app}\lib\winrt-wp8_1-arm"; Flags: ignoreversion
@@ -172,7 +171,7 @@ Source: "lib\SRC\ARICP\*"; Excludes: "Makefile.in"; Components: dev and src; Des
 Source: "lib\SRC\ARMulti\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARMulti"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\AR2\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\AR2"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\KPM\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\KPM"; Flags: recursesubdirs ignoreversion
-Source: "lib\SRC\Util\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Util"; Flags: recursesubdirs ignoreversion
+Source: "lib\SRC\ARUtil\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARUtil"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\ARosg\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARosg"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\ARWrapper\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\ARWrapper"; Flags: recursesubdirs ignoreversion
 Source: "lib\SRC\Eden\*"; Excludes: "Makefile.in"; Components: dev and src; DestDir: "{app}\lib\SRC\Eden"; Flags: recursesubdirs ignoreversion

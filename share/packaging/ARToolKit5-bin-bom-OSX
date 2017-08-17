@@ -7,8 +7,7 @@ include/AR2/
 include/KPM/
 include/ARWrapper/
 include/Eden/
-include/profile.h
-include/thread_sub.h
+include/ARUtil/
 include/glStateCache.h
 include/glStateCache2.h
 include/macosx-universal/
@@ -90,7 +89,7 @@ lib/SRC/VideoQuickTime/
 lib/SRC/VideoQuickTime7/
 lib/SRC/AR2/
 lib/SRC/KPM/
-lib/SRC/Util/
+lib/SRC/ARUtil/
 lib/SRC/Eden/
 
 util/1394/

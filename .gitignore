@@ -169,7 +169,7 @@ android/obj/local/**/libar2.a
 android/obj/local/**/libARWrapper.so
 android/obj/local/**/libeden.a
 android/obj/local/**/libkpm.a
-android/obj/local/**/libutil.a
+android/obj/local/**/libarutil.a
 android/obj/local/**/libc++_shared.so
 android/obj/local/**/libcpufeatures.a
 android/libs/**/libARWrapper.so

@@ -65,7 +65,7 @@
 #  include <curl/curl.h>
 #endif
 #include <AR/ar.h>                  // arParamLoadFromBuffer().
-#include <thread_sub.h>
+#include <ARUtil/thread_sub.h>
 #ifdef __APPLE__
 #  include <sys/types.h>
 #  include <sys/sysctl.h>

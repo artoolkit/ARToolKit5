@@ -35,8 +35,8 @@
  *
  */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef __ARUtil_profile_h__
+#define __ARUtil_profile_h__
 
 #define MAX_PROF_NUM     20
 
@@ -52,4 +52,4 @@ void profilePrint (void);
 }
 #endif
 
-#endif
+#endif // !__ARUtil_profile_h__
