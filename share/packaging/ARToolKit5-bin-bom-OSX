@@ -41,12 +41,6 @@ bin/dispFeatureSet
 bin/checkResolution
 bin/genMarkerSet
 
-share/artoolkit-utils/Data/calibStereoMarkerConfig.dat
-share/artoolkit-utils/Data/camera_para.dat
-share/artoolkit-utils/Data/calib.patt
-share/artoolkit-examples/Data/hiro.patt
-share/artoolkit-examples/Data/kanji.patt
-
 bin/libopencv_calib3d.2.4.6.dylib
 bin/libopencv_core.2.4.6.dylib
 bin/libopencv_flann.2.4.6.dylib

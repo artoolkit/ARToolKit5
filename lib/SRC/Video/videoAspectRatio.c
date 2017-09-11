@@ -33,7 +33,9 @@
  *
  */
 
+#define _GNU_SOURCE   // asprintf()/vasprintf() on Linux.
 #include <AR/video.h>
+#include <stdio.h>
 #include <string.h> // strdup(), asprintf()
 
 struct _ASPECT_RATIOS_ENTRY {
@@ -56,6 +58,7 @@ const static struct _ASPECT_RATIOS_ENTRY aspectRatios[] =
     {16, 9,  AR_VIDEO_ASPECT_RATIO_16_9, "16:9"},  // 1.778: 640x360, 960x540, 1024x576, 1280x720 (720p), 1600x900, 1920x1080 (1080p)
     {9,  5,  AR_VIDEO_ASPECT_RATIO_9_5, "9:5"},    // 1.8:   864x480
     {17, 9,  AR_VIDEO_ASPECT_RATIO_17_9, "17:9"},  // 1.889: 2040x1080
+    {21, 9,  AR_VIDEO_ASPECT_RATIO_21_9, "21:9"},  // 2.333: 2560x1080
     
     // Some values that are close to standard ratios.
     {683, 384, AR_VIDEO_ASPECT_RATIO_16_9, "16:9"}, // ~1.778: 1366x768
@@ -67,7 +70,9 @@ const static struct _ASPECT_RATIOS_ENTRY aspectRatios[] =
     {30,  23,  AR_VIDEO_ASPECT_RATIO_11_9, "11:9"}, // ~1.222: 592x480, 480x368
     {53,  30,  AR_VIDEO_ASPECT_RATIO_16_9, "16:9"}, // ~1.767: 848x480
     {37,  30,  AR_VIDEO_ASPECT_RATIO_11_9, "11:9"}, // ~1.233: 592x480
-    {192, 145, AR_VIDEO_ASPECT_RATIO_4_3, "4:3"}    // ~1.324: 1152x870
+    {192, 145, AR_VIDEO_ASPECT_RATIO_4_3, "4:3"},   // ~1.324: 1152x870
+    {640, 427, AR_VIDEO_ASPECT_RATIO_3_2, "3:2"},   // ~1.499: 1280x854
+    {427, 240, AR_VIDEO_ASPECT_RATIO_16_9, "16:9"}  // ~1.779: 854x480
 };
 #define _ASPECT_RATIOS_COUNT (sizeof(aspectRatios)/sizeof(aspectRatios[0]))
 
@@ -123,10 +128,11 @@ char *arVideoUtilFindAspectRatioName(int w, int h)
     len = _scprintf(format, w, h);
     if (len >= 0) {
         ret = (char *)malloc((len + 1)*sizeof(char)); // +1 for nul-term.
+        if (!ret) return (NULL);
         sprintf(ret, format, w, h);
     }
 #else
-    asprintf(&ret, format, w, h);
+    if (asprintf(&ret, format, w, h) == -1) return (NULL);
 #endif
     return (ret);
 }

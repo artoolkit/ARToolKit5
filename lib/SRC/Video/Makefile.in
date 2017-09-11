@@ -59,16 +59,21 @@ INCLUDE= ${INC_DIR}/AR/config.h       \
          ${INC_DIR}/AR/ar.h           \
          ${INC_DIR}/AR/videoConfig.h  \
          ${INC_DIR}/AR/videoLuma.h    \
-         ${INC_DIR}/AR/video.h
+         ${INC_DIR}/AR/videoRGB.h     \
+         ${INC_DIR}/AR/video.h        \
+         cparamSearch.h               \
+         nxjson.h                     \
 
 #
 #   compilation control
 #
 LIBOBJS= ${LIB}(video.o)  \
 	 ${LIB}(video2.o) \
-	 ${LIB}(videoSaveImage.o) \
 	 ${LIB}(videoAspectRatio.o) \
      ${LIB}(videoLuma.o) \
+     ${LIB}(videoRGB.o) \
+	 ${LIB}(videoSaveImage.o) \
+     ${LIB}(cparamSearch.o) \
 
 all:		${LIBOBJS}
 

@@ -48,7 +48,7 @@
 
 //#import <Foundation/Foundation.h> // Using precompiled header.
 #import "VEObject.h"
-#import <AR/sys/MovieVideo.h>
+#import "../../lib/SRC/Video/AVFoundation/MovieVideo.h"
 #import <AR/gsub_es.h>
 
 @interface VEObjectMovie : VEObject {

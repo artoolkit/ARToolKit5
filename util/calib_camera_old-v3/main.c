@@ -50,6 +50,7 @@
 #include <AR/ar.h>
 #include <AR/video.h>
 #include <AR/gsub.h>
+#include <ARUtil/time.h>
 #include "calib_camera.h"
 
 // Make sure that required OpenGL constant definitions are available at compile-time.

@@ -62,7 +62,6 @@
 #import "ARView.h"
 #import "../ARAppCore/ARMarker.h"
 #import "../ARAppCore/VirtualEnvironment.h"
-#import <AR/sys/CameraVideo.h>
 
 #import <pthread.h>
 #import <ARUtil/thread_sub.h> 
@@ -71,12 +70,11 @@
 
 #define PAGES_MAX 10
 
-@interface ARViewController : UIViewController <CameraVideoTookPictureDelegate> {
+@interface ARViewController : UIViewController {
 }
 
 - (IBAction)start;
 - (IBAction)stop;
-- (void) processFrame:(AR2VideoBufferT *)buffer;
 
 // Markers.
 @property (readonly) NSMutableArray *markers;

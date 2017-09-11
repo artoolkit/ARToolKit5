@@ -59,17 +59,15 @@
 #include <AR/ar.h>
 #include <AR/video.h>
 #include <AR/gsub_es2.h>
-#import <AR/sys/CameraVideo.h>
 #import "ARView.h"
 #import "../ARAppCore/EAGLView.h"
 
 @class ARView;
-@interface ARViewController : UIViewController <CameraVideoTookPictureDelegate, EAGLViewTookSnapshotDelegate, ARViewTouchDelegate> {
+@interface ARViewController : UIViewController <EAGLViewTookSnapshotDelegate, ARViewTouchDelegate> {
 }
 
 - (IBAction)start;
 - (IBAction)stop;
-- (void) processFrame:(AR2VideoBufferT *)buffer;
 - (IBAction)switchCamerasButtonPressed;
 - (IBAction)changeResolutionButtonPressed;
 - (IBAction)cameraButtonPressed;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0830"
    version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -57,8 +57,8 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-width=640 -height=480"
-            isEnabled = "NO">
+            value = "-format=BGRA"
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>

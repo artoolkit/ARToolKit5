@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0830"
    version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -57,7 +57,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-device=QUICKTIME -movie=&quot;file:///Users/phil/Documents/Development/Projects/ARToolKit5_5/bin/simpleMovie.app/Contents/Resources/Data/sample.mov&quot; -loop"
+            value = "-module=AVFoundation -movie=&quot;Data/sample.mov&quot; -loop"
             isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>

@@ -74,6 +74,7 @@
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <ARUtil/time.h>
 #include "ARMarkerSquare.h"
 #include "VirtualEnvironment2.h"
 
@@ -224,16 +225,14 @@ int main(int argc, char** argv)
 	char    glutGamemode[32] = "";
     char   *vconfL = NULL;
     char   *vconfR = NULL;
-    char   *cparaL = NULL;
-    char   *cparaR = NULL;
-    char    cparaLDefault[] = "../share/artoolkit-examples/Data/cparaL.dat";
-    char    cparaRDefault[] = "../share/artoolkit-examples/Data/cparaR.dat";
-    char    transL2RDefault[] = "../share/artoolkit-examples/Data/transL2R.dat";
+    char   *cparam_nameL = NULL;
+    char   *cparam_nameR = NULL;
+    char    transL2RDefault[] = "Data/transL2R.dat";
     
     int     i, j;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data/markers.dat";
-	const char objectDataFilename[] = "../share/artoolkit-examples/Data/objects.dat";
+    const char markerConfigDataFilename[] = "Data/markers.dat";
+	const char objectDataFilename[] = "Data/objects.dat";
 	
     //
 	// Process command-line options.
@@ -256,11 +255,11 @@ int main(int argc, char** argv)
                 gotTwoPartOption = TRUE;
             } else if (strcmp(argv[i], "--cparaL") == 0) {
                 i++;
-                cparaL = argv[i];
+                cparam_nameL = argv[i];
                 gotTwoPartOption = TRUE;
             } else if (strcmp(argv[i], "--cparaR") == 0) {
                 i++;
-                cparaR = argv[i];
+                cparam_nameR = argv[i];
                 gotTwoPartOption = TRUE;
             } else if (strcmp(argv[i], "--stereo") == 0) {
                 i++;
@@ -313,9 +312,9 @@ int main(int argc, char** argv)
             if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-help") == 0 || strcmp(argv[i], "-h") == 0) {
                 usage(argv[0]);
             } else if( strncmp(argv[i], "-cparaL=", 8) == 0 ) {
-                cparaL = &(argv[i][8]);
+                cparam_nameL = &(argv[i][8]);
             } else if( strncmp(argv[i], "-cparaR=", 8) == 0 ) {
-                cparaR = &(argv[i][8]);
+                cparam_nameR = &(argv[i][8]);
             } else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "-v") == 0) {
                 ARLOG("%s version %s\n", argv[0], AR_HEADER_VERSION_STRING);
                 exit(0);
@@ -338,11 +337,11 @@ int main(int argc, char** argv)
 	// Video setup.
 	//
     
-	if (!setupCamera((cparaL ? cparaL : cparaLDefault), vconfL, &gVidL, &gCparamLTL)) {
+	if (!setupCamera(cparam_nameL, vconfL, &gVidL, &gCparamLTL)) {
 		ARLOGe("main(): Unable to set up AR camera.\n");
 		exit(-1);
 	}
-	if (!setupCamera((cparaR ? cparaR : cparaRDefault), vconfR, &gVidR, &gCparamLTR)) {
+	if (!setupCamera(cparam_nameR, vconfR, &gVidR, &gCparamLTR)) {
 		ARLOGe("main(): Unable to set up AR camera.\n");
 		exit(-1);
 	}
@@ -624,10 +623,15 @@ static int setupCamera(const char *cparam_name, char *vconf, AR2VideoParamT **vi
 	}
 	
 	// Load the camera parameters, resize for the window and init.
-    if (arParamLoad(cparam_name, 1, &cparam) < 0) {
-		ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
-        ar2VideoClose(*vid_p);
-        return (FALSE);
+	if (cparam_name && *cparam_name) {
+        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
+		    ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
+            arVideoClose();
+            return (FALSE);
+        }
+    } else {
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);

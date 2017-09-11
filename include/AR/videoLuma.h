@@ -39,6 +39,10 @@
 
 #include <AR/ar.h>
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 typedef struct _ARVideoLumaInfo ARVideoLumaInfo;
 
 ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat);
@@ -47,4 +51,7 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
 
 int arVideoLumaFinal(ARVideoLumaInfo **vli_p);
 
+#ifdef  __cplusplus
+}
+#endif
 #endif // !AR_VIDEO_LUMA_H

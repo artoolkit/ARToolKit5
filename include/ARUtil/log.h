@@ -86,7 +86,7 @@ enum {
     @brief   Sets the severity level. Log messages below the set severity level are not logged.
 	@details
         All calls to ARToolKit's logging facility include a "log level" parameter, which specifies
-        the severity of the log message. (The severities are defined in &lt;AR6/ARUtil/log.h&gt;.)
+        the severity of the log message. (The severities are defined in &lt;ARUtil/log.h&gt;.)
         Setting this global allows for filtering of log messages. All log messages lower than
         the set level will not be logged by arLog().
         Note that debug log messages created using the ARLOGd() macro will be logged only in
@@ -105,7 +105,7 @@ extern int arLogLevel;
         Newlines are not automatically appended to log output.
     @param      tag A tag to supply to an OS-specific logging function to specify the source
         of the error message. May be NULL, in which case "libAR" will be used.
-    @param      logLevel The severity of the log message. Defined in %lt;AR6/ARUtil/log.h&gt;.
+    @param      logLevel The severity of the log message. Defined in %lt;ARUtil/log.h&gt;.
         Log output is written to the logging facility provided the logLevel meets or
         exceeds the minimum level specified in global arLogLevel.
     @param      format Log format string, in the form of printf().

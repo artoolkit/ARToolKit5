@@ -73,6 +73,7 @@ typedef unsigned char bool;
 #include <AR/param.h>			// arParamDisp(), arParamSaveOptical()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <ARUtil/time.h>
 #include "calc_optical.h"
 #include "getInput.h"
 #include <Eden/EdenGLFont.h>
@@ -250,11 +251,11 @@ int main(int argc, char** argv)
 {
 	char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
+    char    cparaDefault[] = "../share/calib_optical/Data/camera_para.dat";
     char   *cpara = NULL;
     int     i;
     int     gotTwoPartOption;
-	char    patt_name[]  = "../share/artoolkit-utils/Data/calib.patt";
+	char    patt_name[]  = "../share/calib_optical/Data/calib.patt";
 	
     //
 	// Process command-line options.

@@ -114,7 +114,7 @@ static int                  initialization_extraction_level = -1;
 static int                  background = 0;
 static char                 logfile[MAXPATHLEN] = "";
 static char                 exitcodefile[MAXPATHLEN] = "";
-static char                 exitcode = 255;
+static char                 exitcode = -1;
 #define EXIT(c) {exitcode=c;exit(c);}
 
 

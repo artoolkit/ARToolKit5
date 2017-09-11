@@ -44,7 +44,7 @@
 #include <AR2/util.h>
 
 static char                *cpara = NULL;
-static char                 cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
+static char                 cparaDefault[] = "../share/checkResolution/Data/camera_para.dat";
 static int                  xsize = -1;
 static int                  ysize = -1;
 

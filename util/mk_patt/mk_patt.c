@@ -53,24 +53,23 @@
 #include <AR/gsub.h>
 #include <AR/video.h>
 #include <AR/ar.h>
+#include <ARUtil/time.h>
 #ifdef _WIN32
 #  define MAXPATHLEN MAX_PATH
 #else
 #  include <sys/param.h> // MAXPATHLEN
 #endif
 
-#if defined(AR_DEFAULT_INPUT_SGI)
-#  define  VCONF  "-size=FULL"
-#elif defined(AR_DEFAULT_INPUT_V4L)
+#if defined(ARVIDEO_INPUT_DEFAULT_V4L2)
 #  define  VCONF  "-width=640 -height=480"
-#elif defined(AR_DEFAULT_INPUT_1394CAM)
-#  if AR_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
-#    if defined(AR_INPUT_1394CAM_USE_FLEA_XGA)
+#elif defined(ARVIDEO_INPUT_DEFAULT_1394)
+#  if ARVIDEO_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
+#    if defined(ARVIDEO_INPUT_1394CAM_USE_FLEA_XGA)
 #      define  VCONF  "-mode=1024x768_MONO"
 #    else
 #      define  VCONF  "-mode=640x480_MONO"
 #    endif
-#  elif defined(AR_INPUT_1394CAM_USE_DRAGONFLY)
+#  elif defined(ARVIDEO_INPUT_1394CAM_USE_DRAGONFLY)
 #    define  VCONF  "-mode=640x480_MONO_COLOR"
 #  else
 #    define  VCONF  "-mode=640x480_YUV411"
@@ -143,7 +142,7 @@ static void init(int argc, char *argv[])
     ARParam      wparam;
     ARGViewport  viewport;
     char        *vconf = NULL;
-    char         cparaDefault[] = "../share/artoolkit-utils/Data/camera_para.dat";
+    char         cparaDefault[] = "../share/mk_patt/Data/camera_para.dat";
     char        *cpara = NULL;
     char         buf[MAXPATHLEN];
     int          xsize, ysize;

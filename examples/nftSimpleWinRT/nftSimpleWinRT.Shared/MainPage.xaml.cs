@@ -185,7 +185,7 @@ namespace nftSimpleWinRT
             // Load video config
             var cameraCalibrationData = await PathIO.ReadBufferAsync("ms-appx:///data/camera_para.dat");
             var desiredVideoCameraPosition = await Helper.GetDefaultVideoDeviceLocation();
-            var videoConfiguration0 = string.Format("-device=WinMC -width={0} -height={1} -format=BGRA -position={2}", DesiredVideoWidth, DesiredVideoHeight, desiredVideoCameraPosition);
+            var videoConfiguration0 = string.Format("-module=WinMC -width={0} -height={1} -format=BGRA -position={2}", DesiredVideoWidth, DesiredVideoHeight, desiredVideoCameraPosition);
 
             // Start capturing
             _isRunning = _arWrapper.arwStartRunningB(videoConfiguration0, cameraCalibrationData.ToArray(), NearPlane, FarPlane);

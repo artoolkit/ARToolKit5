@@ -62,14 +62,12 @@
 #import "ARView.h"
 #import "../ARAppCore/ARMarker.h"
 #import "../ARAppCore/VirtualEnvironment.h"
-#import <AR/sys/CameraVideo.h>
 
-@interface ARViewController : UIViewController <CameraVideoTookPictureDelegate> {
+@interface ARViewController : UIViewController {
 }
 
 - (IBAction)start;
 - (IBAction)stop;
-- (void) processFrame:(AR2VideoBufferT *)buffer;
 
 @property (readonly) ARView *glView;
 @property (readonly) NSMutableArray *markers;

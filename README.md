@@ -86,8 +86,8 @@ simpleLite can be opened by double-clicking its icon in the ARToolKit5\bin direc
 simpleLite can be launched from a terminal window thus:
 
 - First, set the environment variable ARTOOLKIT5_VCONF to indicate the video device to be used; for example, to use a V4L2 camera, do:
-`export ARTOOLKIT5_VCONF="-device=LinuxV4L2"`
-or to use a camera driven via GStreamer, do `export ARTOOLKIT5_VCONF="-device=GStreamer"` 
+`export ARTOOLKIT5_VCONF="-module=LinuxV4L2"`
+or to use a camera driven via GStreamer, do `export ARTOOLKIT5_VCONF="-module=GStreamer"` 
 - then cd to the bin directory and do `./simpleLite`
 		
 		

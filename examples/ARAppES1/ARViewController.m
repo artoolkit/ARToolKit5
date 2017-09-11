@@ -49,6 +49,7 @@
 #import "ARViewController.h"
 #import "ARView.h"
 #import <AR/gsub_es.h>
+#import <ARUtil/time.h>
 #import <AudioToolbox/AudioToolbox.h> // SystemSoundID, AudioServicesCreateSystemSoundID()
 
 #define VIEW_SCALEFACTOR        1.0f
@@ -159,8 +160,8 @@
 - (void)startRunLoop
 {
     if (!running) {
-        // After starting the video, new frames will invoke cameraVideoTookPicture:userData:.
-        if (ar2VideoCapStart(gVid) != 0) {
+        // After starting the video, new frames will invoke frameReadyCallback.
+        if (ar2VideoCapStartAsync(gVid, frameReadyCallback, self) != 0) {
             NSLog(@"Error: Unable to begin camera data capture.\n");
             [self stop];
             return;
@@ -214,7 +215,7 @@ static void startCallback(void *userData);
 - (IBAction)start
 {
     // Open the video path.
-    char *vconf = ""; // See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_DEVICE_IPHONE
+    char *vconf = ""; // See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_MODULE_IPHONE
     if (!(gVid = ar2VideoOpenAsync(vconf, startCallback, self))) {
         NSLog(@"Error: Unable to open connection to camera.\n");
         [self stop];
@@ -251,25 +252,20 @@ static void startCallback(void *userData)
     // 3D drawing.
     BOOL flipV = FALSE;
     int frontCamera;
-    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_IOS_CAMERA_POSITION, &frontCamera) >= 0) {
-        if (frontCamera == AR_VIDEO_IOS_CAMERA_POSITION_FRONT) flipV = TRUE;
+    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_CAMERA_POSITION, &frontCamera) >= 0) {
+        if (frontCamera == AR_VIDEO_AVFOUNDATION_CAMERA_POSITION_FRONT) flipV = TRUE;
     }
 
     // Tell arVideo what the typical focal distance will be. Note that this does NOT
     // change the actual focus, but on devices with non-fixed focus, it lets arVideo
     // choose a better set of camera parameters.
-    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_IOS_FOCUS, AR_VIDEO_IOS_FOCUS_0_3M); // Default is 0.3 metres. See <AR/sys/videoiPhone.h> for allowable values.
+    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_FOCUS_PRESET, AR_VIDEO_AVFOUNDATION_FOCUS_0_3M); // Default is 0.3 metres. See <AR/video.h> for allowable values.
     
     // Load the camera parameters, resize for the window and init.
     ARParam cparam;
     if (ar2VideoGetCParam(gVid, &cparam) < 0) {
-        char cparam_name[] = "Data2/camera_para.dat";
-        NSLog(@"Unable to automatically determine camera parameters. Using default.\n");
-        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
-            NSLog(@"Error: Unable to load parameter file %s for camera.\n", cparam_name);
-            [self stop];
-            return;
-        }
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        NSLog(@"Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
 #ifdef DEBUG
@@ -286,6 +282,7 @@ static void startCallback(void *userData)
         [self stop];
         return;
     }
+    // The camera will be started by -startRunLoop.
 
     // AR init.
     if ((gARHandle = arCreateHandle(gCparamLT)) == NULL) {
@@ -304,20 +301,7 @@ static void startCallback(void *userData)
         return;
     }
     
-    // libARvideo on iPhone uses an underlying class called CameraVideo. Here, we
-    // access the instance of this class to get/set some special types of information.
-    CameraVideo *cameraVideo = ar2VideoGetNativeVideoInstanceiPhone(gVid->device.iPhone);
-    if (!cameraVideo) {
-        NSLog(@"Error: Unable to set up AR camera: missing CameraVideo instance.\n");
-        [self stop];
-        return;
-    }
-    
-    // The camera will be started by -startRunLoop.
-    [cameraVideo setTookPictureDelegate:self];
-    [cameraVideo setTookPictureDelegateUserData:NULL];
-    
-    // Other ARToolKit setup. 
+    // Other ARToolKit setup.
     arSetMarkerExtractionMode(gARHandle, AR_USE_TRACKING_HISTORY_V2);
     //arSetMarkerExtractionMode(gARHandle, AR_NOUSE_TRACKING_HISTORY);
     //arSetLabelingThreshMode(gARHandle, AR_LABELING_THRESH_MODE_MANUAL); // Uncomment to use  manual thresholding.
@@ -383,17 +367,20 @@ static void startCallback(void *userData)
     [self startRunLoop];
 }
 
-- (void) cameraVideoTookPicture:(id)sender userData:(void *)data
+void frameReadyCallback(void *userdata)
 {
-    AR2VideoBufferT *buffer = ar2VideoGetImage(gVid);
-    if (buffer) [self processFrame:buffer];
+    if (!userdata) return;
+    ARViewController *vc = (ARViewController *)userdata;
+    [vc mainLoop];
 }
 
-- (void) processFrame:(AR2VideoBufferT *)buffer
+- (void) mainLoop
 {
     ARdouble err;
     int j, k;
-
+    
+    // Request a video frame.
+    AR2VideoBufferT *buffer = ar2VideoGetImage(gVid);
     if (buffer) {
         
         // Upload the frame to OpenGL.

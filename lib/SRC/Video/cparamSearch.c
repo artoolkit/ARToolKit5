@@ -35,10 +35,11 @@
  *
  */
 
+#define _GNU_SOURCE   // asprintf()/vasprintf() on Linux.
+
 #include "cparamSearch.h"
 
 #if USE_CPARAM_SEARCH
-
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -46,33 +47,22 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/param.h> // MAXPATHLEN
-#include <sys/stat.h> // struct stat, stat(), mkdir()
 #include <math.h> // log2f(), fabsf()
 #include <unistd.h> // unlink()
-
-#ifdef __OBJC__
-#  import <UIKit/UIDevice.h>
-#endif
+#include <float.h> // FLT_MAX
 
 #ifdef ANDROID
-#  include "../VideoAndroid/android_os_build_codes.h"
 #  define LOG2F(x) (logf(x)/0.6931472f) // 0.6931472f = logf(2.0f)
-#  include "../VideoAndroid/sqlite3.h"
-#  include <curl.h>
+#  include "Android/sqlite3.h"
 #else
 #  define LOG2F(x) log2f(x)
 #  include <sqlite3.h>
-#  include <curl/curl.h>
 #endif
+#include <curl/curl.h>
 #include <AR/ar.h>                  // arParamLoadFromBuffer().
 #include <ARUtil/thread_sub.h>
-#ifdef __APPLE__
-#  include <sys/types.h>
-#  include <sys/sysctl.h>
-#  if TARGET_OS_IPHONE
-#    include "../VideoiPhone/cpuInfo.h"
-#  endif
-#endif
+#include <ARUtil/system.h>
+#include <ARUtil/file_utils.h>
 
 #include "nxjson.h"
 
@@ -85,11 +75,10 @@
 #define CACHE_TIME 31557600L // How long to keep values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
 #define CACHE_TIME_FALLBACK 1209600L // How long to keep fallback values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
 #define CACHE_FLUSH_INTERVAL 86400L // How many seconds between checks in which expired cache entries are flushed.
-#define SEARCH_POST_URL "https://omega.artoolworks.com/app/calib_camera/download.php"
+#define SEARCH_POST_URL "https://calibration.artoolkit.org/app/calib_camera/download.php"
 #define SEARCH_TOKEN_LENGTH 16
-#define SEARCH_TOKEN {0x32, 0x57, 0x5a, 0x6f, 0x69, 0xa4, 0x11, 0x5a, 0x25, 0x49, 0xae, 0x55, 0x6b, 0xd2, 0x2a, 0xda}
+#define SEARCH_TOKEN {0x05, 0x8a, 0x4b, 0xa0, 0xdb, 0xa3, 0x3b, 0xa3, 0xa7, 0xe3, 0xf5, 0x8d, 0xd3, 0xbf, 0x49, 0x40} // `echo -n 'ARToolKit.Rocks' | md5sum`
 #define RECEIVE_HTTP_BUFSIZE 65536 // Max. 64k.
-
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
@@ -132,14 +121,6 @@ static int internetState = -1;
 
 static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle);
 
-// Test for existence of regular file like 'test -f [dir/]file'.
-// Returns 1 if file exists, 0 if not, or -1 in case of error and the error code in 'errno'.
-static int test_f(const char *file, const char *dir);
-
-// Copy a single file (with overwriting in case of target file already existing) like 'cp -f source_file target_file'.
-// Returns 0 for success, >0 if an error occurs.
-static int cp_f(const char *source_file, const char *target_file);
-
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
@@ -179,92 +160,12 @@ CPARAM_SEARCH_STATE cparamSearch(const char *device_id, int camera_index, int ca
 
 //--
 
-static int test_f(const char *file, const char *dir)
-{
-    char *path;
-    struct stat statResult;
-    int ret;
-    
-    if (!file) return (0);
-    
-    if (dir) {
-        path = (char *)malloc((strlen(dir) + 1 + strlen(file) + 1) * sizeof(char)); // +1 for '/', +1 for '\0'.
-        sprintf(path, "%s/%s", dir, file);
-    } else {
-        path = (char *)file;
-    }
-    
-    if (!stat(path, &statResult)) {
-    	// Something exists at path. Check that it's a file.
-    	if (!(statResult.st_mode & S_IFREG)) {
-    		errno = EEXIST; // Something other than a file exists.
-    		ret = -1;
-    	} else {
-            ret = 1;
-        }
-    } else {
-        if (errno != ENOENT) {
-            // Some error other than "not found" occurred. Fail.
-            ret = -1;
-        } else {
-            ret = 0;
-        }
-    }
-    
-    if (dir) free(path);
-    return (ret);
-}
-
-static int cp_f(const char *source_file, const char *target_file)
-{
-    FILE *fps;
-    FILE *fpt;
-#define BUFSIZE 16384 // 16k.
-    unsigned char *buf;
-    size_t count;
-    int ret;
-    
-    if (!source_file || !target_file) {
-        errno = EINVAL;
-        return (-1);
-    }
-    fps = fopen(source_file, "rb");
-    if (!fps) return (-1);
-    fpt = fopen(target_file, "wb");
-    if (!fpt) {
-        fclose(fps);
-        return (-1);
-    }
-    buf = (unsigned char *)malloc(BUFSIZE);
-    if (!buf) {
-        fclose(fpt);
-        fclose(fps);
-        return (-1);
-    }
-    ret = 0;
-    do {
-        count = fread(buf, 1, BUFSIZE, fps);
-        if (count < BUFSIZE && ferror(fps)) {
-            ret = -1;
-            break;
-        }
-        if (fwrite(buf, 1, count, fpt) < count) {
-            ret = -1;
-            break;
-        }
-    } while (count == BUFSIZE);
-    free(buf);
-    fclose(fpt);
-    fclose(fps);
-    return (ret);
-}
-
 static void reportSQLite3Err(sqlite3 *db)
 {
     ARLOGe("sqlite3 error: %s (%d).\n", sqlite3_errmsg(db), sqlite3_errcode(db));
 }
 
-static sqlite3 *openCacheDB(const char *basePath, const char *dbPath, const char *initDBPath, bool reset)
+static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const char *initDBBasePath, const char *initDBPath, bool reset)
 {
     char *dbPath0 = NULL;
     char *initDBPath0 = NULL;
@@ -275,14 +176,18 @@ static sqlite3 *openCacheDB(const char *basePath, const char *dbPath, const char
     bool copyOrCreate;
     
     // Form absolute paths if required.
-    if (basePath && basePath[0]) {
-        asprintf(&dbPath0, "%s/%s", basePath, dbPath);
-        asprintf(&initDBPath0, "%s/%s", basePath, initDBPath);
+    if (dbBasePath && dbBasePath[0]) {
+        asprintf(&dbPath0, "%s/%s", dbBasePath, dbPath);
     } else {
         dbPath0 = strdup(dbPath);
+    }
+    if (initDBBasePath && initDBBasePath[0]) {
+        asprintf(&initDBPath0, "%s/%s", initDBBasePath, initDBPath);
+    } else {
         initDBPath0 = strdup(initDBPath);
     }
     if (!dbPath0 || !initDBPath0) goto done;
+    ARLOGd("dbPath0 = '%s', initDBPath0 = '%s'.\n", dbPath0, initDBPath0);
     
     // Check if we already have a cache database.
     copyOrCreate = true;
@@ -306,6 +211,25 @@ static sqlite3 *openCacheDB(const char *basePath, const char *dbPath, const char
     
     if (copyOrCreate) {
         // No current database exists. Need to copy initial or create new.
+        
+        if (dbBasePath) {
+            // First, ensure that we have a directory to put it in.
+            int dbBasePathExists = test_d(dbBasePath);
+            if (dbBasePathExists == -1) {
+                // Some error other than "not found" occurred. Fail.
+                ARLOGe("Error looking for cache directory '%s'.\n", dbBasePath);
+                ARLOGperror(NULL);
+                goto done;
+            } else if (!dbBasePathExists) {
+                // Create the directory.
+                if (mkdir_p(dbBasePath) == -1) {
+                    ARLOGe("Error creating cache directory '%s'.\n", dbBasePath);
+                    ARLOGperror(NULL);
+                    goto done;
+                }
+            }
+        }
+
         // Check if we have an initial database to copy over.
         err = test_f(initDBPath0, NULL);
         if (err < 0) {
@@ -320,6 +244,7 @@ static sqlite3 *openCacheDB(const char *basePath, const char *dbPath, const char
                 ARLOGperror(NULL);
                 goto done;
             }
+            ARLOGi("Initialising camera parameters database from '%s'.\n", initDBPath0);
             copyOrCreate = false;
         }
     }
@@ -332,6 +257,7 @@ static sqlite3 *openCacheDB(const char *basePath, const char *dbPath, const char
     }
     
     if (copyOrCreate) {
+        ARLOGi("Created new camera parameters database.\n");
         // Create the table and columns needed.
         const char createTableSQL[] = "CREATE TABLE cache(device_id TEXT NOT NULL, camera_index INTEGER NOT NULL, camera_width INTEGER NOT NULL, camera_height INTEGER NOT NULL, aspect_ratio TEXT NOT NULL, focal_length REAL, camera_para_base64 TEXT NOT NULL, expires INTEGER);"; // Use default primary key ('rowid').
         sqliteErr = sqlite3_prepare_v2(db, createTableSQL, sizeof(createTableSQL), &stmt, NULL);
@@ -362,7 +288,7 @@ done:
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-int cparamSearchInit(const char *cacheDir, int resetCache)
+int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCache)
 {
     // CURL init.
     if (curl_global_init(CURL_GLOBAL_DEFAULT) != CURLE_OK) {
@@ -371,43 +297,13 @@ int cparamSearchInit(const char *cacheDir, int resetCache)
     }
 
     // Init OS fields.    
-#if defined(__APPLE__) // iOS and OS X.
-#  if TARGET_OS_IPHONE
-    os_name = strdup("ios");
-    os_version = strdup([[[UIDevice currentDevice] systemVersion] UTF8String]);
-    os_arch = strdup(cpuTypeName());
-#  else
-    os_name = strdup("osx");
-    SInt32 versMaj, versMin, versBugFix;
-    Gestalt(gestaltSystemVersionMajor, &versMaj);
-    Gestalt(gestaltSystemVersionMinor, &versMin);
-    Gestalt(gestaltSystemVersionBugFix, &versBugFix);
-    asprintf(os_version, "%d.%d.%d", versMaj, versMin, versBugFix);
-    os_arch = arUtilGetMachineType();
-#  endif
-#elif defined(ANDROID) // Android
-    os_name = strdup("android");
-    char os[PROP_VALUE_MAX];
-    __system_property_get(ANDROID_OS_BUILD_VERSION_RELEASE, os);
-    os_version = strdup(os);
-    __system_property_get(ANDROID_OS_BUILD_CPU_ABI, os);
-    os_arch = strdup(os);
-#elif defined(_WIN32) // Windows.
-    os_name = strdup("windows");
-    os_version = strdup("unknown");
-    os_arch = arUtilGetMachineType();
-#elif defined(__linux) // Linux.
-    os_name = strdup("linux");
-    os_version = strdup("unknown");
-    os_arch = arUtilGetMachineType();
-#else // Other.
-    os_name = strdup("unknown");
-    os_version = strdup("unknown");
-    os_arch = strdup("unknown");
-#endif
+    os_name = arUtilGetOSName();
+    os_version = arUtilGetOSVersion();
+    os_arch = arUtilGetCPUName();
+    ARLOGd("cparamSearchInit(): os_name = '%s', os_version = '%s', os_arch = '%s'.\n", os_name, os_version, os_arch);
 
     // Open cache DB.
-    cacheDB = openCacheDB(cacheDir, CACHE_DB_NAME, CACHE_INIT_DB_NAME, (bool)resetCache);
+    cacheDB = openCacheDB(cacheDir, CACHE_DB_NAME, cacheInitDir, CACHE_INIT_DB_NAME, (bool)resetCache);
     if (!cacheDB) {
     	ARLOGe("Unable to open cache database.\n");
         goto bail;
@@ -551,6 +447,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
 	char curlErrorBuf[CURL_ERROR_SIZE];
     
     time_t nowTime;
+    bool timeSet = false;
     
     char *SQL;
     sqlite3_stmt *stmt;
@@ -571,9 +468,10 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
         while (searchData) {
             
             nowTime = time(NULL);
+            timeSet = true;
             result = CPARAM_SEARCH_STATE_IN_PROGRESS;
             
-            ARLOG("cparamSearch beginning search for %s, camera %d, aspect ratio %s.\n", searchData->device_id, searchData->camera_index, searchData->aspect_ratio);
+            ARLOGi("cparamSearch beginning search for %s, camera %d, aspect ratio %s.\n", searchData->device_id, searchData->camera_index, searchData->aspect_ratio);
             // Let observer know that we've started.
             if (searchData->callback) (*searchData->callback)(result, 0.0f, NULL, searchData->userdata);
             
@@ -634,7 +532,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                         if (sizeRatio < bestSizeRatio || (sizeRatio == bestSizeRatio && focalLengthRatio < bestFocalLengthRatio)) {
                                             searchData->camera_para = decodedCparam;             
                                             result = CPARAM_SEARCH_STATE_OK;
-                                            ARLOG("Matched cached camera calibration record (%dx%d, focal length %.2f).\n", camera_width, camera_height, focal_length);
+                                            ARLOGi("Matched cached camera calibration record (%dx%d, focal length %.2f).\n", camera_width, camera_height, focal_length);
                                             // Take note of sizeRatio and focalLengthRatio.
                                             bestSizeRatio = sizeRatio;
                                             bestFocalLengthRatio = focalLengthRatio;
@@ -775,7 +673,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                         float bestSizeRatio = INFINITY;
                                         float bestFocalLengthRatio = INFINITY;
                                         
-                                        ARLOG("Fetched %d camera calibration records from online database.\n", records->length);
+                                        ARLOGi("Fetched %d camera calibration records from online database.\n", records->length);
                                         for (i = 0; i < records->length; i++) {
                                             // Get a record.
                                             const nx_json *record = nx_json_item(records, i);
@@ -813,7 +711,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                         if (sizeRatio < bestSizeRatio || (sizeRatio == bestSizeRatio && focalLengthRatio < bestFocalLengthRatio)) {
                                                             searchData->camera_para = decodedCparam;
                                                             result = CPARAM_SEARCH_STATE_OK;
-                                                            ARLOG("Matched fetched camera calibration record (%dx%d, %.2f).\n", camera_width, camera_height, focal_length);
+                                                            ARLOGi("Matched fetched camera calibration record (%dx%d, %.2f).\n", camera_width, camera_height, focal_length);
                                                             // Take note of sizeRatio and focalLengthRatio.
                                                             bestSizeRatio = sizeRatio;
                                                             bestFocalLengthRatio = focalLengthRatio;
@@ -903,7 +801,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
         } // while(searchData)
         
         // Expire old cache records. Fail gracefully.
-        if (nowTime >= nextCacheFlushTime) {
+        if (timeSet && (nowTime >= nextCacheFlushTime)) {
             if (asprintf(&SQL, "DELETE FROM cache WHERE expires <= %ld;", nowTime) >= 0) {
                 sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, (int)strlen(SQL), &stmt, NULL);
                 free(SQL);

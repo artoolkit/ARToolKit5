@@ -50,6 +50,8 @@
 #import "ARView.h"
 #import "CameraFocusView.h"
 #import <AR/gsub_es2.h>
+#import <AR/video.h>
+#import <ARUtil/time.h>
 #import <AudioToolbox/AudioToolbox.h> // SystemSoundID, AudioServicesCreateSystemSoundID()
 
 
@@ -166,14 +168,20 @@ const NSString *ARCameraPositionPresets[] = {
 - (void)startRunLoop
 {
     if (!running) {
-        // Normally, after starting the video, new frames will invoke cameraVideoTookPicture:userData:.
-        if (ar2VideoCapStart(gVid) != 0) {
-            NSLog(@"Error: Unable to begin camera data capture.\n");
-            [self stop];
-            return;
-        }
-        if (!videoAsync) {
+        if (videoAsync) {
+            // After starting the video, new frames will invoke frameReadyCallback.
+            if (ar2VideoCapStartAsync(gVid, frameReadyCallback, self) != 0) {
+                NSLog(@"Error: Unable to begin camera data capture.\n");
+                [self stop];
+                return;
+            }
+        } else {
             // But if non-async video (e.g. from a movie file) we'll need to generate regular calls to mainLoop using a display link timer.
+            if (ar2VideoCapStart(gVid) != 0) {
+                NSLog(@"Error: Unable to begin camera data capture.\n");
+                [self stop];
+                return;
+            }
             runLoopDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(mainLoop)];
             [runLoopDisplayLink setFrameInterval:runLoopInterval];
             [runLoopDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -233,7 +241,7 @@ static void startCallback(void *userData);
 - (IBAction)start
 {
     // Open the video path.
-    //char *vconf = "-format=BGRA"; // See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_DEVICE_IPHONE
+    //char *vconf = "-format=BGRA"; // See http://www.artoolworks.com/support/library/Configuring_video_capture_in_ARToolKit_Professional#AR_VIDEO_MODULE_IPHONE
     NSString *vconf = [NSString stringWithFormat:@"%@ %@ %@", @"-format=BGRA", ARResolutionPresets[ARResolutionPreset], ARCameraPositionPresets[ARCameraPositionPreset]];
     if (!(gVid = ar2VideoOpenAsync(vconf.UTF8String, startCallback, self))) {
         if (!(gVid = ar2VideoOpen(vconf.UTF8String))) {
@@ -275,14 +283,14 @@ static void startCallback(void *userData)
     // 3D drawing.
     BOOL flipV = FALSE;
     int frontCamera;
-    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_IOS_CAMERA_POSITION, &frontCamera) >= 0) {
-        if (frontCamera == AR_VIDEO_IOS_CAMERA_POSITION_FRONT) flipV = TRUE;
+    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_CAMERA_POSITION, &frontCamera) >= 0) {
+        if (frontCamera == AR_VIDEO_AVFOUNDATION_CAMERA_POSITION_FRONT) flipV = TRUE;
     }
 
     // Tell arVideo what the typical focal distance will be. Note that this does NOT
     // change the actual focus, but on devices with non-fixed focus, it lets arVideo
     // choose a better set of camera parameters.
-    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_IOS_FOCUS, AR_VIDEO_IOS_FOCUS_0_3M); // Default is 0.3 metres. See <AR/sys/videoiPhone.h> for allowable values.
+    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_FOCUS_PRESET, AR_VIDEO_AVFOUNDATION_FOCUS_0_3M); // Default is 0.3 metres. See <AR/video.h> for allowable values.
     
     // Set up default camera parameters.
     ARParam cparam;
@@ -291,31 +299,17 @@ static void startCallback(void *userData)
     fprintf(stdout, "*** Camera Parameter ***\n");
     arParamDisp(&cparam);
 #endif
+    // The camera will be started by -startRunLoop.
     
     // Determine whether ARvideo will return frames asynchronously.
     int ret0;
-    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_IOS_ASYNC, &ret0) != 0) {
+    if (ar2VideoGetParami(gVid, AR_VIDEO_PARAM_GET_IMAGE_ASYNC, &ret0) != 0) {
         NSLog(@"Error: Unable to query video library for status of async support.\n");
         [self stop];
         return;
     }
     videoAsync = (BOOL)ret0;
 
-    if (videoAsync) {
-        // libARvideo on iPhone uses an underlying class called CameraVideo. Here, we
-        // access the instance of this class to get/set some special types of information.
-        CameraVideo *cameraVideo = ar2VideoGetNativeVideoInstanceiPhone(gVid->device.iPhone);
-        if (!cameraVideo) {
-            NSLog(@"Error: Unable to set up AR camera: missing CameraVideo instance.\n");
-            [self stop];
-            return;
-        }
-        
-        // The camera will be started by -startRunLoop.
-        [cameraVideo setTookPictureDelegate:self];
-        [cameraVideo setTookPictureDelegateUserData:NULL];
-    }
-    
     // Allocate the OpenGL view.
     glView = [[[ARView alloc] initWithFrame:[[UIScreen mainScreen] bounds] pixelFormat:kEAGLColorFormatRGBA8 depthFormat:kEAGLDepth16 withStencil:NO preserveBackbuffer:NO] autorelease]; // Don't retain it, as it will be retained when added to self.view.
     [glView setCameraPose:NULL];
@@ -362,21 +356,17 @@ static void startCallback(void *userData)
     [self startRunLoop];
 }
 
+void frameReadyCallback(void *userdata)
+{
+    if (!userdata) return;
+    ARViewController *vc = (ARViewController *)userdata;
+    [vc mainLoop];
+}
+
 - (void) mainLoop
 {
     // Request a video frame.
     AR2VideoBufferT *buffer = ar2VideoGetImage(gVid);
-    if (buffer) [self processFrame:buffer];
-}
-
-- (void) cameraVideoTookPicture:(id)sender userData:(void *)data
-{
-    AR2VideoBufferT *buffer = ar2VideoGetImage(gVid);
-    if (buffer) [self processFrame:buffer];
-}
-
-- (void) processFrame:(AR2VideoBufferT *)buffer
-{
     if (buffer) {
         
         // Upload the frame to OpenGL.
@@ -480,7 +470,7 @@ static void startCallback(void *userData)
 
 - (IBAction)cameraButtonPressed
 {
-    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_IPHONE_WILL_CAPTURE_NEXT_FRAME, 1);
+    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_WILL_CAPTURE_NEXT_FRAME, 1);
 }
 
 - (void) handleTouchAtLocation:(CGPoint)location tapCount:(NSUInteger)tapCount

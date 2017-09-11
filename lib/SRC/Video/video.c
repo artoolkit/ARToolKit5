@@ -28,7 +28,7 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2015 Daqri, LLC.
+ *  Copyright 2015-2016 Daqri, LLC.
  *  Copyright 2003-2015 ARToolworks, Inc.
  *
  *  Author(s): Hirokazu Kato, Philip Lamb
@@ -44,42 +44,26 @@
 
 static AR2VideoParamT   *vid = NULL;
 
-int arVideoGetDefaultDevice( void )
+AR_VIDEO_MODULE arVideoGetDefaultModule( void )
 {
-#if defined(AR_DEFAULT_INPUT_V4L)
-    return AR_VIDEO_DEVICE_V4L;
-#elif defined(AR_DEFAULT_INPUT_V4L2)
-    return AR_VIDEO_DEVICE_V4L2;
-#elif defined(AR_DEFAULT_INPUT_DV)
-    return AR_VIDEO_DEVICE_DV;
-#elif defined(AR_DEFAULT_INPUT_1394CAM)
-    return AR_VIDEO_DEVICE_1394CAM;
-#elif defined(AR_DEFAULT_INPUT_SGI)
-    return AR_VIDEO_DEVICE_SGI;
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_DIRECTSHOW)
-    return AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW;
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_DSVIDEOLIB)
-    return AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB;
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_DRAGONFLY)
-    return AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY;
-#elif defined(AR_DEFAULT_INPUT_QUICKTIME)
-    return AR_VIDEO_DEVICE_QUICKTIME;
-#elif defined(AR_DEFAULT_INPUT_GSTREAMER)
-    return AR_VIDEO_DEVICE_GSTREAMER;
-#elif defined(AR_DEFAULT_INPUT_IPHONE)
-    return AR_VIDEO_DEVICE_IPHONE;
-#elif defined(AR_DEFAULT_INPUT_QUICKTIME7)
-    return AR_VIDEO_DEVICE_QUICKTIME7;
-#elif defined(AR_DEFAULT_INPUT_IMAGE)
-    return AR_VIDEO_DEVICE_IMAGE;
-#elif defined(AR_DEFAULT_INPUT_ANDROID)
-    return AR_VIDEO_DEVICE_ANDROID;
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_MEDIA_FOUNDATION)
-    return AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION;
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_MEDIA_CAPTURE)
-    return AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE;
+#if defined(ARVIDEO_INPUT_DEFAULT_V4L2)
+    return AR_VIDEO_MODULE_V4L2;
+#elif defined(ARVIDEO_INPUT_DEFAULT_1394)
+    return AR_VIDEO_MODULE_1394;
+#elif defined(ARVIDEO_INPUT_DEFAULT_GSTREAMER)
+    return AR_VIDEO_MODULE_GSTREAMER;
+#elif defined(ARVIDEO_INPUT_DEFAULT_AVFOUNDATION)
+    return AR_VIDEO_MODULE_AVFOUNDATION;
+#elif defined(ARVIDEO_INPUT_DEFAULT_IMAGE)
+    return AR_VIDEO_MODULE_IMAGE;
+#elif defined(ARVIDEO_INPUT_DEFAULT_ANDROID)
+    return AR_VIDEO_MODULE_ANDROID;
+#elif defined(ARVIDEO_INPUT_DEFAULT_WINDOWS_MEDIA_FOUNDATION)
+    return AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION;
+#elif defined(ARVIDEO_INPUT_DEFAULT_WINDOWS_MEDIA_CAPTURE)
+    return AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE;
 #else
-    return AR_VIDEO_DEVICE_DUMMY;
+    return AR_VIDEO_MODULE_DUMMY;
 #endif
 }
 
@@ -126,11 +110,11 @@ int arVideoDispOption( void )
     return  ar2VideoDispOption( vid );
 }
 
-int arVideoGetDevice( void )
+AR_VIDEO_MODULE arVideoGetModule( void )
 {
     if( vid == NULL ) return -1;
     
-    return ar2VideoGetDevice(vid);
+    return ar2VideoGetModule(vid);
 }
 
 int arVideoGetId( ARUint32 *id0, ARUint32 *id1 )
@@ -217,6 +201,20 @@ int   arVideoSetParamd( int paramName, double  value )
     if( vid == NULL ) return -1;
 
     return ar2VideoSetParamd( vid, paramName, value );
+}
+
+int   arVideoGetParams( int paramName, char **value )
+{
+    if( vid == NULL ) return -1;
+    
+    return ar2VideoGetParams( vid, paramName, value );
+}
+
+int   arVideoSetParams( int paramName, const char  *value )
+{
+    if( vid == NULL ) return -1;
+    
+    return ar2VideoSetParams( vid, paramName, value );
 }
 
 int   arVideoSaveParam( char *filename )

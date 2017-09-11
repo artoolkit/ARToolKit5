@@ -55,41 +55,30 @@
 #include <AR/arMulti.h>
 #include <AR/video.h>
 #include <AR/gsub.h>
+#include <ARUtil/time.h>
 
 #define          CALIB_STEREO_MARKER_CONFIG    "../share/artoolkit-utils/Data/calibStereoMarkerConfig.dat"
 #define          CPARAL_NAME                   "../share/artoolkit-utils/Data/cparaL.dat"
 #define          CPARAR_NAME                   "../share/artoolkit-utils/Data/cparaR.dat"
 #define          TRANSL2R_NAME                 "../share/artoolkit-utils/Data/transL2R.dat"
 
-#if defined(AR_DEFAULT_INPUT_SGI)
-#define          VCONFL                        "-device=0 -size=FULL"
-#define          VCONFR                        "-device=1 -size=FULL"
-#elif defined(AR_DEFAULT_INPUT_V4L)
-#define          VCONFL                        "-dev=/dev/video0 -width=640 -height=480"
-#define          VCONFR                        "-dev=/dev/video1 -width=640 -height=480"
-#elif defined(AR_DEFAULT_INPUT_1394CAM)
-#if AR_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
-#define          VCONFR                        "-mode=640x480_MONO"
-#define          VCONFR                        "-mode=640x480_MONO"
-#elif defined(AR_INPUT_1394CAM_USE_DRAGONFLY)
-#define          VCONFR                        "-mode=640x480_MONO_COLOR"
-#define          VCONFR                        "-mode=640x480_MONO_COLOR"
+#if defined(ARVIDEO_INPUT_DEFAULT_V4L2)
+#  define        VCONFL                        "-dev=/dev/video0 -width=640 -height=480"
+#  define        VCONFR                        "-dev=/dev/video1 -width=640 -height=480"
+#elif defined(ARVIDEO_INPUT_DEFAULT_1394)
+#  if ARVIDEO_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
+#    define      VCONFR                        "-mode=640x480_MONO"
+#    define      VCONFR                        "-mode=640x480_MONO"
+#  elif defined(ARVIDEO_INPUT_1394CAM_USE_DRAGONFLY)
+#    define      VCONFR                        "-mode=640x480_MONO_COLOR"
+#    define      VCONFR                        "-mode=640x480_MONO_COLOR"
+#  else
+#    define      VCONFL                        "-mode=640x480_YUV411"
+#    define      VCONFR                        "-mode=640x480_YUV411"
+#  endif
 #else
-#define          VCONFL                        "-mode=640x480_YUV411"
-#define          VCONFR                        "-mode=640x480_YUV411"
-#endif
-#elif defined(AR_DEFAULT_INPUT_DV)
-#define          VCONFL                        ""
-#define          VCONFR                        ""
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_DIRECTSHOW)
-#define          VCONFL                        "-showDialog"
-#define          VCONFR                        "-showDialog"
-#elif defined(AR_DEFAULT_INPUT_WINDOWS_DSVIDEOLIB)
-#define          VCONFL                        "Data\\WDM_camera_flipV.xml"
-#define          VCONFR                        "Data\\WDM_camera_flipV-2.xml"
-#else
-#define          VCONFL                        ""
-#define          VCONFR                        ""
+#  define        VCONFL                        ""
+#  define        VCONFR                        ""
 #endif 
 
 
@@ -340,8 +329,8 @@ static void dispImage( void )
             videoBuffR = ar2VideoGetImage(vidR);
         }
         if( videoBuffL->fillFlag && videoBuffR->fillFlag ) {
-            i = ((int)videoBuffR->time_sec - (int)videoBuffL->time_sec) * 1000
-              + ((int)videoBuffR->time_usec - (int)videoBuffL->time_usec) / 1000;
+            i = ((int)videoBuffR->time.sec - (int)videoBuffL->time.sec) * 1000
+              + ((int)videoBuffR->time.usec - (int)videoBuffL->time.usec) / 1000;
             if( i > 20 ) {
                 videoBuffL = NULL;
                 ARLOG("Time diff = %d[msec]\n", i);

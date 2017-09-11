@@ -38,24 +38,18 @@
 #ifndef CALIB_DIST_H
 #define CALIB_DIST_H
 
-#if defined(AR_DEFAULT_INPUT_SGI)
-#define  VCONF  "-size=FULL"
-#elif defined(AR_DEFAULT_INPUT_V4L)
-#define  VCONF  "-width=640 -height=480"
-#elif defined(AR_DEFAULT_INPUT_1394CAM)
-#if AR_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
-#define  VCONF  "-mode=640x480_MONO"
-#elif defined(AR_INPUT_1394CAM_USE_DRAGONFLY)
-#define  VCONF  "-mode=640x480_MONO_COLOR"
+#if defined(ARVIDEO_INPUT_DEFAULT_V4L2)
+#  define VCONF  "-width=640 -height=480"
+#elif defined(ARVIDEO_INPUT_DEFAULT_1394)
+#  if ARVIDEO_INPUT_1394CAM_DEFAULT_PIXEL_FORMAT == AR_PIXEL_FORMAT_MONO
+#    define VCONF  "-mode=640x480_MONO"
+#  elif defined(ARVIDEO_INPUT_1394CAM_USE_DRAGONFLY)
+#    define VCONF  "-mode=640x480_MONO_COLOR"
+#  else
+#    define VCONF  "-mode=640x480_YUV411"
+#  endif
 #else
-#define  VCONF  "-mode=640x480_YUV411"
-#endif
-#elif defined(AR_DEFAULT_INPUT_DV)
-#define  VCONF  ""
-#elif defined(AR_DEFAULT_INPUT_WINDOWS)
-#define  VCONF  ""
-#else
-#define  VCONF  ""
+#  define VCONF  ""
 #endif
 
 

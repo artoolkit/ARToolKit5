@@ -1,0 +1,6 @@
+# Example model configuration file.
+# First line is OSG model filename, relative to this .dat file.
+p51d-jw-animated.osg
+-90.0 0.0 30.0
+90.0 1.0 0.0 0.0
+25.0 25.0 25.0

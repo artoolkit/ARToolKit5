@@ -71,6 +71,7 @@
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <ARUtil/time.h>
 
 // ============================================================================
 //	Constants
@@ -160,10 +161,15 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamL
 	}
 	
 	// Load the camera parameters, resize for the window and init.
-    if (arParamLoad(cparam_name, 1, &cparam) < 0) {
-		ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
-        arVideoClose();
-        return (FALSE);
+	if (cparam_name && *cparam_name) {
+        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
+		    ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
+            arVideoClose();
+            return (FALSE);
+        }
+    } else {
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);
@@ -232,11 +238,11 @@ static int setupMovie(const char *path)
     
     // Construct the vconf string.
     arMalloc(movieVconf, char, 2048); // 2Kb for URL.
-    sprintf(movieVconf, "-device=QUICKTIME -movie=\""); // Make sure we're using the QuickTime video input.
+    sprintf(movieVconf, "-module=AVFoundation -movie=\""); // Make sure we're using the AVFoundation video input.
     len = (int)strlen(movieVconf);
     strncat(movieVconf + len, path, 2048 - len - 1);
     len = (int)strlen(movieVconf);
-    strncat(movieVconf + len, "\" -loop -pause", 2048 - len - 1); // Start the movie paused. It will be unpaused in mainLoop().
+    strncat(movieVconf + len, "\"", 2048 - len - 1); // Movie will start paused. It will be unpaused in mainLoop().
 
     // Open the movie.
     gMovieVideo = ar2VideoOpen(movieVconf);
@@ -549,12 +555,11 @@ static void Display(void)
 int main(int argc, char** argv)
 {
 	char glutGamemode[32];
-	char cparam_name[] = "../share/artoolkit-examples/Data/artoolkit-examples/camera_para.dat";
+	char *cparam_name = NULL;
 	char vconf[] = "";
-	char patt_name[]  = "../share/artoolkit-examples/Data/artoolkit-examples/hiro.patt";
+	char patt_name[]  = "Data/hiro.patt";
     
-    char movieFileName[] = "../share/artoolkit-examples/Data/artoolkit-examples/sample.mov";
-    char *movieURI;
+    char movieFileName[] = "Data/sample.mp4";
 	
     //
 	// Library inits.
@@ -608,25 +613,13 @@ int main(int argc, char** argv)
     //
 
     // In this example, we load a movie via a file URI, but other URIs allowed
-    // by the QuickTime module would also be fine.
+    // by the AVFoundation module would also be fine.
 
-    // Movie relative path is in "movieFileName". Get a file:// URI for it.
-    movieURI = arUtilGetFileURI(movieFileName);
-    if (!movieURI) {
-        ARLOGe("Error: Unable to construct URI for movie file '%s'.\n", movieFileName);
-		cleanup();
-		exit(-1);
+    if (!setupMovie(movieFileName)) {
+        ARLOGe("Error: Unable to open movie from file '%s'.\n", movieFileName);
+        cleanup();
+        exit(-1);
     }
-    
-    // Now open the movie.
-    if (!setupMovie(movieURI)) {
-        ARLOGe("Error: Unable to open movie at URI '%s'.\n", movieURI);
-        free(movieURI);
-		cleanup();
-		exit(-1);
-    }
-    
-    free(movieURI); // We're finished with movieURI, so free it.
 
 	// Register GLUT event-handling callbacks.
 	// NB: mainLoop() is registered by Visibility.

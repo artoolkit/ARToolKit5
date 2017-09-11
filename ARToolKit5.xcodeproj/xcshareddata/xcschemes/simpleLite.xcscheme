@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0830"
    version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -71,63 +71,33 @@
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-device=QuickTime7 -width=640 -height=480"
+            value = "-format=2vuy"
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-device=QuickTime7 -width=640 -height=480 -pixelformat=yuvs"
+            value = "-format=yuvs"
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-device=QUICKTIME -movie=&quot;rtsp://video2.multicasttech.com/AFTVHorror3GPP296.sdp&quot;"
+            value = "-format=420v"
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=40"
+            value = "-format=420f"
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=24"
+            value = "-format=32"
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=24BG"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=RGBA"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=32"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=BGRA"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=ABGR"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=2vuy"
-            isEnabled = "NO">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ARTOOLKIT5_VCONF"
-            value = "-pixelformat=yuvs"
-            isEnabled = "NO">
+            value = "-format=BGRA"
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>

@@ -54,16 +54,6 @@ bin/pthreadVC2.dll
 bin/glut32.dll
 bin/DSVL.dll
 
-share/artoolkit-utils/Data/camera_para.dat
-share/artoolkit-examples/Data/cubeMarkerConfig.dat
-share/artoolkit-examples/Data/multi/*
-share/artoolkit-examples/Data/multi-barcode-4x3.dat
-share/artoolkit-examples/Data/multi-barcode-8x6.dat
-share/artoolkit-examples/Data/hiro.patt
-share/artoolkit-examples/Data/kanji.patt
-share/artoolkit-examples/Data/sample1.patt
-share/artoolkit-examples/Data/sample2.patt
-
 lib/SRC/AR/*
 lib/SRC/ARICP/*
 lib/SRC/ARMulti/*

@@ -89,7 +89,7 @@ static void   keyEvent( unsigned char key, int x, int y)
     if( key == ' ' ) {
         dispAvaragePixelValue();
     }
-#ifdef  AR_INPUT_1394CAM
+#ifdef  ARVIDEO_INPUT_1394CAM
     if( key == '1' ) {
         arVideoGetParami( AR_VIDEO_1394_WHITE_BALANCE_UB, &ub );
         arVideoGetParami( AR_VIDEO_1394_WHITE_BALANCE_VR, &vr );
@@ -232,7 +232,7 @@ static void   init(int argc, char *argv[])
     argViewportSetDispMode( vp, AR_GL_DISP_MODE_FIT_TO_VIEWPORT );
     argViewportSetDistortionMode( vp, AR_GL_DISTORTION_COMPENSATE_DISABLE );
 
-#ifdef  AR_INPUT_1394CAM
+#ifdef  ARVIDEO_INPUT_1394CAM
     arVideoSetParami( AR_VIDEO_1394_WHITE_BALANCE_FEATURE_ON, 1 );
     arVideoSetParami( AR_VIDEO_1394_WHITE_BALANCE_AUTO_ON, 0 );
     arVideoGetParami( AR_VIDEO_1394_WHITE_BALANCE_MAX_VAL, &max );

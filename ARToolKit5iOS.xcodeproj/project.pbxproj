@@ -73,6 +73,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4A061BDD1F45551400E6EAAD /* videoDummy.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BD71F4554FC00E6EAAD /* videoDummy.c */; };
+		4A061BDE1F45551A00E6EAAD /* videoAVFoundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BD31F4554FC00E6EAAD /* videoAVFoundation.m */; };
+		4A061BDF1F45551E00E6EAAD /* MovieVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BD11F4554FC00E6EAAD /* MovieVideo.m */; };
+		4A061BE01F45552100E6EAAD /* cparams.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BCE1F4554FC00E6EAAD /* cparams.c */; };
+		4A061BE11F45552400E6EAAD /* CameraVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BCD1F4554FC00E6EAAD /* CameraVideo.m */; };
+		4A061BE21F45552A00E6EAAD /* videoImage.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A061BDB1F4554FC00E6EAAD /* videoImage.c */; };
 		4A089BC8133C93DE00974D65 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC2F130AEC6C009D1DA0 /* libfreetype.a */; };
 		4A089BC9133C93DE00974D65 /* libOpenThreads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC31130AEC6C009D1DA0 /* libOpenThreads.a */; };
 		4A089BCA133C93DE00974D65 /* libosg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC32130AEC6C009D1DA0 /* libosg.a */; };
@@ -195,6 +201,15 @@
 		4A26CD64116B2D010078D207 /* ARAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A26CD63116B2D010078D207 /* ARAppDelegate.m */; };
 		4A26CD7D116B2E270078D207 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A26CD7C116B2E270078D207 /* main.m */; };
 		4A26CDA2116B59F10078D207 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A26CDA1116B59F10078D207 /* MainWindow.xib */; };
+		4A29CE6A1F661A8600D92AB9 /* android_system_property_get.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEA81F445FFD007DD981 /* android_system_property_get.c */; };
+		4A29CE6B1F661A8600D92AB9 /* file_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEA91F445FFD007DD981 /* file_utils.c */; };
+		4A29CE6C1F661A8600D92AB9 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEAB1F445FFD007DD981 /* ioapi.c */; };
+		4A29CE6D1F661A8600D92AB9 /* system.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEAD1F445FFD007DD981 /* system.c */; };
+		4A29CE6E1F661A8600D92AB9 /* thread_sub_winrt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEAE1F445FFD007DD981 /* thread_sub_winrt.cpp */; };
+		4A29CE6F1F661A8600D92AB9 /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEB01F445FFD007DD981 /* time.c */; };
+		4A29CE701F661A8600D92AB9 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEB11F445FFD007DD981 /* unzip.c */; };
+		4A29CE711F661A8600D92AB9 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A91CEB21F445FFD007DD981 /* zip.c */; };
+		4A29CE741F661AD200D92AB9 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A29CE721F661AC600D92AB9 /* log.c */; };
 		4A2F70FF11773A3000F35FA7 /* Iris.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F70FE11773A3000F35FA7 /* Iris.png */; };
 		4A2F715E117747A300F35FA7 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2F715D117747A300F35FA7 /* Icon.png */; };
 		4A2F72F1117840A600F35FA7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
@@ -562,7 +577,6 @@
 		4A920D711CC87F5B0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
 		4A920D721CC87F5B0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
 		4A920D731CC87F5C0065B301 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A920D6B1CC87F1D0065B301 /* Security.framework */; };
-		4A920D7E1CC8E4180065B301 /* cpuInfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A920D741CC88AED0065B301 /* cpuInfo.c */; };
 		4A941CF01AE5DC4F000FA802 /* icpCalibStereo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB31AE5DBEC000FA802 /* icpCalibStereo.c */; };
 		4A941CF11AE5DC4F000FA802 /* icpCore.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB41AE5DBEC000FA802 /* icpCore.c */; };
 		4A941CF21AE5DC4F000FA802 /* icpHandle.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CB51AE5DBEC000FA802 /* icpHandle.c */; };
@@ -576,12 +590,6 @@
 		4A941CFA1AE5DC79000FA802 /* video2.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BB3E7608E482F400D7CA2D /* video2.c */; };
 		4A941CFB1AE5DC79000FA802 /* videoSaveImage.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A3151AE1234FFBE006E2B82 /* videoSaveImage.c */; };
 		4A941CFC1AE5DC79000FA802 /* videoAspectRatio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */; };
-		4A941CFD1AE5DC79000FA802 /* videoDummy.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BB3E7908E482F400D7CA2D /* videoDummy.c */; };
-		4A941CFE1AE5DC79000FA802 /* videoImage.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CBD1AE5DBF8000FA802 /* videoImage.c */; };
-		4A941CFF1AE5DC79000FA802 /* videoiPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CBF1AE5DC03000FA802 /* videoiPhone.m */; };
-		4A941D001AE5DC79000FA802 /* CameraVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC11AE5DC03000FA802 /* CameraVideo.m */; };
-		4A941D011AE5DC79000FA802 /* MovieVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC21AE5DC03000FA802 /* MovieVideo.m */; };
-		4A941D021AE5DC79000FA802 /* cparams.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC41AE5DC03000FA802 /* cparams.c */; };
 		4A941D031AE5DC86000FA802 /* coord.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC61AE5DC0F000FA802 /* coord.c */; };
 		4A941D041AE5DC86000FA802 /* featureMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC71AE5DC0F000FA802 /* featureMap.c */; };
 		4A941D051AE5DC86000FA802 /* featureSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A941CC81AE5DC0F000FA802 /* featureSet.c */; };
@@ -1590,6 +1598,21 @@
 		4A0619C313D59DF10066826B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4A0619C413D59DF10066826B /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		4A0619C513D59DF10066826B /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		4A061BCC1F4554FC00E6EAAD /* CameraVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraVideo.h; sourceTree = "<group>"; };
+		4A061BCD1F4554FC00E6EAAD /* CameraVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraVideo.m; sourceTree = "<group>"; };
+		4A061BCE1F4554FC00E6EAAD /* cparams.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cparams.c; sourceTree = "<group>"; };
+		4A061BCF1F4554FC00E6EAAD /* cparams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cparams.h; sourceTree = "<group>"; };
+		4A061BD01F4554FC00E6EAAD /* MovieVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieVideo.h; sourceTree = "<group>"; };
+		4A061BD11F4554FC00E6EAAD /* MovieVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieVideo.m; sourceTree = "<group>"; };
+		4A061BD21F4554FC00E6EAAD /* videoAVFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoAVFoundation.h; sourceTree = "<group>"; };
+		4A061BD31F4554FC00E6EAAD /* videoAVFoundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = videoAVFoundation.m; sourceTree = "<group>"; };
+		4A061BD41F4554FC00E6EAAD /* videoAVFoundationCameraVideoTookPictureDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoAVFoundationCameraVideoTookPictureDelegate.h; sourceTree = "<group>"; };
+		4A061BD61F4554FC00E6EAAD /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		4A061BD71F4554FC00E6EAAD /* videoDummy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoDummy.c; sourceTree = "<group>"; };
+		4A061BD81F4554FC00E6EAAD /* videoDummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoDummy.h; sourceTree = "<group>"; };
+		4A061BDA1F4554FC00E6EAAD /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		4A061BDB1F4554FC00E6EAAD /* videoImage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoImage.c; sourceTree = "<group>"; };
+		4A061BDC1F4554FC00E6EAAD /* videoImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoImage.h; sourceTree = "<group>"; };
 		4A0F33950E8009F200065B70 /* glStateCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glStateCache.h; sourceTree = "<group>"; };
 		4A0F33960E8009F200065B70 /* glStateCache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glStateCache.c; sourceTree = "<group>"; };
 		4A13023915BDF8F2003A441C /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
@@ -1676,8 +1699,15 @@
 		4A26CD7E116B2E880078D207 /* ARApp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARApp_Prefix.pch; sourceTree = "<group>"; };
 		4A26CDA1116B59F10078D207 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		4A26CDE4116B660D0078D207 /* ARApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ARApp-Info.plist"; sourceTree = "<group>"; };
-		4A286FA213DB9710002A6078 /* CameraVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraVideo.h; sourceTree = "<group>"; };
-		4A286FA313DB9710002A6078 /* MovieVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieVideo.h; sourceTree = "<group>"; };
+		4A29CE631F660E7F00D92AB9 /* gsub_lite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gsub_lite.h; sourceTree = "<group>"; };
+		4A29CE641F660E7F00D92AB9 /* gsub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gsub.h; sourceTree = "<group>"; };
+		4A29CE651F660E7F00D92AB9 /* gsubConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gsubConfig.h; sourceTree = "<group>"; };
+		4A29CE661F660E7F00D92AB9 /* paramGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = paramGL.h; sourceTree = "<group>"; };
+		4A29CE671F660E7F00D92AB9 /* videoRGBA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoRGBA.h; sourceTree = "<group>"; };
+		4A29CE681F660EBF00D92AB9 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		4A29CE691F660EBF00D92AB9 /* videoRGBA.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = videoRGBA.c; sourceTree = "<group>"; };
+		4A29CE721F661AC600D92AB9 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
+		4A29CE731F661AC600D92AB9 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		4A2C418E134A42ED000D6C8B /* osgPlugins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osgPlugins.h; sourceTree = "<group>"; };
 		4A2C523A1AAFFB6A00BB3808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		4A2F70FE11773A3000F35FA7 /* Iris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Iris.png; sourceTree = "<group>"; };
@@ -1789,7 +1819,6 @@
 		4A65BBD51843F943007380B3 /* CWaves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWaves.h; sourceTree = "<group>"; };
 		4A65BBD61843F943007380B3 /* EdenSound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EdenSound.c; sourceTree = "<group>"; };
 		4A65BBDA1843F966007380B3 /* EdenSound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EdenSound.h; sourceTree = "<group>"; };
-		4A67A1AE163E32EE0096DC1C /* videoImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = videoImage.h; sourceTree = "<group>"; };
 		4A6C5E431794F30300061A08 /* glStateCache2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glStateCache2.h; sourceTree = "<group>"; };
 		4A6C5E441794F32800061A08 /* glStateCache2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = glStateCache2.c; sourceTree = "<group>"; };
 		4A6C5E501794F4E700061A08 /* libARgsub_es2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARgsub_es2.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1930,7 +1959,7 @@
 		4A91CEAA1F445FFD007DD981 /* ftw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftw.h; sourceTree = "<group>"; };
 		4A91CEAB1F445FFD007DD981 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		4A91CEAC1F445FFD007DD981 /* nftw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = nftw.c; sourceTree = "<group>"; };
-		4A91CEAD1F445FFD007DD981 /* system.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = system.c; sourceTree = "<group>"; };
+		4A91CEAD1F445FFD007DD981 /* system.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = system.c; sourceTree = "<group>"; };
 		4A91CEAE1F445FFD007DD981 /* thread_sub_winrt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_sub_winrt.cpp; sourceTree = "<group>"; };
 		4A91CEAF1F445FFD007DD981 /* thread_sub_winrt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread_sub_winrt.h; sourceTree = "<group>"; };
 		4A91CEB01F445FFD007DD981 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time.c; sourceTree = "<group>"; };
@@ -1947,8 +1976,6 @@
 		4A920D551CC87B2F0065B301 /* typecheck-gcc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "typecheck-gcc.h"; sourceTree = "<group>"; };
 		4A920D5C1CC87EBE0065B301 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
 		4A920D6B1CC87F1D0065B301 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		4A920D741CC88AED0065B301 /* cpuInfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cpuInfo.c; sourceTree = "<group>"; };
-		4A920D751CC88AED0065B301 /* cpuInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpuInfo.h; sourceTree = "<group>"; };
 		4A941B541AE5D8D9000FA802 /* libKPM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKPM.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A941BD91AE5D8DC000FA802 /* libARUtil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARUtil.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A941C5E1AE5D923000FA802 /* libARvideo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARvideo.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1961,13 +1988,6 @@
 		4A941CB91AE5DBEC000FA802 /* icpStereoPoint.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = icpStereoPoint.c; sourceTree = "<group>"; };
 		4A941CBA1AE5DBEC000FA802 /* icpStereoPointRobust.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = icpStereoPointRobust.c; sourceTree = "<group>"; };
 		4A941CBB1AE5DBEC000FA802 /* icpUtil.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = icpUtil.c; sourceTree = "<group>"; };
-		4A941CBD1AE5DBF8000FA802 /* videoImage.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = videoImage.c; sourceTree = "<group>"; };
-		4A941CBF1AE5DC03000FA802 /* videoiPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = videoiPhone.m; sourceTree = "<group>"; };
-		4A941CC01AE5DC03000FA802 /* videoiPhoneCameraVideoTookPictureDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoiPhoneCameraVideoTookPictureDelegate.h; sourceTree = "<group>"; };
-		4A941CC11AE5DC03000FA802 /* CameraVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraVideo.m; sourceTree = "<group>"; };
-		4A941CC21AE5DC03000FA802 /* MovieVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieVideo.m; sourceTree = "<group>"; };
-		4A941CC31AE5DC03000FA802 /* cparams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cparams.h; sourceTree = "<group>"; };
-		4A941CC41AE5DC03000FA802 /* cparams.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cparams.c; sourceTree = "<group>"; };
 		4A941CC61AE5DC0F000FA802 /* coord.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = coord.c; sourceTree = "<group>"; };
 		4A941CC71AE5DC0F000FA802 /* featureMap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = featureMap.c; sourceTree = "<group>"; };
 		4A941CC81AE5DC0F000FA802 /* featureSet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = featureSet.c; sourceTree = "<group>"; };
@@ -2686,7 +2706,6 @@
 		4AD26CBC13B37EEB00F5E037 /* libARMulti.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARMulti.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD26CBF13B37EEB00F5E037 /* libARosg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARosg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD26CC013B37EEB00F5E037 /* libEden.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEden.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AE651B00DCDBAC600532B31 /* videoiPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videoiPhone.h; sourceTree = "<group>"; };
 		4AE6FE7F0BC24FFC0084390C /* ChangeLog.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ChangeLog.txt; sourceTree = "<group>"; wrapsLines = 1; };
 		4AEAEB9217A7443600F61E33 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
 		4AEAEB9317A7445200F61E33 /* ARAppES1_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARAppES1_Prefix.pch; sourceTree = "<group>"; };
@@ -3248,14 +3267,12 @@
 		78BB3E6108E482F400D7CA2D /* arMultiReadConfigFile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = arMultiReadConfigFile.c; sourceTree = "<group>"; };
 		78BB3E7408E482F400D7CA2D /* video.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = video.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		78BB3E7608E482F400D7CA2D /* video2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = video2.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
-		78BB3E7908E482F400D7CA2D /* videoDummy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = videoDummy.c; sourceTree = "<group>"; };
 		78BB3F1108E4837000D7CA2D /* ar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ar.h; sourceTree = "<group>"; };
 		78BB3F1208E4837000D7CA2D /* arConfig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arConfig.h; sourceTree = "<group>"; };
 		78BB3F1308E4837000D7CA2D /* arMulti.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = arMulti.h; sourceTree = "<group>"; };
 		78BB3F1408E4837000D7CA2D /* config.h.in */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; path = config.h.in; sourceTree = "<group>"; };
 		78BB3F1608E4837000D7CA2D /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		78BB3F1708E4837000D7CA2D /* param.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = param.h; sourceTree = "<group>"; };
-		78BB3F1908E4837000D7CA2D /* videoDummy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = videoDummy.h; sourceTree = "<group>"; };
 		78BB3F2008E4837000D7CA2D /* video.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = video.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		78BB3F2108E4837000D7CA2D /* videoConfig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = videoConfig.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3770,6 +3787,42 @@
 			name = ARAppMovie;
 			path = examples/ARAppMovie;
 			sourceTree = SOURCE_ROOT;
+		};
+		4A061BCB1F4554FC00E6EAAD /* AVFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				4A061BCC1F4554FC00E6EAAD /* CameraVideo.h */,
+				4A061BCD1F4554FC00E6EAAD /* CameraVideo.m */,
+				4A061BCE1F4554FC00E6EAAD /* cparams.c */,
+				4A061BCF1F4554FC00E6EAAD /* cparams.h */,
+				4A061BD01F4554FC00E6EAAD /* MovieVideo.h */,
+				4A061BD11F4554FC00E6EAAD /* MovieVideo.m */,
+				4A061BD21F4554FC00E6EAAD /* videoAVFoundation.h */,
+				4A061BD31F4554FC00E6EAAD /* videoAVFoundation.m */,
+				4A061BD41F4554FC00E6EAAD /* videoAVFoundationCameraVideoTookPictureDelegate.h */,
+			);
+			path = AVFoundation;
+			sourceTree = "<group>";
+		};
+		4A061BD51F4554FC00E6EAAD /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				4A061BD61F4554FC00E6EAAD /* Makefile.in */,
+				4A061BD71F4554FC00E6EAAD /* videoDummy.c */,
+				4A061BD81F4554FC00E6EAAD /* videoDummy.h */,
+			);
+			path = Dummy;
+			sourceTree = "<group>";
+		};
+		4A061BD91F4554FC00E6EAAD /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				4A061BDA1F4554FC00E6EAAD /* Makefile.in */,
+				4A061BDB1F4554FC00E6EAAD /* videoImage.c */,
+				4A061BDC1F4554FC00E6EAAD /* videoImage.h */,
+			);
+			path = Image;
+			sourceTree = "<group>";
 		};
 		4A13023415BDF8F2003A441C /* ARAppNFTOSG */ = {
 			isa = PBXGroup;
@@ -4286,29 +4339,6 @@
 			path = ARICP;
 			sourceTree = "<group>";
 		};
-		4A941CBE1AE5DBF8000FA802 /* VideoImage */ = {
-			isa = PBXGroup;
-			children = (
-				4A941CBD1AE5DBF8000FA802 /* videoImage.c */,
-			);
-			path = VideoImage;
-			sourceTree = "<group>";
-		};
-		4A941CC51AE5DC03000FA802 /* VideoiPhone */ = {
-			isa = PBXGroup;
-			children = (
-				4A941CBF1AE5DC03000FA802 /* videoiPhone.m */,
-				4A941CC01AE5DC03000FA802 /* videoiPhoneCameraVideoTookPictureDelegate.h */,
-				4A941CC11AE5DC03000FA802 /* CameraVideo.m */,
-				4A941CC21AE5DC03000FA802 /* MovieVideo.m */,
-				4A941CC31AE5DC03000FA802 /* cparams.h */,
-				4A941CC41AE5DC03000FA802 /* cparams.c */,
-				4A920D751CC88AED0065B301 /* cpuInfo.h */,
-				4A920D741CC88AED0065B301 /* cpuInfo.c */,
-			);
-			path = VideoiPhone;
-			sourceTree = "<group>";
-		};
 		4A941CD61AE5DC0F000FA802 /* AR2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -4355,6 +4385,7 @@
 				4A91CEA91F445FFD007DD981 /* file_utils.c */,
 				4A91CEAA1F445FFD007DD981 /* ftw.h */,
 				4A91CEAB1F445FFD007DD981 /* ioapi.c */,
+				4A29CE721F661AC600D92AB9 /* log.c */,
 				4A91CEAC1F445FFD007DD981 /* nftw.c */,
 				4A941CED1AE5DC25000FA802 /* profile.c */,
 				4A91CEAD1F445FFD007DD981 /* system.c */,
@@ -4364,6 +4395,7 @@
 				4A91CEB01F445FFD007DD981 /* time.c */,
 				4A91CEB11F445FFD007DD981 /* unzip.c */,
 				4A91CEB21F445FFD007DD981 /* zip.c */,
+				4A29CE731F661AC600D92AB9 /* Makefile.in */,
 			);
 			path = ARUtil;
 			sourceTree = "<group>";
@@ -6441,9 +6473,6 @@
 				78BB3E5C08E482F400D7CA2D /* ARMulti */,
 				78BB3E6408E482F400D7CA2D /* Gl */,
 				78BB3E7108E482F400D7CA2D /* Video */,
-				78BB3E7708E482F400D7CA2D /* VideoDummy */,
-				4A941CBE1AE5DBF8000FA802 /* VideoImage */,
-				4A941CC51AE5DC03000FA802 /* VideoiPhone */,
 				4AC36B5D113E653700C86F19 /* Eden */,
 				4ACE00AF130B3F54009D1DA0 /* ARosg */,
 				4AEB26DF1804A813002290C5 /* ARWrapper */,
@@ -6480,25 +6509,22 @@
 		78BB3E7108E482F400D7CA2D /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				4A061BCB1F4554FC00E6EAAD /* AVFoundation */,
+				4A061BD51F4554FC00E6EAAD /* Dummy */,
+				4A061BD91F4554FC00E6EAAD /* Image */,
 				78BB3E7408E482F400D7CA2D /* video.c */,
 				78BB3E7608E482F400D7CA2D /* video2.c */,
 				4A3151AE1234FFBE006E2B82 /* videoSaveImage.c */,
 				4A6F0D1218E5072C00C45B33 /* videoAspectRatio.c */,
 				4A75E8E71C92339E00DC8915 /* videoLuma.c */,
+				4A29CE691F660EBF00D92AB9 /* videoRGBA.c */,
 				4AC6C0451BC624DB00403BA0 /* cparamSearch.h */,
 				4AC6C0441BC624DB00403BA0 /* cparamSearch.c */,
 				4AC6C0481BC6252400403BA0 /* nxjson.h */,
 				4AC6C0471BC6252400403BA0 /* nxjson.c */,
+				4A29CE681F660EBF00D92AB9 /* Makefile.in */,
 			);
 			path = Video;
-			sourceTree = "<group>";
-		};
-		78BB3E7708E482F400D7CA2D /* VideoDummy */ = {
-			isa = PBXGroup;
-			children = (
-				78BB3E7908E482F400D7CA2D /* videoDummy.c */,
-			);
-			path = VideoDummy;
 			sourceTree = "<group>";
 		};
 		78BB3ED008E4837000D7CA2D /* examples */ = {
@@ -6544,32 +6570,24 @@
 				78BB3F1308E4837000D7CA2D /* arMulti.h */,
 				78BB3F1408E4837000D7CA2D /* config.h.in */,
 				4AF79D5F0A269BC900E900EC /* config.h */,
+				4A29CE641F660E7F00D92AB9 /* gsub.h */,
+				4A29CE651F660E7F00D92AB9 /* gsubConfig.h */,
 				4A15ED1809E35E2E00159C62 /* gsub_es.h */,
 				4A7FBEDE1794A67500F7EBEE /* gsub_es2.h */,
+				4A29CE631F660E7F00D92AB9 /* gsub_lite.h */,
 				4A6C5E531794F59F00061A08 /* gsub_mtx.h */,
 				4A7797D50CCEEB5F0021FAC9 /* icp.h */,
 				4A7797D60CCEEB5F0021FAC9 /* icpCalib.h */,
 				4A7797D70CCEEB5F0021FAC9 /* icpCore.h */,
 				78BB3F1608E4837000D7CA2D /* matrix.h */,
 				78BB3F1708E4837000D7CA2D /* param.h */,
-				78BB3F1808E4837000D7CA2D /* sys */,
+				4A29CE661F660E7F00D92AB9 /* paramGL.h */,
 				78BB3F2008E4837000D7CA2D /* video.h */,
 				78BB3F2108E4837000D7CA2D /* videoConfig.h */,
 				4A75E8E61C92338C00DC8915 /* videoLuma.h */,
+				4A29CE671F660E7F00D92AB9 /* videoRGBA.h */,
 			);
 			path = AR;
-			sourceTree = "<group>";
-		};
-		78BB3F1808E4837000D7CA2D /* sys */ = {
-			isa = PBXGroup;
-			children = (
-				78BB3F1908E4837000D7CA2D /* videoDummy.h */,
-				4A67A1AE163E32EE0096DC1C /* videoImage.h */,
-				4AE651B00DCDBAC600532B31 /* videoiPhone.h */,
-				4A286FA213DB9710002A6078 /* CameraVideo.h */,
-				4A286FA313DB9710002A6078 /* MovieVideo.h */,
-			);
-			path = sys;
 			sourceTree = "<group>";
 		};
 		78BB3F4F08E483AD00D7CA2D /* bin */ = {
@@ -7081,6 +7099,32 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0730;
+				TargetAttributes = {
+					4A1302AB15BDFF14003A441C = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A1302FF15BDFF17003A441C = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A2F72D7117840A600F35FA7 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A3D4297130D1F2500E64C33 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A4BAA7C1B745B210012B77D = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A50D6FC1164E16D00ED169B = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4A5BAA5B13D82BC000C8D5E7 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+					4AEAEBAD17A744AA00F61E33 = {
+						DevelopmentTeam = 7DJXLNF77X;
+					};
+				};
 			};
 			buildConfigurationList = 78BB3DD508E482DA00D7CA2D /* Build configuration list for PBXProject "ARToolKit5iOS" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -7713,8 +7757,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A29CE741F661AD200D92AB9 /* log.c in Sources */,
+				4A29CE701F661A8600D92AB9 /* unzip.c in Sources */,
+				4A29CE6D1F661A8600D92AB9 /* system.c in Sources */,
+				4A29CE6A1F661A8600D92AB9 /* android_system_property_get.c in Sources */,
+				4A29CE711F661A8600D92AB9 /* zip.c in Sources */,
+				4A29CE6B1F661A8600D92AB9 /* file_utils.c in Sources */,
 				4A941D1F1AE5DC9E000FA802 /* thread_sub.c in Sources */,
 				4A941D1E1AE5DC9E000FA802 /* profile.c in Sources */,
+				4A29CE6E1F661A8600D92AB9 /* thread_sub_winrt.cpp in Sources */,
+				4A29CE6F1F661A8600D92AB9 /* time.c in Sources */,
+				4A29CE6C1F661A8600D92AB9 /* ioapi.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7722,20 +7775,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A941D001AE5DC79000FA802 /* CameraVideo.m in Sources */,
-				4A941D011AE5DC79000FA802 /* MovieVideo.m in Sources */,
+				4A061BE11F45552400E6EAAD /* CameraVideo.m in Sources */,
+				4A061BDD1F45551400E6EAAD /* videoDummy.c in Sources */,
 				4A941CFB1AE5DC79000FA802 /* videoSaveImage.c in Sources */,
+				4A061BDF1F45551E00E6EAAD /* MovieVideo.m in Sources */,
+				4A061BDE1F45551A00E6EAAD /* videoAVFoundation.m in Sources */,
 				4AC6C0461BC624DB00403BA0 /* cparamSearch.c in Sources */,
-				4A941D021AE5DC79000FA802 /* cparams.c in Sources */,
-				4A920D7E1CC8E4180065B301 /* cpuInfo.c in Sources */,
-				4A941CFE1AE5DC79000FA802 /* videoImage.c in Sources */,
-				4A941CFF1AE5DC79000FA802 /* videoiPhone.m in Sources */,
 				4A941CFC1AE5DC79000FA802 /* videoAspectRatio.c in Sources */,
 				4A941CFA1AE5DC79000FA802 /* video2.c in Sources */,
 				4A75E8E81C9233AE00DC8915 /* videoLuma.c in Sources */,
 				4AC6C0491BC6252400403BA0 /* nxjson.c in Sources */,
 				4A941CF91AE5DC79000FA802 /* video.c in Sources */,
-				4A941CFD1AE5DC79000FA802 /* videoDummy.c in Sources */,
+				4A061BE01F45552100E6EAAD /* cparams.c in Sources */,
+				4A061BE21F45552A00E6EAAD /* videoImage.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8342,6 +8394,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8362,6 +8415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8383,6 +8437,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppOSG/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8405,6 +8460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8423,6 +8479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8442,6 +8499,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARApp2/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8520,6 +8578,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8535,6 +8594,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8551,6 +8611,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARApp2/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8567,6 +8628,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8583,6 +8645,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8600,6 +8663,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppOSG/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8619,6 +8683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8635,6 +8700,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8652,6 +8718,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppCameraTest/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8668,6 +8735,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
@@ -8683,6 +8751,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
@@ -8699,6 +8768,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARApp/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp/ARApp_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp/ARApp-Info.plist";
@@ -8715,6 +8785,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -8729,6 +8800,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -8744,6 +8816,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppMovie/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -9266,6 +9339,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";
@@ -9280,6 +9354,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";
@@ -9295,6 +9370,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppES1/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppES1/ARAppES1-Info.plist";

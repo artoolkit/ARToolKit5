@@ -197,7 +197,7 @@ bool ARToolKitVideoSource::open2()
     // Tell arVideo what the typical focal distance will be. Note that this does NOT
     // change the actual focus, but on devices with non-fixed focus, it lets arVideo
     // choose a better set of camera parameters.
-    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_IOS_FOCUS, AR_VIDEO_IOS_FOCUS_0_3M); // Default is 0.3 metres. See <AR/sys/videoiPhone.h> for allowable values.
+    ar2VideoSetParami(gVid, AR_VIDEO_PARAM_AVFOUNDATION_FOCUS_PRESET, AR_VIDEO_AVFOUNDATION_FOCUS_0_3M); // Default is 0.3 metres. See <AR/video.h> for allowable values.
 #endif
     
     // Load the camera parameters, resize for the window and init.

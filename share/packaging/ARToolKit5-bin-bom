@@ -45,12 +45,6 @@ bin/checkImage
 bin/listCamera
 bin/whiteBalance
 
-share/artoolkit-utils/Data/calibStereoMarkerConfig.dat
-share/artoolkit-utils/Data/camera_para.dat
-share/artoolkit-utils/Data/calib.patt
-share/artoolkit-examples/Data/hiro.patt
-share/artoolkit-examples/Data/kanji.patt
-
 Configure
 Makefile.in
 share/artoolkit5-config.in
@@ -111,18 +105,17 @@ bin/stereo
 bin/nftSimple
 bin/nftBook
 
-share/artoolkit-examples/OSG/
-share/artoolkit-examples/Data/cubeMarkerConfig.dat
-share/artoolkit-examples/Data/multi/
-share/artoolkit-examples/Data/multi-barcode-4x3.dat
-share/artoolkit-examples/Data/multi-barcode-8x6.dat
-share/artoolkit-examples/Data/objects.dat
-share/artoolkit-examples/Data/markers.dat
-share/artoolkit-examples/Data/sample1.patt
-share/artoolkit-examples/Data/sample2.patt
-share/artoolkit-examples/Data/sample.mov
-share/artoolkit-examples/Data2/
-share/artoolkit-examples/DataNFT/
+share/multiCube/
+share/multiTest/
+share/multiWin/
+share/nftBook/
+share/nftSimple/
+share/optical/
+share/opticalStereo/
+share/simpleLite/
+share/simpleOSG/
+share/simpleTest/
+share/stereo/
 
 examples/Makefile.in
 examples/multi

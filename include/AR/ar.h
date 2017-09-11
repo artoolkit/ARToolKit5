@@ -118,6 +118,14 @@ extern "C" {
 /* --------------------------------------------------*/
 
 /*!
+    @brief A structure to hold a timestamp in seconds and microseconds, with arbitrary epoch.
+ */
+typedef struct {
+    uint64_t sec;
+    uint32_t usec;
+} AR2VideoTimestampT;
+
+/*!
     @brief A structure which carries information about a video frame retrieved by the video library.
     @see arVideoGetPixelFormat arVideoGetPixelFormat
  */
@@ -127,8 +135,7 @@ typedef struct {
     unsigned int        bufPlaneCount;  ///< For multi-planar video frames, this is the number of frame planes. For single-plane formats, this will be 0.
     ARUint8            *buffLuma;       ///< A pointer to a luminance-only version of the image. For luminance-only video formats this pointer is a copy of buff. For multi-planar formats which include a luminance-only plane, this pointer is a copy of one of the bufPlanes[] pointers. In all other cases, this pointer points to a buffer containing a copy of the video frame converted to luminance only.
     int                 fillFlag;       ///< Set non-zero when buff is valid.
-    ARUint32            time_sec;       ///< Seconds portion of the time at which buff was filled. Epoch is OS-specific.
-    ARUint32            time_usec;      ///< Microseconds portion of the time at which buff was filled. Epoch is OS-specific.
+    AR2VideoTimestampT  time;           ///< Time at which buff was filled.
 } AR2VideoBufferT;
 
 /*!

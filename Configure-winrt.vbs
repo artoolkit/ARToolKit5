@@ -66,10 +66,10 @@ If doUpdate Then
     Set objFile = objFSO.OpenTextFile(strConfigHInFileName, ForReading)
     strText = objFile.ReadAll
     objFile.Close
-    strText = Replace(strText, "#undef  AR_INPUT_IMAGE", "#define AR_INPUT_IMAGE")
-    strText = Replace(strText, "#undef  AR_INPUT_WINDOWS_MEDIA_FOUNDATION", "#define AR_INPUT_WINDOWS_MEDIA_FOUNDATION")
-    strText = Replace(strText, "#undef  AR_INPUT_WINDOWS_MEDIA_CAPTURE", "#define AR_INPUT_WINDOWS_MEDIA_CAPTURE")
-    strText = Replace(strText, "#undef  AR_DEFAULT_INPUT_WINDOWS_MEDIA_CAPTURE", "#define AR_DEFAULT_INPUT_WINDOWS_MEDIA_CAPTURE")
+    strText = Replace(strText, "#undef  ARVIDEO_INPUT_IMAGE", "#define ARVIDEO_INPUT_IMAGE")
+    strText = Replace(strText, "#undef  ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION", "#define ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION")
+    strText = Replace(strText, "#undef  ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE", "#define ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE")
+    strText = Replace(strText, "#undef  ARVIDEO_INPUT_DEFAULT_WINDOWS_MEDIA_CAPTURE", "#define ARVIDEO_INPUT_DEFAULT_WINDOWS_MEDIA_CAPTURE")
     Set objFile = objFSO.CreateTextFile(strConfigHFileName)
     objFile.WriteLine strText
     objFile.Close

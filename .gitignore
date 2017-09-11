@@ -1,4 +1,4 @@
-#### OS-generated caches and stres
+#### OS-generated caches and stores
 .DS_Store
 .DS_Store?
 ._*
@@ -182,11 +182,6 @@ AndroidStudioProjects/**/obj
 AndroidStudioProjects/**/build
 
 # Visual Studio build files.
-VisualStudio/vs100/Debug/
-VisualStudio/vs100/Debug-StaticCRuntime/
-VisualStudio/vs100/Release/
-VisualStudio/vs100/Release-StaticCRuntime/
-VisualStudio/vs100/x64/
 VisualStudio/vs120/Debug/
 VisualStudio/vs120/Debug-StaticCRuntime/
 VisualStudio/vs120/Release/

@@ -66,10 +66,10 @@
 #include <AR/ar.h>
 #include <AR/gsub.h>
 #include <AR/video.h>
+#include <ARUtil/time.h>
 
-#define             CPARA_NAME       "../share/artoolkit-examples/Data/camera_para.dat"
-#define             VPARA_NAME       "../share/artoolkit-examples/Data/cameraSetting-%08x%08x.dat"
-#define             PATT_NAME        "../share/artoolkit-examples/Data/hiro.patt"
+#define             VPARA_NAME       "Data/cameraSetting-%08x%08x.dat"
+#define             PATT_NAME        "Data/hiro.patt"
 
 ARHandle           *arHandle;
 ARPattHandle       *arPattHandle;
@@ -267,6 +267,7 @@ static void mainLoop(void)
 
 static void   init(int argc, char *argv[])
 {
+    char           *cparam_name = NULL;
     ARParam         cparam;
     ARGViewport     viewport;
     char            vconf[512];
@@ -295,9 +296,14 @@ static void   init(int argc, char *argv[])
     }
 
     /* set the initial camera parameters */
-    if( arParamLoad(CPARA_NAME, 1, &cparam) < 0 ) {
-        ARLOGe("Camera parameter load error !!\n");
-        exit(0);
+    if (cparam_name && *cparam_name) {
+        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
+            ARLOGe("Camera parameter load error !!\n");
+            exit(0);
+        }
+    } else {
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     arParamChangeSize( &cparam, xsize, ysize, &cparam );
     ARLOG("*** Camera Parameter ***\n");

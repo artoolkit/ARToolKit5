@@ -639,7 +639,7 @@ local ZPOS64_T zip64local_SearchCentralDir64(const zlib_filefunc64_32_def* pzlib
   return relativeOffset;
 }
 
-int LoadCentralDirectoryRecord(zip64_internal* pziinit)
+static int LoadCentralDirectoryRecord(zip64_internal* pziinit)
 {
   int err=ZIP_OK;
   ZPOS64_T byte_before_the_zipfile;/* byte before the zipfile, (>0 for sfx)*/
@@ -957,7 +957,7 @@ extern zipFile ZEXPORT zipOpen64 (const void* pathname, int append)
     return zipOpen3(pathname,append,NULL,NULL);
 }
 
-int Write_LocalFileHeader(zip64_internal* zi, const char* filename, uInt size_extrafield_local, const void* extrafield_local)
+static int Write_LocalFileHeader(zip64_internal* zi, const char* filename, uInt size_extrafield_local, const void* extrafield_local)
 {
   /* write the local header */
   int err;
@@ -1754,7 +1754,7 @@ extern int ZEXPORT zipCloseFileInZip (zipFile file)
     return zipCloseFileInZipRaw (file,0,0);
 }
 
-int Write_Zip64EndOfCentralDirectoryLocator(zip64_internal* zi, ZPOS64_T zip64eocd_pos_inzip)
+static int Write_Zip64EndOfCentralDirectoryLocator(zip64_internal* zi, ZPOS64_T zip64eocd_pos_inzip)
 {
   int err = ZIP_OK;
   ZPOS64_T pos = zip64eocd_pos_inzip - zi->add_position_when_writting_offset;
@@ -1776,7 +1776,7 @@ int Write_Zip64EndOfCentralDirectoryLocator(zip64_internal* zi, ZPOS64_T zip64eo
     return err;
 }
 
-int Write_Zip64EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centraldir, ZPOS64_T centraldir_pos_inzip)
+static int Write_Zip64EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centraldir, ZPOS64_T centraldir_pos_inzip)
 {
   int err = ZIP_OK;
 
@@ -1815,7 +1815,7 @@ int Write_Zip64EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centra
   }
   return err;
 }
-int Write_EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centraldir, ZPOS64_T centraldir_pos_inzip)
+static int Write_EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centraldir, ZPOS64_T centraldir_pos_inzip)
 {
   int err = ZIP_OK;
 
@@ -1863,7 +1863,7 @@ int Write_EndOfCentralDirectoryRecord(zip64_internal* zi, uLong size_centraldir,
    return err;
 }
 
-int Write_GlobalComment(zip64_internal* zi, const char* global_comment)
+static int Write_GlobalComment(zip64_internal* zi, const char* global_comment)
 {
   int err = ZIP_OK;
   uInt size_global_comment = 0;

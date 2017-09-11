@@ -35,15 +35,45 @@
  *
  */
 /* 
- *   author: Hirokazu Kato ( kato@sys.im.hiroshima-cu.ac.jp )
+ *   author: Hirokazu Kato (kato@sys.im.hiroshima-cu.ac.jp)
  *
  *   Revision: 6.0   Date: 2003/09/29
  */
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <AR/video.h>
 #include <AR/config.h>
+#include <ARUtil/time.h>
+#ifdef ARVIDEO_INPUT_DUMMY
+#include "Dummy/videoDummy.h"
+#endif
+#ifdef ARVIDEO_INPUT_V4L2
+#include "Video4Linux2/videoV4L2.h"
+#endif
+#ifdef ARVIDEO_INPUT_LIBDC1394
+#include "libdc1394/video1394.h"
+#endif
+#ifdef ARVIDEO_INPUT_GSTREAMER
+#include "GStreamer/videoGStreamer.h"
+#endif
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+#include "AVFoundation/videoAVFoundation.h"
+#endif
+#ifdef ARVIDEO_INPUT_IMAGE
+#include "Image/videoImage.h"
+#endif
+#ifdef ARVIDEO_INPUT_ANDROID
+#include "Android/videoAndroid.h"
+#endif
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+#include "WindowsMediaFoundation/videoWindowsMediaFoundation.h"
+#endif
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+#include "WindowsMediaCapture/videoWindowsMediaCapture.h"
+#endif
+    
 
 static const char *ar2VideoGetConfig(const char *config_in)
 {
@@ -72,179 +102,106 @@ static const char *ar2VideoGetConfig(const char *config_in)
     return config;
 }
 
-static int ar2VideoGetDeviceWithConfig(const char *config, const char **configStringFollowingDevice_p)
+static int ar2VideoGetModuleWithConfig(const char *config, const char **configStringFollowingDevice_p)
 {
-    int                        device;
+    int                        module;
     const char                *a;
     char                       b[256];
     
-    device = arVideoGetDefaultDevice();
+    module = arVideoGetDefaultModule();
     
     if (configStringFollowingDevice_p) *configStringFollowingDevice_p = NULL;
     
     a = config;
     if (a) {
         for(;;) {
-            while( *a == ' ' || *a == '\t' ) a++;
-            if( *a == '\0' ) break;
+            while(*a == ' ' || *a == '\t') a++;
+            if (*a == '\0') break;
             
-            if( sscanf(a, "%s", b) == 0 ) break;
+            if (sscanf(a, "%s", b) == 0) break;
             
-            if( strcmp( b, "-device=Dummy" ) == 0 )             {
-                device = AR_VIDEO_DEVICE_DUMMY;
-            }
-            else if( strcmp( b, "-device=LinuxV4L" ) == 0 )     {
-                device = AR_VIDEO_DEVICE_V4L;
-            }
-            else if( strcmp( b, "-device=LinuxV4L2" ) == 0 )     {
-                device = AR_VIDEO_DEVICE_V4L2;
-            }
-            else if( strcmp( b, "-device=LinuxDV" ) == 0 )      {
-                device = AR_VIDEO_DEVICE_DV;
-            }
-            else if( strcmp( b, "-device=Linux1394Cam" ) == 0 ) {
-                device = AR_VIDEO_DEVICE_1394CAM;
-            }
-            else if( strcmp( b, "-device=SGI" ) == 0 )          {
-                device = AR_VIDEO_DEVICE_SGI;
-            }
-            else if( strcmp( b, "-device=WinDS" ) == 0 )      {
-                device = AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW;
-            }
-            else if( strcmp( b, "-device=WinDF" ) == 0 )      {
-                device = AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY;
-            }
-            else if( strcmp( b, "-device=WinDSVL" ) == 0 )      {
-                device = AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB;
+            if (strcmp(b, "-module=Dummy") == 0)             {
+                module = AR_VIDEO_MODULE_DUMMY;
+            } else if (strcmp(b, "-module=V4L") == 0 || strcmp(b, "-module=V4L2") == 0) {
+                module = AR_VIDEO_MODULE_V4L2;
+            } else if (strcmp(b, "-module=1394") == 0) {
+                module = AR_VIDEO_MODULE_1394;
+            } else if (strcmp(b, "-module=GStreamer") == 0)    {
+                module = AR_VIDEO_MODULE_GSTREAMER;
                 if (configStringFollowingDevice_p) *configStringFollowingDevice_p = a;
-            }
-            else if( strcmp( b, "-device=QUICKTIME" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_QUICKTIME;
-            }
-            else if( strcmp( b, "-device=GStreamer" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_GSTREAMER;
-                if (configStringFollowingDevice_p) *configStringFollowingDevice_p = a;
-            }
-            else if( strcmp( b, "-device=iPhone" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_IPHONE;
-            }
-            else if( strcmp( b, "-device=QuickTime7" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_QUICKTIME7;
-            }
-            else if( strcmp( b, "-device=Image" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_IMAGE;
-            }
-            else if( strcmp( b, "-device=Android" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_ANDROID;
-            }
-            else if( strcmp( b, "-device=WinMF" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION;
-            }
-            else if( strcmp( b, "-device=WinMC" ) == 0 )    {
-                device = AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE;
+            } else if (strcmp(b, "-module=AVFoundation") == 0)    {
+                module = AR_VIDEO_MODULE_AVFOUNDATION;
+            } else if (strcmp(b, "-module=Image") == 0)    {
+                module = AR_VIDEO_MODULE_IMAGE;
+            } else if (strcmp(b, "-module=Android") == 0)    {
+                module = AR_VIDEO_MODULE_ANDROID;
+            } else if (strcmp(b, "-module=WinMF") == 0)    {
+                module = AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION;
+            } else if (strcmp(b, "-module=WinMC") == 0)    {
+                module = AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE;
             }
             
-            while( *a != ' ' && *a != '\t' && *a != '\0') a++;
+            while (*a != ' ' && *a != '\t' && *a != '\0') a++;
         }
     }
     
     if (configStringFollowingDevice_p) {
         if (*configStringFollowingDevice_p) {
-            while( **configStringFollowingDevice_p != ' ' && **configStringFollowingDevice_p != '\t' && **configStringFollowingDevice_p != '\0') (*configStringFollowingDevice_p)++;
-            while( **configStringFollowingDevice_p == ' ' || **configStringFollowingDevice_p == '\t') (*configStringFollowingDevice_p)++;
+            while(**configStringFollowingDevice_p != ' ' && **configStringFollowingDevice_p != '\t' && **configStringFollowingDevice_p != '\0') (*configStringFollowingDevice_p)++;
+            while(**configStringFollowingDevice_p == ' ' || **configStringFollowingDevice_p == '\t') (*configStringFollowingDevice_p)++;
         } else {
             *configStringFollowingDevice_p = config;
         }
     }
     
-    return (device);
+    return (module);
 }
 
 ARVideoSourceInfoListT *ar2VideoCreateSourceInfoList(const char *config_in)
 {
-    int device = ar2VideoGetDeviceWithConfig(ar2VideoGetConfig(config_in), NULL);
-#ifdef AR_INPUT_DUMMY
-    if (device == AR_VIDEO_DEVICE_DUMMY) {
+    int module = ar2VideoGetModuleWithConfig(ar2VideoGetConfig(config_in), NULL);
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (module == AR_VIDEO_MODULE_DUMMY) {
         return (NULL);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if (device == AR_VIDEO_DEVICE_V4L) {
+#ifdef ARVIDEO_INPUT_V4L2
+    if (module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoCreateSourceInfoListV4L2(config_in);
+    }
+#endif
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (module == AR_VIDEO_MODULE_1394) {
         return (NULL);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if (device == AR_VIDEO_DEVICE_V4L2) {
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (module == AR_VIDEO_MODULE_GSTREAMER) {
         return (NULL);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if (device == AR_VIDEO_DEVICE_DV) {
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoCreateSourceInfoListAVFoundation(config_in);
+    }
+#endif
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (module == AR_VIDEO_MODULE_IMAGE) {
         return (NULL);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if (device == AR_VIDEO_DEVICE_1394CAM) {
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (module == AR_VIDEO_MODULE_ANDROID) {
         return (NULL);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if (device == AR_VIDEO_DEVICE_GSTREAMER) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_SGI
-    if (device == AR_VIDEO_DEVICE_SGI) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if (device == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW) {
-		return ar2VideoCreateSourceInfoListWinDS(config_in);
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if (device == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if (device == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if (device == AR_VIDEO_DEVICE_QUICKTIME) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if (device == AR_VIDEO_DEVICE_IPHONE) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if (device == AR_VIDEO_DEVICE_QUICKTIME7) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if (device == AR_VIDEO_DEVICE_IMAGE) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if (device == AR_VIDEO_DEVICE_ANDROID) {
-        return (NULL);
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if (device == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
         return ar2VideoCreateSourceInfoListWinMF(config_in);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if (device == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
         return (NULL);
     }
 #endif
@@ -259,7 +216,9 @@ void ar2VideoDeleteSourceInfoList(ARVideoSourceInfoListT **p)
     
     for (i = 0; i < (*p)->count; i++) {
         free((*p)->info[i].name);
+        free((*p)->info[i].model);
         free((*p)->info[i].UID);
+        free((*p)->info[i].open_token);
     }
     free((*p)->info);
     free(*p);
@@ -267,139 +226,83 @@ void ar2VideoDeleteSourceInfoList(ARVideoSourceInfoListT **p)
     *p = NULL;
 }
 
-AR2VideoParamT *ar2VideoOpen( const char *config_in )
+AR2VideoParamT *ar2VideoOpen(const char *config_in)
 {
     AR2VideoParamT            *vid;
     const char                *config;
-    // Some devices won't understand the "-device=" option, so we need to pass
+    // Some devices won't understand the "-module=" option, so we need to pass
     // only the portion following that option to them.
     const char                *configStringFollowingDevice = NULL;
 
-    arMallocClear( vid, AR2VideoParamT, 1 );
+    arMallocClear(vid, AR2VideoParamT, 1);
     config = ar2VideoGetConfig(config_in);
-    vid->deviceType = ar2VideoGetDeviceWithConfig(config, &configStringFollowingDevice);
+    vid->module = ar2VideoGetModuleWithConfig(config, &configStringFollowingDevice);
 
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-#ifdef AR_INPUT_DUMMY
-        if( (vid->device.dummy = ar2VideoOpenDummy(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+#ifdef ARVIDEO_INPUT_DUMMY
+        if ((vid->moduleParam = (void *)ar2VideoOpenDummy(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"Dummy\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"Dummy\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-#ifdef AR_INPUT_V4L
-        if( (vid->device.v4l = ar2VideoOpenV4L(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+#ifdef ARVIDEO_INPUT_V4L2
+        if ((vid->moduleParam = (void *)ar2VideoOpenV4L2(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"LinuxV4L\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"V4L2\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-#ifdef AR_INPUT_V4L2
-        if( (vid->device.v4l2 = ar2VideoOpenV4L2(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+#ifdef ARVIDEO_INPUT_LIBDC1394
+        if ((vid->moduleParam = (void *)ar2VideoOpen1394(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"LinuxV4L2\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"1394\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-#ifdef AR_INPUT_DV
-        if( (vid->device.dv = ar2VideoOpenDv(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+#ifdef ARVIDEO_INPUT_GSTREAMER
+        if ((vid->moduleParam = (void *)ar2VideoOpenGStreamer(configStringFollowingDevice)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"LinuxDV\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"GStreamer\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-#ifdef AR_INPUT_1394CAM
-        if( (vid->device.cam1394 = ar2VideoOpen1394(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+        if ((vid->moduleParam = (void *)ar2VideoOpenAVFoundation(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"Linux1394Cam\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"AVFoundation\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-#ifdef AR_INPUT_GSTREAMER
-        if( (vid->device.gstreamer = ar2VideoOpenGStreamer(configStringFollowingDevice)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+#ifdef ARVIDEO_INPUT_IMAGE
+        if ((vid->moduleParam = (void *)ar2VideoOpenImage(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"GStreamer\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"Image\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-#ifdef AR_INPUT_SGI
-        if( (vid->device.sgi = ar2VideoOpenSGI(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+#ifdef ARVIDEO_INPUT_ANDROID
+        ARLOGe("ar2VideoOpen: Error: module \"Android\" requires ar2VideoOpenAsync.\n");
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"SGI\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"Android\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-        if( (vid->device.winDS = ar2VideoOpenWinDS(config)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+        if ((vid->moduleParam = (void *)ar2VideoOpenWinMF(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"WinDS\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"WinMF\" not supported on this build/architecture/system.\n");
 #endif
     }
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-        if( (vid->device.winDSVL = ar2VideoOpenWinDSVL(configStringFollowingDevice)) != NULL ) return vid;
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+        if ((vid->moduleParam = (void *)ar2VideoOpenWinMC(config)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"WinDSVL\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-        if( (vid->device.winDF = ar2VideoOpenWinDF(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"WinDF\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-#ifdef AR_INPUT_QUICKTIME
-        if( (vid->device.quickTime = ar2VideoOpenQuickTime(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"QUICKTIME\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-#ifdef AR_INPUT_IPHONE
-        if ((vid->device.iPhone = ar2VideoOpeniPhone(config)) != NULL) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"iPhone\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-#ifdef AR_INPUT_QUICKTIME7
-        if( (vid->device.quickTime7 = ar2VideoOpenQuickTime7(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"QuickTime7\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-#ifdef AR_INPUT_IMAGE
-        if( (vid->device.image = ar2VideoOpenImage(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"Image\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-#ifdef AR_INPUT_ANDROID
-        if( (vid->device.android = ar2VideoOpenAndroid(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"Android\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-        if( (vid->device.winMF = ar2VideoOpenWinMF(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"WinMF\" not supported on this build/architecture/system.\n");
-#endif
-    }
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-        if( (vid->device.winMC = ar2VideoOpenWinMC(config)) != NULL ) return vid;
-#else
-        ARLOGe("ar2VideoOpen: Error: device \"WinMC\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpen: Error: module \"WinMC\" not supported on this build/architecture/system.\n");
 #endif
     }
     
-    free( vid );
+    free(vid);
     return NULL;
 }
 
@@ -407,30 +310,36 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
 {
     AR2VideoParamT            *vid;
     const char                *config;
-    // Some devices won't understand the "-device=" option, so we need to pass
+    // Some devices won't understand the "-module=" option, so we need to pass
     // only the portion following that option to them.
     const char                *configStringFollowingDevice = NULL;
     
-    arMallocClear( vid, AR2VideoParamT, 1 );
-    config = ar2VideoGetConfig(config_in);
-    vid->deviceType = ar2VideoGetDeviceWithConfig(config, &configStringFollowingDevice);
+    if (!callback) return NULL;
     
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-#ifdef AR_INPUT_IPHONE
-        if (callback) vid->device.iPhone = ar2VideoOpenAsynciPhone(config, callback, userdata);
-        else vid->device.iPhone = NULL;
-        
-        if (vid->device.iPhone != NULL) return vid;
+    arMallocClear(vid, AR2VideoParamT, 1);
+    config = ar2VideoGetConfig(config_in);
+    vid->module = ar2VideoGetModuleWithConfig(config, &configStringFollowingDevice);
+    
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+        if ((vid->moduleParam = (void *)ar2VideoOpenAsyncAVFoundation(config, callback, userdata)) != NULL) return vid;
 #else
-        ARLOGe("ar2VideoOpen: Error: device \"iPhone\" not supported on this build/architecture/system.\n");
+        ARLOGe("ar2VideoOpenAsync: Error: module \"AVFoundation\" not supported on this build/architecture/system.\n");
+#endif
+    }
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+#ifdef ARVIDEO_INPUT_ANDROID
+        if ((vid->moduleParam = (void *)ar2VideoOpenAsyncAndroid(config, callback, userdata)) != NULL) return vid;
+#else
+        ARLOGe("ar2VideoOpenAsync: Error: module \"Android\" not supported on this build/architecture/system.\n");
 #endif
     }
 
-    free( vid );
+    free(vid);
     return NULL;
 }
 
-int ar2VideoClose( AR2VideoParamT *vid )
+int ar2VideoClose(AR2VideoParamT *vid)
 {
     int ret;
     
@@ -441,278 +350,158 @@ int ar2VideoClose( AR2VideoParamT *vid )
         }
     }
     ret = -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        ret = ar2VideoCloseDummy( vid->device.dummy );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        ret = ar2VideoCloseDummy((AR2VideoParamDummyT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        ret = ar2VideoCloseV4L( vid->device.v4l );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        ret = ar2VideoCloseV4L2((AR2VideoParamV4L2T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        ret = ar2VideoCloseV4L2( vid->device.v4l2 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        ret = ar2VideoClose1394((AR2VideoParam1394T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        ret = ar2VideoCloseDv( vid->device.dv );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        ret = ar2VideoCloseGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        ret = ar2VideoClose1394( vid->device.cam1394 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        ret = ar2VideoCloseAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        ret = ar2VideoCloseGStreamer( vid->device.gstreamer );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        ret = ar2VideoCloseImage((AR2VideoParamImageT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        ret = ar2VideoCloseSGI( vid->device.sgi );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        ret = ar2VideoCloseAndroid((AR2VideoParamAndroidT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        ret = ar2VideoCloseWinDS( vid->device.winDS );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        ret = ar2VideoCloseWinMF((AR2VideoParamWinMFT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        ret = ar2VideoCloseWinDSVL( vid->device.winDSVL );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        ret = ar2VideoCloseWinDF( vid->device.winDF );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        ret = ar2VideoCloseQuickTime( vid->device.quickTime );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        ret = ar2VideoCloseiPhone( vid->device.iPhone );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        ret = ar2VideoCloseQuickTime7( vid->device.quickTime7 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        ret = ar2VideoCloseImage( vid->device.image );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        ret = ar2VideoCloseAndroid( vid->device.android );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        ret = ar2VideoCloseWinMF( vid->device.winMF );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        ret = ar2VideoCloseWinMC( vid->device.winMC );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        ret = ar2VideoCloseWinMC((AR2VideoParamWinMCT *)vid->moduleParam);
     }
 #endif
     free (vid);
     return (ret);
 } 
 
-int ar2VideoDispOption( AR2VideoParamT *vid )
+int ar2VideoDispOption(AR2VideoParamT *vid)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
         return ar2VideoDispOptionDummy();
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoDispOptionV4L();
-    }
-#endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
         return ar2VideoDispOptionV4L2();
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoDispOptionDv();
-    }
-#endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
         return ar2VideoDispOption1394();
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
         return ar2VideoDispOptionGStreamer();
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoDispOptionSGI();
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoDispOptionAVFoundation();
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoDispOptionWinDS();
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoDispOptionWinDSVL();
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoDispOptionWinDF();
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoDispOptionQuickTime();
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoDispOptioniPhone();
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoDispOptionQuickTime7();
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
         return ar2VideoDispOptionImage();
     }
 #endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
         return ar2VideoDispOptionAndroid();
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
         return ar2VideoDispOptionWinMF();
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
         return ar2VideoDispOptionWinMC();
     }
 #endif
     return (-1);
 }
 
-int ar2VideoGetDevice( AR2VideoParamT *vid )
+AR_VIDEO_MODULE ar2VideoGetModule(AR2VideoParamT *vid)
 {
     if (!vid) return -1;
-    return vid->deviceType;
+    return vid->module;
 }
 
-int ar2VideoGetId( AR2VideoParamT *vid, ARUint32 *id0, ARUint32 *id1 )
+int ar2VideoGetId(AR2VideoParamT *vid, ARUint32 *id0, ARUint32 *id1)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetIdDummy( vid->device.dummy, id0, id1 );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetIdDummy((AR2VideoParamDummyT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoGetIdV4L( vid->device.v4l, id0, id1 );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetIdV4L2((AR2VideoParamV4L2T *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoGetIdV4L2( vid->device.v4l2, id0, id1 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoGetId1394((AR2VideoParam1394T *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoGetIdDv( vid->device.dv, id0, id1 );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoGetIdGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoGetId1394( vid->device.cam1394, id0, id1 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetIdAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoGetIdGStreamer( vid->device.gstreamer, id0, id1 );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetIdImage((AR2VideoParamImageT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoGetIdSGI( vid->device.sgi, id0, id1 );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetIdAndroid((AR2VideoParamAndroidT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoGetIdWinDS( vid->device.winDS, id0, id1 );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetIdWinMF((AR2VideoParamWinMFT *)vid->moduleParam, id0, id1);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoGetIdWinDSVL( vid->device.winDSVL, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoGetIdWinDF( vid->device.winDF, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoGetIdQuickTime( vid->device.quickTime, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetIdiPhone( vid->device.iPhone, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetIdQuickTime7( vid->device.quickTime7, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetIdImage( vid->device.image, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetIdAndroid( vid->device.android, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetIdWinMF( vid->device.winMF, id0, id1 );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetIdWinMC( vid->device.winMC, id0, id1 );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetIdWinMC((AR2VideoParamWinMCT *)vid->moduleParam, id0, id1);
     }
 #endif
     return (-1);
@@ -721,291 +510,171 @@ int ar2VideoGetId( AR2VideoParamT *vid, ARUint32 *id0, ARUint32 *id1 )
 int ar2VideoGetSize(AR2VideoParamT *vid, int *x,int *y)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetSizeDummy( vid->device.dummy, x, y );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetSizeDummy((AR2VideoParamDummyT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoGetSizeV4L( vid->device.v4l, x, y );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetSizeV4L2((AR2VideoParamV4L2T *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoGetSizeV4L2( vid->device.v4l2, x, y );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoGetSize1394((AR2VideoParam1394T *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoGetSizeDv( vid->device.dv, x, y );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoGetSizeGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoGetSize1394( vid->device.cam1394, x, y );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetSizeAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoGetSizeGStreamer( vid->device.gstreamer, x, y );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetSizeImage((AR2VideoParamImageT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoGetSizeSGI( vid->device.sgi, x, y );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetSizeAndroid((AR2VideoParamAndroidT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoGetSizeWinDS( vid->device.winDS, x, y );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetSizeWinMF((AR2VideoParamWinMFT *)vid->moduleParam, x, y);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoGetSizeWinDSVL( vid->device.winDSVL, x, y );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoGetSizeWinDF( vid->device.winDF, x, y );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoGetSizeQuickTime( vid->device.quickTime, x, y );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetSizeiPhone( vid->device.iPhone, x, y );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetSizeQuickTime7( vid->device.quickTime7, x, y );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetSizeImage( vid->device.image, x, y );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetSizeAndroid( vid->device.android, x, y );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetSizeWinMF( vid->device.winMF, x, y );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetSizeWinMC( vid->device.winMC, x, y );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetSizeWinMC((AR2VideoParamWinMCT *)vid->moduleParam, x, y);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoGetPixelSize( AR2VideoParamT *vid )
+int ar2VideoGetPixelSize(AR2VideoParamT *vid)
 {
     return (arVideoUtilGetPixelSize(ar2VideoGetPixelFormat(vid)));
 }
 
-AR_PIXEL_FORMAT ar2VideoGetPixelFormat( AR2VideoParamT *vid )
+AR_PIXEL_FORMAT ar2VideoGetPixelFormat(AR2VideoParamT *vid)
 {
     if (!vid) return (AR_PIXEL_FORMAT_INVALID);
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetPixelFormatDummy( vid->device.dummy );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetPixelFormatDummy((AR2VideoParamDummyT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoGetPixelFormatV4L( vid->device.v4l );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetPixelFormatV4L2((AR2VideoParamV4L2T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoGetPixelFormatV4L2( vid->device.v4l2 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoGetPixelFormat1394((AR2VideoParam1394T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoGetPixelFormatDv( vid->device.dv );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoGetPixelFormatGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoGetPixelFormat1394( vid->device.cam1394 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetPixelFormatAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoGetPixelFormatGStreamer( vid->device.gstreamer );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetPixelFormatImage((AR2VideoParamImageT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoGetPixelFormatSGI( vid->device.sgi );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetPixelFormatAndroid((AR2VideoParamAndroidT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoGetPixelFormatWinDS( vid->device.winDS );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetPixelFormatWinMF((AR2VideoParamWinMFT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoGetPixelFormatWinDSVL( vid->device.winDSVL );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoGetPixelFormatWinDF( vid->device.winDF );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoGetPixelFormatQuickTime( vid->device.quickTime );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetPixelFormatiPhone( vid->device.iPhone );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetPixelFormatQuickTime7( vid->device.quickTime7 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetPixelFormatImage( vid->device.image );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetPixelFormatAndroid( vid->device.android );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetPixelFormatWinMF( vid->device.winMF );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetPixelFormatWinMC( vid->device.winMC );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetPixelFormatWinMC((AR2VideoParamWinMCT *)vid->moduleParam);
     }
 #endif
     return (AR_PIXEL_FORMAT_INVALID);
 }
 
-AR2VideoBufferT *ar2VideoGetImage( AR2VideoParamT *vid )
+AR2VideoBufferT *ar2VideoGetImage(AR2VideoParamT *vid)
 {
     AR2VideoBufferT *ret = NULL;
     
     if (!vid) return (NULL);
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        ret = ar2VideoGetImageDummy( vid->device.dummy );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        ret = ar2VideoGetImageDummy((AR2VideoParamDummyT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        ret = ar2VideoGetImageV4L( vid->device.v4l );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        ret = ar2VideoGetImageV4L2((AR2VideoParamV4L2T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        ret = ar2VideoGetImageV4L2( vid->device.v4l2 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        ret = ar2VideoGetImage1394((AR2VideoParam1394T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        ret = ar2VideoGetImageDv( vid->device.dv );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        ret = ar2VideoGetImageGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        ret = ar2VideoGetImage1394( vid->device.cam1394 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        ret = ar2VideoGetImageAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        ret = ar2VideoGetImageGStreamer( vid->device.gstreamer );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        ret = ar2VideoGetImageImage((AR2VideoParamImageT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        ret = ar2VideoGetImageSGI( vid->device.sgi );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        ret = ar2VideoGetImageAndroid((AR2VideoParamAndroidT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        ret = ar2VideoGetImageWinDS( vid->device.winDS );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        ret = ar2VideoGetImageWinMF((AR2VideoParamWinMFT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        ret = ar2VideoGetImageWinDSVL( vid->device.winDSVL );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        ret = ar2VideoGetImageWinDF( vid->device.winDF );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        ret = ar2VideoGetImageQuickTime( vid->device.quickTime );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        ret = ar2VideoGetImageiPhone( vid->device.iPhone );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        ret = ar2VideoGetImageQuickTime7( vid->device.quickTime7 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        ret = ar2VideoGetImageImage( vid->device.image );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
-        ret = ar2VideoGetImageAndroid( vid->device.android );
-#  else
-        return (NULL); // NOT IMPLEMENTED.
-#  endif
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        ret = ar2VideoGetImageWinMF( vid->device.winMF );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        ret = ar2VideoGetImageWinMC( vid->device.winMC );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        ret = ar2VideoGetImageWinMC((AR2VideoParamWinMCT *)vid->moduleParam);
     }
 #endif
     if (ret) {
+        // Supply a timestamp if the video module didn't provide one.
+        if (!ret->time.sec && !ret->time.usec) {
+            arUtilTimeSinceEpoch(&ret->time.sec, &ret->time.usec);
+        }
         // Do a conversion to luma-only if the video module didn't provide one.
         if (!ret->buffLuma) {
             AR_PIXEL_FORMAT pixFormat;
             pixFormat = ar2VideoGetPixelFormat(vid);
             if (pixFormat == AR_PIXEL_FORMAT_INVALID) {
-                ARLOGe("ar2VideoGetImage: Error: unable to get pixel format.\n");
+                ARLOGe("ar2VideoGetImage unable to get pixel format.\n");
                 return (NULL);
             }
             if (pixFormat == AR_PIXEL_FORMAT_MONO || pixFormat == AR_PIXEL_FORMAT_420f || pixFormat == AR_PIXEL_FORMAT_420v || pixFormat == AR_PIXEL_FORMAT_NV21) {
@@ -1014,12 +683,12 @@ AR2VideoBufferT *ar2VideoGetImage( AR2VideoParamT *vid )
                 if (!vid->lumaInfo) {
                     int xsize, ysize;
                     if (ar2VideoGetSize(vid, &xsize, &ysize) < 0) {
-                        ARLOGe("ar2VideoGetImage: Error: unable to get size.\n");
+                        ARLOGe("ar2VideoGetImage unable to get size.\n");
                         return (NULL);
                     }
                     vid->lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
                     if (!vid->lumaInfo) {
-                        ARLOGe("ar2VideoGetImage: Error: unable to initialise luma conversion.\n");
+                        ARLOGe("ar2VideoGetImage unable to initialise luma conversion.\n");
                         return (NULL);
                     }
                 }
@@ -1030,96 +699,52 @@ AR2VideoBufferT *ar2VideoGetImage( AR2VideoParamT *vid )
     return (ret);
 }
 
-int ar2VideoCapStart( AR2VideoParamT *vid )
+int ar2VideoCapStart(AR2VideoParamT *vid)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoCapStartDummy( vid->device.dummy );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoCapStartDummy((AR2VideoParamDummyT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoCapStartV4L( vid->device.v4l );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoCapStartV4L2((AR2VideoParamV4L2T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoCapStartV4L2( vid->device.v4l2 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoCapStart1394((AR2VideoParam1394T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoCapStartDv( vid->device.dv );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoCapStartGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoCapStart1394( vid->device.cam1394 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoCapStartAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoCapStartGStreamer( vid->device.gstreamer );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoCapStartImage((AR2VideoParamImageT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoCapStartSGI( vid->device.sgi );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoCapStartAndroid((AR2VideoParamAndroidT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoCapStartWinDS( vid->device.winDS );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoCapStartWinMF((AR2VideoParamWinMFT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoCapStartWinDSVL( vid->device.winDSVL );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoCapStartWinDF( vid->device.winDF );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoCapStartQuickTime( vid->device.quickTime );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoCapStartiPhone( vid->device.iPhone );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoCapStartQuickTime7( vid->device.quickTime7 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoCapStartImage( vid->device.image );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
-        return ar2VideoCapStartAndroid( vid->device.android );
-#  else
-        return (-1); // NOT IMPLEMENTED.
-#  endif
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoCapStartWinMF( vid->device.winMF );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoCapStartWinMC( vid->device.winMC );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoCapStartWinMC((AR2VideoParamWinMCT *)vid->moduleParam);
     }
 #endif
     return (-1);
@@ -1128,114 +753,66 @@ int ar2VideoCapStart( AR2VideoParamT *vid )
 int ar2VideoCapStartAsync (AR2VideoParamT *vid, AR_VIDEO_FRAME_READY_CALLBACK callback, void *userdata)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
-        return ar2VideoCapStartAsyncAndroid( vid->device.android, callback, userdata );
-#  else
-        return (-1); // NOT IMPLEMENTED.
-#  endif
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoCapStartAsyncAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, callback, userdata);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoCapStop( AR2VideoParamT *vid )
+int ar2VideoCapStop(AR2VideoParamT *vid)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoCapStopDummy( vid->device.dummy );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoCapStopDummy((AR2VideoParamDummyT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoCapStopV4L( vid->device.v4l );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoCapStopV4L2((AR2VideoParamV4L2T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoCapStopV4L2( vid->device.v4l2 );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoCapStop1394((AR2VideoParam1394T *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoCapStopDv( vid->device.dv );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoCapStopGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoCapStop1394( vid->device.cam1394 );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoCapStopAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoCapStopGStreamer( vid->device.gstreamer );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoCapStopImage((AR2VideoParamImageT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoCapStopSGI( vid->device.sgi );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+		return ar2VideoCapStopAndroid((AR2VideoParamAndroidT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoCapStopWinDS( vid->device.winDS );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoCapStopWinMF((AR2VideoParamWinMFT *)vid->moduleParam);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoCapStopWinDSVL( vid->device.winDSVL );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoCapStopWinDF( vid->device.winDF );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoCapStopQuickTime( vid->device.quickTime );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoCapStopiPhone( vid->device.iPhone );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoCapStopQuickTime7( vid->device.quickTime7 );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoCapStopImage( vid->device.image );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-#  if AR_VIDEO_ANDROID_ENABLE_NATIVE_CAMERA
-		return ar2VideoCapStopAndroid( vid->device.android );
-#  else
-        return (-1); // NOT IMPLEMENTED.
-#  endif
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoCapStopWinMF( vid->device.winMF );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoCapStopWinMC( vid->device.winMC );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoCapStopWinMC((AR2VideoParamWinMCT *)vid->moduleParam);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoGetParami( AR2VideoParamT *vid, int paramName, int *value )
+int ar2VideoGetParami(AR2VideoParamT *vid, int paramName, int *value)
 {
     if (paramName == AR_VIDEO_GET_VERSION) {
 #if (AR_HEADER_VERSION_MAJOR >= 10)
@@ -1248,472 +825,312 @@ int ar2VideoGetParami( AR2VideoParamT *vid, int paramName, int *value )
                 0x00000100 * ((unsigned int)AR_HEADER_VERSION_TINY % 10) +
                 0x00000010 * ((unsigned int)AR_HEADER_VERSION_DEV / 10) +
                 0x00000001 * ((unsigned int)AR_HEADER_VERSION_DEV % 10)
-                );
+               );
 #endif
     }
     
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetParamiDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetParamiDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoGetParamiV4L( vid->device.v4l, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetParamiV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoGetParamiV4L2( vid->device.v4l2, paramName, value );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoGetParami1394((AR2VideoParam1394T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoGetParamiDv( vid->device.dv, paramName, value );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoGetParamiGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoGetParami1394( vid->device.cam1394, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetParamiAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoGetParamiGStreamer( vid->device.gstreamer, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetParamiImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoGetParamiSGI( vid->device.sgi, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetParamiAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoGetParamiWinDS( vid->device.winDS, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetParamiWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoGetParamiWinDSVL( vid->device.winDSVL, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoGetParamiWinDF( vid->device.winDF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoGetParamiQuickTime( vid->device.quickTime, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetParamiiPhone( vid->device.iPhone, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetParamiQuickTime7( vid->device.quickTime7, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetParamiImage( vid->device.image, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetParamiAndroid( vid->device.android, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetParamiWinMF( vid->device.winMF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetParamiWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetParamiWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoSetParami( AR2VideoParamT *vid, int paramName, int  value )
+int ar2VideoSetParami(AR2VideoParamT *vid, int paramName, int  value)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoSetParamiDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoSetParamiDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoSetParamiV4L( vid->device.v4l, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoSetParamiV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoSetParamiV4L2( vid->device.v4l2, paramName, value );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoSetParami1394((AR2VideoParam1394T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoSetParamiDv( vid->device.dv, paramName, value );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoSetParamiGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoSetParami1394( vid->device.cam1394, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoSetParamiAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoSetParamiGStreamer( vid->device.gstreamer, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoSetParamiImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoSetParamiSGI( vid->device.sgi, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoSetParamiAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoSetParamiWinDS( vid->device.winDS, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoSetParamiWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoSetParamiWinDSVL( vid->device.winDSVL, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoSetParamiWinDF( vid->device.winDF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoSetParamiQuickTime( vid->device.quickTime, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoSetParamiiPhone( vid->device.iPhone, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoSetParamiQuickTime7( vid->device.quickTime7, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoSetParamiImage( vid->device.image, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoSetParamiAndroid( vid->device.android, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoSetParamiWinMF( vid->device.winMF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoSetParamiWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoSetParamiWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoGetParamd( AR2VideoParamT *vid, int paramName, double *value )
+int ar2VideoGetParamd(AR2VideoParamT *vid, int paramName, double *value)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetParamdDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetParamdDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoGetParamdV4L( vid->device.v4l, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetParamdV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoGetParamdV4L2( vid->device.v4l2, paramName, value );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoGetParamd1394((AR2VideoParam1394T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoGetParamdDv( vid->device.dv, paramName, value );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoGetParamdGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoGetParamd1394( vid->device.cam1394, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetParamdAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoGetParamdGStreamer( vid->device.gstreamer, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetParamdImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoGetParamdSGI( vid->device.sgi, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetParamdAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoGetParamdWinDS( vid->device.winDS, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetParamdWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoGetParamdWinDSVL( vid->device.winDSVL, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoGetParamdWinDF( vid->device.winDF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoGetParamdQuickTime( vid->device.quickTime, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetParamdiPhone( vid->device.iPhone, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetParamdQuickTime7( vid->device.quickTime7, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetParamdImage( vid->device.image, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetParamdAndroid( vid->device.android, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetParamdWinMF( vid->device.winMF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetParamdWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetParamdWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoSetParamd( AR2VideoParamT *vid, int paramName, double  value )
+int ar2VideoSetParamd(AR2VideoParamT *vid, int paramName, double  value)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoSetParamdDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoSetParamdDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L ) {
-        return ar2VideoSetParamdV4L( vid->device.v4l, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoSetParamdV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_V4L2
-    if( vid->deviceType == AR_VIDEO_DEVICE_V4L2 ) {
-        return ar2VideoSetParamdV4L2( vid->device.v4l2, paramName, value );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoSetParamd1394((AR2VideoParam1394T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_DV
-    if( vid->deviceType == AR_VIDEO_DEVICE_DV ) {
-        return ar2VideoSetParamdDv( vid->device.dv, paramName, value );
+#ifdef ARVIDEO_INPUT_GSTREAMER
+    if (vid->module == AR_VIDEO_MODULE_GSTREAMER) {
+        return ar2VideoSetParamdGStreamer((AR2VideoParamGStreamerT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoSetParamd1394( vid->device.cam1394, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoSetParamdAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_GSTREAMER
-    if( vid->deviceType == AR_VIDEO_DEVICE_GSTREAMER ) {
-        return ar2VideoSetParamdGStreamer( vid->device.gstreamer, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoSetParamdImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_SGI
-    if( vid->deviceType == AR_VIDEO_DEVICE_SGI ) {
-        return ar2VideoSetParamdSGI( vid->device.sgi, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoSetParamdAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DIRECTSHOW
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DIRECTSHOW ) {
-        return ar2VideoSetParamdWinDS( vid->device.winDS, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoSetParamdWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_DSVIDEOLIB
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DSVIDEOLIB ) {
-        return ar2VideoSetParamdWinDSVL( vid->device.winDSVL, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_DRAGONFLY
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_DRAGONFLY ) {
-        return ar2VideoSetParamdWinDF( vid->device.winDF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME ) {
-        return ar2VideoSetParamdQuickTime( vid->device.quickTime, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoSetParamdiPhone( vid->device.iPhone, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoSetParamdQuickTime7( vid->device.quickTime7, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoSetParamdImage( vid->device.image, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoSetParamdAndroid( vid->device.android, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoSetParamdWinMF( vid->device.winMF, paramName, value );
-    }
-#endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoSetParamdWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoSetParamdWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
 
-int ar2VideoGetParams( AR2VideoParamT *vid, const int paramName, char **value )
+int ar2VideoGetParams(AR2VideoParamT *vid, const int paramName, char **value)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetParamsDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetParamsDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetParamsiPhone( vid->device.iPhone, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetParamsV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoGetParamsQuickTime7(vid->device.quickTime7, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetParamsAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetParamsImage( vid->device.image, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetParamsImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetParamsAndroid( vid->device.android, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetParamsAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoGetParamsWinMF( vid->device.winMF, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoGetParamsWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoGetParamsWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoGetParamsWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoSetParams( AR2VideoParamT *vid, const int paramName, const char  *value )
+int ar2VideoSetParams(AR2VideoParamT *vid, const int paramName, const char  *value)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoSetParamsDummy( vid->device.dummy, paramName, value );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoSetParamsDummy((AR2VideoParamDummyT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoSetParamsiPhone( vid->device.iPhone, paramName, value );
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoSetParamsV4L2((AR2VideoParamV4L2T *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        return ar2VideoSetParamsQuickTime7( vid->device.quickTime7, paramName, value );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoSetParamsAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoSetParamsImage( vid->device.image, paramName, value );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoSetParamsImage((AR2VideoParamImageT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoSetParamsAndroid( vid->device.android, paramName, value );
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoSetParamsAndroid((AR2VideoParamAndroidT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_FOUNDATION
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_FOUNDATION ) {
-        return ar2VideoSetParamsWinMF( vid->device.winMF, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_FOUNDATION) {
+        return ar2VideoSetParamsWinMF((AR2VideoParamWinMFT *)vid->moduleParam, paramName, value);
     }
 #endif
-#ifdef AR_INPUT_WINDOWS_MEDIA_CAPTURE
-    if( vid->deviceType == AR_VIDEO_DEVICE_WINDOWS_MEDIA_CAPTURE ) {
-        return ar2VideoSetParamsWinMC( vid->device.winMC, paramName, value );
+#ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE
+    if (vid->module == AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE) {
+        return ar2VideoSetParamsWinMC((AR2VideoParamWinMCT *)vid->moduleParam, paramName, value);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoSaveParam( AR2VideoParamT *vid, char *filename )
+int ar2VideoSaveParam(AR2VideoParamT *vid, char *filename)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoSaveParam1394( vid->device.cam1394, filename );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoSaveParam1394((AR2VideoParam1394T *)vid->moduleParam, filename);
     }
 #endif
     return (-1);
 }
 
-int ar2VideoLoadParam( AR2VideoParamT *vid, char *filename )
+int ar2VideoLoadParam(AR2VideoParamT *vid, char *filename)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_1394CAM
-    if( vid->deviceType == AR_VIDEO_DEVICE_1394CAM ) {
-        return ar2VideoLoadParam1394( vid->device.cam1394, filename );
+#ifdef ARVIDEO_INPUT_LIBDC1394
+    if (vid->module == AR_VIDEO_MODULE_1394) {
+        return ar2VideoLoadParam1394((AR2VideoParam1394T *)vid->moduleParam, filename);
     }
 #endif
     return (-1);
@@ -1722,24 +1139,19 @@ int ar2VideoLoadParam( AR2VideoParamT *vid, char *filename )
 int ar2VideoSetBufferSize(AR2VideoParamT *vid, const int width, const int height)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoSetBufferSizeDummy( vid->device.dummy, width, height );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoSetBufferSizeDummy((AR2VideoParamDummyT *)vid->moduleParam, width, height);
     }
 #endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoSetBufferSizeiPhone( vid->device.iPhone, width, height );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoSetBufferSizeAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, width, height);
     }
 #endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        //return ar2VideoSetBufferSizeQuickTime7( vid->device.quickTime7, width, height );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoSetBufferSizeImage( vid->device.image, width, height );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoSetBufferSizeImage((AR2VideoParamImageT *)vid->moduleParam, width, height);
     }
 #endif
     return (-1);
@@ -1748,24 +1160,19 @@ int ar2VideoSetBufferSize(AR2VideoParamT *vid, const int width, const int height
 int ar2VideoGetBufferSize(AR2VideoParamT *vid, int *width, int *height)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_DUMMY
-    if( vid->deviceType == AR_VIDEO_DEVICE_DUMMY ) {
-        return ar2VideoGetBufferSizeDummy( vid->device.dummy, width, height );
+#ifdef ARVIDEO_INPUT_DUMMY
+    if (vid->module == AR_VIDEO_MODULE_DUMMY) {
+        return ar2VideoGetBufferSizeDummy((AR2VideoParamDummyT *)vid->moduleParam, width, height);
     }
 #endif
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetBufferSizeiPhone( vid->device.iPhone, width, height );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetBufferSizeAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, width, height);
     }
 #endif
-#ifdef AR_INPUT_QUICKTIME7
-    if( vid->deviceType == AR_VIDEO_DEVICE_QUICKTIME7 ) {
-        //return ar2VideoGetBufferSizeQuickTime7( vid->device.quickTime7, width, height );
-    }
-#endif
-#ifdef AR_INPUT_IMAGE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IMAGE ) {
-        return ar2VideoGetBufferSizeImage( vid->device.image, width, height );
+#ifdef ARVIDEO_INPUT_IMAGE
+    if (vid->module == AR_VIDEO_MODULE_IMAGE) {
+        return ar2VideoGetBufferSizeImage((AR2VideoParamImageT *)vid->moduleParam, width, height);
     }
 #endif
     return (-1);
@@ -1774,9 +1181,9 @@ int ar2VideoGetBufferSize(AR2VideoParamT *vid, int *width, int *height)
 int ar2VideoGetCParam(AR2VideoParamT *vid, ARParam *cparam)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetCParamiPhone( vid->device.iPhone, cparam );
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetCParamAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, cparam);
     }
 #endif
     return (-1);
@@ -1785,16 +1192,76 @@ int ar2VideoGetCParam(AR2VideoParamT *vid, ARParam *cparam)
 int ar2VideoGetCParamAsync(AR2VideoParamT *vid, void (*callback)(const ARParam *, void *), void *userdata)
 {
     if (!vid) return -1;
-#ifdef AR_INPUT_IPHONE
-    if( vid->deviceType == AR_VIDEO_DEVICE_IPHONE ) {
-        return ar2VideoGetCParamAsynciPhone( vid->device.iPhone, callback, userdata);
+#if USE_CPARAM_SEARCH
+#ifdef ARVIDEO_INPUT_V4L2
+    if (vid->module == AR_VIDEO_MODULE_V4L2) {
+        return ar2VideoGetCParamAsyncV4L2((AR2VideoParamV4L2T *)vid->moduleParam, callback, userdata);
     }
 #endif
-#ifdef AR_INPUT_ANDROID
-    if( vid->deviceType == AR_VIDEO_DEVICE_ANDROID ) {
-        return ar2VideoGetCParamAsyncAndroid( vid->device.android, callback, userdata);
+#ifdef ARVIDEO_INPUT_AVFOUNDATION
+    if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
+        return ar2VideoGetCParamAsyncAVFoundation((AR2VideoParamAVFoundationT *)vid->moduleParam, callback, userdata);
+    }
+#endif
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoGetCParamAsyncAndroid((AR2VideoParamAndroidT *)vid->moduleParam, callback, userdata);
+    }
+#endif
+#endif // USE_CPARAM_SEARCH
+    return (-1);
+}
+
+#ifdef ANDROID
+// JNI interface.
+jint ar2VideoPushInit(AR2VideoParamT *vid, JNIEnv *env, jobject obj, jint width, jint height, const char *pixelFormat, jint camera_index, jint camera_face)
+{
+    if (!vid) return -1;
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoPushInitAndroid((AR2VideoParamAndroidT *)vid->moduleParam, env, obj, width, height, pixelFormat, camera_index, camera_face);
     }
 #endif
     return (-1);
 }
+
+jint ar2VideoPush1(AR2VideoParamT *vid, JNIEnv *env, jobject obj, jbyteArray buf, jint bufSize)
+{
+    if (!vid) return -1;
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoPushAndroid1((AR2VideoParamAndroidT *)vid->moduleParam, env, obj, buf, bufSize);
+    }
+#endif
+    return (-1);
+}
+
+jint ar2VideoPush2(AR2VideoParamT *vid, JNIEnv *env, jobject obj,
+                   jobject buf0, jint buf0PixelStride, jint buf0RowStride,
+                   jobject buf1, jint buf1PixelStride, jint buf1RowStride,
+                   jobject buf2, jint buf2PixelStride, jint buf2RowStride,
+                   jobject buf3, jint buf3PixelStride, jint buf3RowStride)
+{
+    if (!vid) return -1;
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoPushAndroid2((AR2VideoParamAndroidT *)vid->moduleParam, env, obj, buf0, buf0PixelStride, buf0RowStride, buf1, buf1PixelStride, buf1RowStride, buf2, buf2PixelStride, buf2RowStride, buf3, buf3PixelStride, buf3RowStride);
+    }
+#endif
+    return (-1);
+}
+
+jint ar2VideoPushFinal(AR2VideoParamT *vid, JNIEnv *env, jobject obj)
+{
+    if (!vid) return -1;
+#ifdef ARVIDEO_INPUT_ANDROID
+    if (vid->module == AR_VIDEO_MODULE_ANDROID) {
+        return ar2VideoPushFinalAndroid((AR2VideoParamAndroidT *)vid->moduleParam, env, obj);
+    }
+#endif
+    return (-1);
+}
+
+#endif // ANDROID
+
 

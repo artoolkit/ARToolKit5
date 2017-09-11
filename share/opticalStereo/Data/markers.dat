@@ -1,0 +1,23 @@
+# Number of markers
+2
+
+# Entries for each marker. Format is:
+#
+# Name of pattern file (relative to this file)
+# Marker type (SINGLE)
+# Marker width in millimetres (floating point number)
+# Optional tokens:
+#     FILTER [x]   Enable pose estimate filtering for the preceding marker
+#                  x (optional) specifies the cutoff frequency. Default
+#                  value is AR_FILTER_TRANS_MAT_CUTOFF_FREQ_DEFAULT, which
+#                  at time of writing, equals 5.0.
+# A blank line
+
+hiro.patt
+SINGLE
+80.0
+
+kanji.patt
+SINGLE
+80.0
+FILTER 15.0

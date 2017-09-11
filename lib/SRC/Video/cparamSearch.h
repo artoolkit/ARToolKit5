@@ -45,10 +45,11 @@
 extern "C" {
 #endif
 
-// cacheDir NULL to use current working directory for cache, otherwise path to use.
+// cacheDir NULL to use current working directory for camera parameter database cache, otherwise path to folder in which to write.
+// cacheInitDir NULL to look in current working directory for camera parameter database initial cache, otherwise path to folder in which to look.
 // resetCache 1 to reset the cache to initial state, or 0 to use existing cache (if any).
 // Returns 0 if succesful, <0 if error.
-int cparamSearchInit(const char *cacheDir, int resetCache);
+int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCache);
 
 // Returns 0 if succesful, <0 if error.
 int cparamSearchFinal();

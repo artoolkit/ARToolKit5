@@ -147,7 +147,6 @@ static int initNFT(ARParamLT *cparamLT, AR_PIXEL_FORMAT pixFormat);
 // ============================================================================
 
 // Preferences.
-static const char *cparaName = "Data/camera_para.dat";				///< Camera parameters file
 static const char *markerConfigDataFilename = "Data/markers.dat";
 
 // Image acquisition.
@@ -389,11 +388,8 @@ static void nativeVideoGetCparamCallback(const ARParam *cparam_p, void *userdata
 	ARParam cparam;
 	if (cparam_p) cparam = *cparam_p;
 	else {
-	    LOGE("Unable to automatically determine camera parameters. Using default.\n");
-        if (arParamLoad(cparaName, 1, &cparam) < 0) {
-            LOGE("Error: Unable to load parameter file %s for camera.\n", cparaName);
-            return;
-        }
+        arParamClearWithFOVy(&cparam, videoWidth, videoHeight, M_PI_4); // M_PI_4 radians = 45 degrees.
+        LOGE("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", videoWidth, videoHeight);
 	}
 	if (cparam.xsize != videoWidth || cparam.ysize != videoHeight) {
 #ifdef DEBUG

@@ -77,6 +77,7 @@
 #include <AR/video.h>
 #include <AR/gsub_lite.h>
 #include <AR2/tracking.h>
+#include <ARUtil/time.h>
 
 #include "ARMarkerNFT.h"
 #include "trackingSub.h"
@@ -155,12 +156,11 @@ int main(int argc, char** argv)
 {
     char    glutGamemode[32] = "";
     char   *vconf = NULL;
-    char    cparaDefault[] = "../share/artoolkit-examples/Data2/camera_para.dat";
-    char   *cpara = NULL;
+    char   *cparam_name = NULL;
     int     i;
     int     gotTwoPartOption;
-    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data2/markers.dat";
-    const char objectDataFilename[] = "../share/artoolkit-examples/Data2/objects.dat";
+    const char markerConfigDataFilename[] = "Data2/markers.dat";
+    const char objectDataFilename[] = "Data2/objects.dat";
 
 #ifdef DEBUG
     arLogLevel = AR_LOG_LEVEL_DEBUG;
@@ -183,7 +183,7 @@ int main(int argc, char** argv)
                 gotTwoPartOption = TRUE;
             } else if (strcmp(argv[i], "--cpara") == 0) {
                 i++;
-                cpara = argv[i];
+                cparam_name = argv[i];
                 gotTwoPartOption = TRUE;
             } else if (strcmp(argv[i],"--width") == 0) {
                 i++;
@@ -213,7 +213,7 @@ int main(int argc, char** argv)
             if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-help") == 0 || strcmp(argv[i], "-h") == 0) {
                 usage(argv[0]);
             } else if (strncmp(argv[i], "-cpara=", 7) == 0) {
-                cpara = &(argv[i][7]);
+                cparam_name = &(argv[i][7]);
             } else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "-v") == 0) {
                 ARLOG("%s version %s\n", argv[0], AR_HEADER_VERSION_STRING);
                 exit(0);
@@ -234,7 +234,7 @@ int main(int argc, char** argv)
 	// Video setup.
 	//
     
-    if (!setupCamera((cpara ? cpara : cparaDefault), vconf, &gCparamLT)) {
+    if (!setupCamera(cparam_name, vconf, &gCparamLT)) {
         ARLOGe("main(): Unable to set up AR camera.\n");
         exit(-1);
     }
@@ -385,10 +385,15 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamL
 	}
 	
 	// Load the camera parameters, resize for the window and init.
-    if (arParamLoad(cparam_name, 1, &cparam) < 0) {
-		ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
-        arVideoClose();
-        return (FALSE);
+	if (cparam_name && *cparam_name) {
+        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
+		    ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
+            arVideoClose();
+            return (FALSE);
+        }
+    } else {
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);

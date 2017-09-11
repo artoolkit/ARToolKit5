@@ -74,6 +74,7 @@
 #include <AR/arMulti.h>
 #include <AR/video.h>
 #include <AR/gsub_lite.h>
+#include <ARUtil/time.h>
 #include <AR/arFilterTransMat.h>
 #include <AR2/tracking.h>
 
@@ -144,9 +145,9 @@ static void Display(void);
 int main(int argc, char** argv)
 {
 	char glutGamemode[32];
-	const char *cparam_name = "../share/artoolkit-examples/Data2/camera_para.dat";
+	char *cparam_name = NULL;
 	char vconf[] = "";
-    const char markerConfigDataFilename[] = "../share/artoolkit-examples/Data2/markers.dat";
+    const char markerConfigDataFilename[] = "Data2/markers.dat";
 	
 #ifdef DEBUG
     arLogLevel = AR_LOG_LEVEL_DEBUG;
@@ -320,10 +321,15 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamL
 	}
 	
 	// Load the camera parameters, resize for the window and init.
-    if (arParamLoad(cparam_name, 1, &cparam) < 0) {
-		ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
-        arVideoClose();
-        return (FALSE);
+	if (cparam_name && *cparam_name) {
+        if (arParamLoad(cparam_name, 1, &cparam) < 0) {
+		    ARLOGe("setupCamera(): Error loading parameter file %s for camera.\n", cparam_name);
+            arVideoClose();
+            return (FALSE);
+        }
+    } else {
+        arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);
