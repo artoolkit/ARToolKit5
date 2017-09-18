@@ -72,7 +72,7 @@ void profileSet(int n)
 #ifdef _WIN32
     struct _timeb sys_time;
 
-    _ftime(&sys_time);
+    _ftime_s(&sys_time);
     if(num != -1) {
 		profTable[num] += ((long)sys_time.time - s) * 1000000L + sys_time.millitm * 1000L - us;
         profCount[num]++;

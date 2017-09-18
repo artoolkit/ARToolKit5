@@ -35,11 +35,10 @@
  *
  */
 
-#include <stdbool.h>
-#include <termios.h>
-#include <stdio.h>
 #ifndef __ARUtil_file_utils_h__
 #define __ARUtil_file_utils_h__
+
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,7 +76,8 @@ int unzip_od(const char *zipPathname, const char *outPath);
 // Returns 0 in case of success, or error code < 0 in case of error (see zip.h). If error code is -1, the error code is in 'errno'.
 int zip_od(char *zipPathname, const char *baseFilePath, const char **fileNames, int totalFiles);
 
-float get_file_size(const char * pathName);
+// Get a file's size like 'stat -f "%z" file'
+int64_t get_file_size(const char *file);
 
 // Read a single character from the terminal without echo, like 'read -s -n 1'.
 char read_sn1(void);

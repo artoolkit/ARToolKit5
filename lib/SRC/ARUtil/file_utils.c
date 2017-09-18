@@ -56,6 +56,9 @@
 #  include <io.h>
 #  include <direct.h> // chdir(), getcwd()
 #  include <Shellapi.h> // SHFileOperation()
+#  ifndef S_ISDIR
+#    define S_ISDIR(mode) (((mode)& S_IFMT) == S_IFDIR)
+#  endif
 #  define MAXPATHLEN MAX_PATH
 #  define FOPEN_FUNC(filename, mode) fopen64(filename, mode)
 #  define FTELLO_FUNC(stream) ftello64(stream)
@@ -73,18 +76,18 @@
 #  define FOPEN_FUNC(filename, mode) fopen(filename, mode)
 #  define FTELLO_FUNC(stream) ftello(stream)
 #  define FSEEKO_FUNC(stream, offset, origin) fseeko(stream, offset, origin)
+#  include <termios.h> // struct termios, tcgetattr(), tcsetattr()
 #endif
 #include <sys/stat.h> // struct stat, stat(), mkdir()
 #include <errno.h> // errno, ENOENT
 #include <time.h> // struct tm, mktime()
-#include <termios.h> // struct termios, tcgetattr(), tcsetattr()
 
 #define WRITEBUFFERSIZE (8192)
 
 
 
-#include <ARUtil/unzip.h>
-#include <ARUtil/zip.h>
+#include "unzip.h"
+#include "zip.h"
 
 int test_f(const char *file, const char *dir)
 {
@@ -280,7 +283,7 @@ int mkdir_p(const char *path)
 		if (p[1] == '\0') last = true;
 
 #ifdef _WIN32
-        if (mkdir(pathCopy) < 0)
+        if (_mkdir(pathCopy) < 0)
 #else
         if (mkdir(pathCopy, S_IRWXU|S_IRWXG) < 0)
 #endif
@@ -343,7 +346,7 @@ int rm_rf(const char *path)
     size_t len, len2;
     int needsep;
     char *buf;
-    int i;
+    unsigned int i;
     int err;
     SHFILEOPSTRUCT opts;
     
@@ -382,9 +385,9 @@ int rm_rf(const char *path)
     opts.pFrom = buf;
     opts.pTo = NULL;
     opts.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR;
-    
-    err = SHFileOperationA(&SHFILEOPSTRUCT);
-    
+
+    err = SHFileOperationA(&opts);
+
     if (err || opts.fAnyOperationsAborted) {
         ret = -1;
     }
@@ -395,37 +398,56 @@ bail:
 #endif
 }
 
-static void zip_change_file_date(const char *filename, uLong dosdate, tm_unz tmu_date)
+static int dosdate_to_tm(uint64_t dos_date, struct tm *ptm)
+{
+    uint64_t date = (uint64_t)(dos_date >> 16);
+
+    ptm->tm_mday = (uint16_t)(date & 0x1f);
+    ptm->tm_mon = (uint16_t)(((date & 0x1E0) / 0x20) - 1);
+    ptm->tm_year = (uint16_t)(((date & 0x0FE00) / 0x0200) + 1980);
+    ptm->tm_hour = (uint16_t)((dos_date & 0xF800) / 0x800);
+    ptm->tm_min = (uint16_t)((dos_date & 0x7E0) / 0x20);
+    ptm->tm_sec = (uint16_t)(2 * (dos_date & 0x1f));
+    ptm->tm_isdst = -1;
+    
+#define datevalue_in_range(min, max, value) ((min) <= (value) && (value) <= (max))
+    if (!datevalue_in_range(0, 11, ptm->tm_mon) ||
+        !datevalue_in_range(1, 31, ptm->tm_mday) ||
+        !datevalue_in_range(0, 23, ptm->tm_hour) ||
+        !datevalue_in_range(0, 59, ptm->tm_min) ||
+        !datevalue_in_range(0, 59, ptm->tm_sec))
+    {
+        /* Invalid date stored, so don't return it. */
+        memset(ptm, 0, sizeof(struct tm));
+        return -1;
+    }
+#undef datevalue_in_range
+    return 0;
+}
+
+static void change_file_date(const char *path, uint32_t dos_date)
 {
 #ifdef _WIN32
-    HANDLE hFile;
-    FILETIME ftm, ftLocal, ftCreate, ftLastAcc, ftLastWrite;
-    
-    hFile = CreateFileA(filename, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-    if (hFile != INVALID_HANDLE_VALUE) {
-        GetFileTime(hFile, &ftCreate, &ftLastAcc, &ftLastWrite);
-        DosDateTimeToFileTime((WORD)(dosdate>>16),(WORD)dosdate, &ftLocal);
-        LocalFileTimeToFileTime(&ftLocal, &ftm);
-        SetFileTime(hFile, &ftm, &ftLastAcc, &ftm);
-        CloseHandle(hFile);
+    HANDLE handle = NULL;
+    FILETIME ftm, ftm_local, ftm_create, ftm_access, ftm_modified;
+
+    handle = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+    if (handle != INVALID_HANDLE_VALUE)
+    {
+        GetFileTime(handle, &ftm_create, &ftm_access, &ftm_modified);
+        DosDateTimeToFileTime((WORD)(dos_date >> 16), (WORD)dos_date, &ftm_local);
+        LocalFileTimeToFileTime(&ftm_local, &ftm);
+        SetFileTime(handle, &ftm, &ftm_access, &ftm);
+        CloseHandle(handle);
     }
 #else
     struct utimbuf ut;
     struct tm newdate;
-    
-    newdate.tm_sec = tmu_date.tm_sec;
-    newdate.tm_min = tmu_date.tm_min;
-    newdate.tm_hour = tmu_date.tm_hour;
-    newdate.tm_mday = tmu_date.tm_mday;
-    newdate.tm_mon = tmu_date.tm_mon;
-    if (tmu_date.tm_year > 1900)
-        newdate.tm_year = tmu_date.tm_year - 1900;
-    else
-        newdate.tm_year = tmu_date.tm_year ;
-    newdate.tm_isdst = -1;
-    
+
+    dosdate_to_tm(dos_date, &newdate);
+
     ut.actime = ut.modtime = mktime(&newdate);
-    utime(filename, &ut);
+    utime(path, &ut);
 #endif
 }
 
@@ -543,7 +565,7 @@ int unzip_od(const char *zipFilePathname, const char *dir)
                     } while (err > 0);
                     fclose(fout);
                     
-                    if (err == 0) zip_change_file_date(filename_inzip, file_info.dosDate, file_info.tmu_date);
+                    if (err == 0) change_file_date(filename_inzip, file_info.dos_date);
                 }
                 
                 errclose = unzCloseCurrentFile(uf);
@@ -612,67 +634,67 @@ int zip_od(char *zipFilePathname, const char *baseFilePath, const char **fileNam
     
     for (int i = 0; (i < totalFiles) && (err == ZIP_OK); i++) {
         if (((*(fileNames[i])) != '-') && ((*(fileNames[i])) != '/')) {
+
+            const char *filenameinzip = fileNames[i];
+
             FILE * fin;
             int size_read;
-            const char *filenameinzip = fileNames[i];
-            zip_fileinfo zi;
-            
-            zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour =
-            zi.tmz_date.tm_mday = zi.tmz_date.tm_min = zi.tmz_date.tm_year = 0;
-            zi.dosDate = 0;
-            zi.internal_fa = 0;
-            zi.external_fa = 0;
-            //filetime(filenameinzip, &zi.tmz_date, &zi.dosDate);
-            
-            err = zipOpenNewFileInZip(zf, filenameinzip, &zi,
-                                      NULL, 0, NULL, 0, NULL /* comment*/,
-                                      (opt_compress_level != 0) ? Z_DEFLATED : 0,
-                                      opt_compress_level);
-            
-            if (err != ZIP_OK) {
-                fprintf(stderr, "Error in opening '%s' in zipfile.\n", filenameinzip);
+            char *fullFilePath;
+            size_t fullFilePathSize = (strlen(baseFilePath) + 1 + strlen(filenameinzip) + 1) * sizeof(char); // +1 for nul-terminator.
+            fullFilePath = (char *)malloc(fullFilePathSize);
+            if (snprintf(fullFilePath, fullFilePathSize, "%s/%s", baseFilePath, filenameinzip) < 0) {
+                fprintf(stderr, "Error creating full file path from '%s' and '%s'", baseFilePath, filenameinzip);
+                err = ZIP_PARAMERROR;
             } else {
-                char *fullFilePath;
-                fullFilePath = (char *)malloc((strlen(baseFilePath) + 1 + strlen(filenameinzip) + 1) * sizeof(char));
-                sprintf(fullFilePath, "%s/%s", baseFilePath, filenameinzip);
-                if (asprintf(&fullFilePath, "%s/%s", baseFilePath, filenameinzip) < 0) {
-                    fprintf(stderr, "Error creating full file path from '%s' and '%s'", baseFilePath, filenameinzip);
-                }
-                fin = fopen(fullFilePath, "rb");
-                if (!fin) {
-                    err = ZIP_ERRNO;
-                    fprintf(stderr, "Error in opening '%s' for reading\n", filenameinzip);
-                }
-                free(fullFilePath);
-            }
-            
-            if (err == ZIP_OK) {
-                do {
-                    err = ZIP_OK;
-                    size_read = (int)fread(buf, 1, size_buf, fin);
-                    if (size_read < size_buf) {
-                        if (feof(fin) == 0) {
-                            fprintf(stderr, "Error in reading '%s'.\n", filenameinzip);
-                            err = ZIP_ERRNO;
-                        }
-                    }
-                    
-                    if (size_read > 0) {
-                        err = zipWriteInFileInZip (zf,buf,size_read);
-                        if (err < 0) {
-                            fprintf(stderr, "Error in writing '%s' in the zipfile.\n", filenameinzip);
-                        }
-                    }
-                } while ((err == ZIP_OK) && (size_read > 0));
-            }
-            
-            fclose(fin);
-            if (err < 0) {
-                err = ZIP_ERRNO;
-            } else {
-                err = zipCloseFileInZip(zf);
+                zip_fileinfo zi;
+                zi.dos_date = 0;
+                //get_file_date(fullFilePathSize, &zi.dos_date);
+                zi.internal_fa = 0;
+                zi.external_fa = 0;
+                
+                err = zipOpenNewFileInZip(zf, filenameinzip, &zi,
+                                          NULL, 0, NULL, 0, NULL /* comment*/,
+                                          (opt_compress_level != 0) ? Z_DEFLATED : 0,
+                                          opt_compress_level);
                 if (err != ZIP_OK) {
-                    fprintf(stderr, "Error in closing %s in the zipfile.\n", filenameinzip);
+                    fprintf(stderr, "Error in opening '%s' in zipfile.\n", filenameinzip);
+                } else {
+                    fin = fopen(fullFilePath, "rb");
+                    if (!fin) {
+                        err = ZIP_ERRNO;
+                        fprintf(stderr, "Error in opening '%s' for reading\n", filenameinzip);
+                    }
+                    free(fullFilePath);
+                }
+                
+                if (err == ZIP_OK) {
+                    do {
+                        err = ZIP_OK;
+                        size_read = (int)fread(buf, 1, size_buf, fin);
+                        if (size_read < size_buf) {
+                            if (feof(fin) == 0) {
+                                fprintf(stderr, "Error in reading '%s'.\n", filenameinzip);
+                                err = ZIP_ERRNO;
+                            }
+                        }
+                        
+                        if (size_read > 0) {
+                            err = zipWriteInFileInZip (zf,buf,size_read);
+                            if (err < 0) {
+                                fprintf(stderr, "Error in writing '%s' in the zipfile.\n", filenameinzip);
+                            }
+                        }
+                    } while ((err == ZIP_OK) && (size_read > 0));
+                }
+                
+                fclose(fin);
+                if (err < 0) {
+                    err = ZIP_ERRNO;
+                } else {
+                    err = zipCloseFileInZip(zf);
+                    if (err != ZIP_OK) {
+                        fprintf(stderr, "Error in closing %s in the zipfile.\n", filenameinzip);
+                    }
                 }
             }
         }
@@ -688,12 +710,12 @@ bail:
 }
 
 
-float get_file_size(const char * pathName)
+int64_t get_file_size(const char * pathName)
 {
     struct stat st;
-    if (stat(pathName, &st) == 0)
+    if (stat(pathName, &st) == 0) {
         return st.st_size;
-    
+    }
     return -1;
 }
 
@@ -723,7 +745,7 @@ char read_sn1(void)
     
     return c;
 #elif defined(_WIN32)
-    return (getch());
+    return (_getch());
 #else
     return -1;
 #endif

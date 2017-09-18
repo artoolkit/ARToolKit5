@@ -43,7 +43,9 @@
     kato@is.naist.jp   Apr.24 2007
  */
 
-#ifndef _WIN32
+#ifdef _WIN32
+#  include <windows.h>
+#else
 #  include <unistd.h>
 #endif
 #include <stdio.h>
@@ -267,4 +269,3 @@ int threadGetCPU(void)
     return (int)sysconf(_SC_NPROCESSORS_ONLN);
 #endif
 }
-

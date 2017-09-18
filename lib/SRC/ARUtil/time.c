@@ -39,6 +39,7 @@
 
 #include <ARUtil/time.h>
 #ifdef _WIN32
+#  include <windows.h>
 #  include <sys/timeb.h>
 #else
 #  include <time.h>
@@ -49,13 +50,13 @@ void         arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec)
 {
 #ifdef _WIN32
     struct _timeb sys_time;
-    
-    _ftime(&sys_time);
-    if (sec) *sec = (uint64_t)sys_time.times;
+
+    _ftime_s(&sys_time);
+    if (sec) *sec = (uint64_t)sys_time.time;
     if (usec) *usec = (uint32_t)sys_time.millitm * 1000u;
 #else
     struct timeval     time;
-    
+
 #  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
     gettimeofday( &time, NULL );
 #  else
@@ -77,7 +78,7 @@ double arUtilTimer(void)
 #ifdef _WIN32
     struct _timeb sys_time;
 
-    _ftime(&sys_time);
+    _ftime_s(&sys_time);
     s1 = (long)sys_time.time  - ss;
     s2 = sys_time.millitm - sms;
 #else
@@ -102,7 +103,7 @@ void arUtilTimerReset(void)
 #ifdef _WIN32
     struct _timeb sys_time;
 
-    _ftime(&sys_time);
+    _ftime_s(&sys_time);
     ss  = (long)sys_time.time;
     sms = sys_time.millitm;
 #else

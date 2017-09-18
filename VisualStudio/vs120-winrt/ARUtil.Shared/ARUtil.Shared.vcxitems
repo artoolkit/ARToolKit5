@@ -14,6 +14,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\crypt.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\file_utils.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\ioapi.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\log.c" />
@@ -32,17 +33,17 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\crypt.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\file_utils.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\ioapi.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\log.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\profile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\system.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\thread_sub.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\time.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\unzip.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARUtil\zip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\crypt.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\ftw.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\ioapi.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\thread_sub_winrt.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\unzip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARUtil\zip.h" />
   </ItemGroup>
 </Project>

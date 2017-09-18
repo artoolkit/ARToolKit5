@@ -288,6 +288,7 @@
 		4A347B3A18B16328000BEB89 /* ARMarkerMulti.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A33B70618ADC4590028A979 /* ARMarkerMulti.m */; };
 		4A347B3B18B16329000BEB89 /* ARMarkerMulti.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A33B70618ADC4590028A979 /* ARMarkerMulti.m */; };
 		4A347B3C18B16329000BEB89 /* ARMarkerMulti.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A33B70618ADC4590028A979 /* ARMarkerMulti.m */; };
+		4A3AEB5A1F70904D00635D5B /* crypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A3AEB591F70903600635D5B /* crypt.c */; };
 		4A3D42B1130D1F2500E64C33 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
 		4A3D42B2130D1F2500E64C33 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
 		4A3D42B3130D1F2500E64C33 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E70DC97C3800B73A53 /* CoreGraphics.framework */; };
@@ -1771,6 +1772,11 @@
 		4A33B70718ADC8700028A979 /* ARView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARView.h; sourceTree = "<group>"; };
 		4A33B70818ADC8700028A979 /* ARView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARView.m; sourceTree = "<group>"; };
 		4A3543441683173C0083B43E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		4A3AEB4F1F708EF100635D5B /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		4A3AEB501F708EF100635D5B /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		4A3AEB511F708EF100635D5B /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		4A3AEB521F708EF100635D5B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		4A3AEB591F70903600635D5B /* crypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crypt.c; sourceTree = "<group>"; };
 		4A47F751116E092C00FC577E /* ARView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARView.h; sourceTree = "<group>"; };
 		4A47F752116E092C00FC577E /* ARView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARView.m; sourceTree = "<group>"; };
 		4A4BAA571B7453450012B77D /* ARAppCameraTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ARAppCameraTest-Info.plist"; sourceTree = "<group>"; };
@@ -1947,13 +1953,9 @@
 		4A91CE8D1F443A11007DD981 /* profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = profile.h; sourceTree = "<group>"; };
 		4A91CE8E1F443A11007DD981 /* thread_sub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread_sub.h; sourceTree = "<group>"; };
 		4A91CEA01F445FB4007DD981 /* android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = android.h; sourceTree = "<group>"; };
-		4A91CEA11F445FB4007DD981 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		4A91CEA21F445FB4007DD981 /* file_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file_utils.h; sourceTree = "<group>"; };
-		4A91CEA31F445FB4007DD981 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
 		4A91CEA41F445FB4007DD981 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = system.h; sourceTree = "<group>"; };
 		4A91CEA51F445FB4007DD981 /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time.h; sourceTree = "<group>"; };
-		4A91CEA61F445FB4007DD981 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		4A91CEA71F445FB4007DD981 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		4A91CEA81F445FFD007DD981 /* android_system_property_get.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = android_system_property_get.c; sourceTree = "<group>"; };
 		4A91CEA91F445FFD007DD981 /* file_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = file_utils.c; sourceTree = "<group>"; };
 		4A91CEAA1F445FFD007DD981 /* ftw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftw.h; sourceTree = "<group>"; };
@@ -4294,15 +4296,11 @@
 			isa = PBXGroup;
 			children = (
 				4A91CEA01F445FB4007DD981 /* android.h */,
-				4A91CEA11F445FB4007DD981 /* crypt.h */,
 				4A91CEA21F445FB4007DD981 /* file_utils.h */,
-				4A91CEA31F445FB4007DD981 /* ioapi.h */,
 				4A91CE8D1F443A11007DD981 /* profile.h */,
 				4A91CEA41F445FB4007DD981 /* system.h */,
 				4A91CE8E1F443A11007DD981 /* thread_sub.h */,
 				4A91CEA51F445FB4007DD981 /* time.h */,
-				4A91CEA61F445FB4007DD981 /* unzip.h */,
-				4A91CEA71F445FB4007DD981 /* zip.h */,
 			);
 			path = ARUtil;
 			sourceTree = "<group>";
@@ -4382,8 +4380,11 @@
 			isa = PBXGroup;
 			children = (
 				4A91CEA81F445FFD007DD981 /* android_system_property_get.c */,
+				4A3AEB4F1F708EF100635D5B /* crypt.h */,
+				4A3AEB591F70903600635D5B /* crypt.c */,
 				4A91CEA91F445FFD007DD981 /* file_utils.c */,
 				4A91CEAA1F445FFD007DD981 /* ftw.h */,
+				4A3AEB501F708EF100635D5B /* ioapi.h */,
 				4A91CEAB1F445FFD007DD981 /* ioapi.c */,
 				4A29CE721F661AC600D92AB9 /* log.c */,
 				4A91CEAC1F445FFD007DD981 /* nftw.c */,
@@ -4393,7 +4394,9 @@
 				4A91CEAE1F445FFD007DD981 /* thread_sub_winrt.cpp */,
 				4A91CEAF1F445FFD007DD981 /* thread_sub_winrt.h */,
 				4A91CEB01F445FFD007DD981 /* time.c */,
+				4A3AEB511F708EF100635D5B /* unzip.h */,
 				4A91CEB11F445FFD007DD981 /* unzip.c */,
+				4A3AEB521F708EF100635D5B /* zip.h */,
 				4A91CEB21F445FFD007DD981 /* zip.c */,
 				4A29CE731F661AC600D92AB9 /* Makefile.in */,
 			);
@@ -7763,6 +7766,7 @@
 				4A29CE6A1F661A8600D92AB9 /* android_system_property_get.c in Sources */,
 				4A29CE711F661A8600D92AB9 /* zip.c in Sources */,
 				4A29CE6B1F661A8600D92AB9 /* file_utils.c in Sources */,
+				4A3AEB5A1F70904D00635D5B /* crypt.c in Sources */,
 				4A941D1F1AE5DC9E000FA802 /* thread_sub.c in Sources */,
 				4A941D1E1AE5DC9E000FA802 /* profile.c in Sources */,
 				4A29CE6E1F661A8600D92AB9 /* thread_sub_winrt.cpp in Sources */,

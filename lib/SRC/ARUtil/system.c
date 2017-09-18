@@ -72,7 +72,7 @@ char *arUtilGetOSName(void)
 #elif defined(ANDROID) // Android
     return strdup("android");
 #elif defined(_WIN32) // Windows.
-    return strdup("windows");
+    return _strdup("windows");
 #elif defined(__linux) // Linux.
     return strdup("linux");
 #else // Other.
@@ -98,7 +98,7 @@ char *arUtilGetOSVersion(void)
     android_system_property_get(ANDROID_OS_BUILD_VERSION_RELEASE, os);
     ret = strdup(os);
 #elif defined(_WIN32) // Windows.
-    ret = strdup("unknown");
+    ret = _strdup("unknown");
 #elif defined(__linux) // Linux.
     struct utsname un;
     if (uname(&un) == 0) {
@@ -124,7 +124,7 @@ char *arUtilGetCPUName(void)
     static const char *cpuTypeNameARM64 = "armv64";
     static const char *cpuTypeNameX86 = "x86";
     static const char *cpuTypeNameX86_64 = "x86_64";
-    
+
     size_t size;
     cpu_type_t type;
     cpu_subtype_t subtype;
@@ -132,7 +132,7 @@ char *arUtilGetCPUName(void)
     sysctlbyname("hw.cputype", &type, &size, NULL, 0);
     size = sizeof(subtype);
     sysctlbyname("hw.cpusubtype", &subtype, &size, NULL, 0);
-    
+
     // Values for cputype and cpusubtype defined in <mach/machine.h>.
     const char *namep = cpuTypeNameUnknown;
     if (type == CPU_TYPE_ARM) {
@@ -171,15 +171,15 @@ char *arUtilGetCPUName(void)
     ret = strdup(os);
 #elif defined(_WIN32) // Windows.
 #  if defined(_M_IX86)
-    ret = strdup("x86");
+    ret = _strdup("x86");
 #  elif defined(_M_X64)
-    ret = strdup("x86_64");
+    ret = _strdup("x86_64");
 #  elif defined(_M_IA64)
-    ret = strdup("ia64");
+    ret = _strdup("ia64");
 #  elif defined(_M_ARM)
-    ret = strdup("arm");
+    ret = _strdup("arm");
 #  else
-    ret = strdup("unknown");
+    ret = _strdup("unknown");
 #  endif
 #elif defined(__linux) // Linux.
     struct utsname un;
