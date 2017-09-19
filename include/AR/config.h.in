@@ -64,13 +64,13 @@
     API, or (occsasionally) other significant backwards-compatible
     changes in runtime functionality. Range: [0-99].
  */
-#define AR_HEADER_VERSION_MINOR		3
+#define AR_HEADER_VERSION_MINOR		4
 
 /*@
     The TINY version number defines bug-fixes to existing
     functionality. Range: [0-99].
  */
-#define AR_HEADER_VERSION_TINY		2
+#define AR_HEADER_VERSION_TINY		0
 
 /*@
     The BUILD version number will always be zero in releases,
@@ -83,7 +83,7 @@
     The string representation below must match the major, minor
     and tiny release numbers.
  */
-#define AR_HEADER_VERSION_STRING	"5.3.2"
+#define AR_HEADER_VERSION_STRING	"5.4.0"
 
 /*@
     Convenience macros to enable use of certain ARToolKit header
@@ -100,6 +100,7 @@
 #define AR_HAVE_HEADER_VERSION_5_1
 #define AR_HAVE_HEADER_VERSION_5_2
 #define AR_HAVE_HEADER_VERSION_5_3
+#define AR_HAVE_HEADER_VERSION_5_4
 
 //
 // End version definitions.
@@ -240,14 +241,10 @@ typedef enum {
 // and arUtilGetPixelSize() arUtilGetPixelFormatName() must also be edited.
 #define       AR_PIXEL_FORMAT_MAX       AR_PIXEL_FORMAT_NV21
 
-/*------------------------------------------------------------*/
-/*                                                            */
-/*  For Linux                                                 */
-/*    ARVIDEO_INPUT_V4L2:    use of standard Video4Linux2 Library  */
-/*    ARVIDEO_INPUT_1394CAM: use of 1394 Digital Camara            */
-/*    ARVIDEO_INPUT_GSTREAMER: use of GStreamer library            */
-/*                                                            */
-/*------------------------------------------------------------*/
+//
+//  For Linux
+//
+
 #ifdef EMSCRIPTEN
 #  define __linux
 #endif
@@ -313,9 +310,9 @@ typedef enum {
 
 
 
-/*------------------------------------------------------------*/
-/*  For Windows                                               */
-/*------------------------------------------------------------*/
+//
+//  For Windows                                              
+//
 #ifdef _WIN32
 
 // Include Windows API.
@@ -388,10 +385,10 @@ typedef enum {
 #define  ARVIDEO_INPUT_WINDOWS_MEDIA_CAPTURE_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGRA
 #endif
 
-/*------------------------------------------------------------*/
-/*  For Android                                               */
-/*    Note that Android NDK also defines __linux              */
-/*------------------------------------------------------------*/
+//
+//  For Android                                              
+//    Note that Android NDK also defines __linux             
+//
 
 #if defined ANDROID
 
@@ -428,9 +425,9 @@ typedef enum {
 #define  ARVIDEO_INPUT_ANDROID_PIXEL_FORMAT   AR_PIXEL_FORMAT_NV21
 #endif
 
-/*------------------------------------------------------------*/
-/*  For Mac OS X                                              */
-/*------------------------------------------------------------*/
+//
+//  For Mac OS X                                             
+//
 #if __APPLE__
 
 #  include <TargetConditionals.h>
@@ -495,18 +492,18 @@ typedef enum {
 #define  ARVIDEO_INPUT_AVFOUNDATION_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_BGRA
 #endif
 
-/*------------------------------------------------------------*/
-/*  Emscripten input                                          */
-/*------------------------------------------------------------*/
+//
+//  Emscripten input                                         
+//
 
 #ifdef EMSCRIPTEN
 #define ARVIDEO_INPUT_DEFAULT_EMSCRIPTEN
 #define ARVIDEO_INPUT_EMSCRIPTEN_PIXEL_FORMAT   AR_PIXEL_FORMAT_RGBA
 #endif
 
-/*------------------------------------------------------------*/
-/*  Multi-platform inputs                                     */
-/*------------------------------------------------------------*/
+//
+//  Multi-platform inputs
+//
 
 #ifdef ARVIDEO_INPUT_DUMMY
 #define ARVIDEO_INPUT_DUMMY_DEFAULT_PIXEL_FORMAT   AR_PIXEL_FORMAT_RGB
