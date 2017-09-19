@@ -37,8 +37,8 @@
 #
 # For instalation. Change this to your settings.
 #
-INC_DIR = ../../../include
-LIB_DIR = ../..
+INC_DIR = ../../../../include
+LIB_DIR = ../../..
 #
 #  compiler
 #

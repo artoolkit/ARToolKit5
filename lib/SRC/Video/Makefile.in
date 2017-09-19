@@ -59,7 +59,7 @@ INCLUDE= ${INC_DIR}/AR/config.h       \
          ${INC_DIR}/AR/ar.h           \
          ${INC_DIR}/AR/videoConfig.h  \
          ${INC_DIR}/AR/videoLuma.h    \
-         ${INC_DIR}/AR/videoRGB.h     \
+         ${INC_DIR}/AR/videoRGBA.h     \
          ${INC_DIR}/AR/video.h        \
          cparamSearch.h               \
          nxjson.h                     \
@@ -71,7 +71,7 @@ LIBOBJS= ${LIB}(video.o)  \
 	 ${LIB}(video2.o) \
 	 ${LIB}(videoAspectRatio.o) \
      ${LIB}(videoLuma.o) \
-     ${LIB}(videoRGB.o) \
+     ${LIB}(videoRGBA.o) \
 	 ${LIB}(videoSaveImage.o) \
      ${LIB}(cparamSearch.o) \
 
