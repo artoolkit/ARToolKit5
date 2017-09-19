@@ -210,7 +210,7 @@ int   arVideoGetParams( const int paramName, char **value )
     return ar2VideoGetParams( vid, paramName, value );
 }
 
-int   arVideoSetParams( const int paramName, const char  *value )
+int   arVideoSetParams( const int paramName, const char *value )
 {
     if( vid == NULL ) return -1;
     

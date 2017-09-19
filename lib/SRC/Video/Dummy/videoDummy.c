@@ -82,7 +82,8 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
 {
     AR2VideoParamDummyT *vid;
     const char *a;
-    char b[256];
+#   define B_SIZE ((unsigned int)256)
+    char b[B_SIZE];
     int bufSizeX;
     int bufSizeY;
     char bufferpow2 = 0;
@@ -101,7 +102,7 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
         for (;;) {
             while (*a == ' ' || *a == '\t') a++;
             if (*a == '\0') break;
-    
+
             if (sscanf(a, "%s", b) == 0) break;
             if (strncmp(b, "-width=", 7) == 0) {
                 if (sscanf(&b[7], "%d", &vid->width) == 0) {
@@ -117,10 +118,10 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
             }
             else if (strncmp(b, "-format=", 8 ) == 0) {
                 if (strcmp(b+8, "RGBA_5551") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_RGBA_5551;                    
+                    vid->format = AR_PIXEL_FORMAT_RGBA_5551;
                     ARLOGi("Dummy video will return red-green-blue bars in RGBA_5551.\n");
                 } else if (strcmp(b+8, "RGBA_4444") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_RGBA_4444;                    
+                    vid->format = AR_PIXEL_FORMAT_RGBA_4444;
                     ARLOGi("Dummy video will return red-green-blue bars in RGBA_4444.\n");
                 } else if (strcmp(b+8, "RGBA") == 0) {
                     vid->format = AR_PIXEL_FORMAT_RGBA;
@@ -129,19 +130,19 @@ AR2VideoParamDummyT *ar2VideoOpenDummy( const char *config )
                     vid->format = AR_PIXEL_FORMAT_RGB_565;
                     ARLOGi("Dummy video will return red-green-blue bars in RGB_565.\n");
                 } else if (strcmp(b+8, "RGB") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_RGB;                    
+                    vid->format = AR_PIXEL_FORMAT_RGB;
                     ARLOGi("Dummy video will return red-green-blue bars in RGB.\n");
                 } else if (strcmp(b+8, "ARGB") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_ARGB;                    
+                    vid->format = AR_PIXEL_FORMAT_ARGB;
                     ARLOGi("Dummy video will return red-green-blue bars in ARGB.\n");
                 } else if (strcmp(b+8, "ABGR") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_ABGR;                    
+                    vid->format = AR_PIXEL_FORMAT_ABGR;
                     ARLOGi("Dummy video will return red-green-blue bars in ABGR.\n");
                 } else if (strcmp(b+8, "BGRA") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_BGRA;                    
+                    vid->format = AR_PIXEL_FORMAT_BGRA;
                     ARLOGi("Dummy video will return red-green-blue bars in BGRA.\n");
                 } else if (strcmp(b+8, "BGR") == 0) {
-                    vid->format = AR_PIXEL_FORMAT_BGR;                    
+                    vid->format = AR_PIXEL_FORMAT_BGR;
                     ARLOGi("Dummy video will return red-green-blue bars in BGR.\n");
                 } else if (strcmp(b+8, "420f") == 0) {
                     vid->format = AR_PIXEL_FORMAT_420f;
@@ -189,12 +190,12 @@ bail:
 int ar2VideoCloseDummy( AR2VideoParamDummyT *vid )
 {
     if (!vid) return (-1); // Sanity check.
-    
+
     ar2VideoSetBufferSizeDummy(vid, 0, 0);
     free( vid );
 
     return 0;
-} 
+}
 
 int ar2VideoCapStartDummy( AR2VideoParamDummyT *vid )
 {
@@ -224,12 +225,12 @@ AR2VideoBufferT *ar2VideoGetImageDummy( AR2VideoParamDummyT *vid )
         p = vid->buffer.bufPlanes[0];
         p1 = vid->buffer.bufPlanes[1];
     }
-    
-    
+
+
     // Clear buffer to white.
     memset(p, 255, vid->bufWidth*vid->bufHeight*arVideoUtilGetPixelSize(vid->format));
     if (p1) memset(p1, 128, vid->bufWidth*vid->bufHeight/2);
-    
+
     for( j = vid->height/2 - 50; j < vid->height/2 - 25; j++ ) {
         for( i = vid->width/2 - 50 + k; i < vid->width/2 + 50 + k; i++ ) {
             switch (vid->format) {
@@ -602,9 +603,9 @@ AR_PIXEL_FORMAT ar2VideoGetPixelFormatDummy( AR2VideoParamDummyT *vid )
 
 int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const int height)
 {
-    int i;
+    unsigned int i;
     int rowBytes;
-    
+
     if (!vid) return (-1);
 
     if (vid->buffer.bufPlaneCount) {
@@ -621,13 +622,13 @@ int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const 
             vid->buffer.buff = vid->buffer.buffLuma = NULL;
         }
     }
-    
+
     if (width && height) {
         if (width < vid->width || height < vid->height) {
             ARLOGe("Error: Requested buffer size smaller than video size.\n");
             return (-1);
         }
-        
+
         if (ar2VideoGetPixelFormatDummy(vid) == AR_PIXEL_FORMAT_420f || ar2VideoGetPixelFormatDummy(vid) == AR_PIXEL_FORMAT_NV21) {
             arMallocClear(vid->buffer.bufPlanes, ARUint8 *, 2);
             arMalloc(vid->buffer.bufPlanes[0], ARUint8, width*height);
@@ -644,7 +645,7 @@ int ar2VideoSetBufferSizeDummy(AR2VideoParamDummyT *vid, const int width, const 
             }
         }
     }
-    
+
     vid->bufWidth = width;
     vid->bufHeight = height;
 
@@ -694,7 +695,7 @@ int ar2VideoSetParamdDummy( AR2VideoParamDummyT *vid, int paramName, double  val
 int ar2VideoGetParamsDummy( AR2VideoParamDummyT *vid, const int paramName, char **value )
 {
     if (!vid || !value) return (-1);
-    
+
     switch (paramName) {
         default:
             return (-1);
@@ -705,7 +706,7 @@ int ar2VideoGetParamsDummy( AR2VideoParamDummyT *vid, const int paramName, char 
 int ar2VideoSetParamsDummy( AR2VideoParamDummyT *vid, const int paramName, const char  *value )
 {
     if (!vid) return (-1);
-    
+
     switch (paramName) {
         default:
             return (-1);

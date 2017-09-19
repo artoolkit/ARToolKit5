@@ -1,5 +1,5 @@
 /*
- *  videoWinMF.cpp
+ *  videoWindowsMediaFoundation.cpp
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.

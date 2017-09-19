@@ -48,15 +48,15 @@
 #  define AR_PAGE_ALIGNED_FREE(p) free(p)
 #endif
 
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
 #  include <arm_neon.h>
 #endif
-#if defined(HAVE_INTEL_SIMD)
+#if HAVE_INTEL_SIMD
 #  include <emmintrin.h> // SSE2.
 #  include <pmmintrin.h> // SSE3.
 #  include <tmmintrin.h> // SSSE3.
 #endif
-#if defined(ANDROID) && (defined(HAVE_ARM_NEON) || defined(HAVE_INTEL_SIMD))
+#if defined(ANDROID) && (HAVE_ARM_NEON || HAVE_INTEL_SIMD)
 #  include "cpu-features.h"
 #endif
 
@@ -70,18 +70,18 @@ struct _ARVideoLumaInfo {
     int ysize;
     int buffSize;
     AR_PIXEL_FORMAT pixFormat;
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON) || defined(HAVE_INTEL_SIMD)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON || HAVE_INTEL_SIMD
     int fastPath;
 #endif
     ARUint8 *__restrict buff;
 };
 
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
 static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaRGBAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaABGRtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
-#elif defined(HAVE_INTEL_SIMD)
+#elif HAVE_INTEL_SIMD
 static void arVideoLumaBGRAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaRGBAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
 static void arVideoLumaABGRtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels);
@@ -110,7 +110,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
     vli->pixFormat = pixFormat;
     
     // Accelerated RGB to luma conversion.
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON) || defined(HAVE_INTEL_SIMD)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON || HAVE_INTEL_SIMD
     vli->fastPath = (xsize * ysize % 8 == 0
                      && (pixFormat == AR_PIXEL_FORMAT_RGBA
                          || pixFormat == AR_PIXEL_FORMAT_BGRA
@@ -120,7 +120,7 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
                      );
     // Under Windows, Linux and OS X, we assume a minimum of Intel Core2, which satifisfies the requirement for SSE2, SSE3 and SSSE3 support.
     // Under iOS, we assume a minimum of ARMv7a with NEON.
-#  if defined(ANDROID) && (defined(HAVE_ARM_NEON) || defined(HAVE_INTEL_SIMD))
+#  if defined(ANDROID) && (HAVE_ARM_NEON || HAVE_INTEL_SIMD)
     // Not all Android devices with ARMv7 CPUs are guaranteed to have NEON, so check.
     // Also, need to check Android devices with x86 and x86_64 CPUs for appropriate level of SIMD support.
     uint64_t features = android_getCpuFeatures();
@@ -129,10 +129,10 @@ ARVideoLumaInfo *arVideoLumaInit(int xsize, int ysize, AR_PIXEL_FORMAT pixFormat
                                      ((features & ANDROID_CPU_FAMILY_X86 || features & ANDROID_CPU_FAMILY_X86_64) && (features & ANDROID_CPU_X86_FEATURE_SSSE3))); // Can also test for: ANDROID_CPU_X86_FEATURE_POPCNT, ANDROID_CPU_X86_FEATURE_SSE4_1, ANDROID_CPU_X86_FEATURE_SSE4_2, ANDROID_CPU_X86_FEATURE_MOVBE.
 #  endif
     // Debug output.
-#  if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#  if HAVE_ARM_NEON || HAVE_ARM64_NEON
     if (vli->fastPath) ARLOGi("arVideoLuma will use ARM NEON acceleration.\n");
 	else ARLOGd("arVideoLuma will NOT use ARM NEON acceleration.\n");
-#  elif defined(HAVE_INTEL_SIMD)
+#  elif HAVE_INTEL_SIMD
     if (vli->fastPath) ARLOGi("arVideoLuma will use Intel SIMD acceleration.\n");
 	else ARLOGd("arVideoLuma will NOT use Intel SIMD acceleration.\n");
 #  endif
@@ -158,7 +158,7 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
     unsigned int p, q;
     
     AR_PIXEL_FORMAT pixFormat = vli->pixFormat;
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
     if (vli->fastPath) {
         if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
             arVideoLumaBGRAtoL_ARM_neon_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
@@ -171,7 +171,7 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
         }
         return (vli->buff);
     }
-#  elif defined(HAVE_INTEL_SIMD)
+#  elif HAVE_INTEL_SIMD
     if (vli->fastPath) {
         if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
             arVideoLumaBGRAtoL_Intel_simd_asm(vli->buff, (unsigned char *__restrict)dataPtr, vli->buffSize);
@@ -190,57 +190,57 @@ ARUint8 *__restrict arVideoLuma(ARVideoLumaInfo *vli, const ARUint8 *__restrict 
     } else {
         q = 0;
         if (pixFormat == AR_PIXEL_FORMAT_RGBA) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*dataPtr[q + 0] + G8_CCIR601*dataPtr[q + 1] + B8_CCIR601*dataPtr[q + 2]) >> 8;
                 q += 4;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_BGRA) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (B8_CCIR601*dataPtr[q + 0] + G8_CCIR601*dataPtr[q + 1] + R8_CCIR601*dataPtr[q + 2]) >> 8;
                 q += 4;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_ARGB) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*dataPtr[q + 1] + G8_CCIR601*dataPtr[q + 2] + B8_CCIR601*dataPtr[q + 3]) >> 8;
                 q += 4;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_ABGR) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (B8_CCIR601*dataPtr[q + 1] + G8_CCIR601*dataPtr[q + 2] + R8_CCIR601*dataPtr[q + 3]) >> 8;
                 q += 4;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_RGB) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*dataPtr[q + 0] + G8_CCIR601*dataPtr[q + 1] + B8_CCIR601*dataPtr[q + 2]) >> 8;
                 q += 3;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_BGR) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (B8_CCIR601*dataPtr[q + 0] + G8_CCIR601*dataPtr[q + 1] + R8_CCIR601*dataPtr[q + 2]) >> 8;
                 q += 3;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_yuvs) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = dataPtr[q + 0];
                 q += 2;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_2vuy) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = dataPtr[q + 1];
                 q += 2;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_RGB_565) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*((dataPtr[q + 0] & 0xf8) + 4) + G8_CCIR601*(((dataPtr[q + 0] & 0x07) << 5) + ((dataPtr[q + 1] & 0xe0) >> 3) + 2) + B8_CCIR601*(((dataPtr[q + 1] & 0x1f) << 3) + 4)) >> 8;
                 q += 2;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_RGBA_5551) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*((dataPtr[q + 0] & 0xf8) + 4) + G8_CCIR601*(((dataPtr[q + 0] & 0x07) << 5) + ((dataPtr[q + 1] & 0xc0) >> 3) + 2) + B8_CCIR601*(((dataPtr[q + 1] & 0x3e) << 2) + 4)) >> 8;
                 q += 2;
             }
         } else if (pixFormat == AR_PIXEL_FORMAT_RGBA_4444) {
-            for (p = 0; p < vli->buffSize; p++) {
+            for (p = 0; p < ((unsigned int)vli->buffSize); p++) {
                 vli->buff[p] = (R8_CCIR601*((dataPtr[q + 0] & 0xf0) + 8) + G8_CCIR601*(((dataPtr[q + 0] & 0x0f) << 4) + 8) + B8_CCIR601*((dataPtr[q + 1] & 0xf0) + 8)) >> 8;
                 q += 2;
             }
@@ -396,7 +396,7 @@ static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-#elif defined(HAVE_ARM64_NEON)
+#elif HAVE_ARM64_NEON
 
 static void arVideoLumaBGRAtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {
@@ -498,7 +498,7 @@ static void arVideoLumaARGBtoL_ARM_neon_asm(uint8_t * __restrict dest, uint8_t *
                      );
 }
 
-#elif defined(HAVE_INTEL_SIMD)
+#elif HAVE_INTEL_SIMD
 
 static void arVideoLumaBGRAtoL_Intel_simd_asm(uint8_t * __restrict dest, uint8_t * __restrict src, int32_t numPixels)
 {

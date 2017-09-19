@@ -78,7 +78,7 @@ static int jpegGetSize(FILE *fp, int *w, int *h, int *nc, float *dpi)
 {
     struct jpeg_decompress_struct    cinfo;
     struct jpeg_error_mgr            jerr;
-    
+
     memset(&cinfo, 0, sizeof(cinfo));
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
@@ -112,7 +112,7 @@ static int jpegRead(FILE *fp, unsigned char *buf, int bufWidth, int bufHeight, A
     int                              row, rowsread, columnsToCopy;
     int                              i, j;
     unsigned char *inp, *outp;
-    
+
     bufBytesPerRow = bufWidth * arVideoUtilGetPixelSize(bufPixFormat);
 
     memset(&cinfo, 0, sizeof(cinfo));
@@ -120,7 +120,7 @@ static int jpegRead(FILE *fp, unsigned char *buf, int bufWidth, int bufHeight, A
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, fp);
     (void) jpeg_read_header(&cinfo, TRUE);
-    
+
     // Adjust decompression parameters to match requested.
     if (cinfo.num_components == 3) pixFormat = AR_PIXEL_FORMAT_RGB;
     else if (cinfo.num_components == 4) pixFormat = AR_PIXEL_FORMAT_RGBA;
@@ -140,35 +140,35 @@ static int jpegRead(FILE *fp, unsigned char *buf, int bufWidth, int bufHeight, A
 
     // Start decompression. This gives us access to the JPEG size.
     (void) jpeg_start_decompress(&cinfo);
-    height = MIN(cinfo.output_height, bufHeight); // If jpeg is taller than our buffer, extra rows will be ignored.
-    
+    height = MIN(((int)cinfo.output_height), bufHeight); // If jpeg is taller than our buffer, extra rows will be ignored.
+
     // Decompression requires a bunch of pointers to where to output the decompressed pixels. Create an array to hold the pointers.
     decompressBufRows = cinfo.rec_outbuf_height;
     arMalloc(decompressBufRowPtrs, unsigned char *, decompressBufRows);
-    
+
     // If output width is > bufWidth or colour conversion required, decompress into an intermediate buffer and copy/convert.
     // Otherwise, decompress straight into user-supplied buffer (i.e. buf)..
-    if (convertPixFormat || cinfo.output_width > bufWidth) {
-        
+    if (convertPixFormat || ((int)cinfo.output_width) > bufWidth) {
+
         // Create decompressBuf to decompress into, and a set of pointers to its rows;
         decompressBufBytesPerRow = cinfo.output_width * cinfo.num_components;
         arMalloc(decompressBuf, unsigned char, decompressBufBytesPerRow * decompressBufRows);
         for (i = 0; i < decompressBufRows; i++) decompressBufRowPtrs[i] = &(decompressBuf[decompressBufBytesPerRow*i]);
-        
+
         row = 0;
-        while (cinfo.output_scanline < height) {
-            rowsToRead = MIN(height - cinfo.output_scanline, decompressBufRows);
-            
+        while (((int)cinfo.output_scanline) < height) {
+            rowsToRead = MIN(height - ((int)cinfo.output_scanline), decompressBufRows);
+
             // Decompress.
             rowsread = jpeg_read_scanlines(&cinfo, decompressBufRowPtrs, rowsToRead);
-            
+
             // Copy, and optionally convert.
             if (!convertPixFormat) {
                 // Just copying with truncation.
                 for (i = 0; i < rowsread; i++) memcpy(&(buf[bufBytesPerRow*(row + i)]), decompressBufRowPtrs[i], bufBytesPerRow);
             } else {
                 // Copy with format conversion.
-                columnsToCopy = MIN(bufWidth, cinfo.output_width); // Possibly also truncate.
+                columnsToCopy = MIN(bufWidth, ((int)cinfo.output_width)); // Possibly also truncate.
                 for (i = 0; i < rowsread; i++) {
                     inp = decompressBufRowPtrs[i];
                     outp = &buf[bufBytesPerRow*(row + i)];
@@ -217,24 +217,24 @@ static int jpegRead(FILE *fp, unsigned char *buf, int bufWidth, int bufHeight, A
         }
 
         free(decompressBuf);
-        
+
     } else {
-        
+
         // Decompress directly to buf.
         row = 0;
-        while (cinfo.output_scanline < height) {
-            rowsToRead = MIN(height - cinfo.output_scanline, decompressBufRows);
+        while (((int)cinfo.output_scanline) < height) {
+            rowsToRead = MIN(height - ((int)cinfo.output_scanline), decompressBufRows);
             // Update the set of pointers to decompress into.
             for (i = 0; i < rowsToRead; i++) decompressBufRowPtrs[i] = &(buf[bufBytesPerRow*(row + i)]);
             // Decompress.
             row += jpeg_read_scanlines(&cinfo, decompressBufRowPtrs, rowsToRead);
         }
     }
-    
+
     (void) jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     free(decompressBufRowPtrs);
-    
+
     return (TRUE);
 }
 #endif // HAVE_LIBJPEG
@@ -264,7 +264,8 @@ AR2VideoParamImageT *ar2VideoOpenImage( const char *config )
 {
     AR2VideoParamImageT      *vid;
     const char               *a;
-    char                      line[1024];
+    #define LINE_SIZE ((unsigned int)1024)
+    char                      line[LINE_SIZE];
     int bufSizeX;
     int bufSizeY;
     char bufferpow2 = 0;
@@ -290,7 +291,7 @@ AR2VideoParamImageT *ar2VideoOpenImage( const char *config )
         for(;;) {
             while( *a == ' ' || *a == '\t' ) a++;
             if( *a == '\0' ) break;
-    
+
             if (sscanf(a, "%s", line) == 0) break;
             if (strncmp( line, "-width=", 7) == 0) {
                 if (sscanf(&line[7], "%d", &vid->width) == 0) {
@@ -366,7 +367,7 @@ AR2VideoParamImageT *ar2VideoOpenImage( const char *config )
             goto bail;
         }
         if ((infile = fopen(vid->imageList->pathname, "rb")) == NULL) {
-            ARLOGe("Can't open JPEG file '%s'\n", vid->imageList->pathname);
+            ARLOGe("Error: unable to open JPEG file '%s' for reading.\n", vid->imageList->pathname);
             ARLOGperror(NULL);
             goto bail;
         }
@@ -400,7 +401,7 @@ AR2VideoParamImageT *ar2VideoOpenImage( const char *config )
     if (ar2VideoSetBufferSizeImage(vid, bufSizeX, bufSizeY) != 0) {
         goto bail;
     }
-    
+
     // Point to head of image list.
     vid->nextImage = vid->imageList;
 
@@ -415,7 +416,7 @@ bail:
 int ar2VideoCloseImage( AR2VideoParamImageT *vid )
 {
     AR2VideoImageRef *imageRefToFree;
-    
+
     if (!vid) return (-1); // Sanity check.
     while (vid->imageList) {
         imageRefToFree = vid->imageList;
@@ -428,7 +429,7 @@ int ar2VideoCloseImage( AR2VideoParamImageT *vid )
     free( vid );
 
     return 0;
-} 
+}
 
 int ar2VideoCapStartImage( AR2VideoParamImageT *vid )
 {
@@ -446,10 +447,10 @@ AR2VideoBufferT *ar2VideoGetImageImage( AR2VideoParamImageT *vid )
     int ok;
 
     if (!vid) return (NULL); // Sanity check.
-    
+
     if (vid->nextImage) {
         if ((infile = fopen(vid->nextImage->pathname, "rb")) == NULL) {
-            ARLOGe("Can't open JPEG file '%s'\n", vid->nextImage->pathname);
+            ARLOGe("Error: unable to open JPEG file '%s' for reading.\n", vid->nextImage->pathname);
             ARLOGperror(NULL);
         } else {
             ok = jpegRead(infile, vid->buffer.buff, vid->bufWidth, vid->bufHeight, vid->format);
@@ -465,7 +466,7 @@ AR2VideoBufferT *ar2VideoGetImageImage( AR2VideoParamImageT *vid )
             vid->buffer.time.sec  = 0;
             vid->buffer.time.usec = 0;
         }
-        
+
         vid->nextImage = vid->nextImage->next; // Next item in linked list.
         if (!vid->nextImage && vid->loop) vid->nextImage = vid->imageList; // If we've hit the end of the list and looping requested, go back to head of linked list.
 
@@ -495,12 +496,12 @@ int ar2VideoSetBufferSizeImage(AR2VideoParamImageT *vid, const int width, const 
     int rowBytes;
 
     if (!vid) return (-1);
-    
+
     if (vid->buffer.buff) {
         free (vid->buffer.buff);
         vid->buffer.buff = vid->buffer.buffLuma = NULL;
     }
-    
+
     if (width && height) {
         if (width < vid->width || height < vid->height) {
             ARLOGe("Error: Requested buffer size smaller than video size.\n");
@@ -514,10 +515,10 @@ int ar2VideoSetBufferSizeImage(AR2VideoParamImageT *vid, const int width, const 
         }
         vid->buffer.buffLuma = NULL;
     }
-    
+
     vid->bufWidth = width;
     vid->bufHeight = height;
-    
+
     return (0);
 }
 
@@ -564,7 +565,7 @@ int ar2VideoSetParamdImage( AR2VideoParamImageT *vid, int paramName, double  val
 int ar2VideoGetParamsImage( AR2VideoParamImageT *vid, const int paramName, char **value )
 {
     if (!vid || !value) return (-1);
-    
+
     switch (paramName) {
         default:
             return (-1);
@@ -575,7 +576,7 @@ int ar2VideoGetParamsImage( AR2VideoParamImageT *vid, const int paramName, char 
 int ar2VideoSetParamsImage( AR2VideoParamImageT *vid, const int paramName, const char  *value )
 {
     if (!vid) return (-1);
-    
+
     switch (paramName) {
         default:
             return (-1);

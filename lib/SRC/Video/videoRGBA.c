@@ -37,7 +37,7 @@
 #include <stdbool.h>
 #include <AR/videoRGBA.h>
 
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
 #  include <arm_neon.h>
 #  ifdef ANDROID
 #    include "cpu-features.h"
@@ -48,11 +48,11 @@
 #define MIN(x,y) (x < y ? x : y)
 #define CLAMP(x,r1,r2) (MIN(MAX(x,r1),r2))
 
-#if defined(HAVE_ARM_NEON) && defined(ANDROID)
+#if defined(ANDROID) && HAVE_ARM_NEON
 int gHaveARMv7aWithNEON = -1;
 #endif
 
-#if defined(HAVE_ARM_NEON)
+#if HAVE_ARM_NEON
 static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCbCr, int rowBytes, int rows)
 {
     __asm__ volatile("    vstmdb      sp!, {d8-d15}    \n" // Save any VFP or NEON registers that should be preserved (S16-S31 / Q4-Q7).
@@ -254,7 +254,7 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
                      : "cc", "r4", "r5", "r6"
                      );
 }
-#elif defined(HAVE_ARM64_NEON)
+#elif HAVE_ARM64_NEON
 
 static void YCbCr422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8_t * __restrict srcY, uint8_t * __restrict srcCbCr, int32_t rowBytes, int32_t rows)
 {
@@ -471,17 +471,17 @@ static void YCrCb422BiPlanarToRGBA_ARM_neon_asm(uint8_t * __restrict dest, uint8
 
 int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat)
 {
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
     bool fastPath;
 #endif
     
     if (!destRGBA || !source || width <= 0 || height <= 0 || pixelFormat == AR_PIXEL_FORMAT_INVALID) return (-1); // Sanity check.
 
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
     if (width % 16 != 0 || height % 2 != 0) {
         fastPath = false;
     } else {
-#  if defined(HAVE_ARM_NEON) && defined(ANDROID)
+#  if defined(ANDROID) && HAVE_ARM_NEON
         if (gHaveARMv7aWithNEON == -1) {
             // Not all Android devices with ARMv7 are guaranteed to have NEON, so check.
             uint64_t features = android_getCpuFeatures();
@@ -621,7 +621,7 @@ int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height
             break;
         case AR_PIXEL_FORMAT_420f:
         {
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
             if (fastPath) {
                 YCbCr422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)destRGBA, source->bufPlanes[0], source->bufPlanes[1], width, height);
             } else {
@@ -680,14 +680,14 @@ int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height
                     outp0 += width*4;
                     outp1 += width*4;
                 }
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
             }
 #endif
         }
             break;
         case AR_PIXEL_FORMAT_NV21:
         {
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
             if (fastPath) {
                 YCrCb422BiPlanarToRGBA_ARM_neon_asm((uint8_t *)destRGBA, source->bufPlanes[0], source->bufPlanes[1], width, height);
             } else {
@@ -746,7 +746,7 @@ int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height
                     outp0 += width*4;
                     outp1 += width*4;
                 }
-#if defined(HAVE_ARM_NEON) || defined(HAVE_ARM64_NEON)
+#if HAVE_ARM_NEON || HAVE_ARM64_NEON
             }
 #endif
         }

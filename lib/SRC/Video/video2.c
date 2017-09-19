@@ -34,7 +34,7 @@
  *  Author(s): Hirokazu Kato, Philip Lamb
  *
  */
-/* 
+/*
  *   author: Hirokazu Kato (kato@sys.im.hiroshima-cu.ac.jp)
  *
  *   Revision: 6.0   Date: 2003/09/29
@@ -78,7 +78,7 @@
 static const char *ar2VideoGetConfig(const char *config_in)
 {
     const char *config = NULL;
-    
+
     /* If no config string is supplied, we should use the environment variable, otherwise set a sane default */
     if (!config_in || !(config_in[0])) {
         /* None supplied, lets see if the user supplied one from the shell */
@@ -98,7 +98,7 @@ static const char *ar2VideoGetConfig(const char *config_in)
         config = config_in;
         ARLOGi("Using supplied video config \"%s\".\n", config_in);
     }
-    
+
     return config;
 }
 
@@ -106,20 +106,21 @@ static int ar2VideoGetModuleWithConfig(const char *config, const char **configSt
 {
     int                        module;
     const char                *a;
-    char                       b[256];
-    
+#   define B_SIZE ((unsigned int)256)
+    char                       b[B_SIZE];
+
     module = arVideoGetDefaultModule();
-    
+
     if (configStringFollowingDevice_p) *configStringFollowingDevice_p = NULL;
-    
+
     a = config;
     if (a) {
         for(;;) {
             while(*a == ' ' || *a == '\t') a++;
             if (*a == '\0') break;
-            
+
             if (sscanf(a, "%s", b) == 0) break;
-            
+
             if (strcmp(b, "-module=Dummy") == 0)             {
                 module = AR_VIDEO_MODULE_DUMMY;
             } else if (strcmp(b, "-module=V4L") == 0 || strcmp(b, "-module=V4L2") == 0) {
@@ -140,11 +141,11 @@ static int ar2VideoGetModuleWithConfig(const char *config, const char **configSt
             } else if (strcmp(b, "-module=WinMC") == 0)    {
                 module = AR_VIDEO_MODULE_WINDOWS_MEDIA_CAPTURE;
             }
-            
+
             while (*a != ' ' && *a != '\t' && *a != '\0') a++;
         }
     }
-    
+
     if (configStringFollowingDevice_p) {
         if (*configStringFollowingDevice_p) {
             while(**configStringFollowingDevice_p != ' ' && **configStringFollowingDevice_p != '\t' && **configStringFollowingDevice_p != '\0') (*configStringFollowingDevice_p)++;
@@ -153,7 +154,7 @@ static int ar2VideoGetModuleWithConfig(const char *config, const char **configSt
             *configStringFollowingDevice_p = config;
         }
     }
-    
+
     return (module);
 }
 
@@ -211,9 +212,9 @@ ARVideoSourceInfoListT *ar2VideoCreateSourceInfoList(const char *config_in)
 void ar2VideoDeleteSourceInfoList(ARVideoSourceInfoListT **p)
 {
     int i;
-    
+
     if (!p || !*p) return;
-    
+
     for (i = 0; i < (*p)->count; i++) {
         free((*p)->info[i].name);
         free((*p)->info[i].model);
@@ -222,7 +223,7 @@ void ar2VideoDeleteSourceInfoList(ARVideoSourceInfoListT **p)
     }
     free((*p)->info);
     free(*p);
-    
+
     *p = NULL;
 }
 
@@ -301,7 +302,7 @@ AR2VideoParamT *ar2VideoOpen(const char *config_in)
         ARLOGe("ar2VideoOpen: Error: module \"WinMC\" not supported on this build/architecture/system.\n");
 #endif
     }
-    
+
     free(vid);
     return NULL;
 }
@@ -313,13 +314,13 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
     // Some devices won't understand the "-module=" option, so we need to pass
     // only the portion following that option to them.
     const char                *configStringFollowingDevice = NULL;
-    
+
     if (!callback) return NULL;
-    
+
     arMallocClear(vid, AR2VideoParamT, 1);
     config = ar2VideoGetConfig(config_in);
     vid->module = ar2VideoGetModuleWithConfig(config, &configStringFollowingDevice);
-    
+
     if (vid->module == AR_VIDEO_MODULE_AVFOUNDATION) {
 #ifdef ARVIDEO_INPUT_AVFOUNDATION
         if ((vid->moduleParam = (void *)ar2VideoOpenAsyncAVFoundation(config, callback, userdata)) != NULL) return vid;
@@ -342,7 +343,7 @@ AR2VideoParamT *ar2VideoOpenAsync(const char *config_in, void (*callback)(void *
 int ar2VideoClose(AR2VideoParamT *vid)
 {
     int ret;
-    
+
     if (!vid) return -1;
     if (vid->lumaInfo) {
         if (arVideoLumaFinal(&(vid->lumaInfo)) < 0) {
@@ -397,7 +398,7 @@ int ar2VideoClose(AR2VideoParamT *vid)
 #endif
     free (vid);
     return (ret);
-} 
+}
 
 int ar2VideoDispOption(AR2VideoParamT *vid)
 {
@@ -617,7 +618,7 @@ AR_PIXEL_FORMAT ar2VideoGetPixelFormat(AR2VideoParamT *vid)
 AR2VideoBufferT *ar2VideoGetImage(AR2VideoParamT *vid)
 {
     AR2VideoBufferT *ret = NULL;
-    
+
     if (!vid) return (NULL);
 #ifdef ARVIDEO_INPUT_DUMMY
     if (vid->module == AR_VIDEO_MODULE_DUMMY) {
@@ -828,7 +829,7 @@ int ar2VideoGetParami(AR2VideoParamT *vid, int paramName, int *value)
                );
 #endif
     }
-    
+
     if (!vid) return -1;
 #ifdef ARVIDEO_INPUT_DUMMY
     if (vid->module == AR_VIDEO_MODULE_DUMMY) {

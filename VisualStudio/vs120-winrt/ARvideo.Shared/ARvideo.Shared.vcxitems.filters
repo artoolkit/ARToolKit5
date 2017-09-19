@@ -39,7 +39,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\LogMediaType.cpp">
       <Filter>WinMF</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWinMF.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWindowsMediaFoundation.cpp">
       <Filter>WinMF</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video.c" />

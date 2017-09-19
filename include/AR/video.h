@@ -279,9 +279,9 @@ typedef struct {
 } ARVideoSourceInfoListT;
 
 typedef void (*AR_VIDEO_FRAME_READY_CALLBACK)(void *);
-    
+
 #ifdef _WIN32
-#  ifndef LIBARVIDEO_STATIC
+#  ifdef LIBARVIDEO_DYNAMIC
 #    ifdef LIBARVIDEO_EXPORTS
 #      define AR_DLL_API __declspec(dllexport)
 #    else
@@ -402,10 +402,10 @@ AR_DLL_API int               arVideoSaveParam       (char *filename);
 AR_DLL_API int               arVideoLoadParam       (char *filename);
 AR_DLL_API int               arVideoSetBufferSize   (const int width, const int height);
 AR_DLL_API int               arVideoGetBufferSize   (int *width, int *height);
-    
+
 AR_DLL_API int               arVideoGetCParam       (ARParam *cparam);
 AR_DLL_API int               arVideoGetCParamAsync  (void (*callback)(const ARParam *, void *), void *userdata);
-    
+
 AR_DLL_API int               arVideoUtilGetPixelSize(const AR_PIXEL_FORMAT arPixelFormat);
 AR_DLL_API const char       *arVideoUtilGetPixelFormatName(const AR_PIXEL_FORMAT arPixelFormat);
 #if !AR_ENABLE_MINIMIZE_MEMORY_FOOTPRINT
@@ -469,16 +469,16 @@ char *arVideoUtilFindAspectRatioName(int w, int h);
     @result
         Returns the full version number of the ARToolKit version corresponding
         to this video library, in binary coded decimal (BCD) format.
- 
+
         BCD format allows simple tests of version number in the caller
         e.g. if ((arGetVersion(NULL) >> 16) > 0x0272) printf("This release is later than 2.72\n");
- 
+
         The major version number is encoded in the most-significant byte
         (bits 31-24), the minor version number in the second-most-significant
         byte (bits 23-16), the tiny version number in the third-most-significant
         byte (bits 15-8), and the build version number in the least-significant
         byte (bits 7-0).
- 
+
         If the returned value is equal to -1, it can be assumed that the actual
         version is in the range 0x04000000 to 0x04040100.
     @since Available in ARToolKit v4.4.2 and later. The underlying

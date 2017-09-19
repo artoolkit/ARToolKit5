@@ -16,7 +16,7 @@
     <ClCompile Include="..\..\lib\SRC\Video\WindowsMediaFoundation\LogMediaType.cpp">
       <Filter>WindowsMediaFoundation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\lib\SRC\Video\WindowsMediaFoundation\videoWinMF.cpp">
+    <ClCompile Include="..\..\lib\SRC\Video\WindowsMediaFoundation\videoWindowsMediaFoundation.cpp">
       <Filter>WindowsMediaFoundation</Filter>
     </ClCompile>
   </ItemGroup>

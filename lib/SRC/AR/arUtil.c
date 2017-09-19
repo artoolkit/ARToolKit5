@@ -51,9 +51,7 @@
 #include <ctype.h>    // tolower()
 #ifdef _WIN32
 #  include <direct.h> // chdir(), getcwd()
-#  ifdef _WINRT
-#  else
-#    define getcwd _getcwd
+#  ifndef _WINRT
 #    include <shlobj.h> // SHGetFolderPath()
 #  endif
 #  define MAXPATHLEN MAX_PATH

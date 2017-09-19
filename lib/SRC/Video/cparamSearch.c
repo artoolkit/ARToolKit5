@@ -48,7 +48,9 @@
 #include <time.h>
 #include <sys/param.h> // MAXPATHLEN
 #include <math.h> // log2f(), fabsf()
-#include <unistd.h> // unlink()
+#ifndef _WIN32
+#  include <unistd.h> // unlink()
+#endif
 #include <float.h> // FLT_MAX
 
 #ifdef ANDROID
@@ -129,7 +131,7 @@ CPARAM_SEARCH_STATE cparamSearch(const char *device_id, int camera_index, int ca
 {
     struct _CPARAM_SEARCH_DATA *searchData;
     struct _CPARAM_SEARCH_DATA *tail;
-    
+
     // Create a new search request.
     searchData = (struct _CPARAM_SEARCH_DATA *)calloc(1, sizeof(struct _CPARAM_SEARCH_DATA));
     searchData->device_id = strdup(device_id);
@@ -140,7 +142,7 @@ CPARAM_SEARCH_STATE cparamSearch(const char *device_id, int camera_index, int ca
     searchData->focal_length = focal_length;
     searchData->callback = callback;
     searchData->userdata = userdata;
-    
+
     // Find the queue tail and add it on.
     pthread_mutex_lock(&cparamSearchListLock);
     if (!cparamSearchList) {
@@ -151,10 +153,10 @@ CPARAM_SEARCH_STATE cparamSearch(const char *device_id, int camera_index, int ca
         tail->next = searchData;
     }
     pthread_mutex_unlock(&cparamSearchListLock);
-    
+
     // Start processing.
     threadStartSignal(cparamSearchThread);
-    
+
     return (CPARAM_SEARCH_STATE_INITIAL);
 }
 
@@ -174,7 +176,7 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
     sqlite3 *db = NULL;
     sqlite3_stmt *stmt;
     bool copyOrCreate;
-    
+
     // Form absolute paths if required.
     if (dbBasePath && dbBasePath[0]) {
         asprintf(&dbPath0, "%s/%s", dbBasePath, dbPath);
@@ -188,7 +190,7 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
     }
     if (!dbPath0 || !initDBPath0) goto done;
     ARLOGd("dbPath0 = '%s', initDBPath0 = '%s'.\n", dbPath0, initDBPath0);
-    
+
     // Check if we already have a cache database.
     copyOrCreate = true;
     err = test_f(dbPath0, NULL);
@@ -208,10 +210,10 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
             copyOrCreate = false;
         }
     }
-    
+
     if (copyOrCreate) {
         // No current database exists. Need to copy initial or create new.
-        
+
         if (dbBasePath) {
             // First, ensure that we have a directory to put it in.
             int dbBasePathExists = test_d(dbBasePath);
@@ -248,14 +250,14 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
             copyOrCreate = false;
         }
     }
-    
+
     // Open the database.
     sqliteErr = sqlite3_open_v2(dbPath0, &db, (copyOrCreate ? SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE : SQLITE_OPEN_READWRITE), NULL);
     if (sqliteErr != SQLITE_OK) {
         ARLOGe("Error opening %s database '%s'.\n", (copyOrCreate ? "new" : "existing"), dbPath0);
         goto bail;
     }
-    
+
     if (copyOrCreate) {
         ARLOGi("Created new camera parameters database.\n");
         // Create the table and columns needed.
@@ -273,9 +275,9 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
             goto bail;
         }
     }
-    
+
     goto done;
-    
+
 bail:
     reportSQLite3Err(db);
     sqlite3_close(db);
@@ -296,7 +298,7 @@ int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCa
     	return (-1);
     }
 
-    // Init OS fields.    
+    // Init OS fields.
     os_name = arUtilGetOSName();
     os_version = arUtilGetOSVersion();
     os_arch = arUtilGetCPUName();
@@ -308,11 +310,11 @@ int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCa
     	ARLOGe("Unable to open cache database.\n");
         goto bail;
     }
-    
+
     nextCacheFlushTime = time(NULL) + CACHE_FLUSH_INTERVAL; // Flush once every 10 minutes.
-    
+
     internetState = -1;
-    
+
     cparamSearchList = NULL;
     pthread_mutex_init(&cparamSearchListLock, NULL);
     cparamSearchThread = threadInit(0, NULL, cparamSearchWorker);
@@ -321,9 +323,9 @@ int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCa
         pthread_mutex_destroy(&cparamSearchListLock);
         goto bail;
     }
-    
+
     return (0);
-    
+
 bail:
     cparamSearchFinal();
     return (-1);
@@ -337,21 +339,21 @@ int cparamSearchFinal()
         threadFree(&cparamSearchThread);
     }
     cparamSearchList = NULL;
-    
+
     internetState = -1;
 
     if (cacheDB) {
         sqlite3_close(cacheDB);
         cacheDB = NULL;
     }
-    
+
     free(os_name); os_name = NULL;
     free(os_arch); os_arch = NULL;
     free(os_version); os_version = NULL;
-    
+
     // CURL final.
     curl_global_cleanup();
-    
+
     return (0);
 }
 
@@ -366,14 +368,14 @@ int cparamSearchSetInternetState(int state)
 static size_t receiveHTTP(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
     if (!ptr || !size || !nmemb) return (0); // If no data, do nothing.
-    
+
     if (!receiveHTTPBuf) {
         receiveHTTPBuf = (char *)malloc(RECEIVE_HTTP_BUFSIZE * sizeof(char));
         if (!receiveHTTPBuf) return (0);
         *receiveHTTPBuf = '\0';
         receiveHTTPBufLength = 0;
     }
-    
+
     // Check for response too big.
     if (receiveHTTPBufLength + size*nmemb > RECEIVE_HTTP_BUFSIZE - 1) {
         free(receiveHTTPBuf);
@@ -381,11 +383,11 @@ static size_t receiveHTTP(char *ptr, size_t size, size_t nmemb, void *userdata)
         receiveHTTPBufLength = 0;
         return (0);
     }
-    
+
     memcpy(&receiveHTTPBuf[receiveHTTPBufLength], ptr, size*nmemb);
     receiveHTTPBufLength += size*nmemb;
     receiveHTTPBuf[receiveHTTPBufLength] = '\0';
-    
+
     return (size*nmemb);
 }
 
@@ -409,33 +411,33 @@ static unsigned char *base64_decode(const char *data, size_t input_length, size_
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
     int i, j;
-    
+
     if (input_length % 4 != 0) return NULL;
-    
+
     *output_length = input_length / 4 * 3;
     if (data[input_length - 1] == '=') (*output_length)--;
     if (data[input_length - 2] == '=') (*output_length)--;
-    
+
     unsigned char *decoded_data = malloc(*output_length);
     if (!decoded_data) return NULL;
-    
+
     for (i = 0, j = 0; i < input_length;) {
-        
+
         uint32_t sextet_a = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
         uint32_t sextet_b = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
         uint32_t sextet_c = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
         uint32_t sextet_d = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
-        
+
         uint32_t triple = (sextet_a << 3 * 6)
         + (sextet_b << 2 * 6)
         + (sextet_c << 1 * 6)
         + (sextet_d << 0 * 6);
-        
+
         if (j < *output_length) decoded_data[j++] = (triple >> 2 * 8) & 0xFF;
         if (j < *output_length) decoded_data[j++] = (triple >> 1 * 8) & 0xFF;
         if (j < *output_length) decoded_data[j++] = (triple >> 0 * 8) & 0xFF;
     }
-    
+
     return decoded_data;
 }
 
@@ -445,36 +447,36 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
     CURL *curlHandle = NULL;
     CURLcode curlErr;
 	char curlErrorBuf[CURL_ERROR_SIZE];
-    
+
     time_t nowTime;
     bool timeSet = false;
-    
+
     char *SQL;
     sqlite3_stmt *stmt;
     int sqliteErr;
-    
+
 	long http_response;
     CPARAM_SEARCH_STATE result;
     int i;
-    
+
     ARLOGd("cparamSearch worker entered.\n");
 
     while (threadStartWait(threadHandle) == 0) {
-        
+
         pthread_mutex_lock(&cparamSearchListLock);
         struct _CPARAM_SEARCH_DATA *searchData = cparamSearchList;
         pthread_mutex_unlock(&cparamSearchListLock);
-        
+
         while (searchData) {
-            
+
             nowTime = time(NULL);
             timeSet = true;
             result = CPARAM_SEARCH_STATE_IN_PROGRESS;
-            
+
             ARLOGi("cparamSearch beginning search for %s, camera %d, aspect ratio %s.\n", searchData->device_id, searchData->camera_index, searchData->aspect_ratio);
             // Let observer know that we've started.
             if (searchData->callback) (*searchData->callback)(result, 0.0f, NULL, searchData->userdata);
-            
+
             // First, check the cache.
             if (asprintf(&SQL, "SELECT camera_width, camera_height, focal_length, camera_para_base64 FROM cache WHERE device_id = ?1 AND camera_index = %d AND aspect_ratio = '%s' AND (expires IS NULL OR expires > %ld);", searchData->camera_index, searchData->aspect_ratio, nowTime) < 0) { // ?1 will be bound to the string value.
                 ARLOGe("Out of memory!\n");
@@ -491,27 +493,27 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                         reportSQLite3Err(cacheDB);
                         result = CPARAM_SEARCH_STATE_FAILED_ERROR;
                     } else {
-                        
+
                         // Retrieve all matching records and sort throught them.
                         float focal_length;
                         int camera_width;
                         int camera_height;
                         const unsigned char *camera_para_base64;
-                        
+
                         float bestSizeRatio = INFINITY;
                         float bestFocalLengthRatio = INFINITY;
-                        
+
                         do {
-                            
+
                             sqliteErr = sqlite3_step(stmt);
-                            
+
                             if (sqliteErr == SQLITE_ROW) {
-                                
+
                                 camera_width = sqlite3_column_int(stmt, 0);
                                 camera_height = sqlite3_column_int(stmt, 1);
                                 focal_length = (float)sqlite3_column_double(stmt, 2);
                                 camera_para_base64 = sqlite3_column_text(stmt, 3);
-                                
+
                                 // Width, height and camera_para must never be NULL.
                                 if (!camera_width || !camera_height || !camera_para_base64) {
                                     ARLOGe("Error in database: NULL field.\n");
@@ -530,7 +532,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                         float sizeRatio = fabsf(LOG2F(((float)camera_width)/((float)searchData->camera_width)));
                                         float focalLengthRatio = (focal_length ? fabsf(LOG2F(focal_length/searchData->focal_length)) : FLT_MAX);
                                         if (sizeRatio < bestSizeRatio || (sizeRatio == bestSizeRatio && focalLengthRatio < bestFocalLengthRatio)) {
-                                            searchData->camera_para = decodedCparam;             
+                                            searchData->camera_para = decodedCparam;
                                             result = CPARAM_SEARCH_STATE_OK;
                                             ARLOGi("Matched cached camera calibration record (%dx%d, focal length %.2f).\n", camera_width, camera_height, focal_length);
                                             // Take note of sizeRatio and focalLengthRatio.
@@ -540,14 +542,14 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                     }
                                     free(decoded);
                                 }
-                                
+
                             } else if (sqliteErr != SQLITE_DONE) { // No records found is not an error.
                                 reportSQLite3Err(cacheDB);
                                 result = CPARAM_SEARCH_STATE_FAILED_ERROR;
                                 break;
                             }
                         } while (sqliteErr == SQLITE_ROW);
-                        
+
                         sqliteErr = sqlite3_finalize(stmt); // Invalidates cache_camera_para_base64.
                         if (sqliteErr != SQLITE_OK) {
                             reportSQLite3Err(cacheDB);
@@ -556,10 +558,10 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                     }
                 }
             }
-            
+
             // If no cache hit, do a network query.
             if (result == CPARAM_SEARCH_STATE_IN_PROGRESS) {
-                
+
                 // Init curl handle and network.
                 if (!curlHandle) {
                     curlHandle = curl_easy_init();
@@ -600,28 +602,28 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                         } // !curl_easy_setopt()
                     } // !curl_easy_init()
                 } // !curlHandle
-                
+
                 if (result == CPARAM_SEARCH_STATE_IN_PROGRESS) {
-                    
+
                     // Network OK, proceed.
                     // Build the form.
                     struct curl_httppost* post = NULL;
                     struct curl_httppost* last = NULL;
-                    
+
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "version", CURLFORM_COPYCONTENTS, "1", CURLFORM_END);
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "os_name", CURLFORM_COPYCONTENTS, os_name, CURLFORM_END);
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "os_arch", CURLFORM_COPYCONTENTS, os_arch, CURLFORM_END);
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "os_version", CURLFORM_COPYCONTENTS, os_version, CURLFORM_END);
-                    
+
                     // Search token to ASCII.
                     unsigned char searchToken[SEARCH_TOKEN_LENGTH] = SEARCH_TOKEN;
                     char searchToken_ascii[SEARCH_TOKEN_LENGTH*2 + 1]; // space for null terminator.
                     for (i = 0; i < SEARCH_TOKEN_LENGTH; i++) snprintf(&(searchToken_ascii[i*2]), 3, "%.2hhx", searchToken[i]);
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "ss", CURLFORM_COPYCONTENTS, searchToken_ascii, CURLFORM_END);
-                    
+
                     // Get all records for this device_id.
                     curl_formadd(&post, &last, CURLFORM_COPYNAME, "device_id", CURLFORM_COPYCONTENTS, searchData->device_id, CURLFORM_END);
-                    
+
                     // Set options.
                     // WORK AROUND ISSUE OF MISSING CAfile (default: /etc/ssl/certs/ca-certificates.crt) AND EMPTY CApath.
                     if (((curlErr = curl_easy_setopt(curlHandle, CURLOPT_URL, SEARCH_POST_URL)) != CURLE_OK) ||
@@ -629,11 +631,11 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                         ((curlErr = curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, receiveHTTP)) != CURLE_OK) ||
                         ((curlErr = curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, NULL)) != CURLE_OK) ||  // Set userdata pointer.
                         ((curlErr = curl_easy_setopt(curlHandle, CURLOPT_HTTPPOST, post)) != CURLE_OK)) { // Automatically sets CURLOPT_NOBODY to 0.
-                        
+
                         ARLOGe("CURL error: %s (%d)\n", curl_easy_strerror(curlErr), curlErr);
                         result = CPARAM_SEARCH_STATE_FAILED_ERROR;
                     } else {
-                        
+
                         // Perform the transfer. Blocks until complete.
                         curlErr = curl_easy_perform(curlHandle);
                         curl_formfree(post); // Free the form resources, regardless of outcome.
@@ -659,12 +661,12 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                         } else {
                             curl_easy_getinfo (curlHandle, CURLINFO_RESPONSE_CODE, &http_response);
                             if (http_response == 200) {
-                                
+
                                 if (receiveHTTPBufLength <= 0) {
                                     result = CPARAM_SEARCH_STATE_RESULT_NULL;
-                                } else { 
+                                } else {
                                     //ARLOGe("Got http:'%s'\n", receiveHTTPBuf);
-                                    // Read the results.                                    
+                                    // Read the results.
                                     // JSON decode
                                     const nx_json *records = nx_json_parse_utf8(receiveHTTPBuf);
                                     if (!records || records->type != NX_JSON_ARRAY) {
@@ -672,13 +674,13 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                     } else {
                                         float bestSizeRatio = INFINITY;
                                         float bestFocalLengthRatio = INFINITY;
-                                        
+
                                         ARLOGi("Fetched %d camera calibration records from online database.\n", records->length);
                                         for (i = 0; i < records->length; i++) {
                                             // Get a record.
                                             const nx_json *record = nx_json_item(records, i);
                                             if (record->type != NX_JSON_OBJECT) continue;
-                                            
+
                                             // Get its data.
                                             int camera_index = (int)(nx_json_get(record, "camera_index")->int_value);
                                             int camera_width = (int)(nx_json_get(record, "camera_width")->int_value);
@@ -687,9 +689,9 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                             float focal_length = (float)(nx_json_get(record, "focal_length")->dbl_value);
                                             bool fallback = (nx_json_get(record, "fallback")->int_value ? true : false);
                                             unsigned char *camera_para_base64 = (unsigned char *)(nx_json_get(record, "camera_para_base64")->text_value);
-                                            
+
                                             ARLOGd("camera_index=%d, camera_width=%d, camera_height=%d, aspect_ratio='%s', focal_length=%f, camera_para_base64='%s'%s.\n", camera_index, camera_width, camera_height, aspect_ratio, focal_length, camera_para_base64, (fallback ? ", fallback" : ""));
-                                            
+
                                             // Check validity of values.
                                             if (!camera_width || !camera_height || !aspect_ratio || !camera_para_base64) {
                                                 ARLOGe("Error in database: NULL field.\n");
@@ -717,7 +719,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                             bestFocalLengthRatio = focalLengthRatio;
                                                         }
                                                     }
-                                                    
+
                                                     // Put into cache.
                                                     if (asprintf(&SQL, "INSERT OR REPLACE INTO cache (device_id,camera_index,focal_length,camera_width,camera_height,aspect_ratio,camera_para_base64,expires) VALUES (?1, %d, %f, %d, %d, ?2, ?3, %ld);", camera_index, focal_length, camera_width, camera_height, nowTime + (fallback ? CACHE_TIME_FALLBACK : CACHE_TIME)) >= 0) { // ?n will be bound to string values.
                                                         sqliteErr = sqlite3_prepare_v2(cacheDB, SQL, (int)strlen(SQL), &stmt, NULL);
@@ -742,19 +744,19 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                                                             }
                                                         }
                                                     }
-                                                    
+
                                                 } // base64 ok.
                                                 free(decoded);
                                             } // no NULLs.
                                         } // for (records)
-                                        
+
                                         // Check for case where we didn't match any of the downloaded records.
                                         if (result == CPARAM_SEARCH_STATE_IN_PROGRESS) {
                                             result = CPARAM_SEARCH_STATE_RESULT_NULL;
                                         }
                                     }
                                     nx_json_free(records);
-                                    
+
                                 }
                             } else if (http_response == 204) {
                                 result = CPARAM_SEARCH_STATE_RESULT_NULL;
@@ -776,9 +778,9 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
                         receiveHTTPBufLength = 0;
                     } //options set OK.
                 } // curlHandle, curlErrorBuf, network OK.
-                
+
             }
-            
+
             // Return the result.
             if (searchData->callback) {
                 ARLOGd("cparamSearch result ready, invoking callback.\n");
@@ -787,7 +789,7 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
             } else {
                 ARLOGw("Warning: cparamSearch result with no callback registered.\n");
             }
-            
+
             // Remove the current query from the head of the list.
             pthread_mutex_lock(&cparamSearchListLock);
             cparamSearchList = searchData->next;
@@ -797,9 +799,9 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
             free(searchData);
             searchData = cparamSearchList;
             pthread_mutex_unlock(&cparamSearchListLock);
-            
+
         } // while(searchData)
-        
+
         // Expire old cache records. Fail gracefully.
         if (timeSet && (nowTime >= nextCacheFlushTime)) {
             if (asprintf(&SQL, "DELETE FROM cache WHERE expires <= %ld;", nowTime) >= 0) {
@@ -820,18 +822,18 @@ static void *cparamSearchWorker(THREAD_HANDLE_T *threadHandle)
             }
             nextCacheFlushTime = nowTime + CACHE_FLUSH_INTERVAL;
         }
-        
+
         threadEndSignal(threadHandle);
     }
-    
+
     ARLOGd("cparamSearch worker exiting.\n");
-    
+
     // Cleanup CURL handle on exit.
     if (curlHandle) {
         curl_easy_cleanup(curlHandle);
         curlHandle = NULL;
     }
-    
+
     return (NULL);
 }
 

@@ -327,13 +327,14 @@ typedef enum {
 
 #define AR_CALLBACK __stdcall
 #define strdup _strdup
+#define LIBARVIDEO_DYNAMIC
 
 // Define _WINRT for support Windows Runtime platforms.
 #if defined(WINAPI_FAMILY)
 #  if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP) // Windows Phone 8.1 and later.
 #    if (_WIN32_WINNT >= 0x0603) // (_WIN32_WINNT_WINBLUE)
 #      define _WINRT
-#      define LIBARVIDEO_STATIC
+#      undef LIBARVIDEO_DYNAMIC
 #      define ARDOUBLE_IS_FLOAT
 #    else
 #      error ARToolKit for Windows Phone requires Windows Phone 8.1 or later. Please compile with Visual Studio 2013 or later with Windows Phone 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).
@@ -341,7 +342,7 @@ typedef enum {
 #  elif (WINAPI_FAMILY == WINAPI_FAMILY_PC_APP) // Windows Store 8.1 and later.
 #    if (_WIN32_WINNT >= 0x0603) // (_WIN32_WINNT_WINBLUE)
 #      define _WINRT
-#      define LIBARVIDEO_STATIC
+#      undef LIBARVIDEO_DYNAMIC
 #      define ARDOUBLE_IS_FLOAT
 #    else
 #      error ARToolKit for Windows Store requires Windows 8.1 or later. Please compile with Visual Studio 2013 or later with Windows 8.1 SDK installed and with _WIN32_WINNT=0x0603 in your project compiler settings (setting /D_WIN32_WINNT=0x0603).

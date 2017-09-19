@@ -33,7 +33,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\LogMediaType.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWinMF.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\VideoWinMF\videoWindowsMediaFoundation.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\video2.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\Video\videoAspectRatio.c" />
