@@ -51,7 +51,6 @@
 
 #include <AR/ar.h>
 #include <AR/videoConfig.h>
-#include <AR/videoLuma.h>
 #include <limits.h>
 
 #ifdef  __cplusplus
@@ -294,6 +293,8 @@ typedef void (*AR_VIDEO_FRAME_READY_CALLBACK)(void *);
 #else
 #  define AR_DLL_API
 #endif
+
+#include <AR/videoLuma.h>
 
 typedef struct {
     int module;

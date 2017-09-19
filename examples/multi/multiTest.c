@@ -57,11 +57,13 @@
 #ifndef __APPLE__
 #  ifdef _WIN32
 #    include <windows.h>
+#    define _USE_MATH_DEFINES
 #  endif
 #  include <GL/glut.h>
 #else
 #  include <GLUT/glut.h>
 #endif
+#include <math.h>
 #include <AR/ar.h>
 #include <AR/gsub.h>
 #include <AR/video.h>

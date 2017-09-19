@@ -64,6 +64,7 @@
 #  define FTELLO_FUNC(stream) ftello64(stream)
 #  define FSEEKO_FUNC(stream, offset, origin) fseeko64(stream, offset, origin)
 #  include <conio.h> // getch()
+#  define snprintf _snprintf
 #else
 #  include <unistd.h> // chdir()
 #  include <sys/param.h> // MAXPATHLEN
@@ -362,7 +363,7 @@ int rm_rf(const char *path)
     if (path[0] == '\\' || path[0] == '/') {
         len2 = 0;
     } else {
-        if (!getcwd(cwd, MAXPATHLEN)) {
+        if (!_getcwd(cwd, MAXPATHLEN)) {
             //ARLOGe("Error: unable to get current working directory.\n");
             ret = -1;
             goto bail;
@@ -379,7 +380,7 @@ int rm_rf(const char *path)
     strncpy(buf + len2, path, len);
     
     // SHFileOperation is old API. Convert forward slashes to backslashes.
-    for (i = 0; i < len2 + len; i++) if (buf[i] == '/') buf[i] == '\\';
+    for (i = 0; i < len2 + len; i++) if (buf[i] == '/') buf[i] = '\\';
     
     opts.wFunc = FO_DELETE;
     opts.pFrom = buf;

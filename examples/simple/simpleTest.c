@@ -52,10 +52,12 @@
 
 #ifdef _WIN32
 #  include <windows.h>
+#  define _USE_MATH_DEFINES
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #ifndef __APPLE__
 #  include <GL/gl.h>
 #  include <GL/glut.h>

@@ -34,7 +34,7 @@
  *
  */
 
-#include <AR/videoLuma.h>
+#include <AR/video.h>
 
 #include <stdlib.h>
 #if defined(ANDROID)

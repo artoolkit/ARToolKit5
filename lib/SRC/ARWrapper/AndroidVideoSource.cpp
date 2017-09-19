@@ -42,6 +42,7 @@
 #include <ARWrapper/AndroidVideoSource.h>
 #include <ARWrapper/ColorConversion.h>
 #include <jni.h>
+#include <math.h>
 
 #include <ARWrapper/ARController.h>
 

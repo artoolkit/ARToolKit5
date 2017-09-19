@@ -58,13 +58,13 @@
 
 #ifdef _WIN32
 #  include <windows.h>
+#  define _USE_MATH_DEFINES
+#  define snprintf _snprintf
 #endif
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>					// malloc(), free()
 #include <string.h>
-#ifdef _WIN32
-#  define snprintf _snprintf
-#endif
 #ifdef __APPLE__
 #  include <GLUT/glut.h>
 #else

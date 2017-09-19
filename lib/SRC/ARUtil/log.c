@@ -42,6 +42,9 @@
 #  ifdef __APPLE__
 #    include <os/log.h>
 #  endif
+#else
+#  include <Windows.h>
+#  define snprintf _snprintf
 #endif
 
 //
@@ -57,8 +60,8 @@ static DWORD arLogLoggerThreadID;
 #endif
 #define AR_LOG_WRONG_THREAD_BUFFER_SIZE 4096
 static char *arLogWrongThreadBuffer = NULL;
-static int arLogWrongThreadBufferSize = 0;
-static int arLogWrongThreadBufferCount = 0;
+static size_t arLogWrongThreadBufferSize = 0;
+static size_t arLogWrongThreadBufferCount = 0;
 
 
 void arLogSetLogger(AR_LOG_LOGGER_CALLBACK callback, int callBackOnlyIfOnSameThread)
@@ -124,7 +127,7 @@ void arLogv(const char *tag, const int logLevel, const char *format, va_list ap)
     if (len < 1) return;
     
     // Add characters required for logLevelString.
-    if (logLevel >= 0 && logLevel < logLevelStringsCount) {
+    if (logLevel >= 0 && logLevel < (int)logLevelStringsCount) {
         logLevelStringLen = 3 + strlen(logLevelStrings[logLevel]); // +3 for brackets and a space, e.g. "[debug] ".
     } else {
         logLevelStringLen = 0;

@@ -94,12 +94,13 @@
       <DisableSpecificWarnings>4068;4065;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;zlib.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win32-i386;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImportLibrary>$(ProjectDir)..\..\lib\win32-i386\$(ProjectName)d.lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -120,11 +121,12 @@
       <DisableSpecificWarnings>4068;4065;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ARd.lib;ARgsub_lited.lib;ARVideod.lib;ARMultid.lib;ARICPd.lib;AR2d.lib;KPMd.lib;ARUtild.lib;zlib.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win64-x64;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(ProjectDir)..\..\lib\win64-x64\$(ProjectName)d.lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -146,13 +148,14 @@
       <DisableSpecificWarnings>4068;4065;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;zlib.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win32-i386;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <ImportLibrary>$(ProjectDir)..\..\lib\win32-i386\$(ProjectName).lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" ..\bin</Command>
@@ -173,12 +176,13 @@
       <DisableSpecificWarnings>4068;4065;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AR.lib;ARgsub_lite.lib;ARVideo.lib;ARMulti.lib;ARICP.lib;AR2.lib;KPM.lib;ARUtil.lib;zlib.lib;pthreadVC2.lib;opengl32.lib;glu32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\lib\win64-x64;..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(ProjectDir)..\..\lib\win64-x64\$(ProjectName).lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" ..\bin</Command>

@@ -63,7 +63,9 @@
 #include <string.h>
 #ifdef _WIN32
 #  define snprintf _snprintf
+#  define _USE_MATH_DEFINES
 #endif
+#include <math.h>
 #ifdef __APPLE__
 #  include <GLUT/glut.h>
 #else

@@ -58,12 +58,12 @@
 
 #ifdef _WIN32
 #  include <windows.h>
-#endif
-#include <stdio.h>
-#ifdef _WIN32
+#  define _USE_MATH_DEFINES
 #  define snprintf _snprintf
 #endif
+#include <stdio.h>
 #include <string.h>
+#include <math.h>
 #ifdef __APPLE__
 #  include <GLUT/glut.h>
 #else

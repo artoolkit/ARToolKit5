@@ -35,7 +35,7 @@
  *
  */
 
-#include <AR/video.h>
+#include "videoWindowsMediaFoundation.h"
 
 #ifdef ARVIDEO_INPUT_WINDOWS_MEDIA_FOUNDATION
 
@@ -47,7 +47,7 @@
 #pragma comment(lib,"mfplat.lib")
 #pragma comment(lib,"mfreadwrite.lib")
 #pragma comment(lib,"mfuuid.lib")
-
+#pragma comment(lib,"strmiids.lib")
 
 #include <iostream>
 #include <stdio.h>
@@ -768,8 +768,8 @@ AR2VideoBufferT *ar2VideoGetImageWinMF(AR2VideoParamWinMFT *vid)
     SafeRelease(&pBuffer);
     
     LONGLONG sec = llTimeStamp / 10000000ll;
-    vid->buffer.time_sec = (ARUint32)sec;
-    vid->buffer.time_usec = (ARUint32)(llTimeStamp / 10ll - sec * 1000000ll);
+    vid->buffer.time.sec = (ARUint32)sec;
+    vid->buffer.time.usec = (ARUint32)(llTimeStamp / 10ll - sec * 1000000ll);
     vid->buffer.fillFlag = 1;
     vid->buffer.buffLuma = NULL;
     

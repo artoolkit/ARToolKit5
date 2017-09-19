@@ -1181,7 +1181,7 @@ char *arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR behav
             return (wpath1);
 #elif defined(_WIN32)
             arMallocClear(wpath1, char, MAXPATHLEN);
-            DWORD len = GetTempPath(MAXPATHLEN, wpath1));
+            DWORD len = GetTempPath(MAXPATHLEN, wpath1);
             if (len == 0) {
                 free (wpath1);
                 return (NULL);

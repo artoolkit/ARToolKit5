@@ -60,7 +60,7 @@
 #include <AR2/marker.h>
 #include <AR2/util.h>
 #include <AR2/imageFormat.h>
-#include <AR/videoLuma.h>
+#include <AR/video.h>
 
 #define		XWIN_MAX	1000
 #define		YWIN_MAX	800

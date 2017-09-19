@@ -35,10 +35,16 @@
  *
  */
 
+#include <stdlib.h>
+#ifdef _WIN32
+#  define _USE_MATH_DEFINES
+#endif
+#include <math.h>
+
 #include <ARWrapper/ARToolKitVideoSource.h>
 #include <ARWrapper/ARController.h>
 #include <ARWrapper/Error.h>
-#include <stdlib.h>
+
 // Define constants for extensions which became core in OpenGL 1.2
 #ifndef GL_VERSION_1_2
 #  if GL_EXT_bgra

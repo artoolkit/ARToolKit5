@@ -38,7 +38,7 @@
 #ifndef AR_VIDEO_WIN_MF_H
 #define AR_VIDEO_WIN_MF_H
 
-#include <AR/ar.h>
+#include <AR/video.h>
 
 
 #ifdef  __cplusplus
