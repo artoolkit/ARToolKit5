@@ -283,6 +283,8 @@ static void   init(int argc, char *argv[])
         for( i = 2; i < argc; i++ ) {strcat(vconf, " "); strcat(vconf,argv[i]);}
     }
 
+    arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST, NULL);
+    
     /* open the video path */
 	ARLOGi("Using video configuration '%s'.\n", vconf);
     if( arVideoOpen( vconf ) < 0 ) exit(0);
@@ -305,7 +307,7 @@ static void   init(int argc, char *argv[])
         }
     } else {
         arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
-        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.\n", xsize, ysize);
     }
     arParamChangeSize( &cparam, xsize, ysize, &cparam );
     ARLOG("*** Camera Parameter ***\n");

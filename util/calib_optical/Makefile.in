@@ -40,7 +40,7 @@ BIN_DIR= ../../bin
 
 CC=@CC@
 LDFLAG=@LDFLAG@ -L$(LIB_DIR)/@SYSTEM@ -L$(LIB_DIR)
-LIBS= -lARgsub_lite -lARvideo -lAR -lARICP -lAR -lEden @LIBS@
+LIBS= -lARgsub_lite -lARvideo -lAR -lARICP -lAR -lARUtil -lEden @LIBS@
 CFLAG= @CFLAG@ -I$(INC_DIR)
 
 OBJS = calib_optical.o calc_optical.o getInput.o

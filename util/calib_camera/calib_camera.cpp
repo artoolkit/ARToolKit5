@@ -63,6 +63,7 @@
 #include <AR/gsub.h>
 #include <AR/video.h>
 #include <AR/arImageProc.h>
+#include <ARUtil/time.h>
 
 
 #define      CHESSBOARD_CORNER_NUM_X        7

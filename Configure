@@ -117,6 +117,7 @@ then
         exit 0
     fi
 
+    INPUT_IMAGE="y"
     DEFAULT_CAP_DEVICE=""
     echo "Do you want to enable the Video4Linux2 capture module? (y or n)"
     echo -n "Enter : "
@@ -297,8 +298,13 @@ then
     AR="ar"
     ARFLAGS="rsU"
     RANLIB="true"
-    LIBS="-lglut -lGLU -lGL -lX11 -lm -lpthread -ljpeg"
+    LIBS="-lglut -lGLU -lGL -lX11 -lm -lpthread -ljpeg -lz"
 
+    if [ "$INPUT_V4L2" = "y" ]
+    then
+        LIBS="$LIBS `pkg-config libudev --libs`"
+        CFLAG="$CFLAG `pkg-config libudev --cflags`"
+    fi
     if [ "$INPUT_GSTREAMER" = "y" ]
     then
         if [ "$USE_GSTREAMER_1" = "y" ]
@@ -485,38 +491,38 @@ s/@SYSTEM@/$SYSTEM/
 s/@STDCXXLIB@/$STDCXXLIB/
 EOF
 
+if [ "$INPUT_IMAGE" = "y" ]
+then
+cat >> $SED <<EOF
+s/#(cd Image; make -f Makefile)/(cd Image; make -f Makefile)/
+EOF
+fi
+
 if [ "$INPUT_V4L2" = "y" ]
 then
 cat >> $SED <<EOF
-s/#(cd VideoLinuxV4L2;    make -f Makefile)/(cd VideoLinuxV4L2;    make -f Makefile)/
+s/#(cd Video4Linux2; make -f Makefile)/(cd Video4Linux2; make -f Makefile)/
 EOF
 fi
 
 if [ "$INPUT_CAM1394" = "y" ]
 then
 cat >> $SED <<EOF
-s/#(cd VideoLinux1394Cam; make -f Makefile)/(cd VideoLinux1394Cam; make -f Makefile)/
-EOF
-fi
-
-if [ "$INPUT_GSTREAMER" = "y" ]
-then
-cat >> $SED <<EOF
-s/#(cd VideoGStreamer;    make -f Makefile)/(cd VideoGStreamer;    make -f Makefile)/
+s/#(cd libdc1394; make -f Makefile)/(cd libdc1394; make -f Makefile)/
 EOF
 fi
 
 if [ "$INPUT_CAM1394_MAC" = "y" ]
 then
 cat >> $SED <<EOF
-s/#(cd VideoLinux1394Cam; make -f Makefile)/(cd VideoLinux1394Cam; make -f Makefile)/
+s/#(cd libdc1394; make -f Makefile)/(cd libdc1394; make -f Makefile)/
 EOF
 fi
 
-if [ "$INPUT_IMAGE" = "y" ]
+if [ "$INPUT_GSTREAMER" = "y" ]
 then
 cat >> $SED <<EOF
-s/#(cd VideoImage;        make -f Makefile)/(cd VideoImage;        make -f Makefile)/
+s/#(cd GStreamer; make -f Makefile)/(cd GStreamer;    make -f Makefile)/
 EOF
 fi
 

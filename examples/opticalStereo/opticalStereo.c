@@ -247,6 +247,8 @@ int main(int argc, char** argv)
     
 	glutInit(&argc, argv);
     
+    arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST, NULL);
+    
     i = 1; // argv[0] is name of app, so start at 1.
     while (i < argc) {
         gotTwoPartOption = FALSE;
@@ -618,7 +620,7 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamL
         }
     } else {
         arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
-        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.\n", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);

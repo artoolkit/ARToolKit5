@@ -259,7 +259,7 @@ bool ARToolKitVideoSource::open3(const ARParam *cparam_p)
         cparam = *cparam_p;
     } else {
         arParamClearWithFOVy(&cparam, videoWidth, videoHeight, M_PI_4); // M_PI_4 radians = 45 degrees.
-        ARController::logv(AR_LOG_LEVEL_WARN, "Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", videoWidth, videoHeight);
+        ARController::logv(AR_LOG_LEVEL_WARN, "Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.\n", videoWidth, videoHeight);
     }
 
     if (cparam.xsize != videoWidth || cparam.ysize != videoHeight) {

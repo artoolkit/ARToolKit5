@@ -67,7 +67,7 @@ CPPFLAGS = $(AR_CPPFLAGS) $(OSG_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
 LDFLAGS = $(AR_LDFLAGS) $(OSG_LDFLAGS) @LDFLAG@
-LIBS = -lARosg -lARgsub_lite -lARvideo -lAR -lARICP -lAR \
+LIBS = -lARosg -lARgsub_lite -lARvideo -lAR -lARICP -lAR -lARUtil \
     $(OSG_LIBS) @LIBS@
 AR=@AR@
 ARFLAGS=@ARFLAGS@

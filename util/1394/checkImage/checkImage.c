@@ -311,7 +311,7 @@ static void   init(int argc, char *argv[])
         }
     } else {
         arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
-        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.\n", xsize, ysize);
     }
     arParamChangeSize( &cparam, xsize, ysize, &cparam );
     ARLOG("*** Camera Parameter ***\n");

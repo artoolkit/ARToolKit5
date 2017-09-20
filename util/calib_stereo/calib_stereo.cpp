@@ -65,6 +65,7 @@
 #include <AR/icpCore.h>
 #include <AR/icpCalib.h>
 #include <AR/icp.h>
+#include <ARUtil/time.h>
 
 #define          CHESSBOARD_CORNER_NUM_X        7
 #define          CHESSBOARD_CORNER_NUM_Y        5
@@ -402,8 +403,8 @@ static void mainLoop( void )
     if (gVideoBuffL && gVideoBuffR) {
         
         // Warn about significant time differences.
-        i = ((int)gVideoBuffR->time_sec -  (int)gVideoBuffL->time_sec) * 1000
-          + ((int)gVideoBuffR->time_usec - (int)gVideoBuffL->time_usec) / 1000;
+        i = ((int)gVideoBuffR->time.sec -  (int)gVideoBuffL->time.sec) * 1000
+          + ((int)gVideoBuffR->time.usec - (int)gVideoBuffL->time.usec) / 1000;
         if( i > 20 ) {
             ARLOG("Time diff = %d[msec]\n", i);
         } else if( i < -20 ) {

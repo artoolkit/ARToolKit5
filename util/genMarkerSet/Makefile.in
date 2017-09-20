@@ -43,7 +43,7 @@ BIN_DIR= ../../bin
 CC= @CC@
 CFLAG= @CFLAG@ -I$(AR2_INC_DIR)
 LDFLAG= @LDFLAG@ -L$(AR2_LIB_DIR)/@SYSTEM@ -L$(AR2_LIB_DIR)
-LIBS= -lAR2 -lARvideo -lARgsub -lAR -lARICP -lAR @LIBS@
+LIBS= -lAR2 -lARvideo -lARgsub -lAR -lARICP -lAR -lARUtil @LIBS@
 
 
 OBJS =

@@ -55,24 +55,26 @@ ARFLAGS=@ARFLAGS@
 #
 LIB= ${LIB_DIR}/libARUtil.a
 
-INCLUDE= $(INC_DIR)/ARUtil/file_utils.h      \
+INCLUDE= $(INC_DIR)/ARUtil/file_utils.h   \
+         $(INC_DIR)/ARUtil/log.h          \
          $(INC_DIR)/ARUtil/profile.h      \
-         $(INC_DIR)/ARUtil/system.h      \
-         $(INC_DIR)/ARUtil/thread_sub.h      \
-         $(INC_DIR)/ARUtil/time.h      \
-         crypt.h      \
-         ioapi.h      \
-         unzip.h      \
+         $(INC_DIR)/ARUtil/system.h       \
+         $(INC_DIR)/ARUtil/thread_sub.h   \
+         $(INC_DIR)/ARUtil/time.h         \
+         crypt.h                          \
+         ioapi.h                          \
+         unzip.h                          \
          zip.h
 
 #
 #   compilation control
 #
-LIBOBJS= ${LIB}(file_utils.o)        \
-         ${LIB}(profile.o)        \
-         ${LIB}(system.o)        \
-         ${LIB}(thread_sub.o)        \
-         ${LIB}(time.o)        \
+LIBOBJS= ${LIB}(file_utils.o)   \
+         ${LIB}(log.o)          \
+         ${LIB}(profile.o)      \
+         ${LIB}(system.o)       \
+         ${LIB}(thread_sub.o)   \
+         ${LIB}(time.o)         \
          ${LIB}(crypt.o)        \
          ${LIB}(ioapi.o)        \
          ${LIB}(unzip.o)        \

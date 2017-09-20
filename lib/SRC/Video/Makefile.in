@@ -75,7 +75,12 @@ LIBOBJS= ${LIB}(video.o)  \
 	 ${LIB}(videoSaveImage.o) \
      ${LIB}(cparamSearch.o) \
 
-all:		${LIBOBJS}
+all: ${LIBOBJS}
+	(cd Dummy; make -f Makefile)
+	#(cd Image; make -f Makefile)
+	#(cd Video4Linux2; make -f Makefile)
+	#(cd libdc1394; make -f Makefile)
+	#(cd Video/GStreamer; make -f Makefile)
 
 ${LIBOBJS}:	${INCLUDE}
 
@@ -84,16 +89,36 @@ ${LIBOBJS}:	${INCLUDE}
 	${AR} ${ARFLAGS} $@ $*.o
 	${RANLIB}
 	rm -f $*.o
+	(cd Dummy; make -f Makefile)
+	#(cd Image; make -f Makefile)
+	#(cd Video4Linux2; make -f Makefile)
+	#(cd libdc1394; make -f Makefile)
+	#(cd GStreamer; make -f Makefile)
 
 clean:
 	rm -f *.o
 	rm -f ${LIB}
+	(cd Dummy; make -f Makefile clean)
+	(cd Image; make -f Makefile clean)
+	(cd Video4Linux2; make -f Makefile clean)
+	(cd libdc1394; make -f Makefile clean)
+	(cd GStreamer; make -f Makefile clean)
 
 allclean:
 	rm -f *.o
 	rm -f ${LIB}
 	rm -f Makefile
+	(cd Dummy; make -f Makefile allclean)
+	(cd Image; make -f Makefile allclean)
+	(cd Video4Linux2; make -f Makefile allclean)
+	(cd libdc1394; make -f Makefile allclean)
+	(cd GStreamer; make -f Makefile allclean)
 
 distclean:
 	rm -f *.o
 	rm -f Makefile
+	(cd Dummy; make -f Makefile distclean)
+	(cd Image; make -f Makefile distclean)
+	(cd Video4Linux2; make -f Makefile distclean)
+	(cd libdc1394; make -f Makefile distclean)
+	(cd GStreamer; make -f Makefile distclean)

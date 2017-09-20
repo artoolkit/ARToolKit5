@@ -58,7 +58,7 @@ CPPFLAGS = $(AR_CPPFLAGS)
 CFLAGS = @CFLAG@
 CXXFLAGS = @CFLAG@
 LDFLAGS = $(AR_LDFLAGS) @LDFLAG@
-LIBS = -lKPM -lAR2 -lARUtil -lARgsub_lite -lARvideo -lAR -lARICP -lAR \
+LIBS = -lKPM -lAR2 -lARgsub_lite -lARvideo -lAR -lARICP -lAR -lARUtil \
      @LIBS@
 AR=@AR@
 ARFLAGS=@ARFLAGS@

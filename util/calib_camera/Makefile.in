@@ -40,7 +40,7 @@ BIN_DIR= ../../bin
 
 CXX=@CXX@
 LDFLAG=@LDFLAG@ -L$(LIB_DIR)
-LIBS= -lARgsub -lARvideo -lAR -lARICP -lAR @CV_LIBS@ @LIBS@
+LIBS= -lARgsub -lARvideo -lAR -lARICP -lAR -lARUtil @CV_LIBS@ @LIBS@
 CFLAG= @CFLAG@ @CV_CFLAG@ -I$(INC_DIR)
 
 

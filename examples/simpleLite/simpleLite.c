@@ -87,11 +87,11 @@
 // ============================================================================
 
 // Preferences.
-static int windowed = TRUE;                     // Use windowed (TRUE) or fullscreen mode (FALSE) on launch.
-static int windowWidth = 640;					// Initial window width, also updated during program execution.
-static int windowHeight = 480;                  // Initial window height, also updated during program execution.
-static int windowDepth = 32;					// Fullscreen mode bit depth.
-static int windowRefresh = 0;					// Fullscreen mode refresh rate. Set to 0 to use default rate.
+static int prefWindowed = TRUE;             // Use windowed (TRUE) or fullscreen mode (FALSE) on launch.
+static int prefWidth = 640;					// Initial window width, also updated during program execution.
+static int prefHeight = 480;                // Initial window height, also updated during program execution.
+static int prefDepth = 32;					// Fullscreen mode bit depth.
+static int prefRefresh = 0;					// Fullscreen mode refresh rate. Set to 0 to use default rate.
 
 static int          gARTImageSavePlease = FALSE;
 
@@ -108,6 +108,8 @@ static int			gPatt_found = FALSE;	// Per-marker, but we are using only 1 marker.
 static int			gPatt_id;				// Per-marker, but we are using only 1 marker.
 
 // Drawing.
+static int gWindowW;
+static int gWindowH;
 static ARParamLT *gCparamLT = NULL;
 static ARGL_CONTEXT_SETTINGS_REF gArglSettings = NULL;
 static int gShowHelp = 1;
@@ -175,6 +177,22 @@ static void DrawCubeUpdate(float timeDelta)
 	}
 }
 
+static void usage(char *com)
+{
+    ARLOG("Usage: %s [options]\n", com);
+    ARLOG("Options:\n");
+    ARLOG("  --vconf <video parameter for the camera>\n");
+    ARLOG("  --cpara <camera parameter file for the camera>\n");
+    ARLOG("  -cpara=<camera parameter file for the camera>\n");
+    ARLOG("  --width w     Use display/window width of w pixels.\n");
+    ARLOG("  --height h    Use display/window height of h pixels.\n");
+    ARLOG("  --refresh f   Use display refresh rate of f Hz.\n");
+    ARLOG("  --windowed    Display in window, rather than fullscreen.\n");
+    ARLOG("  --fullscreen  Display fullscreen, rather than in window.\n");
+    ARLOG("  -h -help --help: show this message\n");
+    exit(0);
+}
+
 static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamLT_p, ARHandle **arhandle, AR3DHandle **ar3dhandle)
 {	
     ARParam			cparam;
@@ -212,7 +230,7 @@ static int setupCamera(const char *cparam_name, char *vconf, ARParamLT **cparamL
         }
     } else {
         arParamClearWithFOVy(&cparam, xsize, ysize, M_PI_4); // M_PI_4 radians = 45 degrees.
-        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.", xsize, ysize);
+        ARLOGw("Using default camera parameters for %dx%d image size, 45 degrees vertical field-of-view.\n", xsize, ysize);
     }
     if (cparam.xsize != xsize || cparam.ysize != ysize) {
         ARLOGw("*** Camera Parameter resized from %d, %d. ***\n", cparam.xsize, cparam.ysize);
@@ -450,8 +468,8 @@ static void Visibility(int visible)
 //
 static void Reshape(int w, int h)
 {
-    windowWidth = w;
-    windowHeight = h;
+    gWindowW = w;
+    gWindowH = h;
     
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
@@ -510,7 +528,7 @@ static void Display(void)
 	// Any 2D overlays go here.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, (GLdouble)windowWidth, 0, (GLdouble)windowHeight, -1.0, 1.0);
+    glOrtho(0, (GLdouble)gWindowW, 0, (GLdouble)gWindowH, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glDisable(GL_LIGHTING);
@@ -533,24 +551,77 @@ static void Display(void)
 
 int main(int argc, char** argv)
 {
-    char glutGamemode[32];
-    char *cparam_name = NULL;
-    char vconf[] = "";
-    char patt_name[]  = "Data/hiro.patt";
-    int  i;
-
-    if( argc == 1 ) vconf[0] = '\0';
-    else {
-        strcpy( vconf, argv[1] );
-        for( i = 2; i < argc; i++ ) {strcat(vconf, " "); strcat(vconf,argv[i]);}
+    char    glutGamemode[32] = "";
+    char   *vconf = NULL;
+    char   *cparam_name = NULL;
+    int     i;
+    int     gotTwoPartOption;
+    char    patt_name[]  = "Data/hiro.patt";
+    //
+    // Process command-line options.
+    //
+    
+    glutInit(&argc, argv);
+    
+    arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST, NULL);
+    
+    i = 1; // argv[0] is name of app, so start at 1.
+    while (i < argc) {
+        gotTwoPartOption = FALSE;
+        // Look for two-part options first.
+        if ((i + 1) < argc) {
+            if (strcmp(argv[i], "--vconf") == 0) {
+                i++;
+                vconf = argv[i];
+                gotTwoPartOption = TRUE;
+            } else if (strcmp(argv[i], "--cpara") == 0) {
+                i++;
+                cparam_name = argv[i];
+                gotTwoPartOption = TRUE;
+            } else if (strcmp(argv[i],"--width") == 0) {
+                i++;
+                // Get width from second field.
+                if (sscanf(argv[i], "%d", &prefWidth) != 1) {
+                    ARLOGe("Error: --width option must be followed by desired width.\n");
+                }
+                gotTwoPartOption = TRUE;
+            } else if (strcmp(argv[i],"--height") == 0) {
+                i++;
+                // Get height from second field.
+                if (sscanf(argv[i], "%d", &prefHeight) != 1) {
+                    ARLOGe("Error: --height option must be followed by desired height.\n");
+                }
+                gotTwoPartOption = TRUE;
+            } else if (strcmp(argv[i],"--refresh") == 0) {
+                i++;
+                // Get refresh rate from second field.
+                if (sscanf(argv[i], "%d", &prefRefresh) != 1) {
+                    ARLOGe("Error: --refresh option must be followed by desired refresh rate.\n");
+                }
+                gotTwoPartOption = TRUE;
+            }
+        }
+        if (!gotTwoPartOption) {
+            // Look for single-part options.
+            if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-help") == 0 || strcmp(argv[i], "-h") == 0) {
+                usage(argv[0]);
+            } else if (strncmp(argv[i], "-cpara=", 7) == 0) {
+                cparam_name = &(argv[i][7]);
+            } else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "-v") == 0) {
+                ARLOG("%s version %s\n", argv[0], AR_HEADER_VERSION_STRING);
+                exit(0);
+            } else if (strcmp(argv[i],"--windowed") == 0) {
+                prefWindowed = TRUE;
+            } else if (strcmp(argv[i],"--fullscreen") == 0) {
+                prefWindowed = FALSE;
+            } else {
+                ARLOGe("Error: invalid command line argument '%s'.\n", argv[i]);
+                usage(argv[0]);
+            }
+        }
+        i++;
     }
     
-	//
-	// Library inits.
-	//
-
-    glutInit(&argc, argv);
-
 	//
 	// Video setup.
 	//
@@ -566,13 +637,13 @@ int main(int argc, char** argv)
 
 	// Set up GL context(s) for OpenGL to draw into.
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	if (!windowed) {
-		if (windowRefresh) sprintf(glutGamemode, "%ix%i:%i@%i", windowWidth, windowHeight, windowDepth, windowRefresh);
-		else sprintf(glutGamemode, "%ix%i:%i", windowWidth, windowHeight, windowDepth);
+	if (!prefWindowed) {
+		if (prefRefresh) sprintf(glutGamemode, "%ix%i:%i@%i", prefWidth, prefHeight, prefDepth, prefRefresh);
+		else sprintf(glutGamemode, "%ix%i:%i", prefWidth, prefHeight, prefDepth);
 		glutGameModeString(glutGamemode);
 		glutEnterGameMode();
 	} else {
-		glutInitWindowSize(windowWidth, windowHeight);
+		glutInitWindowSize(prefRefresh, prefHeight);
 		glutCreateWindow(argv[0]);
 	}
 
@@ -616,12 +687,12 @@ static void print(const char *text, const float x, const float y, int calculateX
     if (!text) return;
     
     if (calculateXFromRightEdge) {
-        x0 = windowWidth - x - (float)glutBitmapLength(GLUT_BITMAP_HELVETICA_10, (const unsigned char *)text);
+        x0 = gWindowW - x - (float)glutBitmapLength(GLUT_BITMAP_HELVETICA_10, (const unsigned char *)text);
     } else {
         x0 = x;
     }
     if (calculateYFromTopEdge) {
-        y0 = windowHeight - y - 10.0f;
+        y0 = gWindowH - y - 10.0f;
     } else {
         y0 = y;
     }
@@ -737,7 +808,7 @@ static void printMode()
     line++;
     
     // Window size.
-    snprintf(text, sizeof(text), "Drawing into %dx%d window", windowWidth, windowHeight);
+    snprintf(text, sizeof(text), "Drawing into %dx%d window", gWindowW, gWindowH);
     print(text, 2.0f,  (line - 1)*12.0f + 2.0f, 0, 1);
     line++;
     

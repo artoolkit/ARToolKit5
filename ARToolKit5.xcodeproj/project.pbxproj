@@ -2795,7 +2795,7 @@
 		78BB3E7208E482F400D7CA2D /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		78BB3E7408E482F400D7CA2D /* video.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = video.c; sourceTree = "<group>"; };
 		78BB3E7608E482F400D7CA2D /* video2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = video2.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
-		78BB3ECF08E4837000D7CA2D /* Configure */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = Configure; sourceTree = "<group>"; };
+		78BB3ECF08E4837000D7CA2D /* Configure */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 30; path = Configure; sourceTree = "<group>"; };
 		78BB3EFD08E4837000D7CA2D /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		78BB3F0408E4837000D7CA2D /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; usesTabs = 1; };
 		78BB3F0708E4837000D7CA2D /* simpleTest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = simpleTest.c; sourceTree = "<group>"; };
