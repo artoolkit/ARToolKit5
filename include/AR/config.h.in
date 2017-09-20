@@ -425,7 +425,7 @@ typedef enum {
 #endif
 
 //
-//  For Mac OS X                                             
+//  For macOS                                             
 //
 #if __APPLE__
 

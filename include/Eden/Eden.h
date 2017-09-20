@@ -88,7 +88,7 @@ extern "C" {
 #  define EDEN_PACKED
 #endif
 	
-// GCC on Mac OS X.
+// GCC on macOS.
 #if defined(__APPLE__)
 #  define EDEN_UNIX
 #  define	EDEN_HAVE_PTHREAD_RELATIVE_TIMEDWAIT
@@ -108,7 +108,7 @@ extern "C" {
 #  endif
     
 #  if !defined(DARWINONLY) && !TARGET_OS_IPHONE
-#    define EDEN_MACOSX	// Running under Mac OS X.
+#    define EDEN_MACOSX	// Running under macOS.
 //#    define EDEN_HAVE_HID		// Has HID API available (for joystick).
 //#    define EDEN_HAVE_ARTOOLKIT
 #    define EDEN_HAVE_MACOSX_CGL

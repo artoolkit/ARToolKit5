@@ -43,5 +43,5 @@
 
 main()
 {
-    ar2VideoOpen("-module=Linux1394Cam -listCamera");
+    ar2VideoOpen("-module=1394 -listCamera");
 }

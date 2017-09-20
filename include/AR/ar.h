@@ -1576,7 +1576,7 @@ typedef enum {
     /*!
         Use a platform-dependent recommended-best option.
         Note the this behavior is subject to change in future versions of ARToolKit.
-        At present, on Mac OS X and iOS, this will change to the Apple-provided resources directory inside the application bundle.
+        At present, on macOS and iOS, this will change to the Apple-provided resources directory inside the application bundle.
         At present, on other platforms, this will change to the same directory as the executable.
      */
     AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST = 0,

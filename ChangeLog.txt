@@ -2,8 +2,26 @@ ARToolKit ChangeLog.
 ====================
 
 
-Changes in version 5.3.3 (this release) (2016-xx-xx).
------------------------------------------------------
+Changes in version 5.4 (this release) (2017-09-20).
+---------------------------------------------------
+Enhancements:
+- libARUtil has been overhauled, with a number of utility-related functions moved out of various ARToolKit code. Note that libARUtil has no dependencies on the other ARToolKit libraries. It does however now depend on zlib.
+- Logging functions (ARLOG and friends) are now in libARUtil.
+- Resource data is now split into per-application subfolders of 'share'. arUtilChangeToResourcesDirectory(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_BEST, NULL) will correctly locate these for the examples.
+- Notification of availability of incoming video frames is now implemented via a callback which is passed into arVideoCapStartAsync/ar2VideoCapStartAsync. Currently implemented only in the AVFoundation module (iOS and macOS) but other modules will be supported in the future.
+
+Bug fixes:
+- Numerous minor correctness fixes as a result of detailed static analysis.
+
+Other changes:
+- Support for Microsoft Visual Studio 2010 SP1 has been dropped.
+- In video configuration strings, the token '-device=' has been replaced with '-module=' to better represent the function of the token.
+- Some video modules have been renamed. 'LinuxV4L2' is now 'V4L2'. 'Linux1394Cam' is now '1394'. On macOS and iOS, the default is 'AVFoundation', and on Windows 'WinMF'.
+- The following video modules have been removed: 'QUICKTIME', 'QuickTime7' (i.e. QTKit), 'LinuxDV', 'WinDF', ''WinDS', 'WinDSVL'.
+
+
+Changes in version 5.3.3 (2016-05-13).
+--------------------------------------
 Enhancements:
 - Data files which were previously stored in subdirectories of the "bin" directory are now stored in share/artoolkit-utils (for data relevant to the utilities) and share/artoolkit-examples (for data relevant to the examples).
 - The video library libARvideo now guarantees production of a luminance channel, potentially alongside any colour channel(s). This has allowed for a number of internal optimisations in libAR and libKPM. Where a video module cannot produce luma-only in an optimal way, a separate optimised routine for ARM, ARM64 and x86 SSE CPUs will produce one.

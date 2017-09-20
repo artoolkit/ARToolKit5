@@ -13,16 +13,16 @@
 
 # About this archive
 
-This archive contains the ARToolKit libraries, utilities and examples, version 5.3.3.
+This archive contains the ARToolKit libraries, utilities and examples, version 5.4.
 
-ARToolKit version 5.3.3 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
+ARToolKit version 5.4 is released under the GNU Lesser General Public License version 3, with some additional permissions. Example code is generally released under a more permissive disclaimer; please read the file LICENSE.txt for more information.
 
 ARToolKit is designed to build on Windows, Macintosh OS X, Linux, iOS and Android platforms.
 
 >This archive was assembled by:  
     Philip Lamb  
     http://www.artoolkit.org  
-    2016-xx-xx  
+    2017-09-20  
 
 
 ## Installing
@@ -36,7 +36,7 @@ By default, ARToolKit will be installed into a folder inside your Program Files 
 
 If you are upgrading to a newer version, it is generally safe to install over the old version. Before upgrading, save any modifications you have made to any ARToolKit source or example code, and then run the installer. The installer will add or update new files, and remove unneeded old files.
 	
-### Mac OS X
+### macOS
 
 The SDK is supplied as an archive file (.tar.gz or .zip file) which need only be unpacked to a location of your choice, e.g. ~/SDKs/. Drop the archive into your chosen location and double-click it in the Finder to unpack it.
 	
@@ -77,7 +77,7 @@ simpleLite can be opened by double-clicking its icon in the ARToolKit5\bin direc
 * Navigate to your ARToolKit5\bin directory.
 * Type: simpleLite.exe
 
-### Mac OS X:
+### macOS:
 
 * Bundled applications are generated for the examples. Open the "bin" directory in the Finder and double-click the "simpleLite" example app. Application errors are logged in the Console application.
 
@@ -85,8 +85,8 @@ simpleLite can be opened by double-clicking its icon in the ARToolKit5\bin direc
   
 simpleLite can be launched from a terminal window thus:
 
-- First, set the environment variable ARTOOLKIT5_VCONF to indicate the video device to be used; for example, to use a V4L2 camera, do:
-`export ARTOOLKIT5_VCONF="-module=LinuxV4L2"`
+- First, set the environment variable ARTOOLKIT5_VCONF to indicate the video device to be used; for example, to use a Video4Linux2 camera, do:
+`export ARTOOLKIT5_VCONF="-module=V4L2"`
 or to use a camera driven via GStreamer, do `export ARTOOLKIT5_VCONF="-module=GStreamer"` 
 - then cd to the bin directory and do `./simpleLite`
 		
@@ -102,8 +102,8 @@ Required external software
 ### Windows:
 Microsoft Visual Studio 2013 is supported. The free Microsoft Visual Studio Express Edition will also work.
 
-### Mac OS X:
-Xcode tools v5.1 under Mac OS X 10.9 or later is required. Xcode 6 under Mac OS X 10.10 is recommended. Xcode may be obtained free from Apple at [http://developer.apple.com/xcode/](http://developer.apple.com/xcode/).
+### macOS:
+Xcode tools v5.1 under macOS 10.9 or later is required. Xcode 6 under macOS 10.10 is recommended. Xcode may be obtained free from Apple at [http://developer.apple.com/xcode/](http://developer.apple.com/xcode/).
 
 ### Linux: 
 g++ with libstdc++, or Clang and LLVM's libc++ are required. For the latter, install Packages: 'clang', 'libc++-dev'.
@@ -118,7 +118,7 @@ The optional video capture sources require some external software:
 * QuickTime movie files as video source: QuickTime 6.4 or later must be installed. Download from http://www.apple.com/quicktime/download/.
 * Point Grey camera: The Flycapture SDK (distributed with Point Grey Cameras) must be installed.
 
-### Mac OS X
+### macOS
 * C++ runtime: libc++ is only available on OS X 10.7 and later.
 * OpenSceneGraph (optional; The ARToolKit OSG renderer requires OpenSceneGraph). Use the installer provided at [http://www.artoolkit.org/dist/openscenegraph/](http://www.artoolkit.org/dist/openscenegraph/).
 
@@ -129,7 +129,7 @@ ARToolKit follows the Linux model whereby required software is externally instal
 * OpenGL: Package 'xorg'
 * OpenCV (unless building with Clang). Packages: 'libopencv-dev'.
 * GLUT: Package 'freeglut3'. Alternatively, GLUT can be built from source and is also included in the MESA 3D libraries:
-* Video4Linux, lib1394dc, or GStreamer. Packages: 'libv4l2-0', 'libdc1394-22' (for lib1394 version 2.x) or 'libdc1394-13' (for lib1394 version 1.x), and 'libgstreamer0.10'.
+* Video4Linux, lib1394dc, or GStreamer. Packages: 'libv4l2-0', 'libdc1394-22' (for lib1394 version 2.x) or 'libdc1394-13' (for lib1394 version 1.x), and 'libgstreamer1.0' or 'libgstreamer0.10'.
 * OpenSceneGraph (optional; The ARToolKit OSG renderer requires OpenSceneGraph). Package 'openscenegraph'.
 	
 #### Opening the project files
@@ -138,7 +138,7 @@ ARToolKit follows the Linux model whereby required software is externally instal
   
 Open the "VisualStudio" directory, then the appropriate directory for your compiler version, and then the "ARToolKit5.sln" solution file.
 
-##### Mac OS X
+##### macOS
 
 Open the ARToolKit5.xcodeproj, found inside the Xcode folder.
 
@@ -154,7 +154,9 @@ The SDK build system uses a Configure script and makefiles. To run the script, u
 
 ## Release notes
 
-This release contains ARToolKit v5.3.3.
+This release contains ARToolKit v5.4.
+
+As the first major update to ARToolKit v5.x for some time, a number of changes are incorporated in the libraries. The most visible external change is in an overhaul of the video libraries available on each platform. On macOS, the QuickTime and QTKit modules have been replaced with the AVFoundation module. On Windows, the DirectShow and DragonFly modules have been dropped. On Linux, Video4Linux2 is now the default, and the DVCam module has been dropped.
 
 External API changes in ARToolKit v5.3.3:
 
@@ -187,9 +189,7 @@ For users of ARToolKit Professional versions 4.0 through 5.1.7, ARToolKit v5.2 a
 
 ## libKPM usage
 
-libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV’s FLANN library, which should simply app builds and distribution on all supported platforms.
-
-Existing holders of a commercial license to ARToolKit Professional v5.x may use libKPM from ARToolKit v5.2 under the terms of their current license for the remainder of its duration. Please contact us via http://www.artoolkit.org/contact if you are an existing user of ARToolKit Professional with questions.
+libKPM, which performs key-point matching for NFT page recognition and initialization now use a FREAK detector framework, contributed by DAQRI. Unlike the previous commercial version of libKPM which used SURF features, FREAK is not encumbered by patents. libKPM now joins the other core ARToolKit libraries under an LGPLv3 license. Additionally the new libKPM no longer has dependencies on OpenCV's FLANN library, which should simply app builds and distribution on all supported platforms.
 
 
 ## Next steps

@@ -75,12 +75,6 @@ lib/SRC/Gl/gsub_mtx.c
 lib/SRC/Gl/gsubTest.c
 lib/SRC/Gl/Makefile.in
 lib/SRC/Video/
-lib/SRC/VideoDummy/
-lib/SRC/VideoImage/
-lib/SRC/VideoGStreamer/
-lib/SRC/VideoLinux1394Cam/
-lib/SRC/VideoQuickTime/
-lib/SRC/VideoQuickTime7/
 lib/SRC/AR2/
 lib/SRC/KPM/
 lib/SRC/ARUtil/
@@ -114,18 +108,18 @@ bin/stereo.app/
 bin/nftSimple.app/
 bin/nftBook.app/
 
-
-share/artoolkit-examples/Data/cubeMarkerConfig.dat
-share/artoolkit-examples/Data/multi/
-share/artoolkit-examples/Data/multi-barcode-4x3.dat
-share/artoolkit-examples/Data/multi-barcode-8x6.dat
-share/artoolkit-examples/Data/objects.dat
-share/artoolkit-examples/Data/markers.dat
-share/artoolkit-examples/Data/sample1.patt
-share/artoolkit-examples/Data/sample2.patt
-share/artoolkit-examples/Data/sample.mov
-share/artoolkit-examples/Data2/
-share/artoolkit-examples/DataNFT/
+share/multiCube/
+share/multiTest/
+share/multiWin/
+share/nftBook/
+share/nftSimple/
+share/optical/
+share/opticalStereo/
+share/simpleLite/
+share/simpleMovie/
+share/simpleOSG/
+share/simpleTest/
+share/stereo/
 
 examples/Makefile.in
 examples/multi
@@ -147,5 +141,5 @@ share/doc/
 share/packaging/ARToolKit5-bin.sh
 share/packaging/ARToolKit5-bin-bom-OSX
 share/packaging/headerDoc2HTML.config
-share/artoolkit-examples/OSG/
+
 

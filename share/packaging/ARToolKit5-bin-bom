@@ -67,12 +67,6 @@ lib/SRC/Gl/gsub_mtx.c
 lib/SRC/Gl/gsubTest.c
 lib/SRC/Gl/Makefile.in
 lib/SRC/Video/
-lib/SRC/VideoDummy/
-lib/SRC/VideoImage/
-lib/SRC/VideoGStreamer/
-lib/SRC/VideoLinux1394Cam/
-lib/SRC/VideoLinuxV4L/
-lib/SRC/VideoLinuxV4L2/
 lib/SRC/AR2/
 lib/SRC/KPM/
 lib/SRC/ARUtil/
