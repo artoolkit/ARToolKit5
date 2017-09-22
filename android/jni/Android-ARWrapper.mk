@@ -72,7 +72,7 @@ define add_artoolkit_module
 	LOCAL_SRC_FILES:=lib$1.a
 	include $(PREBUILT_STATIC_LIBRARY)
 endef
-ARTOOLKIT_LIBS := ar2 kpm arutil argsub_es armulti ar aricp jpeg arvideo
+ARTOOLKIT_LIBS := ar2 kpm argsub_es armulti ar aricp arvideo arutil jpeg
 LOCAL_PATH := $(ARTOOLKIT_LIBDIR)
 $(foreach module,$(ARTOOLKIT_LIBS),$(eval $(call add_artoolkit_module,$(module))))
 LOCAL_PATH := $(MY_LOCAL_PATH)
@@ -105,11 +105,11 @@ MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/ARWrapper/*.c*)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-  MY_FILES := $(subst VideoSource.cpp,VideoSource.cpp.neon,$(MY_FILES))
+  MY_FILES := $(subst ARVideoSource.cpp,ARVideoSource.cpp.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
 endif
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-  MY_FILES := $(subst VideoSource.cpp,VideoSource.cpp.neon,$(MY_FILES))
+  MY_FILES := $(subst ARVideoSource.cpp,ARVideoSource.cpp.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM64_NEON=1
 endif
 LOCAL_SRC_FILES := $(MY_FILES)
@@ -118,7 +118,7 @@ LOCAL_C_INCLUDES += $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_CFLAGS += -DHAVE_NFT=1 $(MY_CFLAGS)
 LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
-LOCAL_STATIC_LIBRARIES += ar2 kpm arutil argsub_es armulti aricp jpeg arvideo cpufeatures
+LOCAL_STATIC_LIBRARIES += ar2 kpm argsub_es armulti aricp arvideo arutil jpeg cpufeatures
 #LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)
 LOCAL_STATIC_LIBRARIES += $(CURL_LIBS)
 

@@ -42,7 +42,6 @@
 #if HAVE_NFT
 #  include <AR2/imageSet.h>
 #endif
-#include <ARWrapper/Image.h>
 
 /**
  * Encapsulates information about a sub-component of a marker useful for
@@ -78,7 +77,7 @@ public:
     float m_height;         ///< Height of the pattern in mm.
     int m_imageSizeX;
     int m_imageSizeY;
-	Color *m_image;			///< Image of the pattern
+	uint32_t *m_image;      ///< RGBA32 image of the pattern.
     
 private:
 

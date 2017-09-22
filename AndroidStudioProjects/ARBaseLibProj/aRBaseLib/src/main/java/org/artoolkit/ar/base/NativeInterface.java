@@ -39,6 +39,8 @@ package org.artoolkit.ar.base;
 
 import android.util.Log;
 
+import java.nio.ByteBuffer;
+
 /**
  * The NativeInterface class contains the JNI function signatures for
  * native ARToolKit functions. These functions should be accessed via
@@ -245,6 +247,10 @@ public class NativeInterface {
      */
     public static native boolean arwUpdateAR();
 
+    public static native boolean arwUpdateTexture32(byte[] image);
+  
+    public static native boolean arwUpdateTextureStereo32(byte[] imageL, byte[] imageR);
+  
     /**
      * Adds a marker to be detected.
      *
@@ -355,34 +361,6 @@ public class NativeInterface {
 	 */
     public static native int arwGetVideoThresholdMode();    
     
-	/**
-	 * Passes a video frame to the native library for processing.
-	 * @param image			Buffer containing the video frame
-	 * @param width			Width of the video frame in pixels
-	 * @param height		Height of the video frame in pixels
-	 * @param cameraIndex	Zero-based index of the camera in use. If only one camera is present, will be 0.
-	 * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
-	 * @return				true if no error occurred, otherwise false
-	 */
-    public static native boolean arwAcceptVideoImage(byte[] image, int width, int height, int cameraIndex, boolean cameraIsFrontFacing);
-
-    /**
-     * Passes a video frame for the right camera of a stereo camera pair to the native library for processing.
-     *
-     * @param imageL               Buffer containing the video frame
-     * @param widthL               Width of the video frame in pixels
-     * @param heightL              Height of the video frame in pixels
-     * @param cameraIndexL         Zero-based index of the camera in use. If only one camera is present, will be 0.
-     * @param cameraIsFrontFacingL false if camera is rear-facing (the default) or true if camera is facing toward the user.
-     * @param imageR               Buffer containing the video frame
-     * @param widthR               Width of the video frame in pixels
-     * @param heightR              Height of the video frame in pixels
-     * @param cameraIndexR         Zero-based index of the camera in use. If only one camera is present, will be 0.
-     * @param cameraIsFrontFacingR false if camera is rear-facing (the default) or true if camera is facing toward the user.
-     * @return true if no error occurred, otherwise false
-     */
-    public static native boolean arwAcceptVideoImageStereo(byte[] imageL, int widthL, int heightL, int cameraIndexL, boolean cameraIsFrontFacingL, byte[] imageR, int widthR, int heightR, int cameraIndexR, boolean cameraIsFrontFacingR);
-    
     
     public static native boolean arwUpdateDebugTexture32(byte[] image);
   
@@ -434,5 +412,73 @@ public class NativeInterface {
 	public static native void arwSetImageProcMode(int mode);
 	
     public static native int arwGetImageProcMode();
+
+    public static final int AR_PIXEL_FORMAT_INVALID = -1,
+                            AR_PIXEL_FORMAT_RGB = 0,
+                            AR_PIXEL_FORMAT_BGR = 1,
+                            AR_PIXEL_FORMAT_RGBA = 2,
+                            AR_PIXEL_FORMAT_BGRA = 3,
+                            AR_PIXEL_FORMAT_ABGR = 4,
+                            AR_PIXEL_FORMAT_MONO = 5,
+                            AR_PIXEL_FORMAT_ARGB = 6,
+                            AR_PIXEL_FORMAT_2vuy = 7,
+                            AR_PIXEL_FORMAT_yuvs = 8,
+                            AR_PIXEL_FORMAT_RGB_565 = 9,
+                            AR_PIXEL_FORMAT_RGBA_5551 = 10,
+                            AR_PIXEL_FORMAT_RGBA_4444 = 11,
+                            AR_PIXEL_FORMAT_420v = 12,
+                            AR_PIXEL_FORMAT_420f = 13,
+                            AR_PIXEL_FORMAT_NV21 = 14;
+
+    /**
+     * Tells the native library the source and size and format in which video frames will be pushed.
+     * This call may only be made after a call to arwStartRunning or arwStartRunningStereo.
+     * @param videoSourceIndex Zero-based index of the video source which is being initialized for pushing. Normally 0, but for the second camera in a stereo pair, 1.
+     * @param width			Width of the video frame in pixels.
+     * @param height		Height of the video frame in pixels.
+     * @param pixelFormat   string with format in which buffers will be pushed. Supported values include "NV21", "NV12", "YUV_420_888", "RGBA", "RGB_565", and "MONO".
+     * @param camera_index	Zero-based index into the devices's list of cameras. If only one camera is present on the device, will be 0.
+     * @param camera_face   0 if camera is rear-facing (the default) or 1 if camera is facing toward the user.
+     * @return				0 if no error occurred, otherwise an error value less than 0.
+     */
+    public static native int arwAndroidVideoPushInit(int videoSourceIndex, int width, int height, String pixelFormat, int camera_index, int camera_face);
+
+    /**
+     * Pushes a video frame to the native library (single-planar).
+     * May only be made after calling arwAndroidVideoPushInit and may not be made after a call to arwAndroidVideoPushFinal.
+     * @param videoSourceIndex Zero-based index of the video source which is being pushed. Normally 0, but for the second camera in a stereo pair, 1.
+     * @param buf			Reference to a byte buffer holding the frame data. This will be the only plane.
+     * @param bufSize		The length (in bytes) of the buffer referred to by buf.
+     * @return				0 if no error occurred, otherwise an error value less than 0.
+     */
+    public static native int arwAndroidVideoPush1(int videoSourceIndex, byte[] buf, int bufSize);
+
+    /**
+     * Pushes a video frame to the native library.
+     * May only be made after calling arwAndroidVideoPushInit and may not be made after a call to arwAndroidVideoPushFinal.
+     * @param videoSourceIndex Zero-based index of the video source which is being pushed. Normally 0, but for the second camera in a stereo pair, 1.
+     * @param buf0			For interleaved formats (e.g. RGBA), reference to a byte buffer holding the frame data. For interleaved formats this will be the only plane. For planar formats, reference to a byte buffer holding plane 0 of the frame. For planar NV21 and YUV_420_888 formats, this will be the luma plane.
+     * @param buf0Size		The length (in bytes) of the buffer referred to by buf0.
+     * @param buf1			For planar formats consisting of 2 or more planes, reference to a byte buffer holding plane 1 of the frame. For planar NV21 image format, this will be the chroma plane. For planar YUV_420_888 format, this will be the Cb chroma plane.
+     * @param buf1Size		The length (in bytes) of the buffer referred to by buf1.
+     * @param buf2			For planar formats consisting 3 or more planes, reference to a byte buffer holding plane 2 of the frame. For planar YUV_420_888 format, this will be the Cr chroma plane.
+     * @param buf2Size		The length (in bytes) of the buffer referred to by buf2.
+     * @param buf3			For planar formats consisting of 4 planes, reference to a byte buffer holding plane 3 of the frame.
+     * @param buf3Size		The length (in bytes) of the buffer referred to by buf3.
+     * @return				0 if no error occurred, otherwise an error value less than 0.
+     */
+    public static native int arwAndroidVideoPush2(int videoSourceIndex,
+												  ByteBuffer buf0, int buf0PixelStride, int buf0RowStride,
+												  ByteBuffer buf1, int buf1PixelStride, int buf1RowStride,
+												  ByteBuffer buf2, int buf2PixelStride, int buf2RowStride,
+												  ByteBuffer buf3, int buf3PixelStride, int buf3RowStride);
+
+    /**
+     * Tells the native library that no further frames will be pushed.
+     * This call may only be made before a call to arwStopRunning.
+     * @param videoSourceIndex Zero-based index of the video source which is being finalized for pushing. Normally 0, but for the second camera in a stereo pair, 1.
+     * @return				0 if no error occurred, otherwise an error value less than 0.
+     */
+    public static native int arwAndroidVideoPushFinal(int videoSourceIndex);
 
 }

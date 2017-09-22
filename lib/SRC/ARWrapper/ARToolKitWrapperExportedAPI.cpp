@@ -79,11 +79,6 @@ static int logDumpedWrongThreadCount = 0;
 
 static ARController *gARTK = NULL;
 
-#if !TARGET_PLATFORM_WINRT
-static int arwUnityRenderEventUpdateTextureGLTextureID_L = 0;
-static int arwUnityRenderEventUpdateTextureGLTextureID_R = 0;
-#endif // !TARGET_PLATFORM_WINRT
-
 // ----------------------------------------------------------------------------------------------------
 
 // When handed a logging callback, install it for use by our own log function,
@@ -248,10 +243,6 @@ EXPORT_API bool arwShutdownAR()
         gARTK = NULL;
     }
 
-    // Clean up statics.
-#if !TARGET_PLATFORM_WINRT
-    arwUnityRenderEventUpdateTextureGLTextureID_L = arwUnityRenderEventUpdateTextureGLTextureID_R = 0;
-#endif // !TARGET_PLATFORM_WINRT
     return (true);
 }
 
@@ -340,22 +331,10 @@ EXPORT_API bool arwUpdateAR()
     return gARTK->update();
 }
 
-EXPORT_API bool arwUpdateTexture(Color *buffer)
-{
-    if (!gARTK) return false;
-    return gARTK->updateTexture(0, buffer);
-}
-
 EXPORT_API bool arwUpdateTexture32(unsigned int *buffer)
 {
     if (!gARTK) return false;
     return gARTK->updateTexture32(0, buffer);
-}
-
-EXPORT_API bool arwUpdateTextureStereo(Color *bufferL, Color *bufferR)
-{
-    if (!gARTK) return false;
-    return (gARTK->updateTexture(0, bufferL) && gARTK->updateTexture(1, bufferR));
 }
 
 EXPORT_API bool arwUpdateTexture32Stereo(unsigned int *bufferL, unsigned int *bufferR)
@@ -376,65 +355,11 @@ EXPORT_API bool arwGetVideoDebugMode()
 	return gARTK->getDebugMode();
 }
 
-EXPORT_API bool arwUpdateDebugTexture(Color *buffer)
-{
-    if (!gARTK) return false;
-	return gARTK->updateDebugTexture(0, buffer);
-}
-
 EXPORT_API bool arwUpdateDebugTexture32(unsigned int *buffer)
 {
     if (!gARTK) return false;
     return gARTK->updateDebugTexture32(0, buffer);
 }
-
-#if !TARGET_PLATFORM_WINRT
-EXPORT_API bool arwUpdateTextureGL(const int textureID)
-{
-    if (!gARTK) return false;
-    return gARTK->updateTextureGL(0, textureID);
-}
-
-EXPORT_API bool arwUpdateTextureGLStereo(const int textureID_L, const int textureID_R)
-{
-    if (!gARTK) return false;
-    return (gARTK->updateTextureGL(0, textureID_L) && gARTK->updateTextureGL(1, textureID_R));
-}
-#endif // !TARGET_PLATFORM_WINRT
-
-// ----------------------------------------------------------------------------------------------------
-#pragma mark  Unity-specific API
-// ----------------------------------------------------------------------------------------------------
-
-EXPORT_API void UnityRenderEvent(int eventID)
-{
-    switch (eventID) {
-#if !TARGET_PLATFORM_WINRT
-        case ARW_UNITY_RENDER_EVENTID_UPDATE_TEXTURE_GL:
-            if (arwUnityRenderEventUpdateTextureGLTextureID_L) arwUpdateTextureGL(arwUnityRenderEventUpdateTextureGLTextureID_L);
-            break;
-        case ARW_UNITY_RENDER_EVENTID_UPDATE_TEXTURE_GL_STEREO:
-            if (arwUnityRenderEventUpdateTextureGLTextureID_L && arwUnityRenderEventUpdateTextureGLTextureID_R) arwUpdateTextureGLStereo(arwUnityRenderEventUpdateTextureGLTextureID_L, arwUnityRenderEventUpdateTextureGLTextureID_R);
-            break;
-#endif // !TARGET_PLATFORM_WINRT
-        case ARW_UNITY_RENDER_EVENTID_NOP:
-        default:
-            break;
-    }
-}
-
-#if !TARGET_PLATFORM_WINRT
-EXPORT_API void arwSetUnityRenderEventUpdateTextureGLTextureID(int textureID)
-{
-    arwUnityRenderEventUpdateTextureGLTextureID_L = textureID;
-}
-
-EXPORT_API void arwSetUnityRenderEventUpdateTextureGLStereoTextureIDs(int textureID_L, int textureID_R)
-{
-    arwUnityRenderEventUpdateTextureGLTextureID_L = textureID_L;
-    arwUnityRenderEventUpdateTextureGLTextureID_R = textureID_R;
-}
-#endif // !TARGET_PLATFORM_WINRT
 
 // ----------------------------------------------------------------------------------------------------
 #pragma mark  Tracking configuration
@@ -640,7 +565,7 @@ EXPORT_API bool arwGetMarkerPatternConfig(int markerUID, int patternID, float ma
     return true;
 }
 
-EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, Color *buffer)
+EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, uint32_t *buffer)
 {
     ARMarker *marker;
     ARPattern *p;
@@ -660,7 +585,7 @@ EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, Color *bu
         return false;
     }
     
-    memcpy(buffer, p->m_image, sizeof(Color) * p->m_imageSizeX * p->m_imageSizeY);
+    memcpy(buffer, p->m_image, sizeof(uint32_t) * p->m_imageSizeX * p->m_imageSizeY);
     return true;
 
 }
@@ -899,6 +824,9 @@ extern "C" {
     JNIEXPORT jboolean JNICALL JNIFUNCTION(arwGetVideoParamsStereo(JNIEnv *env, jobject obj, jintArray widthL, jintArray heightL, jintArray pixelSizeL, jobjectArray pixelFormatStringL, jintArray widthR, jintArray heightR, jintArray pixelSizeR, jobjectArray  pixelFormatStringR));
 	JNIEXPORT jboolean JNICALL JNIFUNCTION(arwCapture(JNIEnv *env, jobject obj));
 	JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateAR(JNIEnv *env, jobject obj));
+    JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray));
+    JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateTextureStereo32(JNIEnv *env, jobject obj, jbyteArray pinArrayL, jbyteArray pinArrayR));
+    JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray));
 	JNIEXPORT jint JNICALL JNIFUNCTION(arwAddMarker(JNIEnv *env, jobject obj, jstring cfg));
 	JNIEXPORT jboolean JNICALL JNIFUNCTION(arwRemoveMarker(JNIEnv *env, jobject obj, jint markerUID));
 	JNIEXPORT jint JNICALL JNIFUNCTION(arwRemoveAllMarkers(JNIEnv *env, jobject obj));
@@ -933,10 +861,14 @@ extern "C" {
     JNIEXPORT jfloat JNICALL JNIFUNCTION(arwGetMarkerOptionFloat(JNIEnv *env, jobject obj, jint markerUID, jint option));
 
 	// Additional Java-specific function not found in the C-API
-    JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImage(JNIEnv *env, jobject obj, jbyteArray pinArray, jint width, jint height, jint cameraIndex, jboolean cameraIsFrontFacing));
-    JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImageStereo(JNIEnv *env, jobject obj, jbyteArray pinArrayL, jint widthL, jint heightL, jint cameraIndexL, jboolean cameraIsFrontFacingL, jbyteArray pinArrayR, jint widthR, jint heightR, jint cameraIndexR, jboolean cameraIsFrontFacingR));
-
-    JNIEXPORT bool JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPushInit(JNIEnv *env, jobject obj, jint videoSourceIndex, jint width, jint height, jstring pixelFormat, jint camera_index, jint camera_face));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPush1(JNIEnv *env, jobject obj, jint videoSourceIndex, jbyteArray buf, jint bufSize));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPush2(JNIEnv *env, jobject obj, jint videoSourceIndex,
+                                       jobject buf0, jint buf0PixelStride, jint buf0RowStride,
+                                       jobject buf1, jint buf1PixelStride, jint buf1RowStride,
+                                       jobject buf2, jint buf2PixelStride, jint buf2RowStride,
+                                       jobject buf3, jint buf3PixelStride, jint buf3RowStride));
+    JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPushFinal(JNIEnv *env, jobject obj, jint videoSourceIndex));
 
 	// ------------------------------------------------------------------------------------
 	// JNI Functions Not Yet Implemented
@@ -944,13 +876,6 @@ extern "C" {
     //EXPORT_API bool arwStartRunningStereoB(const char *vconfL, const char *cparaBuffL, const int cparaBuffLenL, const char *vconfR, const char *cparaBuffR, const int cparaBuffLenR, const char *transL2RBuff, const int transL2RBuffLen, const float nearPlane, const float farPlane);
 	//EXPORT_API bool arwGetMarkerPatternConfig(int markerUID, int patternID, float matrix[16], float *width, float *height);
 	//EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, Color *buffer);
-	//EXPORT_API bool arwUpdateTexture(Color *buffer);
-    //EXPORT_API bool arwUpdateTexture32(unsigned int *buffer);
-	//EXPORT_API bool arwUpdateTextureStereo(Color *bufferL, Color *bufferR);
-    //EXPORT_API bool arwUpdateTexture32Stereo(unsigned int *bufferL, unsigned int *bufferR);
-	//EXPORT_API bool arwUpdateTextureGL(const int textureID);
-	//EXPORT_API bool arwUpdateTextureGLStereo(const int textureID_L, const int textureID_R);
-    //EXPORT_API bool arwUpdateDebugTexture(Color *buffer);
 
     //EXPORT_API bool arwLoadOpticalParams(const char *optical_param_name, const char *optical_param_buff, const int optical_param_buffLen, float *fovy_p, float *aspect_p, float m[16], float p[16]);
 	// ------------------------------------------------------------------------------------
@@ -1101,7 +1026,48 @@ JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateAR(JNIEnv *env, jobject obj))
 	return arwUpdateAR();
 }
 
-JNIEXPORT jint JNICALL JNIFUNCTION(arwAddMarker(JNIEnv *env, jobject obj, jstring cfg)) 
+JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray))
+{
+    bool updated = false;
+
+    if (jbyte *inArray = env->GetByteArrayElements(pinArray, NULL)) {
+        updated = arwUpdateTexture32((unsigned int *)inArray);
+        env->ReleaseByteArrayElements(pinArray, inArray, 0); // 0 -> copy back the changes on the native side to the Java side.
+    }
+
+    return updated;
+}
+
+JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateTextureStereo32(JNIEnv *env, jobject obj, jbyteArray pinArrayL, jbyteArray pinArrayR))
+{
+    bool updated = false;
+
+    if (jbyte *inArrayL = env->GetByteArrayElements(pinArrayL, NULL)) {
+        if (jbyte *inArrayR = env->GetByteArrayElements(pinArrayR, NULL)) {
+            updated = arwUpdateTexture32Stereo((uint32_t *)inArrayL, (uint32_t *)inArrayR);
+            env->ReleaseByteArrayElements(pinArrayR, inArrayR, 0); // 0 -> copy back the changes on the native side to the Java side.
+        }
+        env->ReleaseByteArrayElements(pinArrayL, inArrayL, 0); // 0 -> copy back the changes on the native side to the Java side.
+    }
+
+    return updated;
+}
+
+JNIEXPORT jboolean JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray))
+{
+    if (!gARTK) return false;
+    
+    bool updated = false;
+    
+    if (jbyte *inArray = env->GetByteArrayElements(pinArray, NULL)) {
+        updated = arwUpdateDebugTexture32((unsigned int *)inArray);
+        env->ReleaseByteArrayElements(pinArray, inArray, 0); // 0 -> copy back the changes on the native side to the Java side.
+    }
+    
+    return updated;
+}
+
+JNIEXPORT jint JNICALL JNIFUNCTION(arwAddMarker(JNIEnv *env, jobject obj, jstring cfg))
 {
 	jboolean isCopy;
 
@@ -1270,32 +1236,52 @@ JNIEXPORT jfloat JNICALL JNIFUNCTION(arwGetMarkerOptionFloat(JNIEnv *env, jobjec
     return arwGetMarkerOptionFloat(markerUID, option);
 }
 
-JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImage(JNIEnv *env, jobject obj, jbyteArray pinArray, jint width, jint height, jint cameraIndex, jboolean cameraIsFrontFacing)) 
+// Additional JNI functions not found in the C API.
+
+JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPushInit(JNIEnv *env, jobject obj, jint videoSourceIndex, jint width, jint height, jstring pixelFormat, jint camera_index, jint camera_face))
 {
-    if (!gARTK) return false;
-    return gARTK->videoAcceptImage(env, obj, 0, pinArray, width, height, cameraIndex, cameraIsFrontFacing);
+    if (!gARTK) {
+        return -1;
+    }
+
+    jboolean isCopy;
+    jint ret;
+
+    const char *pixelFormatC = env->GetStringUTFChars(pixelFormat, &isCopy);
+    ret = gARTK->androidVideoPushInit(env, obj, videoSourceIndex, width, height, pixelFormatC, camera_index, camera_face);
+    env->ReleaseStringUTFChars(pixelFormat, pixelFormatC);
+    return ret;
 }
 
-JNIEXPORT jboolean JNICALL JNIFUNCTION(arwAcceptVideoImageStereo(JNIEnv *env, jobject obj, jbyteArray pinArrayL, jint widthL, jint heightL, jint cameraIndexL, jboolean cameraIsFrontFacingL, jbyteArray pinArrayR, jint widthR, jint heightR, jint cameraIndexR, jboolean cameraIsFrontFacingR))
+JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPush1(JNIEnv *env, jobject obj, jint videoSourceIndex, jbyteArray buf, jint bufSize))
 {
-    if (!gARTK) return false;
-    return (gARTK->videoAcceptImage(env, obj, 0, pinArrayL, widthL, heightL, cameraIndexL, cameraIsFrontFacingL) &&
-            gARTK->videoAcceptImage(env, obj, 1, pinArrayR, widthR, heightR, cameraIndexR, cameraIsFrontFacingR)
-            );
+    if (!gARTK) {
+        return -1;
+    }
+
+    return gARTK->androidVideoPush1(env, obj, videoSourceIndex, buf, bufSize);
 }
 
-JNIEXPORT bool  JNICALL JNIFUNCTION(arwUpdateDebugTexture32(JNIEnv *env, jobject obj, jbyteArray pinArray))
+JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPush2(JNIEnv *env, jobject obj, jint videoSourceIndex,
+                                                        jobject buf0, jint buf0PixelStride, jint buf0RowStride,
+                                                        jobject buf1, jint buf1PixelStride, jint buf1RowStride,
+                                                        jobject buf2, jint buf2PixelStride, jint buf2RowStride,
+                                                        jobject buf3, jint buf3PixelStride, jint buf3RowStride))
 {
-    if (!gARTK) return false;
-    
-	bool updated = false;
+    if (!gARTK) {
+        return -1;
+    }
 
-	if (jbyte *inArray = env->GetByteArrayElements(pinArray, NULL)) {
-		updated = arwUpdateDebugTexture32((unsigned int *)inArray);
-		env->ReleaseByteArrayElements(pinArray, inArray, 0); // 0 -> copy back the changes on the native side to the Java side.
-	}
+    return gARTK->androidVideoPush2(env, obj, videoSourceIndex, buf0, buf0PixelStride, buf0RowStride, buf1, buf1PixelStride, buf1RowStride, buf2, buf2PixelStride, buf2RowStride, buf3, buf3PixelStride, buf3RowStride);
+}
 
-	return updated;
+JNIEXPORT jint JNICALL JNIFUNCTION(arwAndroidVideoPushFinal(JNIEnv *env, jobject obj, jint videoSourceIndex))
+{
+    if (!gARTK) {
+        return -1;
+    }
+
+    return gARTK->androidVideoPushFinal(env, obj, videoSourceIndex);
 }
 
 #endif // TARGET_PLATFORM_ANDROID

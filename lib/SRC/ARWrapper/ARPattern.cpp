@@ -87,7 +87,7 @@ bool ARPattern::loadTemplate(int patternID, const ARPattHandle *arPattHandle, fl
     
     // Create the image.
     m_imageSizeX = m_imageSizeY = arPattHandle->pattSize;
-    m_image = new Color[m_imageSizeX * m_imageSizeY];
+    m_image = new uint32_t[m_imageSizeX * m_imageSizeY];
     
     const int *arr = arPattHandle->patt[m_patternID * 4];
     for (int y = 0; y < m_imageSizeY; y++) {
@@ -96,11 +96,11 @@ bool ARPattern::loadTemplate(int patternID, const ARPattHandle *arPattHandle, fl
             int pattIdx = (m_imageSizeY - 1 - y)*m_imageSizeX + x; // Flip pattern in Y.
             int buffIdx = y*m_imageSizeX + x;
             
-            Color *c = &m_image[buffIdx];
-            c->b = 1.0f - (float)arr[pattIdx * 3 + 0] / 255.0f;
-            c->g = 1.0f - (float)arr[pattIdx * 3 + 1] / 255.0f;
-            c->r = 1.0f - (float)arr[pattIdx * 3 + 2] / 255.0f;
-            c->a = 1.0f;
+            uint8_t *c = (uint8_t *)&m_image[buffIdx];
+            *c++ = 255 - arr[pattIdx * 3 + 2];
+            *c++ = 255 - arr[pattIdx * 3 + 1];
+            *c++ = 255 - arr[pattIdx * 3 + 0];
+            *c++ = 255;
         }
     }
     

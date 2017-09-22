@@ -247,19 +247,21 @@ include $(CLEAR_VARS)
 LOCAL_PATH := $(MY_LOCAL_PATH)
 CURL_DIR := $(MY_LOCAL_PATH)/curl
 MY_FILES := $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Video/*.c)
-MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/VideoAndroid/sqlite3.c
-MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoDummy/*.c)
-MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/VideoImage/*.c)
+MY_FILES += $(ARTOOLKIT_ROOT)/lib/SRC/Video/Android/videoAndroid.c $(ARTOOLKIT_ROOT)/lib/SRC/Video/Android/sqlite3.c
+MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Video/Dummy/*.c)
+MY_FILES += $(wildcard $(ARTOOLKIT_ROOT)/lib/SRC/Video/Image/*.c)
 MY_FILES := $(MY_FILES:$(LOCAL_PATH)/%=%)
 # ARToolKit libs use lots of floating point, so don't compile in thumb mode.
 LOCAL_ARM_MODE := arm
-# Rather than using LOCAL_ARM_NEON := true, just compile the one file in NEON mode.
+# Rather than using LOCAL_ARM_NEON := true, just compile these file in NEON mode.
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
   MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
+  MY_FILES := $(subst videoRGBA.c,videoRGBA.c.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM_NEON=1
 endif
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
   MY_FILES := $(subst videoLuma.c,videoLuma.c.neon,$(MY_FILES))
+  MY_FILES := $(subst videoRGBA.c,videoRGBA.c.neon,$(MY_FILES))
   LOCAL_CFLAGS += -DHAVE_ARM64_NEON=1
 endif
 ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),x86 x86_64))
@@ -267,7 +269,8 @@ ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),x86 x86_64))
 endif
 
 LOCAL_SRC_FILES := $(MY_FILES)
-LOCAL_CFLAGS += $(MY_CFLAGS)
+# Android NDK requires -D_FILE_OFFSET_BITS=32 if targeting API versions < 21.
+LOCAL_CFLAGS += $(MY_CFLAGS) -D_FILE_OFFSET_BITS=32
 LOCAL_C_INCLUDES := $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_C_INCLUDES += $(CURL_DIR)/include
 LOCAL_MODULE := arvideo

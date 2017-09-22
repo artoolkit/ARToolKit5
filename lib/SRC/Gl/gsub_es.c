@@ -71,7 +71,9 @@
 #endif
 
 #if !defined(GL_IMG_texture_format_BGRA8888) && !defined(GL_APPLE_texture_format_BGRA8888)
-#define GL_BGRA 0x80E1
+#  define GL_BGRA 0x80E1
+#elif !defined(GL_BGRA)
+#  define GL_BGRA 0x80E1
 #endif
 
 #ifndef MIN

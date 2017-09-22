@@ -59,18 +59,15 @@ trackingSub.h \
 
 OBJS = \
 AndroidFeatures.o \
-AndroidVideoSource.o \
 ARController.o \
 ARMarker.o \
 ARMarkerMulti.o \
 ARMarkerNFT.o \
 ARMarkerSquare.o \
 ARPattern.o \
-ARToolKitVideoSource.o \
+ARVideoSource.o \
 ARToolKitWrapperExportedAPI.o \
-ColorConversion.o \
 trackingSub.o \
-VideoSource.o \
 
 # Implicit rule, to compile C++ files with the .cpp suffix (rule already exists for .cc).
 %.o : %.cpp

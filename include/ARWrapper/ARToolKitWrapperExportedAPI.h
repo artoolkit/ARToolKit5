@@ -39,8 +39,8 @@
 #define ARTOOLKITWRAPPEREXPORTEDAPI_H
 
 #include <ARWrapper/Platform.h>
-#include <ARWrapper/Image.h>
 #include <ARWrapper/Error.h>
+#include <stdint.h>
 
 /**
  * \file ARToolKitWrapperExportedAPI.h
@@ -231,15 +231,17 @@ extern "C" {
     
 	/**
 	 * Populates the provided floating-point color buffer with the current video frame.
-	 * @param buffer	The color buffer to fill with video
+	 * @param buffer	The color buffer to fill with video.
 	 * @return			true if successful, false if an error occurred
 	 */
-	EXPORT_API bool arwUpdateTexture(Color *buffer);
-    
     EXPORT_API bool arwUpdateTexture32(unsigned int *buffer);
     
-	EXPORT_API bool arwUpdateTextureStereo(Color *bufferL, Color *bufferR);
-    
+	/**
+	 * Populates the provided stereo floating-point color buffers with the current video frames.
+	 * @param bufferL	The color buffer to fill with video from the left camera.
+	 * @param bufferR	The color buffer to fill with video from the right camera.
+	 * @return			true if successful, false if an error occurred
+	 */
     EXPORT_API bool arwUpdateTexture32Stereo(unsigned int *bufferL, unsigned int *bufferR);
     
 	/**
@@ -259,14 +261,6 @@ extern "C" {
 	EXPORT_API bool arwGetVideoDebugMode();
     
     /**
-     * Populates the provided color buffer with the current contents of the debug image.
-     * @param buffer Pointer to a buffer of pixels (of type 'Color') to be filled. It is the caller's responsibility to ensure that the buffer is of sufficient size.
-     * @return				true if successful, false if an error occurred
-     */
-    EXPORT_API bool arwUpdateDebugTexture(Color *buffer);
-    
-    
-    /**
      * Populates the provided buffer with the current contents of the debug image.
      * @param buffer Pointer to a buffer of pixels (of type 'uint32_t') to be filled. It is the
      *      caller's responsibility to ensure that the buffer is of sufficient size. The pixels are
@@ -274,49 +268,6 @@ extern "C" {
      */
     EXPORT_API bool arwUpdateDebugTexture32(unsigned int *buffer);
     
-#if !TARGET_PLATFORM_WINRT
-	/**
-	 * Uses OpenGL to directly updated the specified texture with the current video frame.
-	 * @param textureID	The OpenGL texture ID to upload texture data to
-	 * @return			true if successful, false if an error occurred
-	 */
-	EXPORT_API bool arwUpdateTextureGL(const int textureID);
-    
- 	EXPORT_API bool arwUpdateTextureGLStereo(const int textureID_L, const int textureID_R);
-#endif // !TARGET_PLATFORM_WINRT
-
-    // ----------------------------------------------------------------------------------------------------
-#pragma mark  Unity-specific API
-    // ----------------------------------------------------------------------------------------------------
-    
-    enum {
-        ARW_UNITY_RENDER_EVENTID_NOP = 0, // No operation (does nothing).
-#if !TARGET_PLATFORM_WINRT
-        ARW_UNITY_RENDER_EVENTID_UPDATE_TEXTURE_GL = 1,
-        ARW_UNITY_RENDER_EVENTID_UPDATE_TEXTURE_GL_STEREO = 2,
-#endif // !TARGET_PLATFORM_WINRT
-    };
-    
-    /**
-       When ARWrapper is loaded as a plugin into the Unity 3D environment, this function will be
-       called for Unity GL.IssuePluginEvent script calls.
-       The function will be called on a rendering thread; note that when multithreaded rendering is used,
-       the rendering thread WILL BE DIFFERENT from the thread that all scripts & other game logic happens.
-       It is up to the user to ensure any synchronization with other plugin script calls.
-     */
-    EXPORT_API void UnityRenderEvent(int eventID);
-
-#if !TARGET_PLATFORM_WINRT
-	/**
-	 * Uses OpenGL to directly updated the specified texture with the current video frame.
-	 * @param textureID	The OpenGL texture ID to upload texture data to
-	 * @return			true if successful, false if an error occurred
-	 */
-    EXPORT_API void arwSetUnityRenderEventUpdateTextureGLTextureID(int textureID);
-    
-    EXPORT_API void arwSetUnityRenderEventUpdateTextureGLStereoTextureIDs(int textureID_L, int textureID_R);
-#endif // !TARGET_PLATFORM_WINRT
-
 	// ----------------------------------------------------------------------------------------------------
 #pragma mark  Tracking configuration
     // ----------------------------------------------------------------------------------------------------
@@ -459,10 +410,13 @@ extern "C" {
      * Images of NFT markers are not currently supported, so at present this function will return no image for NFT markers.
 	 * @param markerUID	The unique identifier (UID) of the marker
 	 * @param patternID	The id for the pattern within that marker. Ignored for single markers and NFT markers.
-	 * @param buffer	Color array to populate with pattern image. Use arwGetMarkerPatternConfig to get the required size of this array (imageSizeX * imageSizeY elements).
+     * @param buffer    Pointer to a buffer of pixels (of type 'uint32_t') to be filled with pattern image.
+     *      It is the caller's responsibility to ensure that the buffer is of sufficient size.
+     *      Use arwGetMarkerPatternConfig to get the required size of this array (imageSizeX * imageSizeY elements).
+     *      The pixels are RGBA in little-endian systems, or ABGR in big-endian systems.
 	 * @return			true if successful, false if an error occurred
 	 */
-	EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, Color *buffer);
+	EXPORT_API bool arwGetMarkerPatternImage(int markerUID, int patternID, uint32_t *buffer);
     
     /**
      * Constants for use with marker option setters/getters.

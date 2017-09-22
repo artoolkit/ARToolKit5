@@ -26,6 +26,10 @@
 
 #include <sys/cdefs.h>
 
+#ifndef __UNCONST
+#define __UNCONST(a)	((void *)(unsigned long)(const void *)(a))
+#endif
+
 #ifndef lint
 __RCSID("$NetBSD: nftw.c,v 1.1 2005/12/30 23:07:32 agc Exp $");
 #endif
@@ -34,8 +38,14 @@ __RCSID("$NetBSD: nftw.c,v 1.1 2005/12/30 23:07:32 agc Exp $");
 #include <sys/stat.h>
 #include <errno.h>
 #include <fts.h>
-#include "ftw.h"
 #include <limits.h>
+
+#ifndef OPEN_MAX
+#include <stdio.h>
+#define OPEN_MAX FOPEN_MAX
+#endif
+
+#include "ftw.h"
 
 int
 nftw(const char *path, int (*fn)(const char *, const struct stat *, int,

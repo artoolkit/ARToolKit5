@@ -342,7 +342,7 @@ public abstract class ARActivity extends /*AppCompat*/Activity implements Camera
     @Override
     public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing) {
 
-        if (ARToolKit.getInstance().initialiseAR(width, height, null, cameraIndex, cameraIsFrontFacing)) {
+        if (ARToolKit.getInstance().startWithPushedVideo(width, height, null, cameraIndex, cameraIsFrontFacing)) {
             // Expects Data to be already in the cache dir. This can be done with the AssetUnpacker.
             Log.i(TAG, "cameraPreviewStarted(): Camera initialised");
         } else {
@@ -356,7 +356,7 @@ public abstract class ARActivity extends /*AppCompat*/Activity implements Camera
     }
 
     @Override
-    public void cameraPreviewFrame(byte[] frame) {
+    public void cameraPreviewFrame(byte[] frame, int frameSize) {
         if (firstUpdate) {
             // ARToolKit has been initialised. The renderer can now add markers, etc...
             if (renderer.configureARScene()) {
@@ -369,7 +369,7 @@ public abstract class ARActivity extends /*AppCompat*/Activity implements Camera
             firstUpdate = false;
         }
 
-        if (ARToolKit.getInstance().convertAndDetect(frame)) {
+        if (ARToolKit.getInstance().convertAndDetect1(frame, frameSize)) {
 
             // Update the renderer as the frame has changed
             if (glView != null)
@@ -383,7 +383,7 @@ public abstract class ARActivity extends /*AppCompat*/Activity implements Camera
 
     @Override
     public void cameraPreviewStopped() {
-        ARToolKit.getInstance().cleanup();
+        ARToolKit.getInstance().stopAndFinal();
     }
 
     protected void showInfo() {

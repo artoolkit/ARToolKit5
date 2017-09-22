@@ -333,7 +333,7 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
 
-        if (listener != null) listener.cameraPreviewFrame(data);
+        if (listener != null) listener.cameraPreviewFrame(data, captureWidth*captureHeight + 2 * captureWidth/2*captureHeight/2);
 
         cameraWrapper.frameReceived(data);
 

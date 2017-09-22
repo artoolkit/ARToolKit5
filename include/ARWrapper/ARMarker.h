@@ -41,7 +41,6 @@
 #include <AR/ar.h>
 #include <AR/arFilterTransMat.h>
 
-#include <ARWrapper/Image.h>
 #include <ARWrapper/ARPattern.h>
 
 #include <vector>

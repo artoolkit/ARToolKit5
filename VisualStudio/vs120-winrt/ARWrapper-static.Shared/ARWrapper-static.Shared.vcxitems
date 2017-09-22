@@ -15,38 +15,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\AndroidFeatures.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\AndroidVideoSource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARController.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARMarker.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARMarkerMulti.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARMarkerNFT.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARMarkerSquare.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARPattern.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARToolKitVideoSource.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARVideoSource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ARToolKitWrapperExportedAPI.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\ColorConversion.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\trackingSub.c" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\VideoSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\AndroidFeatures.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\AndroidVideoSource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARController.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARMarker.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARMarkerMulti.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARMarkerNFT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARMarkerSquare.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARPattern.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARToolKitVideoSource.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARVideoSource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ARToolKitWrapperExportedAPI.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\ColorConversion.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\Error.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\Image.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\Platform.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\include\ARWrapper\VideoSource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\lib\SRC\ARWrapper\trackingSub.h" />
   </ItemGroup>
 </Project>

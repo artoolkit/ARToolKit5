@@ -639,11 +639,9 @@
 		4AEB27621804C395002290C5 /* ARMarkerSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB272D1804BB8A002290C5 /* ARMarkerSquare.cpp */; };
 		4AEB27631804C395002290C5 /* ARPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB272E1804BB8A002290C5 /* ARPattern.cpp */; };
 		4AEB27641804C395002290C5 /* ARController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB272F1804BB8A002290C5 /* ARController.cpp */; };
-		4AEB27651804C395002290C5 /* ARToolKitVideoSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27301804BB8A002290C5 /* ARToolKitVideoSource.cpp */; };
 		4AEB27661804C395002290C5 /* ARToolKitWrapperExportedAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27311804BB8A002290C5 /* ARToolKitWrapperExportedAPI.cpp */; };
-		4AEB27671804C395002290C5 /* ColorConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27321804BB8A002290C5 /* ColorConversion.cpp */; };
 		4AEB27681804C395002290C5 /* trackingSub.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27331804BB8A002290C5 /* trackingSub.c */; };
-		4AEB27691804C395002290C5 /* VideoSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27341804BB8A002290C5 /* VideoSource.cpp */; };
+		4AEB27691804C395002290C5 /* ARVideoSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB27341804BB8A002290C5 /* ARVideoSource.cpp */; };
 		4AEC9594114FD19400E26C39 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4AEC9596114FD19400E26C39 /* libARgsub_lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A15ED3109E35F0800159C62 /* libARgsub_lite.a */; };
 		4AEC9597114FD19400E26C39 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
@@ -2674,32 +2672,25 @@
 		4AE9CC57178E75C300D944B9 /* ARMarkerNFT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ARMarkerNFT.c; sourceTree = "<group>"; };
 		4AE9CC58178E75C300D944B9 /* ARMarkerNFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARMarkerNFT.h; sourceTree = "<group>"; };
 		4AEB27181804BB68002290C5 /* AndroidFeatures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AndroidFeatures.h; sourceTree = "<group>"; };
-		4AEB27191804BB68002290C5 /* AndroidVideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AndroidVideoSource.h; sourceTree = "<group>"; };
 		4AEB271A1804BB68002290C5 /* ARMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMarker.h; sourceTree = "<group>"; };
 		4AEB271B1804BB68002290C5 /* ARMarkerMulti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMarkerMulti.h; sourceTree = "<group>"; };
 		4AEB271C1804BB68002290C5 /* ARMarkerNFT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMarkerNFT.h; sourceTree = "<group>"; };
 		4AEB271D1804BB68002290C5 /* ARMarkerSquare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARMarkerSquare.h; sourceTree = "<group>"; };
 		4AEB271E1804BB68002290C5 /* ARPattern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARPattern.h; sourceTree = "<group>"; };
 		4AEB271F1804BB68002290C5 /* ARController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARController.h; sourceTree = "<group>"; };
-		4AEB27201804BB68002290C5 /* ARToolKitVideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARToolKitVideoSource.h; sourceTree = "<group>"; };
 		4AEB27211804BB68002290C5 /* ARToolKitWrapperExportedAPI.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; lineEnding = 2; path = ARToolKitWrapperExportedAPI.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		4AEB27221804BB68002290C5 /* ColorConversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorConversion.h; sourceTree = "<group>"; };
-		4AEB27231804BB68002290C5 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		4AEB27241804BB68002290C5 /* Platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
-		4AEB27261804BB68002290C5 /* VideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoSource.h; sourceTree = "<group>"; };
+		4AEB27261804BB68002290C5 /* ARVideoSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARVideoSource.h; sourceTree = "<group>"; };
 		4AEB27281804BB8A002290C5 /* AndroidFeatures.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidFeatures.cpp; sourceTree = "<group>"; };
-		4AEB27291804BB8A002290C5 /* AndroidVideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AndroidVideoSource.cpp; sourceTree = "<group>"; };
 		4AEB272A1804BB8A002290C5 /* ARMarker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARMarker.cpp; sourceTree = "<group>"; };
 		4AEB272B1804BB8A002290C5 /* ARMarkerMulti.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARMarkerMulti.cpp; sourceTree = "<group>"; };
 		4AEB272C1804BB8A002290C5 /* ARMarkerNFT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARMarkerNFT.cpp; sourceTree = "<group>"; };
 		4AEB272D1804BB8A002290C5 /* ARMarkerSquare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARMarkerSquare.cpp; sourceTree = "<group>"; };
 		4AEB272E1804BB8A002290C5 /* ARPattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARPattern.cpp; sourceTree = "<group>"; };
 		4AEB272F1804BB8A002290C5 /* ARController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARController.cpp; sourceTree = "<group>"; };
-		4AEB27301804BB8A002290C5 /* ARToolKitVideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARToolKitVideoSource.cpp; sourceTree = "<group>"; };
 		4AEB27311804BB8A002290C5 /* ARToolKitWrapperExportedAPI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = ARToolKitWrapperExportedAPI.cpp; sourceTree = "<group>"; };
-		4AEB27321804BB8A002290C5 /* ColorConversion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColorConversion.cpp; sourceTree = "<group>"; };
 		4AEB27331804BB8A002290C5 /* trackingSub.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = trackingSub.c; sourceTree = "<group>"; };
-		4AEB27341804BB8A002290C5 /* VideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoSource.cpp; sourceTree = "<group>"; };
+		4AEB27341804BB8A002290C5 /* ARVideoSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARVideoSource.cpp; sourceTree = "<group>"; };
 		4AEB27391804BC2E002290C5 /* ARWrapper.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARWrapper.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AEB273B1804BC2E002290C5 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		4AEB273F1804BC2E002290C5 /* ARWrapper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ARWrapper-Info.plist"; sourceTree = "<group>"; };
@@ -5026,12 +5017,8 @@
 				4AEB27211804BB68002290C5 /* ARToolKitWrapperExportedAPI.h */,
 				4AEB271F1804BB68002290C5 /* ARController.h */,
 				4AEB27241804BB68002290C5 /* Platform.h */,
-				4AEB27231804BB68002290C5 /* Image.h */,
-				4AEB27261804BB68002290C5 /* VideoSource.h */,
-				4AEB27201804BB68002290C5 /* ARToolKitVideoSource.h */,
-				4AEB27221804BB68002290C5 /* ColorConversion.h */,
+				4AEB27261804BB68002290C5 /* ARVideoSource.h */,
 				4AEB27181804BB68002290C5 /* AndroidFeatures.h */,
-				4AEB27191804BB68002290C5 /* AndroidVideoSource.h */,
 				4AEB271A1804BB68002290C5 /* ARMarker.h */,
 				4AEB271E1804BB68002290C5 /* ARPattern.h */,
 				4AEB271B1804BB68002290C5 /* ARMarkerMulti.h */,
@@ -5047,11 +5034,8 @@
 			children = (
 				4AEB27311804BB8A002290C5 /* ARToolKitWrapperExportedAPI.cpp */,
 				4AEB272F1804BB8A002290C5 /* ARController.cpp */,
-				4AEB27341804BB8A002290C5 /* VideoSource.cpp */,
-				4AEB27301804BB8A002290C5 /* ARToolKitVideoSource.cpp */,
-				4AEB27291804BB8A002290C5 /* AndroidVideoSource.cpp */,
+				4AEB27341804BB8A002290C5 /* ARVideoSource.cpp */,
 				4AEB27281804BB8A002290C5 /* AndroidFeatures.cpp */,
-				4AEB27321804BB8A002290C5 /* ColorConversion.cpp */,
 				4AEB272A1804BB8A002290C5 /* ARMarker.cpp */,
 				4AEB272D1804BB8A002290C5 /* ARMarkerSquare.cpp */,
 				4AEB272E1804BB8A002290C5 /* ARPattern.cpp */,
@@ -6844,14 +6828,12 @@
 				4AEB27611804C395002290C5 /* ARMarkerNFT.cpp in Sources */,
 				4AEB27621804C395002290C5 /* ARMarkerSquare.cpp in Sources */,
 				4AEB27631804C395002290C5 /* ARPattern.cpp in Sources */,
-				4AEB27671804C395002290C5 /* ColorConversion.cpp in Sources */,
 				4AEB27601804C395002290C5 /* ARMarkerMulti.cpp in Sources */,
 				4AEB275F1804C395002290C5 /* ARMarker.cpp in Sources */,
 				4AEB27641804C395002290C5 /* ARController.cpp in Sources */,
 				4AEB27681804C395002290C5 /* trackingSub.c in Sources */,
-				4AEB27651804C395002290C5 /* ARToolKitVideoSource.cpp in Sources */,
 				4AEB27661804C395002290C5 /* ARToolKitWrapperExportedAPI.cpp in Sources */,
-				4AEB27691804C395002290C5 /* VideoSource.cpp in Sources */,
+				4AEB27691804C395002290C5 /* ARVideoSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

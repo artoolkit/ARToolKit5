@@ -42,6 +42,8 @@ import android.graphics.Color;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import java.nio.ByteBuffer;
+
 /**
  * The ARToolKit class is a singleton which manages access to the underlying
  * native functions defined in the {@link NativeInterface} class. Native calls
@@ -70,10 +72,6 @@ public class ARToolKit {
         else Log.i(TAG, "Loaded native library.");
     }
 
-    private int frameWidth;
-    private int frameHeight;
-    private int cameraIndex;
-    private boolean cameraIsFrontFacing;
     /**
      * Array of RGB color values containing the debug video image data.
      */
@@ -161,25 +159,30 @@ public class ARToolKit {
      *
      * @param videoWidth     The width of the video image in pixels.
      * @param videoHeight    The height of the video image in pixels.
+     * @param pixelFormat    string with format in which buffers will be pushed. Supported values include "NV21", "NV12", "YUV_420_888", "RGBA", "RGB_565", and "MONO".
 	 * @param cameraParaPath Either: null to search for camera parameters specific to the device,
 	 *            or a path (in the filesystem) to a camera parameter file. The path may be an
 	 *            absolute path, or relative to the resourcesDirectoryPath set in initialiseNative().
+	 * @param cameraIndex    Integer 0-based index of the camera in use. E.g. 0 represents the first (usually rear) camera on the device. The
+	 *            camera represented by a given index must not change over the lifetime of the device.
+	 * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
      * @return true if initialisation was successful.
      */
-    public boolean initialiseAR(int videoWidth, int videoHeight, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
+    public boolean startWithPushedVideo(int videoWidth, int videoHeight, String pixelFormat, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
 
         if (!initedNative) {
-            Log.e(TAG, "initialiseAR(): Cannot initialise camera because native interface not inited.");
+            Log.e(TAG, "startWithPushedVideo(): Cannot start because native interface not inited.");
             return false;
         }
 
-        this.frameWidth = videoWidth;
-        this.frameHeight = videoHeight;
-        this.cameraIndex = cameraIndex;
-        this.cameraIsFrontFacing = cameraIsFrontFacing;
-
-        if (!NativeInterface.arwStartRunning("-format=NV21", cameraParaPath, 10.0f, 10000.0f)) {
-            Log.e(TAG, "initialiseAR(): Error starting video");
+        if (!NativeInterface.arwStartRunning("", cameraParaPath, 10.0f, 10000.0f)) {
+            Log.e(TAG, "startWithPushedVideo(): Error starting");
+            return false;
+        }
+        if (0 > NativeInterface.arwAndroidVideoPushInit(0, videoWidth, videoHeight,
+                                                        pixelFormat, cameraIndex,
+                                                        (cameraIsFrontFacing ? 1 : 0))) {
+            Log.e(TAG, "startWithPushedVideo(): Error initialising Android video");
             return false;
         }
 
@@ -341,23 +344,84 @@ public class ARToolKit {
      * @param frame New video frame to process.
      * @return true if successful, otherwise false.
      */
-    public boolean convertAndDetect(byte[] frame) {
+    public boolean convertAndDetect1(byte[] frame, int frameSize) {
 
-        if (!initedNative) return false;
-        if (frame == null) return false;
-        if (!NativeInterface.arwAcceptVideoImage(frame, frameWidth, frameHeight, cameraIndex, cameraIsFrontFacing))
+        if ((!isNativeInited()) || (frame == null)) {
             return false;
-        if (!NativeInterface.arwCapture()) return false;
+        }
+
+        if (NativeInterface.arwAndroidVideoPush1(0, frame, frameSize) < 0) {
+            return false;
+        }
+        //noinspection SimplifiableIfStatement
+        if (!NativeInterface.arwCapture()) {
+            return false;
+        }
         return NativeInterface.arwUpdateAR();
     }
 
     /**
-     * Instructs the native code to free resources.
+     * Takes an incoming frame from the Android camera and passes it to native
+     * code for conversion and marker detection.
+     *
+     * @param framePlanes New video frame to process.
+     * @return true if successful, otherwise false.
      */
-    public void cleanup() {
+    public boolean convertAndDetect2(ByteBuffer[] framePlanes, int[] framePlanePixelStrides, int[] framePlaneRowStrides) {
+
+        if ((!isNativeInited()) || (framePlanes == null)) {
+            return false;
+        }
+
+        int framePlaneCount = Math.min(framePlanes.length, 4); // Maximum 4 planes can be passed to native.
+        if (framePlaneCount == 1) {
+            if (NativeInterface.arwAndroidVideoPush2(0,
+                    framePlanes[0], framePlanePixelStrides[0], framePlaneRowStrides[0],
+                    null, 0, 0,
+                    null, 0, 0,
+                    null, 0, 0) < 0) {
+                return false;
+            }
+        } else if (framePlaneCount == 2) {
+            if (NativeInterface.arwAndroidVideoPush2(0,
+                    framePlanes[0], framePlanePixelStrides[0], framePlaneRowStrides[0],
+                    framePlanes[1], framePlanePixelStrides[1], framePlaneRowStrides[1],
+                    null, 0, 0,
+                    null, 0, 0) < 0) {
+                return false;
+            }
+        } else if (framePlaneCount == 3) {
+            if (NativeInterface.arwAndroidVideoPush2(0,
+                    framePlanes[0], framePlanePixelStrides[0], framePlaneRowStrides[0],
+                    framePlanes[1], framePlanePixelStrides[1], framePlaneRowStrides[1],
+                    framePlanes[2], framePlanePixelStrides[2], framePlaneRowStrides[2],
+                    null, 0, 0) < 0) {
+               return false;
+            }
+        } else if (framePlaneCount == 4) {
+            if (NativeInterface.arwAndroidVideoPush2(0,
+                    framePlanes[0], framePlanePixelStrides[0], framePlaneRowStrides[0],
+                    framePlanes[1], framePlanePixelStrides[1], framePlaneRowStrides[1],
+                    framePlanes[2], framePlanePixelStrides[2], framePlaneRowStrides[2],
+                    framePlanes[3], framePlanePixelStrides[3], framePlaneRowStrides[3]) < 0) {
+                return false;
+            }
+        }
+        //noinspection SimplifiableIfStatement
+        if (!NativeInterface.arwCapture()) {
+            return false;
+        }
+        return NativeInterface.arwUpdateAR();
+    }
+
+    /**
+     * Stop and final.
+     */
+    public void stopAndFinal() {
 
         if (!initedNative) return;
 
+        NativeInterface.arwAndroidVideoPushFinal(0);
         NativeInterface.arwStopRunning();
         NativeInterface.arwShutdownAR();
 

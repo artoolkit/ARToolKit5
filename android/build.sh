@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 #--------------------------------------------------------------------------
 #
@@ -49,39 +49,82 @@ OURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "${OURDIR}"
 echo "Working from directory \"$PWD\"."
 
+function usage {
+    echo "Usage: $(basename $0) [--debug] [--verbose] [tests] [examples] [clean]"
+    exit 1
+}
+
+# -e = exit on errors
+set -e
+
+# -x = debug
+#set -x
+
+# Parse parameters
+while test $# -gt 0
+do
+    case "$1" in
+		tests) BUILD_TESTS=1
+		    ;;
+		examples) BUILD_EXAMPLES=1
+		    ;;
+		clean) CLEAN=
+		    ;;
+        --debug) DEBUG=
+            ;;
+        --verbose) VERBOSE=
+            ;;
+        --*) echo "bad option $1"
+            usage
+            ;;
+        *) echo "bad argument $1"
+            usage
+            ;;
+    esac
+    shift
+done
+
+
 # Set OS-dependent variables.
 OS=`uname -s`
 ARCH=`uname -m`
 CPUS=
 NDK_BUILD_SCRIPT_FILE_EXT=
-if [[ "$OS" = "Linux" ]]; then
-    echo Building on Linux \(${ARCH}\)
+TAR='/usr/bin/tar'
+if [ "$OS" = "Linux" ]
+then
     CPUS=`/usr/bin/nproc`
-elif [[ "$OS" = "Darwin" ]]; then
-    echo Building on Apple Mac OS X \(${ARCH}\)
-    CPUS=`/usr/sbin/sysctl -n hw.ncpu`
-else #Checking for Windows in a non-cygwin dependent way.
-    WinsOS=
-    if [[ $OS ]]; then
-        WinsVerNum=${OS##*-}
-        if [[ $WinsVerNum = "10.0" || $WinsVerNum = "6.3" ]]; then
-            if [[ $WinsVerNum = "10.0" ]]; then
-                WinsOS="Wins10"
-            else
-                WinsOS="Wins8.1"
-            fi
-            echo Building on Microsoft ${WinsOS} Desktop \(${ARCH}\)
-            export HOST_OS="windows"
-            NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
-            CPUS=`/usr/bin/nproc`
-        fi
+    TAR='/bin/tar'
+    # Identify Linux OS. Sets useful variables: ID, ID_LIKE, VERSION, NAME, PRETTY_NAME.
+    source /etc/os-release
+    # Windows Subsystem for Linux identifies itself as 'Linux'. Additional test required.
+    if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+        OS='Windows'
+        NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
     fi
+elif [ "$OS" = "Darwin" ]
+then
+    CPUS=`/usr/sbin/sysctl -n hw.ncpu`
+elif [ "$OS" = "CYGWIN_NT-6.1" ]
+then
+    # bash on Cygwin.
+    CPUS=`/usr/bin/nproc`
+    OS='Windows'
+    NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
+elif [ "$OS" = "MINGW64_NT-10.0" ]
+then
+    # git-bash on Windows.
+    CPUS=`/usr/bin/nproc`
+    OS='Windows'
+    NDK_BUILD_SCRIPT_FILE_EXT=".cmd"
+else
+    CPUS=1
 fi
 
-if [[ ! $CPUS ]]; then
-    echo **Development platform not supported, exiting script**
-    exit 1
+if [ -n "${CLEAN+set}" ]; then
+    CPUS=1
 fi
+
 
 #
 # Update <AR/config.h> if required.
@@ -97,7 +140,7 @@ fi
 #
 # Build the ARToolKit libraries.
 #
-$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS $1
+$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS ${DEBUG+NDK_DEBUG=1} ${VERBOSE+V=1} ${CLEAN+clean}
 NDK_BLD_RESULT=$?
 if [[ ${NDK_BLD_RESULT} != "0" ]]; then
   echo Exiting ndk-build script abnormally terminated.
@@ -107,7 +150,7 @@ fi
 #
 # Build ARWrapper
 #
-$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk $1
+$NDK/ndk-build$NDK_BUILD_SCRIPT_FILE_EXT -j $CPUS NDK_APPLICATION_MK=jni/Application-ARWrapper.mk ${DEBUG+NDK_DEBUG=1} ${VERBOSE+V=1} ${CLEAN+clean}
 NDK_BLD_RESULT=$?
 if [[ ${NDK_BLD_RESULT} != "0" ]]; then
   echo Exiting ndk-build script abnormally terminated.
@@ -119,7 +162,7 @@ fi
 #
 ARTK_LibsDir=libs
 
-if [[ $1 != "clean" ]] ; then
+if ! [ -n "${CLEAN+set}" ]; then
     JDK_PROJS=" \
         ARSimple \
         ARSimpleInteraction \

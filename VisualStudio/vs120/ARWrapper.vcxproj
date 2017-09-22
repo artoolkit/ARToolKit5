@@ -196,9 +196,7 @@
     <ClCompile Include="..\..\lib\SRC\ARWrapper\ARMarkerSquare.cpp" />
     <ClCompile Include="..\..\lib\SRC\ARWrapper\ARMarkerNFT.cpp" />
     <ClCompile Include="..\..\lib\SRC\ARWrapper\trackingSub.c" />
-    <ClCompile Include="..\..\lib\SRC\ARWrapper\AndroidVideoSource.cpp" />
-    <ClCompile Include="..\..\lib\SRC\ARWrapper\ARToolKitVideoSource.cpp" />
-    <ClCompile Include="..\..\lib\SRC\ARWrapper\VideoSource.cpp" />
+    <ClCompile Include="..\..\lib\SRC\ARWrapper\ARVideoSource.cpp" />
     <ClCompile Include="..\..\lib\SRC\ARWrapper\ColorConversion.cpp" />
     <ClCompile Include="..\..\lib\SRC\ARWrapper\ARController.cpp" />
     <ClCompile Include="..\..\lib\SRC\ARWrapper\AndroidFeatures.cpp" />
@@ -206,16 +204,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\ARWrapper\ARToolKitWrapperExportedAPI.h" />
     <ClInclude Include="..\..\include\ARWrapper\Error.h" />
-    <ClInclude Include="..\..\include\ARWrapper\Image.h" />
     <ClInclude Include="..\..\include\ARWrapper\Platform.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARMarker.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARPattern.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARMarkerMulti.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARMarkerSquare.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARMarkerNFT.h" />
-    <ClInclude Include="..\..\include\ARWrapper\AndroidVideoSource.h" />
-    <ClInclude Include="..\..\include\ARWrapper\ARToolKitVideoSource.h" />
-    <ClInclude Include="..\..\include\ARWrapper\VideoSource.h" />
+    <ClInclude Include="..\..\include\ARWrapper\ARVideoSource.h" />
     <ClInclude Include="..\..\include\ARWrapper\ColorConversion.h" />
     <ClInclude Include="..\..\include\ARWrapper\ARController.h" />
     <ClInclude Include="..\..\include\ARWrapper\AndroidFeatures.h" />

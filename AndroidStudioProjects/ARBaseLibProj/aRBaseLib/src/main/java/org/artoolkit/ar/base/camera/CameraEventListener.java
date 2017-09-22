@@ -60,7 +60,7 @@ public interface CameraEventListener {
      *
      * @param frame A byte array from the camera, in the camera's capture format.
      */
-    public void cameraPreviewFrame(byte[] frame);
+    public void cameraPreviewFrame(byte[] frame, int frameSize);
 
     /**
      * Called when the capture preview is stopped. No new frames will be sent.
