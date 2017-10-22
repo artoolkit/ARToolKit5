@@ -194,6 +194,7 @@ ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *p
     arMalloc(marker_info, ARMultiMarkerInfoT, 1);
     marker_info->marker     = marker;
     marker_info->marker_num = num;
+    marker_info->min_submarker = 0;
     marker_info->prevF      = 0;
     if( (patt_type & 0x03) == 0x03 ) marker_info->patt_type = AR_MULTI_PATTERN_DETECTION_MODE_TEMPLATE_AND_MATRIX;
     else if( patt_type & 0x01 )    marker_info->patt_type = AR_MULTI_PATTERN_DETECTION_MODE_TEMPLATE;
