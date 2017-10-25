@@ -121,8 +121,8 @@
         }
         if (scale) {
             _scale[0] = scale[0];
-            _scale[1] = scale[2];
-            _scale[2] = scale[3];
+            _scale[1] = scale[1];
+            _scale[2] = scale[2];
         } else {
             _scale[0] = 1.0f;
             _scale[1] = 1.0f;
