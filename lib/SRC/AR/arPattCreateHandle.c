@@ -90,13 +90,20 @@ int arPattDeleteHandle(ARPattHandle *pattHandle)
 	
 	if (pattHandle == NULL) return (-1);
 	
-    for (i = 0; i < pattHandle->patt_num_max; i++) {
+    	for (i = 0; i < pattHandle->patt_num_max; i++) {
 		if (pattHandle->pattf[i] != 0) arPattFree(pattHandle, i);
-        for (j = 0; j < 4; j++) {
-            free(pattHandle->patt[i*4 + j]);
-            free(pattHandle->pattBW[i*4 + j]);
-        }
+        	for (j = 0; j < 4; j++) {
+            		free(pattHandle->patt[i*4 + j]);
+            		free(pattHandle->pattBW[i*4 + j]);
+		}
 	}
+	
+	free(pattHandle->patt);
+	free(pattHandle->pattBW);
+	free(pattHandle->pattf);
+	free(pattHandle->pattpow);
+	free(pattHandle->pattpowBW);
+	
 	free(pattHandle);
 	pattHandle = NULL;
 	
