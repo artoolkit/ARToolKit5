@@ -88,6 +88,7 @@ static ARGViewportHandle *vp = NULL;
 static AR_PIXEL_FORMAT  pixFormat = AR_PIXEL_FORMAT_INVALID;
 static float            dpi = -1.0f;
 static char            *inputFilePath = NULL;
+static ARVideoLumaInfo *lumaInfo = NULL;
 static ARdouble         pattRatio = (ARdouble)(AR_PATT_RATIO);
 static int              gPattSize = AR_PATT_SIZE1;
 static ARParam          cparam;
@@ -115,8 +116,8 @@ static void pixel2mm( float px, float py, float *mx, float *my );
 //static void mm2pixel( float mx, float my, float *px, float *py );
 static void print(const char *text, const float x, const float y, int calculateXFromRightEdge, int calculateYFromTopEdge);
 static void drawBackground(const float width, const float height, const float x, const float y);
-static void printHelpKeys();
-static void printMode();
+static void printHelpKeys(void);
+static void printMode(void);
 
 int main( int argc, char *argv[] )
 {
@@ -279,7 +280,7 @@ static int init( int argc, char *argv[] )
         if (pixFormat == AR_PIXEL_FORMAT_MONO) {
             buff.buffLuma = buff.buff;
         } else {
-            ARVideoLumaInfo *lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
+            lumaInfo = arVideoLumaInit(xsize, ysize, pixFormat);
             if (!lumaInfo) {
                 ARLOGe("Error: unable to initialise luma conversion.\n");
                 ar2FreeJpegImage(&jpegImage);
@@ -287,7 +288,6 @@ static int init( int argc, char *argv[] )
                 EXIT(E_INPUT_DATA_ERROR);
             }
             buff.buffLuma = arVideoLuma(lumaInfo, buff.buff);
-            arVideoLumaFinal(&lumaInfo);
         }
 
     } else {
@@ -358,6 +358,10 @@ static void cleanup(void)
         gMarkerWidths = NULL;
     }
     argCleanup();
+    if (lumaInfo) {
+        arVideoLumaFinal(&lumaInfo);
+        lumaInfo = NULL;
+    }
     ar2FreeImageSet(&imageSet);
     ar2FreeJpegImage(&jpegImage);
     free(inputFilePath);
