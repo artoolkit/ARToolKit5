@@ -1,5 +1,5 @@
 /*
- *  videoLinuxV4L2.h
+ *  videoV4L2.h
  *  ARToolKit5
  *
  *  This file is part of ARToolKit.

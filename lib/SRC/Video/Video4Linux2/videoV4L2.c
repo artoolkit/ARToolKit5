@@ -59,31 +59,25 @@
 #include <stdio.h> // asprintf()
 #include <stdlib.h>
 #include <stdbool.h>
-#include <pthread.h>
 #include <string.h> // memset()
 #include <errno.h>
 #include <linux/types.h>
 #include <linux/videodev2.h>
-#include <linux/types.h>
-#include <linux/videodev2.h>
 #include <libudev.h>
 #include "../cparamSearch.h"
+#include <AR/videoRGBA.h>
 
 #define   AR2VIDEO_V4L2_STATUS_IDLE    0
 #define   AR2VIDEO_V4L2_STATUS_RUN     1
 #define   AR2VIDEO_V4L2_STATUS_STOP    2
 
-typedef struct {
-    AR2VideoBufferT     in;
-    AR2VideoBufferT     wait;
-    AR2VideoBufferT     out;
-    pthread_mutex_t     mutex;
-} AR2VideoBufferV4L2T;
+//#define AR2VIDEO_V4L2_NONBLOCKING
+//#define AR2VIDEO_V4L2_DEBUG
 
-struct buffer_ar_v4l2 {
-    ARUint8   *start;
+typedef struct {
+    uint8_t  *ptr;
     size_t    length;
-};
+} AR2VideoInternalBufferSetV4LT;
 
 struct _AR2VideoParamV4L2T {
     char                   dev[MAXPATHLEN];
@@ -91,7 +85,7 @@ struct _AR2VideoParamV4L2T {
     int                    height;
     int                    channel;
     int                    mode;
-    AR_PIXEL_FORMAT        format;
+    int                    field;
     int                    debug;
     int                    palette;
     int                    saturation;
@@ -107,56 +101,80 @@ struct _AR2VideoParamV4L2T {
     int                    fd;
     int                    status;
     int                    video_cont_num;
-    ARUint8                *videoBuffer;
-
-    pthread_t              capture;
-    AR2VideoBufferV4L2T    buffer;
     
-    struct buffer_ar_v4l2 *buffers;
-    int                    n_buffers;
+    AR2VideoInternalBufferSetV4LT *internalBufferSet;
+    int                    internalBufferCount;
+    AR_PIXEL_FORMAT        format;
+    AR2VideoBufferT        buffer;
+    AR_PIXEL_FORMAT        formatConverted;
+    AR2VideoBufferT        bufferConverted;
     
     void                 (*cparamSearchCallback)(const ARParam *, void *);
     void                  *cparamSearchUserdata;
     char                  *device_id;
 };
 
-// V4L2 code from https://gist.github.com/jayrambhia/5866483
 static int xioctl(int fd, int request, void *arg)
 {
     int r;
-    do r = ioctl(fd, request, arg);
-    while (-1 == r && EINTR == errno);
-    return r;
+
+    do {
+        r = ioctl(fd, request, arg);
+    } while (r == -1 && ((errno == EINTR)
+#ifdef AR2VIDEO_V4L2_NONBLOCKING
+                         || (errno == EAGAIN)
+#endif
+                         ));
+    if (r == -1) {
+        ARLOGperror("ioctl error");
+    }
+    return (r);
 }
 
 #define MAXCHANNEL   10
 
-static void printPalette(int p)
+static void printPalette(const char *tag, int p)
 {
+    const char *s;
+
     switch (p) {
-        //YUV formats
-        case (V4L2_PIX_FMT_GREY): ARLOGi("  Pix Fmt: Grey\n"); break;
-        case (V4L2_PIX_FMT_YUYV): ARLOGi("  Pix Fmt: YUYV\n"); break;
-        case (V4L2_PIX_FMT_UYVY): ARLOGi("  Pix Fmt: UYVY\n"); break;
-        case (V4L2_PIX_FMT_Y41P): ARLOGi("  Pix Fmt: Y41P\n"); break;
-        case (V4L2_PIX_FMT_YVU420): ARLOGi("  Pix Fmt: YVU420\n"); break;
-        case (V4L2_PIX_FMT_YVU410): ARLOGi("  Pix Fmt: YVU410\n"); break;
-        case (V4L2_PIX_FMT_YUV422P): ARLOGi("  Pix Fmt: YUV422P\n"); break;
-        case (V4L2_PIX_FMT_YUV411P): ARLOGi("  Pix Fmt: YUV411P\n"); break;
-        case (V4L2_PIX_FMT_NV12): ARLOGi("  Pix Fmt: NV12\n"); break;
-        case (V4L2_PIX_FMT_NV21): ARLOGi("  Pix Fmt: NV21\n"); break;
+        // YUV formats.
+        case (V4L2_PIX_FMT_GREY): s = "GREY"; break;
+        case (V4L2_PIX_FMT_YUYV): s = "YUYV"; break;
+        case (V4L2_PIX_FMT_UYVY): s = "UYVY"; break;
+        case (V4L2_PIX_FMT_Y41P): s = "Y41P"; break;
+        case (V4L2_PIX_FMT_YVU420): s = "YVU420"; break;
+        case (V4L2_PIX_FMT_YVU410): s = "YVU410"; break;
+        case (V4L2_PIX_FMT_YUV422P): s = "YUV422P"; break;
+        case (V4L2_PIX_FMT_YUV411P): s = "YUV411P"; break;
+        case (V4L2_PIX_FMT_NV12): s = "NV12"; break;
+        case (V4L2_PIX_FMT_NV21): s = "NV21"; break;
         // RGB formats
-        case (V4L2_PIX_FMT_RGB332): ARLOGi("  Pix Fmt: RGB332\n"); break;
-        case (V4L2_PIX_FMT_RGB555): ARLOGi("  Pix Fmt: RGB555\n"); break;
-        case (V4L2_PIX_FMT_RGB565): ARLOGi("  Pix Fmt: RGB565\n"); break;
-        case (V4L2_PIX_FMT_RGB555X): ARLOGi("  Pix Fmt: RGB555X\n"); break;
-        case (V4L2_PIX_FMT_RGB565X): ARLOGi("  Pix Fmt: RGB565X\n"); break;
-        case (V4L2_PIX_FMT_BGR24): ARLOGi("  Pix Fmt: BGR24\n"); break;
-        case (V4L2_PIX_FMT_RGB24): ARLOGi("  Pix Fmt: RGB24\n"); break;
-        case (V4L2_PIX_FMT_BGR32): ARLOGi("  Pix Fmt: BGR32\n"); break;
-        case (V4L2_PIX_FMT_RGB32): ARLOGi("  Pix Fmt: RGB32\n"); break;
+        case (V4L2_PIX_FMT_RGB332): s = "RGB332"; break;
+        case (V4L2_PIX_FMT_ARGB444): s = "ARGB444"; break;
+        case (V4L2_PIX_FMT_XRGB444): s = "XRGB444"; break;
+        case (V4L2_PIX_FMT_ARGB555): s = "ARGB555"; break;
+        case (V4L2_PIX_FMT_XRGB555): s = "XRGB555"; break;
+        case (V4L2_PIX_FMT_RGB565): s = "RGB565"; break;
+        case (V4L2_PIX_FMT_ARGB555X): s = "ARGB555X"; break;
+        case (V4L2_PIX_FMT_XRGB555X): s = "XRGB555X"; break;
+        case (V4L2_PIX_FMT_RGB565X): s = "RGB565X"; break;
+        case (V4L2_PIX_FMT_BGR24): s = "BGR24"; break;
+        case (V4L2_PIX_FMT_RGB24): s = "RGB24"; break;
+        case (V4L2_PIX_FMT_BGR666): s = "BGR666"; break;
+        case (V4L2_PIX_FMT_ABGR32): s = "ABGR32"; break;
+        case (V4L2_PIX_FMT_XBGR32): s = "XBGR32"; break;
+        case (V4L2_PIX_FMT_ARGB32): s = "ARGB32"; break;
+        case (V4L2_PIX_FMT_XRGB32): s = "XRGB32"; break;
+        // Deprecated formats.
+        case (V4L2_PIX_FMT_RGB444): s = "RGB444"; break;
+        case (V4L2_PIX_FMT_RGB555): s = "RGB555"; break;
+        case (V4L2_PIX_FMT_RGB555X): s = "RGB555X"; break;
+        case (V4L2_PIX_FMT_BGR32): s = "BGR32"; break;
+        case (V4L2_PIX_FMT_RGB32): s = "RGB32"; break;
+        default:  s = "Unknown"; break;
     };
-    
+    ARLOGi("%s%s\n", (tag ? tag : ""), s);
 }
 
 static int getControl(int fd, int type, int *value)
@@ -242,10 +260,13 @@ int ar2VideoDispOptionV4L2(void)
     ARLOG("    specifies expected width of image.\n");
     ARLOG(" -height=N\n");
     ARLOG("    specifies expected height of image.\n");
-    ARLOG(" -palette=[GREY|HI240|RGB565|RGB555|BGR24|BGR32|YUYV|UYVY|\n");
-    ARLOG("    Y41P|YUV422P|YUV411P|YVU420|YVU410]\n");
+    ARLOG(" -palette=[BGR32|ABGR32|RGB32|ARGB32|BGR24|RGB24|GREY\n");
+    ARLOG("           YUYV|UYV|NV12|NV21|RGB565X]\n");
     ARLOG("    specifies the camera palette (WARNING: not all options are supported by\n");
     ARLOG("    every camera).\n");
+    ARLOG(" -format=[0|BGRA|RGBA].\n");
+    ARLOG("    Specifies the pixel format to convert output images to.\n");
+    ARLOG("    0=Don't convert.\n");
     ARLOG("IMAGE CONTROLS (WARNING: not all options are not supported by every camera):\n");
     ARLOG(" -brightness=N\n");
     ARLOG("    specifies brightness. (0.0 <-> 1.0)\n");
@@ -309,11 +330,11 @@ ARVideoSourceInfoListT *ar2VideoCreateSourceInfoListV4L2(const char *config_in)
     udev_list_entry_foreach(dev_list_entry, devices) {
         
         const char *path = udev_list_entry_get_name(dev_list_entry);
-        //ARLOGd("System Name: %s\n", path);                         // e.g. '/sys/devices/pci0000:00/0000:00:1d.7/usb1/1-1/1-1:1.0/video4linux/video0'
-		dev = udev_device_new_from_syspath(udev, path);
-		//ARLOGd("Device Node: %s\n", udev_device_get_devnode(dev)); // e.g. '/dev/video0'
-		//ARLOGd("System Name: %s\n", udev_device_get_sysname(dev)); // e.g. 'video0'
-		//ARLOGd("Device Path: %s\n", udev_device_get_devpath(dev)); // e.g. '/devices/pci0000:00/0000:00:1d.7/usb1/1-1/1-1:1.0/video4linux/video0'
+        //ARLOGd("System Path: %s\n", path);                         // e.g. '/sys/devices/pci0000:00/0000:00:1d.7/usb1/1-1/1-1:1.0/video4linux/video0'
+        dev = udev_device_new_from_syspath(udev, path);
+        //ARLOGd("Device Node: %s\n", udev_device_get_devnode(dev)); // e.g. '/dev/video0'
+        //ARLOGd("System Name: %s\n", udev_device_get_sysname(dev)); // e.g. 'video0'
+        //ARLOGd("Device Path: %s\n", udev_device_get_devpath(dev)); // e.g. '/devices/pci0000:00/0000:00:1d.7/usb1/1-1/1-1:1.0/video4linux/video0'
 
         sil->info[i].flags |= AR_VIDEO_POSITION_UNKNOWN;
         //sil->info[i].flags |= AR_VIDEO_SOURCE_INFO_FLAG_OPEN_ASYNC; // If we require async opening.
@@ -374,7 +395,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     vid->height     = AR_VIDEO_V4L2_DEFAULT_HEIGHT;
     vid->channel    = AR_VIDEO_V4L2_DEFAULT_CHANNEL;
     vid->mode       = AR_VIDEO_V4L2_DEFAULT_MODE;
-    vid->format     = ARVIDEO_INPUT_V4L2_DEFAULT_PIXEL_FORMAT;
+    vid->field = V4L2_FIELD_ANY;
     vid->palette = V4L2_PIX_FMT_YUYV;     /* palette format */
     vid->contrast   = -1;
     vid->brightness = -1;
@@ -385,7 +406,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     vid->gain  = 1;
     //vid->debug      = 0;
     vid->debug      = 1;
-    vid->videoBuffer = NULL;
+    vid->formatConverted = AR_VIDEO_V4L2_DEFAULT_FORMAT_CONVERSION;
     
     a = config;
     if (a != NULL) {
@@ -412,37 +433,50 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
                     err_i = 1;
                 }
             } else if (strncmp(a, "-palette=", 9) == 0) {
-                if (strncmp(&a[9], "GREY", 4) == 0) {
-                    vid->palette = V4L2_PIX_FMT_GREY;
-                } else if (strncmp(&a[9], "HI240", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_HI240;
-                } else if (strncmp(&a[9], "RGB565", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_RGB565;
-                } else if (strncmp(&a[9], "RGB555", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_RGB555;
-                } else if (strncmp(&a[9], "BGR24", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_BGR24;
-                } else if (strncmp(&a[9], "BGR32", 3) == 0) {
+                if (strcmp(&line[9], "BGR32") == 0) { // deprecated
                     vid->palette = V4L2_PIX_FMT_BGR32;
-                } else if (strncmp(&a[9], "YUYV", 3) == 0) {
+                } else if (strcmp(&line[9], "ABGR32") == 0) {
+                    vid->palette = V4L2_PIX_FMT_ABGR32;
+                } else if (strcmp(&line[9], "RGB32") == 0) {  // deprecated
+                    vid->palette = V4L2_PIX_FMT_RGB32;
+                } else if (strcmp(&line[9], "ARGB32") == 0) {
+                    vid->palette = V4L2_PIX_FMT_ARGB32;
+                } else if (strcmp(&line[9], "BGR24") == 0) {
+                    vid->palette = V4L2_PIX_FMT_BGR24;
+                } else if (strcmp(&line[9], "RGB24") == 0) {
+                    vid->palette = V4L2_PIX_FMT_RGB24;
+                } else if (strcmp(&line[9], "GREY") == 0) {
+                    vid->palette = V4L2_PIX_FMT_GREY;
+                } else if (strcmp(&line[9], "YUYV") == 0) {
                     vid->palette = V4L2_PIX_FMT_YUYV;
-                } else if (strncmp(&a[9], "UYVY", 3) == 0) {
+                } else if (strcmp(&line[9], "UYVY") == 0) {
                     vid->palette = V4L2_PIX_FMT_UYVY;
-                } else if (strncmp(&a[9], "Y41P", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_Y41P;
-                } else if (strncmp(&a[9], "YUV422P", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_YUV422P;
-                } else if (strncmp(&a[9], "YUV411P", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_YUV411P;
-                } else if (strncmp(&a[9], "YVU420", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_YVU420;
-                } else if (strncmp(&a[9], "YVU410", 3) == 0) {
-                    vid->palette = V4L2_PIX_FMT_YVU410;
+                } else if (strcmp(&line[9], "NV12") == 0) {
+                    vid->palette = V4L2_PIX_FMT_NV12;
+                } else if (strcmp(&line[9], "NV21") == 0) {
+                    vid->palette = V4L2_PIX_FMT_NV21;
+                } else if (strcmp(&line[9], "RGB565X") == 0) {
+                    vid->palette = V4L2_PIX_FMT_RGB565X;
+                } else {
+                    ARLOGe("Request for a palette format '%s' unsupported by ARToolKit.\n", &line[9]);
+                    err_i = 1;
+                }
+            } else if (strncmp(line, "-format=", 8) == 0) {
+                if (strcmp(line+8, "0") == 0) {
+                    vid->formatConverted = AR_PIXEL_FORMAT_INVALID;
+                    ARLOGi("Requesting images in system default format.\n");
+                } else if (strcmp(line+8, "RGBA") == 0) {
+                    vid->formatConverted = AR_PIXEL_FORMAT_RGBA;
+                    ARLOGi("Requesting images in RGBA format.\n");
+                } else if (strcmp(line+8, "BGRA") == 0) {
+                    vid->formatConverted = AR_PIXEL_FORMAT_BGRA;
+                    ARLOGi("Requesting images in BGRA format.\n");
+                } else {
+                    ARLOGe("Ignoring unsupported request for conversion to video format '%s'.\n", line+8);
                 }
             } else if (strncmp(a, "-contrast=", 10) == 0) {
                 if (sscanf(&line[10], "%d", &vid->contrast) == 0) {
                     err_i = 1;
-                    goto bail;
                 }
             } else if (strncmp(a, "-brightness=", 12) == 0) {
                 if (sscanf(&line[12], "%d", &vid->brightness) == 0) {
@@ -473,6 +507,10 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
                 else if (strncmp(&a[6], "NTSC", 4) == 0)  vid->mode = V4L2_STD_NTSC;
                 else if (strncmp(&a[6], "SECAM", 5) == 0) vid->mode = V4L2_STD_SECAM;
                 else {
+                    err_i = 1;
+                }
+            } else if (strncmp(a, "-field=", 7) == 0) {
+                if (sscanf(&line[7], "%d", &vid->field) == 0) {
                     err_i = 1;
                 }
             } else if (strcmp(line, "-debug") == 0) {
@@ -531,7 +569,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
             }
             
             if (err_i) {
-				ARLOGe("Error: Unrecognised configuration option '%s'.\n", a);
+                ARLOGe("Error: Unrecognised configuration option '%s'.\n", a);
                 ar2VideoDispOptionV4L2();
                 goto bail;
 			}
@@ -541,7 +579,7 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     }
     
 #if USE_CPARAM_SEARCH
-	// Initialisation required before cparamSearch can be used.
+    // Initialisation required before cparamSearch can be used.
     if (!cacheDir) {
         cacheDir = arUtilGetResourcesDirectoryPath(AR_UTIL_RESOURCES_DIRECTORY_BEHAVIOR_USE_APP_CACHE_DIR);
     }
@@ -558,13 +596,17 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     free(cacheInitDir);
     cacheInitDir = NULL;
 
-    vid->fd = open(vid->dev, O_RDWR);// O_RDONLY ?
+    vid->fd = open(vid->dev, O_RDWR
+#ifdef AR2VIDEO_V4L2_NONBLOCKING
+                   | O_NONBLOCK
+#endif
+                   );
     if (vid->fd < 0) {
-        ARLOGe("video device (%s) open failed\n",vid->dev);
+        ARLOGe("video device (%s) open failed\n", vid->dev);
         goto bail;
     }
     
-    if (xioctl(vid->fd,VIDIOC_QUERYCAP, &vd) < 0) {
+    if (xioctl(vid->fd, VIDIOC_QUERYCAP, &vd) < 0) {
         ARLOGe("xioctl failed\n");
         goto bail1;
     }
@@ -608,8 +650,8 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
             if (!dev) {
                 ARLOGe("Unable to locate udev video4linux device '%s'.\n", sysname);
             } else {
-                //const char *name = udev_device_get_sysattr_value(dev, "name");
-                //ARLOGd("name: %s\n", name); // e.g. 'Logitech Camera'
+                ARLOGd("Device Path: %s\n", udev_device_get_devpath(dev)); // e.g. '/devices/pci0000:00/0000:00:1d.7/usb1/1-1/1-1:1.0/video4linux/video0'
+                ARLOGd("Device Name: %s\n", udev_device_get_sysattr_value(dev, "name")); // e.g. 'Logitech Camera'
                 struct udev_device *dev_parent = udev_device_get_parent_with_subsystem_devtype(dev, "usb", "usb_device");
                 if (dev_parent) {
                     //char *UID = strdup(udev_device_get_sysattr_value(dev_parent, "serial"));
@@ -636,40 +678,84 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     memset(&fmt, 0, sizeof(fmt));
     
     fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-#if 1
     fmt.fmt.pix.width       = vid->width;
     fmt.fmt.pix.height      = vid->height;
     fmt.fmt.pix.pixelformat = vid->palette;
-    fmt.fmt.pix.field       = V4L2_FIELD_NONE;
-#else
-    fmt.fmt.pix.width       = 640;
-    fmt.fmt.pix.height      = 480;
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
-    fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
-#endif
+    fmt.fmt.pix.field       = vid->field;
     
     if (xioctl (vid->fd, VIDIOC_S_FMT, &fmt) < 0) {
-        ARLOGe("ar2VideoOpen: Error setting video format (%d)\n", errno);
+        ARLOGe("ar2VideoOpen: Error setting video format.\n");
+        ARLOGperror(NULL); // EINVAL -> Requested buffer type is not supported drivers. EBUSY -> I/O is already in progress or the resource is not available for other reasons.
         goto bail1;
     }
     
-    // Get actual camera settings
+    if (vid->debug) {
+        if (vid->width != fmt.fmt.pix.width) {
+            ARLOGi("  Width requested: %d\n", vid->width);
+            ARLOGi("  Width chosen:    %d\n", fmt.fmt.pix.width);
+        } else {
+            ARLOGi("  Width: %d\n", fmt.fmt.pix.width);
+        }
+        if (vid->height != fmt.fmt.pix.height) {
+            ARLOGi("  Height requested: %d\n", vid->height);
+            ARLOGi("  Height chosen:    %d\n", fmt.fmt.pix.height);
+        } else {
+            ARLOGi("  Height: %d\n", fmt.fmt.pix.height);
+        }
+        if (vid->palette != fmt.fmt.pix.pixelformat) {
+            printPalette("  Palette requested: ", vid->palette);
+            printPalette("  Palette chosen:    ", fmt.fmt.pix.pixelformat);
+            vid->palette = fmt.fmt.pix.pixelformat;
+        } else {
+            printPalette("  Palette: ", fmt.fmt.pix.pixelformat);
+        }
+    }
+    // Get actual camera settings.
     vid->palette = fmt.fmt.pix.pixelformat;
     vid->width = fmt.fmt.pix.width;
     vid->height = fmt.fmt.pix.height;
     
-    if (vid->debug) {
-        ARLOGi("  Width: %d\n", fmt.fmt.pix.width);
-        ARLOGi("  Height: %d\n", fmt.fmt.pix.height);
-        printPalette(fmt.fmt.pix.pixelformat);
+    // Determine format and setup buffer.
+    switch (vid->palette) {
+#ifdef AR_LITTLE_ENDIAN
+        case (V4L2_PIX_FMT_BGR32): // deprecated
+        case (V4L2_PIX_FMT_ABGR32): vid->format = AR_PIXEL_FORMAT_ARGB; break;
+        case (V4L2_PIX_FMT_RGB32): // deprecated
+        case (V4L2_PIX_FMT_ARGB32): vid->format = AR_PIXEL_FORMAT_BGRA; break;
+#else
+        case (V4L2_PIX_FMT_BGR32): // deprecated
+        case (V4L2_PIX_FMT_ABGR32): vid->format = AR_PIXEL_FORMAT_BGRA; break;
+        case (V4L2_PIX_FMT_RGB32): // deprecated
+        case (V4L2_PIX_FMT_ARGB32): vid->format = AR_PIXEL_FORMAT_ARGB; break;
+#endif
+        case (V4L2_PIX_FMT_BGR24): vid->format = AR_PIXEL_FORMAT_BGR; break;
+        case (V4L2_PIX_FMT_RGB24): vid->format = AR_PIXEL_FORMAT_RGB; break;
+        case (V4L2_PIX_FMT_GREY): vid->format = AR_PIXEL_FORMAT_MONO; break;
+        case (V4L2_PIX_FMT_YUYV): vid->format = AR_PIXEL_FORMAT_yuvs; break;    // https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/pixfmt-yuyv.html
+        case (V4L2_PIX_FMT_UYVY): vid->format = AR_PIXEL_FORMAT_2vuy; break;    // https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/pixfmt-uyvy.html
+        case (V4L2_PIX_FMT_NV12): vid->format = AR_PIXEL_FORMAT_420f; break;    // https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/pixfmt-nv12.html
+        case (V4L2_PIX_FMT_NV21): vid->format = AR_PIXEL_FORMAT_NV21; break;    // https://www.kernel.org/doc/html/v4.10/media/uapi/v4l/pixfmt-nv12.html
+        case (V4L2_PIX_FMT_RGB565X): vid->format = AR_PIXEL_FORMAT_RGB_565; break;
+        default: vid->format = AR_PIXEL_FORMAT_INVALID; break;
     }
-    
-    memset(&ipt, 0, sizeof(ipt));
-    
+    if (vid->format == AR_PIXEL_FORMAT_INVALID) {
+        ARLOGe("Driver chose palette format unsupported by ARToolKit.\n");
+        goto bail1;
+    }
+    if (vid->format == AR_PIXEL_FORMAT_420f || vid->format == AR_PIXEL_FORMAT_NV21) {
+        vid->buffer.bufPlaneCount = 2;
+        vid->buffer.bufPlanes = (ARUint8 **)calloc(vid->buffer.bufPlaneCount, sizeof(ARUint8 *));
+        if (!vid->buffer.bufPlanes) {
+            ARLOGe("Out of memory!\n");
+            goto bail1;
+        }
+    }
+
+    memset(&ipt, 0, sizeof(ipt));    
     ipt.index = vid->channel;
     ipt.std = vid->mode;
     
-    if (xioctl(vid->fd,VIDIOC_ENUMINPUT,&ipt) < 0) {
+    if (xioctl(vid->fd, VIDIOC_ENUMINPUT, &ipt) < 0) {
         ARLOGe("arVideoOpen: Error querying input device type\n");
         goto bail1;
     }
@@ -677,9 +763,10 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
     if (vid->debug) {
         if (ipt.type == V4L2_INPUT_TYPE_TUNER) {
             ARLOGi("  Type: Tuner\n");
-        }
-        if (ipt.type == V4L2_INPUT_TYPE_CAMERA) {
+        } else if (ipt.type == V4L2_INPUT_TYPE_CAMERA) {
             ARLOGi("  Type: Camera\n");
+        } else {
+            ARLOGi("  Type: Unknown\n");
         }
     }
     
@@ -723,12 +810,16 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
         }
     }
     
-    //    if (vid->palette==V4L2_PIX_FMT_YUYV)
-#if defined(AR_PIX_FORMAT_BGRA)
-    arMalloc(vid->videoBuffer, ARUint8, vid->width*vid->height*4);
-#else
-    arMalloc(vid->videoBuffer, ARUint8, vid->width*vid->height*3);
-#endif
+    // If the user requested a pixel format conversion, allocate a buffer for that.
+    if (vid->formatConverted != AR_PIXEL_FORMAT_INVALID) {
+        if (vid->formatConverted == AR_PIXEL_FORMAT_RGBA || vid->formatConverted == AR_PIXEL_FORMAT_BGRA) {
+            arMalloc(vid->bufferConverted.buff, ARUint8, vid->width*vid->height*4);
+        } else {
+            ARLOGe("Request for conversion to unsupported pixel format %s.\n", arVideoUtilGetPixelFormatName(vid->formatConverted));
+            goto bail1;
+        }
+    }
+
     // Setup memory mapping
     memset(&req, 0, sizeof(req));
     req.count = 2;
@@ -746,58 +837,64 @@ AR2VideoParamV4L2T *ar2VideoOpenV4L2(const char *config)
         goto bail2;
     }
     
-    vid->buffers = (struct buffer_ar_v4l2 *)calloc(req.count , sizeof(*vid->buffers));
-    
-    if (vid->buffers == NULL) {
+    vid->internalBufferSet = (AR2VideoInternalBufferSetV4LT *)calloc(req.count , sizeof(AR2VideoInternalBufferSetV4LT));
+    if (!vid->internalBufferSet) {
         ARLOGe("ar2VideoOpen: Error allocating buffer memory\n");
         goto bail2;
     }
-    
-    for (vid->n_buffers = 0; vid->n_buffers < req.count; ++vid->n_buffers) {
+    for (i = 0; i < req.count; i++) {
         struct v4l2_buffer buf;
         memset(&buf, 0, sizeof(buf));
         buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         buf.memory      = V4L2_MEMORY_MMAP;
-        buf.index       = vid->n_buffers;
+        buf.index       = i;
         
         if (xioctl(vid->fd, VIDIOC_QUERYBUF, &buf)) {
             ARLOGe("error VIDIOC_QUERYBUF\n");
             goto bail2;
         }
         
-        vid->buffers[vid->n_buffers].length = buf.length;
-        vid->buffers[vid->n_buffers].start =
-        mmap (NULL /* start anywhere */,
-              buf.length,
-              PROT_READ | PROT_WRITE /* required */,
-              MAP_SHARED /* recommended */,
-              vid->fd, buf.m.offset);
-        
-        if (MAP_FAILED == vid->buffers[vid->n_buffers].start) {
-            ARLOGe("Error mmap\n");
+        // Keep our own record of the mapped region.
+        vid->internalBufferSet[i].length = buf.length;
+        vid->internalBufferSet[i].ptr = (uint8_t *)mmap(NULL /* start anywhere */,
+                                                        buf.length,
+                                                        PROT_READ | PROT_WRITE /* required */,
+                                                        MAP_SHARED /* recommended */,
+                                                        vid->fd, buf.m.offset);
+        if (vid->internalBufferSet[i].ptr == MAP_FAILED) {
+            ARLOGperror("mmap error");
             goto bail2;
         }
     }
+    vid->internalBufferCount = i;
     
     vid->video_cont_num = -1;
     
     return vid;
 
 bail2:
-    free(vid->videoBuffer);
+    free(vid->bufferConverted.buff);
 bail1:
     close(vid->fd);
 bail:
+    free(vid->buffer.bufPlanes);
     free(vid);
     return (NULL);
 }
 
 int ar2VideoCloseV4L2(AR2VideoParamV4L2T *vid)
 {
+    int i;
+
     if (vid->video_cont_num >= 0) {
         ar2VideoCapStopV4L2(vid);
     }
-    free(vid->videoBuffer);
+    
+    for (i = 0; i < vid->internalBufferCount; i++) {
+        munmap(vid->internalBufferSet[i].ptr, vid->internalBufferSet[i].length);
+    }
+    
+    free(vid->bufferConverted.buff);
     close(vid->fd);
 
 #if USE_CPARAM_SEARCH
@@ -806,6 +903,7 @@ int ar2VideoCloseV4L2(AR2VideoParamV4L2T *vid)
     }
 #endif
 
+    free(vid->buffer.bufPlanes);
     free(vid);
     
     return 0;
@@ -835,7 +933,8 @@ AR_PIXEL_FORMAT ar2VideoGetPixelFormatV4L2(AR2VideoParamV4L2T *vid)
 {
     if (!vid) return AR_PIXEL_FORMAT_INVALID;
     
-    return vid->format;
+    if (vid->formatConverted != AR_PIXEL_FORMAT_INVALID) return (vid->formatConverted);
+    else return (vid->format);
 }
 
 int ar2VideoCapStartV4L2(AR2VideoParamV4L2T *vid)
@@ -851,7 +950,7 @@ int ar2VideoCapStartV4L2(AR2VideoParamV4L2T *vid)
     
     vid->video_cont_num = 0;
     
-    for (i = 0; i < vid->n_buffers; ++i) {
+    for (i = 0; i < vid->internalBufferCount; ++i) {
         memset(&buf, 0, sizeof(buf));
         buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         buf.memory = V4L2_MEMORY_MMAP;
@@ -893,125 +992,6 @@ int ar2VideoCapStopV4L2(AR2VideoParamV4L2T *vid)
     return 0;
 }
 
-// YUYV, aka YUV422, to RGB
-// from http://pastebin.com/mDcwqJV3
-static inline
-void saturate(int* value, int min_val, int max_val)
-{
-    if (*value < min_val) *value = min_val;
-    else if (*value > max_val) *value = max_val;
-}
-
-// destination format AR_PIX_FORMAT_BGRA
-static void yuyv_to_rgb32(int width, int height, const void *src, void *dst)
-{
-    unsigned char *yuyv_image = (unsigned char*) src;
-    unsigned char *rgb_image = (unsigned char*) dst;
-    const int K1 = (int)(1.402f * (1 << 16));
-    const int K2 = (int)(0.714f * (1 << 16));
-    const int K3 = (int)(0.334f * (1 << 16));
-    const int K4 = (int)(1.772f * (1 << 16));
-    
-    typedef unsigned char T;
-    T* out_ptr = &rgb_image[0];
-    const T a = 0xff;
-    const int pitch = width * 2; // 2 bytes per one YU-YV pixel
-    int x, y;
-    for (y=0; y<height; y++) {
-        const T* src = yuyv_image + pitch * y;
-        for (x=0; x<width*2; x+=4) { // Y1 U Y2 V
-            T Y1 = src[x + 0];
-            T U  = src[x + 1];
-            T Y2 = src[x + 2];
-            T V  = src[x + 3];
-            
-            char uf = U - 128;
-            char vf = V - 128;
-            
-            int R = Y1 + (K1*vf >> 16);
-            int G = Y1 - (K2*vf >> 16) - (K3*uf >> 16);
-            int B = Y1 + (K4*uf >> 16);
-            
-            saturate(&R, 0, 255);
-            saturate(&G, 0, 255);
-            saturate(&B, 0, 255);
-            
-            *out_ptr++ = (T)(B);
-            *out_ptr++ = (T)(G);
-            *out_ptr++ = (T)(R);
-            *out_ptr++ = a;
-            
-            R = Y2 + (K1*vf >> 16);
-            G = Y2 - (K2*vf >> 16) - (K3*uf >> 16);
-            B = Y2 + (K4*uf >> 16);
-            
-            saturate(&R, 0, 255);
-            saturate(&G, 0, 255);
-            saturate(&B, 0, 255);
-            
-            *out_ptr++ = (T)(B);
-            *out_ptr++ = (T)(G);
-            *out_ptr++ = (T)(R);
-            *out_ptr++ = a;
-        }
-        
-    }
-    
-}
-
-// destination format AR_PIX_FORMAT_BGR
-static void yuyv_to_rgb24(int width, int height, const void *src, void *dst)
-{
-    unsigned char *yuyv_image = (unsigned char*) src;
-    unsigned char *rgb_image = (unsigned char*) dst;
-    const int K1 = (int)(1.402f * (1 << 16));
-    const int K2 = (int)(0.714f * (1 << 16));
-    const int K3 = (int)(0.334f * (1 << 16));
-    const int K4 = (int)(1.772f * (1 << 16));
-    
-    typedef unsigned char T;
-    T* out_ptr = &rgb_image[0];
-    const int pitch = width * 2; // 2 bytes per one YU-YV pixel
-    int x, y;
-    for (y=0; y<height; y++) {
-        const T* src = yuyv_image + pitch * y;
-        for (x = 0; x < width*2; x += 4) { // Y1 U Y2 V
-            T Y1 = src[x + 0];
-            T U  = src[x + 1];
-            T Y2 = src[x + 2];
-            T V  = src[x + 3];
-            
-            char uf = U - 128;
-            char vf = V - 128;
-            
-            int R = Y1 + (K1*vf >> 16);
-            int G = Y1 - (K2*vf >> 16) - (K3*uf >> 16);
-            int B = Y1 + (K4*uf >> 16);
-            
-            saturate(&R, 0, 255);
-            saturate(&G, 0, 255);
-            saturate(&B, 0, 255);
-            
-            *out_ptr++ = (T)(B);
-            *out_ptr++ = (T)(G);
-            *out_ptr++ = (T)(R);
-            
-            R = Y2 + (K1*vf >> 16);
-            G = Y2 - (K2*vf >> 16) - (K3*uf >> 16);
-            B = Y2 + (K4*uf >> 16);
-            
-            saturate(&R, 0, 255);
-            saturate(&G, 0, 255);
-            saturate(&B, 0, 255);
-            
-            *out_ptr++ = (T)(B);
-            *out_ptr++ = (T)(G);
-            *out_ptr++ = (T)(R);
-        }
-        
-    }
-}
-
 AR2VideoBufferT *ar2VideoGetImageV4L2(AR2VideoParamV4L2T *vid)
 {
     if (!vid) return NULL;
@@ -1021,48 +1001,62 @@ AR2VideoBufferT *ar2VideoGetImageV4L2(AR2VideoParamV4L2T *vid)
         return NULL;
     }
     
-    ARUint8 *buffer;
-    AR2VideoBufferT *out = &(vid->buffer.out);
-    memset(out, 0, sizeof(*out));
-    
+    // Dequeue a buffer. We have a record of the mapped region in vid->internalBufferSet.
     struct v4l2_buffer buf;
     memset(&buf, 0, sizeof(buf));
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
-    
     if (xioctl(vid->fd, VIDIOC_DQBUF, &buf) < 0) {
         ARLOGe("Error calling VIDIOC_DQBUF: %d\n", errno);
-        return out;
+        return NULL;
     }
-    
-    buffer = (ARUint8*)vid->buffers[buf.index].start;
     vid->video_cont_num = buf.index;
-    
-    // TODO: Add other video format conversions.
-    if (vid->palette == V4L2_PIX_FMT_YUYV) {
-#if defined(AR_PIX_FORMAT_BGRA)
-        yuyv_to_rgb32(vid->width, vid->height, buffer, vid->videoBuffer);
-#else
-        yuyv_to_rgb24(vid->width, vid->height, buffer, vid->videoBuffer);
+#ifdef AR2VIDEO_V4L2_DEBUG
+    ARLOGd("v4l2_buffer.timestamp=(%ld, %d)\n", buf.timestamp.tv_sec, buf.timestamp.tv_usec);
 #endif
-        out->buff = vid->videoBuffer;
-        out->time.sec = (uint64_t)buf.timestamp.tv_sec;
-        out->time.usec = (uint32_t)buf.timestamp.tv_usec; 
-        out->fillFlag = 1;
-        out->buffLuma = NULL;
+
+    AR2VideoBufferT *ret = NULL;
+
+    if (buf.timestamp.tv_sec >= 0) { // Only process buffers returned with valid timestamps.
+        vid->buffer.buff = vid->internalBufferSet[buf.index].ptr;
+        if (vid->format == AR_PIXEL_FORMAT_420f || vid->format == AR_PIXEL_FORMAT_NV21) {
+            vid->buffer.bufPlanes[0] = vid->buffer.buff;
+            vid->buffer.bufPlanes[1] = vid->buffer.buff + vid->width*vid->height;
+            vid->buffer.buffLuma = vid->buffer.buff;
+        } else if (vid->format == AR_PIXEL_FORMAT_MONO) {
+            vid->buffer.buffLuma = vid->buffer.buff;
+        }
+        vid->buffer.time.sec = (uint64_t)(buf.timestamp.tv_sec);
+        vid->buffer.time.usec = (uint32_t)(buf.timestamp.tv_usec);
+        vid->buffer.fillFlag = 1;
+    
+        // Convert if the user asked for it.
+        if (vid->formatConverted != AR_PIXEL_FORMAT_INVALID) {
+            if (vid->formatConverted == AR_PIXEL_FORMAT_RGBA) {
+                videoRGBA((uint32_t *)(vid->bufferConverted.buff), &vid->buffer, vid->width, vid->height, vid->format);
+            } else if (vid->formatConverted == AR_PIXEL_FORMAT_BGRA) {
+                videoBGRA((uint32_t *)(vid->bufferConverted.buff), &vid->buffer, vid->width, vid->height, vid->format);
+            }
+            vid->bufferConverted.time.sec = vid->buffer.time.sec;
+            vid->bufferConverted.time.usec = vid->buffer.time.usec;
+            vid->bufferConverted.fillFlag = 1;
+            ret = &vid->bufferConverted;
+        } else {
+            ret = &vid->buffer;
+        }
     }
     
+    // Queue a buffer.
     struct v4l2_buffer buf_next;
     memset(&buf_next, 0, sizeof(buf_next));
     buf_next.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf_next.memory = V4L2_MEMORY_MMAP;
     buf_next.index = vid->video_cont_num;
-    
     if (xioctl(vid->fd, VIDIOC_QBUF, &buf_next)) {
         ARLOGe("ar2VideoCapNext: Error calling VIDIOC_QBUF: %d\n", errno);
     }
 
-    return out;
+    return (ret);
 }
 
 int ar2VideoGetParamiV4L2(AR2VideoParamV4L2T *vid, int paramName, int *value)

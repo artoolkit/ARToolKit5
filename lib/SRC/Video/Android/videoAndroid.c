@@ -97,6 +97,9 @@ int ar2VideoDispOptionAndroid(void)
     ARLOG(" -cachedir=/path/to/cache\n");
     ARLOG("    Specifies the path in which to look for/store camera parameter cache files.\n");
     ARLOG("    Default is working directory.\n");
+    ARLOG(" -format=[0|RGBA].\n");
+    ARLOG("    Specifies the pixel format for output images.\n");
+    ARLOG("    0=use system default. RGBA=output RGBA, including conversion if necessary.\n");
     ARLOG("\n");
     
     return 0;

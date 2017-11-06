@@ -45,6 +45,7 @@ extern "C" {
 #endif
 
 int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
+int videoBGRA(uint32_t *destBGRA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
 
 #ifdef  __cplusplus
 }

@@ -179,12 +179,18 @@ static sqlite3 *openCacheDB(const char *dbBasePath, const char *dbPath, const ch
 
     // Form absolute paths if required.
     if (dbBasePath && dbBasePath[0]) {
-        asprintf(&dbPath0, "%s/%s", dbBasePath, dbPath);
+        if (asprintf(&dbPath0, "%s/%s", dbBasePath, dbPath) == -1) {
+            ARLOGperror(NULL);
+            goto done;
+        }
     } else {
         dbPath0 = strdup(dbPath);
     }
     if (initDBBasePath && initDBBasePath[0]) {
-        asprintf(&initDBPath0, "%s/%s", initDBBasePath, initDBPath);
+        if (asprintf(&initDBPath0, "%s/%s", initDBBasePath, initDBPath) == -1) {
+            ARLOGperror(NULL);
+            goto done;
+        }
     } else {
         initDBPath0 = strdup(initDBPath);
     }
