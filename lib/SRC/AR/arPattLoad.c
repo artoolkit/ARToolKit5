@@ -49,6 +49,7 @@
 #include <math.h>
 #include <AR/ar.h>
 #include <string.h>
+#include <ARUtil/file_utils.h>
 
 int arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer) {
     
@@ -139,67 +140,20 @@ int arPattLoadFromBuffer(ARPattHandle *pattHandle, const char *buffer) {
     return( patno );
 }
 
-/* Old behaviour: load pattern data by loading the specified file and reading its contents.
- * New behaviour: load file contents and pass to arPattLoadFromBuffer.
- */
-
-int arPattLoad( ARPattHandle *pattHandle, const char *filename )
+int arPattLoad(ARPattHandle *pattHandle, const char *filename)
 {
-    FILE   *fp;
-	int     patno;
-    size_t  ret;
+    int patno = -1;
+    char *bytes;
 
-	/* Old variables */
-    /*	
-    int     h, i1, i2, i3;
-    int     i, j, l, m;
-	*/
-
-	/* New variables */
-	long pos = 0;
-	char* bytes = NULL;
-
-	/* Open file */
-	fp = fopen(filename, "rb");
-	if (fp == NULL) {
-		ARLOGe("Error opening pattern file '%s' for reading.\n", filename);
-        return (-1);
-	}
-
-	/* Determine number of bytes in file */
-	fseek(fp, 0L, SEEK_END);
-	pos = ftell(fp);
-	fseek(fp, 0L, SEEK_SET);
-
-	//ARLOGd("Pattern file is %ld bytes\n", pos);
-    
-	/* Allocate buffer */
-	bytes = (char *)malloc(pos + 1);
-	if (!bytes) {
-		ARLOGe("Out of memory!!\n");
-        fclose(fp);
-		return (-1);
-	}
-
-	/* Read pattern into buffer and close file */
-	ret = fread(bytes, pos, 1, fp);
-	fclose(fp);
-    if (ret < 1) {
+    bytes = cat(filename, NULL);
+    if (!bytes) {
         ARLOGe("Error reading pattern file '%s'.\n", filename);
+        ARLOGperror(NULL);
+    } else {
+        patno = arPattLoadFromBuffer(pattHandle, bytes);
         free(bytes);
-        return (-1);
     }
-
-	/* Terminate string */
-	bytes[pos] = '\0';
-
-	/* Load pattern from buffer */
-	patno = arPattLoadFromBuffer(pattHandle, bytes);
-
-	/* Free allocated buffer */
-	free(bytes);
-	
-	return( patno );
+    return (patno);
 }
 
 int arPattFree( ARPattHandle *pattHandle, int patno )

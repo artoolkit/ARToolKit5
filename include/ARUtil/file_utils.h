@@ -38,6 +38,7 @@
 #ifndef __ARUtil_file_utils_h__
 #define __ARUtil_file_utils_h__
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -79,6 +80,14 @@ int zip_od(char *zipPathname, const char *baseFilePath, const char **fileNames, 
 // Get a file's size like 'stat -f "%z" file'
 int64_t get_file_size(const char *file);
 
+// Read a file into a buffer like 'cat file', and appends a nul character so that the returned buffer
+// is always a valid C-string.
+// Returns pointer to heap-allocated buffer containing the file contents. The caller must call free()
+// on this value to dispose of the buffer. If bufSize_p is non-NULL, this will be filled with the
+// size in bytes of the returned buffer, including any trailing nul character.
+// In case of error, returns NULL and the error code in 'errno'.
+char *cat(const char *file, size_t *bufSize_p);
+    
 // Read a single character from the terminal without echo, like 'read -s -n 1'.
 char read_sn1(void);
 

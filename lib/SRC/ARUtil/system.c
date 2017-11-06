@@ -91,7 +91,7 @@ char *arUtilGetOSVersion(void)
     Gestalt(gestaltSystemVersionMajor, &versMaj);
     Gestalt(gestaltSystemVersionMinor, &versMin);
     Gestalt(gestaltSystemVersionBugFix, &versBugFix);
-    asprintf(&ret, "%d.%d.%d", versMaj, versMin, versBugFix);
+    if (asprintf(&ret, "%d.%d.%d", versMaj, versMin, versBugFix) == -1) return (NULL);
 #  endif
 #elif defined(ANDROID) // Android
     char os[PROP_VALUE_MAX];
@@ -109,7 +109,7 @@ char *arUtilGetOSVersion(void)
 #else // Other.
     ret = strdup("unknown");
 #endif
-    return ret;
+    return (ret);
 }
 
 char *arUtilGetCPUName(void)

@@ -720,6 +720,43 @@ int64_t get_file_size(const char * pathName)
     return -1;
 }
 
+char *cat(const char *file, size_t *bufSize_p)
+{
+    FILE *fp;
+    size_t len;
+    char *s;
+    
+    if (!file) {
+        errno = EINVAL;
+        return NULL;
+    }
+    
+    fp = fopen(file, "rb");
+    if (!fp) {
+        return (NULL);
+    }
+    
+    fseek(fp, 0, SEEK_END);
+    len = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    if (!(s = (char *)malloc(len + 1))) {
+        fclose(fp);
+        errno = ENOMEM;
+        return (NULL);
+    }
+    
+    if (fread(s, len, 1, fp) < 1) {
+        free(s);
+        fclose(fp);
+        return (NULL);
+    }
+    s[len] = '\0';
+    fclose(fp);
+
+    if (bufSize_p) *bufSize_p = len + 1;
+    return (s);
+}
+
 char read_sn1(void)
 {
 #if defined(__APPLE__) || defined(__linux) || defined(ANDROID)

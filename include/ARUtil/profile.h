@@ -44,8 +44,36 @@
 extern "C" {
 #endif
 
+
+/*!
+    @brief   Reset profiling.
+	@details
+        The profiling facility provides a single profile per process.
+        There are up to MAX_PROF_NUM timing buckets available, numbered 0 to MAX_PROF_NUM-1.
+        Call this function before the first call to profileSet to have the first call to
+        profileSet function set the initial time and timing bucket.
+    @see profileSet
+*/
 void profileClear (void);
+
+/*!
+    @brief   Set profiling initial time and timing bucket, or add elapsed time to a bucket.
+	@details
+        This function sets a profiling timing point and selects the timing bucket.
+        If being called for the first time, or the first time since profileClear was called,
+        it sets the initial time, and subsequent calls will log time into the timing bucket n.
+        On subsequent calls, the elapsed time since the last call will be added to the
+        previously set timing bucket, and will again set the timing bucket.
+    @param      n The timing bucket to add to on the next call.
+    @see profileClear profilePrint
+*/
 void profileSet   (int n);
+
+/*!
+    @brief   Print all profiling buckets.
+	@details
+        Prints all non-zero timing buckets and the percentage time occupied and total time.
+*/
 void profilePrint (void);
 
 #ifdef __cplusplus

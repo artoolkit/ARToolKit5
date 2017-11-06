@@ -46,7 +46,7 @@
 #  include <sys/time.h>
 #endif
 
-void         arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec)
+void arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec)
 {
 #ifdef _WIN32
     struct _timeb sys_time;
@@ -58,9 +58,9 @@ void         arUtilTimeSinceEpoch(uint64_t *sec, uint32_t *usec)
     struct timeval     time;
 
 #  if defined(__linux) || defined(__APPLE__) || defined(EMSCRIPTEN)
-    gettimeofday( &time, NULL );
+    gettimeofday(&time, NULL);
 #  else
-    gettimeofday( &time );
+    gettimeofday(&time);
 #  endif
     if (sec) *sec = (uint64_t)time.tv_sec;
     if (usec) *usec = (uint32_t)time.tv_usec;
