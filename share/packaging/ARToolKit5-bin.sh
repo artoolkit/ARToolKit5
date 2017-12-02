@@ -31,7 +31,7 @@ else
 fi
 PACKAGE="../${PACKAGE_NAME}"
 
-export $PACKAGE_NAME
+export PACKAGE_NAME
 
 tar czvf "$PACKAGE" \
 	-T "$BOM" \
