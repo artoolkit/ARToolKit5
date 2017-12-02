@@ -278,7 +278,7 @@ static void init(int argc, char *argv[])
 	}
 
     /* open the graphics window */
-    if( argCreateWindow((int)((xsizeL + xsizeR)*scalef), (int)(MAX(ysizeL, ysizeR)*scalef)) < 0 ) {
+    if( argCreateWindow((int)((xsizeL + xsizeR)*scalef), (int)(MAX(ysizeL, ysizeR)*scalef)) == NULL) {
         ARLOGe("Error: argCreateWindow.\n");
         exit(0);
     }
