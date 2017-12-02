@@ -30,9 +30,6 @@ share/artoolkit5-config
 share/artoolkit5-setenv
 share/artoolkit5-unsetenv
 
-bin/calib_camera
-bin/calib_optical
-bin/calib_stereo
 bin/check_id
 bin/mk_patt
 bin/genTexData
@@ -40,13 +37,6 @@ bin/dispImageSet
 bin/dispFeatureSet
 bin/checkResolution
 bin/genMarkerSet
-
-bin/libopencv_calib3d.2.4.6.dylib
-bin/libopencv_core.2.4.6.dylib
-bin/libopencv_flann.2.4.6.dylib
-bin/libopencv_highgui.2.4.6.dylib
-bin/libopencv_imgproc.2.4.6.dylib
-bin/libopencv_features2d.2.4.6.dylib
 
 ARToolKit5.xcodeproj/project.pbxproj
 ARToolKit5.xcodeproj/xcshareddata/
@@ -141,5 +131,3 @@ share/doc/
 share/packaging/ARToolKit5-bin.sh
 share/packaging/ARToolKit5-bin-bom-OSX
 share/packaging/headerDoc2HTML.config
-
-
