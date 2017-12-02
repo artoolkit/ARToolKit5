@@ -102,6 +102,7 @@
 			);
 			dependencies = (
 				4AD5C44B0A39035C003F13D4 /* PBXTargetDependency */,
+				4AD5C44F0A39035C003F13D4 /* PBXTargetDependency */,
 				4AD5C44D0A39035C003F13D4 /* PBXTargetDependency */,
 				4A88F3D915D365C9002E595A /* PBXTargetDependency */,
 			);
@@ -1659,6 +1660,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4A15ED4509E361E400159C62;
 			remoteInfo = "ARToolKit5 examples";
+		};
+		4AD5C44E0A39035C003F13D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 78BB3DD408E482DA00D7CA2D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AD5C30C0A38FFBB003F13D4;
+			remoteInfo = "ARToolKit utilities";
 		};
 		4AD6D8F517B1F9270062F7B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -7626,6 +7634,11 @@
 			isa = PBXTargetDependency;
 			target = 4A15ED4509E361E400159C62 /* ARToolKit5 examples */;
 			targetProxy = 4AD5C44C0A39035C003F13D4 /* PBXContainerItemProxy */;
+		};
+		4AD5C44F0A39035C003F13D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AD5C30C0A38FFBB003F13D4 /* ARToolKit5 utilities */;
+			targetProxy = 4AD5C44E0A39035C003F13D4 /* PBXContainerItemProxy */;
 		};
 		4AD6D8F417B1F9270062F7B2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
