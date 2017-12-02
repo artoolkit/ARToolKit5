@@ -1,7 +1,10 @@
 # Read me for ARToolKit
 
-Build state: 
-macOS: [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7)
+## Build state
+
+| macos | iOS |
+| ----- | --- |
+| [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7) | tbd |
 ## Contents
 
 - About this archive  
