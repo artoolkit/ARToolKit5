@@ -74,8 +74,12 @@ VERSION=`sed -En -e 's/.*AR_HEADER_VERSION_STRING[[:space:]]+"([0-9]+\.[0-9]+(\.
 # Exclude: build files and directories, version control info,
 # ARToolKit settings files which don't carry over.
 #
-rm -f "../ARToolKit5-bin-${VERSION}-Android.zip"
-zip -r -MM "../ARToolKit5-bin-${VERSION}-Android.zip" . \
+PACKAGE_NAME="ARToolKit5-bin-${VERSION}-Android.zip"
+PACKAGE="../${PACKAGE_NAME}"
+export PACKAGE_NAME
+
+rm -f "$PACKAGE"
+zip -r -MM "$PACKAGE" . \
     -i@share/packaging/ARToolKit5Android-bin-bom \
     --exclude "*/.svn/*" \
     --exclude "*/.DS_Store" \

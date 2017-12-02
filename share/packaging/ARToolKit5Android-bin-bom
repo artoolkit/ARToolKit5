@@ -23,19 +23,6 @@ bin/checkResolution
 bin/check_id
 bin/genMarkerSet
 
-bin/libopencv_calib3d.2.4.6.dylib
-bin/libopencv_core.2.4.6.dylib
-bin/libopencv_flann.2.4.6.dylib
-bin/libopencv_highgui.2.4.6.dylib
-bin/libopencv_imgproc.2.4.6.dylib
-bin/libopencv_features2d.2.4.6.dylib
-lib/macosx-universal/libopencv_calib3d.2.4.6.dylib
-lib/macosx-universal/libopencv_core.2.4.6.dylib
-lib/macosx-universal/libopencv_flann.2.4.6.dylib
-lib/macosx-universal/libopencv_highgui.2.4.6.dylib
-lib/macosx-universal/libopencv_imgproc.2.4.6.dylib
-lib/macosx-universal/libopencv_features2d.2.4.6.dylib
-
 bin/mk_patt.exe
 bin/genTexData.exe
 bin/dispFeatureSet.exe
@@ -43,16 +30,6 @@ bin/dispImageSet.exe
 bin/checkResolution.exe
 bin/check_id.exe
 bin/genMarkerSet.exe
-
-bin/opencv_calib3d2410.dll
-bin/opencv_core2410.dll
-bin/opencv_flann2410.dll
-bin/opencv_imgproc2410.dll
-bin/opencv_features2d2410.dll
-bin/ARvideo.dll
-bin/pthreadVC2.dll
-bin/glut32.dll
-bin/DSVL.dll
 
 lib/SRC/AR/*
 lib/SRC/ARICP/*
@@ -73,29 +50,12 @@ lib/SRC/KPM/*
 lib/SRC/ARUtil/*
 lib/SRC/Eden/*
 
-EclipseProjects/ARBaseLib/*
-EclipseProjects/ARNativeES1/*
-EclipseProjects/ARNative/*
-EclipseProjects/ARNativeOSG/*
-EclipseProjects/ARMovie/*
-EclipseProjects/ARMulti/*
-EclipseProjects/ARSimple/*
-EclipseProjects/ARSimpleInteraction/*
-EclipseProjects/ARSimpleNative/*
-EclipseProjects/ARSimpleNativeCars/*
-EclipseProjects/AssetUnpacker/*
-EclipseProjects/calib_optical/*
-EclipseProjects/nftSimple/*
-EclipseProjects/nftBook/*
-
 AndroidStudioProjects/*
 
 doc/*
 
 share/doc/*
 
-android/SetNDKBuildVars.bat
-android/build.bat
 android/build.sh
 android/build_native_examples.sh
 android/jni/Application.mk
