@@ -71,11 +71,6 @@ lib/SRC/ARUtil/
 lib/SRC/Eden/
 
 util/1394/
-util/calib_camera/
-util/calib_camera_old-v3/
-util/calib_optical/
-util/calib_stereo/
-util/calib_stereo_old-v3/
 util/checkResolution/
 util/check_id/
 util/dispFeatureSet/
