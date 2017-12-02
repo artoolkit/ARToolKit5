@@ -24,11 +24,14 @@ VERSION=`sed -En -e 's/.*AR_HEADER_VERSION_STRING[[:space:]]+"([0-9]+\.[0-9]+(\.
 if [ "$OS" = "OSX" ]
 then
 	BOM="share/packaging/ARToolKit5-bin-bom-OSX"
-	PACKAGE="../ARToolKit5-bin-${VERSION}-${OS}.tar.gz"
+    PACKAGE_NAME="ARToolKit5-bin-${VERSION}-${OS}.tar.gz"
 else
 	BOM="share/packaging/ARToolKit5-bin-bom"
-	PACKAGE="../ARToolKit5-bin-${VERSION}-${OS}-${ARCH}.tar.gz"
+    PACKAGE_NAME="ARToolKit5-bin-${VERSION}-${OS}-${ARCH}.tar.gz"
 fi
+PACKAGE="../${PACKAGE_NAME}"
+
+export $PACKAGE_NAME
 
 tar czvf "$PACKAGE" \
 	-T "$BOM" \
