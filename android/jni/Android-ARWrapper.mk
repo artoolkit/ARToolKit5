@@ -116,7 +116,7 @@ LOCAL_SRC_FILES := $(MY_FILES)
 
 LOCAL_C_INCLUDES += $(ARTOOLKIT_ROOT)/include/android $(ARTOOLKIT_ROOT)/include
 LOCAL_CFLAGS += -DHAVE_NFT=1 $(MY_CFLAGS)
-LOCAL_LDLIBS += -llog -lGLESv1_CM -lz
+LOCAL_LDLIBS += -llog -lGLESv1_CM -lz -lfts
 LOCAL_WHOLE_STATIC_LIBRARIES += ar
 LOCAL_STATIC_LIBRARIES += ar2 kpm argsub_es armulti aricp arvideo arutil jpeg cpufeatures
 #LOCAL_SHARED_LIBRARIES += $(CURL_LIBS)

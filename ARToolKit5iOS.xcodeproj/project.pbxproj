@@ -7087,29 +7087,12 @@
 			attributes = {
 				LastUpgradeCheck = 0730;
 				TargetAttributes = {
-					4A1302AB15BDFF14003A441C = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
-					4A1302FF15BDFF17003A441C = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
-					4A2F72D7117840A600F35FA7 = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
-					4A3D4297130D1F2500E64C33 = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
-					4A4BAA7C1B745B210012B77D = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
 					4A50D6FC1164E16D00ED169B = {
-						DevelopmentTeam = 7DJXLNF77X;
-					};
-					4A5BAA5B13D82BC000C8D5E7 = {
 						DevelopmentTeam = 7DJXLNF77X;
 					};
 					4AEAEBAD17A744AA00F61E33 = {
 						DevelopmentTeam = 7DJXLNF77X;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -8380,7 +8363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8401,7 +8384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8423,7 +8406,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppOSG/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFTOSG/ARAppNFTOSG_Prefix.pch;
@@ -8446,7 +8429,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8465,7 +8448,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8485,7 +8468,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARApp2/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppNFT/ARAppNFT_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -8564,7 +8547,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8580,7 +8563,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8597,7 +8580,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARApp2/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARApp2/ARApp2_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARApp2/ARApp2-Info.plist";
@@ -8614,7 +8597,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8631,7 +8614,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8649,7 +8632,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppOSG/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppOSG/ARAppOSG_Prefix.pch;
@@ -8669,7 +8652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8686,7 +8669,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8704,7 +8687,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppCameraTest/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppCameraTest/ARAppCameraTest_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppCameraTest/ARAppCameraTest-Info.plist";
@@ -8771,7 +8754,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -8786,7 +8769,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -8802,7 +8785,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppMovie/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 7DJXLNF77X;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppMovie/ARAppMovie_Prefix.pch;
 				INFOPLIST_FILE = "examples/ARAppMovie/ARAppMovie-Info.plist";
@@ -9325,6 +9308,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
@@ -9332,6 +9317,7 @@
 				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -9340,6 +9326,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
@@ -9347,6 +9335,7 @@
 				OTHER_LDFLAGS = "-lsqlite3";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -9356,6 +9345,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = examples/ARAppES1/dist.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7DJXLNF77X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = examples/ARAppES1/ARAppES1_Prefix.pch;
@@ -9364,6 +9355,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = ARAppES1;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
