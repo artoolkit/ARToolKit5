@@ -35,13 +35,8 @@
 #
 
 all:
-	(cd calib_camera;     make -f Makefile)
-	(cd calib_stereo;     make -f Makefile)
 	(cd mk_patt;          make -f Makefile)
 	(cd 1394;             make -f Makefile)
-	(cd calib_optical;    make -f Makefile)
-	(cd calib_camera_old-v3; make -f Makefile)
-	(cd calib_stereo_old-v3; make -f Makefile)
 	(cd check_id;         make -f Makefile)
 	(cd genTexData;       make -f Makefile)
 	(cd genMarkerSet;     make -f Makefile)
@@ -50,13 +45,8 @@ all:
 	(cd checkResolution;  make -f Makefile)
 
 clean:
-	(cd calib_camera;     make -f Makefile clean)
-	(cd calib_stereo;     make -f Makefile clean)
 	(cd mk_patt;          make -f Makefile clean)
 	(cd 1394;             make -f Makefile clean)
-	(cd calib_optical;    make -f Makefile clean)
-	(cd calib_camera_old-v3; make -f Makefile clean)
-	(cd calib_stereo_old-v3; make -f Makefile clean)
 	(cd check_id;         make -f Makefile clean)
 	(cd genTexData;       make -f Makefile clean)
 	(cd genMarkerSet;     make -f Makefile clean)
@@ -69,9 +59,6 @@ allclean:
 	(cd calib_stereo;     make -f Makefile allclean)
 	(cd mk_patt;          make -f Makefile allclean)
 	(cd 1394;             make -f Makefile allclean)
-	(cd calib_optical;    make -f Makefile allclean)
-	(cd calib_camera_old-v3; make -f Makefile allclean)
-	(cd calib_stereo_old-v3; make -f Makefile allclean)
 	(cd check_id;         make -f Makefile allclean)
 	(cd genTexData;       make -f Makefile allclean)
 	(cd genMarkerSet;     make -f Makefile allclean)
@@ -81,13 +68,8 @@ allclean:
 	rm -f Makefile
 
 distclean:
-	(cd calib_camera;     make -f Makefile distclean)
-	(cd calib_stereo;     make -f Makefile distclean)
 	(cd mk_patt;          make -f Makefile distclean)
 	(cd 1394;             make -f Makefile distclean)
-	(cd calib_optical;    make -f Makefile distclean)
-	(cd calib_camera_old-v3; make -f Makefile distclean)
-	(cd calib_stereo_old-v3; make -f Makefile distclean)
 	(cd check_id;         make -f Makefile distclean)
 	(cd genTexData;       make -f Makefile distclean)
 	(cd genMarkerSet;     make -f Makefile distclean)

@@ -31,9 +31,6 @@ share/artoolkit5-config
 share/artoolkit5-setenv
 share/artoolkit5-unsetenv
 
-bin/calib_camera
-bin/calib_optical
-bin/calib_stereo
 bin/check_id
 bin/mk_patt
 bin/genTexData
@@ -73,11 +70,6 @@ lib/SRC/ARUtil/
 lib/SRC/Eden/
 
 util/1394/
-util/calib_camera/
-util/calib_camera_old-v3/
-util/calib_optical/
-util/calib_stereo/
-util/calib_stereo_old-v3/
 util/checkResolution/
 util/check_id/
 util/dispFeatureSet/
@@ -121,7 +113,6 @@ examples/optical
 examples/opticalStereo
 examples/simpleMovie
 examples/simpleOSG
-examples/simpleVRML
 examples/stereo
 examples/nftSimple
 examples/nftBook
