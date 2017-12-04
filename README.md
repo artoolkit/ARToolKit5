@@ -2,9 +2,9 @@
 
 ## Build state
 
-| macos | iOS |
-| ----- | --- |
-| [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7) | tbd |
+| macos | iOS | Android |
+| ----- | --- | ------- |
+| [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7) | tbd | [![Build Status](https://www.bitrise.io/app/effbb10a28315107/status.svg?token=7qiyYxXAgQUw_ohNYeafQg&branch=master)](https://www.bitrise.io/app/effbb10a28315107) |
 ## Contents
 
 - About this archive  
