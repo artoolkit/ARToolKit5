@@ -34,19 +34,6 @@ bin/checkResolution
 bin/check_id
 bin/genMarkerSet
 
-bin/libopencv_calib3d.2.4.6.dylib
-bin/libopencv_core.2.4.6.dylib
-bin/libopencv_flann.2.4.6.dylib
-bin/libopencv_highgui.2.4.6.dylib
-bin/libopencv_imgproc.2.4.6.dylib
-bin/libopencv_features2d.2.4.6.dylib
-lib/macosx-universal/libopencv_calib3d.2.4.6.dylib
-lib/macosx-universal/libopencv_core.2.4.6.dylib
-lib/macosx-universal/libopencv_flann.2.4.6.dylib
-lib/macosx-universal/libopencv_highgui.2.4.6.dylib
-lib/macosx-universal/libopencv_imgproc.2.4.6.dylib
-lib/macosx-universal/libopencv_features2d.2.4.6.dylib
-
 lib/SRC/AR/
 lib/SRC/ARICP/
 lib/SRC/ARMulti/

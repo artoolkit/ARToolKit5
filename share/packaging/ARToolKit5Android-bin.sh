@@ -76,7 +76,6 @@ VERSION=`sed -En -e 's/.*AR_HEADER_VERSION_STRING[[:space:]]+"([0-9]+\.[0-9]+(\.
 #
 PACKAGE_NAME="ARToolKit5-bin-${VERSION}-Android.zip"
 PACKAGE="../${PACKAGE_NAME}"
-export PACKAGE_NAME
 
 rm -f "$PACKAGE"
 zip -r -MM "$PACKAGE" . \
