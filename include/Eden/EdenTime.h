@@ -70,10 +70,10 @@ extern "C" {
 #  include <sys/time.h>					// struct timespec, struct timeval, gettimeofday()
 #else
 #  ifndef PTHREAD_H						// pthreads_win32 also defines struct timespec.
-struct timespec {
-	long tv_sec;
-	long tv_nsec;
-};
+//struct timespec {
+//	long tv_sec;
+//	long tv_nsec;
+//};
 #  endif // !PTHREAD_H
 #endif
 

@@ -226,3 +226,9 @@ examples/uiControlsWinRT/uiControlsWinRT.Windows/obj/*
 examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/bin/*
 examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/obj/*
 
+VisualStudio/vs120/.vs/ARToolKit5/v15/Browse.VC.db
+VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db-wal
+VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db-shm
+VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db
+lib/win64-x64/ARvideod.exp
+lib/win64-x64/ARosgd.exp
