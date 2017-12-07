@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\SRC\Video\video.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\video2.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoAspectRatio.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoLuma.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoRGBA.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\videoSaveImage.c" />
+    <ClCompile Include="..\..\lib\SRC\Video\Dummy\videoDummy.c">
+      <Filter>Dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\SRC\Video\Image\videoImage.c">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\SRC\Video\WindowsMediaFoundation\LogMediaType.cpp">
+      <Filter>WindowsMediaFoundation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\SRC\Video\WindowsMediaFoundation\videoWindowsMediaFoundation.cpp">
+      <Filter>WindowsMediaFoundation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\AR\ar.h" />
+    <ClInclude Include="..\..\include\AR\arConfig.h" />
+    <ClInclude Include="..\..\include\AR\config.h" />
+    <ClInclude Include="..\..\include\AR\matrix.h" />
+    <ClInclude Include="..\..\include\AR\param.h" />
+    <ClInclude Include="..\..\include\AR\video.h" />
+    <ClInclude Include="..\..\include\AR\videoConfig.h" />
+    <ClInclude Include="..\..\include\AR\videoLuma.h" />
+    <ClInclude Include="..\..\include\AR\videoRGBA.h" />
+    <ClInclude Include="..\..\lib\SRC\Video\Dummy\videoDummy.h">
+      <Filter>Dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\SRC\Video\Image\videoImage.h">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\SRC\Video\WindowsMediaFoundation\BufferLock.h">
+      <Filter>WindowsMediaFoundation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\SRC\Video\WindowsMediaFoundation\videoWindowsMediaFoundation.h">
+      <Filter>WindowsMediaFoundation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dummy">
+      <UniqueIdentifier>{41ea9781-da6a-4615-9536-65cb3c7cd63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{2d7e7398-e3a1-4dc4-b67b-1196a7968229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowsMediaFoundation">
+      <UniqueIdentifier>{867a4534-9e35-43e5-93d2-18800e7e63ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

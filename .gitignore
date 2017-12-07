@@ -144,17 +144,6 @@ bin64/opencv_imgproc2410.dll
 bin64/vcredist_x64.exe
 bin64/pthreadVC2.dll
 
-bin-winrt-w8_1-arm/
-bin-winrt-w8_1-x86/
-bin-winrt-w8_1-x64/
-bin-winrt-wp8_1-arm/
-bin-winrt-wp8_1-x86/
-lib/winrt-w8_1-arm/
-lib/winrt-w8_1-x86/
-lib/winrt-w8_1-x64/
-lib/winrt-wp8_1-arm/
-lib/winrt-wp8_1-x86/
-
 # Android build products.
 android/obj/local/**/objs/
 android/obj/local/**/objs-debug/
@@ -182,15 +171,11 @@ AndroidStudioProjects/**/obj
 AndroidStudioProjects/**/build
 
 # Visual Studio build files.
-VisualStudio/vs120/Debug/
-VisualStudio/vs120/Debug-StaticCRuntime/
-VisualStudio/vs120/Release/
-VisualStudio/vs120/Release-StaticCRuntime/
-VisualStudio/vs120/x64/
-VisualStudio/vs120-winrt/**/ARM/
-VisualStudio/vs120-winrt/**/Generated Files/
-VisualStudio/vs120-winrt/**/Win32/
-VisualStudio/vs120-winrt/**/x64/
+VisualStudio/vs2017/Debug/
+VisualStudio/vs2017/Debug-StaticCRuntime/
+VisualStudio/vs2017/Release/
+VisualStudio/vs2017/Release-StaticCRuntime/
+VisualStudio/vs2017/x64/
 
 # Symlinks in OS X builds.
 bin/libopencv_*.dylib
@@ -208,27 +193,6 @@ lib/SRC/ARgsubD3D/ARgsubD3D.WindowsPhone/ARM/Release/*
 lib/SRC/ARgsubD3D/ARgsubD3D.Windows/ARM/Release/*
 lib/SRC/ARgsubD3D/ARgsubD3D.Windows/x64/Release/*
 
-# WinRT samples
-examples/simpleLiteWinRT/simpleLiteWinRT.Windows/bin/*
-examples/simpleLiteWinRT/simpleLiteWinRT.Windows/obj/*
-examples/simpleLiteWinRT/simpleLiteWinRT.WindowsPhone/bin/*
-examples/simpleLiteWinRT/simpleLiteWinRT.WindowsPhone/obj/*
-examples/multiCubeWinRT/multiCubeWinRT.Windows/bin/*
-examples/multiCubeWinRT/multiCubeWinRT.Windows/obj/*
-examples/multiCubeWinRT/multiCubeWinRT.WindowsPhone/bin/*
-examples/multiCubeWinRT/multiCubeWinRT.WindowsPhone/obj/*
-examples/nftSimpleWinRT/nftSimpleWinRT.Windows/bin/*
-examples/nftSimpleWinRT/nftSimpleWinRT.Windows/obj/*
-examples/nftSimpleWinRT/nftSimpleWinRT.WindowsPhone/bin/*
-examples/nftSimpleWinRT/nftSimpleWinRT.WindowsPhone/obj/*
-examples/uiControlsWinRT/uiControlsWinRT.Windows/bin/*
-examples/uiControlsWinRT/uiControlsWinRT.Windows/obj/*
-examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/bin/*
-examples/uiControlsWinRT/uiControlsWinRT.WindowsPhone/obj/*
-
-VisualStudio/vs120/.vs/ARToolKit5/v15/Browse.VC.db
-VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db-wal
-VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db-shm
-VisualStudio/vs120/.vs/ARToolKit5/v15/Solution.VC.db
+VisualStudio/vs2017/.vs/*
 lib/win64-x64/ARvideod.exp
 lib/win64-x64/ARosgd.exp
