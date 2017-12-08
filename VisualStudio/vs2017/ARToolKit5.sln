@@ -388,6 +388,7 @@ Global
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug|Win32.Build.0 = Debug|Win32
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug|x64.ActiveCfg = Debug|Win32
+		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug|x64.Build.0 = Debug|Win32
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug-StaticCRuntime|Mixed Platforms.ActiveCfg = Debug|Win32
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug-StaticCRuntime|Mixed Platforms.Build.0 = Debug|Win32
 		{8FA21D52-6CE2-4F22-84CE-04F7E390EBC6}.Debug-StaticCRuntime|Win32.ActiveCfg = Debug|Win32

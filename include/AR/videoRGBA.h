@@ -38,14 +38,14 @@
 #ifndef __ARvideo_videoRGBA_h__
 #define __ARvideo_videoRGBA_h__
 
-#include <AR/ar.h>
+#include <AR/video.h>
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
-int videoBGRA(uint32_t *destBGRA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
+AR_DLL_API int videoRGBA(uint32_t *destRGBA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
+AR_DLL_API int videoBGRA(uint32_t *destBGRA, AR2VideoBufferT *source, int width, int height, AR_PIXEL_FORMAT pixelFormat);
 
 #ifdef  __cplusplus
 }
