@@ -77,7 +77,7 @@
 #define CACHE_TIME 31557600L // How long to keep values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
 #define CACHE_TIME_FALLBACK 1209600L // How long to keep fallback values in the cache, in seconds. 86400L=1 day, 604800L=1 week, 31557600=1 year of 365.25 days.
 #define CACHE_FLUSH_INTERVAL 86400L // How many seconds between checks in which expired cache entries are flushed.
-#define SEARCH_POST_URL "https://calibration.artoolkit.org/app/calib_camera/download.php"
+#define SEARCH_POST_URL "https://calibration.artoolkitx.org/app/calib_camera/download.php"
 #define SEARCH_TOKEN_LENGTH 16
 #define SEARCH_TOKEN {0x05, 0x8a, 0x4b, 0xa0, 0xdb, 0xa3, 0x3b, 0xa3, 0xa7, 0xe3, 0xf5, 0x8d, 0xd3, 0xbf, 0x49, 0x40} // `echo -n 'ARToolKit.Rocks' | md5sum`
 #define RECEIVE_HTTP_BUFSIZE 65536 // Max. 64k.
