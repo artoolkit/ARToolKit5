@@ -69,7 +69,7 @@ extern "C" {
 #if defined(EDEN_UNIX)
 #  include <sys/time.h>					// struct timespec, struct timeval, gettimeofday()
 #else
-#  ifndef PTHREAD_H						// pthreads_win32 also defines struct timespec.
+#  ifndef HAVE_STRUCT_TIMESPEC						// pthreads_win32 also defines struct timespec.
 struct timespec {
 	long tv_sec;
 	long tv_nsec;

@@ -55,7 +55,7 @@
 #  ifdef __APPLE__
 #    include <GLUT/GLUT.h>
 #  else
-#    include <GL/glut.h>
+#    include "GL/glut.h"
 #  endif
 #  define DISABLE_GL_STATE_CACHE
 #endif

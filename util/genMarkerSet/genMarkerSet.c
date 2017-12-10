@@ -39,7 +39,7 @@
 
 #ifdef _WIN32
 #  include <windows.h>
-#  define snprintf _snprintf
+//#  define snprintf _snprintf
 #endif
 #include <stdio.h>
 #include <string.h>
