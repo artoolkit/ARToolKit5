@@ -8,7 +8,7 @@ echo "Building archive from directory \"$PWD\"."
 #
 # Give the archive a sensible name.
 #
-OS=`uname -s`
+SET os=`systeminfo | findstr /B /C:"OS Name"`
 ARCH=`uname -m`
 
 OS='OSX'

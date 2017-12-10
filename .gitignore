@@ -196,3 +196,7 @@ lib/SRC/ARgsubD3D/ARgsubD3D.Windows/x64/Release/*
 VisualStudio/vs2017/.vs/*
 lib/win64-x64/ARvideod.exp
 lib/win64-x64/ARosgd.exp
+*.exp
+*.ipdb
+.history/
+*.iobj
