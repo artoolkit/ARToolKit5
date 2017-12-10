@@ -2,9 +2,9 @@
 
 ## Build state
 
-| macos | iOS | Android | Linux |
-| ----- | --- | ------- | ----- |
-| [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7) | [![Build Status](https://www.bitrise.io/app/88666fe0601b8e16/status.svg?token=z0tclkckOxko56KsZEToBQ)](https://www.bitrise.io/app/88666fe0601b8e16) | [![Build Status](https://www.bitrise.io/app/effbb10a28315107/status.svg?token=7qiyYxXAgQUw_ohNYeafQg&branch=master)](https://www.bitrise.io/app/effbb10a28315107) | [![Build Status](https://www.bitrise.io/app/53ee3753545bf8b5/status.svg?token=Kk-_y3LNu_Y3exI-sOWC7Q&branch=master)](https://www.bitrise.io/app/53ee3753545bf8b5) |
+| macos | iOS | Android | Linux | Windows |
+| ----- | --- | ------- | ----- | ------- |
+| [![Build Status](https://www.bitrise.io/app/0fcc83b6b5389ae7/status.svg?token=OAvG_BbWsTEOoj82MCdomw&branch=master)](https://www.bitrise.io/app/0fcc83b6b5389ae7) | [![Build Status](https://www.bitrise.io/app/88666fe0601b8e16/status.svg?token=z0tclkckOxko56KsZEToBQ)](https://www.bitrise.io/app/88666fe0601b8e16) | [![Build Status](https://www.bitrise.io/app/effbb10a28315107/status.svg?token=7qiyYxXAgQUw_ohNYeafQg&branch=master)](https://www.bitrise.io/app/effbb10a28315107) | [![Build Status](https://www.bitrise.io/app/53ee3753545bf8b5/status.svg?token=Kk-_y3LNu_Y3exI-sOWC7Q&branch=master)](https://www.bitrise.io/app/53ee3753545bf8b5) | <img src="https://thor-bux.visualstudio.com/_apis/public/build/definitions/f05f7a2f-6433-463e-9dc0-1c02505d8294/6/badge"> |
 ## Contents
 
 - About this archive  
