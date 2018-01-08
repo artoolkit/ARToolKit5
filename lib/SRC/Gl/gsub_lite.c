@@ -385,65 +385,6 @@ void arglCameraFrustum(const ARParam *cparam, const ARdouble focalmin, const ARd
     }	
 }
 
-void arglCameraFrustumRH(const ARParam *cparam, const ARdouble focalmin, const ARdouble focalmax, ARdouble m_projection[16])
-{
-	ARdouble    icpara[3][4];
-    ARdouble    trans[3][4];
-    ARdouble    p[3][3], q[4][4];
-	int         width, height;
-    int         i, j;
-	
-    width  = cparam->xsize;
-    height = cparam->ysize;
-	
-    if (arParamDecompMat(cparam->mat, icpara, trans) < 0) {
-        ARLOGe("arglCameraFrustum(): arParamDecompMat() indicated parameter error.\n");
-        return;
-    }
-	for (i = 0; i < 4; i++) {
-        icpara[1][i] = (height - 1)*(icpara[2][i]) - icpara[1][i];
-    }
-	
-    for(i = 0; i < 3; i++) {
-        for(j = 0; j < 3; j++) {
-            p[i][j] = icpara[i][j] / icpara[2][2];
-        }
-    }
-    q[0][0] = (2.0 * p[0][0] / (width - 1));
-    q[0][1] = (2.0 * p[0][1] / (width - 1));
-    q[0][2] = -((2.0 * p[0][2] / (width - 1))  - 1.0);
-    q[0][3] = 0.0;
-	
-    q[1][0] = 0.0;
-    q[1][1] = -(2.0 * p[1][1] / (height - 1));
-    q[1][2] = -((2.0 * p[1][2] / (height - 1)) - 1.0);
-    q[1][3] = 0.0;
-	
-    q[2][0] = 0.0;
-    q[2][1] = 0.0;
-    q[2][2] = (focalmax + focalmin)/(focalmin - focalmax);
-    q[2][3] = 2.0 * focalmax * focalmin / (focalmin - focalmax);
-	
-    q[3][0] = 0.0;
-    q[3][1] = 0.0;
-    q[3][2] = -1.0;
-    q[3][3] = 0.0;
-	
-    for (i = 0; i < 4; i++) { // Row.
-		// First 3 columns of the current row.
-        for (j = 0; j < 3; j++) { // Column.
-            m_projection[i + j*4] = q[i][0] * trans[0][j] +
-									q[i][1] * trans[1][j] +
-									q[i][2] * trans[2][j];
-        }
-		// Fourth column of the current row.
-        m_projection[i + 3*4] = q[i][0] * trans[0][3] +
-								q[i][1] * trans[1][3] +
-								q[i][2] * trans[2][3] +
-								q[i][3];
-    }	
-}
-
 // para's type is also equivalent to (double(*)[4]).
 void arglCameraView(const ARdouble para[3][4], ARdouble m_modelview[16], const ARdouble scale)
 {
@@ -459,32 +400,6 @@ void arglCameraView(const ARdouble para[3][4], ARdouble m_modelview[16], const A
 	m_modelview[2 + 1*4] = para[2][1];
 	m_modelview[2 + 2*4] = para[2][2];
 	m_modelview[2 + 3*4] = para[2][3];
-	m_modelview[3 + 0*4] = 0.0;
-	m_modelview[3 + 1*4] = 0.0;
-	m_modelview[3 + 2*4] = 0.0;
-	m_modelview[3 + 3*4] = 1.0;
-	if (scale != 0.0) {
-		m_modelview[12] *= scale;
-		m_modelview[13] *= scale;
-		m_modelview[14] *= scale;
-	}
-}
-
-// para's type is also equivalent to (double(*)[4]).
-void arglCameraViewRH(const ARdouble para[3][4], ARdouble m_modelview[16], const ARdouble scale)
-{
-	m_modelview[0 + 0*4] = para[0][0]; // R1C1
-	m_modelview[0 + 1*4] = para[0][1]; // R1C2
-	m_modelview[0 + 2*4] = para[0][2];
-	m_modelview[0 + 3*4] = para[0][3];
-	m_modelview[1 + 0*4] = -para[1][0]; // R2
-	m_modelview[1 + 1*4] = -para[1][1];
-	m_modelview[1 + 2*4] = -para[1][2];
-	m_modelview[1 + 3*4] = -para[1][3];
-	m_modelview[2 + 0*4] = -para[2][0]; // R3
-	m_modelview[2 + 1*4] = -para[2][1];
-	m_modelview[2 + 2*4] = -para[2][2];
-	m_modelview[2 + 3*4] = -para[2][3];
 	m_modelview[3 + 0*4] = 0.0;
 	m_modelview[3 + 1*4] = 0.0;
 	m_modelview[3 + 2*4] = 0.0;

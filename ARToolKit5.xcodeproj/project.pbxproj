@@ -664,6 +664,7 @@
 		78BBCE3408E4AC9B00AEE575 /* video.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BB3E7408E482F400D7CA2D /* video.c */; };
 		78BBCE3508E4AC9B00AEE575 /* video2.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BB3E7608E482F400D7CA2D /* video2.c */; };
 		78BBCE7108E4AFF700AEE575 /* simpleTest.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BB3F0708E4837000D7CA2D /* simpleTest.c */; };
+		F2BB865520041EBB00E46EB4 /* paramGL.c in Sources */ = {isa = PBXBuildFile; fileRef = F2BB865420041E1000E46EB4 /* paramGL.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2523,6 +2524,7 @@
 		A1774E5C1CD6C2E100E1A17E /* libopencv_imgcodecs.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_imgcodecs.3.1.0.dylib; sourceTree = "<group>"; };
 		A1774E5D1CD6C2E100E1A17E /* libopencv_ml.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_ml.3.1.0.dylib; sourceTree = "<group>"; };
 		A1774E5E1CD6C2E100E1A17E /* libopencv_videoio.3.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videoio.3.1.0.dylib; sourceTree = "<group>"; };
+		F2BB865420041E1000E46EB4 /* paramGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = paramGL.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4715,6 +4717,7 @@
 		78BB3DE108E482F400D7CA2D /* AR */ = {
 			isa = PBXGroup;
 			children = (
+				F2BB865420041E1000E46EB4 /* paramGL.c */,
 				78BB3DE408E482F400D7CA2D /* ar3DCreateHandle.c */,
 				78BB3DE508E482F400D7CA2D /* ar3DUtil.c */,
 				78BB3DE708E482F400D7CA2D /* arCreateHandle.c */,
@@ -6261,6 +6264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2BB865520041EBB00E46EB4 /* paramGL.c in Sources */,
 				78BB3FE708E4884700D7CA2D /* paramChangeSize.c in Sources */,
 				78BB3FE808E4884700D7CA2D /* paramClear.c in Sources */,
 				78BB3FE908E4884700D7CA2D /* paramDecomp.c in Sources */,
