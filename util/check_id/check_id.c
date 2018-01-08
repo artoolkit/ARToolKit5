@@ -61,6 +61,7 @@
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
 #include <AR/gsub_lite.h>
+#include <AR/paramGL.h>
 #include <AR/arMulti.h>
 #include <ARUtil/time.h>
 
