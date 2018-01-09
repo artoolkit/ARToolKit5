@@ -145,7 +145,7 @@ void arglCameraFrustumRHf(const ARParam *cparam, const float focalmin, const flo
     heightm1 = (float)(cparam->ysize - 1);
     
     if (arParamDecompMatf(cparam->mat, icpara, trans) < 0) {
-        printf("arglCameraFrustum(): arParamDecompMat() indicated parameter error.\n"); // Windows bug: when running multi-threaded, can't write to stderr!
+        printf("arglCameraFrustumRHf(): arParamDecompMat() indicated parameter error.\n"); // Windows bug: when running multi-threaded, can't write to stderr!
         return;
     }
     for (i = 0; i < 4; i++) {

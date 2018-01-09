@@ -196,6 +196,7 @@
     <ClCompile Include="..\..\lib\SRC\AR\paramDistortion.c" />
     <ClCompile Include="..\..\lib\SRC\AR\paramFile.c" />
     <ClCompile Include="..\..\lib\SRC\AR\paramGetPerspective.c" />
+    <ClCompile Include="..\..\lib\SRC\AR\paramGL.c" />
     <ClCompile Include="..\..\lib\SRC\AR\paramLT.c" />
     <ClCompile Include="..\..\lib\SRC\AR\vAlloc.c" />
     <ClCompile Include="..\..\lib\SRC\AR\vDisp.c" />

@@ -391,7 +391,7 @@ int         kpmUtilGetPoseHomography( KpmMatchResult *matchData, KpmRefDataSet *
 int         kpmUtilGetCorner( ARUint8 *inImagePtr, int xsize, int ysize, int procMode, int maxPointNum, CornerPoints *cornerPoints );
 
 
-double wallclock();
+double wallclock(void);
     
 int kpmLoadImageDb(const char *filename);
     

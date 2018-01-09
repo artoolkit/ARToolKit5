@@ -80,7 +80,7 @@ extern "C" {
 #ifdef DISABLE_GL_STATE_CACHE
 #define glStateCacheFlush()
 #else
-void glStateCacheFlush();
+void glStateCacheFlush(void);
 #endif
 #define glStateCacheBeginAgain glStateCacheFlush // Deprecated name.
 
@@ -89,8 +89,8 @@ void glStateCacheFlush();
 #define glStateCacheEnableDepthTest() glEnable(GL_DEPTH_TEST)
 #define glStateCacheDisableDepthTest() glDisable(GL_DEPTH_TEST)
 #else
-void glStateCacheEnableDepthTest();
-void glStateCacheDisableDepthTest();
+void glStateCacheEnableDepthTest(void);
+void glStateCacheDisableDepthTest(void);
 #endif
 
 // Client-side vertex and normal operations.
@@ -100,10 +100,10 @@ void glStateCacheDisableDepthTest();
 #define glStateCacheEnableClientStateNormalArray() glEnableClientState(GL_NORMAL_ARRAY)
 #define glStateCacheDisableClientStateNormalArray() glDisableClientState(GL_NORMAL_ARRAY)
 #else
-void glStateCacheEnableClientStateVertexArray();
-void glStateCacheDisableClientStateVertexArray();
-void glStateCacheEnableClientStateNormalArray();
-void glStateCacheDisableClientStateNormalArray();
+void glStateCacheEnableClientStateVertexArray(void);
+void glStateCacheDisableClientStateVertexArray(void);
+void glStateCacheEnableClientStateNormalArray(void);
+void glStateCacheDisableClientStateNormalArray(void);
 #endif
 // No longer included in cached state. Definitions retained here for backwards compatibility.
 #define glStateCacheVertexPtr(size, type, stride, ptr) glVertexPointer(size, type, stride, ptr)
@@ -122,8 +122,8 @@ void glStateCacheDisableClientStateNormalArray();
 #define glStateCacheDisableClientStateTexCoordArray() glDisableClientState(GL_TEXTURE_COORD_ARRAY)
 #else
 void glStateCacheClientActiveTexture(GLenum texture);
-void glStateCacheEnableClientStateTexCoordArray();
-void glStateCacheDisableClientStateTexCoordArray();
+void glStateCacheEnableClientStateTexCoordArray(void);
+void glStateCacheDisableClientStateTexCoordArray(void);
 #endif
 // No longer included in cached state. Definitions retained here for backwards compatibility.
 #define glStateCacheTexCoordPtr(size, type, stride, ptr) glTexCoordPointer(size, type, stride, ptr)
@@ -148,8 +148,8 @@ void glStateCacheDisableClientStateTexCoordArray();
 #define GLSTATECACHE_MAX_COMBINED_TEXTURE_IMAGE_UNITS 8 // Minimum value for GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is 8
 void glStateCacheActiveTexture(GLuint texture);
 void glStateCacheBindTexture2D(GLuint name);
-void glStateCacheEnableTex2D();
-void glStateCacheDisableTex2D();
+void glStateCacheEnableTex2D(void);
+void glStateCacheDisableTex2D(void);
 void glStateCacheTexEnvMode(GLint mode);
 void glStateCacheTexEnvSrc0(GLint source);
 void glStateCacheTexEnvSrc1(GLint source);
@@ -163,8 +163,8 @@ void glStateCacheTexEnvCombine(GLint combine);
 #define glStateCacheMaterialv(pname, param) glMaterialfv(GL_FRONT_AND_BACK, pname, param)
 #define glStateCacheMaterial(pname, param) glMaterialf(GL_FRONT_AND_BACK, pname, param)
 #else
-void glStateCacheEnableLighting();
-void glStateCacheDisableLighting();
+void glStateCacheEnableLighting(void);
+void glStateCacheDisableLighting(void);
 void glStateCacheMaterialv(GLenum pname, GLfloat *param);
 void glStateCacheMaterial(GLenum pname, GLfloat param);
 #endif
@@ -175,8 +175,8 @@ void glStateCacheMaterial(GLenum pname, GLfloat param);
 #define glStateCacheDisableBlend() glDisable(GL_BLEND)
 #define glStateCacheBlendFunc(sfactor, dfactor) glBlendFunc(sfactor, dfactor)
 #else
-void glStateCacheEnableBlend();
-void glStateCacheDisableBlend();
+void glStateCacheEnableBlend(void);
+void glStateCacheDisableBlend(void);
 void glStateCacheBlendFunc(GLenum sfactor, GLenum dfactor);
 #endif
 

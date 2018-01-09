@@ -80,7 +80,7 @@ extern "C" {
 #ifdef DISABLE_GL_STATE_CACHE
 #define glStateCacheFlush()
 #else
-void glStateCacheFlush();
+void glStateCacheFlush(void);
 #endif
 #define glStateCacheBeginAgain glStateCacheFlush // Deprecated name.
 
@@ -90,10 +90,10 @@ void glStateCacheFlush();
 #define glStateCacheEnableBlend() glEnable(GL_BLEND)
 #define glStateCacheDisableBlend() glDisable(GL_BLEND)
 #else
-void glStateCacheEnableDepthTest();
-void glStateCacheDisableDepthTest();
-void glStateCacheEnableBlend();
-void glStateCacheDisableBlend();
+void glStateCacheEnableDepthTest(void);
+void glStateCacheDisableDepthTest(void);
+void glStateCacheEnableBlend(void);
+void glStateCacheDisableBlend(void);
 #endif
 
 #ifdef DISABLE_GL_STATE_CACHE

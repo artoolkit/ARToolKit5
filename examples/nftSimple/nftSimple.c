@@ -73,6 +73,7 @@
 #include <AR/ar.h>
 #include <AR/arMulti.h>
 #include <AR/video.h>
+#include <AR/paramGL.h>
 #include <AR/gsub_lite.h>
 #include <ARUtil/time.h>
 #include <AR/arFilterTransMat.h>

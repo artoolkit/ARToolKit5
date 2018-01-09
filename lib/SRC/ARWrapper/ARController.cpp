@@ -56,6 +56,8 @@
 #if HAVE_NFT
 #  include "trackingSub.h"
 #endif
+#include <AR/paramGL.h>
+
 #include <stdarg.h>
 
 #include <algorithm>

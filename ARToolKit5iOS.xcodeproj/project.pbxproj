@@ -753,6 +753,7 @@
 		4ACEFC47130AEC7E009D1DA0 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
 		4ACEFC48130AEC9A009D1DA0 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
 		4AD1D4C9133D34BA00941170 /* Data2 in Resources */ = {isa = PBXBuildFile; fileRef = 4AD1D4B6133D34BA00941170 /* Data2 */; };
+		4AD2331120043ECE008145CB /* paramGL.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AD2331020043EB7008145CB /* paramGL.c */; };
 		4AEAEBD317A744AA00F61E33 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8393B5152163C000D8FE60 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4AEAEBD417A744AA00F61E33 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEFC30130AEC6C009D1DA0 /* libjpeg.a */; };
 		4AEAEBD517A744AA00F61E33 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A1822E30DC97C2700B73A53 /* QuartzCore.framework */; };
@@ -2702,6 +2703,7 @@
 		4ACEFEF5130AF497009D1DA0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4ACEFEF6130AF497009D1DA0 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		4AD1D4B6133D34BA00941170 /* Data2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data2; sourceTree = "<group>"; };
+		4AD2331020043EB7008145CB /* paramGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = paramGL.c; sourceTree = "<group>"; };
 		4AD26CBB13B37EEB00F5E037 /* libARgsub_es.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARgsub_es.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD26CBC13B37EEB00F5E037 /* libARMulti.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARMulti.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AD26CBF13B37EEB00F5E037 /* libARosg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libARosg.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5510,6 +5512,7 @@
 				4AEB261B1804A330002290C5 /* paramDistortion.c */,
 				4AEB261C1804A330002290C5 /* paramFile.c */,
 				4AEB261D1804A330002290C5 /* paramGetPerspective.c */,
+				4AD2331020043EB7008145CB /* paramGL.c */,
 				4AEB261E1804A330002290C5 /* paramLT.c */,
 				4AEB261F1804A330002290C5 /* vAlloc.c */,
 				4AEB26201804A330002290C5 /* vDisp.c */,
@@ -7843,6 +7846,7 @@
 				4AF101BA180BFC9100A922DE /* arLabeling.c in Sources */,
 				4AF101C3180BFC9100A922DE /* mAllocInv.c in Sources */,
 				4AF101DB180BFC9100A922DE /* vFree.c in Sources */,
+				4AD2331120043ECE008145CB /* paramGL.c in Sources */,
 				4AF101B3180BFC9100A922DE /* arDetectMarker2.c in Sources */,
 				4AF101BB180BFC9100A922DE /* arPattAttach.c in Sources */,
 				4AF101D1180BFC9100A922DE /* paramChangeSize.c in Sources */,
@@ -9141,7 +9145,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -9561,7 +9564,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -9626,7 +9628,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;

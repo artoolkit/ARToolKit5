@@ -63,6 +63,7 @@ $(AR_HOME)/include/AR/matrix.h \
 $(AR_HOME)/include/AR/param.h \
 $(AR_HOME)/include/AR/arImageProc.h \
 $(AR_HOME)/include/AR/arFilterTransMat.h \
+$(AR_HOME)/include/AR/paramGL.h \
 
 
 OBJS = \
@@ -95,6 +96,7 @@ paramDistortion.o \
 paramChangeSize.o \
 paramFile.o \
 paramLT.o \
+paramGL.o \
 paramDisp.o \
 ar3DCreateHandle.o \
 ar3DUtil.o \
