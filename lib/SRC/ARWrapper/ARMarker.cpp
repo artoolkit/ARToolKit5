@@ -42,13 +42,7 @@
 #  include <ARWrapper/ARMarkerNFT.h>
 #endif
 #include <ARWrapper/ARController.h>
-#if TARGET_PLATFORM_ANDROID || TARGET_PLATFORM_IOS
-#  include <AR/gsub_es.h>
-#elif TARGET_PLATFORM_WINRT
-#  include <AR/gsub_es2.h>
-#else
-#  include <AR/gsub_lite.h>
-#endif
+#include <AR/paramGL.h>
 
 #ifdef _WIN32
 #  define MAXPATHLEN MAX_PATH

@@ -47,6 +47,7 @@
 //
 
 #import "ARViewController.h"
+#import <AR/paramGL.h>
 #import <AR/gsub_es.h>
 #import <ARUtil/time.h>
 #import "../ARAppCore/ARMarkerSquare.h"

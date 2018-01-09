@@ -77,6 +77,7 @@
 #include <AR/video.h>
 #include <AR/param.h>			// arParamDisp()
 #include <AR/ar.h>
+#include <AR/paramGL.h>
 #include <AR/gsub_lite.h>
 #include <AR/gsub_mtx.h>
 #include <ARUtil/time.h>

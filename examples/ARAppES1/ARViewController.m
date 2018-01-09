@@ -48,6 +48,7 @@
 
 #import "ARViewController.h"
 #import "ARView.h"
+#import <AR/paramGL.h>
 #import <AR/gsub_es.h>
 #import <ARUtil/time.h>
 #import <AudioToolbox/AudioToolbox.h> // SystemSoundID, AudioServicesCreateSystemSoundID()

@@ -53,6 +53,7 @@
 #  import "ARMarkerNFT.h"
 #endif
 
+#import <AR/paramGL.h>
 #import <AR/gsub_es.h>
 #import <Eden/EdenMath.h> // EdenMathInvertMatrix().
 

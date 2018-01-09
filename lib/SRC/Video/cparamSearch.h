@@ -52,7 +52,7 @@ extern "C" {
 int cparamSearchInit(const char *cacheDir, const char *cacheInitDir, int resetCache);
 
 // Returns 0 if succesful, <0 if error.
-int cparamSearchFinal();
+int cparamSearchFinal(void);
     
 // >= 0 is normal state.
 // < 0 is error state.
