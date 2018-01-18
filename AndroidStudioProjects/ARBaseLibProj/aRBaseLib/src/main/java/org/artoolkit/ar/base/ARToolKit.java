@@ -72,6 +72,11 @@ public class ARToolKit {
         else Log.i(TAG, "Loaded native library.");
     }
 
+    private int frameWidth;
+    private int frameHeight;
+    private int cameraIndex;
+    private boolean cameraIsFrontFacing;
+
     /**
      * Array of RGB color values containing the debug video image data.
      */
@@ -169,6 +174,11 @@ public class ARToolKit {
      * @return true if initialisation was successful.
      */
     public boolean startWithPushedVideo(int videoWidth, int videoHeight, String pixelFormat, String cameraParaPath, int cameraIndex, boolean cameraIsFrontFacing) {
+
+        this.frameWidth = videoWidth;
+        this.frameHeight = videoHeight;
+        this.cameraIndex = cameraIndex;
+        this.cameraIsFrontFacing = cameraIsFrontFacing;
 
         if (!initedNative) {
             Log.e(TAG, "startWithPushedVideo(): Cannot start because native interface not inited.");
@@ -346,7 +356,7 @@ public class ARToolKit {
      */
     public boolean convertAndDetect1(byte[] frame, int frameSize) {
 
-        if ((!isNativeInited()) || (frame == null)) {
+        if ((!initedNative) || (frame == null)) {
             return false;
         }
 
@@ -369,7 +379,7 @@ public class ARToolKit {
      */
     public boolean convertAndDetect2(ByteBuffer[] framePlanes, int[] framePlanePixelStrides, int[] framePlaneRowStrides) {
 
-        if ((!isNativeInited()) || (framePlanes == null)) {
+        if ((!initedNative) || (framePlanes == null)) {
             return false;
         }
 

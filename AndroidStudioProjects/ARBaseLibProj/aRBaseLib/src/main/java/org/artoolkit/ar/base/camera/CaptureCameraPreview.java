@@ -327,7 +327,7 @@ public class CaptureCameraPreview extends SurfaceView implements SurfaceHolder.C
         camera.startPreview();
 
         if (listener != null)
-            listener.cameraPreviewStarted(captureWidth, captureHeight, captureRate, cameraIndex, cameraIsFrontFacing);
+            listener.cameraPreviewStarted(captureWidth, captureHeight, captureRate,"NV21", cameraIndex, cameraIsFrontFacing);
     }
 
     @Override
