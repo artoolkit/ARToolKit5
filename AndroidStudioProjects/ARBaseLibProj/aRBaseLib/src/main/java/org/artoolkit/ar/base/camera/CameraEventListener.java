@@ -50,10 +50,11 @@ public interface CameraEventListener {
      * @param width               The width of the video image in pixels.
      * @param height              The height of the video image in pixels.
      * @param rate                The capture rate in frames per second.
+     * @param pixelFormat         A string with format in which buffers will be pushed. Supported values include "NV21", "NV12", "YUV_420_888", "RGBA", "RGB_565", and "MONO".
      * @param cameraIndex         Zero-based index of the camera in use. If only one camera is present, will be 0.
      * @param cameraIsFrontFacing false if camera is rear-facing (the default) or true if camera is facing toward the user.
      */
-    public void cameraPreviewStarted(int width, int height, int rate, int cameraIndex, boolean cameraIsFrontFacing);
+    public void cameraPreviewStarted(int width, int height, int rate, String pixelFormat, int cameraIndex, boolean cameraIsFrontFacing);
 
     /**
      * Called when the camera preview has a new frame ready.
