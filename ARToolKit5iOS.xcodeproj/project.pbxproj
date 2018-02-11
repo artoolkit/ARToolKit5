@@ -901,6 +901,7 @@
 		4AF9712B1B5F5709001BFEB5 /* timers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9706A1B5F5708001BFEB5 /* timers.cpp */; };
 		4AF9712D1B5F5709001BFEB5 /* freak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AF970771B5F5708001BFEB5 /* freak.cpp */; };
 		4AF9712E1B5F5709001BFEB5 /* hough_similarity_voting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9707A1B5F5708001BFEB5 /* hough_similarity_voting.cpp */; };
+		901F3ED3202FA07E001E0CB2 /* videoRGBA.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A29CE691F660EBF00D92AB9 /* videoRGBA.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -7768,6 +7769,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A061BE11F45552400E6EAAD /* CameraVideo.m in Sources */,
+				901F3ED3202FA07E001E0CB2 /* videoRGBA.c in Sources */,
 				4A061BDD1F45551400E6EAAD /* videoDummy.c in Sources */,
 				4A941CFB1AE5DC79000FA802 /* videoSaveImage.c in Sources */,
 				4A061BDF1F45551E00E6EAAD /* MovieVideo.m in Sources */,
