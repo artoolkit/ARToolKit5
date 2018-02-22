@@ -150,8 +150,8 @@ int main( int argc, char *argv[] )
             if( sscanf(&argv[i][12], "%f", &max_thresh) != 1 ) usage(argv[0]);
         } else if( strncmp(argv[i], "-min_thresh=", 12) == 0 ) {
             if( sscanf(&argv[i][12], "%f", &min_thresh) != 1 ) usage(argv[0]);
-        } else if( strncmp(argv[i], "-feature_density=", 13) == 0 ) {
-            if( sscanf(&argv[i][13], "%d", &featureDensity) != 1 ) usage(argv[0]);
+        } else if( strncmp(argv[i], "-feature_density=", 17) == 0 ) {
+            if( sscanf(&argv[i][17], "%d", &featureDensity) != 1 ) usage(argv[0]);
         } else if( strncmp(argv[i], "-level=", 7) == 0 ) {
             if( sscanf(&argv[i][7], "%d", &tracking_extraction_level) != 1 ) usage(argv[0]);
         } else if( strncmp(argv[i], "-leveli=", 8) == 0 ) {
