@@ -1138,7 +1138,7 @@ static void DisplayPerContext(const int contextIndex)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glRasterPos2f(0.0f, 0.0f);
-        glPixelTransferi(GL_UNPACK_ALIGNMENT, ((viewContexts[contextIndex].width & 0x3) == 0 ? 4 : 1));
+        glPixelStorei(GL_UNPACK_ALIGNMENT, ((viewContexts[contextIndex].width & 0x3) == 0 ? 4 : 1));
         glPixelZoom(1.0f, 1.0f);
         glDrawPixels(viewContexts[contextIndex].width, viewContexts[contextIndex].height, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, stereoStencilPattern);
     } else
