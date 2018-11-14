@@ -69,8 +69,7 @@ MDIR=".                              \
       util/1394/listCamera           \
       util/1394/checkImage           \
       util/calib_optical             \
-      util/calib_camera_old-v3       \
-      util/calib_stereo_old-v3       \
+      util/calib_stereo              \
       util/check_id                  \
       util/genTexData                \
       util/genMarkerSet              \
