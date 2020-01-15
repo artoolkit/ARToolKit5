@@ -330,6 +330,15 @@
 		4A3453EB09E4D9DC00C508AB /* gsub_lite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A15ED1B09E35E8A00159C62 /* gsub_lite.c */; };
 		4A36EC3E129732C900F5A339 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4A37A46512E7417B006E4A0E /* arFilterTransMat.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A37A46312E7417B006E4A0E /* arFilterTransMat.c */; };
+		4A38257323CEB78400BCFF63 /* libARICP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA256FE1AE0BBEE0003CD2F /* libARICP.a */; };
+		4A38257423CEB7EC00BCFF63 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3149BB13C4AE1100F96B52 /* libopencv_core.dylib */; };
+		4A38257523CEB80400BCFF63 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3149BD13C4AE2F00F96B52 /* libopencv_imgproc.dylib */; };
+		4A38257623CEB81800BCFF63 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3AE51F17F126BB001D56CA /* libopencv_features2d.dylib */; };
+		4A38257723CEB83400BCFF63 /* libopencv_calib3d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3149BA13C4ADF100F96B52 /* libopencv_calib3d.dylib */; };
+		4A38257823CEB85C00BCFF63 /* libopencv_ml.3.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1774E5D1CD6C2E100E1A17E /* libopencv_ml.3.1.0.dylib */; };
+		4A38257923CEB85C00BCFF63 /* libopencv_videoio.3.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1774E5E1CD6C2E100E1A17E /* libopencv_videoio.3.1.0.dylib */; };
+		4A38257A23CEB85C00BCFF63 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A88F3E215D367CA002E595A /* libopencv_flann.dylib */; };
+		4A38257B23CEB85C00BCFF63 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A3149BC13C4AE2F00F96B52 /* libopencv_highgui.dylib */; };
 		4A3ABD1512B11FAF00F25466 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE25B021288612000F271D2 /* Accelerate.framework */; };
 		4A3ABD1B12B11FAF00F25466 /* libAR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BB3F8608E486DB00D7CA2D /* libAR.a */; };
 		4A3ABD1D12B11FAF00F25466 /* libARvideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BBCE3108E4AC6600AEE575 /* libARvideo.a */; };
@@ -2708,6 +2717,7 @@
 				4A11A133219BD4A3000646E0 /* Accelerate.framework in Frameworks */,
 				4A11A134219BD4A3000646E0 /* libz.tbd in Frameworks */,
 				4A11A135219BD4A3000646E0 /* libAR.a in Frameworks */,
+				4A38257323CEB78400BCFF63 /* libARICP.a in Frameworks */,
 				4A11A136219BD4A3000646E0 /* libARUtil.a in Frameworks */,
 				4A11A137219BD4A3000646E0 /* AVFoundation.framework in Frameworks */,
 				4A11A138219BD4A3000646E0 /* libARgsub.a in Frameworks */,
@@ -2718,6 +2728,14 @@
 				4A11A13D219BD4A3000646E0 /* Cocoa.framework in Frameworks */,
 				4A11A13E219BD4A3000646E0 /* GLUT.framework in Frameworks */,
 				4A11A13F219BD4A3000646E0 /* OpenGL.framework in Frameworks */,
+				4A38257423CEB7EC00BCFF63 /* libopencv_core.dylib in Frameworks */,
+				4A38257823CEB85C00BCFF63 /* libopencv_ml.3.1.0.dylib in Frameworks */,
+				4A38257923CEB85C00BCFF63 /* libopencv_videoio.3.1.0.dylib in Frameworks */,
+				4A38257723CEB83400BCFF63 /* libopencv_calib3d.dylib in Frameworks */,
+				4A38257A23CEB85C00BCFF63 /* libopencv_flann.dylib in Frameworks */,
+				4A38257B23CEB85C00BCFF63 /* libopencv_highgui.dylib in Frameworks */,
+				4A38257523CEB80400BCFF63 /* libopencv_imgproc.dylib in Frameworks */,
+				4A38257623CEB81800BCFF63 /* libopencv_features2d.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3526,11 +3544,11 @@
 			isa = PBXGroup;
 			children = (
 				A1774E5C1CD6C2E100E1A17E /* libopencv_imgcodecs.3.1.0.dylib */,
+				4A3149BB13C4AE1100F96B52 /* libopencv_core.dylib */,
 				A1774E5D1CD6C2E100E1A17E /* libopencv_ml.3.1.0.dylib */,
 				A1774E5E1CD6C2E100E1A17E /* libopencv_videoio.3.1.0.dylib */,
 				4A3149BA13C4ADF100F96B52 /* libopencv_calib3d.dylib */,
 				4A88F3E215D367CA002E595A /* libopencv_flann.dylib */,
-				4A3149BB13C4AE1100F96B52 /* libopencv_core.dylib */,
 				4A3149BC13C4AE2F00F96B52 /* libopencv_highgui.dylib */,
 				4A3149BD13C4AE2F00F96B52 /* libopencv_imgproc.dylib */,
 				4A3AE51F17F126BB001D56CA /* libopencv_features2d.dylib */,
@@ -7513,12 +7531,14 @@
 		4A11A126219BD458000646E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/calib_optical/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -7528,6 +7548,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.calib-optical";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -7540,12 +7561,14 @@
 		4A11A127219BD458000646E0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/calib_optical/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -7555,6 +7578,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.calib-optical";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -7567,21 +7591,25 @@
 		4A11A141219BD4A3000646E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/calib_stereo/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
 					"$(SRCROOT)/lib",
+					"$(PROJECT_DIR)/lib/macosx-universal",
 				);
 				"OTHER_LDFLAGS[arch=i386]" = (
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.calib-stereo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -7594,21 +7622,25 @@
 		4A11A142219BD4A3000646E0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/calib_stereo/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
 					"$(SRCROOT)/lib",
+					"$(PROJECT_DIR)/lib/macosx-universal",
 				);
 				"OTHER_LDFLAGS[arch=i386]" = (
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.calib-stereo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -7855,12 +7887,14 @@
 		4A3ABD1F12B11FAF00F25466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/check_id/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -7870,6 +7904,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.check-id";
 				PRODUCT_NAME = check_id;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -7882,12 +7917,14 @@
 		4A3ABD2012B11FAF00F25466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/check_id/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -7897,6 +7934,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.check-id";
 				PRODUCT_NAME = check_id;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8493,12 +8531,14 @@
 		4AD5C3200A39002C003F13D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/mk_patt/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -8508,6 +8548,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.mk-patt";
 				PRODUCT_NAME = mk_patt;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -8520,12 +8561,14 @@
 		4AD5C3210A39002C003F13D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(SRCROOT)";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/include/macosx-universal",
 					"$(SRCROOT)/include",
 				);
+				INFOPLIST_FILE = util/mk_patt/Info.plist;
 				INSTALL_PATH = /bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/macosx-universal",
@@ -8535,6 +8578,7 @@
 					"-framework",
 					QuickTime,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.artoolkit.mk-patt";
 				PRODUCT_NAME = mk_patt;
 				WARNING_CFLAGS = (
 					"-Wmost",
