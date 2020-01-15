@@ -796,7 +796,7 @@ int arglPixelBufferDataUpload(ARGL_CONTEXT_SETTINGS_REF contextSettings, ARUint8
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, contextSettings->texture);
     
-    glPixelTransferi(GL_UNPACK_ALIGNMENT, (((contextSettings->bufSizeX * contextSettings->pixSize) & 0x3) == 0 ? 4 : 1));
+    glPixelStorei(GL_UNPACK_ALIGNMENT, ((((contextSettings->bufSizeIsTextureSize ? contextSettings->textureSizeX : contextSettings->bufSizeX) * contextSettings->pixSize) & 0x3) == 0 ? 4 : 1));
     
     if (contextSettings->arhandle) {
         arGetDebugMode(contextSettings->arhandle, &arDebugMode);
